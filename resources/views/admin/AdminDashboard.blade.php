@@ -1,1 +1,4 @@
-<h1>Admin dashboard</h1>
+@extends('admin.layout.AdminLayout')
+@Section('content')
+
+@endsection

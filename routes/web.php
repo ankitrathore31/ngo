@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SocialActivityController;
+use App\Http\Controllers\HomeControlller;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home.welcome');
 });
 
 Route::get('/dashboard', function () {
@@ -24,5 +26,18 @@ Route::get('/dashboard', function () {
 Route::get('/admin', function () {
     return view('admin.AdminDashboard');
 })->middleware(['auth'])->name('AdminDashboard');
+
+
+Route::controller(HomeControlller::class)->group(function(){
+    Route::get('/welcome','home')->name('welcome');
+    Route::get('/SocialActivity','activitypage')->name('activity');
+});
+
+Route::controller(SocialActivityController::class)->group(function(){
+    Route::get('/activitylist','activitylist')->middleware('auth')->name('activitylist');
+    Route::get('/addactivity','addactivity')->middleware('auth')->name('addactivity');
+    Route::post('admin/saveactivity', 'saveactivity')->middleware('auth')->name('saveactivity');
+    
+});
 
 require __DIR__.'/auth.php';
