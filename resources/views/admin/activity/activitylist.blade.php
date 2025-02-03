@@ -8,9 +8,8 @@
     <div class="card">
         <div class="card-header">
             <a href="{{ 'addactivity' }}" class="btn btn-success float-right">Add Activity</a>
-
         </div>
-        <div class="row m-3">
+        <div class="row m-3">   
             <div class="col">
                 <div class="">
                     <table class="table border">
