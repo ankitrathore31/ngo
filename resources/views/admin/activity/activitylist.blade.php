@@ -37,11 +37,11 @@
                                     <td>{{ $item->program_category }}</td>
                                     <td>{{ $item->program_address }}</td>
                                     <td> 
-                                        <a href="" class="btn btn-sm bg-success me-2">
-                                            <i class="fa-regular fa-eye"></i></a>
-                                        <a href="{{-- 'editslider/'.$item->id --}}" class="btn btn-sm bg-primary me-2">
+                                        {{-- <a href="" class="btn btn-sm bg-success me-2">
+                                            <i class="fa-regular fa-eye"></i></a> --}}
+                                        <a href="{{ 'editactivity/'.$item->id }}" class="btn btn-sm bg-primary me-2">
                                         <i class="fa-regular fa-pen-to-square"></i></a>
-                                        <a href="{{-- 'removeslider/'.$item->id --}}" class="btn btn-sm bg-danger me-2">
+                                        <a href="{{ 'removeactivity/'.$item->id --}}" class="btn btn-sm bg-danger me-2">
                                             <i class="fa-regular fa-trash-can"></i></a>
                                     </td>
                                 </tr>

@@ -21,7 +21,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                        @php
+                        {{-- @php
                         $previousMonth = null;
                       @endphp
                       @foreach ($activity as $item)
@@ -36,7 +36,8 @@
                               {{ $currentMonth }}
                             </td>
                           </tr>
-                        @endif
+                        @endif --}}
+                        @foreach ($activity as $item)
                         <tr>
                             <td>{{ $item->id }}</td>
                             <td>{{ \Carbon\Carbon::parse($item->program_date)->format('d-m-Y') }}
@@ -47,7 +48,7 @@
                             <td>{{ $item->program_category }}</td>
                             <td>{{ $item->program_address }}</td>
                             <td> 
-                                <a href="" class="btn btn-sm bg-success me-2">
+                                <a href=" {{ route('viewactivity') }}" class="btn btn-sm bg-success me-2">
                                     <i class="fa-regular fa-eye"></i></a>
                         </tr>
                     @endforeach
