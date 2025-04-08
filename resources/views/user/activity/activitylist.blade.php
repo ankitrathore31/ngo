@@ -1,4 +1,4 @@
-@extends('admin.layout.AdminLayout')
+@extends('user.layout.userLayout')
 @Section('content')
     <div class="row card  m-5">
         <div class="col m-3 d-flex justify-content-center">

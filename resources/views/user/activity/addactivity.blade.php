@@ -1,4 +1,4 @@
-@extends('admin.layout.AdminLayout')
+@extends('user.layout.UserLayout')
 @Section('content')
     <div class="container mt-5">
         <div class="row card m-1">

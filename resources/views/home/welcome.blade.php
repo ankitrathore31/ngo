@@ -1,7 +1,6 @@
 @extends('home.layout.MasterLayout')
 @Section('content')
     <style>
-
         .owl-carousel {
             position: relative;
         }
@@ -36,7 +35,7 @@
         }
 
         .slider {
-            margin-top: 110px;
+            margin-top: 50px;
         }
 
         .owl-nav .owl-prev,
@@ -92,61 +91,618 @@
             color: white;
             /* Adjust text color if needed */
         }
+
+        .custom-img {
+            width: 180px;
+            /* Set a fixed width */
+            height: 150px;
+            /* Set a fixed height */
+            /* object-fit: cover; Ensures the image fills the box properly */
+        }
+
+        .about_ngo,
+        .list-group {
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: 400;
+        }
+
+        .carousel-item img {
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-item:hover img {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 900px) {
+            .hide-sm {
+                display: none !important;
+            }
+        }
     </style>
-  
 
- 
-        
-        <!-- slider -->
-        <div class="owl-carousel owl-theme slider">
-            {{-- @foreach ($slider as $slideritem) --}}
-            <div class="item ">
-                <div class="background-image">
-                    <img src="images/FOOD.JPG" alt="slider image">
-                    <img src="images/CHILD1.JPG" alt="slider image">
-                    {{-- <div class="carousel-caption d-none d-md-block">
-                    <h1 class="text-white">{{ $slideritem->title }}</h1>
-                    <h2 class="text-white">{{ $slideritem->subtitle }}</h2>
-                    <p class="text-white">{{ $slideritem->description }}</p>
-                </div> --}}
+
+
+
+    <!-- slider -->
+    <div class="owl-carousel owl-theme slider">
+        <div class="item ">
+            <div class="background-image">
+                <img src="images/sewing.jpeg" alt="slider image">
+                <div class="carousel-caption d-none d-md-block">
+                    <h1 class="text-white"></h1>
+                    <h2 class="text-white"></h2>
+                    <p class="text-white"></p>
                 </div>
             </div>
-            {{-- @endforeach --}}
         </div>
-        <!-- end slider -->
+    </div>
+    <!-- end slider -->
 
-        <br>
+    <!--info section start-->
+    <section id="about" class="py-5 shadow m-3">
+        <div class="container-fluid">
+            <div class="row d-flex justify-content-between hide-sm">
+                <div class="col-md-3 col-sm-6">
+                    <img src="assets/images/logo.png" class="img-fluid custom-img" alt="">
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <img src="assets/images/meri-mati.png" class="img-fluid custom-img" alt="">
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <img src="assets/images/beti-bachao.png" class="img-fluid custom-img" alt="">
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <img src="assets/images/gandhi.png" class="img-fluid custom-img" alt="">
+                </div>
+            </div>
+            <div class="row m-4">
+                <div class="col-sm-12 col-md-12 col-xxl-12 col-lg-12">
+                    <h3 class="fw-bold mb-3 text-center">Welcome To <span class="text-primary">GYAN BHARTI SANSTHA
+                            (NGO)</span></h3>
+                    <p class="text-muted fst-italic fs-5">Empowering communities since <strong>30th June 2009</strong></p>
+                    <p class="about_ngo"><em>Gyan Bharti Sanstha (NGO) </em>is working since 2009
+                        Donations play a crucial role in supporting NGOs like Gyan Bharti Sanstha in their mission to serve
+                        the community.
+                        By contributing, donors enable the organization to provide essential services to those in need, such
+                        as food aid,
+                        healthcare, education, and livelihood support. Every donation, no matter how small, makes a
+                        meaningful impact and
+                        helps improve the lives of vulnerable individuals and families. Your support can help ensure that
+                        Gyan Bharti Sanstha continues its valuable work and reaches more people in need
+                    </p>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <i class="fa-solid fa-circle-check text-success me-2"></i> Dedicated to serving the
+                                    poor, hungry, and helpless, ensuring necessary support and care.
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fa-solid fa-circle-check text-success me-2"></i> Providing free education to
+                                    underprivileged children for a brighter future.
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fa-solid fa-circle-check text-success me-2"></i> Offering skill development
+                                    programs like sewing training to empower women and unemployed individuals.
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <i class="fa-solid fa-circle-check text-success me-2"></i> Running free food
+                                    distribution programs to ensure no one sleeps hungry.
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fa-solid fa-circle-check text-success me-2"></i> Promoting women’s empowerment
+                                    through beauty parlour training and professional skills.
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fa-solid fa-circle-check text-success me-2"></i> Conducting awareness camps on
+                                    health, hygiene, education, and self-sustainability.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="mt-2">
+                        <marquee behavior="alternate" direction=""><strong>Note:</strong> Donate money, books, clothes,
+                            and other
+                            essential items to support our mission. We provide a certificate of appreciation for your
+                            generous donations.
+                        </marquee>
+                    </p>
+                    <div class="row d-flex justify-content-between mt-2">
+                        <div class="col-md-4 mb-3">
+                            <a href="about.php" class="btn btn-info"><i class="fas fa-info-circle"></i> More Info</a>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <a href="donate.php" class="btn btn-success"><i class="fas fa-donate"></i>Donate Now</a>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <a href="tel:9411484111" class="btn btn-primary"><i class="fas fa-phone-alt"></i>+91
+                                9411484111</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========== Donation Section Start ============ -->
+    <section class="community mt-5 py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-xl-7">
+                    <div class="section__header">
+                        <h2 class="text-dark">Join The Community To Give Donation</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="community-donation p-4 border rounded shadow-sm bg-light">
+                        <div class="donation-form">
+                            <form method="post" action="pay.php">
+                                <div class="container mt-4">
+                                    <h5>Your Donation:</h5>
+                                    <div class="input-group">
+                                        <span class="input-group-text">₹</span>
+                                        <input type="text" id="donationAmount" name="donation_amount"
+                                            class="form-control" placeholder="Enter amount" required>
+                                    </div>
+                                    <div class="mt-3">
+                                        <button class="btn btn-outline-primary donation-btn" data-amount="100">100</button>
+                                        <button class="btn btn-outline-primary donation-btn" data-amount="200">200</button>
+                                        <button class="btn btn-outline-primary donation-btn" data-amount="300">300</button>
+                                        <button class="btn btn-outline-primary donation-btn" data-amount="500">500</button>
+                                        <button class="btn btn-outline-danger" id="customAmountBtn">Custom</button>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <h6 class="mt-2">After Gave Donation Get a Certifiate:</h6>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary">Donate Now <i
+                                            class="fa fa-arrow-right"></i></button>
+                                </div>
+                                <!-- <div class="text-center">
+                          <a href="https://paylink.sabpaisa.in/PayLink/getFormDetail?formId=468&clientId=20808" target="_blank" class="btn btn-primary">Donate Now</a>
+                          </div> -->
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================== working Area show ========================================== -->
+    <section>
+        <div class="container-fluid mt-5">
+            <div class="row justify-content-center d-flex">
+                <div class="col text-center">
+                    <h2 class="section-title mb-4"><b>SANSTHA WORKING AREA</b></h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 mb-2">
+                    <div class="card text-center shadow-sm bg-primary text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Country</h5>
+                            <p class="card-text fs-4 counter" data-count="1">1</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <div class="card text-center shadow-sm bg-success text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">State</h5>
+                            <p class="card-text fs-4 counter" data-count="2">2</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <div class="card text-center shadow-sm bg-warning text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">District</h5>
+                            <p class="card-text fs-4 counter" data-count="3">3</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <div class="card text-center shadow-sm bg-danger text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Tahsil</h5>
+                            <p class="card-text fs-4 counter" data-count="6">6</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-2 mt-2">
+                    <div class="card text-center shadow-sm bg-info text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Block</h5>
+                            <p class="card-text fs-4 counter" data-count="10">10</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-2 mt-2">
+                    <div class="card text-center shadow-sm bg-secondary text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">City / Town</h5>
+                            <p class="card-text fs-4 counter" data-count="3">3</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-2 mt-2">
+                    <div class="card text-center shadow-sm bg-info text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Village</h5>
+                            <p class="card-text fs-4 counter" data-count="21">21</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-2 mt-2">
+                    <div class="card text-center shadow-sm bg-primary text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Family</h5>
+                            <p class="card-text fs-4 counter" data-count="419">419</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-2 mt-2">
+                    <div class="card text-center shadow-sm bg-warning text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Beneficiary</h5>
+                            <p class="card-text fs-4 counter" data-count="1115">1115</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================ Sanstha Activitis box show ====================== -->
+    <section>
+        <div class="container-fluid mt-5">
+            <!-- Heading -->
+            <div class="row justify-content-center d-flex">
+                <div class="col text-center">
+                    <h2 class="section-title mb-4"><b>SANSTHA ACTIVITIES</b></h2>
+                </div>
+            </div>
+
+            <!-- Activity Cards -->
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center shadow-sm bg-warning text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Total Activity</h5>
+                            <p class="card-text fs-4 counter" data-count="10">358</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center shadow-sm bg-primary text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Education</h5>
+                            <p class="card-text fs-4 counter" data-count="10">52</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center shadow-sm bg-success text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Environment</h5>
+                            <p class="card-text fs-4 counter" data-count="15">45</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center shadow-sm bg-warning text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Social Awareness Program</h5>
+                            <p class="card-text fs-4 counter" data-count="20">78</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center shadow-sm bg-info text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Cultural Program</h5>
+                            <p class="card-text fs-4 counter" data-count="25">18</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center shadow-sm bg-secondary text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Sanitation Program</h5>
+                            <p class="card-text fs-4 counter" data-count="30">42</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center shadow-sm bg-light text-dark">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Health Program</h5>
+                            <p class="card-text fs-4 counter" data-count="35">35</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center shadow-sm bg-success text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Poor Alleviation</h5>
+                            <p class="card-text fs-4 counter" data-count="40">68</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center shadow-sm bg-warning text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Women Empowerment</h5>
+                            <p class="card-text fs-4 counter" data-count="45">55</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center shadow-sm bg-info text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Social Problem</h5>
+                            <p class="card-text fs-4 counter" data-count="50">68</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center shadow-sm bg-success text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Peace Talks Program</h5>
+                            <p class="card-text fs-4 counter" data-count="55">70</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center shadow-sm bg-ingo text-dark">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Skill development</h5>
+                            <p class="card-text fs-4 counter" data-count="55">48</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center shadow-sm bg-info text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Religious Program</h5>
+                            <p class="card-text fs-4 counter" data-count="55">60</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center shadow-sm bg-primary text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Agriculture Program</h5>
+                            <p class="card-text fs-4 counter" data-count="55">38</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center shadow-sm bg-light text-dark">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Other Activities</h5>
+                            <p class="card-text fs-4 counter" data-count="60">42</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==== service section start ==== -->
+    <section>
         <div class="container mt-5">
-            <div class="row">
-                <div class="col-md-8">
-                    <h2 class="mb-3">MR. MANOJ KUMAR</h2>
-                    <ul class="list-unstyled">
-                        <li>DIRECTOR & FOUNDER OF NGO</li>
-                        <li>HEAD OFFICE: KAINCHU TANDA AMARIA PILIBHIT UP 262121</li>
-                        <li>GYAN BHARTI SANSHTHA : ONE OF THE BEST NGO IN ROHELKHAND (ALWAYS READY FOR SOCIAL SERVICE)</li>
-                    </ul>
+            <div class="row justify-content-center d-flex">
+                <div class="col text-center">
+                    <h2 class="section-title mb-4 typed-text"><b>SERVICES</b></h2>
                 </div>
-                <div class="col-md-4">
-                    <img src="images/photo.jpeg" class="img-fluid rounded" alt="Manoj Kumar">
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow-lg p-3 mb-5 bg-white rounded facilities">
+                        <div class="card-body text-center">
+                            <img src="assets/images/sewing.jpg" class="img-fluid mb-3" alt="Clean Classroom"
+                                width="200">
+                            <h5 class="card-title font-weight-bold text-primary">SEWING</h5>
+                            <p class="card-text text-muted">
+                                Sewing are taught here, which develops the students’
+                                skills and enhances their intelligence..
+                            </p>
+                            <a href="service.php" class="btn btn-primary">More Info</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+                        <div class="card-body text-center">
+                            <img src="assets/images/parlour.jpg" alt="lunch area" class="img-fluid mb-3" width="200">
+                            <h5 class="card-title font-weight-bold text-primary">PARLOUR</h5>
+                            <p class="card-text text-muted">
+                                Our Beauty Parlour Training empowers women with professional beauty skills,
+                                helping them achieve financial.
+                            </p>
+                            <a href="service.php" class="btn btn-primary">More Info</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow-lg bg-white rounded p-3 mb-5">
+                        <div class="card-body text-center ">
+                            <img src="assets/images/education.jpg" alt="" class="img-fluid mb-3" width="200">
+                            <h5 class="card-title font-weight-bold text-primary">EDUCATION</h5>
+                            <p class="card-text text-muted">
+                                Our Sanstha provide free education to children for their
+                                future success with professional teachers.
+                            </p>
+                            <a href="service.php" class="btn btn-primary">More Info</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="container mt-2">
-            <div class="row">
-                <div class="col-md-8">
-                    <h2 class="mb-3">MISS DROPATI DEVI</h2>
-                    <ul class="list-unstyled">
-                        <li>PROJECT MANAGER & PROGRAM OFFICER</li>
-                        <li>HEAD OFFICE: KAINCHU TANDA AMARIA PILIBHIT UP 262121</li>
-                        <li>GYAN BHARTI SANSHTHA : ONE OF THE BEST NGO IN ROHELKHAND (ALWAYS READY FOR SOCIAL SERVICE)</li>
-                    </ul>
-                </div>
-                <div class="col-md-4">
-                    <img src="images/pic.jpeg" class="img-fluid rounded" alt="Manoj Kumar">
-                </div>
-            </div>
-        </div>
-    </body>
+    </section>
 
-    </html>
+    <!-- ==== Event section start ==== -->
+    <section>
+        <div class="container mt-5">
+            <div class="row justify-content-center d-flex">
+                <div class="col text-center">
+                    <h2 class="section-title mb-4 typed-text"><b>LATEST EVENT</b></h2>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow-lg p-3 mb-5 bg-white rounded facilities">
+                        <div class="card-body text-center">
+                            <img src="assets/images/enviroment.jpeg" class="img-fluid mb-3" alt="Clean Classroom"
+                                width="200">
+                            <h5 class="card-title font-weight-bold text-primary">Environment Meeting</h5>
+                            <p class="card-text text-muted">
+                                Our Sanstha organizes cleanliness meeting events to raise
+                                encourage community participation in maintaining a clean environment
+                            </p>
+                            <a href="event.php" class="btn btn-primary">More Info</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+                        <div class="card-body text-center">
+                            <img src="assets/images/blanket.jpeg" alt="lunch area" class="img-fluid mb-3"
+                                width="200">
+                            <h5 class="card-title font-weight-bold text-primary">Blanket Distribution</h5>
+                            <p class="card-text text-muted">
+                                Our Sanstha organizes blanket distribution drives to provide warmth and comfort to those in
+                                need,
+                                ensuring protection against harsh weather conditions.
+                            </p>
+                            <a href="event.php" class="btn btn-primary">More Info</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow-lg bg-white rounded p-3 mb-5">
+                        <div class="card-body text-center ">
+                            <img src="assets/images/peace.jpeg" alt="" class="img-fluid mb-3" width="200">
+                            <h5 class="card-title font-weight-bold text-primary">Peace Talkin Meeting</h5>
+                            <p class="card-text text-muted">
+                                Our sanstha organizes peace talk meetings to foster dialogue ,
+                                and encourage conflict resolution for a more harmonious community
+                            </p>
+                            <a href="event.php" class="btn btn-primary">More Info</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container mt-5">
+            <div class="text-center">
+                <h2>Gallery</h2>
+                <p class="text-muted">Explore our sanstha images.</p>
+            </div>
+
+            <div id="galleryCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="assets/images/blanket.jpeg" class="d-block w-100" alt="Image 1">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="assets/images/peace.jpeg" class="d-block w-100" alt="Image 2">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="assets/images/enviroment.jpeg" class="d-block w-100" alt="Image 3">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#galleryCarousel"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon " aria-hidden="true"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#galleryCarousel"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                </button>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="gallery.php" class="btn btn-primary">Show More</a>
+            </div>
+        </div>
+    </section>
+    <!-- ============ Contact Form Start =========== -->
+    <section class="mb-5">
+        <div class="container mt-5">
+            <div class="text-center">
+                <h2>Contact Us</h2>
+                <p class="text-muted">We'd love to hear from you! Fill out the form below to get in touch.</p>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <form action="mailto:gyanbhartingo600@gmail.com" method="post" enctype="text/plain">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        document.querySelectorAll(".donation-btn").forEach(button => {
+            button.addEventListener("click", function(event) {
+                event.preventDefault(); // Prevent form submission
+                document.getElementById("donationAmount").value = this.getAttribute("data-amount");
+            });
+        });
+
+        document.getElementById("customAmountBtn").addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent form submission
+            let customAmount = prompt("Enter your custom donation amount:");
+            if (customAmount !== null && !isNaN(customAmount) && customAmount.trim() !== "") {
+                document.getElementById("donationAmount").value = customAmount;
+            }
+        });
+    </script>
+    <script>
+        // Initialize the counters
+        document.addEventListener("DOMContentLoaded", () => {
+            const counters = document.querySelectorAll(".counter");
+
+            counters.forEach(counter => {
+                const count = parseInt(counter.getAttribute("data-count"), 10);
+                const countUp = new CountUp(counter, count, {
+                    duration: 2, // Animation duration in seconds
+                    useEasing: true,
+                    useGrouping: true,
+                });
+
+                if (!countUp.error) {
+                    countUp.start();
+                } else {
+                    console.error(countUp.error);
+                }
+            });
+        });
+    </script>
 @endsection

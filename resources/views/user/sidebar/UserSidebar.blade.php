@@ -1,14 +1,13 @@
 <style>
     .navv ul li a {
-
            color: white;
-    }
-    
-    .social-icons i {
+       }
+      
 
+       .social-icons i {
            margin-right: 10px;
            font-size: 24px;
-    }
+       }
 </style>
 
 <!-- Navbar -->
@@ -25,18 +24,24 @@
                <li class="nav-item">
                    <a class="nav-link" aria-current="page" href="{{ 'AdminDashboard'}}">Dashboard</a>
                </li>
+               <li class="nav-item">
+                   <a class="nav-link" href="#">Help me</a>
+               </li>
+               <li class="nav-item">
+                   <a class="nav-link" href="#">Publicity</a>
+               </li>
                <li class="nav-item dropdown bg-primary">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                     data-bs-toggle="dropdown" aria-expanded="false">
-                    User
+                    Activity
                 </a>
                 <ul class="dropdown-menu bg-primary" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="{{-- route('userlist') --}}">User List</a></li>
-                    <li><a class="dropdown-item" href="{{-- route('adduser') --}}">Add User</a></li>
+                    <li><a class="dropdown-item" href="{{ route('activitylist') }}">Activity List</a></li>
+                    <li><a class="dropdown-item" href="{{ route('addactivity') }}">Add Activity</a></li>
                 </ul>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{-- route('logout') --}}">Logout</a>
+                <a class="nav-link" href="#">Logout</a>
             </li>
        </div>
    </div>
