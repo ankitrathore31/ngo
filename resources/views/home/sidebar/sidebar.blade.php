@@ -1,75 +1,79 @@
- <style>
-     .navv ul li a {
-            color: white;
-        }
-       
+<style>
+    ul>li>a {
+        color: white;
+        font-weight: 500;
+    }
+</style>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-md bg-primary m-3">
 
-        .social-icons i {
-            margin-right: 10px;
-            font-size: 24px;
-        }
- </style>
- 
- <!-- Navbar -->
- <nav class="navbar navbar-expand-lg bg-primary ">
+    <!-- Main Toast -->
+    <div class="toast text-white" id="mainToast" data-delay="3000"
+        style="position: fixed; bottom: 10px; right: 10px; z-index: 9999;">
+        <!-- <div class="toast-header">
+             <strong class="mr-auto" id="toastTitle"></strong>
+             <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+          </div> -->
+        <div class="toast-body" id="toastBody">
+        </div>
+    </div>
+
+
+
     <div class="container-fluid">
-
+        <!-- Navbar Toggler for Mobile -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse   navv" id="navbarNav">
-            <ul class="navbar-nav">
+        <!-- Navbar Links -->
+        <div class="collapse navbar-collapse overflow-auto" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 flex-wrap">
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ 'welcome' }}">Home</a>
+                    <a class="nav-link text-nowrap text-white" href="">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Help me</a>
+                    <a class="nav-link text-nowrap" href="{{ route('about') }}">About Us</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Publicity</a>
+                    <a class="nav-link text-nowrap" href="{{ route('service') }}">Services</a>
+                </li>
+                <!-- <li class="nav-item">
+                   <a class="nav-link text-nowrap" href="helpme.php">Help Me</a>
+                </li> -->
+                <!-- <li class="nav-item">
+                   <a class="nav-link text-nowrap" href="publicity.php">Publicity</a>
+                </li> -->
+                <li class="nav-item">
+                    <a class="nav-link text-nowrap" href=" {{ route('activity') }} ">Social Activity</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('activity') }}">Social Activity</a>
+                    <a class="nav-link text-nowrap" href="{{ route('event' )}}">Event</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">About Us</a>
+                    <a class="nav-link text-nowrap" href="{{ route('project') }}">Project</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Services</a>
-                </li>
-                <li class="nav-item dropdown bg-primary">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Project
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Running Project</a></li>
-                        <li><a class="dropdown-item" href="#">Previous Project</a></li>
-                        <li><a class="dropdown-item" href="#">Future Project</a></li>
-                    </ul>
+                    <a class="nav-link text-nowrap" href="{{-- --}}">Newspaper Cuttings</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Gallery</a>
+                    <a class="nav-link text-nowrap" href="">Certification</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Donation</a>
+                    <a class="nav-link text-nowrap" href="">Achievements & Rewards</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Notice Board</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route('login') }}">Login</a>
+                    <a class="nav-link text-nowrap" href="">Donation</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route('register') }}">Signup</a>
+                    <a class="nav-link text-nowrap" href="">Notice Board</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-nowrap" href="">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-nowrap" href="" target="_blank">Login</a>
                 </li>
             </ul>
         </div>

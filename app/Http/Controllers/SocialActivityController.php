@@ -80,10 +80,7 @@ class SocialActivityController extends Controller
 
         if ($activity) {
             $destination = 'program_images/' . $activity->program_image;
-            if (File::exists($destination)) {
-                File::delete($destination);
-            }
-            ;
+           
             $activity->delete();
             return redirect()->back()->with('Success', ' Deleted Successfully!');
         } else {

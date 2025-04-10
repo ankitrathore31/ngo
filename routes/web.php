@@ -32,6 +32,10 @@ Route::controller(HomeControlller::class)->group(function(){
     Route::get('/welcome','home')->name('welcome');
     Route::get('/SocialActivity','activitypage')->name('activity');
     Route::get('SocialActivity/ViewActivity','viewhomeactivity')->name('viewactivity');
+    Route::get('/Services', 'servicepage')->name('service');
+    Route::get('/About', 'aboutpage')->name('about');
+    Route::get('/Event', 'eventpage')->name('event');
+    Route::get('/Project', 'projectpage')->name('project');
 
 });
 
@@ -40,10 +44,9 @@ Route::controller(SocialActivityController::class)->group(function(){
     Route::get('admin/addactivity','addactivity')->middleware('auth')->name('addactivity');
     Route::post('admin/saveactivity', 'saveactivity')->middleware('auth')->name('saveactivity');
     Route::get('admin/editactivity/{id}','editactivity')->middleware('auth')->name('editactivity');
-    Route::post('admin/updateactivity', 'updateactivity')->middleware('auth')->name('updateactivity');
+    Route::post('admin/updateactivity/{id}', 'updateactivity')->middleware('auth')->name('updateactivity');
     Route::get('admin/removeactivity/{id}','removeactivity')->middleware('auth')->name('removeactivity');
 
-    
 });
 
 require __DIR__.'/auth.php';
