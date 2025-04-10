@@ -31,7 +31,7 @@
         <div class="collapse navbar-collapse overflow-auto" id="navbarNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 flex-wrap">
                 <li class="nav-item">
-                    <a class="nav-link text-nowrap text-white" href="">Home</a>
+                    <a class="nav-link text-nowrap text-white" href="{{ route('welcome') }}">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-nowrap" href="{{ route('about') }}">About Us</a>
@@ -55,25 +55,25 @@
                     <a class="nav-link text-nowrap" href="{{ route('project') }}">Project</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-nowrap" href="{{-- --}}">Newspaper Cuttings</a>
+                    <a class="nav-link text-nowrap" href="{{ route('news') }}">Newspaper Cuttings</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-nowrap" href="">Certification</a>
+                    <a class="nav-link text-nowrap" href="{{ route('certificate') }}">Certification</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-nowrap" href="">Achievements & Rewards</a>
+                    <a class="nav-link text-nowrap" href="{{ route('reward') }}">Achievements & Rewards</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-nowrap" href="">Donation</a>
+                    <a class="nav-link text-nowrap" href="{{ route('donate') }}">Donation</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-nowrap" href="">Notice Board</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-nowrap" href="">Contact</a>
+                    <a class="nav-link text-nowrap" href="{{ route('contact') }}">Contact</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-nowrap" href="" target="_blank">Login</a>
+                    <a class="nav-link text-nowrap" href="{{ route('login') }}" target="_blank">Login</a>
                 </li>
             </ul>
         </div>

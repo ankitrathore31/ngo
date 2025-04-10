@@ -144,16 +144,16 @@
         <div class="container-fluid">
             <div class="row d-flex justify-content-between hide-sm">
                 <div class="col-md-3 col-sm-6">
-                    <img src="assets/images/logo.png" class="img-fluid custom-img" alt="">
+                    <img src="images/logo.png" class="img-fluid custom-img" alt="">
                 </div>
                 <div class="col-md-3 col-sm-6">
-                    <img src="assets/images/meri-mati.png" class="img-fluid custom-img" alt="">
+                    <img src="images/meri-mati.png" class="img-fluid custom-img" alt="">
                 </div>
                 <div class="col-md-3 col-sm-6">
-                    <img src="assets/images/beti-bachao.png" class="img-fluid custom-img" alt="">
+                    <img src="images/beti-bachao.png" class="img-fluid custom-img" alt="">
                 </div>
                 <div class="col-md-3 col-sm-6">
-                    <img src="assets/images/gandhi.png" class="img-fluid custom-img" alt="">
+                    <img src="images/gandhi.png" class="img-fluid custom-img" alt="">
                 </div>
             </div>
             <div class="row m-4">
@@ -214,10 +214,10 @@
                     </p>
                     <div class="row d-flex justify-content-between mt-2">
                         <div class="col-md-4 mb-3">
-                            <a href="about.php" class="btn btn-info"><i class="fas fa-info-circle"></i> More Info</a>
+                            <a href="{{route('about') }}" class="btn btn-info"><i class="fas fa-info-circle"></i> More Info</a>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <a href="donate.php" class="btn btn-success"><i class="fas fa-donate"></i>Donate Now</a>
+                            <a href="{{route('donate')}}" class="btn btn-success"><i class="fas fa-donate"></i>Donate Now</a>
                         </div>
                         <div class="col-md-4 mb-3">
                             <a href="tel:9411484111" class="btn btn-primary"><i class="fas fa-phone-alt"></i>+91
@@ -243,7 +243,7 @@
                 <div class="col-12">
                     <div class="community-donation p-4 border rounded shadow-sm bg-light">
                         <div class="donation-form">
-                            <form method="post" action="pay.php">
+                            <form method="post" action="{{-- route('pay') --}}">
                                 <div class="container mt-4">
                                     <h5>Your Donation:</h5>
                                     <div class="input-group">
@@ -266,9 +266,6 @@
                                     <button type="submit" class="btn btn-primary">Donate Now <i
                                             class="fa fa-arrow-right"></i></button>
                                 </div>
-                                <!-- <div class="text-center">
-                          <a href="https://paylink.sabpaisa.in/PayLink/getFormDetail?formId=468&clientId=20808" target="_blank" class="btn btn-primary">Donate Now</a>
-                          </div> -->
                             </form>
                         </div>
                     </div>
@@ -510,7 +507,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card shadow-lg p-3 mb-5 bg-white rounded facilities">
                         <div class="card-body text-center">
-                            <img src="assets/images/sewing.jpg" class="img-fluid mb-3" alt="Clean Classroom"
+                            <img src="images/sewing.jpeg" class="img-fluid mb-3" alt="Clean Classroom"
                                 width="200">
                             <h5 class="card-title font-weight-bold text-primary">SEWING</h5>
                             <p class="card-text text-muted">
@@ -524,7 +521,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card shadow-lg p-3 mb-5 bg-white rounded">
                         <div class="card-body text-center">
-                            <img src="assets/images/parlour.jpg" alt="lunch area" class="img-fluid mb-3" width="200">
+                            <img src="images/parlour.jpg" alt="lunch area" class="img-fluid mb-3" width="200">
                             <h5 class="card-title font-weight-bold text-primary">PARLOUR</h5>
                             <p class="card-text text-muted">
                                 Our Beauty Parlour Training empowers women with professional beauty skills,
@@ -537,7 +534,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card shadow-lg bg-white rounded p-3 mb-5">
                         <div class="card-body text-center ">
-                            <img src="assets/images/education.jpg" alt="" class="img-fluid mb-3" width="200">
+                            <img src="images/education.jpg" alt="" class="img-fluid mb-3" width="200">
                             <h5 class="card-title font-weight-bold text-primary">EDUCATION</h5>
                             <p class="card-text text-muted">
                                 Our Sanstha provide free education to children for their
@@ -563,7 +560,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card shadow-lg p-3 mb-5 bg-white rounded facilities">
                         <div class="card-body text-center">
-                            <img src="assets/images/enviroment.jpeg" class="img-fluid mb-3" alt="Clean Classroom"
+                            <img src="images/enviroment.jpeg" class="img-fluid mb-3" alt="Clean Classroom"
                                 width="200">
                             <h5 class="card-title font-weight-bold text-primary">Environment Meeting</h5>
                             <p class="card-text text-muted">
@@ -577,7 +574,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card shadow-lg p-3 mb-5 bg-white rounded">
                         <div class="card-body text-center">
-                            <img src="assets/images/blanket.jpeg" alt="lunch area" class="img-fluid mb-3"
+                            <img src="images/blanket.jpeg" alt="lunch area" class="img-fluid mb-3"
                                 width="200">
                             <h5 class="card-title font-weight-bold text-primary">Blanket Distribution</h5>
                             <p class="card-text text-muted">
@@ -592,7 +589,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card shadow-lg bg-white rounded p-3 mb-5">
                         <div class="card-body text-center ">
-                            <img src="assets/images/peace.jpeg" alt="" class="img-fluid mb-3" width="200">
+                            <img src="images/peace.jpeg" alt="" class="img-fluid mb-3" width="200">
                             <h5 class="card-title font-weight-bold text-primary">Peace Talkin Meeting</h5>
                             <p class="card-text text-muted">
                                 Our sanstha organizes peace talk meetings to foster dialogue ,
@@ -616,13 +613,13 @@
             <div id="galleryCarousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="assets/images/blanket.jpeg" class="d-block w-100" alt="Image 1">
+                        <img src="images/blanket.jpeg" class="d-block w-100" alt="Image 1">
                     </div>
                     <div class="carousel-item">
-                        <img src="assets/images/peace.jpeg" class="d-block w-100" alt="Image 2">
+                        <img src="images/peace-talk.jpeg" class="d-block w-100" alt="Image 2">
                     </div>
                     <div class="carousel-item">
-                        <img src="assets/images/enviroment.jpeg" class="d-block w-100" alt="Image 3">
+                        <img src="images/enviroment.jpeg" class="d-block w-100" alt="Image 3">
                     </div>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#galleryCarousel"

@@ -23,7 +23,7 @@
                         </tr> -->
                         <tr>
                             <td>1</td>
-                            <td><img src="assets/images/education.jpg" alt="Service Image" class="img-fluid"
+                            <td><img src="images/education.jpg" alt="Service Image" class="img-fluid"
                                     style="max-width: 130px;"></td>
                             <td>Free Education</td>
                             <td>Education</td>
@@ -31,7 +31,7 @@
                         </tr>
                         <tr>
                             <td>2</td>
-                            <td><img src="assets/images/peace-talk.jpeg" alt=" Image" class="img-fluid"
+                            <td><img src="images/peace-talk.jpeg" alt=" Image" class="img-fluid"
                                     style="max-width: 150px;"></td>
                             <td>Peace Talk Meeting</td>
                             <td>Peace Talk</td>
@@ -42,7 +42,7 @@
                         <tr>
                             <td>3</td>
                             <!-- <td>16</td> -->
-                            <td><img src="assets/images/enviroment.jpeg" alt=" Image" class="img-fluid"
+                            <td><img src="images/enviroment.jpeg" alt=" Image" class="img-fluid"
                                     style="max-width: 130px;"></td>
                             <td>Environment Protection</td>
                             <td>Environment</td>
@@ -50,7 +50,7 @@
                         </tr>
                         <tr>
                             <td>4</td>
-                            <td><img src="assets/images/food.jpg" alt="Service Image" class="img-fluid"
+                            <td><img src="images/food.jpg" alt="Service Image" class="img-fluid"
                                     style="max-width: 130px;"></td>
                             <td>Free Food</td>
                             <td>Food</td>
@@ -59,7 +59,7 @@
                         <tr>
                             <td>5</td>
                             <!-- <td>16</td> -->
-                            <td><img src="assets/images/silai.jpeg" alt=" Image" class="img-fluid"
+                            <td><img src="images/silai.jpeg" alt=" Image" class="img-fluid"
                                     style="max-width: 130px;"></td>
                             <td>Skill Development & Training Centre</td>
                             <td>Skill Development</td>
@@ -68,7 +68,7 @@
                         </tr>
                         <tr>
                             <td>6</td>
-                            <td><img src="assets/images/woman.jpg" alt=" Image" class="img-fluid"
+                            <td><img src="images/woman.jpg" alt=" Image" class="img-fluid"
                                     style="max-width: 130px;"></td>
                             <td>Save The Women</td>
                             <td>Women Empowerment</td>
@@ -76,7 +76,7 @@
                         </tr>
                         <tr>
                             <td>7</td>
-                            <td><img src="assets/images/peace.jpeg" alt=" Image" class="img-fluid"
+                            <td><img src="images/peace-talk.jpeg" alt=" Image" class="img-fluid"
                                     style="max-width: 130px;"></td>
                             <td>Social Awareness Program</td>
                             <td>Awareness</td>
@@ -86,7 +86,7 @@
                         </tr>
                         <tr>
                             <td>8</td>
-                            <td><img src="assets/images/ind.jpeg" alt=" Image" class="img-fluid"
+                            <td><img src="images/ind.jpeg" alt=" Image" class="img-fluid"
                                     style="max-width: 130px;"></td>
                             <td>Cultural Project</td>
                             <td>Cultural Program</td>
@@ -95,7 +95,7 @@
                         </tr>
                         <tr>
                             <td>9</td>
-                            <td><img src="assets/images/sanitation.PNG" alt=" Image" class="img-fluid"
+                            <td><img src="images/sanitation.PNG" alt=" Image" class="img-fluid"
                                     style="max-width: 130px;"></td>
                             <td>Sanitation Project</td>
                             <td>Clean Campaign</td>
@@ -104,7 +104,7 @@
                         </tr>
                         <tr>
                             <td>10</td>
-                            <td><img src="assets/images/health.PNG" alt=" Image" class="img-fluid"
+                            <td><img src="images/health.PNG" alt=" Image" class="img-fluid"
                                     style="max-width: 130px;"></td>
                             <td>Health Program</td>
                             <td>Health Mission</td>
@@ -113,7 +113,7 @@
                         </tr>
                         <tr>
                             <td>11</td>
-                            <td><img src="assets/images/blanket.jpeg" alt=" Image" class="img-fluid"
+                            <td><img src="images/blanket.jpeg" alt=" Image" class="img-fluid"
                                     style="max-width: 130px;"></td>
                             <td>Help The Poor</td>
                             <td>Poor Alleviation</td>
@@ -122,7 +122,7 @@
                         </tr>
                         <tr>
                             <td>12</td>
-                            <td><img src="assets/images/peace.jpeg" alt=" Image" class="img-fluid"
+                            <td><img src="images/peace-talk.jpeg" alt=" Image" class="img-fluid"
                                     style="max-width: 130px;"></td>
                             <td>Social Problem</td>
                             <td>Peace Talk</td>
@@ -131,7 +131,7 @@
                         </tr>
                         <tr>
                             <td>13</td>
-                            <td><img src="assets/images/hari-naam.PNG" alt=" Image" class="img-fluid"
+                            <td><img src="images/hari-naam.PNG" alt=" Image" class="img-fluid"
                                     style="max-width: 130px;"></td>
                             <td>Hari Naam Mission & Mukesh</td>
                             <td>Religious Program</td>
@@ -140,7 +140,7 @@
                         </tr>
                         <tr>
                             <td>14</td>
-                            <td><img src="assets/images/farmer.jpeg" alt=" Image" class="img-fluid"
+                            <td><img src="images/farmer.jpeg" alt=" Image" class="img-fluid"
                                     style="max-width: 130px;"></td>
                             <td>Farmer Club</td>
                             <td>Agriculture Program</td>
@@ -149,7 +149,7 @@
                         </tr>
                         <tr>
                             <td>15</td>
-                            <td><img src="assets/images/labour.jpeg" alt=" Image" class="img-fluid"
+                            <td><img src="images/labour.jpeg" alt=" Image" class="img-fluid"
                                     style="max-width: 130px;"></td>
                             <td>Labour Tools Distribution</td>
                             <td>Poor Alleviation</td>
@@ -158,7 +158,7 @@
                         </tr>
                         <tr>
                             <td>16</td>
-                            <td><img src="assets/images/drink.jpeg" alt=" Image" class="img-fluid"
+                            <td><img src="images/drink.jpeg" alt=" Image" class="img-fluid"
                                     style="max-width: 130px;"></td>
                             <td>Drinking Water</td>
                             <td>Drinking Water</td>
@@ -167,7 +167,7 @@
                         </tr>
                         <tr>
                             <td>17</td>
-                            <td><img src="assets/images/ration.PNG" alt=" Image" class="img-fluid"
+                            <td><img src="images/ration.PNG" alt=" Image" class="img-fluid"
                                     style="max-width: 130px;"></td>
                             <td>Ration Distribution</td>
                             <td>Poor Alleviation</td>
@@ -176,7 +176,7 @@
                         </tr>
                         <tr>
                             <td>18</td>
-                            <td><img src="assets/images/diaster.PNG" alt=" Image" class="img-fluid"
+                            <td><img src="images/diaster.PNG" alt=" Image" class="img-fluid"
                                     style="max-width: 130px;"></td>
                             <td>Disaster Management</td>
                             <td>Natural Disaster</td>
@@ -185,7 +185,7 @@
                         </tr>
                         <tr>
                             <td>19</td>
-                            <td><img src="assets/images/economic.jpeg" alt=" Image" class="img-fluid"
+                            <td><img src="images/economic.jpeg" alt=" Image" class="img-fluid"
                                     style="max-width: 130px;"></td>
                             <td>Economic Help</td>
                             <td>Poor Alleviation</td>
@@ -194,7 +194,7 @@
                         </tr>
                         <tr>
                             <td>20</td>
-                            <td><img src="assets/images/cow.PNG" alt=" Image" class="img-fluid" style="max-width: 130px;">
+                            <td><img src="images/cow.PNG" alt=" Image" class="img-fluid" style="max-width: 130px;">
                             </td>
                             <td>Cow Service</td>
                             <td>Animal Service</td>
@@ -203,7 +203,7 @@
                         </tr>
                         <tr>
                             <td>21</td>
-                            <td><img src="assets/images/animal-food.PNG" alt=" Image" class="img-fluid"
+                            <td><img src="images/animal-food.PNG" alt=" Image" class="img-fluid"
                                     style="max-width: 130px;"></td>
                             <td>Animal Food</td>
                             <td>Animal Service</td>
