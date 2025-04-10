@@ -216,17 +216,17 @@
       <div class="row">
          <div class="col-md-4 mb-4">
             <div class="card">
-               <img src="assets/images/education2.jpg" class="card-img-top" alt="Education" width="200">
+               <img src="images/education2.jpg" class="card-img-top" alt="Education" width="200">
                <div class="card-body">
                   <h5 class="card-title">Help For Education</h5>
                   <p class="card-text">Providing Free Education by our NGO</p>
-                  <a href="pay.php" class="btn btn-secondary">Donate Now</a>
+                  <a href="{{ route('help-education') }}" class="btn btn-secondary">Donate Now</a>
                </div>
             </div>
          </div>
          <div class="col-md-4 mb-4">
             <div class="card">
-               <img src="assets/images/food.jpg" class="card-img-top" alt="Food" width="200">
+               <img src="images/food.jpg" class="card-img-top" alt="Food" width="200">
                <div class="card-body">
                   <h5 class="card-title">Help For Food</h5>
                   <p class="card-text">Free Food feeding by our NGO</p>
@@ -236,7 +236,7 @@
          </div>
          <div class="col-md-4 mb-4">
             <div class="card">
-               <img src="assets/images/clothe.jpg" class="card-img-top" alt="Clothes" width="200">
+               <img src="images/clothe.jpg" class="card-img-top" alt="Clothes" width="200">
                <div class="card-body">
                   <h5 class="card-title">Help For Clothes</h5>
                   <p class="card-text">Donate for clothes, NGO distributes them</p>
@@ -248,7 +248,7 @@
       <div class="row">
          <div class="col-md-4 mb-4">
             <div class="card">
-               <img src="assets/images/enviroment.jpeg" class="card-img-top" alt="Education" width="200">
+               <img src="images/enviroment.jpeg" class="card-img-top" alt="Education" width="200">
                <div class="card-body">
                   <h5 class="card-title">Help For Environment Protection</h5>
                   <p class="card-text">Environment protection by our NGO</p>
@@ -258,7 +258,7 @@
          </div>
          <div class="col-md-4 mb-4">
             <div class="card">
-               <img src="assets/images/peace.jpeg" class="card-img-top" alt="Education" width="200">
+               <img src="images/peace.jpeg" class="card-img-top" alt="Education" width="200">
                <div class="card-body">
                   <h5 class="card-title">Help For Skill Development & Trainning Centre</h5>
                   <p class="card-text">Skill Deplopment by our NGO</p>
@@ -268,7 +268,7 @@
          </div>
          <div class="col-md-4 mb-4">
             <div class="card">
-               <img src="assets/images/logo.png" class="card-img-top" alt="Education" width="200">
+               <img src="images/logo.png" class="card-img-top" alt="Education" width="200">
                <div class="card-body">
                   <h5 class="card-title">Help For Watershed</h5>
                   <p class="card-text">Watershed service by our NGO</p>
@@ -281,7 +281,7 @@
 
          <div class="col-md-4 mb-4">
             <div class="card">
-               <img src="assets/images/logo.png" class="card-img-top" alt="Education" width="200">
+               <img src="images/logo.png" class="card-img-top" alt="Education" width="200">
                <div class="card-body">
                   <h5 class="card-title">Help For Wild Life</h5>
                   <p class="card-text">Wild Life Protection by our NGO</p>

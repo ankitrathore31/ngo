@@ -36,6 +36,13 @@ Route::controller(HomeControlller::class)->group(function(){
     Route::get('/About', 'aboutpage')->name('about');
     Route::get('/Event', 'eventpage')->name('event');
     Route::get('/Project', 'projectpage')->name('project');
+    Route::get('/News', 'newspage')->name('news');
+    Route::get('/Certificates', 'certificatepage')->name('certificate');
+    Route::get('/Acheivement', 'rewardpage')->name('reward');
+    Route::get('/Donate', 'donatepage')->name('donate');
+    Route::get('/Contact', 'contact')->name('contact');
+    Route::get('/education-donate', 'helpeducationcart')->name('help-education');
+    Route::get('/Pay', 'pay')->name('pay');
 
 });
 

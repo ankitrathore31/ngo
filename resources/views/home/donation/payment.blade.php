@@ -1,39 +1,35 @@
 <?php
-    include("common/connection.php");
-    // connecttion lagao
     $donor_name        = !empty($_POST['donor_name']) ? $_POST['donor_name'] : '';
     $donor_email       = !empty($_POST['donor_email']) ? $_POST['donor_email'] : '';
     $donor_number      = !empty($_POST['donor_number']) ? $_POST['donor_number'] : '';
-    $donor_country     = !empty($_POST['donor_country']) ? $_POST['donor_country'] : '';
-    $donor_state       = !empty($_POST['donor_state']) ? $_POST['donor_state'] : '';
-    $donor_district    = !empty($_POST['donor_district']) ? $_POST['donor_district'] : '';
-    $donor_post        = !empty($_POST['donor_post']) ? $_POST['donor_post'] : '';
-    $donor_pincode     = !empty($_POST['donor_pincode']) ? $_POST['donor_pincode'] : '';
-    $donor_village     = !empty($_POST['donor_village']) ? $_POST['donor_village'] : '';
-    $donation_category = !empty($_POST['donation_category']) ? $_POST['donation_category'] : '';
-    $donor_remark      = !empty($_POST['donor_remark']) ? $_POST['donor_remark'] : '';
+    // $donor_country     = !empty($_POST['donor_country']) ? $_POST['donor_country'] : '';
+    // $donor_state       = !empty($_POST['donor_state']) ? $_POST['donor_state'] : '';
+    // $donor_district    = !empty($_POST['donor_district']) ? $_POST['donor_district'] : '';
+    // $donor_post        = !empty($_POST['donor_post']) ? $_POST['donor_post'] : '';
+    // $donor_pincode     = !empty($_POST['donor_pincode']) ? $_POST['donor_pincode'] : '';
+    // $donor_village     = !empty($_POST['donor_village']) ? $_POST['donor_village'] : '';
+    // $donation_category = !empty($_POST['donation_category']) ? $_POST['donation_category'] : '';
+    // $donor_remark      = !empty($_POST['donor_remark']) ? $_POST['donor_remark'] : '';
     $donation_amount   = !empty($_POST['donation_amount']) ? $_POST['donation_amount'] : '';
-    $donation_date     = date('Y-m-d');
+    // $donation_date     = date('Y-m-d');
     
 
     
-    $donate_date = date('Y-m-d');
+    // $donate_date = date('Y-m-d');
 
-    // Prepare SQL query
-    $query = "INSERT INTO donor_data 
-        (donor_name, donor_email, donor_number, donor_country, donor_state, 
-        donor_district, donor_post, donor_pincode, donor_village, donation_category, 
-        donation_remark, donation_amount, donate_date) 
-        VALUES (
-            '$donor_name', '$donor_email', '$donor_number', '$donor_country',
-            '$donor_state', '$donor_district', '$donor_post', '$donor_pincode',
-            '$donor_village', '$donation_category', '$donation_remark', '$donation_amount',
-            '$donate_date'
-        )";
+    // $query = "INSERT INTO donor_data 
+    //     (donor_name, donor_email, donor_number, donor_country, donor_state, 
+    //     donor_district, donor_post, donor_pincode, donor_village, donation_category, 
+    //     donation_remark, donation_amount, donate_date) 
+    //     VALUES (
+    //         '$donor_name', '$donor_email', '$donor_number', '$donor_country',
+    //         '$donor_state', '$donor_district', '$donor_post', '$donor_pincode',
+    //         '$donor_village', '$donation_category', '$donation_remark', '$donation_amount',
+    //         '$donate_date'
+    //     )";
        
-    // Run query chal gaya code h 
-    $result = mysqli_query($db, $query);
-    $inserted_id = mysqli_insert_id($db);
+    // $result = mysqli_query($db, $query);
+    // $inserted_id = mysqli_insert_id($db);
    
 
 

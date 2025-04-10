@@ -36,4 +36,32 @@ class HomeControlller extends Controller
     public function projectpage(){
         return view ('home.project');
     }
+
+    public function newspage(){
+        return view ('home.newspaper');
+    }
+
+    public function certificatepage(){
+        return view ('home.certification');
+    }
+
+    public function rewardpage(){
+        return view ('home.reward');
+    }
+
+    public function donatepage(){
+        return view ('home.donation.donate');
+    }
+
+    public function contactpage(){
+        return view ('home.contact');
+    }
+
+    public function helpeducationcart(){
+        return view ('home.donation.help-education');
+    }
+
+    public function pay(){
+        return view ('home.donation.payment');
+    }
 }

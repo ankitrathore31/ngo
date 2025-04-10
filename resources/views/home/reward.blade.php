@@ -6,27 +6,27 @@
             <h3 class="text-center">Acheivement & Reward</h3>
             <div class="row mt-2">
                 <div class="col-md-4">
-                    <img src="assets/images/ach1.jpeg" class="img-fluid gallery-img" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src)" alt="Award">
+                    <img src="images/ach1.jpeg" class="img-fluid gallery-img" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src)" alt="Award">
                 </div>
                 <div class="col-md-4">
-                    <img src="assets/images/ach2.jpeg" class="img-fluid gallery-img" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src)" alt="Award">
+                    <img src="images/ach2.jpeg" class="img-fluid gallery-img" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src)" alt="Award">
                 </div>
                 <!-- <div class="col-md-4">
                     <img src="aassets/images/ach3.jpeg" class="img-fluid gallery-img" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src)" alt="Award">
                 </div> -->
                 <div class="col-md-4">
-                    <img src="assets/images/event1.jpeg" class="img-fluid gallery-img" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src)" alt="Award">
+                    <img src="images/event1.jpeg" class="img-fluid gallery-img" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src)" alt="Award">
                  </div>
             </div>
             <div class="row mt-2">
                 <div class="col-md-4">
-                    <img src="assets/images/ach4.jpeg" class="img-fluid gallery-img" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src)" alt="Award">
+                    <img src="images/ach4.jpeg" class="img-fluid gallery-img" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src)" alt="Award">
                 </div>
                 <div class="col-md-4">
-                    <img src="assets/images/ach5.jpeg" class="img-fluid gallery-img" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src)" alt="Award">
+                    <img src="images/ach5.jpeg" class="img-fluid gallery-img" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src)" alt="Award">
                 </div>
                 <div class="col-md-4">
-                    <img src="aassets/images/ach6.jpeg" class="img-fluid gallery-img" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src)" alt="Award">
+                    <img src="images/ach6.jpeg" class="img-fluid gallery-img" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src)" alt="Award">
                 </div>
             </div>
         </div>
