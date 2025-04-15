@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialActivityController;
 use App\Http\Controllers\HomeControlller;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,14 +20,21 @@ Route::get('/', function () {
     return view('home.welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth'])->name('dashboard');
 
 Route::get('/admin', function () {
     return view('admin.AdminDashboard');
 })->middleware(['auth'])->name('AdminDashboard');
 
+Route::get('/user', function () {
+    return view('ngo.dashboard');
+})->middleware(['auth'])->name('UserDashboard');
+
+Route::controller(AdminController::class)->group(function(){
+    Route::get('admin/add-user','adduserpage')->middleware('auth')->name('add-user');
+});
 
 Route::controller(HomeControlller::class)->group(function(){
     Route::get('/welcome','home')->name('welcome');
