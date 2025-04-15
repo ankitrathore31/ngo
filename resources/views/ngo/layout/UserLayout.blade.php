@@ -18,13 +18,13 @@
 
     <!-- Header Section -->
 
-    @include('user.header.UserHeader')
+    @include('ngo.header.UserHeader')
 
 
 
     <!-- Sidebar Section -->
 
-    @include('user.sidebar.UserSidebar')
+    @include('ngo.sidebar.UserSidebar')
 
 
     <!-- Main Content Section -->

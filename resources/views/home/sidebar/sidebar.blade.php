@@ -73,7 +73,7 @@
                     <a class="nav-link text-nowrap" href="{{ route('contact') }}">Contact</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-nowrap" href="{{ route('login') }}" target="_blank">Login</a>
+                    <a class="nav-link text-nowrap" href="{{ route('login') }}" >Login</a>
                 </li>
             </ul>
         </div>

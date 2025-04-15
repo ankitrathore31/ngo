@@ -1,59 +1,115 @@
-<x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{-- <title>Register - NGO Portal</title> --}}
 
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
-        <form method="POST" action="{{ route('register') }}">
-            @csrf
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
-            <!-- Name -->
-            <div>
-                <x-label for="name" :value="__('Name')" />
+    <style>
+        body {
+            background-color: #f5f8fa;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+        }
+        .card-header {
+            background: #007bff;
+            color: white;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        .form-control::placeholder {
+            color: #aaa;
+        }
+        .form-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+        .input-group {
+            position: relative;
+        }
+        .input-group input {
+            padding-left: 40px;
+        }
+    </style>
+</head>
+<body>
 
-                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card">
+                <div class="card-header">Create Account</div>
+                <div class="card-body">
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('register') }}">
+                        @csrf
+
+                        <!-- Name -->
+                        <div class="form-group input-group">
+                            <i class="fas fa-user form-icon"></i>
+                            <input type="text" name="name" class="form-control" placeholder="Full Name" value="{{ old('name') }}" required autofocus>
+                        </div>
+
+                        <!-- Email Address -->
+                        <div class="form-group input-group">
+                            <i class="fas fa-envelope form-icon"></i>
+                            <input type="email" name="email" class="form-control" placeholder="Email Address" value="{{ old('email') }}" required>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="form-group input-group">
+                            <i class="fas fa-lock form-icon"></i>
+                            <input type="password" name="password" class="form-control" placeholder="Password" required autocomplete="new-password">
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="form-group input-group">
+                            <i class="fas fa-lock form-icon"></i>
+                            <input type="password" name="password_confirmation" class="form-control" placeholder="Confirm Password" required>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="form-group text-right">
+                            <a href="{{ route('login') }}" class="text-muted small">Already registered?</a>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary btn-block" type="submit">
+                                <i class="fas fa-user-plus mr-2"></i>Register
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
             </div>
+        </div>
+    </div>
+</div>
 
-            <!-- Email Address -->
-            <div class="mt-4">
-                <x-label for="email" :value="__('Email')" />
+<!-- Bootstrap JS and FontAwesome -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
-            </div>
-
-            <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
-
-                <x-input id="password" class="block mt-1 w-full"
-                                type="password"
-                                name="password"
-                                required autocomplete="new-password" />
-            </div>
-
-            <!-- Confirm Password -->
-            <div class="mt-4">
-                <x-label for="password_confirmation" :value="__('Confirm Password')" />
-
-                <x-input id="password_confirmation" class="block mt-1 w-full"
-                                type="password"
-                                name="password_confirmation" required />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
-                    {{ __('Already registered?') }}
-                </a>
-
-                <x-button class="ml-4">
-                    {{ __('Register') }}
-                </x-button>
-            </div>
-        </form>
-    </x-auth-card>
-</x-guest-layout>
+</body>
+</html>

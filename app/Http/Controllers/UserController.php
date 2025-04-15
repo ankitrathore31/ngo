@@ -13,7 +13,7 @@ class AdminController extends Controller
             'password' => 'required',
         ]);
         if (Auth::attempt($credentials)){
-            return view('admin.dashboard');
+            return view('');
         }
     }
 }
