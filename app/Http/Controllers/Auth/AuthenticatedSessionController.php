@@ -32,13 +32,14 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
         if(auth()->user()->user_type == 'Admin'){
-            return redirect()->intended(RouteServiceProvider::ADMIN_HOME);
+            // return redirect()->route('admin');
+            return redirect('/admin');
         }
-        elseif(auth()->user()->user_type == 'user'){
-            return redirect()->intended(RouteServiceProvider::USER_HOME);
+        elseif(auth()->user()->user_type == 'ngo'){
+            return redirect()->route('ngo');
         }
         else{
-            return redirect()->route('home');
+            // return view('auth.login');
         }
         
     }

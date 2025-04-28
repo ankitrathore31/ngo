@@ -1,30 +1,49 @@
-<style>
-     .header {
-            padding: 15px 0;
-        }
-</style>
-
 <!-- Header Section -->
-<header class="container-fluid header">
-    <div class="row align-items-center">
-        <div class="col-md-2 text-center text-md-start">
-            <a href="https://gyanbhartingo.org">
-                <img src="images/LOGO.png" alt="Logo" class="img-fluid">
-            </a>
-        </div>
-        <div class="col-md-6 text-center">
-            <h3 class="text-danger"><b>GYAN BHARTI SANSTHA (NGO)</b></h3>
-            <h4>Together let's help each other</h4>
-            <p class="text-primary"><u>HEAD OFFICE- KAINCHU TANDA AMARIA PILIPHIT UP</u></p>
-        </div>
-        <div class="col-md-4 text-center">
-            <p class="text-primary"><u> THE INSTITUTION IN CONTINUOUS SERVICE SINCE 2009</u></p>
-            <p class="fw-semibold">  <a href="#" class="text-dark"><i class="fab fa-call"></i></a>Call +919411484111</p>
-            <div class="social-icons">
-                <a href="#" class="text-dark"><i class="fab fa-facebook"></i></a>
-                <a href="#" class="text-dark"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="text-dark"><i class="fab fa-instagram"></i></a>
+<header class="container-fluid border-bottom py-2" style="border-bottom: 3px solid #8000ff;">
+    <div class="d-flex justify-content-between align-items-center flex-wrap">
+        
+        <!-- Left: Logo + Title + Address -->
+        <div class="d-flex align-items-center flex-grow-1">
+            <img src="images/logo.png" alt="Logo" width="60" height="60" class="me-2">
+            <div>
+                <h6 class="mb-0 fw-bold text-uppercase">GYAN BHARTI SANSTHA</h6>
+                <small class="text-muted">Kainchu Tanda Amaria 262121 Pilibhit (Uttar Pradesh)</small>
             </div>
+        </div>
+
+        <!-- Center: Session Select -->
+        <div class="text-center mx-auto me-3">
+            <label for="sessionSelect" class="form-label mb-0 me-2 fw-semibold">Session Year</label>
+            <select name="session" class="form-select form-select-sm d-inline-block w-auto" id="sessionSelect">
+                <option value="2025-26">2025-26</option>
+                <option value="2024-25">2024-25</option>
+                <option value="2023-24">2023-24</option>
+            </select>
+        </div>
+
+        <!-- Right: User Dropdown -->
+        <div class="dropdown text-end">
+            <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="images/logo.png" alt="User" width="40" height="40" class="rounded-circle me-2">
+                <div class="text-start">
+                    <div class="fw-bold text-dark">GYAN BHARTI SANSTHA</div>
+                    <small class="text-primary">Admin</small>
+                </div>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="userDropdown">
+                <li><a class="dropdown-item" href="#">Profile</a></li>
+                <li><a class="dropdown-item" href="#">Change Password</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <form method="POST" action="{{ route('logout') }}" class="px-3">
+                        @csrf
+                        <a class="btn btn-outline-danger btn-sm w-100" href="route('logout')"
+                           onclick="event.preventDefault(); this.closest('form').submit();">
+                            {{ __('Log Out') }}
+                        </a>
+                    </form>
+                </li>
+            </ul>
         </div>
     </div>
 </header>

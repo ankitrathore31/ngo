@@ -214,10 +214,12 @@
                     </p>
                     <div class="row d-flex justify-content-between mt-2">
                         <div class="col-md-4 mb-3">
-                            <a href="{{route('about') }}" class="btn btn-info"><i class="fas fa-info-circle"></i> More Info</a>
+                            <a href="{{ route('about') }}" class="btn btn-info"><i class="fas fa-info-circle"></i> More
+                                Info</a>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <a href="{{route('donate')}}" class="btn btn-success"><i class="fas fa-donate"></i>Donate Now</a>
+                            <a href="{{ route('donate') }}" class="btn btn-success"><i class="fas fa-donate"></i>Donate
+                                Now</a>
                         </div>
                         <div class="col-md-4 mb-3">
                             <a href="tel:9411484111" class="btn btn-primary"><i class="fas fa-phone-alt"></i>+91
@@ -278,8 +280,14 @@
     <section>
         <div class="container-fluid mt-5">
             <div class="row justify-content-center d-flex">
-                <div class="col text-center">
+                <div class="col-md-10 text-center">
                     <h2 class="section-title mb-4"><b>SANSTHA WORKING AREA</b></h2>
+                </div>
+                <div class="col-md-2 text-end">
+                    <select name="" class="form-control" id="">
+                        <option value="">2025</option>
+                    </select>
+                    {{-- <input type="text" class="form-control w-50" value="2025"> --}}
                 </div>
             </div>
             <div class="row">
@@ -364,8 +372,14 @@
         <div class="container-fluid mt-5">
             <!-- Heading -->
             <div class="row justify-content-center d-flex">
-                <div class="col text-center">
+                <div class="col-md-10 text-center">
                     <h2 class="section-title mb-4"><b>SANSTHA ACTIVITIES</b></h2>
+                </div>
+                <div class="col-md-2 text-end">
+                    <select name="" class="form-control" id="">
+                        <option value="">2025</option>
+                    </select>
+                    {{-- <input type="text" class="form-control w-50" value="2025"> --}}
                 </div>
             </div>
 
@@ -507,8 +521,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card shadow-lg p-3 mb-5 bg-white rounded facilities">
                         <div class="card-body text-center">
-                            <img src="images/sewing.jpeg" class="img-fluid mb-3" alt="Clean Classroom"
-                                width="200">
+                            <img src="images/sewing.jpeg" class="img-fluid mb-3" alt="Clean Classroom" width="200">
                             <h5 class="card-title font-weight-bold text-primary">SEWING</h5>
                             <p class="card-text text-muted">
                                 Sewing are taught here, which develops the students’
@@ -574,8 +587,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card shadow-lg p-3 mb-5 bg-white rounded">
                         <div class="card-body text-center">
-                            <img src="images/blanket.jpeg" alt="lunch area" class="img-fluid mb-3"
-                                width="200">
+                            <img src="images/blanket.jpeg" alt="lunch area" class="img-fluid mb-3" width="200">
                             <h5 class="card-title font-weight-bold text-primary">Blanket Distribution</h5>
                             <p class="card-text text-muted">
                                 Our Sanstha organizes blanket distribution drives to provide warmth and comfort to those in
@@ -601,6 +613,54 @@
                 </div>
             </div>
         </div>
+    </section>
+    <!-- ==== Donate Section Start ==== -->
+    <section class="mt-4 py-5">
+        <div class="container">
+            <div class="row justify-content-center d-flex">
+                <div class="col text-center">
+                    <h2 class="section-title mb-4 typed-text"><b>HELP & DONATE NOW</b></h2>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-lg bg-white rounded p-3 mb-5">
+                        <div class="card-body text-center">
+                            <img src="images/education2.jpg" class="img-fluid mb-3" width="200">
+                            <div class="card-body">
+                                <h5 class="card-title">Help For Education</h5>
+                                <p class="card-text">Providing Free Education by our NGO</p>
+                                <a href="{{ route('help-education') }}" class="btn btn-outline-success">Donate Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-lg bg-white rounded p-3 mb-5">
+                        <div class="card-body text-center">
+                            <img src="images/food.jpg" class="img-fluid mb-3" width="200">
+                            <div class="card-body">
+                                <h5 class="card-title">Help For Food</h5>
+                                <p class="card-text">Free Food feeding by our NGO</p>
+                                <a href="{{ route('help-food') }}" class="btn btn-outline-success">Donate Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-lg bg-white rounded p-3 mb-5">
+                        <div class="card-body text-center">
+                            <img src="images/clothe.jpg" class="img-fluid mb-3" width="200">
+                            <h5 class="card-title">Help For Clothes</h5>
+                            <p class="card-text">Donate for clothes, NGO distributes them</p>
+                            <a href="{{ route('help-clothe') }}" class="btn btn-outline-success">Donate Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
     </section>
 
     <section>
