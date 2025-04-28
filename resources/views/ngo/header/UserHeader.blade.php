@@ -1,30 +1,49 @@
 <style>
-     .header {
-            padding: 15px 0;
-        }
+    .header {
+        padding: 15px 0;
+    }
 </style>
 
 <!-- Header Section -->
-<header class="container-fluid header">
+<header class="container-fluid shadow-sm py-2" style="border-bottom: 3px solid #8000ff;">
     <div class="row align-items-center">
-        <div class="col-md-2 text-center text-md-start">
-            <a href="https://gyanbhartingo.org">
-                <img src="images/LOGO.png" alt="Logo" class="img-fluid">
-            </a>
+        <!-- Left: Logo + School Info -->
+        <div class="col-md-4 d-flex align-items-center">
+            <img src="images/LOGO.png" alt="Logo" width="60" height="60" class="me-2">
+            <div>
+                <h6 class="mb-0 fw-bold text-uppercase">GYAN BHARTI SANSTHA</h6>
+                <small class="text-muted">Kainchu Tanda Amaria 262121 Pilibhit (Uttar Pradesh)</small>
+            </div>
         </div>
-        <div class="col-md-6 text-center">
-            <h3 class="text-danger"><b>GYAN BHARTI SANSTHA (NGO)</b></h3>
-            <h4>Together let's help each other</h4>
-            <p class="text-primary"><u>HEAD OFFICE- KAINCHU TANDA AMARIA PILIPHIT UP</u></p>
+
+        <!-- Center: Session Selector -->
+        <div class="col-md-4 text-end">
+            <label for="session" class="form-label fw-bold mb-1">Session Year</label>
+            <select class="form-select form-select-sm d-inline-block w-auto" id="session">
+                <option selected>2025-26</option>
+                <option>2024-25</option>
+                <option>2023-24</option>
+            </select>
         </div>
-        <div class="col-md-4 text-center">
-            <p class="text-primary"><u> THE INSTITUTION IN CONTINUOUS SERVICE SINCE 2009</u></p>
-            <p class="fw-semibold">  <a href="#" class="text-dark"><i class="fab fa-call"></i></a>Call +919411484111</p>
-            <div class="social-icons">
-                <a href="#" class="text-dark"><i class="fab fa-facebook"></i></a>
-                <a href="#" class="text-dark"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="text-dark"><i class="fab fa-instagram"></i></a>
+
+        <!-- Right: User Info + Dropdown -->
+        <div class="col-md-4 text-end">
+            <div class="dropdown">
+                <a href="#" class="d-inline-flex align-items-center text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="images/LOGO.png" alt="User" width="40" height="40" class="rounded-circle me-2">
+                    <div class="text-start">
+                        <div class="fw-bold text-dark">GYAN BHARTI SANSTHA</div>
+                        <small class="text-primary">Founder</small>
+                    </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="userDropdown">
+                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" href="#">Logout</a></li>
+                </ul>
             </div>
         </div>
     </div>
 </header>
+

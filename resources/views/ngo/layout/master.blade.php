@@ -13,6 +13,43 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
 </head>
+<style>
+    .ui-datepicker select.ui-datepicker-month,
+    .ui-datepicker select.ui-datepicker-year {
+        font-size: 14px;
+        padding: 4px;
+    }
+
+    .ui-datepicker-title {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    /* Optional: style the calendar */
+    .ui-datepicker {
+        background: #fff;
+        border: 1px solid #ccc;
+        padding: 10px;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .ui-datepicker th {
+        color: #fff;
+        background-color: #607d8b;
+        padding: 5px;
+    }
+
+    .ui-datepicker td {
+        text-align: center;
+        padding: 5px;
+    }
+
+    .ui-datepicker td a {
+        text-decoration: none;
+        color: #000;
+    }
+</style>
 
 <body>
 
@@ -33,8 +70,20 @@
 
 
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
     <!-- Add your scripts here -->
     <script src="{{ asset('js/app.js') }}"></script>
+    <script>
+        $(function() {
+            $(".datepicker").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-100:+10",
+                dateFormat: "dd-mm-yy"
+            });
+        });
+    </script>
 </body>
 
 </html>

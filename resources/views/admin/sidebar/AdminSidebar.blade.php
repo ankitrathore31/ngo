@@ -1,43 +1,71 @@
+
 <style>
     .navv ul li a {
-
-           color: white;
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
     }
-    
-    .social-icons i {
 
-           margin-right: 10px;
-           font-size: 24px;
+    .navv ul li a:hover {
+        color: #ffc107; /* yellow highlight on hover */
+        transform: translateY(-2px);
+    }
+
+    .navv .dropdown-menu {
+        background-color: #0d6efd; /* match bootstrap primary */
+        transition: all 0.3s ease;
+    }
+
+    .navv .dropdown-item {
+        color: white;
+    }
+
+    .navv .dropdown-item:hover {
+        background-color: #0a58ca;
+        color: #ffc107;
     }
 </style>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg bg-primary ">
-   <div class="container-fluid">
+<nav class="navbar navbar-expand-lg bg-primary">
+    <div class="container-fluid">
 
-       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-           aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-           <span class="navbar-toggler-icon"></span>
-       </button>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-       <div class="collapse navbar-collapse   navv" id="navbarNav">
-           <ul class="navbar-nav">
-               <li class="nav-item">
-                   <a class="nav-link" aria-current="page" href="{{ 'AdminDashboard'}}">Dashboard</a>
-               </li>
-               <li class="nav-item dropdown bg-primary">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    User
-                </a>
-                <ul class="dropdown-menu bg-primary" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="{{-- route('userlist') --}}">User List</a></li>
-                    <li><a class="dropdown-item" href="{{-- route('adduser') --}}">Add User</a></li>
-                </ul>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{-- route('logout') --}}">Logout</a>
-            </li>
-       </div>
-   </div>
+        <div class="collapse navbar-collapse navv d-flex justify-content-center" id="navbarNav">
+            <ul class="navbar-nav">
+
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="{{ '/admin' }}">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('add-ngo') }}">
+                        <i class="fas fa-user-plus"></i> Add Ngo
+                    </a>
+                </li>
+
+                {{-- <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-users"></i> User
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{{ route('userlist') }}">
+                            <i class="fas fa-list"></i> User List</a>
+                        </li>
+                    </ul>
+                </li> --}}
+
+            </ul>
+        </div>
+    </div>
 </nav>

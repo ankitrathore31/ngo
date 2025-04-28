@@ -40,8 +40,8 @@
                                 <td>{{ $item->program_category }}</td>
                                 <td>{{ $item->program_address }}</td>
                                 <td>
-                                    <a href=" {{ route('viewactivity') }}" class="btn btn-sm bg-success me-2">
-                                        <i class="fa fa-eye text-white"></i></a>
+                                    <a href="{{ 'viewreport/' . $item->id }}" class="btn btn-sm bg-success me-2">
+                                        <i class="fa-regular fa-eye"></i></a>
                             </tr>
                         @endforeach
                     </tbody>

@@ -24,9 +24,11 @@
         <div class="collapse navbar-collapse" id="mainNavbar">
             <ul class="navbar-nav flex-wrap w-100 justify-content-center overflow-auto">
                 <!-- Dashboard -->
+
                 <li class="nav-item">
                     <a href="index.php" class="nav-link text-white"><i class="fas fa-tachometer-alt"></i> DASHBOARD</a>
                 </li>
+
 
                 <!-- Activity & Event -->
                 <li class="nav-item dropdown">

@@ -24,38 +24,78 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&amp;family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&amp;family=Nunito:ital,wght@0,200..1000;1,200..1000&amp;family=Outfit:wght@100..900&amp;display=swap"
         rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 </head>
 <style>
-html,
-body {
-   height: 100%;
-   margin: 0;
-   display: flex;
-   flex-direction: column;
-}
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+    }
 
-.wrapper {
-   flex: 1;
-   /* This makes content take up remaining space */
-   display: flex;
-   flex-direction: column;
-   padding-bottom: 80px;
-}
+    .wrapper {
+        flex: 1;
+        /* This makes content take up remaining space */
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 80px;
+    }
 
-/* Ensure the footer is always at the bottom */
-.footer {
-   background-color: #343a40;
-   /* Dark footer background */
-   color: white;
-   text-align: center;
-   padding: 15px 0;
-   width: 100%;
-}
+    /* Ensure the footer is always at the bottom */
+    .footer {
+        background-color: #343a40;
+        /* Dark footer background */
+        color: white;
+        text-align: center;
+        padding: 15px 0;
+        width: 100%;
+    }
 
-.header {
-   padding: 15px 0;
-}
+    .header {
+        padding: 15px 0;
+    }
+
+    .ui-datepicker select.ui-datepicker-month,
+    .ui-datepicker select.ui-datepicker-year {
+        font-size: 14px;
+        padding: 4px;
+    }
+
+    .ui-datepicker-title {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    /* Optional: style the calendar */
+    .ui-datepicker {
+        background: #fff;
+        border: 1px solid #ccc;
+        padding: 10px;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .ui-datepicker th {
+        color: #fff;
+        background-color: #607d8b;
+        padding: 5px;
+    }
+
+    .ui-datepicker td {
+        text-align: center;
+        padding: 5px;
+    }
+
+    .ui-datepicker td a {
+        text-decoration: none;
+        color: #000;
+    }
 </style>
+
 <body>
 
     <!-- Header Section -->
@@ -82,6 +122,27 @@ body {
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/countup.js@2.6.0/dist/countUp.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <script>
+        $(function() {
+            $(".datepicker").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-100:+10",
+                dateFormat: "dd-mm-yy"
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "Select Here",
+                allowClear: true
+            });
+        });
+    </script>
 </body>
 
 </html>

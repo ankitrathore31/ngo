@@ -16,8 +16,8 @@ class HomeControlller extends Controller
         return view('home.activity.SocialActivity',compact('activity'));
     }
 
-    public function viewhomeactivity(){
-        $activity = Activity::get();
+    public function viewreport($id){
+        $activity = Activity::find($id);
         return view('home.activity.ViewActivity',compact('activity'));
     }
 
@@ -57,8 +57,20 @@ class HomeControlller extends Controller
         return view ('home.contact');
     }
 
-    public function helpeducationcart(){
+    public function helpeducation(){
         return view ('home.donation.help-education');
+    }
+
+    public function helpclothe(){
+        return view ('home.donation.help-clothe');
+    }
+
+    public function helpfood(){
+        return view('home.donation.help-food');
+    }
+
+    public function helpenvironment(){
+        return view('home.donation.help-environment');
     }
 
     public function pay(){
