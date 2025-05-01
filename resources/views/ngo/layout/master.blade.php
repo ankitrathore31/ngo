@@ -55,13 +55,13 @@
 
     <!-- Header Section -->
 
-    @include('ngo.header.UserHeader')
+    @include('ngo.header.NgoHeader')
 
 
 
     <!-- Sidebar Section -->
 
-    @include('ngo.sidebar.UserSidebar')
+    @include('ngo.sidebar.NgoSidebar')
 
 
     <!-- Main Content Section -->

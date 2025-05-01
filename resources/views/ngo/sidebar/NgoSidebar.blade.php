@@ -9,6 +9,9 @@
         font-size: 24px;
         font-weight: 400;
     }
+    .dropdown-item{
+        z-index: 2 !important;
+    }
 </style>
 
 <!-- Navbar -->

@@ -46,6 +46,10 @@
 
     <div class="wrapper">
         <div class="container-fluid mt-5">
+            <div class="row">
+                <h1>Welcome, {{ Auth::user()->name }}</h1>
+                <p>User Type: {{ Auth::user()->user_type }}</p>
+            </div>
             <div class="row g-4">
                 <!-- Total Users -->
                 <div class="col-md-4 col-sm-6">

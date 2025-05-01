@@ -5,6 +5,7 @@ use App\Http\Controllers\SocialActivityController;
 use App\Http\Controllers\HomeControlller;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\NgoController;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +34,7 @@ Route::get('/', function () {
 Route::controller(HomeControlller::class)->group(function () {
     Route::get('/welcome', 'home')->name('welcome');
     Route::get('/SocialActivity', 'activitypage')->name('activity');
-    Route::get('SocialActivity/ViewActivity/{id}', 'viewreport')->name('viewreport');
+    Route::get('SocialActivity/ViewReport/{id}', 'viewreport')->name('viewreport');
     Route::get('/Services', 'servicepage')->name('service');
     Route::get('/About', 'aboutpage')->name('about');
     Route::get('/Event', 'eventpage')->name('event');
@@ -41,13 +42,19 @@ Route::controller(HomeControlller::class)->group(function () {
     Route::get('/News', 'newspage')->name('news');
     Route::get('/Certificates', 'certificatepage')->name('certificate');
     Route::get('/Acheivement', 'rewardpage')->name('reward');
-    Route::get('/Donate', 'donatepage')->name('donate');
+    Route::get('/Donation', 'donatepage')->name('donate-page');
     Route::get('/Contact', 'contact')->name('contact');
     Route::get('/education-donate', 'helpeducationcart')->name('help-education');
     Route::get('/food-donate', 'helpfood')->name('help-food');
     Route::get('/clothe-donate', 'helpclothe')->name('help-clothe');
     Route::get('/environment-donate', 'helpenvironment')->name('help-environment');
     Route::get('/Pay', 'pay')->name('pay');
+});
+
+Route::controller(PaymentController::class)->group(function () {
+    Route::post('/donate',  'savedonor')->name('donate');
+    Route::get('/checkout','checkout')->name('donation.checkout');
+    Route::get('/payment-success/{id}', 'success')->name('payment.success');
 });
 
 
