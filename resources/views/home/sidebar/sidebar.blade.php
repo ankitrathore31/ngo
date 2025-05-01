@@ -64,7 +64,7 @@
                     <a class="nav-link text-nowrap" href="{{ route('reward') }}">Achievements & Rewards</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-nowrap" href="{{ route('donate') }}">Donation</a>
+                    <a class="nav-link text-nowrap" href="{{ route('donate-page') }}">Donation</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-nowrap" href="">Notice Board</a>
