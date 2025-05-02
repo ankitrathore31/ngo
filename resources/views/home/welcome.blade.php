@@ -158,7 +158,7 @@
             </div>
             <div class="row m-4">
                 <div class="col-sm-12 col-md-12 col-xxl-12 col-lg-12">
-                    <h3 class="fw-bold mb-3 text-center">WELCOME TO <span class="text-primary">GYAN BHARTI SANSTHA
+                    <h3 class="fw-bold mb-3 text-center">Welcome To <span class="text-primary">GYAN BHARTI SANSTHA
                             (NGO)</span></h3>
                     <p class="text-muted fst-italic fs-5">Empowering communities since <strong>30th June 2009</strong></p>
                     <p class="about_ngo"><em>Gyan Bharti Sanstha (NGO) </em>is working since 2009
