@@ -28,7 +28,7 @@
                     <h5 class="mb-0">Donor Information</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('pay') }}">
+                    <form action="{{ route('donate') }}">
                         <div class="mb-3">
                             <label for="donor_name" class="form-label">Full Name</label>
                             <input type="text" name="donor_name" id="donor_name" class="form-control" required>
