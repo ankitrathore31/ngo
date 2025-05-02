@@ -86,7 +86,7 @@ class PaymentController extends Controller
             $donor->order_id = $res['order_id'];
             $donor->save();
 
-            return redirect()->to("checkout.php?session_id=" . $res['payment_session_id']);
+            return redirect()->route('checkout', ['session_id' => $res['payment_session_id']]);
         }
 
         return back()->withErrors(['error' => 'Failed to initiate payment.']);
@@ -99,7 +99,7 @@ class PaymentController extends Controller
         $sessionId = $request->session_id;
         $donorId = $request->donor_id;
 
-        return view('checkout', compact('sessionId', 'donorId'));
+        return view('home.donation.checkout', compact('sessionId', 'donorId'));
     }
 
 

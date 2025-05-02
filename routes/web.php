@@ -53,8 +53,8 @@ Route::controller(HomeControlller::class)->group(function () {
 
 Route::controller(PaymentController::class)->group(function () {
     Route::post('/donate',  'savedonor')->name('donate');
-    Route::get('/checkout','checkout')->name('donation.checkout');
     Route::get('/payment-success/{id}', 'success')->name('payment.success');
+    Route::get('/checkout',  'checkout')->name('checkout');
 });
 
 
