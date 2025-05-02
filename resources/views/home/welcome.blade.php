@@ -158,7 +158,7 @@
             </div>
             <div class="row m-4">
                 <div class="col-sm-12 col-md-12 col-xxl-12 col-lg-12">
-                    <h3 class="fw-bold mb-3 text-center">Welcome To <span class="text-primary">GYAN BHARTI SANSTHA
+                    <h3 class="fw-bold mb-3 text-center">WELCOME TO <span class="text-primary">GYAN BHARTI SANSTHA
                             (NGO)</span></h3>
                     <p class="text-muted fst-italic fs-5">Empowering communities since <strong>30th June 2009</strong></p>
                     <p class="about_ngo"><em>Gyan Bharti Sanstha (NGO) </em>is working since 2009
@@ -638,7 +638,7 @@
                 <div class="col-md-4 mb-4">
                     <div class="card shadow-lg bg-white rounded p-3 mb-5">
                         <div class="card-body text-center">
-                            <img src="images/food.jpg" class="img-fluid mb-3" width="200">
+                            <img src="images/education2.jpg" class="img-fluid mb-3" width="200">
                             <div class="card-body">
                                 <h5 class="card-title">Help For Food</h5>
                                 <p class="card-text">Free Food feeding by our NGO</p>
