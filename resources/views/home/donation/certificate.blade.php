@@ -115,8 +115,7 @@
     </div>
 
     <script>
-        document.getElementById('donorName').innerText = "John Doe";
-        document.getElementById('donationAmount').innerText = "₹5,000";
+
 
         function printCertificate() {
             window.print();
@@ -132,14 +131,12 @@
         }
 
 
-        const donor = encodeURIComponent("John Doe");
-        const amount = encodeURIComponent("₹5,000");
-        const textMessage = encodeURIComponent(`I proudly donated ${amount} to a great cause!`);
-        const pageUrl = encodeURIComponent(window.location.href);
+        // const textMessage = encodeURIComponent(`I proudly donated ${amount} to a great cause!`);
+        // const pageUrl = encodeURIComponent(window.location.href);
 
-        document.getElementById('shareWhatsapp').href = `https://api.whatsapp.com/send?text=${textMessage} ${pageUrl}`;
-        document.getElementById('shareFacebook').href = `https://www.facebook.com/sharer/sharer.php?u=${pageUrl}`;
-        document.getElementById('shareTwitter').href =
-        `https://twitter.com/intent/tweet?text=${textMessage}&url=${pageUrl}`;
+        // document.getElementById('shareWhatsapp').href = `https://api.whatsapp.com/send?text=${textMessage} ${pageUrl}`;
+        // document.getElementById('shareFacebook').href = `https://www.facebook.com/sharer/sharer.php?u=${pageUrl}`;
+        // document.getElementById('shareTwitter').href =
+        // `https://twitter.com/intent/tweet?text=${textMessage}&url=${pageUrl}`;
     </script>
 @endsection
