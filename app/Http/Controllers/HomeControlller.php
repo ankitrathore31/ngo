@@ -12,12 +12,13 @@ class HomeControlller extends Controller
     }
 
     public function activitypage(){
-        $activity = Activity::get();
+        $activity = Activity::orderBy('activity_no', 'asc')->get();
         return view('home.activity.SocialActivity',compact('activity'));
     }
 
     public function viewreport($id){
-        $activity = Activity::find($id);
+        $activity = Activity::findOrFail($id);
+       
         return view('home.activity.ViewActivity',compact('activity'));
     }
 

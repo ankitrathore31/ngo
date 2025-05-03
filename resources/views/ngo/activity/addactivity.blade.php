@@ -34,12 +34,12 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4 mb-3">
-                            {{-- <label for="">Program Date <span class="login-danger">*</span></label> --}}
+                            <label for="" class="form-label bold">Program Date <span class="login-danger">*</span></label>
                             <input type="text" id="datepicker" class="datepicker form-control @error('program_date') is-invalid @enderror"
                                 name="program_date" placeholder="Select Date" required>
                         </div>
                         <div class="col-md-4 mb-3">
-                            {{-- <label for="program_year">Program Year / Session <span class="login-danger">*</span></label> --}}
+                            <label for="program_year" class="form-label bold">Program Session <span class="login-danger">*</span></label>
                             <select class="form-control @error('program_session') is-invalid @enderror" name="program_session"
                                 required>
                                 <option value="">Select Session</option>
@@ -53,9 +53,9 @@
                            
                         </div>
                         <div class="col-md-4 mb-3">
-                            {{-- <label for="">Program Time <span class="login-danger">*</span></label> --}}
+                            <label for="" class="form-label bold">Program Time <span class="login-danger">*</span></label>
                             <input type="time" class="form-control @error('program_time') is-invalid @enderror"
-                                name="program_time" required>
+                                name="program_time" placeholder="Selcet Time" required>
                         </div>
                         <div class="row">
                             <div class="col-md-12 mb-3">
