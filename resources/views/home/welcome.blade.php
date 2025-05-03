@@ -218,7 +218,7 @@
                                 Info</a>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <a href="{{ route('donate') }}" class="btn btn-success"><i class="fas fa-donate"></i>Donate
+                            <a href="{{ route('donate-page') }}" class="btn btn-success"><i class="fas fa-donate"></i>Donate
                                 Now</a>
                         </div>
                         <div class="col-md-4 mb-3">
@@ -245,28 +245,34 @@
                 <div class="col-12">
                     <div class="community-donation p-4 border rounded shadow-sm bg-light">
                         <div class="donation-form">
-                            <form method="post" action="{{-- route('pay') --}}">
-                                <div class="container mt-4">
-                                    <h5>Your Donation:</h5>
-                                    <div class="input-group">
-                                        <span class="input-group-text">₹</span>
-                                        <input type="text" id="donationAmount" name="donation_amount"
-                                            class="form-control" placeholder="Enter amount" required>
-                                    </div>
-                                    <div class="mt-3">
-                                        <button class="btn btn-outline-primary donation-btn" data-amount="100">100</button>
-                                        <button class="btn btn-outline-primary donation-btn" data-amount="200">200</button>
-                                        <button class="btn btn-outline-primary donation-btn" data-amount="300">300</button>
-                                        <button class="btn btn-outline-primary donation-btn" data-amount="500">500</button>
-                                        <button class="btn btn-outline-danger" id="customAmountBtn">Custom</button>
+                            <form method="post" action="{{ route('donate') }}">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-md-8 mb-3">
+                                        <label for="name" class="form-label">Donor Name:</label>
+                                        <input type="text" class="form-control" name="donor_name" id="name">
                                     </div>
                                 </div>
-                                <div class="mb-3">
-                                    <h6 class="mt-2">After Gave Donation Get a Certifiate:</h6>
+                                <div class="row">
+                                    <div class="col-md-8 mb-3">
+                                        <label for="number" class="form-label">Donor Mobile Number:</label>
+                                        <input type="number" class="form-control" name="donor_number" id=""
+                                            maxlength="10">
+                                    </div>
                                 </div>
-                                <div class="text-center">
-                                    <button type="submit" class="btn btn-primary">Donate Now <i
-                                            class="fa fa-arrow-right"></i></button>
+                                <div class=" row">
+                                    <div class="col-md-8 mb-3">
+                                        <label for="amount" class="form-label">Donation Amount:</label>
+                                        <input type="number" class="form-control" name="donation_amount" id="amount"
+                                            value="" required>
+                                    </div>
+                                </div>
+                                <div class=" row">
+                                    <div class="col-md-6 text-center">
+                                        <!-- <input type="submit" class="btn btn-success mt-1" value="Pay Now" name="submit"> -->
+                                        <button type="submit" name="submit" class="btn btn-success mt-2">Pay
+                                            Now</button>
+                                    </div>
                                 </div>
                             </form>
                         </div>

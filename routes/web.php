@@ -34,7 +34,7 @@ Route::get('/', function () {
 Route::controller(HomeControlller::class)->group(function () {
     Route::get('/welcome', 'home')->name('welcome');
     Route::get('/SocialActivity', 'activitypage')->name('activity');
-    Route::get('SocialActivity/ViewReport/{id}', 'viewreport')->name('viewreport');
+    Route::get('SocialActivity/ViewReport/{id}','viewreport')->name('viewreport');
     Route::get('/Services', 'servicepage')->name('service');
     Route::get('/About', 'aboutpage')->name('about');
     Route::get('/Event', 'eventpage')->name('event');
