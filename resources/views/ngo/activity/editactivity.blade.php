@@ -8,58 +8,91 @@
                 </div>
             </div>
             <div class="card-body">
-                <form action="{{route ("updateactivity", ['id' => $activity->id]) }}" method="POST" enctype="multipart/form-data" class="m-3">
+                <form action="{{ route('updateactivity', ['id' => $activity->id]) }}" method="POST"
+                    enctype="multipart/form-data" class="m-3">
                     @csrf
                     <input type="text" hidden value="{{ $activity->id }}">
                     <div class="row">
                         <div class="col-md-4 col-sm-2 mb-3 text-start">
-                           <span class="me-2">Activity Sr. No. </span><input type="number" value="{{ $activity->activity_no }}" name="activity_no" class="w-50 @error('activity_no') is-invalid @enderror">
+                            <span class="me-2">Activity Sr. No. </span><input type="number"
+                                value="{{ $activity->activity_no }}" name="activity_no"
+                                class="w-50 @error('activity_no') is-invalid @enderror">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3 form-group local-from">
                             {{-- <label for="">Program name <span class="login-danger">*</span></label> --}}
                             <input type="text" class="form-control @error('program_name') is-invalid @enderror"
-                                name="program_name" placeholder="Program Name" value="{{ $activity->program_name }}" required>
+                                name="program_name" placeholder="Program Name" value="{{ $activity->program_name }}"
+                                required>
                         </div>
                         <div class="col-md-6 mb-3">
                             {{-- <label for="">Program Category <span class="login-danger">*</span></label> --}}
                             <select class="form-control select @error('program_category') is-invalid @enderror"
                                 name="program_category" required>
                                 <option value="" selected>Select Category</option>
-                                <option value="Public Program"
-                                    {{ $activity->program_category == 'Public Program' ? 'selected' : '' }}>Public Program
-                                </option>
-                                <option value="Entertainment"
-                                    {{ $activity->program_category == 'Goverment Program' ? 'selected' : '' }}>Goverment Program
-                                </option>
-    
+
+                                @php
+                                    $categories = [
+                                        'Public Program',
+                                        'Government Program',
+                                        'Education',
+                                        'Environment',
+                                        'Social Awareness Program',
+                                        'Cultural Program',
+                                        'Sanitation Program',
+                                        'Health Program',
+                                        'Poor Alleviation',
+                                        'Women Empowerment',
+                                        'Social Problem',
+                                        'Peace Talks Program',
+                                        'Skill Development',
+                                        'Religious Program',
+                                        'Agriculture Program',
+                                        'Other Activities',
+                                    ];
+                                @endphp
+
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category }}"
+                                        {{ $activity->program_category == $category ? 'selected' : '' }}>
+                                        {{ $category }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
+
                     </div>
                     <div class="row">
                         <div class="col-md-4 mb-3">
-                            {{-- <label for="">Program Date <span class="login-danger">*</span></label> --}}
-                            <input type="text" class="datepicker form-control @error('program_date') is-invalid @enderror"
+                            <label for="">Program Date <span class="login-danger">*</span></label>
+                            <input type="text"
+                                class="datepicker form-control @error('program_date') is-invalid @enderror"
                                 name="program_date" value="{{ $activity->program_date }}" required>
                         </div>
                         <div class="col-md-4 mb-3">
-                            {{-- <label for="program_session">Program Year / Session <span class="login-danger">*</span></label> --}}
-                            <select class="form-control @error('program_session') is-invalid @enderror" name="program_session" required>
+                            <label for="program_session">Program Session <span class="login-danger">*</span></label>
+                            <select class="form-control @error('program_session') is-invalid @enderror"
+                                name="program_session" required>
                                 <option value="">Select Session</option>
                                 @php
                                     $currentYear = date('Y');
                                 @endphp
                                 @for ($year = $currentYear; $year >= 2000; $year--)
-                                    <option value="{{ $year }}" {{ (old('program_session', $activity->academic_session) == $year) ? 'selected' : '' }}>
-                                        {{ $year }}
+                                    @php
+                                        $session = $year . '-' . ($year + 1);
+                                    @endphp
+                                    <option value="{{ $session }}"
+                                        {{ old('program_session', $activity->academic_session) == $session ? 'selected' : '' }}>
+                                        {{ $session }}
                                     </option>
                                 @endfor
                             </select>
                         </div>
-                        
+
+
                         <div class="col-md-4 mb-3">
-                            {{-- <label for="">Program Time <span class="login-danger">*</span></label> --}}
+                            <label for="">Program Time <span class="login-danger">*</span></label>
                             <input type="time" class="form-control @error('program_time') is-invalid @enderror"
                                 name="program_time" value="{{ $activity->program_time }}" required>
                         </div>
@@ -81,17 +114,17 @@
                             {{-- <label for="">Program image <span class="login-danger">*</span></label> --}}
                             <input type="file" class="form-control @error('program_image') is-invalid @enderror"
                                 name="program_image" value="{{ $activity->program_image }}" required>
-    
+
                         </div>
                         <div class="col-md-6">
-                            <img src="{{ asset('program_images/' . $activity->program_image) }}" width="200px" height="100px"
-                                alt="image">
+                            <img src="{{ asset('program_images/' . $activity->program_image) }}" width="200px"
+                                height="100px" alt="image">
                         </div>
                     </div>
                     <div class="form-group text-center mt-4">
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
-    
+
                 </form>
             </div>
         </div>

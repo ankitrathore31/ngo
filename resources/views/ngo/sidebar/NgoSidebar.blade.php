@@ -36,12 +36,20 @@
                 <!-- Activity & Event -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
-                            class="fas fa-tasks"></i> ACTIVITY & EVENT</a>
+                            class="fas fa-tasks"></i> ACTIVITY</a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="{{ route('activitylist')}}">Activity List</a></li>
                         <li><a class="dropdown-item" href="{{route('addactivity') }}">Add Activity</a></li>
-                        <li><a class="dropdown-item" href="">Event List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('activitylist')}}">Activity List</a></li>
+                    </ul>
+                </li>
+
+                  <!-- Activity & Event -->
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
+                            class="fas fa-tasks"></i> EVENT</a>
+                    <ul class="dropdown-menu bg-primary">
                         <li><a class="dropdown-item" href="">Add Event</a></li>
+                        <li><a class="dropdown-item" href="">Event List</a></li>
                     </ul>
                 </li>
 

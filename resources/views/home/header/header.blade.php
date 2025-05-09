@@ -20,7 +20,7 @@
             <p class="text-primary text-sm" style="font-size: 15px;"><b>THE INSTITUTION IN CONTINUOUS SERVICE SINCE
                     2009</b></p>
             <p><a href="tel:" class="btn btn-primary btn-sm">Call Now</a>
-                <a href="mailto:" class="btn btn-primary btn-sm">Mail Now</a>
+                <a href="mailto:gyanbhartingo600@gmail.com" class="btn btn-primary btn-sm">Mail Now</a>
             </p>
             <div class="social-icons mt-3">
                 <a href="" class="text-dark"><i class="fab fa-facebook"></i></a>

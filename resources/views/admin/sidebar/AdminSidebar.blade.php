@@ -53,17 +53,20 @@
                     </a>
                 </li>
 
-                {{-- <li class="nav-item dropdown">
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-users"></i> User
+                        <i class="fas fa-cog"></i> Setting
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{{ route('userlist') }}">
-                            <i class="fas fa-list"></i> User List</a>
+                        <li><a class="dropdown-item" href="{{-- route('add-session') --}}">
+                            <i class="fas fa-list"></i> Add Session</a>
+                        </li>
+                        <li><a class="dropdown-item" href="{{-- route('') --}}">
+                            <i class="fas fa-"></i>Session List</a>
                         </li>
                     </ul>
-                </li> --}}
+                </li>
 
             </ul>
         </div>
