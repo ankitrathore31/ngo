@@ -16,7 +16,7 @@
                         <thead>
                             <tr class=" table-primary">
                                 <th scope="col">Activity No.</th>
-                                {{-- <th scope="col">Year</th> --}}
+                                {{-- <th scope="col">Session</th> --}}
                                 <th scope="col">Date/Time</th>
                                 <th scope="col">Program Image</th>
                                 <th scope="col">Program Name</th>
@@ -29,6 +29,7 @@
                             @foreach ($activity as $item)
                                 <tr>
                                     <td>{{ $item->activity_no }}</td>
+                                    {{-- <td>{{ $activity->academic_session }}</td> --}}
                                     <td>{{ \Carbon\Carbon::parse($item->program_date)->format('d-m-Y') }}
                                         <br> {{ $item->program_time }}
                                     </td>
