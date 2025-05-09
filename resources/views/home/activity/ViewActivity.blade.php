@@ -79,7 +79,7 @@
     <div class="report-container shadow-sm mt-5">
         <div class="text-center report-header mb-4">
             <h2 class="mb-2"> Activity Report</h2>
-            <p class="lead fw-semibold"><strong>{{ $activity->program_name }}</strong></p>
+            {{-- <p class="lead fw-semibold"><strong>{{ $activity->program_name }}</strong></p> --}}
         </div>
         <div class="report-image mt-4 mb-3">
             {{-- <p class="section-title">Event Image</p> --}}
