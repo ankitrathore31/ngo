@@ -19,7 +19,7 @@
                     <thead class="text-white">
                         <tr class=" bg-success">
                             <th scope="col">Sr.No.</th>
-                            <th>Session</th>
+                            {{-- <th>Session</th> --}}
                             <th scope="col">Date/Time</th>
                             <th scope="col">Program Image</th>
                             <th scope="col">Program Name</th>
@@ -32,7 +32,7 @@
                         @foreach ($activity as $item)
                             <tr>
                                 <td>{{ $item->activity_no }}</td>
-                                <td>{{ $activity->academic_session }}</td>
+                                {{-- <td>{{ $activity->academic_session }}</td> --}}
                                 <td>{{ \Carbon\Carbon::parse($item->program_date)->format('d-m-Y') }}
                                     <br> {{ $item->program_time }}
                                 </td>
@@ -43,7 +43,7 @@
                                 <td>{{ $item->program_address }}</td>
                                 <td>
                                     <a href="{{ route('viewreport', ['id' => $item->id]) }}" class="btn btn-sm bg-success me-2">
-                                        <i class="fa-regular fa-eye"></i>
+                                        <i class="fa fa-eye"></i>
                                     </a>
                             </tr>
                         @endforeach
