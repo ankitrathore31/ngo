@@ -50,7 +50,15 @@
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-                    <li><a class="dropdown-item text-danger" href="#">Logout</a></li>
+                    <li>
+                        <form method="POST" action="{{ route('logout') }}" class="px-3">
+                            @csrf
+                            <a class="btn btn-outline-danger btn-sm w-100" href="route('logout')"
+                                onclick="event.preventDefault(); this.closest('form').submit();">
+                                {{ __('Log Out') }}
+                            </a>
+                        </form>
+                    </li>
                 </ul>
             </div>
         </div>
