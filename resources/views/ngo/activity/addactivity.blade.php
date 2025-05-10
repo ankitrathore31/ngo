@@ -22,13 +22,11 @@
                                 name="program_name" placeholder="Program Name" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            {{-- <label for="">Program Category <span class="login-danger">*</span></label> --}}
                             <select class="form-control select @error('program_category') is-invalid @enderror"
                                     name="program_category" required>
                                 <option value="" selected>Select Category</option>
                                 <option value="Public Program">Public Program</option>
                                 <option value="Government Program">Government Program</option>
-                                <!-- Add more options here as needed -->
                                 <option value="Education">Education</option>
                                 <option value="Environment">Environment</option>
                                 <option value="Social Awareness Program">Social Awareness Program</option>
@@ -43,8 +41,18 @@
                                 <option value="Religious Program">Religious Program</option>
                                 <option value="Agriculture Program">Agriculture Program</option>
                                 <option value="Other Activities">Other Activities</option>
+                                
+                                <!-- Added new options -->
+                                <option value="Labour Tools Distribution">Labour Tools Distribution</option>
+                                <option value="Drinking Water">Drinking Water</option>
+                                <option value="Ration Distribution">Ration Distribution</option>
+                                <option value="Disaster Management">Disaster Management</option>
+                                <option value="Economic Help">Economic Help</option>
+                                <option value="Cow Service">Cow Service</option>
+                                <option value="Animal Food">Animal Food</option>
                             </select>
                         </div>
+                        
                         
                     </div>
                     <div class="row">
@@ -57,16 +65,9 @@
                             <label for="program_session" class="form-label bold">Program Session <span class="login-danger">*</span></label>
                             <select class="form-control @error('program_session') is-invalid @enderror" name="program_session" required>
                                 <option value="">Select Session</option>
-                                @php
-                                    $currentYear = date('Y');
-                                @endphp
-                                @for ($year = $currentYear; $year >= 2000; $year--)
-                                    @php
-                                        $nextYear = $year + 1;
-                                        $session = $year . '-' . $nextYear;
-                                    @endphp
-                                    <option value="{{ $session }}">{{ $session }}</option>
-                                @endfor
+                                @foreach ($data as $session)
+                                    <option value="{{ $session->session_date }}">{{ $session->session_date }}</option>
+                                @endforeach
                             </select>
                         </div>
                         

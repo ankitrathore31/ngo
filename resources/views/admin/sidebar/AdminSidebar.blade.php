@@ -59,10 +59,10 @@
                         <i class="fas fa-cog"></i> Setting
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{{-- route('add-session') --}}">
+                        <li><a class="dropdown-item" href="{{ route('add-session') }}">
                             <i class="fas fa-list"></i> Add Session</a>
                         </li>
-                        <li><a class="dropdown-item" href="{{-- route('') --}}">
+                        <li><a class="dropdown-item" href="{{ route('session-list') }}">
                             <i class="fas fa-"></i>Session List</a>
                         </li>
                     </ul>

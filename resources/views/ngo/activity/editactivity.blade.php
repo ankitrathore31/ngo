@@ -21,13 +21,11 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3 form-group local-from">
-                            {{-- <label for="">Program name <span class="login-danger">*</span></label> --}}
                             <input type="text" class="form-control @error('program_name') is-invalid @enderror"
                                 name="program_name" placeholder="Program Name" value="{{ $activity->program_name }}"
                                 required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            {{-- <label for="">Program Category <span class="login-danger">*</span></label> --}}
                             <select class="form-control select @error('program_category') is-invalid @enderror"
                                 name="program_category" required>
                                 <option value="" selected>Select Category</option>
@@ -50,12 +48,19 @@
                                         'Religious Program',
                                         'Agriculture Program',
                                         'Other Activities',
+                                        'Labour Tools Distribution',
+                                        'Drinking Water',
+                                        'Ration Distribution',
+                                        'Disaster Management',
+                                        'Economic Help',
+                                        'Cow Service',
+                                        'Animal Food',
                                     ];
                                 @endphp
 
                                 @foreach ($categories as $category)
                                     <option value="{{ $category }}"
-                                        {{ $activity->program_category == $category ? 'selected' : '' }}>
+                                        {{ isset($activity) && $activity->program_category == $category ? 'selected' : '' }}>
                                         {{ $category }}
                                     </option>
                                 @endforeach
@@ -71,26 +76,18 @@
                                 name="program_date" value="{{ $activity->program_date }}" required>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="program_session">Program Session <span class="login-danger">*</span></label>
-                            <select class="form-control @error('program_session') is-invalid @enderror"
-                                name="program_session" required>
+                            <label for="program_session" class="form-label bold">Program Session <span class="login-danger">*</span></label>
+                            <select class="form-control @error('program_session') is-invalid @enderror" name="program_session" required>
                                 <option value="">Select Session</option>
-                                @php
-                                    $currentYear = date('Y');
-                                @endphp
-                                @for ($year = $currentYear; $year >= 2000; $year--)
-                                    @php
-                                        $session = $year . '-' . ($year + 1);
-                                    @endphp
-                                    <option value="{{ $session }}"
-                                        {{ old('program_session', $activity->academic_session) == $session ? 'selected' : '' }}>
-                                        {{ $session }}
+                                @foreach ($data as $session)
+                                    <option value="{{ $session->session_date }}"
+                                        {{ isset($activity) && $activity->academic_session == $session->session_date ? 'selected' : '' }}>
+                                        {{ $session->session_date }}
                                     </option>
-                                @endfor
+                                @endforeach
                             </select>
                         </div>
-
-
+                        
                         <div class="col-md-4 mb-3">
                             <label for="">Program Time <span class="login-danger">*</span></label>
                             <input type="time" class="form-control @error('program_time') is-invalid @enderror"
