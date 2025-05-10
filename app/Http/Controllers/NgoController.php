@@ -8,9 +8,18 @@ use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use App\Models\Ngo;
 use App\Models\User;
+use App\Models\academic_session;
+use Illuminate\Support\Facades\Session;
 
 class NgoController extends Controller
 {
+
+    public function boot()
+    {
+        View::composer('ngo.header.NgoHeader', function ($view) {
+            $view->with('all_sessions', academic_session::orderBy('session_date', 'desc')->get());
+        });
+    }
     public function savengo(Request $request)
     {
         $request->validate([
@@ -75,14 +84,15 @@ class NgoController extends Controller
     {
         $ngo = Ngo::findOrFail($id);
 
-        
+
         $ngo->status = $ngo->status == 1 ? 0 : 1;
         $ngo->save();
 
         return redirect()->back()->with('success', 'NGO status updated successfully.');
     }
 
-    public function editngo($id){
+    public function editngo($id)
+    {
         $ngo = Ngo::find($id);
         return view('admin.ngo.edit-ngo', compact('ngo'));
     }
@@ -93,8 +103,8 @@ class NgoController extends Controller
             'established_date' => 'required|date',
             'ngo_name' => 'required|string|max:255',
             'founder_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:ngos,email'.$id,
-            'phone_number' => 'required|string|max:10|unique:ngos,phone_number' .$id,
+            'email' => 'required|string|email|max:255|unique:ngos,email' . $id,
+            'phone_number' => 'required|string|max:10|unique:ngos,phone_number' . $id,
             'address' => 'required|string|max:255',
             'state' => 'required|string|max:255',
             'pin_code' => 'required|string|max:255',

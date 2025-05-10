@@ -4,20 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Models\Activity;
 use Illuminate\Http\Request;
+use App\Models\academic_session;
+use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 
 class SocialActivityController extends Controller
 {
-    public function activitylist(){
+    public function activitylist()
+    {
         $activity = Activity::orderBy('activity_no', 'asc')->get();
-        return view ('ngo.activity.activitylist',compact('activity'));
+        return view('ngo.activity.activitylist', compact('activity'));
     }
 
-    public function addactivity(){
-        return view ('ngo.activity.addactivity');
+    public function addactivity()
+    {
+        $data = academic_session::all();
+        Session::put('all_academic_session', $data);
+        return view('ngo.activity.addactivity', compact('data'));
     }
 
-    public function saveactivity(Request $request){
+    public function saveactivity(Request $request)
+    {
         $request->validate([
             'activity_no' => 'required',
             'program_name' => 'required|string|max:255',
@@ -48,7 +55,7 @@ class SocialActivityController extends Controller
             $file = $request->file('program_image');
             $extension = $file->getClientOriginalExtension();
             $filename = time() . '.' . $extension;
-            $file->move(public_path('program_images'), $filename); 
+            $file->move(public_path('program_images'), $filename);
             $activity->program_image = $filename;
         }
         $activity->save();
@@ -56,41 +63,50 @@ class SocialActivityController extends Controller
         return redirect()->route('activitylist')->with('success', 'Program registered successfully!');
     }
 
-    public function editactivity($id){
+    public function editactivity($id)
+    {
         $activity = Activity::find($id);
-        return view('ngo.activity.editactivity',compact('activity'));
+        $data = academic_session::all();
+        Session::put('all_academic_session', $data);
+        return view('ngo.activity.editactivity', compact('activity', 'data'));
     }
 
-    public function updateactivity(Request $request, $id){
-        // dd($request);
+    public function updateactivity(Request $request, $id)
+    {
         $activity = Activity::find($id);
+
         $activity->activity_no = $request->activity_no;
         $activity->program_name = $request->program_name;
         $activity->program_category = $request->program_category;
-        $activity->program_date = \Carbon\Carbon::createFromFormat('d-m-Y', $request->program_date)->format('Y-m-d');
-        $activity->academic_session = $request->program_session;
+        $activity->program_date = \Carbon\Carbon::parse($request->program_date)->format('Y-m-d');
+        $activity->academic_session = $request->program_session;  
         $activity->program_time = $request->program_time;
         $activity->program_address = $request->program_address;
         $activity->program_report = $request->program_report;
+        // Handle image upload
         if ($request->hasFile('program_image')) {
             $file = $request->file('program_image');
             $extension = $file->getClientOriginalExtension();
             $filename = time() . '.' . $extension;
-            $file->move(public_path('program_images'), $filename); 
+            $file->move(public_path('program_images'), $filename);
             $activity->program_image = $filename;
         }
+
+        
         $activity->save();
 
-        return redirect()->route('activitylist')->with('success', 'Program update sccessfully');
+        return redirect()->route('activitylist')->with('success', 'Program updated successfully');
     }
+
+
 
     public function removeactivity($id)
     {
-        $activity= Activity::find($id);
+        $activity = Activity::find($id);
 
         if ($activity) {
             $destination = 'program_images/' . $activity->program_image;
-           
+
             $activity->delete();
             return redirect()->back()->with('Success', ' Deleted Successfully!');
         } else {
@@ -104,5 +120,3 @@ class SocialActivityController extends Controller
         return view('ngo.activity.viewactivity', compact('activity'));
     }
 }
-
-

@@ -290,8 +290,14 @@
                     <h2 class="section-title mb-4"><b>SANSTHA WORKING AREA</b></h2>
                 </div>
                 <div class="col-md-2 text-end">
-                    <select name="" class="form-control" id="">
-                        <option value="">2025</option>
+                    <select class="form-control" id="session">
+                        @php
+                            $sessions = Session::get('all_academic_session');
+                            $sessions = collect($sessions)->sortByDesc('session_date');
+                        @endphp
+                        @foreach ($sessions as $session)
+                            <option value="{{ $session->session_date }}">{{ $session->session_date }}</option>
+                        @endforeach
                     </select>
                     {{-- <input type="text" class="form-control w-50" value="2025"> --}}
                 </div>
@@ -381,9 +387,15 @@
                 <div class="col-md-10 text-center">
                     <h2 class="section-title mb-4"><b>SANSTHA ACTIVITIES</b></h2>
                 </div>
-                <div class="col-md-2 text-end">
-                    <select name="" class="form-control" id="">
-                        <option value="">2025</option>
+                <div class="col-md-2 text-start">
+                    <select class="form-control" id="session">
+                        @php
+                            $sessions = Session::get('all_academic_session');
+                            $sessions = collect($sessions)->sortByDesc('session_date');
+                        @endphp
+                        @foreach ($sessions as $session)
+                            <option value="{{ $session->session_date }}">{{ $session->session_date }}</option>
+                        @endforeach
                     </select>
                     {{-- <input type="text" class="form-control w-50" value="2025"> --}}
                 </div>
@@ -503,6 +515,79 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center shadow-sm bg-light text-dark">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Other Activities</h5>
+                            <p class="card-text fs-4 counter" data-count="60">42</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center shadow-sm bg-success text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Labour Tools Distribution</h5>
+                            <p class="card-text fs-4 counter" data-count="70">50</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center shadow-sm bg-info text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Drinking Water</h5>
+                            <p class="card-text fs-4 counter" data-count="80">65</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center shadow-sm bg-warning text-dark">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Ration Distribution</h5>
+                            <p class="card-text fs-4 counter" data-count="90">75</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center shadow-sm bg-danger text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Disaster Management</h5>
+                            <p class="card-text fs-4 counter" data-count="100">85</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center shadow-sm bg-secondary text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Economic Help</h5>
+                            <p class="card-text fs-4 counter" data-count="110">90</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center shadow-sm bg-dark text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Cow Service</h5>
+                            <p class="card-text fs-4 counter" data-count="120">100</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center shadow-sm bg-muted text-dark">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Animal Food</h5>
+                            <p class="card-text fs-4 counter" data-count="130">110</p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-md-3 mb-3">
                     <div class="card text-center shadow-sm bg-light text-dark">
                         <div class="card-body">

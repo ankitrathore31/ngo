@@ -20,16 +20,24 @@
         <div class="col-md-4 text-end">
             <label for="session" class="form-label fw-bold mb-1">Session Year</label>
             <select class="form-select form-select-sm d-inline-block w-auto" id="session">
-                <option selected>2025-26</option>
-                <option>2024-25</option>
-                <option>2023-24</option>
+                @php
+                    $sessions = Session::get('all_academic_session');
+                    $sessions = collect($sessions)->sortByDesc('session_date');
+                @endphp
+                @foreach ($sessions as $session)
+                    <option value="{{ $session->session_date }}">{{ $session->session_date }}</option>
+                @endforeach
             </select>
         </div>
+
+
+
 
         <!-- Right: User Info + Dropdown -->
         <div class="col-md-4 text-end">
             <div class="dropdown">
-                <a href="#" class="d-inline-flex align-items-center text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <a href="#" class="d-inline-flex align-items-center text-decoration-none dropdown-toggle"
+                    id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="images/LOGO.png" alt="User" width="40" height="40" class="rounded-circle me-2">
                     <div class="text-start">
                         <div class="fw-bold text-dark">GYAN BHARTI SANSTHA</div>
@@ -39,11 +47,12 @@
                 <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="userDropdown">
                     <li><a class="dropdown-item" href="#">Profile</a></li>
                     <li><a class="dropdown-item" href="#">Settings</a></li>
-                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
                     <li><a class="dropdown-item text-danger" href="#">Logout</a></li>
                 </ul>
             </div>
         </div>
     </div>
 </header>
-

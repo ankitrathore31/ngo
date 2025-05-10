@@ -68,6 +68,12 @@ Route::get('/admin', function () {
 Route::controller(AdminController::class)->group(function () {
     Route::get('admin', 'ngolist')->middleware('auth')->name('ngolist');
     Route::get('add-ngo', 'addngo')->middleware('auth')->name('add-ngo');
+    Route::get('admin/session', 'sessionlist')->middleware('auth')->name('session-list');
+    Route::get('admin/add-session', 'addsession')->middleware('auth')->name('add-session');
+    Route::post('admin/save-session', 'savesession')->middleware('auth')->name('save-session');
+    Route::get('admin/edit-session/{id}', 'editsession')->middleware('auth')->name('edit-session');
+    Route::put('admin/update-session/{id}', 'updatesession')->middleware('auth')->name('update-session');
+    Route::get('admin/delete-session/{id}', 'deletesession')->middleware('auth')->name('delete-session');
 });
 
 
