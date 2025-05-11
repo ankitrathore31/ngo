@@ -1,12 +1,23 @@
 @extends('ngo.layout.master')
 @Section('content')
-    <div class="container mt-5">    
+    <div class="container mt-5">  
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">Add Activity</h5>
+
+            <!-- Breadcrumb aligned to right -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
+                    <li class="breadcrumb-item"><a href="{{ route('activitylist') }}">Activity List</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Add Activity</li>
+                </ol>
+            </nav>
+        </div>  
         <div class="card m-1">
-            <div class="card-header">
+            {{-- <div class="card-header">
                 <div class="card-title border-bottom p-2 bg-info text-center">
                     <h3><b>ADD ACTIVITY</b></h3>
                 </div>
-            </div>
+            </div> --}}
             <div class="card-body">
                 <form action="{{ route('saveactivity') }}" method="POST" enctype="multipart/form-data" class="m-3">
                     @csrf
@@ -40,7 +51,7 @@
                                 <option value="Skill Development">Skill Development</option>
                                 <option value="Religious Program">Religious Program</option>
                                 <option value="Agriculture Program">Agriculture Program</option>
-                                <option value="Other Activities">Other Activities</option>
+                                
                                 
                                 <!-- Added new options -->
                                 <option value="Labour Tools Distribution">Labour Tools Distribution</option>
@@ -50,6 +61,7 @@
                                 <option value="Economic Help">Economic Help</option>
                                 <option value="Cow Service">Cow Service</option>
                                 <option value="Animal Food">Animal Food</option>
+                                <option value="Other Activities">Other Activities</option>
                             </select>
                         </div>
                         

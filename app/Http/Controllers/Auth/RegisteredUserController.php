@@ -8,6 +8,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Ngo;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
@@ -47,6 +48,15 @@ class RegisteredUserController extends Controller
             'user_type' =>'ngo',
             'password' => Hash::make($request->password),
         ]);
+
+        $ngo = new Ngo;
+
+        $ngo->ngo_name = $request->name;
+        $ngo->email = $request->email;
+        $ngo->phone_number = $request->phone_number;
+        $ngo->password = Hash::make($request->password);
+        
+        $ngo->save();
 
         event(new Registered($user));
 

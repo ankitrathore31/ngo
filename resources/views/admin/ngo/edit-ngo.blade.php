@@ -233,15 +233,27 @@
                                         <div class="form-group">
                                             <label for="staff_password" class="form-label"><strong>Password</strong>
                                                 <span class="text-danger">*</span></label>
-                                            <input type="password"
-                                                class="form-control @error('password') is-invalid @enderror"
-                                                id="password" value="{{ $ngo->password }}" name="password"
+
+                                            <div class="input-group">
+                                                <input type="password"
+                                                    class="form-control @error('password') is-invalid @enderror"
+                                                    id="password" name="password"
+                                                    value="{{ old('password', $password ?? '') }}" 
                                                 placeholder="Enter Password">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text" id="togglePassword"
+                                                        style="cursor: pointer;">
+                                                        <i class="fa fa-eye" id="eyeIcon"></i> <!-- Eye Icon -->
+                                                    </span>
+                                                </div>
+                                            </div>
+
                                             @error('password')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
                                     </div>
+
                                     <div class="col-md-4 mb-3">
                                         <div class="upload-container">
                                             <label for="ngo_logo" class="form-label"><strong>Upload
@@ -280,5 +292,21 @@
                 successAlert.style.display = 'none';
             }
         }, 3000); // 3 seconds
+    </script>
+    <script>
+        // Toggle password visibility
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordField = document.getElementById('password');
+        const eyeIcon = document.getElementById('eyeIcon');
+    
+        togglePassword.addEventListener('click', function (e) {
+            // Toggle the password field type
+            const type = passwordField.type === 'password' ? 'text' : 'password';
+            passwordField.type = type;
+    
+            // Toggle eye icon
+            eyeIcon.classList.toggle('fa-eye');
+            eyeIcon.classList.toggle('fa-eye-slash');
+        });
     </script>
 @endsection

@@ -20,6 +20,7 @@ class NgoController extends Controller
             $view->with('all_sessions', academic_session::orderBy('session_date', 'desc')->get());
         });
     }
+
     public function savengo(Request $request)
     {
         $request->validate([
@@ -94,66 +95,75 @@ class NgoController extends Controller
     public function editngo($id)
     {
         $ngo = Ngo::find($id);
-        return view('admin.ngo.edit-ngo', compact('ngo'));
+        return view('admin.ngo.edit-ngo', compact('ngo'))->with('password', $ngo->password);
     }
 
     public function updatengo(Request $request, $id)
-    {
-        $request->validate([
-            'established_date' => 'required|date',
-            'ngo_name' => 'required|string|max:255',
-            'founder_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:ngos,email' . $id,
-            'phone_number' => 'required|string|max:10|unique:ngos,phone_number' . $id,
-            'address' => 'required|string|max:255',
-            'state' => 'required|string|max:255',
-            'pin_code' => 'required|string|max:255',
-            'country' => 'required|string|max:255',
-            'post' => 'required|string|max:255',
-            'district' => 'required|string|max:255',
-            'package' => 'required|string|max:255',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ], [
-            'email.unique' => 'This email is already registered with another account.',
-            'phone_number.unique' => 'This number is already registered with another account.',
-        ]);
+{
+    $request->validate([
+        'established_date' => 'required|date',
+        'ngo_name' => 'required|string|max:255',
+        'founder_name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:ngos,email,' . $id, // Corrected unique validation rule
+        'phone_number' => 'required|string|max:10|unique:ngos,phone_number,' . $id, // Corrected unique validation rule
+        'address' => 'required|string|max:255',
+        'state' => 'required|string|max:255',
+        'pin_code' => 'required|string|max:255',
+        'country' => 'required|string|max:255',
+        'post' => 'required|string|max:255',
+        'district' => 'required|string|max:255',
+        'package' => 'required|string|max:255',
+        'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ], [
+        'email.unique' => 'This email is already registered with another account.',
+        'phone_number.unique' => 'This number is already registered with another account.',
+    ]);
 
+    $ngo = Ngo::find($id);
 
-        $ngo = Ngo::find($id);
+    // Update the fields with the validated input
+    $ngo->established_date = \Carbon\Carbon::parse($request->established_date)->format('Y-m-d');  
+    $ngo->ngo_name = $request->ngo_name;
+    $ngo->founder_name = $request->founder_name;
+    $ngo->email = $request->email;
+    $ngo->phone_number = $request->phone_number;
+    $ngo->address = $request->address;
+    $ngo->state = $request->state;
+    $ngo->pin_code = $request->pin_code;
+    $ngo->country = $request->country;
+    $ngo->post = $request->post;
+    $ngo->district = $request->district;
+    $ngo->package = $request->package;
+    $ngo->password = Hash::make($request->password); // Don't forget to hash the password if it's being updated.
 
-        $ngo->established_date = \Carbon\Carbon::createFromFormat('d-m-Y', $request->established_date)->format('Y-m-d');
-        $ngo->ngo_name = $request->ngo_name;
-        $ngo->founder_name = $request->founder_name;
-        $ngo->email = $request->email;
-        $ngo->phone_number = $request->phone_number;
-        $ngo->address = $request->address;
-        $ngo->state = $request->state;
-        $ngo->pin_code = $request->pin_code;
-        $ngo->country = $request->country;
-        $ngo->post = $request->post;
-        $ngo->district = $request->district;
-        $ngo->package = $request->package;
-        $ngo->password = Hash::make($request->password);
-
-        if ($request->hasFile('logo')) {
-            $file = $request->file('logo');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('images'), $filename);
-            $ngo->logo = $filename;
-        }
-
-        $ngo->save();
-
-        // $user = User::find();
-
-        // $user->name = $request->ngo_name;
-        // $user->email = $request->email;
-        // $user->phone_number = $request->phone_number;
-        // $user->password = Hash::make($request->password);
-        // $user->user_type = 'ngo';
-
-        // $user->save();
-
-        return redirect()->back()->with('success', 'NGO update successfully!');
+    if ($request->hasFile('logo')) {
+        $file = $request->file('logo');
+        $filename = time() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('images'), $filename);
+        $ngo->logo = $filename;
     }
+
+    $ngo->save();
+
+    return redirect()->back()->with('success', 'NGO updated successfully!');
+}
+
+
+    public function deletengo($id)
+{
+    $ngo = Ngo::find($id);
+
+    if (!$ngo) {
+        return redirect()->back()->with('error', 'NGO not found.');
+    }
+
+    if ($ngo->logo && file_exists(public_path('images/' . $ngo->logo))) {
+        unlink(public_path('images/' . $ngo->logo));
+    }
+
+    $ngo->delete();
+
+    return redirect()->back()->with('success', 'NGO deleted successfully!');
+}
+
 }

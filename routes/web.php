@@ -90,6 +90,7 @@ Route::controller(NgoController::class)->group(function(){
     Route::get('edit-ngo/{id}', 'editngo')->middleware('auth')->name('edit-ngo');
     Route::post('update-ngo/{id}', 'updatengo')->middleware('auth')->name('update-ngo');
     Route::post('toggle-status/{id}','toggleStatus')->middleware('auth')->name('ngo.toggleStatus');
+    Route::delete('delete-ngo/{id}', 'deletengo')->middleware('auth')->name('delete-ngo');
 });
 
 Route::controller(SocialActivityController::class)->group(function () {

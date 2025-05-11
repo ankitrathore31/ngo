@@ -10,15 +10,26 @@ use Carbon\Carbon;
 
 class SocialActivityController extends Controller
 {
-    public function activitylist()
+    public function activitylist(Request $request)
     {
-        $activity = Activity::orderBy('activity_no', 'asc')->get();
+        $query = Activity::query();
+
+        if ($request->session_filter) {
+            $query->where('academic_session', $request->session_filter);
+        }
+
+        if ($request->category_filter) {
+            $query->where('program_category', 'like', '%' . $request->category_filter . '%');
+        }
+
+        $activity = $query->orderBy('activity_no', 'asc')->get();
         return view('ngo.activity.activitylist', compact('activity'));
     }
 
+
     public function addactivity()
     {
-        $data = academic_session::all();
+        $data = academic_session::all()->sortByDesc('session_date');
         Session::put('all_academic_session', $data);
         return view('ngo.activity.addactivity', compact('data'));
     }
@@ -79,7 +90,7 @@ class SocialActivityController extends Controller
         $activity->program_name = $request->program_name;
         $activity->program_category = $request->program_category;
         $activity->program_date = \Carbon\Carbon::parse($request->program_date)->format('Y-m-d');
-        $activity->academic_session = $request->program_session;  
+        $activity->academic_session = $request->program_session;
         $activity->program_time = $request->program_time;
         $activity->program_address = $request->program_address;
         $activity->program_report = $request->program_report;
@@ -92,7 +103,7 @@ class SocialActivityController extends Controller
             $activity->program_image = $filename;
         }
 
-        
+
         $activity->save();
 
         return redirect()->route('activitylist')->with('success', 'Program updated successfully');

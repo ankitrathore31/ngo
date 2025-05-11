@@ -1,16 +1,66 @@
 <style>
-    .navv ul li a {
+    /* Navbar text styling */
+    .navbar-nav .nav-link {
         color: white;
+        font-size: 16px;
+        font-weight: 500;
     }
 
+    /* Navbar item hover effect */
+    .navbar-nav .nav-link:hover {
+        background-color: rgba(255, 255, 255, 0.2); /* Subtle background on hover */
+        border-radius: 5px;
+    }
 
-    .social-icons i {
-        margin-right: 10px;
-        font-size: 24px;
+    /* Dropdown hover effect */
+    .navbar-nav .nav-item.dropdown:hover > .dropdown-menu {
+        display: block;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .navbar-nav .dropdown-menu {
+        display: none;
+        background-color: #007bff; /* Make sure dropdown menu has the same background */
+    }
+
+    .dropdown-item {
+        color: white;
+        font-size: 14px;
         font-weight: 400;
     }
-    .dropdown-item{
-        z-index: 2 !important;
+
+    /* Dropdown item hover effect */
+    .dropdown-item:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 5px;
+    }
+
+    /* Dropdown animation */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-5px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Navbar branding (optional) */
+    .navbar-brand {
+        font-size: 22px;
+        font-weight: bold;
+        color: white !important;
+    }
+
+    /* Adjusting padding and margins */
+    .navbar-toggler {
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .navbar-nav .nav-item {
+        margin-left: 15px;
     }
 </style>
 
@@ -29,7 +79,7 @@
                 <!-- Dashboard -->
 
                 <li class="nav-item">
-                    <a href="index.php" class="nav-link text-white"><i class="fas fa-tachometer-alt"></i> DASHBOARD</a>
+                    <a href="{{ route('ngo')}}" class="nav-link text-white"><i class="fas fa-tachometer-alt"></i> DASHBOARD</a>
                 </li>
 
 
