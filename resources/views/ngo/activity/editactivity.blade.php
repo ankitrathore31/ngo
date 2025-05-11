@@ -76,8 +76,10 @@
                                 name="program_date" value="{{ $activity->program_date }}" required>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="program_session" class="form-label bold">Program Session <span class="login-danger">*</span></label>
-                            <select class="form-control @error('program_session') is-invalid @enderror" name="program_session" required>
+                            <label for="program_session" class="form-label bold">Program Session <span
+                                    class="login-danger">*</span></label>
+                            <select class="form-control @error('program_session') is-invalid @enderror"
+                                name="program_session" required>
                                 <option value="">Select Session</option>
                                 @foreach ($data as $session)
                                     <option value="{{ $session->session_date }}"
@@ -87,7 +89,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        
+
                         <div class="col-md-4 mb-3">
                             <label for="">Program Time <span class="login-danger">*</span></label>
                             <input type="time" class="form-control @error('program_time') is-invalid @enderror"
@@ -107,17 +109,36 @@
                         </div>
                     </div>
                     <div class="row">
+                        <!-- Image Upload Input -->
                         <div class="col-md-6 mb-3">
-                            {{-- <label for="">Program image <span class="login-danger">*</span></label> --}}
+                            <label for="program_image" class="form-label fw-semibold">Choose Program Image</label>
                             <input type="file" class="form-control @error('program_image') is-invalid @enderror"
-                                name="program_image" value="{{ $activity->program_image }}" required>
+                                name="program_image" id="program_image" accept="image/*" onchange="handleFileChange(event)"
+                                required>
+                            @error('program_image')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                            <!-- Image preview after selection -->
+                            <div id="previewContainer" class="mt-2">
+                                <img id="previewImage" src="#" alt="Preview" class="img-fluid"
+                                    style="max-width: 200px; display: none;">
+                            </div>
 
+                            @error('program_image')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
                         </div>
-                        <div class="col-md-6">
-                            <img src="{{ asset('program_images/' . $activity->program_image) }}" width="200px"
-                                height="100px" alt="image">
+
+                        <!-- Current Image Display -->
+                        <div class="col-md-6 mb-3">
+                            @if ($activity->program_image)
+                                <label class="form-label">Current Image:</label><br>
+                                <img src="{{ asset('program_images/' . $activity->program_image) }}" width="200"
+                                    height="100" alt="Current Image" class="border">
+                            @endif
                         </div>
                     </div>
+
                     <div class="form-group text-center mt-4">
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
@@ -126,4 +147,38 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function previewEditImage() {
+            const file = document.getElementById('program_image').files[0];
+            const previewImage = document.getElementById('previewImage');
+            const maxSizeMB = 2;
+
+            if (file) {
+                const fileType = file.type.split('/')[0];
+                const fileSize = file.size / 1024 / 1024;
+
+                if (fileType !== 'image') {
+                    alert("Only image files are allowed.");
+                    previewImage.style.display = 'none';
+                    document.getElementById('program_image').value = '';
+                    return;
+                }
+
+                if (fileSize > maxSizeMB) {
+                    alert("File size should be less than 2MB.");
+                    previewImage.style.display = 'none';
+                    document.getElementById('program_image').value = '';
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    previewImage.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
 @endsection

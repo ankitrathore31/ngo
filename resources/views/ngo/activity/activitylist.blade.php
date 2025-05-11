@@ -82,18 +82,16 @@
                                     <td>{{ $item->academic_session }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            <a href="{{ url('viewactivity/' . $item->id) }}" class="btn btn-sm btn-success"
-                                                title="View">
+                                            <a href="{{ route('viewactivity', $item->id) }}" class="btn btn-sm btn-success" title="View">
                                                 <i class="fa-regular fa-eye"></i>
                                             </a>
-                                            <a href="{{ url('editactivity/' . $item->id) }}" class="btn btn-sm btn-primary"
-                                                title="Edit">
+                                            <a href="{{ route('editactivity', $item->id) }}" class="btn btn-sm btn-primary" title="Edit">
                                                 <i class="fa-regular fa-pen-to-square"></i>
                                             </a>
-                                            <a href="{{ url('removeactivity/' . $item->id) }}"
-                                                class="btn btn-sm btn-danger" title="Delete">
+                                            <a href="{{ route('removeactivity', $item->id) }}" class="btn btn-sm btn-danger" title="Delete">
                                                 <i class="fa-regular fa-trash-can"></i>
                                             </a>
+                                            
                                         </div>
                                     </td>
                                 </tr>
