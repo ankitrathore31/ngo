@@ -516,14 +516,14 @@
                     </div>
                 </div>
 
-                <div class="col-md-3 mb-3">
+                {{-- <div class="col-md-3 mb-3">
                     <div class="card text-center shadow-sm bg-light text-dark">
                         <div class="card-body">
                             <h5 class="card-title fw-bold">Other Activities</h5>
                             <p class="card-text fs-4 counter" data-count="60">42</p>
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="col-md-3 mb-3">
                     <div class="card text-center shadow-sm bg-success text-white">

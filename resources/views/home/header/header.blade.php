@@ -9,7 +9,7 @@
     <div class="row align-items-center">
         <div class="col-md-2 text-center text-md-start">
             <a href="https://gyanbhartingo.org">
-                <img src="images/LOGO.png" alt="Logo" width="100" height="100" class="">
+                <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="100" height="100" class="">
             </a>
         </div>
         <div class="col-md-6 text-center">

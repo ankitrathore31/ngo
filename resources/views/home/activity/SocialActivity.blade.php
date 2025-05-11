@@ -25,6 +25,7 @@
                             <th scope="col">Program Name</th>
                             <th scope="col">Program Category</th>
                             <th scope="col">Program Address</th>
+                            <td>Program Session</td>
                             <th scope="col">View</th>
                         </tr>
                     </thead>
@@ -41,6 +42,7 @@
                                 <td>{{ $item->program_name }}</td>
                                 <td>{{ $item->program_category }}</td>
                                 <td>{{ $item->program_address }}</td>
+                                <td>{{ $item->academic_session }}</td>
                                 <td>
                                     <a href="{{ route('viewreport', ['id' => $item->id]) }}" class="btn btn-sm bg-success me-2">
                                         <i class="fa fa-eye"></i>

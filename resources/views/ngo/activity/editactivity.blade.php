@@ -47,7 +47,6 @@
                                         'Skill Development',
                                         'Religious Program',
                                         'Agriculture Program',
-                                        'Other Activities',
                                         'Labour Tools Distribution',
                                         'Drinking Water',
                                         'Ration Distribution',
@@ -55,6 +54,7 @@
                                         'Economic Help',
                                         'Cow Service',
                                         'Animal Food',
+                                        'Other Activities',
                                     ];
                                 @endphp
 

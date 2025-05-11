@@ -9,7 +9,7 @@
     <div class="row align-items-center">
         <!-- Left: Logo + School Info -->
         <div class="col-md-4 d-flex align-items-center">
-            <img src="images/LOGO.png" alt="Logo" width="60" height="60" class="me-2">
+            <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="60" height="60" class="me-2">
             <div>
                 <h6 class="mb-0 fw-bold text-uppercase">GYAN BHARTI SANSTHA</h6>
                 <small class="text-muted">Kainchu Tanda Amaria 262121 Pilibhit (Uttar Pradesh)</small>
@@ -38,7 +38,7 @@
             <div class="dropdown">
                 <a href="#" class="d-inline-flex align-items-center text-decoration-none dropdown-toggle"
                     id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="images/LOGO.png" alt="User" width="40" height="40" class="rounded-circle me-2">
+                    <img src="{{ asset('images/LOGO.png') }}" alt="User" width="40" height="40" class="rounded-circle me-2">
                     <div class="text-start">
                         <div class="fw-bold text-dark">GYAN BHARTI SANSTHA</div>
                         <small class="text-primary">Founder</small>

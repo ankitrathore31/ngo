@@ -46,10 +46,10 @@
 
     <div class="wrapper">
         <div class="container-fluid mt-5">
-            <div class="row">
+            {{-- <div class="row">
                 <h1>Welcome, {{ Auth::user()->name }}</h1>
                 <p>User Type: {{ Auth::user()->user_type }}</p>
-            </div>
+            </div> --}}
             <div class="row g-4">
                 <!-- Total Users -->
                 <div class="col-md-4 col-sm-6">
@@ -117,21 +117,28 @@
                                                 <a href="#" class="btn btn-sm btn-outline-success"
                                                     style="min-width: 70px; height: 35px;">View</a>
 
-                                                <form action="" method="POST"
+                                                <form action="{{ route('ngo.toggleStatus', $item->id) }}" method="POST"
                                                     style="display:inline;">
                                                     @csrf
-                                                    <a href="{{ route('ngo.toggleStatus', $item->id) }}" type="submit"
+                                                    @method('POST') <!-- Use POST method, as your route expects POST -->
+                                                    <button type="submit"
                                                         class="btn btn-sm {{ $item->status == 1 ? 'btn-outline-danger' : 'btn-outline-success' }}"
                                                         style="min-width: 90px; height: 35px;">
                                                         {{ $item->status == 1 ? 'Deactivate' : 'Activate' }}
-                                                    </a>
+                                                    </button>
                                                 </form>
 
-                                                <a href="{{ route('edit-ngo',$item->id) }}" class="btn btn-sm btn-info text-white"
+
+                                                <a href="{{ route('edit-ngo', $item->id) }}"
+                                                    class="btn btn-sm btn-info text-white"
                                                     style="min-width: 60px; height: 35px;">Edit</a>
 
-                                                <a href="#" class="btn btn-sm btn-danger"
-                                                    style="min-width: 70px; height: 35px;">Delete</a>
+                                                <form action="{{ route('delete-ngo', $item->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger text-white"
+                                                        style="min-width: 60px; height: 35px;">Delete</button>
+                                                </form>
                                             </div>
                                         </td>
 
