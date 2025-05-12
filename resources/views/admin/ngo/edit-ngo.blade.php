@@ -230,16 +230,40 @@
                                     </div>
 
                                     <div class="col-md-4 mb-3">
+                                        <label for="start_date" class="form-label"><strong>Start Date
+                                            </strong> <span class="text-danger">*</span></label>
+                                        <input type="text"
+                                            class="form-control datepicker @error('start_date') is-invalid @enderror"
+                                            id="start_date" name="start_date" placeholder="DD-MM-YYYY"
+                                            value="{{ $ngo->start_date }}">
+                                        @error('start_date')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <label for="end_date" class="form-label"><strong>End Date
+                                            </strong> <span class="text-danger">*</span></label>
+                                        <input type="text"
+                                            class="form-control datepicker @error('end_date') is-invalid @enderror"
+                                            id="end_date" name="end_date" placeholder="DD-MM-YYYY"
+                                            value="{{ $ngo->end_date }}">
+                                        @error('end_date')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
                                         <div class="form-group">
-                                            <label for="staff_password" class="form-label"><strong>Password</strong>
+                                            <label for="staff_password" class="form-label"><strong>New Password</strong>
                                                 <span class="text-danger">*</span></label>
 
                                             <div class="input-group">
                                                 <input type="password"
                                                     class="form-control @error('password') is-invalid @enderror"
                                                     id="password" name="password"
-                                                    value="{{ old('password', $password ?? '') }}" 
-                                                placeholder="Enter Password">
+                                                    value=""
+                                                    placeholder="Enter Password">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text" id="togglePassword"
                                                         style="cursor: pointer;">
@@ -298,12 +322,12 @@
         const togglePassword = document.getElementById('togglePassword');
         const passwordField = document.getElementById('password');
         const eyeIcon = document.getElementById('eyeIcon');
-    
-        togglePassword.addEventListener('click', function (e) {
+
+        togglePassword.addEventListener('click', function(e) {
             // Toggle the password field type
             const type = passwordField.type === 'password' ? 'text' : 'password';
             passwordField.type = type;
-    
+
             // Toggle eye icon
             eyeIcon.classList.toggle('fa-eye');
             eyeIcon.classList.toggle('fa-eye-slash');

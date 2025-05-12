@@ -32,7 +32,8 @@ class AdminController extends Controller
         // $user = User::get();
         $ngo = Ngo::get();
         $inactiveNgo = Ngo::where('status', 0)->count();
-        return view('admin.AdminDashboard', compact('ngo', 'inactiveNgo'));
+        $activengo = Ngo::where('status', 1)->count();
+        return view('admin.AdminDashboard', compact('ngo', 'inactiveNgo','activengo'));
     }
 
     public function sessionlist()
