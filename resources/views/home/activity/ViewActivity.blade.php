@@ -1,138 +1,123 @@
 @extends('home.layout.MasterLayout')
-@Section('content')
-<style>
-    .report-container {
-        max-width: 800px;
-        margin: auto;
-        border: 1px solid #ccc;
-        padding: 30px;
-        box-shadow: 0 0 10px #ddd;
-    }
 
-    .report-header {
-        text-align: center;
-        border-bottom: 2px solid #007BFF;
-        padding-bottom: 10px;
-        margin-bottom: 20px;
-    }
-
-    .report-header h2 {
-        margin: 0;
-        color: #007BFF;
-    }
-
-    .report-section {
-        margin-bottom: 20px;
-    }
-
-    .report-section h4 {
-        margin-bottom: 5px;
-        color: #555;
-    }
-
-    .report-section p {
-        margin: 0;
-    }
-
-    .report-image {
-        text-align: center;
-        margin-top: 20px;
-    }
-
-    .report-image img {
-        max-width: 100%;
-        height: auto;
-        border: 1px solid #ddd;
-        padding: 5px;
-    }
-
-    .report-footer {
-        text-align: center;
-        margin-top: 30px;
-        font-size: 0.9em;
-        color: #777;
-    }
-
-    .no-print {
-        text-align: center;
-        margin-top: 20px;
-    }
-
-    .no-print button {
-        padding: 10px 20px;
-        margin: 5px;
-        border: none;
-        background: #007BFF;
-        color: white;
-        cursor: pointer;
-    }
-
-    @media print {
-        .no-print {
-            display: none;
-        }
-
-        body {}
-    }
-</style>
-<div class="wrapper">
-    <div class="report-container shadow-sm mt-5">
-        <div class="text-center report-header mb-4">
-            <h2 class="mb-2"> Activity Report</h2>
-            {{-- <p class="lead fw-semibold"><strong>{{ $activity->program_name }}</strong></p> --}}
-        </div>
-        <div class="report-image mt-4 mb-3">
-            {{-- <p class="section-title">Event Image</p> --}}
-            <img src="{{ asset('program_images/' . $activity->program_image) }}" alt="Program Image">
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <p class="section-title"><strong>Category</strong></p>
-                <p>{{ $activity->program_category }}</p>
+@section('content')
+    <div class="container my-5">
+        <div class="card shadow-lg p-4 print-area">
+            <!-- Report Header -->
+            <div class="text-center mb-4 border-bottom">
+                <h2 class="fw-bold text-primary"> Activity Report</h2>
             </div>
-            <div class="col-md-6">
-                <p class="section-title"><strong>Date & Time</strong></p>
-                <p>{{ \Carbon\Carbon::parse($activity->program_date)->format('F d, Y') }} at
-                    {{ \Carbon\Carbon::parse($activity->program_time)->format('g:i A') }}</p>
+
+            <!-- Image Section -->
+            @if ($activity->program_image)
+                <div class="mb-4">
+                    <div class="card border-1 rounded shadow-sm mx-auto" style="max-width: 100%;">
+                        <img src="{{ asset('program_images/' . $activity->program_image) }}" class="img-fluid rounded"
+                            alt="Program Image" style="max-height: 350px; object-fit: cover;">
+                    </div>
+                </div>
+            @endif
+
+            <!-- Details Section -->
+            <div class="row g-4">
+
+                <div class="col-sm-6 mb-2">
+                    <div class="bg-light p-3 rounded border h-100">
+                        <small class="text-muted">Program Name</small>
+                        <div class="fw-bold text-dark"><strong>{{ $activity->program_name }}</strong></div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 mb-2">
+                    <div class="bg-light p-3 rounded border h-100">
+                        <small class="text-muted">Program Session</small>
+                        <div class="fw-bold text-dark"><strong>{{ $activity->academic_session }}</strong></div>
+                    </div>
+                </div>
+                
+                <div class="col-sm-6 mb-2">
+                    <div class="bg-light p-3 rounded border h-100">
+                        <small class="text-muted">Category</small>
+                        <div class="fw-bold text-dark"><strong>{{ $activity->program_category }}</strong></div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 mb-2">
+                    <div class="bg-light p-3 rounded border h-100">
+                        <small class="text-muted">Date & Time</small>
+                        <div class="fw-bold text-dark">
+                            <strong>
+                                {{ \Carbon\Carbon::parse($activity->program_date)->format('F d, Y') }} at
+                                {{ \Carbon\Carbon::parse($activity->program_time)->format('g:i A') }}
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 mb-2">
+                    <div class="bg-light p-3 rounded border h-100">
+                        <small class="text-muted">Location</small>
+                        <div class="fw-bold text-dark"><b>{{ $activity->program_address }}</b></div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 mb-2">
+                    <div class="bg-light p-3 rounded border h-100">
+                        <small class="text-muted">Report Summary</small>
+                        <div class="fw-bold text-dark"><b>{{ $activity->program_report }}</b></div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="mb-3">
-            <p class="section-title"><strong>Location</strong></p>
-            <p>{{ $activity->program_address }}</p>
+        <!-- Action Buttons -->
+        <div class="text-center mt-5 no-print">
+            <button class="btn btn-primary me-2" onclick="window.print()">🖨️ Print Report</button>
+            <button class="btn btn-outline-secondary" onclick="shareReport()">📤 Share</button>
         </div>
-
-        <div class="mb-3">
-            <p class="section-title"><strong>Event Summary</strong></p>
-            <p>{{ $activity->program_report }}</p>
-        </div>
-
-
-
-        {{-- <div class="text-center mt-4 text-muted small">
-            <p>Generated by NGO Management System</p>
-        </div> --}}
     </div>
 
-    <div class="no-print">
-        <button class="btn btn-primary btn-custom me-2" onclick="window.print()">🖨️ Print Report</button>
-        <button class="btn btn-outline-secondary btn-custom" onclick="shareReport()">📤 Share</button>
-    </div>
-</div>
-
-<script>
-    function shareReport() {
-        if (navigator.share) {
-            navigator.share({
-                title: '{{ $activity->program_name }}',
-                text: 'Check out this NGO activity report!',
-                url: window.location.href
-            }).then(() => {
-                console.log('Report shared successfully');
-            }).catch(console.error);
-        } else {
-            alert('Sharing not supported. Please copy the link manually.');
+    <!-- Share Script -->
+    <script>
+        function shareReport() {
+            if (navigator.share) {
+                navigator.share({
+                    title: '{{ $activity->program_name }}',
+                    text: 'Check out this NGO activity report!',
+                    url: window.location.href
+                }).then(() => {
+                    console.log('Report shared');
+                }).catch(console.error);
+            } else {
+                alert('Sharing not supported. Please copy the link manually.');
+            }
         }
-    }
-</script>
+    </script>
+
+    <!-- Print Styles -->
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            .print-area,
+            .print-area * {
+                visibility: visible;
+            }
+
+            .print-area {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                padding: 0;
+                box-shadow: none;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
 @endsection

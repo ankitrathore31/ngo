@@ -69,14 +69,13 @@
                                             <div class="col-md-4 mb-3">
                                                 <label for="email" class="form-label"><strong>Email</strong></label>
                                                 <input type="email"
-                                                    class="form-control @error('email') is-invalid @enderror"
-                                                    id="email" name="email" placeholder="Enter Email"
-                                                    value="{{ old('email') }}">
+                                                    class="form-control @error('email') is-invalid @enderror" id="email"
+                                                    name="email" placeholder="Enter Email" value="{{ old('email') }}">
                                                 @error('email')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
                                             </div>
-                                            
+
 
                                             <div class="col-md-4 mb-3">
                                                 <label for="phone_number" class="form-label"><strong>Mobile Number</strong>
@@ -210,6 +209,31 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <label for="start_date" class="form-label"><strong>Start Date
+                                            </strong> <span class="text-danger">*</span></label>
+                                        <input type="text"
+                                            class="form-control datepicker @error('start_date') is-invalid @enderror"
+                                            id="start_date" name="start_date" placeholder="DD-MM-YYYY"
+                                            value="{{ old('start_date') }}">
+                                        @error('start_date')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <label for="end_date" class="form-label"><strong>End Date
+                                            </strong> <span class="text-danger">*</span></label>
+                                        <input type="text"
+                                            class="form-control datepicker @error('end_date') is-invalid @enderror"
+                                            id="end_date" name="end_date" placeholder="DD-MM-YYYY"
+                                            value="{{ old('end_date') }}">
+                                        @error('end_date')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
                                     <div class="col-md-4 mb-3">
                                         <div class="form-group">
                                             <label for="staff_password" class="form-label"><strong>Password</strong>
@@ -255,5 +279,4 @@
             }
         }, 3000); // 3 seconds
     </script>
-    
 @endsection
