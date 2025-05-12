@@ -18,8 +18,9 @@ class SocialActivityController extends Controller
             $query->where('academic_session', $request->session_filter);
         }
 
+        // Filter by category (exact match)
         if ($request->category_filter) {
-            $query->where('program_category', 'like', '%' . $request->category_filter . '%');
+            $query->where('program_category', $request->category_filter);
         }
 
         $activity = $query->orderBy('activity_no', 'asc')->get();
