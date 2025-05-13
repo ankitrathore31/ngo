@@ -1,4 +1,3 @@
-
 <style>
     .navv ul li a {
         color: white;
@@ -11,12 +10,14 @@
     }
 
     .navv ul li a:hover {
-        color: #ffc107; /* yellow highlight on hover */
+        color: #ffc107;
+        /* yellow highlight on hover */
         transform: translateY(-2px);
     }
 
     .navv .dropdown-menu {
-        background-color: #0d6efd; /* match bootstrap primary */
+        background-color: #0d6efd;
+        /* match bootstrap primary */
         transition: all 0.3s ease;
     }
 
@@ -30,7 +31,7 @@
     }
 </style>
 
-<nav class="navbar navbar-expand-lg bg-primary">
+<nav class="navbar navbar-expand-md bg-primary">
     <div class="container-fluid">
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -38,7 +39,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse navv d-flex justify-content-center" id="navbarNav">
+        <div class="collapse navbar-collapse navv justify-content-center" id="navbarNav">
             <ul class="navbar-nav">
 
                 <li class="nav-item">
@@ -47,23 +48,38 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('add-ngo') }}">
-                        <i class="fas fa-user-plus"></i> Add Ngo
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="manageDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user"></i> Manage Ngo
                     </a>
+                    <ul class="dropdown-menu" aria-labelledby="manageDropdown">
+                        <li><a class="dropdown-item" href="{{ route('add-ngo') }}">
+                                <i class="fas fa-user-plus"></i> Add Ngo</a>
+                        </li>
+                        <li><a class="dropdown-item" href="{{ route('totalngo-list') }}">
+                                <i class="fas fa-list"></i> Ngo List</a>
+                        </li>
+                        <li><a class="dropdown-item" href="{{ route('activengo-list') }}">
+                                <i class="fas fa-list"></i> Active Ngo List</a>
+                        </li>
+                        <li><a class="dropdown-item" href="{{ route('deactivengo-list') }}">
+                                <i class="fas fa-list"></i> Deactive Ngo List</a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                    <a class="nav-link dropdown-toggle" href="#" id="settingDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-cog"></i> Setting
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <ul class="dropdown-menu" aria-labelledby="settingDropdown">
                         <li><a class="dropdown-item" href="{{ route('add-session') }}">
-                            <i class="fas fa-list"></i> Add Session</a>
+                                <i class="fas fa-plus"></i> Add Session</a>
                         </li>
                         <li><a class="dropdown-item" href="{{ route('session-list') }}">
-                            <i class="fas fa-"></i>Session List</a>
+                                <i class="fas fa-list"></i> Session List</a>
                         </li>
                     </ul>
                 </li>

@@ -89,11 +89,13 @@
                         </div>
 
                         <div class="col-md-4 mb-3">
-                            <label for="" class="form-label bold">Program Time <span
+                            <label for="program_time" class="form-label bold">Program Time <span
                                     class="login-danger">*</span></label>
-                            <input type="time" class="form-control @error('program_time') is-invalid @enderror"
-                                name="program_time" placeholder="Selcet Time" required>
+                            <input type="text" id="program_time" name="program_time"
+                                class="form-control @error('program_time') is-invalid @enderror" placeholder="Select Time"
+                                required>
                         </div>
+
                         <div class="row">
                             <div class="col-md-12 mb-3">
                                 {{-- <label for="">Program Address <span class="login-danger">*</span></label> --}}
@@ -114,8 +116,8 @@
 
                                 <!-- Custom File Input (hidden default) -->
                                 <input type="file" class="form-control @error('program_image') is-invalid @enderror"
-                                    name="program_image" id="program_image" required accept="image/*"
-                                    style="display: none;" onchange="previewImage(); validateFile()">
+                                    name="program_image" id="program_image" required accept="image/*" style="display: none;"
+                                    onchange="previewImage(); validateFile()">
 
                                 <!-- Custom Button to Trigger File Input -->
                                 <button type="button" class="btn btn-primary" id="chooseFileBtn">Choose Program
@@ -142,41 +144,41 @@
 
     <script>
         // Trigger the hidden file input when the button is clicked
-        document.getElementById('chooseFileBtn').addEventListener('click', function () {
+        document.getElementById('chooseFileBtn').addEventListener('click', function() {
             document.getElementById('program_image').click();
         });
-    
+
         // Preview the uploaded image
         function previewImage() {
             const file = document.getElementById('program_image').files[0];
             const imagePreview = document.getElementById('imagePreview');
             const fileError = document.getElementById('fileError');
-            
+
             // Check if a file is selected
             if (file) {
                 const reader = new FileReader();
-    
+
                 // Display the image preview
-                reader.onload = function (e) {
+                reader.onload = function(e) {
                     imagePreview.src = e.target.result;
                     imagePreview.style.display = 'block';
                 };
                 reader.readAsDataURL(file);
-    
+
                 // Reset error message
                 fileError.style.display = 'none';
             }
         }
-    
+
         // Validate file size (<= 2MB) and file type (only images)
         function validateFile() {
             const file = document.getElementById('program_image').files[0];
             const fileError = document.getElementById('fileError');
-    
+
             if (file) {
                 const fileSize = file.size / 1024 / 1024; // Convert bytes to MB
                 const fileType = file.type.split('/')[0];
-    
+
                 // File size check (<= 2MB)
                 if (fileSize > 2) {
                     fileError.textContent = 'File size should be less than or equal to 2MB.';
@@ -185,7 +187,7 @@
                     document.getElementById('imagePreview').style.display = 'none'; // Hide the preview
                     return false;
                 }
-    
+
                 // File type check (only images)
                 if (fileType !== 'image') {
                     fileError.textContent = 'Only image files are allowed.';
@@ -195,7 +197,7 @@
                     return false;
                 }
             }
-    
+
             return true;
         }
     </script>

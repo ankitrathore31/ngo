@@ -39,7 +39,7 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('ngo');
         }
         else{
-            // return view('auth.login');
+           
         }
         
     }

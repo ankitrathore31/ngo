@@ -30,7 +30,7 @@
         <div class=" mt-4">
             <div class="row g-3">
 
-                <div class="col-md-3 col-sm-6">
+                <div class="col-md-3 col-sm-6 mb-3">
                     <div class="card text-white bg-primary p-3 h-100 card-hover">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-user-plus fa-2x me-3"></i>
@@ -42,7 +42,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3 col-sm-6">
+                <div class="col-md-3 col-sm-6 mb-3">
                     <div class="card text-white bg-warning p-3 h-100 card-hover">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-clock fa-2x me-3"></i>
@@ -53,8 +53,8 @@
                         </div>
                     </div>
                 </div>
-                
-                <div class="col-md-3 col-sm-6">
+
+                <div class="col-md-3 col-sm-6 mb-3">
                     <div class="card text-white bg-success p-3 h-100 card-hover">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-check-circle fa-2x me-3"></i>
@@ -65,8 +65,8 @@
                         </div>
                     </div>
                 </div>
-                
-                <div class="col-md-3 col-sm-6">
+
+                <div class="col-md-3 col-sm-6 mb-3">
                     <div class="card text-white bg-danger p-3 h-100 card-hover">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-times-circle fa-2x me-3"></i>
@@ -77,9 +77,9 @@
                         </div>
                     </div>
                 </div>
-                
 
-                <div class="col-md-3 col-sm-6">
+
+                {{-- <div class="col-md-3 col-sm-6 mb-3">
                     <div class="card text-white bg-danger p-3 h-100 card-hover">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-trash-alt fa-2x me-3"></i>
@@ -89,11 +89,12 @@
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-md-3 col-sm-6">
+                </div> --}}
+            </div>
+            <div class="row g-3">
+                <div class="col-md-6 col-sm-6 mb-3">
                     <div class="card text-white bg-info p-3 h-100 card-hover">
-                        <div class="d-flex align-items-center"> 
+                        <div class="d-flex align-items-center">
                             <i class="fas fa-running fa-2x me-3"></i>
                             <div>
                                 <p class="mb-1">Today's Activities</p>
@@ -103,9 +104,7 @@
                     </div>
                 </div>
 
-                <!-- Add more cards below as needed -->
-
-                <div class="col-md-3 col-sm-6">
+                <div class="col-md-6 col-sm-6 mb-3">
                     <div class="card text-white bg-warning p-3 h-100 card-hover">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-clipboard-list fa-2x me-3"></i>
@@ -116,9 +115,11 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
-                
-                <div class="col-md-3 col-sm-6">
+
+            <div class="row g-3 ">
+                <div class="col-md-4 col-sm-6 mb-3">
                     <div class="card text-white bg-success p-3 h-100 card-hover">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-users fa-2x me-3"></i>
@@ -130,7 +131,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3 col-sm-6">
+                <div class="col-md-4 col-sm-6 mb-3">
                     <div class="card text-white bg-success p-3 h-100 card-hover">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-check-circle fa-2x me-3"></i>
@@ -141,8 +142,8 @@
                         </div>
                     </div>
                 </div>
-                
-                <div class="col-md-3 col-sm-6">
+
+                <div class="col-md-4 col-sm-6 mb-3">
                     <div class="card text-white bg-danger p-3 h-100 card-hover">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-times-circle fa-2x me-3"></i>
@@ -153,8 +154,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-md-3 col-sm-6">
+            <div class="row g-3">
+                <div class="col-md-4 col-sm-6 mb-3">
                     <div class="card text-white bg-info p-3 h-100 card-hover">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-user-tie fa-2x me-3"></i>
@@ -166,7 +169,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3 col-sm-6">
+                <div class="col-md-4 col-sm-6 mb-3">
                     <div class="card text-white bg-success p-3 h-100 card-hover">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-check-circle fa-2x me-3"></i>
@@ -177,8 +180,8 @@
                         </div>
                     </div>
                 </div>
-                
-                <div class="col-md-3 col-sm-6">
+
+                <div class="col-md-4 col-sm-6 mb-3">
                     <div class="card text-white bg-danger p-3 h-100 card-hover">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-times-circle fa-2x me-3"></i>
@@ -189,8 +192,10 @@
                         </div>
                     </div>
                 </div>
-                
-                <div class="col-md-3 col-sm-6">
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6 col-sm-6 mb-3">
                     <div class="card text-white bg-success p-3 h-100 card-hover">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-hand-holding-usd fa-2x me-3"></i>
@@ -202,7 +207,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3 col-sm-6">
+                <div class="col-md-6 col-sm-6 mb-3">
                     <div class="card text-white bg-primary p-3 h-100 card-hover">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-donate fa-2x me-3"></i>
@@ -213,8 +218,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-md-3 col-sm-6">
+            <div class="row g-3">
+                <div class="col-md-4 col-sm-6 mb-3">
                     <div class="card text-white bg-danger p-3 h-100 card-hover">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-coins fa-2x me-3"></i>
@@ -226,7 +233,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3 col-sm-6">
+                <div class="col-md-4 col-sm-6 mb-3">
                     <div class="card text-dark bg-warning p-3 h-100 card-hover">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-file-invoice-dollar fa-2x me-3"></i>
@@ -238,7 +245,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3 col-sm-6">
+                <div class="col-md-4 col-sm-6 mb-3">
                     <div class="card text-white bg-secondary p-3 h-100 card-hover">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-wallet fa-2x me-3"></i>
@@ -249,9 +256,8 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-        </div>
 
+        </div>
     </div>
 @endsection

@@ -91,10 +91,14 @@
                         </div>
 
                         <div class="col-md-4 mb-3">
-                            <label for="">Program Time <span class="login-danger">*</span></label>
-                            <input type="time" class="form-control @error('program_time') is-invalid @enderror"
-                                name="program_time" value="{{ $activity->program_time }}" required>
+                            <label for="program_time" class="form-label bold">Program Time <span
+                                    class="login-danger">*</span></label>
+                            <input type="text" id="program_time" name="program_time"
+                                value="{{ $activity->program_time }}"
+                                class="form-control @error('program_time') is-invalid @enderror" placeholder="Select Time"
+                                required>
                         </div>
+
                     </div>
                     <div class="row">
                         <div class="col-md-12 mb-3">
@@ -109,34 +113,33 @@
                         </div>
                     </div>
                     <div class="row">
-                        <!-- Image Upload Input -->
-                        <div class="col-md-6 mb-3">
-                            <label for="program_image" class="form-label fw-semibold">Choose Program Image</label>
-                            <input type="file" class="form-control @error('program_image') is-invalid @enderror"
-                                name="program_image" id="program_image" accept="image/*" onchange="handleFileChange(event)"
-                                required>
-                            @error('program_image')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                            <!-- Image preview after selection -->
-                            <div id="previewContainer" class="mt-2">
-                                <img id="previewImage" src="#" alt="Preview" class="img-fluid"
-                                    style="max-width: 200px; display: none;">
-                            </div>
-
-                            @error('program_image')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <!-- Current Image Display -->
                         <div class="col-md-6 mb-3">
                             @if ($activity->program_image)
                                 <label class="form-label">Current Image:</label><br>
                                 <img src="{{ asset('program_images/' . $activity->program_image) }}" width="200"
                                     height="100" alt="Current Image" class="border">
+                            @else
+                                <p>No image available.</p>
                             @endif
                         </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="program_image" class="form-label">Change Image</label>
+                            <input type="file" class="form-control @error('program_image') is-invalid @enderror"
+                                name="program_image" accept="image/*">
+                            @error('program_image')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Current Image Display -->
+                        {{-- <div class="col-md-6 mb-3">
+                            @if ($activity->program_image)
+                                <label class="form-label">Current Image:</label><br>
+                                <img src="{{ asset('program_images/' . $activity->program_image) }}" width="200"
+                                    height="100" alt="Current Image" class="border">
+                            @endif
+                        </div> --}}
                     </div>
 
                     <div class="form-group text-center mt-4">
