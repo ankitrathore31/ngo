@@ -92,6 +92,10 @@ Route::controller(NgoController::class)->group(function(){
     Route::post('toggle-status/{id}','toggleStatus')->middleware('auth')->name('ngo.toggleStatus');
     Route::delete('delete-ngo/{id}', 'deletengo')->middleware('auth')->name('delete-ngo');
     Route::get('admin/view-ngo/{id}', 'viewngo')->middleware('auth')->name('view-ngo');
+    Route::get('admin/totalngo-list', 'totalngo')->middleware('auth')->name('totalngo-list');
+    Route::get('admin/activengo-list', 'activengo')->middleware('auth')->name('activengo-list');
+    Route::get('admin/deactivengo-list', 'deactivengo')->middleware('auth')->name('deactivengo-list');
+
 });
 
 Route::controller(SocialActivityController::class)->group(function () {

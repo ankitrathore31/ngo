@@ -43,11 +43,14 @@ class SocialActivityController extends Controller
             'program_category' => 'required|string|max:255',
             'program_date' => 'required|date',
             'program_session' => 'required',
-            'program_time' => 'required|date_format:H:i',
+            'program_time' => 'required|date_format:h:i A',
             'program_address' => 'required|string',
             'program_report' => 'required|string',
             'program_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+
+        // die($request->program_time);
+        // exit();
 
         $imagePath = null;
         if ($request->hasFile('program_image')) {
@@ -84,31 +87,39 @@ class SocialActivityController extends Controller
     }
 
     public function updateactivity(Request $request, $id)
-    {
-        $activity = Activity::find($id);
+{
+    $activity = Activity::find($id);
 
-        $activity->activity_no = $request->activity_no;
-        $activity->program_name = $request->program_name;
-        $activity->program_category = $request->program_category;
-        $activity->program_date = \Carbon\Carbon::parse($request->program_date)->format('Y-m-d');
-        $activity->academic_session = $request->program_session;
-        $activity->program_time = $request->program_time;
-        $activity->program_address = $request->program_address;
-        $activity->program_report = $request->program_report;
-        // Handle image upload
-        if ($request->hasFile('program_image')) {
-            $file = $request->file('program_image');
-            $extension = $file->getClientOriginalExtension();
-            $filename = time() . '.' . $extension;
-            $file->move(public_path('program_images'), $filename);
-            $activity->program_image = $filename;
+    $activity->activity_no = $request->activity_no;
+    $activity->program_name = $request->program_name;
+    $activity->program_category = $request->program_category;
+    $activity->program_date = \Carbon\Carbon::parse($request->program_date)->format('Y-m-d');
+    $activity->academic_session = $request->program_session;
+    $activity->program_time = $request->program_time;
+    $activity->program_address = $request->program_address;
+    $activity->program_report = $request->program_report;
+
+    
+    if ($request->hasFile('program_image')) {
+        // Optional: Delete old image
+        if ($activity->program_image && file_exists(public_path('program_images/' . $activity->program_image))) {
+            unlink(public_path('program_images/' . $activity->program_image));
         }
 
-
-        $activity->save();
-
-        return redirect()->route('activitylist')->with('success', 'Program updated successfully');
+        // Upload new image
+        $file = $request->file('program_image');
+        $extension = $file->getClientOriginalExtension();
+        $filename = time() . '.' . $extension;
+        $file->move(public_path('program_images'), $filename);
+        $activity->program_image = $filename;
     }
+    
+
+    $activity->save();
+
+    return redirect()->route('activitylist')->with('success', 'Program updated successfully');
+}
+
 
 
 

@@ -37,7 +37,7 @@
                 
                 <div class="col-sm-6 mb-2">
                     <div class="bg-light p-3 rounded border h-100">
-                        <small class="text-muted">Category</small>
+                        <small class="text-muted">Program Category</small>
                         <div class="fw-bold text-dark"><strong>{{ $activity->program_category }}</strong></div>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
 
                 <div class="col-sm-12 mb-2">
                     <div class="bg-light p-3 rounded border h-100">
-                        <small class="text-muted">Location</small>
+                        <small class="text-muted">Program Address</small>
                         <div class="fw-bold text-dark"><b>{{ $activity->program_address }}</b></div>
                     </div>
                 </div>

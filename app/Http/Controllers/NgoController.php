@@ -14,12 +14,29 @@ use Illuminate\Support\Facades\Session;
 class NgoController extends Controller
 {
 
-    // public function boot()
-    // {
-    //     View::composer('ngo.header.NgoHeader', function ($view) {
-    //         $view->with('all_sessions', academic_session::orderBy('session_date', 'desc')->get());
-    //     });
-    // }
+    public function totalngo(){
+
+        $ngo = Ngo::get();
+        // $totalngo = Ngo::where('status', 0)->count();
+
+        return view('admin.ngo.totalngo-list',compact('ngo'));
+    }
+
+    public function activengo(){
+        
+        $ngo = Ngo::where('status', 1)->get();
+        // $totalngo = Ngo::where('status', 1)->count();
+
+        return view('admin.ngo.activengo-list',compact('ngo'));
+    }
+
+    public function deactivengo(){
+
+        $ngo = Ngo::where('status', 0)->get();
+        // $totalngo = Ngo::where('status', 0)->count();
+
+        return view('admin.ngo.deactivengo-list',compact('ngo'));
+    }
 
     public function savengo(Request $request)
     {

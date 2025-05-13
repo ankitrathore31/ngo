@@ -270,7 +270,7 @@
                                 <div class=" row">
                                     <div class="col-md-6 text-center">
                                         <!-- <input type="submit" class="btn btn-success mt-1" value="Pay Now" name="submit"> -->
-                                        <button type="submit" name="submit" class="btn btn-success mt-2">Pay
+                                        <button type="submit" name="submit" class="btn btn-success mt-2">Donate
                                             Now</button>
                                     </div>
                                 </div>
@@ -717,7 +717,7 @@
                 <div class="col-md-4 mb-4">
                     <div class="card shadow-lg bg-white rounded p-3 mb-5">
                         <div class="card-body text-center">
-                            <img src="images/education2.jpg" class="img-fluid mb-3" width="200">
+                            <img src="{{asset('images/education2.jpg')}}" class="img-fluid mb-3" width="200">
                             <div class="card-body">
                                 <h5 class="card-title">Help For Education</h5>
                                 <p class="card-text">Providing Free Education by our NGO</p>
@@ -729,7 +729,7 @@
                 <div class="col-md-4 mb-4">
                     <div class="card shadow-lg bg-white rounded p-3 mb-5">
                         <div class="card-body text-center">
-                            <img src="images/education2.jpg" class="img-fluid mb-3" width="200">
+                            <img src="{{asset('images/education2.jpg')}}" class="img-fluid mb-3" width="200">
                             <div class="card-body">
                                 <h5 class="card-title">Help For Food</h5>
                                 <p class="card-text">Free Food feeding by our NGO</p>
@@ -741,7 +741,7 @@
                 <div class="col-md-4 mb-4">
                     <div class="card shadow-lg bg-white rounded p-3 mb-5">
                         <div class="card-body text-center">
-                            <img src="images/clothe.jpg" class="img-fluid mb-3" width="200">
+                            <img src="{{asset('images/clothe.jpg')}}" class="img-fluid mb-3" width="200">
                             <h5 class="card-title">Help For Clothes</h5>
                             <p class="card-text">Donate for clothes, NGO distributes them</p>
                             <a href="{{ route('help-clothe') }}" class="btn btn-outline-success">Donate Now</a>

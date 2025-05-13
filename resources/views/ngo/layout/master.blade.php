@@ -72,6 +72,10 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <!-- Add your scripts here -->
     <script src="{{ asset('js/app.js') }}"></script>
     <script>
@@ -82,6 +86,14 @@
                 yearRange: "-100:+10",
                 dateFormat: "dd-mm-yy"
             });
+        });
+    </script>
+    <script>
+        flatpickr("#program_time", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "h:i K", // 12-hour format with AM/PM
+            time_24hr: false
         });
     </script>
 </body>
