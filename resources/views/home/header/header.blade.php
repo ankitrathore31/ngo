@@ -14,12 +14,13 @@
         </div>
         <div class="col-md-6 text-center">
             <h4 style="color: red; font-weight:900; font-size:40px;"><b>GYAN BHARTI SANSTHA (NGO)</b></h4>
-            <h5 style="color: black;"><b>Together let's help each other</b></h5>
+            {{-- <h5 style="color: black;"><b>Together let's help each other</b></h5> --}}
+            <h5 style="color: blue;"><b>Head Office: Kainchu Tanda Amaria Pilibhit UP 262121</b></h5>
         </div>
         <div class="col-md-4 text-center">
             <p class="text-primary text-sm" style="font-size: 15px;"><b>THE INSTITUTION IN CONTINUOUS SERVICE SINCE
                     2009</b></p>
-            <p><a href="tel:" class="btn btn-primary btn-sm">Call Now</a>
+            <p><a href="tel:9411484111" class="btn btn-primary btn-sm">Call Now</a>
                 <a href="mailto:gyanbhartingo600@gmail.com" class="btn btn-primary btn-sm">Mail Now</a>
             </p>
             <div class="social-icons mt-3">
