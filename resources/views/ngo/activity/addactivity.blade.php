@@ -176,11 +176,10 @@
             const fileError = document.getElementById('fileError');
 
             if (file) {
-                const fileSize = file.size / 1024 / 1024; // Convert bytes to MB
+                const fileSize = file.size / 1024 / 1024; 
                 const fileType = file.type.split('/')[0];
 
-                // File size check (<= 2MB)
-                if (fileSize > 2) {
+                if (fileSize > 40) {
                     fileError.textContent = 'File size should be less than or equal to 2MB.';
                     fileError.style.display = 'block';
                     document.getElementById('program_image').value = ''; // Reset the file input
