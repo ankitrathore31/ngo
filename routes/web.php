@@ -44,12 +44,13 @@ Route::controller(HomeControlller::class)->group(function () {
     Route::get('/Certificates', 'certificatepage')->name('certificate');
     Route::get('/Acheivement', 'rewardpage')->name('reward');
     Route::get('/Donation', 'donatepage')->name('donate-page');
-    Route::get('/Contact', 'contact')->name('contact');
+    Route::get('/Contact', 'contactpage')->name('contact');
     Route::get('/education-donate', 'helpeducationcart')->name('help-education');
     Route::get('/food-donate', 'helpfood')->name('help-food');
     Route::get('/clothe-donate', 'helpclothe')->name('help-clothe');
     Route::get('/environment-donate', 'helpenvironment')->name('help-environment');
     Route::get('/Pay', 'pay')->name('pay');
+    Route::get('/Notice', 'notice')->name('notice');
 });
 
 Route::controller(PaymentController::class)->group(function () {
@@ -111,7 +112,9 @@ Route::controller(SocialActivityController::class)->group(function () {
 });
 
 Route::controller(BeneficiariesController::class)->group(function(){
-    Route::get('ngo/add-beneficiaries' , 'addbene')->middleware('auth')->name('add-bene');
+    Route::get('ngo/Registraition' , 'registraition')->middleware('auth')->name('registraition');
+    Route::get('ngo/Pending Registraition' , 'pendingregistraition')->middleware('auth')->name('pending-registraition');
+    Route::get('ngo/Apporve Registraition' , 'apporveregistraition')->middleware('auth')->name('apporve-registraition');
 });
 
 

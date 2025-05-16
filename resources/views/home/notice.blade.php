@@ -1,4 +1,5 @@
-<?php include("common/layout.php"); ?>
+@extends('home.layout.MasterLayout')
+@Section('content')
 
 <div class="wrapper">
     <div class="container mt-5">
@@ -19,4 +20,5 @@
     </div>
 </div>
 
-<?php include("common/footer.php"); ?>
+@endsection
+
