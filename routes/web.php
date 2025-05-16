@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialActivityController;
 use App\Http\Controllers\HomeControlller;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BeneficiariesController;
 use App\Http\Controllers\NgoController;
 use App\Http\Controllers\PaymentController;
 
@@ -107,6 +108,10 @@ Route::controller(SocialActivityController::class)->group(function () {
     Route::get('ngo/removeactivity/{id}', 'removeactivity')->middleware('auth')->name('removeactivity');
     Route::get('ngo/viewactivity/{id}', 'viewactivity')->middleware('auth')->name('viewactivity');
 
+});
+
+Route::controller(BeneficiariesController::class)->group(function(){
+    Route::get('ngo/add-beneficiaries' , 'addbene')->middleware('auth')->name('add-bene');
 });
 
 
