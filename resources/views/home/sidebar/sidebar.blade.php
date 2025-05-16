@@ -67,7 +67,7 @@
                     <a class="nav-link text-nowrap" href="{{ route('donate-page') }}">Donation</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-nowrap" href="">Notice Board</a>
+                    <a class="nav-link text-nowrap" href="{{ route('notice') }}">Notice Board</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-nowrap" href="{{ route('contact') }}">Contact</a>

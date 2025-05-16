@@ -114,24 +114,24 @@
                 </li>
 
                 <!-- Registration -->
-                {{-- <li class="nav-item dropdown">
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
                             class="fas fa-clipboard-list"></i> REGISTRATION</a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="">New Registration</a></li>
-                        <li><a class="dropdown-item" href="#">Pending Registration</a></li>
-                        <li><a class="dropdown-item" href="#">Approve Registration</a></li>
+                        <li><a class="dropdown-item" href="{{ route('registraition')}}">New Registration</a></li>
+                        <li><a class="dropdown-item" href="{{route('pending-registraition') }}">Pending Registration</a></li>
+                        <li><a class="dropdown-item" href="{{ route('apporve-registraition')}}">Approve Registration</a></li>
                         <li><a class="dropdown-item" href="#">Delete Registration</a></li>
                         <li><a class="dropdown-item" href="#">Recover Registration</a></li>
                     </ul>
-                </li> --}}
+                </li>
 
                 <!-- Beneficiaries -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
                             class="fas fa-project-diagram"></i> BENEFICIARIES</a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="{{ route('add-bene')}}">Add Beneficiary</a></li>
+                        <li><a class="dropdown-item" href="">Add Beneficiary</a></li>
                         <li><a class="dropdown-item" href="#">Beneficiary List</a></li>
                         <li><a class="dropdown-item" href="#">Beneficiary Report</a></li>
                         <li><a class="dropdown-item" href="#">Target Beneficiaries</a></li>

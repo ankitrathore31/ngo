@@ -14,6 +14,7 @@
     </script>
 </head>
 <style>
+    
     .ui-datepicker select.ui-datepicker-month,
     .ui-datepicker select.ui-datepicker-year {
         font-size: 14px;
@@ -69,7 +70,12 @@
     @yield('content') <!-- Body content goes here -->
 
 
-
+<script src="{{ asset('js/app.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/countup.js@2.6.0/dist/countUp.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -78,6 +84,14 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <!-- Add your scripts here -->
     <script src="{{ asset('js/app.js') }}"></script>
+     <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "Select Here",
+                allowClear: true
+            });
+        });
+    </script>
     <script>
         $(function() {
             $(".datepicker").datepicker({
@@ -89,7 +103,7 @@
         });
     </script>
     <script>
-        flatpickr("#program_time", {
+        flatpickr("#", {
             enableTime: true,
             noCalendar: true,
             dateFormat: "h:i K", // 12-hour format with AM/PM

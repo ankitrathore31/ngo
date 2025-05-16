@@ -74,7 +74,7 @@ class HomeControlller extends Controller
         return view('home.donation.help-environment');
     }
 
-    public function pay(){
-        return view ('home.donation.payment');
+    public function notice(){
+        return view('home.notice');
     }
 }
