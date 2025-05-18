@@ -286,11 +286,12 @@
     <section>
         <div class="container-fluid mt-5">
             <div class="row justify-content-center d-flex">
-                <div class="col-md-10 text-center">
+                <div class="col-md-10 justify-content-center d-flex" style="gap: 15px;">
                     <h2 class="section-title mb-4"><b>SANSTHA WORKING AREA</b></h2>
-                </div>
-                <div class="col-md-2 text-end">
-                    <select class="form-control" id="session">
+                
+                
+                    <select class="form-control w-25" id="session">
+                        <option value="">All Session</option>
                         @php
                             $sessions = Session::get('all_academic_session');
                             $sessions = collect($sessions)->sortByDesc('session_date');
@@ -384,11 +385,10 @@
         <div class="container-fluid mt-5">
             <!-- Heading -->
             <div class="row justify-content-center d-flex">
-                <div class="col-md-10 text-center">
+                <div class="col-md-10 justify-content-center d-flex" style="gap: 15px;">
                     <h2 class="section-title mb-4"><b>SANSTHA ACTIVITIES</b></h2>
-                </div>
-                <div class="col-md-2 text-start">
-                    <select class="form-control" id="session">
+                    <select class="form-control w-25" id="session">
+                        <option value="">All Session</option>
                         @php
                             $sessions = Session::get('all_academic_session');
                             $sessions = collect($sessions)->sortByDesc('session_date');
@@ -397,7 +397,6 @@
                             <option value="{{ $session->session_date }}">{{ $session->session_date }}</option>
                         @endforeach
                     </select>
-                    {{-- <input type="text" class="form-control w-50" value="2025"> --}}
                 </div>
             </div>
 

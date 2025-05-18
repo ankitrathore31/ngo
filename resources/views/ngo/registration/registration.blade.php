@@ -65,74 +65,45 @@
         <div class="container-fluide m-3">
             <div class="card bg-white p-2 shadow rounded">
                 <div class="text-black text-center border-bottom pb-3">
-                    <h4 class=" p-3 bg-info rounded"><b>Fill The Fields For Registration </b></h4>
+                    <h4 class=" p-3 bg-info rounded"><b>REGISTER FOR OFFICE USE </b></h4>
                 </div>
                 <div class="card-body m-1">
-                    <form method="post" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('store-registration') }}" enctype="multipart/form-data">
                         @csrf
-                        <div class="border-bottom pb-3 mb-4">
-                            {{-- <h5 class="text-black"><b>Information</b></h5> --}}
-                            <div class="row">
-                                <div class="col-md-4 col-sm-6 form-group mb-3">
-                                    <label for="application_date" class="form-label">Application Date: <span
-                                    class="text-danger">*</span></label>
-                                    <input type="text" name="application_date" id="application_date"
-                                        class="form-control datepicker @error('dob') is-invalid @enderror"
-                                        value="{{ old('application_date') }}" required>
-                                    @error('application_date')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-
-                                <div class="col-md-4 col-sm-6 form-group mb-3">
-                                    <label for="registraition_no" class="form-label">Registration No:<span
-                                    class="text-danger">*</span></label>
-                                    <input type="text" name="registraition_no" id="registraition_no"
-                                        class="form-control @error('dob') is-invalid @enderror"
-                                        value="{{ old('registraition_no') }}" readonly>
-                                    @error('registraition_no')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-
-                                <div class="col-md-4 mb-3">
-                                    <div class="form-group">
-                                        <label for="reg_type" class="form-label">Registraition Type <span
-                                                class="text-danger">*</span></label>
-                                        <select class="form-control" id="reg_type" name="reg_type">
-                                            <option selected disabled>Select Type</option>
-                                            <option value="beneficiaries"
-                                                {{ old('reg_type') == 'beneficiaries' ? 'selected' : '' }}>Beneficiaries
-                                            </option>
-                                            <option value="Voter ID Card"
-                                                {{ old('reg_type') == 'member' ? 'selected' : '' }}>Member
-                                            </option>
-                                        </select>
-                                        @error('reg_type')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label for="project_name" class="form-label">Project Name: <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" name="project_name" id="project_name"
-                                        class="form-control @error('project_name') is-invalid @enderror">
-                                    @error('project_name')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                        </div>
-                        <!--  Information Section -->
                         <div class="border-bottom pb-3 mb-4">
                             <h5 class="text-black"><b>Information</b></h5>
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="row">
+                                        <div class="col-md-6 col-sm-6 form-group mb-3">
+                                            <label for="application_date" class="form-label">Application Date: <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" name="application_date" id="application_date"
+                                                class="form-control datepicker @error('dob') is-invalid @enderror"
+                                                value="{{ old('application_date') }}" required>
+                                            @error('application_date')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="form-group">
+                                                <label for="reg_type" class="form-label">Registraition Type <span
+                                                        class="text-danger">*</span></label>
+                                                <select class="form-control" id="reg_type" name="reg_type">
+                                                    <option selected disabled>Select Type</option>
+                                                    <option value="Beneficiaries"
+                                                        {{ old('reg_type') == 'Beneficiaries' ? 'selected' : '' }}>
+                                                        Beneficiaries
+                                                    </option>
+                                                    <option value="Member"
+                                                        {{ old('reg_type') == 'Member' ? 'selected' : '' }}>Member
+                                                    </option>
+                                                </select>
+                                                @error('reg_type')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
                                         <div class="col-md-6 col-sm-6  form-group mb-3">
                                             <label for="name" class="form-label">Full Name: <span
                                                     class="text-danger">*</span></label>
@@ -185,49 +156,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-6 col-sm-6 col-sm-12 form-group mb-3">
-                                            <label for="email" class="form-label">Email:</label>
-                                            <input type="email" name="email" id="email"
-                                                class="form-control @error('email') is-invalid @enderror"
-                                                value="{{ old('email') }}">
-                                            @error('email')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="religion" class="form-label">Religion <span
-                                                    class="text-danger">*</span></label>
-                                            <select class="form-select select2 @error('religion') is-invalid @enderror"
-                                                id="religion" name="religion" required>
-                                                <option value="" disabled {{ old('religion') ? '' : 'selected' }}>
-                                                    Select
-                                                    Religion</option>
-                                                <option value="Hindu" {{ old('religion') == 'Hindu' ? 'selected' : '' }}>
-                                                    Hindu
-                                                </option>
-                                                <option value="Islam" {{ old('religion') == 'Islam' ? 'selected' : '' }}>
-                                                    Islam
-                                                </option>
-                                                <option value="Christian"
-                                                    {{ old('religion') == 'Christian' ? 'selected' : '' }}>Christian
-                                                </option>
-                                                <option value="Sikh" {{ old('religion') == 'Sikh' ? 'selected' : '' }}>
-                                                    Sikh
-                                                </option>
-                                                <option value="Buddhist"
-                                                    {{ old('religion') == 'Buddhist' ? 'selected' : '' }}>
-                                                    Buddhist
-                                                </option>
-                                                <option value="Parsi" {{ old('religion') == 'Parsi' ? 'selected' : '' }}>
-                                                    Parsi
-                                                </option>
-                                            </select>
-                                            @error('religion')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
+
                                 </div>
                                 <div class="col-md-4 col-sm-4">
                                     <div class="upload-container">
@@ -239,7 +168,151 @@
                                         <input type="file" id="uploadInput" name="image" accept="image/*">
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-group local-forms">
+                                        <label class="form-label">Father/Husband Name: <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" name="gurdian_name" id="gurdian_name"
+                                            class="form-control @error('gurdian_name') is-invalid @enderror"
+                                            value="{{ old('gurdian_name') }}" required>
+                                        @error('gurdian_name')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-4 form-group mb-3">
+                                    <label for="village" class="form-label">Village/Locality: <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" name="village" id="village"
+                                        class="form-control @error('village') is-invalid @enderror"
+                                        value="{{ old('village') }}">
+                                    @error('village')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
 
+                                <div class="col-md-4 form-group mb-3">
+                                    <label for="post" class="form-label">Post/Town: <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" name="post" id="post"
+                                        class="form-control @error('post') is-invalid @enderror"
+                                        value="{{ old('post') }}" required>
+                                    @error('post')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-4 form-group mb-3">
+                                    <label for="block" class="form-label">Block: <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" name="block" id="block"
+                                        class="form-control @error('block') is-invalid @enderror"
+                                        value="{{ old('block') }}" required>
+                                    @error('block')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                @php
+                                    $districtsByState = config('districts');
+                                @endphp
+                                <div class="col-md-4 form-group mb-3">
+                                    <label for="stateSelect" class="form-label">State: <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-control select2 @error('state') is-invalid @enderror"
+                                        name="state" id="stateSelect" required>
+                                        <option value="">Select State</option>
+                                        @foreach ($districtsByState as $state => $districts)
+                                            <option value="{{ $state }}"
+                                                {{ old('state') == $state ? 'selected' : '' }}>{{ $state }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('state')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+
+                                </div>
+
+                                <div class="col-md-4 form-group mb-3">
+                                    <label for="districtSelect" class="form-label">District: <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-control @error('district') is-invalid @enderror" name="district"
+                                        id="districtSelect" required>
+                                        <option value="">Select District</option>
+                                    </select>
+                                    @error('district')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-4 form-group mb-3">
+                                    <label for="pincode" class="form-label">Pincode: <span
+                                            class="text-danger">*</span></label>
+                                    <input type="number" name="pincode" id="pincode"
+                                        class="form-control @error('pincode') is-invalid @enderror"
+                                        value="{{ old('pincode') }}">
+                                    @error('pincode')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-4 form-group mb-3">
+                                    <label for="country" class="form-label">Nationality: <span
+                                            class="text-danger">*</span></label>
+                                    <select name="country" class="form-control" id="country">
+                                        <option value=""></option>
+                                        <option value="India" {{ old('country') == 'India' ? 'selected' : '' }}>India
+                                        </option>
+                                    </select>
+                                    @error('country')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-4 col-sm-6 col-sm-12 form-group mb-3">
+                                    <label for="email" class="form-label">Email:</label>
+                                    <input type="email" name="email" id="email"
+                                        class="form-control @error('email') is-invalid @enderror"
+                                        value="{{ old('email') }}">
+                                    @error('email')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+
+                                <div class="col-md-4 mb-3">
+                                    <label for="religion" class="form-label">Religion <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-select select2 @error('religion') is-invalid @enderror"
+                                        id="religion" name="religion" required>
+                                        <option value="" disabled {{ old('religion') ? '' : 'selected' }}>
+                                            Select
+                                            Religion</option>
+                                        <option value="Hindu" {{ old('religion') == 'Hindu' ? 'selected' : '' }}>
+                                            Hindu
+                                        </option>
+                                        <option value="Islam" {{ old('religion') == 'Islam' ? 'selected' : '' }}>
+                                            Islam
+                                        </option>
+                                        <option value="Christian" {{ old('religion') == 'Christian' ? 'selected' : '' }}>
+                                            Christian
+                                        </option>
+                                        <option value="Sikh" {{ old('religion') == 'Sikh' ? 'selected' : '' }}>
+                                            Sikh
+                                        </option>
+                                        <option value="Buddhist" {{ old('religion') == 'Buddhist' ? 'selected' : '' }}>
+                                            Buddhist
+                                        </option>
+                                        <option value="Parsi" {{ old('religion') == 'Parsi' ? 'selected' : '' }}>
+                                            Parsi
+                                        </option>
+                                    </select>
+                                    @error('religion')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="category" class="form-label">Religion Category <span
                                             class="text-danger">*</span></label>
@@ -274,123 +347,21 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-md-4 mb-3">
-                                    <div class="form-group local-forms">
-                                        <label class="form-label">Father/Husband Name: <span
-                                                class="text-danger">*</span></label>
-                                        <input type="text" name="gurdian_name" id="gurdian_name"
-                                            class="form-control @error('gurdian_name') is-invalid @enderror"
-                                            value="{{ old('gurdian_name') }}" required>
-                                        @error('gurdian_name')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Address Details Section -->
-                        <div class="border-bottom pb-3 mb-3">
-                            <h5 class="text-black"><b>Address Details</b></h5>
-                            <div class="row">
-                                <div class="col-md-4 form-group mb-3">
-                                    <label for="country" class="form-label">Nationality: <span
-                                            class="text-danger">*</span></label>
-                                    <select name="country" class="form-control" id="country">
-                                        <option value=""></option>
-                                        <option value="India" {{ old('country') == 'India' ? 'selected' : '' }}>India
-                                        </option>
-                                        {{-- <option value="Other {{ old('country') == 'other'}}">Other</option> --}}
-                                    </select>
-                                    @error('country')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-4 form-group mb-3">
-                                    <label for="address" class="form-label">Address: <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" name="address" id="address"
-                                        class="form-control @error('address') is-invalid @enderror"
-                                        value="{{ old('address') }}">
-                                    @error('address')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div class="col-md-4 form-group mb-3">
-                                    <label for="post" class="form-label">Post/Town: <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" name="post" id="post"
-                                        class="form-control @error('post') is-invalid @enderror"
-                                        value="{{ old('post') }}" required>
-                                    @error('post')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-4 form-group mb-3">
-                                    <label for="block" class="form-label">Block: <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" name="block" id="block"
-                                        class="form-control @error('block') is-invalid @enderror"
-                                        value="{{ old('block') }}" required>
-                                    @error('block')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-4 form-group mb-3">
-                                    <label for="district" class="form-label">District: <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" name="district" id="district"
-                                        class="form-control @error('district') is-invalid @enderror"
-                                        value="{{ old('district') }}" required>
-                                    @error('district')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-4 form-group mb-3">
-                                    <label for="pincode" class="form-label">Pincode: <span
-                                            class="text-danger">*</span></label>
-                                    <input type="number" name="pincode" id="pincode"
-                                        class="form-control @error('pincode') is-invalid @enderror"
-                                        value="{{ old('pincode') }}">
-                                    @error('pincode')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-4 form-group mb-3">
-                                    <label for="text" class="form-label">State: <span
-                                            class="text-danger">*</span></label>
-                                    <select class="form-control select2 @error('state') is-invalid @enderror"
-                                        name="state" id="state" required>
-                                        <option value="">Select State</option>
-                                        @foreach ($states as $state)
-                                            <option value="{{ $state }}"
-                                                {{ old('state') == $state ? 'selected' : '' }}>{{ $state }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('state')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-
-                                </div>
                             </div>
                         </div>
                         {{-- Other Details  --}}
-                        <div class="border-bottom pb-3 mb-3">
-                            <h3 class="text-black"><b>Other Details</b></h3>
+                        {{-- <div class="border-bottom pb-3 mb-3">
+                            <h3 class="text-black"><b>Other Details</b></h3> --}}
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <div class="form-group">
-                                        <label for="id_type">Identity Type: <span class="text-danger">*</span></label>
-                                        <select class="form-control" id="id_type" name="identity_type">
+                                        <label for="identity_type" class="form-label">Identity Type: <span
+                                                class="text-danger">*</span></label>
+                                        <select class="form-control" id="identity_type" name="identity_type">
                                             <option selected disabled>Select Identity Type</option>
                                             <option value="Aadhar Card"
-                                                {{ old('id_type') == 'Aadhar Card' ? 'selected' : '' }}>Aadhar Card
+                                                {{ old('id_type') == 'Aadhar Card' ? 'selected' : '' }}>
+                                                Aadhar Card
                                             </option>
                                             <option value="Voter ID Card"
                                                 {{ old('id_type') == 'Voter ID Card' ? 'selected' : '' }}>Voter ID Card
@@ -398,6 +369,14 @@
                                             <option value="Pan Card" {{ old('id_type') == 'Pan Card' ? 'selected' : '' }}>
                                                 Pan
                                                 Card</option>
+                                            <option value="Markshhet"
+                                                {{ old('id_type') == 'Markshhet' ? 'selected' : '' }}>
+                                                Markshhet
+                                            </option>
+                                            <option value="Address Proof"
+                                                {{ old('id_type') == 'Address Proof' ? 'selected' : '' }}>
+                                                Address Proof
+                                            </option>
                                         </select>
                                         @error('id_type')
                                             <span class="text-danger">{{ $message }}</span>
@@ -407,7 +386,7 @@
 
                                 <div class="col-md-4 mb-3">
                                     <div class="form-group">
-                                        <label for="identity_no">Identity Card Number: <span
+                                        <label for="identity_no" class="form-label">Identity Card Number: <span
                                                 class="text-danger">*</span></label>
                                         <input type="number" class="form-control" id="identity_no"
                                             value="{{ old('identity_no') }}" name="identity_no"
@@ -416,6 +395,10 @@
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="" class="form-label">ID Document Upload <span></span></label>
+                                    <input type="file" class="form-control" name="id_document">
                                 </div>
                                 <div class="col-md-4 form-group mb-3">
                                     <label for="occupation" class="form-label">Occupation: <span
@@ -427,29 +410,8 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                <div class="col-md-6 form-group mb-3">
-                                    <label for="help" class="form-label">What type of help is needed: <span
-                                            class="text-danger">*</span></label>
-                                    <textarea name="help" id="help" class="form-control @error('help') is-invalid @enderror"
-                                        rows="3" required>{{ old('help') }}</textarea>
-                                    @error('help')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6 form-group mb-3">
-                                    <label for="survey_details" class="form-label">Survey Details: <span
-                                            class="text-danger">*</span></label>
-                                    <textarea name="survey_details" id="survey_details" class="form-control @error('survey_details') is-invalid @enderror"
-                                        rows="3" required>{{ old('help') }}</textarea>
-                                    @error('survey_details')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-
                             </div>
-                        </div>
+                        {{-- </div> --}}
 
                         <div class="row">
                             <div class="col-md-4 mb-3">
@@ -487,5 +449,34 @@
     </script>
     <script>
         document.getElementById("registraition_no").value = Math.floor(100000 + Math.random() * 9000000);
+    </script>
+
+    <!-- Inline Script to load districts -->
+    <script>
+        const allDistricts = @json($districtsByState);
+        const oldDistrict = "{{ old('district') }}";
+        const oldState = "{{ old('state') }}";
+
+        function populateDistricts(state) {
+            const districtSelect = document.getElementById('districtSelect');
+            districtSelect.innerHTML = '<option value="">Select District</option>';
+
+            if (allDistricts[state]) {
+                allDistricts[state].forEach(function(district) {
+                    const selected = (district === oldDistrict) ? 'selected' : '';
+                    districtSelect.innerHTML += `<option value="${district}" ${selected}>${district}</option>`;
+                });
+            }
+        }
+
+        // Initial load if editing or validation failed
+        if (oldState) {
+            populateDistricts(oldState);
+        }
+
+        // On state change
+        document.getElementById('stateSelect').addEventListener('change', function() {
+            populateDistricts(this.value);
+        });
     </script>
 @endsection

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialActivityController;
 use App\Http\Controllers\HomeControlller;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\BeneficiariesController;
+use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\NgoController;
 use App\Http\Controllers\PaymentController;
 
@@ -35,7 +35,7 @@ Route::get('/', function () {
 Route::controller(HomeControlller::class)->group(function () {
     Route::get('/welcome', 'home')->name('welcome');
     Route::get('/SocialActivity', 'activitypage')->name('activity');
-    Route::get('SocialActivity/ViewReport/{id}','viewreport')->name('viewreport');
+    Route::get('SocialActivity/ViewReport/{id}', 'viewreport')->name('viewreport');
     Route::get('/Services', 'servicepage')->name('service');
     Route::get('/About', 'aboutpage')->name('about');
     Route::get('/Event', 'eventpage')->name('event');
@@ -87,17 +87,16 @@ Route::get('/ngo', function () {
 })->middleware(['auth'])->name('ngo');
 
 
-Route::controller(NgoController::class)->group(function(){
+Route::controller(NgoController::class)->group(function () {
     Route::post('save-ngo', 'savengo')->middleware('auth')->name('save-ngo');
     Route::get('edit-ngo/{id}', 'editngo')->middleware('auth')->name('edit-ngo');
     Route::post('update-ngo/{id}', 'updatengo')->middleware('auth')->name('update-ngo');
-    Route::post('toggle-status/{id}','toggleStatus')->middleware('auth')->name('ngo.toggleStatus');
+    Route::post('toggle-status/{id}', 'toggleStatus')->middleware('auth')->name('ngo.toggleStatus');
     Route::delete('delete-ngo/{id}', 'deletengo')->middleware('auth')->name('delete-ngo');
     Route::get('admin/view-ngo/{id}', 'viewngo')->middleware('auth')->name('view-ngo');
     Route::get('admin/totalngo-list', 'totalngo')->middleware('auth')->name('totalngo-list');
     Route::get('admin/activengo-list', 'activengo')->middleware('auth')->name('activengo-list');
     Route::get('admin/deactivengo-list', 'deactivengo')->middleware('auth')->name('deactivengo-list');
-
 });
 
 Route::controller(SocialActivityController::class)->group(function () {
@@ -108,14 +107,18 @@ Route::controller(SocialActivityController::class)->group(function () {
     Route::post('ngo/updateactivity/{id}', 'updateactivity')->middleware('auth')->name('updateactivity');
     Route::get('ngo/removeactivity/{id}', 'removeactivity')->middleware('auth')->name('removeactivity');
     Route::get('ngo/viewactivity/{id}', 'viewactivity')->middleware('auth')->name('viewactivity');
-
 });
 
-Route::controller(BeneficiariesController::class)->group(function(){
-    Route::get('ngo/Registraition' , 'registraition')->middleware('auth')->name('registraition');
-    Route::get('ngo/Pending Registraition' , 'pendingregistraition')->middleware('auth')->name('pending-registraition');
-    Route::get('ngo/Apporve Registraition' , 'apporveregistraition')->middleware('auth')->name('apporve-registraition');
-});
+
+Route::middleware('auth')->group(function () {
+    Route::get('ngo/registration', [RegistrationController::class, 'registration'])->name('registration');
+    Route::post('ngo/store-registration', [RegistrationController::class, 'StoreRegistration'])->name('store-registration');
+    Route::get('ngo/pending-registration', [RegistrationController::class, 'pendingRegistration'])->name('pending-registration');
+    Route::patch('ngo/approve-status/{id}', [RegistrationController::class, 'approveStatus'])->name('approve-status');
+    Route::get('ngo/approve-registration', [RegistrationController::class, 'approveRegistration'])->name('approve-registration');
+    Route::patch('ngo/pending-status/{id}', [RegistrationController::class, 'pendingStatus'])->name('pending-status');
+}); 
+
 
 
 
