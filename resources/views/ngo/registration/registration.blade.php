@@ -65,7 +65,7 @@
         <div class="container-fluide m-3">
             <div class="card bg-white p-2 shadow rounded">
                 <div class="text-black text-center border-bottom pb-3">
-                    <h4 class=" p-3 bg-info rounded"><b>REGISTER FOR OFFICE USE </b></h4>
+                    <h4 class=" p-3 bg-info rounded"><b>APPLICATION FORM </b></h4>
                 </div>
                 <div class="card-body m-1">
                     <form method="POST" action="{{ route('store-registration') }}" enctype="multipart/form-data">
@@ -145,16 +145,42 @@
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                        <div class="col-md-6 col-sm-6  form-group mb-3">
-                                            <label for="phone" class="form-label">Phone: <span
+
+                                        <div class="col-md-6 form-group mb-3">
+                                            <label for="eligibility" class="form-label">Eligibility / Education Level: <span
                                                     class="text-danger">*</span></label>
-                                            <input type="text" name="phone" id="phone"
-                                                class="form-control @error('phone') is-invalid @enderror"
-                                                value="{{ old('phone') }}" required>
-                                            @error('phone')
+                                            <select name="eligibility" class="form-control" id="eligibility" required>
+                                                <option value="">Select Education Level</option>
+                                                <option value="Uneducated"
+                                                    {{ old('eligibility') == 'Uneducated' ? 'selected' : '' }}>Uneducated
+                                                </option>
+                                                <option value="5th Pass"
+                                                    {{ old('eligibility') == '5th Pass' ? 'selected' : '' }}>5th Pass
+                                                </option>
+                                                <option value="Secondary"
+                                                    {{ old('eligibility') == 'Secondary' ? 'selected' : '' }}>Secondary
+                                                </option>
+                                                <option value="Senior Secondary"
+                                                    {{ old('eligibility') == 'Senior Secondary' ? 'selected' : '' }}>Senior
+                                                    Secondary</option>
+                                                <option value="Graduation"
+                                                    {{ old('eligibility') == 'Graduation' ? 'selected' : '' }}>Graduation
+                                                </option>
+                                                <option value="Post Graduation"
+                                                    {{ old('eligibility') == 'Post Graduation' ? 'selected' : '' }}>Post
+                                                    Graduation</option>
+                                                <option value="Degree Holder"
+                                                    {{ old('eligibility') == 'Degree Holder' ? 'selected' : '' }}>Degree
+                                                    Holder</option>
+                                            </select>
+                                            @error('eligibility')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
+
+
+
+
                                     </div>
 
                                 </div>
@@ -162,7 +188,7 @@
                                     <div class="upload-container">
                                         <div class="image-placeholder">
                                             <img id="previewImage" alt="Preview">
-                                            <span id="placeholderText">Upload Student Photo</span>
+                                            <span id="placeholderText">Upload Photo</span>
                                         </div>
                                         <label for="uploadInput" class="upload-btn">Choose File</label>
                                         <input type="file" id="uploadInput" name="image" accept="image/*">
@@ -170,6 +196,26 @@
                                 </div>
                             </div>
                             <div class="row">
+
+                                <div class="col-md-4 form-group mb-3">
+                                    <label for="marital_status" class="form-label">Marital Status: <span
+                                            class="text-danger">*</span></label>
+                                    <select name="marital_status" class="form-control" id="marital_status" required>
+                                        <option value="">Select Marital Status</option>
+                                        <option value="Married"
+                                            {{ old('marital_status') == 'Married' ? 'selected' : '' }}>Married
+                                        </option>
+                                        <option value="Unmarried"
+                                            {{ old('marital_status') == 'Unmarried' ? 'selected' : '' }}>Unmarried
+                                        </option>
+                                    </select>
+                                    @error('marital_status')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+
+
                                 <div class="col-md-4 mb-3">
                                     <div class="form-group local-forms">
                                         <label class="form-label">Father/Husband Name: <span
@@ -178,6 +224,18 @@
                                             class="form-control @error('gurdian_name') is-invalid @enderror"
                                             value="{{ old('gurdian_name') }}" required>
                                         @error('gurdian_name')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-group local-forms">
+                                        <label class="form-label">Mother Name: <span class="text-danger">*</span></label>
+                                        <input type="text" name="mother_name" id="mother_name"
+                                            class="form-control @error('mother_name') is-invalid @enderror"
+                                            value="{{ old('mother_name') }}" required>
+                                        @error('mother_name')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
@@ -200,6 +258,21 @@
                                         class="form-control @error('post') is-invalid @enderror"
                                         value="{{ old('post') }}" required>
                                     @error('post')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-4 form-group mb-3">
+                                    <label for="area_type" class="form-label">Area Type: <span
+                                            class="text-danger">*</span></label>
+                                    <select name="area_type" class="form-control" id="area_type" required>
+                                        <option value="" selected></option>
+                                        <option value="Rular" {{ old('Rular') == 'Rular' ? 'selected' : '' }}>Rular
+                                        </option>
+                                        <option value="Urban" {{ old('Urban') == 'Urban' ? 'selected' : '' }}>Urban
+                                        </option>
+                                    </select>
+                                    @error('area_type')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -281,6 +354,16 @@
                                     @enderror
                                 </div>
 
+                                <div class="col-md-4 col-sm-6  form-group mb-3">
+                                    <label for="phone" class="form-label">Phone: <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" name="phone" id="phone"
+                                        class="form-control @error('phone') is-invalid @enderror"
+                                        value="{{ old('phone') }}" required>
+                                    @error('phone')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
 
                                 <div class="col-md-4 mb-3">
                                     <label for="religion" class="form-label">Religion <span
@@ -349,69 +432,77 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- Other Details  --}}
-                        {{-- <div class="border-bottom pb-3 mb-3">
-                            <h3 class="text-black"><b>Other Details</b></h3> --}}
-                            <div class="row">
-                                <div class="col-md-4 mb-3">
-                                    <div class="form-group">
-                                        <label for="identity_type" class="form-label">Identity Type: <span
-                                                class="text-danger">*</span></label>
-                                        <select class="form-control" id="identity_type" name="identity_type">
-                                            <option selected disabled>Select Identity Type</option>
-                                            <option value="Aadhar Card"
-                                                {{ old('id_type') == 'Aadhar Card' ? 'selected' : '' }}>
-                                                Aadhar Card
-                                            </option>
-                                            <option value="Voter ID Card"
-                                                {{ old('id_type') == 'Voter ID Card' ? 'selected' : '' }}>Voter ID Card
-                                            </option>
-                                            <option value="Pan Card" {{ old('id_type') == 'Pan Card' ? 'selected' : '' }}>
-                                                Pan
-                                                Card</option>
-                                            <option value="Markshhet"
-                                                {{ old('id_type') == 'Markshhet' ? 'selected' : '' }}>
-                                                Markshhet
-                                            </option>
-                                            <option value="Address Proof"
-                                                {{ old('id_type') == 'Address Proof' ? 'selected' : '' }}>
-                                                Address Proof
-                                            </option>
-                                        </select>
-                                        @error('id_type')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
 
-                                <div class="col-md-4 mb-3">
-                                    <div class="form-group">
-                                        <label for="identity_no" class="form-label">Identity Card Number: <span
-                                                class="text-danger">*</span></label>
-                                        <input type="number" class="form-control" id="identity_no"
-                                            value="{{ old('identity_no') }}" name="identity_no"
-                                            placeholder="Enter Identity Card No">
-                                        @error('identity_no')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label for="" class="form-label">ID Document Upload <span></span></label>
-                                    <input type="file" class="form-control" name="id_document">
-                                </div>
-                                <div class="col-md-4 form-group mb-3">
-                                    <label for="occupation" class="form-label">Occupation: <span
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label for="identity_type" class="form-label">Identity Type: <span
                                             class="text-danger">*</span></label>
-                                    <input type="text" name="occupation" id="occupation"
-                                        class="form-control @error('occupation') is-invalid @enderror"
-                                        value="{{ old('occupation') }}" required>
-                                    @error('occupation')
+                                    <select class="form-control" id="identity_type" name="identity_type">
+                                        <option selected disabled>Select Identity Type</option>
+                                        <option value="Aadhar Card"
+                                            {{ old('id_type') == 'Aadhar Card' ? 'selected' : '' }}>
+                                            Aadhar Card
+                                        </option>
+                                        <option value="Voter ID Card"
+                                            {{ old('id_type') == 'Voter ID Card' ? 'selected' : '' }}>Voter ID Card
+                                        </option>
+                                        <option value="Pan Card" {{ old('id_type') == 'Pan Card' ? 'selected' : '' }}>
+                                            Pan
+                                            Card</option>
+                                        <option value="Markshhet" {{ old('id_type') == 'Markshhet' ? 'selected' : '' }}>
+                                            Markshhet
+                                        </option>
+                                        <option value="Driving License"
+                                            {{ old('id_type') == 'Driving License' ? 'selected' : '' }}>
+                                            Driving License
+                                        </option>
+                                        <option value="Narega Card"
+                                            {{ old('id_type') == 'Narega Card' ? 'selected' : '' }}>
+                                            Narega Card
+                                        </option>
+                                        <option value="Ration Card"
+                                            {{ old('id_type') == 'Ration Card' ? 'selected' : '' }}>
+                                            Ration Card
+                                        </option>
+                                    </select>
+                                    @error('id_type')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
                             </div>
-                        {{-- </div> --}}
+                            <!-- Identity Number Input -->
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label for="identity_no" class="form-label">Identity Card Number: <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="identity_no" name="identity_no"
+                                        placeholder="Enter Identity Card No">
+                                    <small id="identity_no_hint" class="form-text text-muted"></small>
+                                    @error('identity_no')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Identity File Upload -->
+                            <div class="col-md-4 mb-3">
+                                <label for="id_document" class="form-label">ID Document Upload</label>
+                                <input type="file" class="form-control" name="id_document" id="id_document">
+                                <small id="id_document_hint" class="form-text text-muted"></small>
+                            </div>
+                            <div class="col-md-4 form-group mb-3">
+                                <label for="occupation" class="form-label">Occupation: <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" name="occupation" id="occupation"
+                                    class="form-control @error('occupation') is-invalid @enderror"
+                                    value="{{ old('occupation') }}" required>
+                                @error('occupation')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
 
                         <div class="row">
                             <div class="col-md-4 mb-3">
@@ -478,5 +569,64 @@
         document.getElementById('stateSelect').addEventListener('change', function() {
             populateDistricts(this.value);
         });
+    </script>
+    <script>
+        function updateIDFields() {
+            const type = document.getElementById('identity_type').value;
+            const hintText = document.getElementById('identity_hint');
+            const numberHint = document.getElementById('identity_no_hint');
+            const fileHint = document.getElementById('id_document_hint');
+            const inputField = document.getElementById('identity_no');
+
+            let subtitle = '';
+            let pattern = '';
+            let placeholder = '';
+
+            switch (type) {
+                case 'Aadhar Card':
+                    subtitle = 'Enter 12-digit Aadhar Number';
+                    pattern = '\\d{12}';
+                    placeholder = 'e.g. 123456789012';
+                    break;
+                case 'Voter ID Card':
+                    subtitle = 'Enter Voter ID like ABC1234567';
+                    pattern = '[A-Z]{3}[0-9]{7}';
+                    placeholder = 'e.g. ABC1234567';
+                    break;
+                case 'Pan Card':
+                    subtitle = 'Enter PAN like ABCDE1234F';
+                    pattern = '[A-Z]{5}[0-9]{4}[A-Z]{1}';
+                    placeholder = 'e.g. ABCDE1234F';
+                    break;
+                case 'Driving License':
+                    subtitle = 'Enter Driving License Number';
+                    pattern = '.{5,20}';
+                    placeholder = 'e.g. DL01XXXXXXX';
+                    break;
+                case 'Narega Card':
+                    subtitle = 'Enter Narega Card Number';
+                    pattern = '\\w{5,20}';
+                    placeholder = 'Enter Narega Card No';
+                    break;
+                case 'Ration Card':
+                    subtitle = 'Enter Ration Card Number';
+                    pattern = '\\w{5,20}';
+                    placeholder = 'Enter Ration Card No';
+                    break;
+                case 'Markshhet':
+                    subtitle = 'Enter Marksheet Number';
+                    pattern = '.{5,20}';
+                    placeholder = 'Enter Marksheet ID';
+                    break;
+            }
+
+            // Set field hints and pattern
+            hintText.textContent = subtitle;
+            numberHint.textContent = subtitle;
+            fileHint.textContent = `Upload scanned copy of ${type}`;
+            inputField.setAttribute('pattern', pattern);
+            inputField.setAttribute('placeholder', placeholder);
+            inputField.setAttribute('title', subtitle); // shows hint on hover
+        }
     </script>
 @endsection

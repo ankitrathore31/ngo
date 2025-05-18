@@ -35,7 +35,7 @@
         }
 
         .slider {
-            margin-top: 50px;
+            margin-top: 40px;
         }
 
         .owl-nav .owl-prev,
@@ -121,6 +121,27 @@
         }
     </style>
 
+    <div class="row d-flex justify-content-between m-3">
+        <div class="col-md-3 mb-3">
+            <a href="{{ route('photo') }}" class="btn btn-warning text-white w-100">
+                Gallery
+            </a>
+        </div>
+        
+        <div class="col-md-3 mb-3">
+            <a href="{{ route('applictionStatus') }}" class="btn btn-primary w-100">
+                Application Status
+            </a>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <a href="{{-- url('/certificate-download') --}}" class="btn btn-success w-100">
+                Certificate Download
+            </a>
+        </div>
+
+        
+    </div>
 
 
 
@@ -129,6 +150,7 @@
         <div class="item ">
             <div class="background-image">
                 <img src="images/sewing.jpeg" alt="slider image">
+                <img src="images/peace-talk.jpeg" alt="slider image">
                 <div class="carousel-caption d-none d-md-block">
                     <h1 class="text-white"></h1>
                     <h2 class="text-white"></h2>
@@ -288,8 +310,8 @@
             <div class="row justify-content-center d-flex">
                 <div class="col-md-10 justify-content-center d-flex" style="gap: 15px;">
                     <h2 class="section-title mb-4"><b>SANSTHA WORKING AREA</b></h2>
-                
-                
+
+
                     <select class="form-control w-25" id="session">
                         <option value="">All Session</option>
                         @php
@@ -716,7 +738,7 @@
                 <div class="col-md-4 mb-4">
                     <div class="card shadow-lg bg-white rounded p-3 mb-5">
                         <div class="card-body text-center">
-                            <img src="{{asset('images/education2.jpg')}}" class="img-fluid mb-3" width="200">
+                            <img src="{{ asset('images/education2.jpg') }}" class="img-fluid mb-3" width="200">
                             <div class="card-body">
                                 <h5 class="card-title">Help For Education</h5>
                                 <p class="card-text">Providing Free Education by our NGO</p>
@@ -728,7 +750,7 @@
                 <div class="col-md-4 mb-4">
                     <div class="card shadow-lg bg-white rounded p-3 mb-5">
                         <div class="card-body text-center">
-                            <img src="{{asset('images/education2.jpg')}}" class="img-fluid mb-3" width="200">
+                            <img src="{{ asset('images/education2.jpg') }}" class="img-fluid mb-3" width="200">
                             <div class="card-body">
                                 <h5 class="card-title">Help For Food</h5>
                                 <p class="card-text">Free Food feeding by our NGO</p>
@@ -740,7 +762,7 @@
                 <div class="col-md-4 mb-4">
                     <div class="card shadow-lg bg-white rounded p-3 mb-5">
                         <div class="card-body text-center">
-                            <img src="{{asset('images/clothe.jpg')}}" class="img-fluid mb-3" width="200">
+                            <img src="{{ asset('images/clothe.jpg') }}" class="img-fluid mb-3" width="200">
                             <h5 class="card-title">Help For Clothes</h5>
                             <p class="card-text">Donate for clothes, NGO distributes them</p>
                             <a href="{{ route('help-clothe') }}" class="btn btn-outline-success">Donate Now</a>

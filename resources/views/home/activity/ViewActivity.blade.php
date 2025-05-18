@@ -25,7 +25,7 @@
                         </a>
                     </div>
                     <div class="col-md-6 text-center">
-                        <h4 style="color: red; font-weight:500; font-size:25px;"><b>GYAN BHARTI SANSTHA (NGO)</b></h4>
+                        <h4 style="color: red; font-weight:500; font-size:25px;"><b>GYAN BHARTI SANSTHA</b></h4>
                         <h6 style="color: blue;"><b>Head Office: Kainchu Tanda Amaria Pilibhit UP 262121</b></h6>
                     </div>
                     <div class="col-md-4 text-center">

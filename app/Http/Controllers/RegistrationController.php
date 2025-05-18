@@ -28,6 +28,7 @@ class RegistrationController extends Controller
             'gender' => 'required|string|in:Male,Female,Other',
             'phone' => 'required|string|max:20',
             'gurdian_name' => 'required|string|max:255',
+            'mother_name' => 'required|string|max:255',
             'village' => 'nullable|string|max:255',
             'post' => 'required|string|max:255',
             'block' => 'required|string|max:255',
@@ -44,6 +45,9 @@ class RegistrationController extends Controller
             'identity_no' => 'required|string|max:255',
             'id_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'occupation' => 'required|string|max:255',
+            'eligibility' => 'nullable|string|max:100',
+            'marital_status' => 'required|string|in:Married,Unmarried',
+            'area_type' => 'required|string|in:Rular,Urban',
         ]);
 
         $data = $request->only([
@@ -54,6 +58,7 @@ class RegistrationController extends Controller
             'gender',
             'phone',
             'gurdian_name',
+            'mother_name',
             'village',
             'post',
             'block',
@@ -68,10 +73,14 @@ class RegistrationController extends Controller
             'identity_type',
             'identity_no',
             'occupation',
+            'eligibility',
+            'marital_status',
+            'area_type',
 
         ]);
 
         $data['status'] = 0;
+        $data['application_no'] = rand(1000000, 9999999);
 
         try {
             if (!empty($data['application_date'])) {
@@ -109,7 +118,7 @@ class RegistrationController extends Controller
     public function pendingRegistration()
     {
 
-        $pendingbene= beneficiarie::where('status', 0)->get();
+        $pendingbene = beneficiarie::where('status', 0)->get();
         $pendingmemeber = Member::where('status', 0)->get();
         return view('ngo.registration.pending-reg-list', compact('pendingbene', 'pendingmemeber'));
     }
@@ -119,6 +128,8 @@ class RegistrationController extends Controller
         $beneficiarie = beneficiarie::find($id);
         if ($beneficiarie && $beneficiarie->reg_type === 'Beneficiaries') {
             $beneficiarie->status = 1;
+            $beneficiarie->registration_no = rand(10000000, 99999999);
+            $beneficiarie->registration_date = now();
             $beneficiarie->save();
 
             return redirect()->back()->with('success', 'Beneficiarie approved successfully.');
@@ -128,6 +139,7 @@ class RegistrationController extends Controller
         $member = Member::find($id);
         if ($member && $member->reg_type === 'Member') {
             $member->status = 1;
+            $member->registration_no = rand(100000, 999999);
             $member->save();
 
             return redirect()->back()->with('success', 'Member approved successfully.');
@@ -141,12 +153,12 @@ class RegistrationController extends Controller
     {
         $approvebeneficiarie = beneficiarie::where('status', 1)->get();
         $approvegmemeber = Member::where('status', 1)->get();
-        return view('ngo.registration.apporve-reg-list', compact('approvebeneficiarie','approvegmemeber'));
+        return view('ngo.registration.apporve-reg-list', compact('approvebeneficiarie', 'approvegmemeber'));
     }
 
     public function pendingStatus($id)
     {
-       $beneficiarie = beneficiarie::find($id);
+        $beneficiarie = beneficiarie::find($id);
         if ($beneficiarie && $beneficiarie->reg_type === 'beneficiaries') {
             $beneficiarie->status = 0;
             $beneficiarie->save();

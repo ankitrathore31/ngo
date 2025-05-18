@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\NgoController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\GalleryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,7 +52,11 @@ Route::controller(HomeControlller::class)->group(function () {
     Route::get('/environment-donate', 'helpenvironment')->name('help-environment');
     Route::get('/Pay', 'pay')->name('pay');
     Route::get('/Notice', 'notice')->name('notice');
+    Route::get('/Appliction-Status', 'applictionStatus')->name('applictionStatus');
+    Route::post('/Check-Status', 'checkStatus')->name('check-status');
+    Route::get('/Photos', 'photo')->name('photo');
 });
+
 
 Route::controller(PaymentController::class)->group(function () {
     Route::post('/donate',  'savedonor')->name('donate');
@@ -118,6 +123,14 @@ Route::middleware('auth')->group(function () {
     Route::get('ngo/approve-registration', [RegistrationController::class, 'approveRegistration'])->name('approve-registration');
     Route::patch('ngo/pending-status/{id}', [RegistrationController::class, 'pendingStatus'])->name('pending-status');
 }); 
+
+Route::controller(GalleryController::class)->group(function () {
+    Route::get('ngo/Gallery', 'gallery')->middleware('auth')->name('gallery-list');
+    Route::get('ngo/Add-Photos', 'addPhotos')->middleware('auth')->name('add-photos');
+    Route::post('ngo/Save-Photo', 'storePhoto')->middleware('auth')->name('save-photo');
+    Route::delete('ngo/Delete-Photo/{id}',  'deletePhoto')->name('delete-photo');
+});
+
 
 
 

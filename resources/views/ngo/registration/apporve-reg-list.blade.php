@@ -5,8 +5,6 @@
 
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="mb-0">Approve Registraition List</h5>
-
-                <!-- Breadcrumb aligned to right -->
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
@@ -49,14 +47,14 @@
                 <div class="card-body table-responsive">
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-primary">
-                            <tr>
-                                {{-- <th>Sr. No.</th> --}}
-                                {{-- <th>Registration No.</th> --}}
-                                <th>Appointment Date</th>
-                                {{-- <th>Image</th> --}}
+                            <tr>                                
+                                <th>Application Date</th>
+                                <td>Application No.</td>
+                                <th>Registration No.</th>
+                                <th>Registration Date.</th>
                                 <th>Name</th>
+                                <th>Father/Husband Name</th>
                                 <th>Number</th>
-                                {{-- <th>Session</th> --}}
                                 <th>Type</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -69,21 +67,11 @@
                                     <td>
                                         {{ \Carbon\Carbon::parse($item->application_date)->format('d-m-Y') }}<br>
                                     </td>
+                                    <td>{{ $item->application_no }}</td>
+                                    <td>{{ $item->registration_no }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($item->registraition_date)->format('d-m-Y') }}</td>
                                     <td>{{ $item->name }}</td>
-                                    {{-- <td>
-                                        @php
-                                            $imagePath = '';
-                                            if ($item->reg_type === 'beneficiaries') {
-                                                $imagePath = 'benefries_images/' . $item->image;
-                                            } elseif ($item->reg_type === 'member') {
-                                                $imagePath = 'member_images/' . $item->image;
-                                            }
-                                        @endphp
-
-                                        <img src="{{ asset($imagePath) }}" alt="image" class="img-thumbnail"
-                                            width="100">
-
-                                    </td> --}}
+                                    <td>{{ $item->gurdian_name }}</td>
                                     <td>{{ $item->phone }}</td>
                                     <td>{{ $item->reg_type }}</td>
                                     <td>
@@ -130,21 +118,8 @@
                                     <td>
                                         {{ \Carbon\Carbon::parse($item->application_date)->format('d-m-Y') }}<br>
                                     </td>
+                                    <td>{{ $item->registration_no }}</td>
                                     <td>{{ $item->name }}</td>
-                                    {{-- <td>
-                                        @php
-                                            $imagePath = '';
-                                            if ($item->reg_type === 'beneficiaries') {
-                                                $imagePath = 'benefries_images/' . $item->image;
-                                            } elseif ($item->reg_type === 'member') {
-                                                $imagePath = 'member_images/' . $item->image;
-                                            }
-                                        @endphp
-
-                                        <img src="{{ asset($imagePath) }}" alt="image" class="img-thumbnail"
-                                            width="100">
-
-                                    </td> --}}
                                     <td>{{ $item->phone }}</td>
                                     <td>{{ $item->reg_type }}</td>
                                     <td>

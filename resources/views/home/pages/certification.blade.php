@@ -14,7 +14,6 @@
         font-weight: bolder;
         margin-bottom: 10px;
     }
-
     /* Ensure images are equal width in a row */
     .certificate-images {
         display: flex;

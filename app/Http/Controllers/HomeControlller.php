@@ -4,77 +4,130 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Activity;
+use App\Models\Gallery;
+use App\Models\beneficiarie;
+use App\Models\Member;
 
 class HomeControlller extends Controller
 {
-    public function home(){
+    public function home()
+    {
         return view('home.welcome');
     }
 
-    public function activitypage(){
+    public function activitypage()
+    {
         $activity = Activity::orderBy('activity_no', 'asc')->get();
-        return view('home.activity.SocialActivity',compact('activity'));
+        return view('home.activity.SocialActivity', compact('activity'));
     }
 
-    public function viewreport($id){
+    public function viewreport($id)
+    {
         $activity = Activity::findOrFail($id);
-       
-        return view('home.activity.ViewActivity',compact('activity'));
+
+        return view('home.activity.ViewActivity', compact('activity'));
     }
 
-    public function servicepage(){
-        return view ('home.service');
+    public function servicepage()
+    {
+        return view('home.pages.service');
     }
 
-    public function aboutpage(){
-        return view ('home.about_us');
+    public function aboutpage()
+    {
+        return view('home.pages.about_us');
     }
 
-    public function eventpage(){
-        return view ('home.event');
+    public function eventpage()
+    {
+        return view('home.pages.event');
     }
 
-    public function projectpage(){
-        return view ('home.project');
+    public function projectpage()
+    {
+        return view('home.pages.project');
     }
 
-    public function newspage(){
-        return view ('home.newspaper');
+    public function newspage()
+    {
+        $images = Gallery::where('gallery_type', 'news')->get();
+        return view('home.gallery.newspaper', compact('images'));
     }
 
-    public function certificatepage(){
-        return view ('home.certification');
+    public function photo()
+    {
+        $images = Gallery::where('gallery_type', 'gallery')->get();
+        return view('home.gallery.gallery', compact('images'));
     }
 
-    public function rewardpage(){
-        return view ('home.reward');
+    public function certificatepage()
+    {
+        return view('home.pages.certification');
     }
 
-    public function donatepage(){
-        return view ('home.donation.donate');
+    public function rewardpage()
+    {
+        return view('home.pages.reward');
     }
 
-    public function contactpage(){
-        return view ('home.contact');
+    public function donatepage()
+    {
+        return view('home.donation.donate');
     }
 
-    public function helpeducation(){
-        return view ('home.donation.help-education');
+    public function contactpage()
+    {
+        return view('home.pages.contact');
     }
 
-    public function helpclothe(){
-        return view ('home.donation.help-clothe');
+    public function helpeducation()
+    {
+        return view('home.donation.help-education');
     }
 
-    public function helpfood(){
+    public function helpclothe()
+    {
+        return view('home.donation.help-clothe');
+    }
+
+    public function helpfood()
+    {
         return view('home.donation.help-food');
     }
 
-    public function helpenvironment(){
+    public function helpenvironment()
+    {
         return view('home.donation.help-environment');
     }
 
-    public function notice(){
-        return view('home.notice');
+    public function notice()
+    {
+        return view('home.pages.notice');
+    }
+
+    public function applictionStatus(){
+        return view('home.status.application_status');
+    }
+
+    public function checkStatus(Request $request)
+    {
+        $request->validate([
+            'application_no' => 'required|string',
+            'appliction_type' => 'required|string',
+        ]);
+
+        $application = null;
+
+        if ($request->appliction_type === 'Beneficiaries') {
+            $application = beneficiarie::where('application_no', $request->application_no)->first();
+        } elseif ($request->appliction_type === 'Member') {
+            $application = Member::where('application_no', $request->application_no)->first();
+        }
+
+        if (!$application) {
+            return back()->with('error', 'Application not found.')->withInput();
+        }
+
+        return view('home.status.show-application', compact('application'))->with('success', 'Application  found.');
     }
 }

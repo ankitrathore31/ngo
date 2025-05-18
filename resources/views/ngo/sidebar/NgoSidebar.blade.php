@@ -285,9 +285,9 @@
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
                             class="fas fa-images"></i> GALLERY</a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="#">Add Photos</a></li>
-                        <li><a class="dropdown-item" href="#">Add Newspaper</a></li>
-                        <li><a class="dropdown-item" href="#">Manage Gallery</a></li>
+                        <li><a class="dropdown-item" href="{{ route('add-photos') }}">Add Photos</a></li>
+                        {{-- <li><a class="dropdown-item" href="#">Add Newspaper</a></li> --}}
+                        <li><a class="dropdown-item" href="{{ route('gallery-list') }}">Manage Gallery</a></li>
                     </ul>
                 </li>
 
