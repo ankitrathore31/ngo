@@ -118,9 +118,9 @@
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
                             class="fas fa-clipboard-list"></i> REGISTRATION</a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="{{ route('registraition')}}">New Registration</a></li>
-                        <li><a class="dropdown-item" href="{{route('pending-registraition') }}">Pending Registration</a></li>
-                        <li><a class="dropdown-item" href="{{ route('apporve-registraition')}}">Approve Registration</a></li>
+                        <li><a class="dropdown-item" href="{{ route('registration')}}">New Registration</a></li>
+                        <li><a class="dropdown-item" href="{{route('pending-registration') }}">Pending Registration</a></li>
+                        <li><a class="dropdown-item" href="{{ route('approve-registration')}}">Approve Registration</a></li>
                         <li><a class="dropdown-item" href="#">Delete Registration</a></li>
                         <li><a class="dropdown-item" href="#">Recover Registration</a></li>
                     </ul>
