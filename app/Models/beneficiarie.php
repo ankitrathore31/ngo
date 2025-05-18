@@ -10,12 +10,16 @@ class beneficiarie extends Model
     use HasFactory;
     protected $fillable = [
         'application_date',
+        'application_no',
+        'registration_date',
+        'registration_no',
         'name',
         'reg_type',
         'dob',
         'gender',
         'phone',
         'gurdian_name',
+        'mother_name',
         'village',
         'post',
         'block',
@@ -32,6 +36,12 @@ class beneficiarie extends Model
         'identity_no',
         'id_document',
         'occupation',
+        'help_needed',
+        'help_by_ngo',
+        'survey_details',
+        'eligibility',
+        'marital_status',
+        'area_type',
         'status',
     ];
 

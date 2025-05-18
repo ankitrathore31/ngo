@@ -14,7 +14,11 @@
                     </ol>
                 </nav>
             </div>
-
+            @if (session('success'))
+                <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
             <div class="row">
                 <div class="col-md-12">
                     <form method="GET" action="{{-- route('') --}}" class="row g-3 mb-4">
@@ -51,12 +55,10 @@
                         <thead class="table-primary">
                             <tr>
                                
-                                {{-- <th>Registration No.</th> --}}
-                                <th>Appointment Date</th>
-                                {{-- <th>Image</th> --}}
+                                <th>Application Date</th>
+                                <th>Application No.</th>
                                 <th>Name</th>
                                 <th>Number</th>
-                                {{-- <th>Session</th> --}}
                                 <th>Type</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -69,6 +71,7 @@
                                     <td>
                                         {{ \Carbon\Carbon::parse($item->application_date)->format('d-m-Y') }}<br>
                                     </td>
+                                    <td>{{ $item->application_no }}</td>
                                     <td>{{ $item->name }}</td>
                                     {{-- <td>
                                         @php
@@ -130,6 +133,7 @@
                                     <td>
                                         {{ \Carbon\Carbon::parse($item->application_date)->format('d-m-Y') }}<br>
                                     </td>
+                                    <td>{{ $item->application_no }}</td>
                                     <td>{{ $item->name }}</td>
                                     {{-- <td>
                                         @php
