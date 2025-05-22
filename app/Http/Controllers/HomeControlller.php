@@ -130,4 +130,8 @@ class HomeControlller extends Controller
 
         return view('home.status.show-application', compact('application'))->with('success', 'Application  found.');
     }
+
+    public function certiStatus(){
+        return view('home.status.certificate-verify');
+    }
 }

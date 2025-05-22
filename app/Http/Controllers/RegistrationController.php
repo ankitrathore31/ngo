@@ -76,11 +76,14 @@ class RegistrationController extends Controller
             'eligibility',
             'marital_status',
             'area_type',
+            'help_needed',
 
         ]);
 
         $data['status'] = 0;
-        $data['application_no'] = rand(1000000, 9999999);
+        $prefix = '2191000';
+        $sequence_number = 60;
+        $data['application_no'] = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
 
         try {
             if (!empty($data['application_date'])) {
@@ -128,7 +131,9 @@ class RegistrationController extends Controller
         $beneficiarie = beneficiarie::find($id);
         if ($beneficiarie && $beneficiarie->reg_type === 'Beneficiaries') {
             $beneficiarie->status = 1;
-            $beneficiarie->registration_no = rand(10000000, 99999999);
+            $prefix = '2192000';
+            $sequence_number = 55;
+            $beneficiarie->registration_no = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
             $beneficiarie->registration_date = now();
             $beneficiarie->save();
 
@@ -139,7 +144,9 @@ class RegistrationController extends Controller
         $member = Member::find($id);
         if ($member && $member->reg_type === 'Member') {
             $member->status = 1;
-            $member->registration_no = rand(100000, 999999);
+            $prefix = '2192000';
+            $sequence_number = 55; // starting from 055; increment this each time
+            $member->registration_no = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
             $member->save();
 
             return redirect()->back()->with('success', 'Member approved successfully.');
@@ -176,5 +183,17 @@ class RegistrationController extends Controller
         }
 
         return redirect()->back()->with('error', 'Record not found or unknown type.');
+    }
+
+     public function viewRegistration($id){
+
+        $beneficiarie = beneficiarie::find($id);
+        return view('ngo.registration.view-reg', compact('beneficiarie'));
+    }
+
+    public function editRegistration($id){
+
+        $beneficiarie = beneficiarie::find($id);
+        return view('ngo.registration.edit-reg', compact('beneficiarie'));
     }
 }
