@@ -547,9 +547,6 @@
             }
         });
     </script>
-    <script>
-        document.getElementById("registraition_no").value = Math.floor(100000 + Math.random() * 9000000);
-    </script>
 
     <!-- Inline Script to load districts -->
     <script>

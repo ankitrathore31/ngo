@@ -188,10 +188,6 @@
                                             @enderror
                                         </div>
 
-
-
-
-
                                     </div>
 
                                 </div>
@@ -542,12 +538,12 @@
                                         class="text-danger">*</span></label>
                                 <input type="text" name="occupation" id="occupation"
                                     class="form-control @error('occupation') is-invalid @enderror"
-                                    value="{{$beneficiarie->occupation }}" required>
+                                    value="{{ $beneficiarie->occupation }}" required>
                                 @error('occupation')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                              <div class="col-md-6 form-group mb-3" id="beneficiaryHelpDiv" style="display: none;">
+                            <div class="col-md-6 form-group mb-3" id="beneficiaryHelpDiv" style="display: none;">
                                 <label for="beneficiary_help" class="form-label">What beneficiaries need help with: <span
                                         class="text-danger">*</span></label>
                                 <textarea name="help_needed" id="beneficiary_help" rows="4"
@@ -567,10 +563,44 @@
                             </div>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>
-        {{-- </div> --}}
+        <div class="container-fluid mt-3">
+            <div class="row ">
+                <div class="col">
+                    <div class="card bg-white p-2 shadow rounded m-2">
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <form action="{{ route('approve-status', $beneficiarie->id) }}" method="POST"
+                                    class="d-inline">
+                                    @csrf
+                                    @method('PATCH')
+
+                                    <div class="form-group mb-3">
+                                        <label for="registration_date" class="form-label">
+                                            Registration Date: <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" name="registration_date" id="registration_date"
+                                            class="form-control datepicker @error('registration_date') is-invalid @enderror"
+                                            value="{{ old('registration_date') }}" required>
+                                        @error('registration_date')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+                                    <button type="submit" class="btn btn-success btn-sm w-50" style="height: 38px;">
+                                        Approve
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
