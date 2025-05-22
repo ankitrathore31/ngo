@@ -97,12 +97,12 @@
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
                                             
-                                           <form action="{{ route('approve-status', $item->id) }}" method="POST" style="display:inline;">
+                                           {{-- <form action="{{ route('approve-status', $item->id) }}" method="POST" style="display:inline;">
                                                 @csrf
                                                 @method('PATCH')
                                                 <button type="submit" class="btn btn-success btn-sm px-3"
                                                     style="min-width: 100px; height: 38px;">Approve</button>
-                                            </form>
+                                            </form> --}}
 
                                             <a href="{{ route('view-reg', $item->id) }}"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"

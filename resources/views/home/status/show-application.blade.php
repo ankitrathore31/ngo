@@ -119,7 +119,23 @@
                                     <span class="text-muted">Not Available</span>
                                 @endif
                             </td>
+
+                            <th>Remark</th>
+                            <td>
+                                @if (isset($application->status))
+                                    @if ($application->status == 1)
+                                        <span class="text-success">Your application has been approved and forwarded to the
+                                            Founder</span>
+                                    @else
+                                        <span class="text-warning">Your application is still under review. Please wait for
+                                            approval.</span>
+                                    @endif
+                                @else
+                                    <span class="text-muted">No remarks available.</span>
+                                @endif
+                            </td>
                         </tr>
+
                     </tbody>
                 </table>
             </div>

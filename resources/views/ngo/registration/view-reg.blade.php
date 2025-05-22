@@ -571,16 +571,49 @@
 
                     </form>
 
-                    <form action="{{ route('approve-status', $beneficiarie->id) }}" method="POST" style="display:inline;">
+                    {{-- <form action="{{ route('approve-status', $beneficiarie->id) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('PATCH')
                         <button type="submit" class="btn btn-success btn-sm px-3"
                             style="min-width: 100px; height: 38px;">Approve</button>
-                    </form>
+                    </form> --}}
                 </div>
             </div>
         </div>
-        {{-- </div> --}}
+        <div class="container-fluid mt-3">
+            <div class="row ">
+                <div class="col">
+                    <div class="card bg-white p-2 shadow rounded m-2">
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <form action="{{ route('approve-status', $beneficiarie->id) }}" method="POST"
+                                    class="d-inline">
+                                    @csrf
+                                    @method('PATCH')
+
+                                    <div class="form-group mb-3">
+                                        <label for="registration_date" class="form-label">
+                                            Registration Date: <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" name="registration_date" id="registration_date"
+                                            class="form-control datepicker @error('registration_date') is-invalid @enderror"
+                                            value="{{ old('registration_date') }}" required>
+                                        @error('registration_date')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+                                    <button type="submit" class="btn btn-success btn-sm w-50" style="height: 38px;">
+                                        Approve
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -603,9 +636,7 @@
             }
         });
     </script>
-    <script>
-        document.getElementById("registraition_no").value = Math.floor(100000 + Math.random() * 9000000);
-    </script>
+  
 
     <!-- Inline Script to load districts -->
     <script>

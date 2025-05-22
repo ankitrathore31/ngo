@@ -82,8 +82,24 @@ class RegistrationController extends Controller
 
         $data['status'] = 0;
         $prefix = '2191000';
-        $sequence_number = 60;
+
+        // Get the latest application_no starting with the prefix
+        $latest = beneficiarie::where('application_no', 'LIKE', $prefix . '%')
+            ->orderBy('application_no', 'desc')
+            ->first();
+
+        if ($latest) {
+            // Extract the numeric sequence after the prefix
+            $last_sequence = (int)substr($latest->application_no, strlen($prefix));
+            $sequence_number = $last_sequence + 1;
+        } else {
+            // First record starts at 60
+            $sequence_number = 60;
+        }
+
+        // Generate the new application number
         $data['application_no'] = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
+
 
         try {
             if (!empty($data['application_date'])) {
@@ -126,27 +142,42 @@ class RegistrationController extends Controller
         return view('ngo.registration.pending-reg-list', compact('pendingbene', 'pendingmemeber'));
     }
 
-    public function approveStatus($id)
+    public function approveStatus(Request $request, $id)
     {
+        $request->validate([
+            'registration_date' => 'required|date_format:d-m-Y',
+        ]);
+
         $beneficiarie = beneficiarie::find($id);
         if ($beneficiarie && $beneficiarie->reg_type === 'Beneficiaries') {
             $beneficiarie->status = 1;
             $prefix = '2192000';
-            $sequence_number = 55;
+
+            $latest = beneficiarie::where('registration_no', 'LIKE', $prefix . '%')
+                ->orderBy('registration_no', 'desc')
+                ->first();
+
+            if ($latest) {
+                $last_sequence = (int)substr($latest->registration_no, strlen($prefix));
+                $sequence_number = $last_sequence + 1;
+            } else {
+                $sequence_number = 55;
+            }
+
             $beneficiarie->registration_no = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
-            $beneficiarie->registration_date = now();
+            $beneficiarie->registration_date = Carbon::createFromFormat('d-m-Y', $request->registration_date)->toDateString();
             $beneficiarie->save();
 
-            return redirect()->back()->with('success', 'Beneficiarie approved successfully.');
+            return redirect()->route('approve-registration')->with('success', 'Beneficiarie approved successfully.');
         }
 
-        // If not found, try member
         $member = Member::find($id);
         if ($member && $member->reg_type === 'Member') {
             $member->status = 1;
             $prefix = '2192000';
-            $sequence_number = 55; // starting from 055; increment this each time
+            $sequence_number = 55;
             $member->registration_no = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
+            $member->registration_date = Carbon::createFromFormat('d-m-Y', $request->registration_date)->format('Y-m-d');
             $member->save();
 
             return redirect()->back()->with('success', 'Member approved successfully.');
@@ -154,6 +185,7 @@ class RegistrationController extends Controller
 
         return redirect()->back()->with('error', 'Record not found or unknown type.');
     }
+
 
 
     public function approveRegistration()
