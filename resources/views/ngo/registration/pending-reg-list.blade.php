@@ -104,13 +104,13 @@
                                                     style="min-width: 100px; height: 38px;">Approve</button>
                                             </form>
 
-                                            <a href="#"
+                                            <a href="{{ route('view-reg', $item->id) }}"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="View" style="min-width: 38px; height: 38px;">
                                                 <i class="fa-regular fa-eye"></i>
                                             </a>
 
-                                            <a href="#"
+                                            <a href="{{ route('edit-reg', $item->id) }}"
                                                 class="btn btn-primary btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="Edit" style="min-width: 38px; height: 38px;">
                                                 <i class="fa-regular fa-pen-to-square"></i>

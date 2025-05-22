@@ -55,6 +55,7 @@ Route::controller(HomeControlller::class)->group(function () {
     Route::get('/Appliction-Status', 'applictionStatus')->name('applictionStatus');
     Route::post('/Check-Status', 'checkStatus')->name('check-status');
     Route::get('/Photos', 'photo')->name('photo');
+    Route::get('/certificate-verify', 'certiStatus')->name('certiStatus');
 });
 
 
@@ -122,6 +123,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('ngo/approve-status/{id}', [RegistrationController::class, 'approveStatus'])->name('approve-status');
     Route::get('ngo/approve-registration', [RegistrationController::class, 'approveRegistration'])->name('approve-registration');
     Route::patch('ngo/pending-status/{id}', [RegistrationController::class, 'pendingStatus'])->name('pending-status');
+    Route::get('ngo/view-registration/{id}', [RegistrationController::class, 'viewRegistration'])->name('view-reg');
+    Route::get('ngo/edit-registration/{id}', [RegistrationController::class, 'editRegistration'])->name('edit-reg');
+
 }); 
 
 Route::controller(GalleryController::class)->group(function () {
