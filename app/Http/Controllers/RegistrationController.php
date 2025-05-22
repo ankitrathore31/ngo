@@ -185,15 +185,36 @@ class RegistrationController extends Controller
         return redirect()->back()->with('error', 'Record not found or unknown type.');
     }
 
-     public function viewRegistration($id){
+    public function viewRegistration($id)
+    {
 
         $beneficiarie = beneficiarie::find($id);
         return view('ngo.registration.view-reg', compact('beneficiarie'));
     }
 
-    public function editRegistration($id){
+    public function editRegistration($id)
+    {
 
         $beneficiarie = beneficiarie::find($id);
         return view('ngo.registration.edit-reg', compact('beneficiarie'));
+    }
+
+    public function deleteRegistration($id)
+    {
+        $beneficiarie = beneficiarie::find($id);
+
+        if (!$beneficiarie) {
+            return redirect()->back()->with('error', 'Record not found.');
+        }
+
+        // Delete image from storage
+        // if ($beneficiarie->image && File::exists(public_path('uploads/beneficiaries/' . $beneficiarie->image))) {
+        //     File::delete(public_path('uploads/beneficiaries/' . $beneficiarie->image));
+        // }
+
+        // Delete the database record
+        $beneficiarie->delete();
+
+        return redirect()->back()->with('success', 'Registration deleted successfully.');
     }
 }
