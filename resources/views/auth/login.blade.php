@@ -79,7 +79,7 @@
                         <!-- Create Account Link -->
                         <div class="create-account">
                             <span>Don't have an account?</span>
-                            <a href="{{ route('register') }}" class=" btn-primary btn-sm mt-1">Create an Account</a>
+                            <a href="{{-- route('register') --}}" class=" btn-primary btn-sm mt-1">Create an Account</a>
                         </div>
 
                     </form>
