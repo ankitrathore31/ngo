@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class beneficiarie extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $fillable = [
         'application_date',
         'application_no',
@@ -42,6 +43,7 @@ class beneficiarie extends Model
         'eligibility',
         'marital_status',
         'area_type',
+        'delete_reason',
         'status',
     ];
 

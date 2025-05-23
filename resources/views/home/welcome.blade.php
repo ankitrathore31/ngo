@@ -123,31 +123,39 @@
 
     <div class="row d-flex justify-content-between m-3">
 
-         <div class="col-md-3 mb-3">
+        <div class="col-md-2 mb-3">
+            <a href="{{ route('photo') }}" class="btn btn-warning text-white w-100">
+                Gallery
+            </a>
+        </div>
+
+        <div class="col-md-2 mb-3">
             <a href="{{ route('applictionStatus') }}" class="btn btn-primary w-100">
                 Application Status
             </a>
         </div>
 
-        <div class="col-md-3 mb-3">
-            <a href="{{ route('photo') }}" class="btn btn-warning text-white w-100">
-                Gallery
-            </a>
-        </div>
-        
-        <div class="col-md-3 mb-3">
+
+
+        <div class="col-md-2 mb-3">
             <a href="{{ route('certiStatus') }}" class="btn btn-info w-100">
                 Certificate Verify
             </a>
         </div>
 
-        <div class="col-md-3 mb-3">
+        <div class="col-md-2 mb-3">
             <a href="{{-- url('/certificate-download') --}}" class="btn btn-success w-100">
                 Certificate Download
             </a>
         </div>
 
-        
+        <div class="col-md-2 mb-3">
+            <a href="{{ route('facilitiesStatus') }}" class="btn btn-primary w-100">
+                Facilities Status
+            </a>
+        </div>
+
+
     </div>
 
 

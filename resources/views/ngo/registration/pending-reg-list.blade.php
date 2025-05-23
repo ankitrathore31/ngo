@@ -54,7 +54,7 @@
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-primary">
                             <tr>
-                               
+
                                 <th>Application Date</th>
                                 <th>Application No.</th>
                                 <th>Name</th>
@@ -67,7 +67,7 @@
                         <tbody>
                             @foreach ($pendingbene as $item)
                                 <tr>
-                                    
+
                                     <td>
                                         {{ \Carbon\Carbon::parse($item->application_date)->format('d-m-Y') }}<br>
                                     </td>
@@ -96,13 +96,19 @@
                                     </td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            
-                                           {{-- <form action="{{ route('approve-status', $item->id) }}" method="POST" style="display:inline;">
+
+                                            {{-- <form action="{{ route('approve-status', $item->id) }}" method="POST" style="display:inline;">
                                                 @csrf
                                                 @method('PATCH')
                                                 <button type="submit" class="btn btn-success btn-sm px-3"
                                                     style="min-width: 100px; height: 38px;">Approve</button>
                                             </form> --}}
+
+                                            <a href="{{ route('edit-reg', $item->id) }}"
+                                                class="btn btn-primary btn-sm px-3 d-flex align-items-center justify-content-center"
+                                                title="Edit" style="min-width: 38px; height: 38px;">
+                                                {{-- <i class="fa-regular fa-pen-to-square"></i> --}}Approve
+                                            </a>
 
                                             <a href="{{ route('view-reg', $item->id) }}"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
@@ -110,79 +116,47 @@
                                                 <i class="fa-regular fa-eye"></i>
                                             </a>
 
-                                            <a href="{{ route('edit-reg', $item->id) }}"
-                                                class="btn btn-primary btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                title="Edit" style="min-width: 38px; height: 38px;">
-                                                <i class="fa-regular fa-pen-to-square"></i>
-                                            </a>
-
-                                            <a href="{{ route('delete-reg', $item->id) }}"
-                                                class="btn btn-danger btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                title="Delete" style="min-width: 38px; height: 38px;">
-                                                <i class="fa-regular fa-trash-can"></i>
-                                            </a>
-                                        </div>
-
-                                    </td>
-                                </tr>
-                            @endforeach
-
-                            @foreach ($pendingmemeber as $item)
-                                <tr>
-                                   
-                                    <td>
-                                        {{ \Carbon\Carbon::parse($item->application_date)->format('d-m-Y') }}<br>
-                                    </td>
-                                    <td>{{ $item->application_no }}</td>
-                                    <td>{{ $item->name }}</td>
-                                    {{-- <td>
-                                        @php
-                                            $imagePath = '';
-                                            if ($item->reg_type === 'beneficiaries') {
-                                                $imagePath = 'benefries_images/' . $item->image;
-                                            } elseif ($item->reg_type === 'member') {
-                                                $imagePath = 'member_images/' . $item->image;
-                                            }
-                                        @endphp
-
-                                        <img src="{{ asset($imagePath) }}" alt="image" class="img-thumbnail"
-                                            width="100">
-
-                                    </td> --}}
-                                    <td>{{ $item->phone }}</td>
-                                    <td>{{ $item->reg_type }}</td>
-                                    <td>
-                                        @if ($item->status == 0)
-                                            Pending
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            
-                                           <form action="{{ route('approve-status', $item->id) }}" method="POST" style="display:inline;">
-                                                @csrf
-                                                @method('PATCH')
-                                                <button type="submit" class="btn btn-success btn-sm px-3"
-                                                    style="min-width: 100px; height: 38px;">Approve</button>
-                                            </form>
-
-                                            <a href="#"
-                                                class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                title="View" style="min-width: 38px; height: 38px;">
-                                                <i class="fa-regular fa-eye"></i>
-                                            </a>
-
-                                            <a href="#"
-                                                class="btn btn-primary btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                title="Edit" style="min-width: 38px; height: 38px;">
-                                                <i class="fa-regular fa-pen-to-square"></i>
-                                            </a>
-
+                                            <!-- Delete Button Triggering Modal -->
                                             <a href="#"
                                                 class="btn btn-danger btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                title="Delete" style="min-width: 38px; height: 38px;">
+                                                title="Delete" style="min-width: 38px; height: 38px;" data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal{{ $item->id }}">
                                                 <i class="fa-regular fa-trash-can"></i>
                                             </a>
+
+                                            <!-- Delete Modal -->
+                                            <div class="modal fade" id="deleteModal{{ $item->id }}" tabindex="-1"
+                                                aria-labelledby="deleteModalLabel{{ $item->id }}" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <form action="{{ route('delete-reg', $item->id) }}" method="POST">
+                                                            @csrf
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title"
+                                                                    id="deleteModalLabel{{ $item->id }}">Confirm
+                                                                    Deletion</h5>
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p>Are you sure you want to delete this record?</p>
+                                                                <div class="mb-3">
+                                                                    <label for="reason{{ $item->id }}"
+                                                                        class="form-label">Reason for deletion</label>
+                                                                    <textarea class="form-control" id="reason{{ $item->id }}" name="reason" rows="3" required></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">Cancel</button>
+                                                                <button type="submit" class="btn btn-danger">Confirm
+                                                                    Delete</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         </div>
 
                                     </td>
@@ -195,4 +169,14 @@
         </div>
 
     </div>
+    <script>
+        function toggleDeleteForm(id) {
+            const form = document.getElementById(`delete-form-${id}`);
+            if (form.style.display === "none") {
+                form.style.display = "block";
+            } else {
+                form.style.display = "none";
+            }
+        }
+    </script>
 @endsection

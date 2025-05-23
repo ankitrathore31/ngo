@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialActivityController;
 use App\Http\Controllers\HomeControlller;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BeneficiarieController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\NgoController;
 use App\Http\Controllers\PaymentController;
@@ -56,6 +57,7 @@ Route::controller(HomeControlller::class)->group(function () {
     Route::post('/Check-Status', 'checkStatus')->name('check-status');
     Route::get('/Photos', 'photo')->name('photo');
     Route::get('/certificate-verify', 'certiStatus')->name('certiStatus');
+    Route::get('/facilities-Status', 'facilitiesStatus')->name('facilitiesStatus');
 });
 
 
@@ -119,13 +121,16 @@ Route::controller(SocialActivityController::class)->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('ngo/registration', [RegistrationController::class, 'registration'])->name('registration');
     Route::post('ngo/store-registration', [RegistrationController::class, 'StoreRegistration'])->name('store-registration');
+    Route::post('ngo/update-registration/{id}', [RegistrationController::class, 'UpdateRegistration'])->name('update-registration');
     Route::get('ngo/pending-registration', [RegistrationController::class, 'pendingRegistration'])->name('pending-registration');
     Route::patch('ngo/approve-status/{id}', [RegistrationController::class, 'approveStatus'])->name('approve-status');
     Route::get('ngo/approve-registration', [RegistrationController::class, 'approveRegistration'])->name('approve-registration');
     Route::patch('ngo/pending-status/{id}', [RegistrationController::class, 'pendingStatus'])->name('pending-status');
     Route::get('ngo/view-registration/{id}', [RegistrationController::class, 'viewRegistration'])->name('view-reg');
     Route::get('ngo/edit-registration/{id}', [RegistrationController::class, 'editRegistration'])->name('edit-reg');
-    Route::get('ngo/delete-registration/{id}', [RegistrationController::class, 'deleteRegistration'])->name('delete-reg');
+    Route::post('ngo/delete-registration/{id}', [RegistrationController::class, 'deleteRegistration'])->name('delete-reg');
+    Route::get('ngo/recover-registration', [RegistrationController::class, 'recover'])->name('recover');
+    Route::get('/recover/{id}', [RegistrationController::class,'recoverItem'])->name('recover-item');
 
 }); 
 
@@ -134,6 +139,10 @@ Route::controller(GalleryController::class)->group(function () {
     Route::get('ngo/Add-Photos', 'addPhotos')->middleware('auth')->name('add-photos');
     Route::post('ngo/Save-Photo', 'storePhoto')->middleware('auth')->name('save-photo');
     Route::delete('ngo/Delete-Photo/{id}',  'deletePhoto')->name('delete-photo');
+});
+
+Route::controller(BeneficiarieController::class)->group(function () {
+    Route::get('ngo/add-beneficiarie', 'beneficiarieList')->name('beneficiarie-list');
 });
 
 

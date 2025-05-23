@@ -121,8 +121,8 @@
                         <li><a class="dropdown-item" href="{{ route('registration')}}">New Registration</a></li>
                         <li><a class="dropdown-item" href="{{route('pending-registration') }}">Pending Registration</a></li>
                         <li><a class="dropdown-item" href="{{ route('approve-registration')}}">Approve Registration</a></li>
-                        <li><a class="dropdown-item" href="#">Delete Registration</a></li>
-                        <li><a class="dropdown-item" href="#">Recover Registration</a></li>
+                        <li><a class="dropdown-item" href="{{ route('recover')}}">Deleted Registration</a></li>
+                        {{-- <li><a class="dropdown-item" href="#">Recover Registration</a></li> --}}
                     </ul>
                 </li>
 
@@ -131,7 +131,7 @@
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
                             class="fas fa-project-diagram"></i> BENEFICIARIES</a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="">Add Beneficiary</a></li>
+                        <li><a class="dropdown-item" href="{{ route('beneficiarie-list') }}">Add Beneficiary</a></li>
                         <li><a class="dropdown-item" href="#">Beneficiary List</a></li>
                         <li><a class="dropdown-item" href="#">Beneficiary Report</a></li>
                         <li><a class="dropdown-item" href="#">Target Beneficiaries</a></li>
