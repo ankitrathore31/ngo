@@ -113,14 +113,13 @@ class HomeControlller extends Controller
     {
         $request->validate([
             'application_no' => 'required|string',
-            'appliction_type' => 'required|string',
         ]);
 
         $application = null;
 
-        if ($request->appliction_type === 'Beneficiaries') {
+        if ($request) {
             $application = beneficiarie::where('application_no', $request->application_no)->first();
-        } elseif ($request->appliction_type === 'Member') {
+        } elseif ($request) {
             $application = Member::where('application_no', $request->application_no)->first();
         }
 
@@ -133,5 +132,9 @@ class HomeControlller extends Controller
 
     public function certiStatus(){
         return view('home.status.certificate-verify');
+    }
+
+    public function facilitiesStatus(){
+        return view('home.status.facilities-status');
     }
 }

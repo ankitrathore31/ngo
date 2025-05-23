@@ -68,7 +68,7 @@
                     <h4 class=" p-3 bg-info rounded"><b>EDIT FORM </b></h4>
                 </div>
                 <div class="card-body m-1">
-                    <form method="POST" action="{{ route('store-registration') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('update-registration', $beneficiarie->id ) }}" enctype="multipart/form-data">
                         @csrf
                         <div class="border-bottom pb-3 mb-4">
                             <h5 class="text-black"><b>Information</b></h5>
@@ -193,16 +193,15 @@
                                 </div>
                                 <div class="col-md-4 col-sm-4">
                                     <div class="upload-container">
-                                        <div class="image-placeholder">
+                                        
                                             @if (!empty($beneficiarie->image))
-                                                <img id="previewImage" src="{{ asset($beneficiarie->image) }}"
-                                                    alt="Preview">
-                                            @else
-                                                <img id="previewImage" src="{{ asset('path/to/default-image.jpg') }}"
-                                                    alt="Preview">
+                                                <img id="previewImage"
+                                                    src="{{ asset('benefries_images/' . $beneficiarie->image) }}"
+                                                    alt="Preview" width="160">
                                             @endif
-                                            <span id="placeholderText">Upload Photo</span>
-                                        </div>
+
+                       
+                                       
                                         <label for="uploadInput" class="upload-btn">Choose File</label>
                                         <input type="file" id="uploadInput" name="image" accept="image/*">
                                     </div>
@@ -336,8 +335,9 @@
                                             class="text-danger">*</span></label>
                                     <select class="form-control @error('district') is-invalid @enderror" name="district"
                                         id="districtSelect" required>
-                                        <option value="">Select District</option>
-                                        {{-- Options will be loaded dynamically --}}
+                                        <option value="">
+
+                                        </option>
                                     </select>
                                     @error('district')
                                         <span class="text-danger">{{ $message }}</span>
@@ -532,6 +532,11 @@
                                 <label for="id_document" class="form-label">ID Document Upload</label>
                                 <input type="file" class="form-control" name="id_document" id="id_document">
                                 <small id="id_document_hint" class="form-text text-muted"></small>
+                                @if (!empty($beneficiarie->id_document))
+                                    <img id="previewImage" src="{{ asset('benefries_images/' . $beneficiarie->id_document) }}"
+                                        alt="Preview" width="150">
+                                @endif
+
                             </div>
                             <div class="col-md-4 form-group mb-3">
                                 <label for="occupation" class="form-label">Occupation: <span
@@ -558,7 +563,7 @@
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <div class="form-group text-center">
-                                    <button type="submit" name="submit" class="btn btn-success w-50">Submit</button>
+                                    <button type="submit" name="submit" class="btn btn-success w-50">Update</button>
                                 </div>
                             </div>
                         </div>

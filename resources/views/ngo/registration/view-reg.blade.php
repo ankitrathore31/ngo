@@ -195,20 +195,19 @@
                                     </div>
 
                                 </div>
-                                <div class="col-md-4 col-sm-4">
+                          <div class="col-md-4 col-sm-4">
                                     <div class="upload-container">
-                                        <div class="image-placeholder">
+                                        
                                             @if (!empty($beneficiarie->image))
-                                                <img id="previewImage" src="{{ asset($beneficiarie->image) }}"
-                                                    alt="Preview">
-                                            @else
-                                                <img id="previewImage" src="{{ asset('path/to/default-image.jpg') }}"
-                                                    alt="Preview">
+                                                <img id="previewImage"
+                                                    src="{{ asset('benefries_images/' . $beneficiarie->image) }}"
+                                                    alt="Preview" width="160">
                                             @endif
-                                            <span id="placeholderText">Upload Photo</span>
-                                        </div>
-                                        <label for="uploadInput" class="upload-btn">Choose File</label>
-                                        <input type="file" id="uploadInput" name="image" accept="image/*">
+
+                       
+                                       
+                                        {{-- <label for="uploadInput" class="upload-btn">Choose File</label> --}}
+                                        {{-- <input type="file" id="uploadInput" name="image" accept="image/*"> --}}
                                     </div>
                                 </div>
 
@@ -533,10 +532,15 @@
 
 
                             <!-- Identity File Upload -->
-                            <div class="col-md-4 mb-3">
-                                <label for="id_document" class="form-label">ID Document Upload</label>
-                                <input type="file" class="form-control" name="id_document" id="id_document">
+                             <div class="col-md-4 mb-3">
+                                <label for="id_document" class="form-label">ID Document Uploaded</label>
+                                {{-- <input type="file" class="form-control" name="id_document" id="id_document"> --}}
                                 <small id="id_document_hint" class="form-text text-muted"></small>
+                                @if (!empty($beneficiarie->id_document))
+                                    <img id="previewImage" src="{{ asset('benefries_images/' . $beneficiarie->id_document) }}"
+                                        alt="Preview" width="150">
+                                @endif
+
                             </div>
                             <div class="col-md-4 form-group mb-3">
                                 <label for="occupation" class="form-label">Occupation: <span
@@ -580,40 +584,7 @@
                 </div>
             </div>
         </div>
-        <div class="container-fluid mt-3">
-            <div class="row ">
-                <div class="col">
-                    <div class="card bg-white p-2 shadow rounded m-2">
-                        <div class="row">
-                            <div class="col-md-8 mb-3">
-                                <form action="{{ route('approve-status', $beneficiarie->id) }}" method="POST"
-                                    class="d-inline">
-                                    @csrf
-                                    @method('PATCH')
-
-                                    <div class="form-group mb-3">
-                                        <label for="registration_date" class="form-label">
-                                            Registration Date: <span class="text-danger">*</span>
-                                        </label>
-                                        <input type="text" name="registration_date" id="registration_date"
-                                            class="form-control datepicker @error('registration_date') is-invalid @enderror"
-                                            value="{{ old('registration_date') }}" required>
-                                        @error('registration_date')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-
-                                    <button type="submit" class="btn btn-success btn-sm w-50" style="height: 38px;">
-                                        Approve
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
+        
     </div>
 
     <script>

@@ -26,24 +26,24 @@
                     <div class="card-body shadow p-3">
                         <form action="{{-- route('check-status') --}}" method="POST" enctype="multipart/form-data">
                             @csrf
-
                             <div class="col-md-6">
-                                <label class="form-label">Application No.</label>
-                                <input type="text" name="application_no" class="form-control"
-                                    value="{{ old('application_no') }}">
-                                @error('application_no')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                           <div class="col-md-6">
                                 <label class="form-label">Registraition No.</label>
                                 <input type="text" name="registraiton_no" class="form-control"
-                                    value="{{ old('application_no') }}">
-                                @error('application_no')
+                                    value="{{ old('registraiton_no') }}">
+                                @error('registraiton_no')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Certificate No.</label>
+                                <input type="text" name="certificate_no" class="form-control"
+                                    value="{{ old('certificate_no') }}">
+                                @error('certificate_no')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
                             <button type="submit" class="btn btn-success mt-4">Verify</button>
                         </form>
                     </div>
