@@ -10,6 +10,8 @@ class beneficiarie extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
+        'academic_session',
+        'ngo_id',
         'application_date',
         'application_no',
         'registration_date',
@@ -44,6 +46,7 @@ class beneficiarie extends Model
         'marital_status',
         'area_type',
         'delete_reason',
+        'delete_date',
         'status',
     ];
 

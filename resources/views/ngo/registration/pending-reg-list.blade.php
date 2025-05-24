@@ -58,9 +58,11 @@
                                 <th>Application Date</th>
                                 <th>Application No.</th>
                                 <th>Name</th>
+                                <th>Image</th>
                                 <th>Number</th>
                                 <th>Type</th>
                                 <th>Status</th>
+                                <th>Session</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -73,20 +75,11 @@
                                     </td>
                                     <td>{{ $item->application_no }}</td>
                                     <td>{{ $item->name }}</td>
-                                    {{-- <td>
-                                        @php
-                                            $imagePath = '';
-                                            if ($item->reg_type === 'beneficiaries') {
-                                                $imagePath = 'benefries_images/' . $item->image;
-                                            } elseif ($item->reg_type === 'member') {
-                                                $imagePath = 'member_images/' . $item->image;
-                                            }
-                                        @endphp
+                                    <td>
+                                        <img id="previewImage" src="{{ asset('benefries_images/' . $item->image) }}"
+                                            alt="Preview" width="100">
 
-                                        <img src="{{ asset($imagePath) }}" alt="image" class="img-thumbnail"
-                                            width="100">
-
-                                    </td> --}}
+                                    </td>
                                     <td>{{ $item->phone }}</td>
                                     <td>{{ $item->reg_type }}</td>
                                     <td>
@@ -94,6 +87,7 @@
                                             Pending
                                         @endif
                                     </td>
+                                    <td></td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
 
@@ -117,45 +111,13 @@
                                             </a>
 
                                             <!-- Delete Button Triggering Modal -->
-                                            <a href="#"
+                                            <a href=" {{ route('delete-view', $item->id) }}"
                                                 class="btn btn-danger btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                title="Delete" style="min-width: 38px; height: 38px;" data-bs-toggle="modal"
-                                                data-bs-target="#deleteModal{{ $item->id }}">
+                                                title="Delete" style="min-width: 38px; height: 38px;">
                                                 <i class="fa-regular fa-trash-can"></i>
                                             </a>
 
-                                            <!-- Delete Modal -->
-                                            <div class="modal fade" id="deleteModal{{ $item->id }}" tabindex="-1"
-                                                aria-labelledby="deleteModalLabel{{ $item->id }}" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <form action="{{ route('delete-reg', $item->id) }}" method="POST">
-                                                            @csrf
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title"
-                                                                    id="deleteModalLabel{{ $item->id }}">Confirm
-                                                                    Deletion</h5>
-                                                                <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <p>Are you sure you want to delete this record?</p>
-                                                                <div class="mb-3">
-                                                                    <label for="reason{{ $item->id }}"
-                                                                        class="form-label">Reason for deletion</label>
-                                                                    <textarea class="form-control" id="reason{{ $item->id }}" name="reason" rows="3" required></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary"
-                                                                    data-bs-dismiss="modal">Cancel</button>
-                                                                <button type="submit" class="btn btn-danger">Confirm
-                                                                    Delete</button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
+
 
                                         </div>
 

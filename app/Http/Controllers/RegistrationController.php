@@ -299,7 +299,14 @@ class RegistrationController extends Controller
         return view('ngo.registration.edit-reg', compact('beneficiarie'));
     }
 
-    public function deleteRegistration($id)
+     public function deleteRegistrationPage($id)
+    {
+
+        $beneficiarie = beneficiarie::find($id);
+        return view('ngo.registration.delete-reg', compact('beneficiarie'));
+    }
+
+    public function deleteRegistration(Request $request, $id)
     {
         $beneficiarie = beneficiarie::find($id);
         if (!$beneficiarie) {
@@ -307,12 +314,14 @@ class RegistrationController extends Controller
         }
 
         // Validate reason
-        request()->validate([
+        $request->validate([
             'reason' => 'required|string',
+            'delete_date',
         ]);
 
 
-        $beneficiarie->delete_reason = request('reason');
+        $beneficiarie->delete_reason = $request->input('reason');
+        $beneficiarie->delete_date = Carbon::parse($request->input('delete_date'));
         $beneficiarie->save();
 
 

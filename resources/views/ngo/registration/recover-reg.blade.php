@@ -29,6 +29,7 @@
                                 <th>Name</th>
                                 <th>Phone Number</th>
                                 <th>Email</th>
+                                <th>Delete Date</th>
                                 <th>Reason for Deletion</th>
                                 <th>Actions</th>
                             </tr>
@@ -44,6 +45,9 @@
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->phone }}</td>
                                     <td>{{ $item->email }}</td>
+                                    <td>
+                                        {{ \Carbon\Carbon::parse($item->delete_date)->format('d-m-Y') }}<br>
+                                    </td>
                                     <td>{{ $item->delete_reason }}</td>
                                     <td>
                                         <a href="{{ route('recover-item', $item->id) }}"
