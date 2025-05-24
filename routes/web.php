@@ -127,6 +127,7 @@ Route::middleware('auth')->group(function () {
     Route::get('ngo/approve-registration', [RegistrationController::class, 'approveRegistration'])->name('approve-registration');
     Route::patch('ngo/pending-status/{id}', [RegistrationController::class, 'pendingStatus'])->name('pending-status');
     Route::get('ngo/view-registration/{id}', [RegistrationController::class, 'viewRegistration'])->name('view-reg');
+    Route::get('ngo/delete-view/{id}', [RegistrationController::class, 'deleteRegistrationPage'])->name('delete-view');
     Route::get('ngo/edit-registration/{id}', [RegistrationController::class, 'editRegistration'])->name('edit-reg');
     Route::post('ngo/delete-registration/{id}', [RegistrationController::class, 'deleteRegistration'])->name('delete-reg');
     Route::get('ngo/recover-registration', [RegistrationController::class, 'recover'])->name('recover');

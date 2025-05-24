@@ -56,7 +56,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('ngo') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">View Registraition</li>
+                        <li class="breadcrumb-item active" aria-current="page">Registraition</li>
                     </ol>
                 </nav>
             </div>
@@ -65,7 +65,7 @@
         <div class="container-fluide m-3">
             <div class="card bg-white p-2 shadow rounded">
                 <div class="text-black text-center border-bottom pb-3">
-                    <h4 class=" p-3 bg-info rounded"><b>VIEW FORM </b></h4>
+                    <h4 class=" p-3 bg-info rounded"><b>DELETE FORM </b></h4>
                 </div>
                 <div class="card-body m-1">
                     <div class="border-bottom pb-3 mb-4">
@@ -273,6 +273,32 @@
                 </div>
             </div>
         </div>
+
+        <div class="card mt-4 p-3 border border-danger rounded">
+            <form action="{{ route('delete-reg', $beneficiarie->id) }}" method="POST">
+                @csrf
+                <h5 class="text-danger">Delete Registration</h5>
+
+                <div class="mb-3">
+                    <label for="reason{{ $beneficiarie->id }}" class="form-label">Reason for deletion <span
+                            class="text-danger">*</span></label>
+                    <textarea class="form-control" id="reason{{ $beneficiarie->id }}" name="reason" rows="3" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="delete_date{{ $beneficiarie->id }}" class="form-label">Date of Deletion <span
+                            class="text-danger">*</span></label>
+                    <input type="date" class="form-control" id="delete_date{{ $beneficiarie->id }}"
+                        name="delete_date" required>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                </div>
+            </form>
+        </div>
+
     </div>
-  
+
+    </div>
 @endsection
