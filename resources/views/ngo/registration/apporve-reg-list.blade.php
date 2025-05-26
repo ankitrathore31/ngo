@@ -56,6 +56,7 @@
                                 <th>Father/Husband Name</th>
                                 <th>Number</th>
                                 <th>Type</th>
+                                <th>Session</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -74,6 +75,7 @@
                                     <td>{{ $item->gurdian_name }}</td>
                                     <td>{{ $item->phone }}</td>
                                     <td>{{ $item->reg_type }}</td>
+                                     <td>{{$item->academic_session}}</td>
                                     <td>
                                         @if ($item->status == 1)
                                             Approve

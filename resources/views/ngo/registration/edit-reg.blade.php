@@ -68,7 +68,8 @@
                     <h4 class=" p-3 bg-info rounded"><b>EDIT FORM </b></h4>
                 </div>
                 <div class="card-body m-1">
-                    <form method="POST" action="{{ route('update-registration', $beneficiarie->id ) }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('update-registration', $beneficiarie->id) }}"
+                        enctype="multipart/form-data">
                         @csrf
                         <div class="border-bottom pb-3 mb-4">
                             <h5 class="text-black"><b>Information</b></h5>
@@ -108,6 +109,21 @@
                                         </div>
 
                                         <div class="col-md-6 col-sm-6  form-group mb-3">
+                                            <label for="program_session" class="form-label bold">Program Session <span
+                                                    class="login-danger">*</span></label>
+                                            <select class="form-control @error('program_session') is-invalid @enderror"
+                                                name="program_session" required>
+                                                <option value="">Select Session</option>
+                                                @foreach ($data as $session)
+                                                    <option value="{{ $session->session_date }}"
+                                                        {{ isset($beneficiarie) && $beneficiarie->academic_session == $session->session_date ? 'selected' : '' }}>
+                                                        {{ $session->session_date }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-6 col-sm-6  form-group mb-3">
                                             <label for="name" class="form-label">Full Name: <span
                                                     class="text-danger">*</span></label>
                                             <input type="text" name="name" id="name"
@@ -127,9 +143,6 @@
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                    </div>
-
-                                    <div class="row">
                                         <div class="col-md-6 col-sm-6 form-group mb-3">
                                             <label for="gender" class="form-label">Gender: <span
                                                     class="text-danger">*</span></label>
@@ -152,56 +165,27 @@
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
-
-
-                                        <div class="col-md-6 form-group mb-3">
-                                            <label for="eligibility" class="form-label">Eligibility / Education Level: <span
-                                                    class="text-danger">*</span></label>
-                                            <select name="eligibility" class="form-control" id="eligibility" required>
-                                                <option value="" disabled
-                                                    {{ !(old('eligibility') ?? $beneficiarie->eligibility) ? 'selected' : '' }}>
-                                                    Select Education Level</option>
-                                                <option value="Uneducated"
-                                                    {{ (old('eligibility') ?? $beneficiarie->eligibility) == 'Uneducated' ? 'selected' : '' }}>
-                                                    Uneducated</option>
-                                                <option value="5th Pass"
-                                                    {{ (old('eligibility') ?? $beneficiarie->eligibility) == '5th Pass' ? 'selected' : '' }}>
-                                                    5th Pass</option>
-                                                <option value="Secondary"
-                                                    {{ (old('eligibility') ?? $beneficiarie->eligibility) == 'Secondary' ? 'selected' : '' }}>
-                                                    Secondary</option>
-                                                <option value="Senior Secondary"
-                                                    {{ (old('eligibility') ?? $beneficiarie->eligibility) == 'Senior Secondary' ? 'selected' : '' }}>
-                                                    Senior Secondary</option>
-                                                <option value="Graduation"
-                                                    {{ (old('eligibility') ?? $beneficiarie->eligibility) == 'Graduation' ? 'selected' : '' }}>
-                                                    Graduation</option>
-                                                <option value="Post Graduation"
-                                                    {{ (old('eligibility') ?? $beneficiarie->eligibility) == 'Post Graduation' ? 'selected' : '' }}>
-                                                    Post Graduation</option>
-                                                <option value="Degree Holder"
-                                                    {{ (old('eligibility') ?? $beneficiarie->eligibility) == 'Degree Holder' ? 'selected' : '' }}>
-                                                    Degree Holder</option>
-                                            </select>
-                                            @error('eligibility')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-
                                     </div>
+
+
+
+
+
+
+
 
                                 </div>
                                 <div class="col-md-4 col-sm-4">
                                     <div class="upload-container">
-                                        
-                                            @if (!empty($beneficiarie->image))
-                                                <img id="previewImage"
-                                                    src="{{ asset('benefries_images/' . $beneficiarie->image) }}"
-                                                    alt="Preview" width="160">
-                                            @endif
 
-                       
-                                       
+                                        @if (!empty($beneficiarie->image))
+                                            <img id="previewImage"
+                                                src="{{ asset('benefries_images/' . $beneficiarie->image) }}"
+                                                alt="Preview" width="160">
+                                        @endif
+
+
+
                                         <label for="uploadInput" class="upload-btn">Choose File</label>
                                         <input type="file" id="uploadInput" name="image" accept="image/*">
                                     </div>
@@ -210,6 +194,39 @@
                             </div>
                             <div class="row">
 
+                                <div class="col-md-4 form-group mb-3">
+                                    <label for="eligibility" class="form-label">Eligibility / Education Level: <span
+                                            class="text-danger">*</span></label>
+                                    <select name="eligibility" class="form-control" id="eligibility" required>
+                                        <option value="" disabled
+                                            {{ !(old('eligibility') ?? $beneficiarie->eligibility) ? 'selected' : '' }}>
+                                            Select Education Level</option>
+                                        <option value="Uneducated"
+                                            {{ (old('eligibility') ?? $beneficiarie->eligibility) == 'Uneducated' ? 'selected' : '' }}>
+                                            Uneducated</option>
+                                        <option value="5th Pass"
+                                            {{ (old('eligibility') ?? $beneficiarie->eligibility) == '5th Pass' ? 'selected' : '' }}>
+                                            5th Pass</option>
+                                        <option value="Secondary"
+                                            {{ (old('eligibility') ?? $beneficiarie->eligibility) == 'Secondary' ? 'selected' : '' }}>
+                                            Secondary</option>
+                                        <option value="Senior Secondary"
+                                            {{ (old('eligibility') ?? $beneficiarie->eligibility) == 'Senior Secondary' ? 'selected' : '' }}>
+                                            Senior Secondary</option>
+                                        <option value="Graduation"
+                                            {{ (old('eligibility') ?? $beneficiarie->eligibility) == 'Graduation' ? 'selected' : '' }}>
+                                            Graduation</option>
+                                        <option value="Post Graduation"
+                                            {{ (old('eligibility') ?? $beneficiarie->eligibility) == 'Post Graduation' ? 'selected' : '' }}>
+                                            Post Graduation</option>
+                                        <option value="Degree Holder"
+                                            {{ (old('eligibility') ?? $beneficiarie->eligibility) == 'Degree Holder' ? 'selected' : '' }}>
+                                            Degree Holder</option>
+                                    </select>
+                                    @error('eligibility')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
                                 <div class="col-md-4 form-group mb-3">
                                     <label for="marital_status" class="form-label">Marital Status: <span
                                             class="text-danger">*</span></label>
@@ -533,7 +550,8 @@
                                 <input type="file" class="form-control" name="id_document" id="id_document">
                                 <small id="id_document_hint" class="form-text text-muted"></small>
                                 @if (!empty($beneficiarie->id_document))
-                                    <img id="previewImage" src="{{ asset('benefries_images/' . $beneficiarie->id_document) }}"
+                                    <img id="previewImage"
+                                        src="{{ asset('benefries_images/' . $beneficiarie->id_document) }}"
                                         alt="Preview" width="150">
                                 @endif
 

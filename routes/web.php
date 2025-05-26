@@ -58,6 +58,7 @@ Route::controller(HomeControlller::class)->group(function () {
     Route::get('/Photos', 'photo')->name('photo');
     Route::get('/certificate-verify', 'certiStatus')->name('certiStatus');
     Route::get('/facilities-Status', 'facilitiesStatus')->name('facilitiesStatus');
+    Route::post('/Check-Facilities', 'showfacilities')->name('check-facilities');
 });
 
 
@@ -132,18 +133,27 @@ Route::middleware('auth')->group(function () {
     Route::post('ngo/delete-registration/{id}', [RegistrationController::class, 'deleteRegistration'])->name('delete-reg');
     Route::get('ngo/recover-registration', [RegistrationController::class, 'recover'])->name('recover');
     Route::get('/recover/{id}', [RegistrationController::class,'recoverItem'])->name('recover-item');
-
 }); 
 
 Route::controller(GalleryController::class)->group(function () {
     Route::get('ngo/Gallery', 'gallery')->middleware('auth')->name('gallery-list');
     Route::get('ngo/Add-Photos', 'addPhotos')->middleware('auth')->name('add-photos');
     Route::post('ngo/Save-Photo', 'storePhoto')->middleware('auth')->name('save-photo');
-    Route::delete('ngo/Delete-Photo/{id}',  'deletePhoto')->name('delete-photo');
+    Route::delete('ngo/Delete-Photo/{id}',  'deletePhoto')->middleware('auth')->name('delete-photo');
 });
 
 Route::controller(BeneficiarieController::class)->group(function () {
-    Route::get('ngo/add-beneficiarie', 'beneficiarieList')->name('beneficiarie-list');
+    Route::get('ngo/add-beneficiarie-list', 'AddbeneficiarieList')->middleware('auth')->name('beneficiarie-add-list');
+    Route::get('ngo/view-beneficiarie/{id}', 'viewbeneficiarie')->middleware('auth')->name('view-beneficiarie');
+    Route::get('ngo/add-beneficiarie/{id}', 'addbeneficiarie')->middleware('auth')->name('add-beneficiarie');
+    Route::post('ngo/store-beneficiarie/{id}', 'storeBeneficiarie')->middleware('auth')->name('store-beneficiarie');
+    Route::get('ngo/beneficiarie-list', 'beneficiarieList')->middleware('auth')->name('beneficiarie-list');
+    Route::get('ngo/edit-beneficiarie/{id}', 'editbeneficiarie')->middleware('auth')->name('edit-beneficiarie');
+    Route::post('ngo/update-beneficiare/{id}', 'updatebeneficiarie')->middleware('auth')->name('update-beneficiarie');
+    Route::get('ngo/show-beneficiarie/{id}', 'showbeneficiarie')->middleware('auth')->name('show-beneficiarie');
+    Route::get('ngo/beneficiarie-report-list', 'beneficiarieReportList')->middleware('auth')->name('beneficiarie-report-list');
+    Route::get('ngo/show-beneficiarie-report/{id}', 'showbeneficiariereport')->middleware('auth')->name('show-beneficiarie-report');
+
 });
 
 

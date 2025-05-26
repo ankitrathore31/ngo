@@ -20,35 +20,47 @@
                 <div class="alert alert-danger mt-3">{{ session('error') }}</div>
             @endif
 
-
             <div class="row">
                 <div class="col">
                     <div class="card-body shadow p-3">
-                        <form action="{{-- route('check-status') --}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{route('check-facilities')}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="col-md-6">
-                                <label class="form-label">Registraition No.</label>
-                                <input type="text" name="registraiton_no" class="form-control"
-                                    value="{{ old('registraiton_no') }}">
-                                @error('registraiton_no')
+                                <label class="form-label">Aadhar Card No.</label>
+                                <input type="text" name="identity_no" id="aadharInput" class="form-control"
+                                    value="{{ old('aadhar_no') }}" placeholder="____ ____ ____" maxlength="14"
+                                    oninput="formatAadhar(this)">
+                                <span id="aadharJsError" class="text-danger"></span>
+                                @error('aadhar_no')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-
-                            {{-- <div class="col-md-6">
-                                <label class="form-label">Certificate No.</label>
-                                <input type="text" name="certificate_no" class="form-control"
-                                    value="{{ old('certificate_no') }}">
-                                @error('certificate_no')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div> --}}
-
-                            <button type="submit" class="btn btn-success mt-4">Verify</button>
+                            <button type="submit" class="btn btn-success mt-4">Check</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        function formatAadhar(input) {
+            let value = input.value.replace(/\D/g, '');
+
+            if (value.length > 4 && value.length <= 8) {
+                value = value.slice(0, 4) + ' ' + value.slice(4);
+            } else if (value.length > 8) {
+                value = value.slice(0, 4) + ' ' + value.slice(4, 8) + ' ' + value.slice(8, 12);
+            }
+            input.value = value;
+
+            const regex = /^\d{4}\s\d{4}\s\d{4}$/;
+            const errorSpan = document.getElementById('aadharJsError');
+
+            if (value && !regex.test(value)) {
+                errorSpan.textContent = "Invalid Aadhar format. Use XXXX XXXX XXXX.";
+            } else {
+                errorSpan.textContent = "";
+            }
+        }
+    </script>
 @endsection

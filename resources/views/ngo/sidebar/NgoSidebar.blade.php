@@ -131,9 +131,9 @@
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
                             class="fas fa-project-diagram"></i> BENEFICIARIES</a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="{{ route('beneficiarie-list') }}">Add Beneficiary</a></li>
-                        <li><a class="dropdown-item" href="#">Beneficiary List</a></li>
-                        <li><a class="dropdown-item" href="#">Beneficiary Report</a></li>
+                        <li><a class="dropdown-item" href="{{ route('beneficiarie-add-list') }}">Add Beneficiary</a></li>
+                        <li><a class="dropdown-item" href="{{ route('beneficiarie-list')}}">Beneficiary List</a></li>
+                        <li><a class="dropdown-item" href="{{route('beneficiarie-report-list')}}">Beneficiary Report</a></li>
                         <li><a class="dropdown-item" href="#">Target Beneficiaries</a></li>
                     </ul>
                 </li>
