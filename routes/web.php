@@ -9,6 +9,7 @@ use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\NgoController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\GalleryController;
+use App\Models\academic_session;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +30,8 @@ use App\Http\Controllers\GalleryController;
 
 
 Route::get('/', function () {
-    return view('home.welcome');
+    $data = academic_session::orderBy('session_date', 'desc')->get();
+    return view('home.welcome', compact('data'));
 });
 
 
