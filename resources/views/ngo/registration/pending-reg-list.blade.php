@@ -87,21 +87,14 @@
                                             Pending
                                         @endif
                                     </td>
-                                    <td></td>
+                                    <td>{{$item->academic_session}}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-
-                                            {{-- <form action="{{ route('approve-status', $item->id) }}" method="POST" style="display:inline;">
-                                                @csrf
-                                                @method('PATCH')
-                                                <button type="submit" class="btn btn-success btn-sm px-3"
-                                                    style="min-width: 100px; height: 38px;">Approve</button>
-                                            </form> --}}
 
                                             <a href="{{ route('edit-reg', $item->id) }}"
                                                 class="btn btn-primary btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="Edit" style="min-width: 38px; height: 38px;">
-                                                {{-- <i class="fa-regular fa-pen-to-square"></i> --}}Approve
+                                                Approve
                                             </a>
 
                                             <a href="{{ route('view-reg', $item->id) }}"
@@ -109,18 +102,14 @@
                                                 title="View" style="min-width: 38px; height: 38px;">
                                                 <i class="fa-regular fa-eye"></i>
                                             </a>
-
-                                            <!-- Delete Button Triggering Modal -->
+                                            
                                             <a href=" {{ route('delete-view', $item->id) }}"
                                                 class="btn btn-danger btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="Delete" style="min-width: 38px; height: 38px;">
                                                 <i class="fa-regular fa-trash-can"></i>
                                             </a>
 
-
-
                                         </div>
-
                                     </td>
                                 </tr>
                             @endforeach
@@ -129,16 +118,5 @@
                 </div>
             </div>
         </div>
-
     </div>
-    <script>
-        function toggleDeleteForm(id) {
-            const form = document.getElementById(`delete-form-${id}`);
-            if (form.style.display === "none") {
-                form.style.display = "block";
-            } else {
-                form.style.display = "none";
-            }
-        }
-    </script>
 @endsection

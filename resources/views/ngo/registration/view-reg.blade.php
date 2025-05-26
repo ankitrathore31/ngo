@@ -67,212 +67,294 @@
                 <div class="text-black text-center border-bottom pb-3">
                     <h4 class=" p-3 bg-info rounded"><b>VIEW FORM </b></h4>
                 </div>
-                <div class="card-body m-1">
-                    <div class="border-bottom pb-3 mb-4">
-                        <h5 class="text-black"><b>Information</b></h5>
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="row d-flex justify-content-between">
-                                    <!-- Application Date -->
-                                    <div class="col-md-5 col-sm-6 form-group mb-3 bg-light">
-                                        <label class="form-label">Application Date:</label>
-                                        <p class="form-control-plaintext">{{ $beneficiarie->application_date }}</p>
-                                    </div>
-
-                                    <!-- Registration Type -->
-                                    <div class="col-md-5 mb-3 bg-light">
-                                        <label class="form-label">Registration Type:</label>
-                                        <p class="form-control-plaintext">{{ $beneficiarie->reg_type }}</p>
-                                    </div>
-
-                                    <!-- Full Name -->
-                                    <div class="col-md-5 col-sm-6 form-group mb-3 bg-light">
-                                        <label class="form-label">Full Name:</label>
-                                        <p class="form-control-plaintext">{{ $beneficiarie->name }}</p>
-                                    </div>
-
-                                    <!-- Date of Birth -->
-                                    <div class="col-md-5 col-sm-6 form-group mb-3 bg-light">
-                                        <label class="form-label">Date of Birth:</label>
-                                        <p class="form-control-plaintext">{{ $beneficiarie->dob }}</p>
-                                    </div>
-                                </div>
-
-                                <div class="row d-flex justify-content-between">
-                                    <!-- Gender -->
-                                    <div class="col-md-5 col-sm-6 form-group mb-3 bg-light">
-                                        <label class="form-label">Gender:</label>
-                                        <p class="form-control-plaintext">{{ $beneficiarie->gender }}</p>
-                                    </div>
-
-                                    <!-- Eligibility / Education Level -->
-                                    <div class="col-md-5 form-group mb-3 bg-light">
-                                        <label class="form-label">Eligibility / Education Level:</label>
-                                        <p class="form-control-plaintext">{{ $beneficiarie->eligibility }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-sm-4">
-                                <div class="upload-container">
-                                    @if (!empty($beneficiarie->image))
-                                        <img id="previewImage" src="{{ asset('benefries_images/' . $beneficiarie->image) }}"
-                                            alt="Preview" width="160">
-                                    @endif
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="row d-flex justify-content-between">
-                            <div class="col-md-3 form-group mb-3 bg-light">
-                                <label class="form-label">Marital Status:</label>
-                                <p class="form-control-plaintext">{{ $beneficiarie->marital_status }}</p>
-                            </div>
-
-                            <div class="col-md-3 mb-3 bg-light">
-                                <label class="form-label">Father/Husband Name:</label>
-                                <p class="form-control-plaintext">{{ $beneficiarie->gurdian_name }}</p>
-                            </div>
-
-                            <div class="col-md-3 mb-3 bg-light">
-                                <label class="form-label">Mother Name:</label>
-                                <p class="form-control-plaintext">{{ $beneficiarie->mother_name }}</p>
-                            </div>
-                        </div>
-                        <div class="row d-flex justify-content-between">
-                            <div class="col-md-3 form-group mb-3 bg-light">
-                                <label class="form-label">Village/Locality:</label>
-                                <p class="form-control-plaintext">{{ $beneficiarie->village }}</p>
-                            </div>
-
-                            <div class="col-md-3 form-group mb-3 bg-light">
-                                <label class="form-label">Post/Town:</label>
-                                <p class="form-control-plaintext">{{ $beneficiarie->post }}</p>
-                            </div>
-
-                            <div class="col-md-3 form-group mb-3 bg-light">
-                                <label class="form-label">Area Type:</label>
-                                <p class="form-control-plaintext">{{ $beneficiarie->area_type }}</p>
-                            </div>
-                        </div>
-                        <div class="row d-flex justify-content-between">
-                            <div class="col-md-3 form-group mb-3 bg-light">
-                                <label class="form-label">Block:</label>
-                                <p class="form-control-plaintext">{{ $beneficiarie->block }}</p>
-                            </div>
-
-                            <div class="col-md-3 form-group mb-3 bg-light">
-                                <label class="form-label">State:</label>
-                                <p class="form-control-plaintext">{{ $beneficiarie->state }}</p>
-                            </div>
-
-                            <div class="col-md-3 form-group mb-3 bg-light">
-                                <label class="form-label">District:</label>
-                                <p class="form-control-plaintext">{{ $beneficiarie->district }}</p>
-                            </div>
-                        </div>
-                        <div class="row d-flex justify-content-between">
-                            <div class="col-md-3 form-group mb-3 bg-light">
-                                <label class="form-label">Pincode:</label>
-                                <p class="form-control-plaintext">{{ $beneficiarie->pincode }}</p>
-                            </div>
-
-                            <div class="col-md-3 form-group mb-3 bg-light">
-                                <label class="form-label">Nationality:</label>
-                                <p class="form-control-plaintext">{{ $beneficiarie->country }}</p>
-                            </div>
-
-                            <div class="col-md-3 col-sm-6 form-group mb-3 bg-light">
-                                <label class="form-label">Email:</label>
-                                <p class="form-control-plaintext">{{ $beneficiarie->email }}</p>
-                            </div>
-                        </div>
-                        <div class="row d-flex justify-content-between">
-                            <div class="col-md-3 col-sm-6 form-group mb-3 bg-light">
-                                <label class="form-label">Phone:</label>
-                                <p class="form-control-plaintext">{{ $beneficiarie->phone }}</p>
-                            </div>
-
-                            <div class="col-md-3 mb-3 bg-light">
-                                <label class="form-label">Religion:</label>
-                                <p class="form-control-plaintext">{{ $beneficiarie->religion }}</p>
-                            </div>
-
-                            <div class="col-md-3 mb-3 bg-light">
-                                <label class="form-label">Religion Category:</label>
-                                <p class="form-control-plaintext">{{ $beneficiarie->religion_category }}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3 bg-light">
-                            <label class="form-label">Caste:</label>
-                            <p class="form-control-plaintext">{{ $beneficiarie->caste }}</p>
-                        </div>
+                <div class="card bg-white p-2 shadow rounded">
+                    <div class="text-black text-center border-bottom pb-3">
+                        <h4 class=" p-3 bg-info rounded"><b>BENEFICIARIE </b></h4>
                     </div>
+                    <div class="card-body m-1">
+                        <div class="border-bottom pb-3 mb-4">
+                            <h5 class="text-black fw-bold">Information</h5>
+
+                            <div class="row g-3">
+                                <!-- Application Date -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Application Date:</label>
+                                        <p class="mb-0">{{ $beneficiarie->application_date }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Application No -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Application No:</label>
+                                        <p class="mb-0">{{ $beneficiarie->application_no }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Registration Date -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Registration Date:</label>
+                                        <p class="mb-0">{{ $beneficiarie->registration_date }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mt-1">
+                                <!-- Registration No -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Registration No:</label>
+                                        <p class="mb-0">{{ $beneficiarie->registration_no }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Uploaded Image -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100 text-center">
+                                        <label class="form-label fw-bold">Uploaded Image:</label><br>
+                                        @if (!empty($beneficiarie->image))
+                                            <img src="{{ asset('benefries_images/' . $beneficiarie->image) }}"
+                                                alt="Program Image" width="100" class="img-fluid rounded">
+                                        @else
+                                            <p class="form-control-plaintext">No Image uploaded</p>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <!-- Full Name -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Full Name:</label>
+                                        <p class="mb-0">{{ $beneficiarie->name }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mt-1">
+                                <!-- Date of Birth -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Date of Birth:</label>
+                                        <p class="mb-0">{{ $beneficiarie->dob }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Gender -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Gender:</label>
+                                        <p class="mb-0">{{ $beneficiarie->gender }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Eligibility -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Eligibility / Education Level:</label>
+                                        <p class="mb-0">{{ $beneficiarie->eligibility }}</p>
+                                    </div>
+                                </div>
+                            </div>
 
 
-                    <div class="row ">
-                        <!-- Identity Type -->
-                        <div class="col-md-8">
-                            <div class="row d-flex justify-content-between">
-                                <div class="col-md-3 mb-3 bg-light">
-                                    <div class="form-group">
-                                        <label class="form-label">Identity Type:</label>
-                                        <p class="form-control-plaintext">
-                                            {{ $beneficiarie->identity_type ?? 'N/A' }}
-                                        </p>
+                            <div class="row g-3 mt-1">
+                                <!-- Marital Status -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Marital Status:</label>
+                                        <p class="mb-0">{{ $beneficiarie->marital_status }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Guardian Name -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Father/Husband Name:</label>
+                                        <p class="mb-0">{{ $beneficiarie->gurdian_name }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Mother Name -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Mother Name:</label>
+                                        <p class="mb-0">{{ $beneficiarie->mother_name }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mt-1">
+                                <!-- Village -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Village/Locality:</label>
+                                        <p class="mb-0">{{ $beneficiarie->village }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Post/Town -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Post/Town:</label>
+                                        <p class="mb-0">{{ $beneficiarie->post }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Area Type -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Area Type:</label>
+                                        <p class="mb-0">{{ $beneficiarie->area_type }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mt-1">
+                                <!-- Block -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Block:</label>
+                                        <p class="mb-0">{{ $beneficiarie->block }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- State -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">State:</label>
+                                        <p class="mb-0">{{ $beneficiarie->state }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- District -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">District:</label>
+                                        <p class="mb-0">{{ $beneficiarie->district }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row g-3 mt-1">
+                                <!-- Pincode -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Pincode:</label>
+                                        <p class="mb-0">{{ $beneficiarie->pincode }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Country -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Nationality:</label>
+                                        <p class="mb-0">{{ $beneficiarie->country }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Email -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Email:</label>
+                                        <p class="mb-0">{{ $beneficiarie->email }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mt-1">
+                                <!-- Phone -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Phone:</label>
+                                        <p class="mb-0">{{ $beneficiarie->phone }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Religion -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Religion:</label>
+                                        <p class="mb-0">{{ $beneficiarie->religion }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Religion Category -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Religion Category:</label>
+                                        <p class="mb-0">{{ $beneficiarie->religion_category }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row g-3 mt-1">
+                                <!-- Caste -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Caste:</label>
+                                        <p class="mb-0">{{ $beneficiarie->caste }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Identity Type -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Identity Type:</label>
+                                        <p class="mb-0">{{ $beneficiarie->identity_type ?? 'N/A' }}</p>
                                     </div>
                                 </div>
 
                                 <!-- Identity Card Number -->
-                                <div class="col-md-3 mb-3 bg-light">
-                                    <div class="form-group">
-                                        <label class="form-label">Identity Card Number:</label>
-                                        <p class="form-control-plaintext">
-                                            {{ $beneficiarie->identity_no ?? 'N/A' }}
-                                        </p>
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Identity Card Number:</label>
+                                        <p class="mb-0">{{ $beneficiarie->identity_no ?? 'N/A' }}</p>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="row">
+
+
+                            <div class="row g-3 mt-1">
                                 <!-- Identity Document -->
-                                <div class="col-md-12 mb-3">
-                                    <label class="form-label">ID Document Uploaded:</label>
-                                    @if (!empty($beneficiarie->id_document))
-                                        <img src="{{ asset('benefries_images/' . $beneficiarie->id_document) }}"
-                                            alt="Preview" width="150">
-                                    @else
-                                        <p class="form-control-plaintext">No document uploaded</p>
-                                    @endif
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">ID Document Uploaded:</label><br>
+                                        @if (!empty($beneficiarie->id_document))
+                                            <img src="{{ asset('benefries_images/' . $beneficiarie->id_document) }}"
+                                                width="150" class="img-thumbnail">
+                                        @else
+                                            <p class="form-control-plaintext">No document uploaded</p>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <!-- Occupation -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">Occupation:</label>
+                                        <p class="mb-0">{{ $beneficiarie->occupation ?? 'N/A' }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Help Needed -->
+                                <div class="col-md-4">
+                                    <div class="bg-light border rounded p-3 h-100">
+                                        <label class="form-label fw-bold">What beneficiaries need help with:</label>
+                                        <div>
+                                            {{ $beneficiarie->help_needed }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
 
-                        <!-- Occupation -->
-                        <div class="col-md-4 mb-3 bg-light">
-                            <div class="form-group">
-                                <label class="form-label">Occupation:</label>
-                                <p class="form-control-plaintext">
-                                    {{ $beneficiarie->occupation ?? 'N/A' }}
-                                </p>
-                            </div>
                         </div>
-
-                        <!-- Help Needed -->
-                        @if (!empty($beneficiarie->help_needed))
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">What beneficiaries need help with:</label>
-                                <div class="border rounded p-2" style="background-color: #f8f9fa;">
-                                    {{ $beneficiarie->help_needed }}
-                                </div>
-                            </div>
-                        @endif
                     </div>
                 </div>
             </div>
         </div>
     </div>
-  
 @endsection

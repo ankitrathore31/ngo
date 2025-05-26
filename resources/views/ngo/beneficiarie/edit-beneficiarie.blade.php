@@ -65,7 +65,7 @@
         <div class="container-fluide m-3">
             <div class="card bg-white p-2 shadow rounded">
                 <div class="text-black text-center border-bottom pb-3">
-                    <h4 class=" p-3 bg-info rounded"><b>ADD BENEFICIARIE </b></h4>
+                    <h4 class=" p-3 bg-info rounded"><b>BENEFICIARIE </b></h4>
                 </div>
                 <div class="card-body m-1">
                     <div class="border-bottom pb-3 mb-4">
@@ -282,9 +282,9 @@
                 </div>
             </div>
             <div class="card mt-4 p-3 border border-success rounded">
-                <form action="{{ route('store-beneficiarie', $beneficiarie->id) }}" method="POST">
+                <form action="{{ route('update-beneficiarie', $beneficiarie->id) }}" method="POST">
                     @csrf
-                    <h5 class="text-success text-center">Add Beneficiarie</h5>
+                    <h5 class="text-success text-center">Edit Beneficiarie</h5>
 
                     <!-- Survey Details -->
                     <div class="mb-3">
@@ -292,7 +292,7 @@
                             Survey Details<span class="text-danger">*</span>
                         </label>
                         <textarea class="form-control @error('survey_details') is-invalid @enderror" id="survey_details"
-                            name="survey_details" rows="3" required>{{ old('survey_details') }}</textarea>
+                            name="survey_details" rows="3" required>{{ $beneficiarie->survey_details }}</textarea>
                         @error('survey_details')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -304,7 +304,7 @@
                             Facilities (Help By Ngo):<span class="text-danger">*</span>
                         </label>
                         <textarea class="form-control @error('help_by_ngo') is-invalid @enderror" id="help_by_ngo" name="help_by_ngo"
-                            rows="3" required>{{ old('help_by_ngo') }}</textarea>
+                            rows="3" required>{{ $beneficiarie->help_by_ngo }}</textarea>
                         @error('help_by_ngo')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -316,14 +316,14 @@
                             Survey Date<span class="text-danger">*</span>
                         </label>
                         <input type="date" class="form-control @error('survey_date') is-invalid @enderror"
-                            name="survey_date" value="{{ old('survey_date') }}" required>
+                            name="survey_date" value="{{ $beneficiarie->survey_date }}" required>
                         @error('survey_date')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <div class="d-flex justify-content-between">
-                        <button type="submit" class="btn btn-success">Add Beneficiarie</button>
+                        <button type="submit" class="btn btn-success">Update Beneficiarie</button>
                     </div>
                 </form>
             </div>

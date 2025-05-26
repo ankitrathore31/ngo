@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Models\beneficiarie;
 use App\Models\Member;
+use App\Models\academic_session;
+use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 
 class RegistrationController extends Controller
@@ -13,7 +15,9 @@ class RegistrationController extends Controller
     public function registration()
     {
         $states = config('states');
-        return view('ngo.registration.registration', compact('states'));
+        $data = academic_session::all()->sortByDesc('session_date');
+        Session::put('all_academic_session', $data);
+        return view('ngo.registration.registration', compact('states', 'data'));
     }
 
     public function StoreRegistration(Request $request)
@@ -21,6 +25,7 @@ class RegistrationController extends Controller
         // die($request);
         // exit();
         $request->validate([
+            'academic_session' => 'required',
             'application_date' => 'required|date',
             'reg_type' => 'required',
             'name' => 'required|string|max:255',
@@ -51,6 +56,7 @@ class RegistrationController extends Controller
         ]);
 
         $data = $request->only([
+            'academic_session',
             'application_date',
             'reg_type',
             'name',
@@ -134,72 +140,82 @@ class RegistrationController extends Controller
         return redirect()->route('pending-registration')->with('success', 'Registration saved successfully.');
     }
 
+    public function editRegistration($id)
+    {
+
+        $beneficiarie = beneficiarie::find($id);
+        $data = academic_session::all();
+        Session::put('all_academic_session', $data);
+        return view('ngo.registration.edit-reg', compact('beneficiarie','data'));
+    }
+
     public function UpdateRegistration(Request $request, $id)
-{
+    {
 
-    $data = $request->only([
-        'application_date',
-        'reg_type',
-        'name',
-        'dob',
-        'gender',
-        'phone',
-        'gurdian_name',
-        'mother_name',
-        'village',
-        'post',
-        'block',
-        'state',
-        'district',
-        'pincode',
-        'country',
-        'email',
-        'religion',
-        'religion_category',
-        'caste',
-        'identity_type',
-        'identity_no',
-        'occupation',
-        'eligibility',
-        'marital_status',
-        'area_type',
-        'help_needed',
-    ]);
+        $data = $request->only([
+            'academic_session',
+            'application_date',
+            'reg_type',
+            'name',
+            'dob',
+            'gender',
+            'phone',
+            'gurdian_name',
+            'mother_name',
+            'village',
+            'post',
+            'block',
+            'state',
+            'district',
+            'pincode',
+            'country',
+            'email',
+            'religion',
+            'religion_category',
+            'caste',
+            'identity_type',
+            'identity_no',
+            'occupation',
+            'eligibility',
+            'marital_status',
+            'area_type',
+            'help_needed',
+        ]);
 
-    // Handle file uploads
-    if ($request->hasFile('image')) {
-        $imageName = time() . '.' . $request->image->extension();
-        $request->image->move(public_path('benefries_images'), $imageName);
-        $data['image'] = $imageName;
-    }
-
-    if ($request->hasFile('id_document')) {
-        $idDocName = time() . '_iddoc.' . $request->id_document->extension();
-        $request->id_document->move(public_path('benefries_images'), $idDocName);
-        $data['id_document'] = $idDocName;
-    }
-
-    try {
-        if (!empty($data['application_date'])) {
-            $data['application_date'] = Carbon::parse($data['application_date'])->format('Y-m-d');
+        // Handle file uploads
+        if ($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('benefries_images'), $imageName);
+            $data['image'] = $imageName;
         }
 
-        if (!empty($data['dob'])) {
-            $data['dob'] = Carbon::parse($data['dob'])->format('Y-m-d');
+        if ($request->hasFile('id_document')) {
+            $idDocName = time() . '_iddoc.' . $request->id_document->extension();
+            $request->id_document->move(public_path('benefries_images'), $idDocName);
+            $data['id_document'] = $idDocName;
         }
-    } catch (\Exception $e) {
-        return back()->withErrors(['date_error' => 'Invalid date format for Application Date or Date of Birth.']);
-    }
 
-    // Update the existing record based on reg_type
-    if ($request->reg_type === 'Beneficiaries') {
-        beneficiarie::where('id', $id)->update($data);
-    } else if ($request->reg_type === 'Member') {
-        Member::where('id', $id)->update($data);
-    }
+        try {
+            if (!empty($data['application_date'])) {
+                $data['application_date'] = Carbon::parse($data['application_date'])->format('Y-m-d');
+            }
 
-    return redirect()->route('pending-registration')->with('success', 'Registration updated successfully.');
-}
+            if (!empty($data['dob'])) {
+                $data['dob'] = Carbon::parse($data['dob'])->format('Y-m-d');
+            }
+        } catch (\Exception $e) {
+            return back()->withErrors(['date_error' => 'Invalid date format for Application Date or Date of Birth.']);
+        }
+
+        // Update the existing record based on reg_type
+        if ($request->reg_type === 'Beneficiaries') {
+            beneficiarie::where('id', $id)->update($data);
+        } else if ($request->reg_type === 'Member') {
+            Member::where('id', $id)->update($data);
+        }
+
+        return redirect()->route('pending-registration')->with('success', 'Registration updated successfully.');
+    }
 
 
     public function pendingRegistration()
@@ -292,14 +308,8 @@ class RegistrationController extends Controller
         return view('ngo.registration.view-reg', compact('beneficiarie'));
     }
 
-    public function editRegistration($id)
-    {
 
-        $beneficiarie = beneficiarie::find($id);
-        return view('ngo.registration.edit-reg', compact('beneficiarie'));
-    }
-
-     public function deleteRegistrationPage($id)
+    public function deleteRegistrationPage($id)
     {
 
         $beneficiarie = beneficiarie::find($id);
@@ -331,7 +341,7 @@ class RegistrationController extends Controller
     }
 
     public function recover()
-    {  
+    {
         $deletedBeneficiaries = beneficiarie::onlyTrashed()->get();
         return view('ngo.registration.recover-reg', compact('deletedBeneficiaries'));
     }

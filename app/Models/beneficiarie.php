@@ -42,6 +42,7 @@ class beneficiarie extends Model
         'help_needed',
         'help_by_ngo',
         'survey_details',
+        'survey_date',
         'eligibility',
         'marital_status',
         'area_type',

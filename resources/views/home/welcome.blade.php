@@ -329,11 +329,7 @@
 
                     <select class="form-control w-25" id="session">
                         <option value="">All Session</option>
-                        @php
-                            $sessions = Session::get('all_academic_session');
-                            $sessions = collect($sessions)->sortByDesc('session_date');
-                        @endphp
-                        @foreach ($sessions as $session)
+                        @foreach ($data as $session)
                             <option value="{{ $session->session_date }}">{{ $session->session_date }}</option>
                         @endforeach
                     </select>
@@ -426,11 +422,7 @@
                     <h2 class="section-title mb-4"><b>SANSTHA ACTIVITIES</b></h2>
                     <select class="form-control w-25" id="session">
                         <option value="">All Session</option>
-                        @php
-                            $sessions = Session::get('all_academic_session');
-                            $sessions = collect($sessions)->sortByDesc('session_date');
-                        @endphp
-                        @foreach ($sessions as $session)
+                        @foreach ($data as $session)
                             <option value="{{ $session->session_date }}">{{ $session->session_date }}</option>
                         @endforeach
                     </select>

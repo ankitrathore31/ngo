@@ -7,12 +7,16 @@ use App\Models\Activity;
 use App\Models\Gallery;
 use App\Models\beneficiarie;
 use App\Models\Member;
+use App\Models\academic_session;
+use Illuminate\Support\Facades\Session;
 
 class HomeControlller extends Controller
 {
     public function home()
     {
-        return view('home.welcome');
+        $data = academic_session::all();
+        Session::put('all_academic_session', $data);
+        return view('home.welcome',compact('data'));
     }
 
     public function activitypage()
@@ -105,7 +109,8 @@ class HomeControlller extends Controller
         return view('home.pages.notice');
     }
 
-    public function applictionStatus(){
+    public function applictionStatus()
+    {
         return view('home.status.application_status');
     }
 
@@ -130,11 +135,34 @@ class HomeControlller extends Controller
         return view('home.status.show-application', compact('application'))->with('success', 'Application  found.');
     }
 
-    public function certiStatus(){
+    public function certiStatus()
+    {
         return view('home.status.certificate-verify');
     }
 
-    public function facilitiesStatus(){
+    public function facilitiesStatus()
+    {
         return view('home.status.facilities-status');
+    }
+
+    public function showfacilities(Request $request)
+    {
+        $request->validate([
+            'identity_no' => 'required',
+        ]);
+
+        // Remove spaces from Aadhar
+        $identityNo = str_replace(' ', '', $request->identity_no);
+
+        $beneficiarie = \App\Models\beneficiarie::withTrashed()
+            ->where('identity_no', $identityNo)
+            ->where('status', 1)
+            ->first();
+
+        if (!$beneficiarie) {
+            return back()->with('error', 'Facilities not found.')->withInput();
+        }
+
+        return view('home.status.show_facilities', compact('beneficiarie'))->with('success', 'Facilities found.');
     }
 }

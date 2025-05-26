@@ -104,6 +104,18 @@
                                                 @enderror
                                             </div>
                                         </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="academic_session" class="form-label bold"> Session <span
+                                                    class="login-danger">*</span></label>
+                                            <select class="form-control @error('academic_session') is-invalid @enderror"
+                                                name="academic_session" required>
+                                                <option value="">Select Session</option>
+                                                @foreach ($data as $session)
+                                                    <option value="{{ $session->session_date }}">
+                                                        {{ $session->session_date }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                         <div class="col-md-6 col-sm-6  form-group mb-3">
                                             <label for="name" class="form-label">Full Name: <span
                                                     class="text-danger">*</span></label>
@@ -124,9 +136,6 @@
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                    </div>
-
-                                    <div class="row">
                                         <div class="col-md-6 col-sm-6 form-group mb-3">
                                             <label for="gender" class="form-label">Gender: <span
                                                     class="text-danger">*</span></label>
@@ -145,42 +154,6 @@
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
-
-                                        <div class="col-md-6 form-group mb-3">
-                                            <label for="eligibility" class="form-label">Eligibility / Education Level: <span
-                                                    class="text-danger">*</span></label>
-                                            <select name="eligibility" class="form-control" id="eligibility" required>
-                                                <option value="">Select Education Level</option>
-                                                <option value="Uneducated"
-                                                    {{ old('eligibility') == 'Uneducated' ? 'selected' : '' }}>Uneducated
-                                                </option>
-                                                <option value="5th Pass"
-                                                    {{ old('eligibility') == '5th Pass' ? 'selected' : '' }}>5th Pass
-                                                </option>
-                                                <option value="Secondary"
-                                                    {{ old('eligibility') == 'Secondary' ? 'selected' : '' }}>Secondary
-                                                </option>
-                                                <option value="Senior Secondary"
-                                                    {{ old('eligibility') == 'Senior Secondary' ? 'selected' : '' }}>Senior
-                                                    Secondary</option>
-                                                <option value="Graduation"
-                                                    {{ old('eligibility') == 'Graduation' ? 'selected' : '' }}>Graduation
-                                                </option>
-                                                <option value="Post Graduation"
-                                                    {{ old('eligibility') == 'Post Graduation' ? 'selected' : '' }}>Post
-                                                    Graduation</option>
-                                                <option value="Degree Holder"
-                                                    {{ old('eligibility') == 'Degree Holder' ? 'selected' : '' }}>Degree
-                                                    Holder</option>
-                                            </select>
-                                            @error('eligibility')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-
-
-
-
                                     </div>
 
                                 </div>
@@ -197,6 +170,37 @@
                             </div>
                             <div class="row">
 
+                                <div class="col-md-4 form-group mb-3">
+                                    <label for="eligibility" class="form-label">Eligibility / Education Level: <span
+                                            class="text-danger">*</span></label>
+                                    <select name="eligibility" class="form-control" id="eligibility" required>
+                                        <option value="">Select Education Level</option>
+                                        <option value="Uneducated"
+                                            {{ old('eligibility') == 'Uneducated' ? 'selected' : '' }}>Uneducated
+                                        </option>
+                                        <option value="5th Pass" {{ old('eligibility') == '5th Pass' ? 'selected' : '' }}>
+                                            5th Pass
+                                        </option>
+                                        <option value="Secondary"
+                                            {{ old('eligibility') == 'Secondary' ? 'selected' : '' }}>Secondary
+                                        </option>
+                                        <option value="Senior Secondary"
+                                            {{ old('eligibility') == 'Senior Secondary' ? 'selected' : '' }}>Senior
+                                            Secondary</option>
+                                        <option value="Graduation"
+                                            {{ old('eligibility') == 'Graduation' ? 'selected' : '' }}>Graduation
+                                        </option>
+                                        <option value="Post Graduation"
+                                            {{ old('eligibility') == 'Post Graduation' ? 'selected' : '' }}>Post
+                                            Graduation</option>
+                                        <option value="Degree Holder"
+                                            {{ old('eligibility') == 'Degree Holder' ? 'selected' : '' }}>Degree
+                                            Holder</option>
+                                    </select>
+                                    @error('eligibility')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
                                 <div class="col-md-4 form-group mb-3">
                                     <label for="marital_status" class="form-label">Marital Status: <span
                                             class="text-danger">*</span></label>
