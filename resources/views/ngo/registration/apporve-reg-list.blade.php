@@ -47,7 +47,8 @@
                 <div class="card-body table-responsive">
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-primary">
-                            <tr>                                
+                            <tr> 
+                                <th>Sr. No.</th>                               
                                 <th>Application Date</th>
                                 <td>Application No.</td>
                                 <th>Registration No.</th>
@@ -64,7 +65,7 @@
                         <tbody>
                             @foreach ($approvebeneficiarie as $item)
                                 <tr>
-                                   
+                                   <td>{{ $loop->iteration }}</td>
                                     <td>
                                         {{ \Carbon\Carbon::parse($item->application_date)->format('d-m-Y') }}<br>
                                     </td>
@@ -83,13 +84,6 @@
                                     </td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            <!-- Approve button/link -->
-                                            {{-- <form action="{{ route('pending-status', $item->id) }}" method="POST" style="display:inline;">
-                                                @csrf
-                                                @method('PATCH')
-                                                <button type="submit" class="btn btn-danger btn-sm px-3"
-                                                    style="min-width: 100px; height: 38px;">Reject</button>
-                                            </form> --}}
 
                                             <a href="#"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"

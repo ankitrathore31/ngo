@@ -78,19 +78,18 @@
                             </p>
                         </div>
                     </div>
-                </div>
-
-                <div class="row g-2 mt-2 card border rounded p-3">
                     <div class="col-md-6">
                         <p><strong>Survey Date:</strong>
                             {{ \Carbon\Carbon::parse($beneficiarie->survey_date)->format('d M Y') ?? 'Update soon'  }}</p>
                     </div>
-
                     <div class="col-12">
                         <p><strong>Survey Details:</strong> {{ $beneficiarie->survey_details ?? 'Update soon'  }}</p>
                     </div>
+                </div>
+
+                <div class="row g-2 mt-2 card shadow border rounded p-3 bg-light">
                     <div class="col-12">
-                        <p><strong>Help by NGO:</strong> {{ $beneficiarie->help_by_ngo ?? 'Update soon' }}</p>
+                        <p><strong>Facilities:</strong> {{ $beneficiarie->help_by_ngo ?? 'Update soon' }}</p>
                     </div>
                 </div>
 

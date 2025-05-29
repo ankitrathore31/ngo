@@ -138,13 +138,13 @@
 
 
         <div class="col-md-2 mb-3">
-            <a href="{{ route('certiStatus') }}" class="btn btn-info w-100">
-                Certificate Verify
+            <a href="{{route('online-registration') }}" class="btn btn-success w-100">
+                Online Registration
             </a>
         </div>
 
         <div class="col-md-2 mb-3">
-            <a href="{{-- url('/certificate-download') --}}" class="btn btn-success w-100">
+            <a href="{{ route('certiStatus') }}" class="btn btn-info w-100">
                 Certificate Download
             </a>
         </div>
@@ -164,8 +164,8 @@
     <div class="owl-carousel owl-theme slider">
         <div class="item ">
             <div class="background-image">
-                <img src="images/sewing.jpeg" alt="slider image">
-                <img src="images/peace-talk.jpeg" alt="slider image">
+                <img src="{{ asset('images/sewing.jpeg') }}" alt="slider image">
+                <img src="{{ asset('images/peace-talk.jpeg') }}" alt="slider image">
                 <div class="carousel-caption d-none d-md-block">
                     <h1 class="text-white"></h1>
                     <h2 class="text-white"></h2>
@@ -181,24 +181,24 @@
         <div class="container-fluid">
             <div class="row d-flex justify-content-between hide-sm">
                 <div class="col-md-3 col-sm-6">
-                    <img src="images/logo.png" class="img-fluid custom-img" alt="">
+                    <img src="{{ asset('images/logo.png') }}" class="img-fluid custom-img" alt="">
                 </div>
                 <div class="col-md-3 col-sm-6">
-                    <img src="images/meri-mati.png" class="img-fluid custom-img" alt="">
+                    <img src="{{ asset('images/meri-mati.png') }}" class="img-fluid custom-img" alt="">
                 </div>
                 <div class="col-md-3 col-sm-6">
-                    <img src="images/beti-bachao.png" class="img-fluid custom-img" alt="">
+                    <img src="{{ asset('images/beti-bachao.png') }}" class="img-fluid custom-img" alt="">
                 </div>
                 <div class="col-md-3 col-sm-6">
-                    <img src="images/gandhi.png" class="img-fluid custom-img" alt="">
+                    <img src="{{ asset('images/gandhi.png') }}" class="img-fluid custom-img" alt="">
                 </div>
             </div>
             <div class="row m-4">
                 <div class="col-sm-12 col-md-12 col-xxl-12 col-lg-12">
                     <h3 class="fw-bold mb-3 text-center">Welcome To <span class="text-primary">GYAN BHARTI SANSTHA
-                            (NGO)</span></h3>
+                        </span></h3>
                     <p class="text-muted fst-italic fs-5">Empowering communities since <strong>30th June 2009</strong></p>
-                    <p class="about_ngo"><em>Gyan Bharti Sanstha (NGO) </em>is working since 2009
+                    <p class="about_ngo"><em>Gyan Bharti Sanstha </em>is working since 2009
                         Donations play a crucial role in supporting NGOs like Gyan Bharti Sanstha in their mission to serve
                         the community.
                         By contributing, donors enable the organization to provide essential services to those in need, such
@@ -640,7 +640,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card shadow-lg p-3 mb-5 bg-white rounded facilities">
                         <div class="card-body text-center">
-                            <img src="images/sewing.jpeg" class="img-fluid mb-3" alt="Clean Classroom" width="200">
+                            <img src="{{ asset('images/sewing.jpeg') }}" class="img-fluid mb-3" alt="Clean Classroom" width="200">
                             <h5 class="card-title font-weight-bold text-primary">SEWING</h5>
                             <p class="card-text text-muted">
                                 Sewing are taught here, which develops the students’
@@ -653,7 +653,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card shadow-lg p-3 mb-5 bg-white rounded">
                         <div class="card-body text-center">
-                            <img src="images/parlour.jpg" alt="lunch area" class="img-fluid mb-3" width="200">
+                            <img src="{{ asset('images/parlour.jpg') }}" alt="lunch area" class="img-fluid mb-3" width="200">
                             <h5 class="card-title font-weight-bold text-primary">PARLOUR</h5>
                             <p class="card-text text-muted">
                                 Our Beauty Parlour Training empowers women with professional beauty skills,
@@ -666,7 +666,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card shadow-lg bg-white rounded p-3 mb-5">
                         <div class="card-body text-center ">
-                            <img src="images/education.jpg" alt="" class="img-fluid mb-3" width="200">
+                            <img src="{{ asset('images/education.jpg') }}" alt="" class="img-fluid mb-3" width="200">
                             <h5 class="card-title font-weight-bold text-primary">EDUCATION</h5>
                             <p class="card-text text-muted">
                                 Our Sanstha provide free education to children for their
@@ -692,7 +692,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card shadow-lg p-3 mb-5 bg-white rounded facilities">
                         <div class="card-body text-center">
-                            <img src="images/enviroment.jpeg" class="img-fluid mb-3" alt="Clean Classroom"
+                            <img src="{{ asset('images/enviroment.jpeg') }}" class="img-fluid mb-3" alt="Clean Classroom"
                                 width="200">
                             <h5 class="card-title font-weight-bold text-primary">Environment Meeting</h5>
                             <p class="card-text text-muted">
@@ -706,7 +706,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card shadow-lg p-3 mb-5 bg-white rounded">
                         <div class="card-body text-center">
-                            <img src="images/blanket.jpeg" alt="lunch area" class="img-fluid mb-3" width="200">
+                            <img src="{{ asset('images/blanket.jpeg') }}" alt="lunch area" class="img-fluid mb-3" width="200">
                             <h5 class="card-title font-weight-bold text-primary">Blanket Distribution</h5>
                             <p class="card-text text-muted">
                                 Our Sanstha organizes blanket distribution drives to provide warmth and comfort to those in
@@ -720,7 +720,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card shadow-lg bg-white rounded p-3 mb-5">
                         <div class="card-body text-center ">
-                            <img src="images/peace.jpeg" alt="" class="img-fluid mb-3" width="200">
+                            <img src="{{ asset('images/peace.jpeg') }}" alt="" class="img-fluid mb-3" width="200">
                             <h5 class="card-title font-weight-bold text-primary">Peace Talkin Meeting</h5>
                             <p class="card-text text-muted">
                                 Our sanstha organizes peace talk meetings to foster dialogue ,
@@ -757,7 +757,7 @@
                 <div class="col-md-4 mb-4">
                     <div class="card shadow-lg bg-white rounded p-3 mb-5">
                         <div class="card-body text-center">
-                            <img src="{{ asset('images/education2.jpg') }}" class="img-fluid mb-3" width="200">
+                            <img src="{{ asset('images/FOOD.jpg') }}" class="img-fluid mb-3" width="200">
                             <div class="card-body">
                                 <h5 class="card-title">Help For Food</h5>
                                 <p class="card-text">Free Food feeding by our NGO</p>
@@ -792,13 +792,13 @@
             <div id="galleryCarousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="images/blanket.jpeg" class="d-block w-100" alt="Image 1">
+                        <img src="{{ asset('images/blanket.jpeg') }}" class="d-block w-100" alt="Image 1">
                     </div>
                     <div class="carousel-item">
-                        <img src="images/peace-talk.jpeg" class="d-block w-100" alt="Image 2">
+                        <img src="{{ asset('images/peace-talk.jpeg') }}" class="d-block w-100" alt="Image 2">
                     </div>
                     <div class="carousel-item">
-                        <img src="images/enviroment.jpeg" class="d-block w-100" alt="Image 3">
+                        <img src="{{ asset('images/enviroment.jpeg') }}" class="d-block w-100" alt="Image 3">
                     </div>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#galleryCarousel"
@@ -844,21 +844,7 @@
             </div>
         </div>
     </section>
-    <script>
-        document.querySelectorAll(".donation-btn").forEach(button => {
-            button.addEventListener("click", function(event) {
-                event.preventDefault(); // Prevent form submission
-                document.getElementById("donationAmount").value = this.getAttribute("data-amount");
-            });
-        });
-
-        document.getElementById("customAmountBtn").addEventListener("click", function(event) {
-            event.preventDefault(); // Prevent form submission
-            let customAmount = prompt("Enter your custom donation amount:");
-            if (customAmount !== null && !isNaN(customAmount) && customAmount.trim() !== "") {
-                document.getElementById("donationAmount").value = customAmount;
-            }
-        });
+   
     </script>
     <script>
         // Initialize the counters

@@ -135,7 +135,14 @@ Route::middleware('auth')->group(function () {
     Route::post('ngo/delete-registration/{id}', [RegistrationController::class, 'deleteRegistration'])->name('delete-reg');
     Route::get('ngo/recover-registration', [RegistrationController::class, 'recover'])->name('recover');
     Route::get('/recover/{id}', [RegistrationController::class,'recoverItem'])->name('recover-item');
-}); 
+
+});
+
+Route::controller(RegistrationController::class)->group(function () {
+    Route::get('ngo/online-registration', 'onlineregistration')->name('online-registration');
+    Route::post('ngo/online-store-registration', 'onlineStoreRegistration')->name('onlinestore-registration');
+
+});
 
 Route::controller(GalleryController::class)->group(function () {
     Route::get('ngo/Gallery', 'gallery')->middleware('auth')->name('gallery-list');
