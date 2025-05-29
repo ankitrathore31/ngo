@@ -85,8 +85,8 @@
                         <tr>
                             <th width="30%">Full Name</th>
                             <td>{{ $application->name ?? 'N/A' }}</td>
-                            <th>Phone Number</th>
-                            <td>{{ $application->phone ?? 'N/A' }}</td>
+                            <th>Gender</th>
+                            <td>{{ $application->gender ?? 'N/A' }}</td>
                         </tr>
 
                         <tr>

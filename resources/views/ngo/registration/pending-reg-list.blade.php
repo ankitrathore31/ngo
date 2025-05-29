@@ -54,11 +54,11 @@
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-primary">
                             <tr>
-
+                                <th>Sr. No.</th>
                                 <th>Application Date</th>
                                 <th>Application No.</th>
-                                <th>Name</th>
                                 <th>Image</th>
+                                <th>Name</th>
                                 <th>Number</th>
                                 <th>Type</th>
                                 <th>Status</th>
@@ -69,25 +69,26 @@
                         <tbody>
                             @foreach ($pendingbene as $item)
                                 <tr>
-
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>
                                         {{ \Carbon\Carbon::parse($item->application_date)->format('d-m-Y') }}<br>
                                     </td>
                                     <td>{{ $item->application_no }}</td>
-                                    <td>{{ $item->name }}</td>
                                     <td>
                                         <img id="previewImage" src="{{ asset('benefries_images/' . $item->image) }}"
                                             alt="Preview" width="100">
 
                                     </td>
+                                    <td>{{ $item->name }}</td>
                                     <td>{{ $item->phone }}</td>
                                     <td>{{ $item->reg_type }}</td>
                                     <td>
                                         @if ($item->status == 0)
                                             Pending
                                         @endif
+                                        
                                     </td>
-                                    <td>{{$item->academic_session}}</td>
+                                    <td>{{ $item->academic_session }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
 
@@ -102,7 +103,7 @@
                                                 title="View" style="min-width: 38px; height: 38px;">
                                                 <i class="fa-regular fa-eye"></i>
                                             </a>
-                                            
+
                                             <a href=" {{ route('delete-view', $item->id) }}"
                                                 class="btn btn-danger btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="Delete" style="min-width: 38px; height: 38px;">
