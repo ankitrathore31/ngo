@@ -99,9 +99,9 @@
                                                         {{ old('reg_type') == 'Beneficiaries' ? 'selected' : '' }}>
                                                         Beneficiaries
                                                     </option>
-                                                    {{-- <option value="Member"
+                                                    <option value="Member"
                                                         {{ old('reg_type') == 'Member' ? 'selected' : '' }}>Member
-                                                    </option> --}}
+                                                    </option>
                                                 </select>
                                                 @error('reg_type')
                                                     <span class="text-danger">{{ $message }}</span>
