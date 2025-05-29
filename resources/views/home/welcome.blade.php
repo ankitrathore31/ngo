@@ -130,18 +130,23 @@
         </div>
 
         <div class="col-md-2 mb-3">
+            <a href="{{route('online-registration') }}" class="btn btn-success w-100">
+                Online Registration
+            </a>
+        </div>
+
+        <div class="col-md-2 mb-3">
             <a href="{{ route('applictionStatus') }}" class="btn btn-primary w-100">
                 Application Status
             </a>
         </div>
 
-
-
         <div class="col-md-2 mb-3">
-            <a href="{{route('online-registration') }}" class="btn btn-success w-100">
-                Online Registration
+            <a href="{{ route('certiStatus') }}" class="btn w-100" style="background-color: skyblue; color: white;">
+                Certificate Vetify
             </a>
         </div>
+
 
         <div class="col-md-2 mb-3">
             <a href="{{ route('certiStatus') }}" class="btn btn-info w-100">
