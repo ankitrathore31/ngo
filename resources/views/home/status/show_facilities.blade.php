@@ -39,16 +39,16 @@
                 <!-- etails Section -->
                 <div class="row g-2 mt-1">
                     <div class="col-md-6">
-                        <p><strong>Application No:</strong> {{ $beneficiarie->application_no }}</p>
+                        <p><strong>Application No:</strong> {{ $beneficiarie->application_no ?? 'Update soon' }}</p>
                     </div>
                     <div class="col-md-6">
-                        <p><strong>Registration No:</strong> {{ $beneficiarie->registration_no }}</p>
+                        <p><strong>Registration No:</strong> {{ $beneficiarie->registration_no ?? 'Update soon' }}</p>
                     </div>
                     <div class="col-md-6">
-                        <p><strong>Application Date:</strong> {{ $beneficiarie->application_date }}</p>
+                        <p><strong>Application Date:</strong> {{ $beneficiarie->application_date ?? 'Update soon' }}</p>
                     </div>
                     <div class="col-md-6">
-                        <p><strong>Registration Date:</strong> {{ $beneficiarie->registration_date }}</p>
+                        <p><strong>Registration Date:</strong> {{ $beneficiarie->registration_date ?? 'Update soon' }}</p>
                     </div>
                     <div class="col-md-6">
                         <p><strong>Full Name:</strong> {{ $beneficiarie->name }}</p>
@@ -86,18 +86,6 @@
                         <p><strong>Survey Details:</strong> {{ $beneficiarie->survey_details ?? 'Update soon'  }}</p>
                     </div>
                 </div>
-
-                <div class="row g-2 mt-2 card shadow border rounded p-3 bg-light">
-                    <div class="col-12">
-                        <p><strong>Facilities:</strong> {{ $beneficiarie->help_by_ngo ?? 'Update soon' }}</p>
-                    </div>
-                </div>
-
-                <!-- Action Buttons -->
-                {{-- <div class="text-center mt-5 no-print">
-                    <button class="btn btn-primary me-2" onclick="window.print()">🖨️ Print Report</button>
-                    <button class="btn btn-outline-secondary" onclick="shareReport()">📤 Share</button>
-                </div> --}}
             </div>
         </div>
     @endsection

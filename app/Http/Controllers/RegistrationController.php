@@ -490,12 +490,12 @@ class RegistrationController extends Controller
         }
 
         if ($request->reg_type === 'Beneficiaries') {
-            beneficiarie::create($data);
+            $beneficiarie = beneficiarie::create($data);
         } else if ($request->reg_type === 'Member') {
             Member::create($data);
         }
 
-        return redirect()->route('online-registration')->with('success', 'Registration saved successfully.');
+        return view('home.registration.success-registration', compact('beneficiarie'))->with('success', 'Registration saved successfully.');
     }
 
     public function onlineregistrationSetting()

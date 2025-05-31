@@ -44,7 +44,7 @@ class BeneficiarieController extends Controller
         $beneficiarie->survey_date = Carbon::parse($request->input('survey_date'));
         $beneficiarie->save();
 
-        return redirect()->route('beneficiarie-list')->with('success', 'Beneficiare added successfully.');
+        return redirect()->route('beneficiarie-facilities')->with('success', 'Beneficiare added successfully.');
     }
 
     public function editbeneficiarie($id)
@@ -67,14 +67,19 @@ class BeneficiarieController extends Controller
     public function beneficiarieFacilities()
     {
         $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->get();
+        
         return view('ngo.beneficiarie.beneficiarie-facilities', compact('beneficiarie'));
     }
 
-    public function showbeneficiarie($id)
+    public function showbeneficiariesurvey($beneficiarie_id, $survey_id)
     {
+        $survey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+                    ->where('id', $survey_id)
+                    ->with('beneficiarie')
+                    ->firstOrFail();
 
-        $beneficiarie = beneficiarie::with('surveys')->find($id);
-        return view('ngo.beneficiarie.show-beneficiarie', compact('beneficiarie'));
+        $beneficiarie = beneficiarie::with('surveys')->find($beneficiarie_id);
+        return view('ngo.beneficiarie.show-beneficiarie-survey', compact('beneficiarie', 'survey'));
     }
 
     public function addbeneficiarieFacilities($id)
@@ -97,6 +102,7 @@ class BeneficiarieController extends Controller
         $beneficiarie->save();
 
         return redirect()->route('beneficiarie-facilities-list')->with('succes', 'Facilities Added successfully');
+
     }
 
     public function editbeneficiarieFacilities($id)
