@@ -80,7 +80,7 @@
                         <strong>Registraition No:</strong>
                     </div>
                     <div class="col-sm-4 mb-3">
-                        <strong>Academic Session:</strong> {{ $beneficiarie->academic_session }}
+                        <strong>Session:</strong> {{ $beneficiarie->academic_session }}
                     </div>
                 </div>
                 <hr>
