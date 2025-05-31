@@ -24,48 +24,51 @@
                             <tr>
                                 <th>Sr. No.</th>
                                 <th>Application Date</th>
-                                <td>Application No.</td>
+                                <th>Application No.</th>
                                 <th>Registration No.</th>
-                                <th>Registration Date.</th>
+                                <th>Registration Date</th>
                                 <th>Name</th>
                                 <th>Father/Husband Name</th>
                                 <th>Number</th>
                                 <th>Session</th>
+                                <th>Survey Date</th> {{-- new column --}}
                                 <th>Action</th>
                             </tr>
                         </thead>
+
                         <tbody>
                             @foreach ($beneficiarie as $item)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>
-                                        {{ \Carbon\Carbon::parse($item->application_date)->format('d-m-Y') }}<br>
-                                    </td>
-                                    <td>{{ $item->application_no }}</td>
-                                    <td>{{ $item->registration_no }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($item->registraition_date)->format('d-m-Y') }}</td>
-                                    <td>{{ $item->name }}</td>
-                                    <td>{{ $item->gurdian_name }}</td>
-                                    <td>{{ $item->phone }}</td>
-                                    <td>{{ $item->academic_session }}</td>
-                                    <td>
-                                        <div class="d-flex justify-content-center gap-2 flex-wrap">
-
-                                            <a href="{{ route('distribute-beneficiarie-facilities', $item->id) }}"
-                                                class="btn btn-primary btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                title="Edit" style="min-width: 38px; height: 38px;">
-                                                Distribute
-                                            </a>
-                                            <a href="{{ route('show-beneficiarie-facilities', $item->id) }}"
-                                                class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                title="View" style="min-width: 38px; height: 38px;">
-                                                <i class="fa-regular fa-eye"></i>
-                                            </a>
-
-                                        </div>
-                                    </td>
-                                </tr>
+                                @foreach ($item->surveys as $survey)
+                                    <tr>
+                                        <td>{{ $loop->parent->iteration }}</td> {{-- Beneficiary iteration --}}
+                                        <td>{{ \Carbon\Carbon::parse($item->application_date)->format('d-m-Y') }}</td>
+                                        <td>{{ $item->application_no }}</td>
+                                        <td>{{ $item->registration_no }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($item->registraition_date)->format('d-m-Y') }}</td>
+                                        <td>{{ $item->name }}</td>
+                                        <td>{{ $item->gurdian_name }}</td>
+                                        <td>{{ $item->phone }}</td>
+                                        <td>{{ $item->academic_session }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') }}</td>
+                                        {{-- Survey date --}}
+                                        <td>
+                                            <div class="d-flex justify-content-center gap-2 flex-wrap">
+                                                <a href="{{ route('distribute-beneficiarie-facilities', $item->id) }}"
+                                                    class="btn btn-primary btn-sm px-3 d-flex align-items-center justify-content-center"
+                                                    title="Distribute" style="min-width: 38px; height: 38px;">
+                                                    Distribute
+                                                </a>
+                                                <a href="{{ route('show-beneficiarie-facilities', $item->id) }}"
+                                                    class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
+                                                    title="View" style="min-width: 38px; height: 38px;">
+                                                    <i class="fa-regular fa-eye"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             @endforeach
+
                         </tbody>
                     </table>
                 </div>

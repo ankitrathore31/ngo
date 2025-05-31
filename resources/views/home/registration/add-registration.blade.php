@@ -186,16 +186,35 @@
                                 <div class="row">
 
                                     <div class="col-md-4 form-group mb-3">
-                                        <label for="eligibility" class="form-label">Eligibility / Education Level: <span
-                                                class="text-danger">*</span></label>
+                                        <label for="eligibility" class="form-label">Eligibility / Education Level:
+                                            <span class="text-danger">*</span>
+                                        </label>
                                         <select name="eligibility" class="form-control" id="eligibility" required>
                                             <option value="">Select Education Level</option>
                                             <option value="Uneducated"
                                                 {{ old('eligibility') == 'Uneducated' ? 'selected' : '' }}>Uneducated
                                             </option>
-                                            <option value="5th Pass"
-                                                {{ old('eligibility') == '5th Pass' ? 'selected' : '' }}>
-                                                5th Pass
+                                            <option value="Literate"
+                                                {{ old('eligibility') == 'Literate' ? 'selected' : '' }}>Literate</option>
+                                            <option value="Nursery"
+                                                {{ old('eligibility') == 'Nursery' ? 'selected' : '' }}>Nursery</option>
+                                            <option value="Below Primary"
+                                                {{ old('eligibility') == 'Below Primary' ? 'selected' : '' }}>Below Primary
+                                            </option>
+                                            <option value="Primary Failed"
+                                                {{ old('eligibility') == 'Primary Failed' ? 'selected' : '' }}>Primary
+                                                Failed</option>
+                                            <option value="Primary Passed"
+                                                {{ old('eligibility') == 'Primary Passed' ? 'selected' : '' }}>Primary
+                                                Passed</option>
+                                            <option value="Below Middle"
+                                                {{ old('eligibility') == 'Below Middle' ? 'selected' : '' }}>Below Middle
+                                            </option>
+                                            <option value="Middle Failed"
+                                                {{ old('eligibility') == 'Middle Failed' ? 'selected' : '' }}>Middle Failed
+                                            </option>
+                                            <option value="Middle Passed"
+                                                {{ old('eligibility') == 'Middle Passed' ? 'selected' : '' }}>Middle Passed
                                             </option>
                                             <option value="Secondary"
                                                 {{ old('eligibility') == 'Secondary' ? 'selected' : '' }}>Secondary
@@ -210,13 +229,15 @@
                                                 {{ old('eligibility') == 'Post Graduation' ? 'selected' : '' }}>Post
                                                 Graduation</option>
                                             <option value="Degree Holder"
-                                                {{ old('eligibility') == 'Degree Holder' ? 'selected' : '' }}>Degree
-                                                Holder</option>
+                                                {{ old('eligibility') == 'Degree Holder' ? 'selected' : '' }}>Degree Holder
+                                            </option>
                                         </select>
                                         @error('eligibility')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
+
+
                                     <div class="col-md-4 form-group mb-3">
                                         <label for="marital_status" class="form-label">Marital Status: <span
                                                 class="text-danger">*</span></label>
@@ -461,57 +482,55 @@
                             </div>
 
                             <div class="row">
+                                <!-- Identity Type -->
                                 <div class="col-md-4 mb-3">
                                     <div class="form-group">
                                         <label for="identity_type" class="form-label">Identity Type: <span
                                                 class="text-danger">*</span></label>
-                                        <select class="form-control" id="identity_type" name="identity_type">
+                                        <select class="form-control" id="identity_type" name="identity_type" required>
                                             <option selected disabled>Select Identity Type</option>
                                             <option value="Aadhar Card"
-                                                {{ old('id_type') == 'Aadhar Card' ? 'selected' : '' }}>
-                                                Aadhar Card
+                                                {{ old('identity_type') == 'Aadhar Card' ? 'selected' : '' }}>Aadhar Card
                                             </option>
                                             <option value="Voter ID Card"
-                                                {{ old('id_type') == 'Voter ID Card' ? 'selected' : '' }}>Voter ID Card
-                                            </option>
-                                            <option value="Pan Card" {{ old('id_type') == 'Pan Card' ? 'selected' : '' }}>
-                                                Pan
+                                                {{ old('identity_type') == 'Voter ID Card' ? 'selected' : '' }}>Voter ID
                                                 Card</option>
+                                            <option value="Pan Card"
+                                                {{ old('identity_type') == 'Pan Card' ? 'selected' : '' }}>Pan Card
+                                            </option>
                                             <option value="Markshhet"
-                                                {{ old('id_type') == 'Markshhet' ? 'selected' : '' }}>
-                                                Markshhet
+                                                {{ old('identity_type') == 'Markshhet' ? 'selected' : '' }}>Markshhet
                                             </option>
                                             <option value="Driving License"
-                                                {{ old('id_type') == 'Driving License' ? 'selected' : '' }}>
-                                                Driving License
-                                            </option>
+                                                {{ old('identity_type') == 'Driving License' ? 'selected' : '' }}>Driving
+                                                License</option>
                                             <option value="Narega Card"
-                                                {{ old('id_type') == 'Narega Card' ? 'selected' : '' }}>
-                                                Narega Card
+                                                {{ old('identity_type') == 'Narega Card' ? 'selected' : '' }}>Narega Card
                                             </option>
                                             <option value="Ration Card"
-                                                {{ old('id_type') == 'Ration Card' ? 'selected' : '' }}>
-                                                Ration Card
+                                                {{ old('identity_type') == 'Ration Card' ? 'selected' : '' }}>Ration Card
                                             </option>
                                         </select>
-                                        @error('id_type')
+                                        @error('identity_type')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
                                 </div>
-                                <!-- Identity Number Input -->
+
+                                <!-- Identity Number -->
                                 <div class="col-md-4 mb-3">
                                     <div class="form-group">
                                         <label for="identity_no" class="form-label">Identity Card Number: <span
                                                 class="text-danger">*</span></label>
                                         <input type="text" class="form-control" id="identity_no" name="identity_no"
-                                            placeholder="Enter Identity Card No">
+                                            placeholder="Enter Identity Card No" required>
                                         <small id="identity_no_hint" class="form-text text-muted"></small>
                                         @error('identity_no')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
                                 </div>
+
 
                                 <!-- Identity File Upload -->
                                 <div class="col-md-4 mb-3">
@@ -625,4 +644,58 @@
             regTypeSelect.addEventListener('change', toggleBeneficiaryHelp);
         });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const identityType = document.getElementById('identity_type');
+            const identityNo = document.getElementById('identity_no');
+            const hint = document.getElementById('identity_no_hint');
+
+            identityType.addEventListener('change', function() {
+                const type = this.value;
+                let pattern = '';
+                let message = '';
+
+                switch (type) {
+                    case 'Aadhar Card':
+                        pattern = '^[2-9]{1}[0-9]{11}$';
+                        message = 'Enter 12-digit Aadhar Number.';
+                        break;
+                    case 'Voter ID Card':
+                        pattern = '^[A-Z]{3}[0-9]{7}$';
+                        message = 'Enter valid Voter ID (e.g., ABC1234567).';
+                        break;
+                    case 'Pan Card':
+                        pattern = '^[A-Z]{5}[0-9]{4}[A-Z]{1}$';
+                        message = 'Enter valid PAN number (e.g., ABCDE1234F).';
+                        break;
+                    case 'Driving License':
+                        pattern = '^[A-Z]{2}[0-9]{2} ?[0-9]{11}$';
+                        message = 'Enter valid Driving License number (e.g., RJ14 12345678901).';
+                        break;
+                    case 'Markshhet':
+                    case 'Narega Card':
+                    case 'Ration Card':
+                        pattern = '^[a-zA-Z0-9/-]{5,20}$';
+                        message = 'Enter a valid number (alphanumeric, 5-20 chars).';
+                        break;
+                    default:
+                        pattern = '';
+                        message = '';
+                }
+
+                identityNo.setAttribute('pattern', pattern);
+                identityNo.setCustomValidity('');
+                hint.textContent = message;
+            });
+
+            // Optional: Prevent form submission if invalid
+            document.querySelector('form').addEventListener('submit', function(e) {
+                if (!identityNo.checkValidity()) {
+                    e.preventDefault();
+                    identityNo.reportValidity();
+                }
+            });
+        });
+    </script>
+
 @endsection

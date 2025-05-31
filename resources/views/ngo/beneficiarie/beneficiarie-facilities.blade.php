@@ -4,7 +4,7 @@
         <div class="container-fluid mt-4">
 
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Beneficiarie List</h5>
+                <h5 class="mb-0">Beneficiarie List For Facilities</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
@@ -30,45 +30,48 @@
                                 <th>Name</th>
                                 <th>Father/Husband Name</th>
                                 <th>Number</th>
-                                {{-- <th>Survey Date</th> --}}
+                                <th>Survey Date</th>
                                 <th>Session</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($beneficiarie as $item)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>
-                                        {{ \Carbon\Carbon::parse($item->application_date)->format('d-m-Y') }}<br>
-                                    </td>
-                                    <td>{{ $item->application_no }}</td>
-                                    <td>{{ $item->registration_no }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($item->registraition_date)->format('d-m-Y') }}</td>
-                                    <td>{{ $item->name }}</td>
-                                    <td>{{ $item->gurdian_name }}</td>
-                                    <td>{{ $item->phone }}</td>
-                                    {{-- @foreach ($item->surveys as $survey)
+                                @foreach ($item->surveys as $survey)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>
+                                            {{ \Carbon\Carbon::parse($item->application_date)->format('d-m-Y') }}<br>
+                                        </td>
+                                        <td>{{ $item->application_no }}</td>
+                                        <td>{{ $item->registration_no }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($item->registraition_date)->format('d-m-Y') }}</td>
+                                        <td>{{ $item->name }}</td>
+                                        <td>{{ $item->gurdian_name }}</td>
+                                        <td>{{ $item->phone }}</td>
                                         <td>{{ \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') }}</td>
-                                    @endforeach --}}
-                                    <td>{{ $item->academic_session }}</td>
-                                    <td>
-                                        <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            
-                                              <a href="{{ route('add-beneficiarie-facilities', $item->id) }}"
-                                                class="btn btn-primary btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                title="Edit" style="min-width: 38px; height: 38px;">
-                                                Facilities
-                                            </a>
-                                            <a href="{{ route('show-beneficiarie', $item->id) }}"
-                                                class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                title="View" style="min-width: 38px; height: 38px;">
-                                                <i class="fa-regular fa-eye"></i>
-                                            </a>
+                                        <td>{{ $item->academic_session }}</td>
+                                        <td>
+                                            <div class="d-flex justify-content-center gap-2 flex-wrap">
 
-                                        </div>
-                                    </td>
-                                </tr>
+                                                <a href="{{ route('add-beneficiarie-facilities', $item->id) }}"
+                                                    class="btn btn-primary btn-sm px-3 d-flex align-items-center justify-content-center"
+                                                    title="Edit" style="min-width: 38px; height: 38px;">
+                                                    Facilities
+                                                </a>
+
+                                                {{-- @foreach ($item->surveys as $survey) --}}
+                                                    <a href="{{ route('show-beneficiarie-survey', [$item->id, $survey->id]) }}"
+                                                        class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
+                                                        title="View Survey" style="min-width: 38px; height: 38px;">
+                                                        <i class="fa-regular fa-eye"></i> Survey 
+                                                    </a>
+                                                {{-- @endforeach --}}
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             @endforeach
                         </tbody>
                     </table>

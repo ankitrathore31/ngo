@@ -68,9 +68,9 @@
                     <h4 class=" p-3 bg-info rounded"><b>VIEW FORM </b></h4>
                 </div>
                 <div class="card bg-white p-2 shadow rounded">
-                    <div class="text-black text-center border-bottom pb-3">
+                    {{-- <div class="text-black text-center border-bottom pb-3">
                         <h4 class=" p-3 bg-info rounded"><b>BENEFICIARIE </b></h4>
-                    </div>
+                    </div> --}}
                     <div class="card-body m-1">
                         <div class="border-bottom pb-3 mb-4">
                             <h5 class="text-black fw-bold">Information</h5>
