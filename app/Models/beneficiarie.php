@@ -40,9 +40,6 @@ class beneficiarie extends Model
         'id_document',
         'occupation',
         'help_needed',
-        'help_by_ngo',
-        'survey_details',
-        'survey_date',
         'eligibility',
         'marital_status',
         'area_type',
@@ -51,4 +48,8 @@ class beneficiarie extends Model
         'status',
     ];
 
+    public function surveys()
+    {
+        return $this->hasMany(Beneficiarie_Survey::class, 'beneficiarie_id');
+    }
 }

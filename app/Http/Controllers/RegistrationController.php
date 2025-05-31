@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\beneficiarie;
 use App\Models\Member;
 use App\Models\academic_session;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 
@@ -146,7 +147,7 @@ class RegistrationController extends Controller
         $beneficiarie = beneficiarie::find($id);
         $data = academic_session::all();
         Session::put('all_academic_session', $data);
-        return view('ngo.registration.edit-reg', compact('beneficiarie','data'));
+        return view('ngo.registration.edit-reg', compact('beneficiarie', 'data'));
     }
 
     public function UpdateRegistration(Request $request, $id)
@@ -362,9 +363,18 @@ class RegistrationController extends Controller
 
     public function onlineregistration()
     {
+        $enabled = Setting::getValue('online_registration_enabled', '0');
+
+        if ($enabled !== '1') {
+            // Return error view with message
+            $error = 'Online registration facility is not available, please contact your concerned institution';
+            return view('home.registration.error', compact('error'));
+        }
+
         $states = config('states');
         $data = academic_session::all()->sortByDesc('session_date');
         Session::put('all_academic_session', $data);
+
         return view('home.registration.add-registration', compact('states', 'data'));
     }
 
@@ -486,5 +496,19 @@ class RegistrationController extends Controller
         }
 
         return redirect()->route('online-registration')->with('success', 'Registration saved successfully.');
+    }
+
+    public function onlineregistrationSetting()
+    {
+        $enabled = Setting::getValue('online_registration_enabled', '0') === '1';
+        return view('ngo.registration.online-reg-setting', compact('enabled'));
+    }
+
+    public function toggleSetting(Request $request)
+    {
+        $status = $request->has('registration_enabled') ? '1' : '0';
+        Setting::setValue('online_registration_enabled', $status);
+
+        return redirect()->back()->with('success', 'Registration setting updated.');
     }
 }

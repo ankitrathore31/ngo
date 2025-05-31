@@ -61,7 +61,11 @@
                 </nav>
             </div>
         </div>
-
+        @if (session('success'))
+                <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
         <div class="container-fluide m-3">
             <div class="card bg-white p-2 shadow rounded">
                 <div class="text-black text-center border-bottom pb-3">

@@ -122,7 +122,7 @@
                         <li><a class="dropdown-item" href="{{route('pending-registration') }}">Pending Registration</a></li>
                         <li><a class="dropdown-item" href="{{ route('approve-registration')}}">Approve Registration</a></li>
                         <li><a class="dropdown-item" href="{{ route('recover')}}">Deleted Registration</a></li>
-                        {{-- <li><a class="dropdown-item" href="#">Recover Registration</a></li> --}}
+                        <li><a class="dropdown-item" href="{{ route('reg-setting') }}">online Registration Setting</a></li>
                     </ul>
                 </li>
 
@@ -132,7 +132,9 @@
                             class="fas fa-project-diagram"></i> BENEFICIARIES</a>
                     <ul class="dropdown-menu bg-primary">
                         <li><a class="dropdown-item" href="{{ route('beneficiarie-add-list') }}">Add Beneficiary</a></li>
-                        <li><a class="dropdown-item" href="{{ route('beneficiarie-list')}}">Beneficiary List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('beneficiarie-facilities')}}">Add Beneficiary Facilities</a></li>
+                        <li><a class="dropdown-item" href="{{ route('beneficiarie-facilities-list')}}">Beneficiary Facilities List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('beneficiarie-facilities-list')}}">Distributed Beneficiary Facilities List</a></li>
                         <li><a class="dropdown-item" href="{{route('beneficiarie-report-list')}}">Beneficiary Report</a></li>
                         <li><a class="dropdown-item" href="#">Target Beneficiaries</a></li>
                     </ul>

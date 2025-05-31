@@ -56,12 +56,16 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('ngo') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">View Registraition</li>
+                        <li class="breadcrumb-item active" aria-current="page">Add Beneficiarie</li>
                     </ol>
                 </nav>
             </div>
         </div>
-
+        @if (session('success'))
+                <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
         <div class="container-fluide m-3">
             <div class="card bg-white p-2 shadow rounded">
                 <div class="text-black text-center border-bottom pb-3">
@@ -287,6 +291,7 @@
                     <h5 class="text-success text-center">Add Beneficiarie</h5>
 
                     <!-- Survey Details -->
+                    <input type="text" name="beneficiarie_id" value="{{ $beneficiarie->id }}" hidden>
                     <div class="mb-3">
                         <label for="survey_details" class="form-label">
                             Survey Details<span class="text-danger">*</span>
@@ -296,19 +301,7 @@
                         @error('survey_details')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
-                    </div>
-
-                    <!-- Help by NGO -->
-                    <div class="mb-3">
-                        <label for="help_by_ngo" class="form-label">
-                            Facilities (Help By Ngo):<span class="text-danger">*</span>
-                        </label>
-                        <textarea class="form-control @error('help_by_ngo') is-invalid @enderror" id="help_by_ngo" name="help_by_ngo"
-                            rows="3" required>{{ old('help_by_ngo') }}</textarea>
-                        @error('help_by_ngo')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
+                    </div> 
 
                     <!-- Survey Date -->
                     <div class="mb-3">
