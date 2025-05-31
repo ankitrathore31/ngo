@@ -355,22 +355,34 @@
                 </div>
             </div>
             <div class="card mt-4 p-3 border border-success rounded">
-                <h5 class="text-success text-center">About Beneficiarie Survey</h5>
+                <h5 class="text-success text-center">About Beneficiarie Survey & Facilities</h5>
 
                 <div class="row">
 
                     @if ($beneficiarie->surveys->count())
                         @foreach ($beneficiarie->surveys as $survey)
-                            <div class="col-md-4">
+                            <div class="col-md-4 mb-3">
                                 <div class="bg-light border rounded p-3 h-100">
                                     <label class="form-label fw-bold">Survey Date:</label>
                                     <p> {{ \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') }}</p>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-8 mb-3">
                                 <div class="bg-light border rounded p-3 h-100">
                                     <label class="form-label fw-bold">Survey Details:</label>
                                     <p class="card-text"><strong>Details:</strong> {{ $survey->survey_details }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="bg-light border rounded p-3 h-100">
+                                    <label class="form-label fw-bold">Facilities Category:</label>
+                                    <p class="card-text"><strong>Category:</strong> {{ $survey->facilities_category }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-8 mb-3">
+                                <div class="bg-light border rounded p-3 h-100">
+                                    <label class="form-label fw-bold">Facilities Details:</label>
+                                    <p class="card-text"><strong>Facilities:</strong> {{ $survey->facilities }}</p>
                                 </div>
                             </div>
                         @endforeach

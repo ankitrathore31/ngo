@@ -13,7 +13,11 @@
                 </nav>
             </div>
         </div>
-
+        @if (session('success'))
+                <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
         <div class="container my-5">
             <div class="card shadow-lg p-4 print-area">
                 <!-- Report Header -->

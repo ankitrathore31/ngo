@@ -56,16 +56,16 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('ngo') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">View Registraition</li>
+                        <li class="breadcrumb-item active" aria-current="page">Add Beneficiarie Facilities</li>
                     </ol>
                 </nav>
             </div>
         </div>
         @if (session('success'))
-                <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                </div>
-            @endif
+            <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
         <div class="container-fluide m-3">
             <div class="card bg-white p-2 shadow rounded">
                 <div class="text-black text-center border-bottom pb-3">
@@ -128,8 +128,9 @@
                             <div class="col-md-4 col-sm-4">
                                 <div class="upload-container">
                                     @if (!empty($beneficiarie->image))
-                                        <img id="previewImage" src="{{ asset('benefries_images/' . $beneficiarie->image) }}"
-                                            alt="Preview" width="160">
+                                        <img id="previewImage"
+                                            src="{{ asset('benefries_images/' . $beneficiarie->image) }}" alt="Preview"
+                                            width="160">
                                     @endif
                                 </div>
                             </div>
@@ -285,49 +286,110 @@
                     </div>
                 </div>
             </div>
+            <div class="card mt-4 p-3 border rounded">
+                <h5 class="text-success text-center">About Beneficiarie Survey</h5>
+
+                <div class="row">
+
+                    @if ($beneficiarie->surveys->count())
+                        @foreach ($beneficiarie->surveys as $survey)
+                            <div class="col-md-4">
+                                <div class="bg-light border rounded p-3 h-100">
+                                    <label class="form-label fw-bold">Survey Date:</label>
+                                    <p> {{ \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="bg-light border rounded p-3 h-100">
+                                    <label class="form-label fw-bold">Survey Details:</label>
+                                    <p class="card-text"><strong>Details:</strong> {{ $survey->survey_details }}</p>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="alert alert-warning">No survey data available for this beneficiarie.</div>
+                    @endif
+
+                </div>
+            </div>
             <div class="card mt-4 p-3 border border-success rounded">
-                <form action="{{ route('update-beneficiarie', $beneficiarie->id) }}" method="POST">
+                <form action="{{ route('store-beneficiarie-facilities', $beneficiarie->id) }}" method="POST">
                     @csrf
-                    <h5 class="text-success text-center">Edit Beneficiarie</h5>
+                    <h5 class="text-success text-center">Add Beneficiarie Facilities</h5>
 
                     <!-- Survey Details -->
                     <div class="mb-3">
-                        <label for="survey_details" class="form-label">
-                            Survey Details<span class="text-danger">*</span>
+                        <label for="facilities_category" class="form-label">
+                            Facilities Category<span class="text-danger">*</span>
                         </label>
-                        <textarea class="form-control @error('survey_details') is-invalid @enderror" id="survey_details"
-                            name="survey_details" rows="3" required>{{ $beneficiarie->survey_details }}</textarea>
-                        @error('survey_details')
+                        <select name="facilities_category" id="facilities_category"
+                            class="form-select @error('facilities_category') is-invalid @enderror" required>
+                            <option value="">-- Select Category --</option>
+                            <option value="Education" {{ old('facilities_category') == 'Education' ? 'selected' : '' }}>
+                                Education</option>
+                            <option value="Peace Talk" {{ old('facilities_category') == 'Peace Talk' ? 'selected' : '' }}>
+                                Peace Talk</option>
+                            <option value="Environment"
+                                {{ old('facilities_category') == 'Environment' ? 'selected' : '' }}>Environment</option>
+                            <option value="Food" {{ old('facilities_category') == 'Food' ? 'selected' : '' }}>Food
+                            </option>
+                            <option value="Skill Development"
+                                {{ old('facilities_category') == 'Skill Development' ? 'selected' : '' }}>Skill Development
+                            </option>
+                            <option value="Women Empowerment"
+                                {{ old('facilities_category') == 'Women Empowerment' ? 'selected' : '' }}>Women Empowerment
+                            </option>
+                            <option value="Awareness" {{ old('facilities_category') == 'Awareness' ? 'selected' : '' }}>
+                                Awareness</option>
+                            <option value="Cultural Program"
+                                {{ old('facilities_category') == 'Cultural Program' ? 'selected' : '' }}>Cultural Program
+                            </option>
+                            <option value="Clean Campaign"
+                                {{ old('facilities_category') == 'Clean Campaign' ? 'selected' : '' }}>Clean Campaign
+                            </option>
+                            <option value="Health Mission"
+                                {{ old('facilities_category') == 'Health Mission' ? 'selected' : '' }}>Health Mission
+                            </option>
+                            <option value="Poor Alleviation"
+                                {{ old('facilities_category') == 'Poor Alleviation' ? 'selected' : '' }}>Poor Alleviation
+                            </option>
+                            <option value="Religious Program"
+                                {{ old('facilities_category') == 'Religious Program' ? 'selected' : '' }}>Religious Program
+                            </option>
+                            <option value="Agriculture Program"
+                                {{ old('facilities_category') == 'Agriculture Program' ? 'selected' : '' }}>Agriculture
+                                Program</option>
+                            <option value="Drinking Water"
+                                {{ old('facilities_category') == 'Drinking Water' ? 'selected' : '' }}>Drinking Water
+                            </option>
+                            <option value="Natural Disaster"
+                                {{ old('facilities_category') == 'Natural Disaster' ? 'selected' : '' }}>Natural Disaster
+                            </option>
+                            <option value="Animal Service"
+                                {{ old('facilities_category') == 'Animal Service' ? 'selected' : '' }}>Animal Service
+                            </option>
+                        </select>
+                        @error('facilities_category')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
 
-                    <!-- Help by NGO -->
-                    <div class="mb-3">
-                        <label for="help_by_ngo" class="form-label">
-                            Facilities (Help By Ngo):<span class="text-danger">*</span>
-                        </label>
-                        <textarea class="form-control @error('help_by_ngo') is-invalid @enderror" id="help_by_ngo" name="help_by_ngo"
-                            rows="3" required>{{ $beneficiarie->help_by_ngo }}</textarea>
-                        @error('help_by_ngo')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
 
                     <!-- Survey Date -->
+                    <!-- Survey Details -->
                     <div class="mb-3">
-                        <label for="survey_date" class="form-label">
-                            Survey Date<span class="text-danger">*</span>
+                        <label for="facilities" class="form-label">
+                            Facilities <span class="text-danger">*</span>
                         </label>
-                        <input type="date" class="form-control @error('survey_date') is-invalid @enderror"
-                            name="survey_date" value="{{ $beneficiarie->survey_date }}" required>
-                        @error('survey_date')
+                        <textarea class="form-control @error('facilities') is-invalid @enderror" id="facilities" name="facilities"
+                            rows="3" required>{{ $beneficiarie->survey_details }}</textarea>
+                        @error('facilities')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <div class="d-flex justify-content-between">
-                        <button type="submit" class="btn btn-success">Update Beneficiarie</button>
+                        <button type="submit" class="btn btn-success">Add Beneficiarie Facilities</button>
                     </div>
                 </form>
             </div>

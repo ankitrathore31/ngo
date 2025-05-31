@@ -56,16 +56,16 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('ngo') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">View Registraition</li>
+                        <li class="breadcrumb-item active" aria-current="page">Distribute Facilities</li>
                     </ol>
                 </nav>
             </div>
         </div>
         @if (session('success'))
-                <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                </div>
-            @endif
+            <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
         <div class="container-fluide m-3">
             <div class="card bg-white p-2 shadow rounded">
                 <div class="text-black text-center border-bottom pb-3">
@@ -128,8 +128,9 @@
                             <div class="col-md-4 col-sm-4">
                                 <div class="upload-container">
                                     @if (!empty($beneficiarie->image))
-                                        <img id="previewImage" src="{{ asset('benefries_images/' . $beneficiarie->image) }}"
-                                            alt="Preview" width="160">
+                                        <img id="previewImage"
+                                            src="{{ asset('benefries_images/' . $beneficiarie->image) }}" alt="Preview"
+                                            width="160">
                                     @endif
                                 </div>
                             </div>
@@ -285,50 +286,75 @@
                     </div>
                 </div>
             </div>
+            <div class="card mt-4 p-3 border rounded">
+                <h5 class="text-success text-center">About Beneficiarie Survey</h5>
+
+                <div class="row">
+
+                    @if ($beneficiarie->surveys->count())
+                        @foreach ($beneficiarie->surveys as $survey)
+                            <div class="col-md-4 mb-3">
+                                <div class="bg-light border rounded p-3 h-100">
+                                    <label class="form-label fw-bold">Survey Date:</label>
+                                    <p> {{ \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-8 mb-3">
+                                <div class="bg-light border rounded p-3 h-100">
+                                    <label class="form-label fw-bold">Survey Details:</label>
+                                    <p class="card-text"><strong>Details:</strong> {{ $survey->survey_details }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="bg-light border rounded p-3 h-100">
+                                    <label class="form-label fw-bold">Facilities Category:</label>
+                                    <p class="card-text"><strong>Category:</strong> {{ $survey->facilities_category }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-8 mb-3">
+                                <div class="bg-light border rounded p-3 h-100">
+                                    <label class="form-label fw-bold">Facilities Details:</label>
+                                    <p class="card-text"><strong>Facilities:</strong> {{ $survey->facilities }}</p>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="alert alert-warning">No survey data available for this beneficiarie.</div>
+                    @endif
+
+                </div>
+            </div>
             <div class="card mt-4 p-3 border border-success rounded">
-                <form action="{{ route('update-beneficiarie', $beneficiarie->id) }}" method="POST">
+                <form action="{{ route('store-distribute-facilities', $beneficiarie->id) }}" method="POST">
                     @csrf
-                    <h5 class="text-success text-center">Edit Beneficiarie</h5>
+                    <h5 class="text-success text-center">Distribute Beneficiarie Facilities</h5>
 
-                    <!-- Survey Details -->
                     <div class="mb-3">
-                        <label for="survey_details" class="form-label">
-                            Survey Details<span class="text-danger">*</span>
+                        <label for="distribute_date" class="form-label">
+                            Distribute Date<span class="text-danger">*</span>
                         </label>
-                        <textarea class="form-control @error('survey_details') is-invalid @enderror" id="survey_details"
-                            name="survey_details" rows="3" required>{{ $beneficiarie->survey_details }}</textarea>
-                        @error('survey_details')
+                        <input type="date" name="distribute_date" class="form-control">
+                        @error('distribute_date')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
-                    </div>
 
-                    <!-- Help by NGO -->
-                    <div class="mb-3">
-                        <label for="help_by_ngo" class="form-label">
-                            Facilities (Help By Ngo):<span class="text-danger">*</span>
-                        </label>
-                        <textarea class="form-control @error('help_by_ngo') is-invalid @enderror" id="help_by_ngo" name="help_by_ngo"
-                            rows="3" required>{{ $beneficiarie->help_by_ngo }}</textarea>
-                        @error('help_by_ngo')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
+                        <div class="mb-3 mt-1">
+                            <label for="facilities" class="form-label">
+                                Status <span class="text-danger">*</span>
+                            </label>
+                            <select name="status" id="status" class="form-control">
+                                <option value="" selected>Select Status</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Distributed">Distributed</option>
+                            </select>
+                            @error('status')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
 
-                    <!-- Survey Date -->
-                    <div class="mb-3">
-                        <label for="survey_date" class="form-label">
-                            Survey Date<span class="text-danger">*</span>
-                        </label>
-                        <input type="date" class="form-control @error('survey_date') is-invalid @enderror"
-                            name="survey_date" value="{{ $beneficiarie->survey_date }}" required>
-                        @error('survey_date')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="d-flex justify-content-between">
-                        <button type="submit" class="btn btn-success">Update Beneficiarie</button>
-                    </div>
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-success">Distribute Beneficiarie Facilities</button>
+                        </div>
                 </form>
             </div>
 

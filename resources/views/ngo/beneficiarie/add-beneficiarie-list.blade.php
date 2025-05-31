@@ -14,7 +14,11 @@
             </div>
 
 
-
+            @if (session('success'))
+                <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
 
             <div class="card shadow-sm">
                 {{-- <div class="card-header d-flex justify-content-between align-items-center">
