@@ -218,6 +218,12 @@ class RegistrationController extends Controller
         return redirect()->route('pending-registration')->with('success', 'Registration updated successfully.');
     }
 
+     public function viewRegistration($id)
+    {
+
+        $beneficiarie = beneficiarie::find($id);
+        return view('ngo.registration.view-reg', compact('beneficiarie'));
+    }
 
     public function pendingRegistration()
     {
@@ -271,6 +277,12 @@ class RegistrationController extends Controller
         return redirect()->back()->with('error', 'Record not found or unknown type.');
     }
 
+    public function showApporveReg($id){
+
+        $beneficiarie = beneficiarie::where('status', 1)->find($id);
+
+        return view('ngo.registration.show-apporve-reg', compact('beneficiarie'));
+    }
 
 
     public function approveRegistration()
@@ -279,6 +291,7 @@ class RegistrationController extends Controller
         $approvegmemeber = Member::where('status', 1)->get();
         return view('ngo.registration.apporve-reg-list', compact('approvebeneficiarie', 'approvegmemeber'));
     }
+
 
     public function pendingStatus($id)
     {
@@ -302,12 +315,7 @@ class RegistrationController extends Controller
         return redirect()->back()->with('error', 'Record not found or unknown type.');
     }
 
-    public function viewRegistration($id)
-    {
-
-        $beneficiarie = beneficiarie::find($id);
-        return view('ngo.registration.view-reg', compact('beneficiarie'));
-    }
+   
 
 
     public function deleteRegistrationPage($id)

@@ -594,6 +594,7 @@
             <div class="row ">
                 <div class="col">
                     <div class="card bg-white p-2 shadow rounded m-2">
+                        
                         <div class="row">
                             <div class="col-md-8 mb-3">
                                 <form action="{{ route('approve-status', $beneficiarie->id) }}" method="POST"
@@ -605,8 +606,8 @@
                                         <label for="registration_date" class="form-label">
                                             Registration Date: <span class="text-danger">*</span>
                                         </label>
-                                        <input type="text" name="registration_date" id="registration_date"
-                                            class="form-control datepicker @error('registration_date') is-invalid @enderror"
+                                        <input type="date" name="registration_date" id="registration_date"
+                                            class="form-control @error('registration_date') is-invalid @enderror"
                                             value="{{ old('registration_date') }}" required>
                                         @error('registration_date')
                                             <span class="text-danger">{{ $message }}</span>

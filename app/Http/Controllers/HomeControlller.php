@@ -156,7 +156,6 @@ class HomeControlller extends Controller
 
         $beneficiarie = \App\Models\beneficiarie::withTrashed()
             ->where('identity_no', $identityNo)
-            ->where('status', 1)
             ->first();
 
         if (!$beneficiarie) {
