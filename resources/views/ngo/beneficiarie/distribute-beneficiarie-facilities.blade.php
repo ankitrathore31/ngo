@@ -225,8 +225,8 @@
                     </div>
 
 
-                    <div class="row ">
-                        <!-- Identity Type -->
+                    {{-- <div class="row ">
+                        
                         <div class="col-md-8">
                             <div class="row d-flex justify-content-between">
                                 <div class="col-md-3 mb-3 bg-light">
@@ -238,7 +238,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Identity Card Number -->
+                               
                                 <div class="col-md-3 mb-3 bg-light">
                                     <div class="form-group">
                                         <label class="form-label">Identity Card Number:</label>
@@ -251,7 +251,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="row">
-                                <!-- Identity Document -->
+                                
                                 <div class="col-md-12 mb-3">
                                     <label class="form-label">ID Document Uploaded:</label>
                                     @if (!empty($beneficiarie->id_document))
@@ -263,7 +263,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="row">
 
                         <!-- Occupation -->
@@ -286,46 +286,52 @@
                     </div>
                 </div>
             </div>
-            <div class="card mt-4 p-3 border rounded">
-                <h5 class="text-success text-center">About Beneficiarie Survey</h5>
+            <div class="card mt-4 p-3 border border-success rounded">
+                <h5 class="text-success text-center">About Beneficiarie Survey & Facilities</h5>
 
                 <div class="row">
+                    @if ($beneficiarie->surveys)
+                        {{-- @foreach ($beneficiarie->surveys as $survey) --}}
+                        <div class="col-md-4 mb-3">
+                            <div class="bg-light border rounded p-3 h-100">
+                                <label class="form-label fw-bold">Survey Date:</label>
+                                <p>{{ \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-8 mb-3">
 
-                    @if ($beneficiarie->surveys->count())
-                        @foreach ($beneficiarie->surveys as $survey)
-                            <div class="col-md-4 mb-3">
-                                <div class="bg-light border rounded p-3 h-100">
-                                    <label class="form-label fw-bold">Survey Date:</label>
-                                    <p> {{ \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') }}</p>
-                                </div>
+                            <div class="bg-light border rounded p-3 h-100">
+                                <label class="form-label fw-bold">Survey Details:</label>
+                                <p><strong>Details:</strong> {{ $survey->survey_details ?? 'Not Found' }}</p>
                             </div>
-                            <div class="col-md-8 mb-3">
-                                <div class="bg-light border rounded p-3 h-100">
-                                    <label class="form-label fw-bold">Survey Details:</label>
-                                    <p class="card-text"><strong>Details:</strong> {{ $survey->survey_details }}</p>
-                                </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="bg-light border rounded p-3 h-100">
+                                <label class="form-label fw-bold">Facilities Category:</label>
+                                <p class="card-text"><strong>Category:</strong>
+                                    {{ $survey->facilities_category ?? 'Not Found' }}</p>
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <div class="bg-light border rounded p-3 h-100">
-                                    <label class="form-label fw-bold">Facilities Category:</label>
-                                    <p class="card-text"><strong>Category:</strong> {{ $survey->facilities_category }}</p>
-                                </div>
+                        </div>
+                        <div class="col-md-8 mb-3">
+                            <div class="bg-light border rounded p-3 h-100">
+                                <label class="form-label fw-bold">Facilities Details:</label>
+                                <p class="card-text"><strong>Facilities:</strong> {{ $survey->facilities ?? 'Not Found' }}
+                                </p>
                             </div>
-                            <div class="col-md-8 mb-3">
-                                <div class="bg-light border rounded p-3 h-100">
-                                    <label class="form-label fw-bold">Facilities Details:</label>
-                                    <p class="card-text"><strong>Facilities:</strong> {{ $survey->facilities }}</p>
-                                </div>
-                            </div>
-                        @endforeach
+                        </div>
+
+                        {{-- @endforeach --}}
                     @else
-                        <div class="alert alert-warning">No survey data available for this beneficiarie.</div>
-                    @endif
-
+                        <div class="col-12">
+                            <div class="alert alert-warning">No survey data available for this beneficiary.</div>
+                        </div>
                 </div>
+                @endif
             </div>
             <div class="card mt-4 p-3 border border-success rounded">
-                <form action="{{ route('store-distribute-facilities', $beneficiarie->id) }}" method="POST">
+                <form
+                    action="{{ route('store-distribute-facilities', ['beneficiarie_id' => $beneficiarie->id, 'survey_id' => $survey->id]) }}"
+                    method="POST">
                     @csrf
                     <h5 class="text-success text-center">Distribute Beneficiarie Facilities</h5>
 
@@ -337,24 +343,31 @@
                         @error('distribute_date')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="distribute_place" class="form-label">Distribute Place</label>
+                        <textarea name="distribute_place" class="form-control"></textarea>
+                        @error('distribute_place')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="mb-3 mt-1">
+                        <label for="facilities" class="form-label">
+                            Status <span class="text-danger">*</span>
+                        </label>
+                        <select name="status" id="status" class="form-control">
+                            <option value="" selected>Select Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Distributed">Distributed</option>
+                        </select>
+                        @error('status')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
 
-                        <div class="mb-3 mt-1">
-                            <label for="facilities" class="form-label">
-                                Status <span class="text-danger">*</span>
-                            </label>
-                            <select name="status" id="status" class="form-control">
-                                <option value="" selected>Select Status</option>
-                                <option value="Pending">Pending</option>
-                                <option value="Distributed">Distributed</option>
-                            </select>
-                            @error('status')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="d-flex justify-content-between">
-                            <button type="submit" class="btn btn-success">Distribute Beneficiarie Facilities</button>
-                        </div>
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-success">Distribute Beneficiarie Facilities</button>
+                    </div>
                 </form>
             </div>
 

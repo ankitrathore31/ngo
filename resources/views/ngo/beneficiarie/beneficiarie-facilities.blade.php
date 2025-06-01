@@ -23,14 +23,15 @@
                         <thead class="table-primary">
                             <tr>
                                 <th>Sr. No.</th>
-                                <th>Application Date</th>
-                                <td>Application No.</td>
+                                {{-- <th>Application Date</th>
+                                <td>Application No.</td> --}}
                                 <th>Registration No.</th>
-                                <th>Registration Date.</th>
+                                {{-- <th>Registration Date.</th> --}}
                                 <th>Name</th>
                                 <th>Father/Husband Name</th>
                                 <th>Number</th>
                                 <th>Survey Date</th>
+                                <th>Survey Details</th>
                                 <th>Session</th>
                                 <th>Action</th>
                             </tr>
@@ -40,24 +41,27 @@
                                 @foreach ($item->surveys as $survey)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>
+                                        {{-- <td>
                                             {{ \Carbon\Carbon::parse($item->application_date)->format('d-m-Y') }}<br>
                                         </td>
-                                        <td>{{ $item->application_no }}</td>
+                                        <td>{{ $item->application_no }}</td> --}}
                                         <td>{{ $item->registration_no }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($item->registraition_date)->format('d-m-Y') }}</td>
+                                        {{-- <td>{{ \Carbon\Carbon::parse($item->registraition_date)->format('d-m-Y') }}</td> --}}
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->gurdian_name }}</td>
                                         <td>{{ $item->phone }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') }}</td>
+                                        <td>
+                                            {{ $survey->survey_date ? \Carbon\Carbon::parse($survey->distribute_date)->format('d-m-Y') : 'No Found' }}
+                                        </td>
+                                        <td>{{ $survey->survey_details}}</td>
                                         <td>{{ $item->academic_session }}</td>
                                         <td>
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">
 
-                                                <a href="{{ route('add-beneficiarie-facilities', $item->id) }}"
+                                                <a href="{{ route('add-beneficiarie-facilities', [$item->id, $survey->id]) }}"
                                                     class="btn btn-primary btn-sm px-3 d-flex align-items-center justify-content-center"
                                                     title="Edit" style="min-width: 38px; height: 38px;">
-                                                    Facilities
+                                                    + Facilities
                                                 </a>
 
                                                 {{-- @foreach ($item->surveys as $survey) --}}

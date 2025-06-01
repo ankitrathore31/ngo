@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\beneficiarie;
 use App\Models\Member;
 use App\Models\Beneficiarie_Survey;
+use App\Models\academic_session;
+use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 
 class BeneficiarieController extends Controller
@@ -67,28 +69,32 @@ class BeneficiarieController extends Controller
     public function beneficiarieFacilities()
     {
         $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->get();
-        
+
         return view('ngo.beneficiarie.beneficiarie-facilities', compact('beneficiarie'));
     }
 
     public function showbeneficiariesurvey($beneficiarie_id, $survey_id)
     {
         $survey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
-                    ->where('id', $survey_id)
-                    ->with('beneficiarie')
-                    ->firstOrFail();
+            ->where('id', $survey_id)
+            ->with('beneficiarie')
+            ->firstOrFail();
 
         $beneficiarie = beneficiarie::with('surveys')->find($beneficiarie_id);
         return view('ngo.beneficiarie.show-beneficiarie-survey', compact('beneficiarie', 'survey'));
     }
 
-    public function addbeneficiarieFacilities($id)
+    public function addbeneficiarieFacilities($beneficiarie_id, $survey_id)
     {
-        $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->find($id);
-        return view('ngo.beneficiarie.add-beneficiarie-facilities', compact('beneficiarie'));
+        $survey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+            ->where('id', $survey_id)
+            ->with('beneficiarie')
+            ->firstOrFail();
+        $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->find($beneficiarie_id);
+        return view('ngo.beneficiarie.add-beneficiarie-facilities', compact('beneficiarie', 'survey'));
     }
 
-    public function storebeneficiariefacilities(Request $request, $id)
+    public function storebeneficiariefacilities(Request $request, $beneficiarie_id, $survey_id)
     {
 
         $request->validate([
@@ -96,13 +102,20 @@ class BeneficiarieController extends Controller
             'facilities' => 'required',
         ]);
 
-        $beneficiarie = Beneficiarie_Survey::find($id);
-        $beneficiarie->facilities_category = $request->input('facilities_category');
-        $beneficiarie->facilities = $request->input('facilities');
-        $beneficiarie->save();
+        try {
+            $facilities = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+                ->where('id', $survey_id)
+                ->with('beneficiarie')
+                ->firstOrFail();
 
-        return redirect()->route('beneficiarie-facilities-list')->with('succes', 'Facilities Added successfully');
+            $facilities->facilities_category = $request->input('facilities_category');
+            $facilities->facilities = $request->input('facilities');
+            $facilities->save();
 
+            return redirect()->route('beneficiarie-facilities-list')->with('success', 'Facilities added successfully');
+        } catch (\Throwable $th) {
+            return back()->withInput()->withErrors(['error' => 'Failed to update facilities.']);
+        }
     }
 
     public function editbeneficiarieFacilities($id)
@@ -112,40 +125,109 @@ class BeneficiarieController extends Controller
     }
 
 
-    public function beneficiarieFacilitiesList()
+    public function beneficiarieFacilitiesList(Request $request)
     {
-        $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->get();
-        return view('ngo.beneficiarie.beneficiarie-facilities-list', compact('beneficiarie'));
+        $query = beneficiarie::with(['surveys' => function ($q) use ($request) {
+            if ($request->session_filter) {
+                $q->where('session_date', $request->session_filter);
+            }
+
+            if ($request->category_filter) {
+                $q->where('facilities_category', $request->category_filter);
+            }
+        }])->where('status', 1);
+
+        $beneficiarie = $query->orderBy('id', 'desc')->get();
+
+        $data = academic_session::all();
+        $categories = Beneficiarie_Survey::select('facilities_category')->distinct()->pluck('facilities_category');
+
+        return view('ngo.beneficiarie.beneficiarie-facilities-list', compact('data', 'categories', 'beneficiarie'));
     }
 
-    public function showbeneficiariefacilities($id)
-    {
 
-        $beneficiarie = beneficiarie::with('surveys')->find($id);
-        return view('ngo.beneficiarie.show-beneficiarie-facilities', compact('beneficiarie'));
+    public function showbeneficiariefacilities($beneficiarie_id, $survey_id)
+    {
+        $survey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+            ->where('id', $survey_id)
+            ->with('beneficiarie')
+            ->firstOrFail();
+        $beneficiarie = beneficiarie::with('surveys')->find($beneficiarie_id);
+        return view('ngo.beneficiarie.show-beneficiarie-facilities', compact('beneficiarie', 'survey'));
     }
 
-    public function distributebeneficiarieFacilities($id)
+    public function distributebeneficiarieFacilities($beneficiarie_id, $survey_id)
     {
-        $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->find($id);
-        return view('ngo.beneficiarie.distribute-beneficiarie-facilities', compact('beneficiarie'));
+        $survey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+            ->where('id', $survey_id)
+            ->with('beneficiarie')
+            ->firstOrFail();
+        $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->find($beneficiarie_id);
+        return view('ngo.beneficiarie.distribute-beneficiarie-facilities', compact('beneficiarie', 'survey'));
     }
 
-    public function storedistributefacilities(Request $request, $id)
-    {
 
+
+    public function storedistributefacilities(Request $request, $beneficiarie_id, $survey_id)
+    {
         $request->validate([
-            'distribute_date' => 'required',
+            'distribute_date' => 'required|date',
             'status' => 'required',
+            'distribute_place' => 'required|string',
         ]);
 
-        $beneficiarie = Beneficiarie_Survey::find($id);
-        $beneficiarie->distribute_date = Carbon::parse($request->input('distribute_date'));
-        $beneficiarie->status = $request->input('status');
-        $beneficiarie->save();
+        try {
+            $distribute = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+                ->where('id', $survey_id)
+                ->with('beneficiarie')
+                ->firstOrFail();
 
-        return redirect()->route('beneficiarie-facilities-list')->with('succes', 'Distribute successfully');
+            $distribute->distribute_date = Carbon::parse($request->input('distribute_date'));
+            $distribute->distribute_place = $request->input('distribute_place'); // FIXED here
+            $distribute->status = $request->input('status');
+            $distribute->save();
+
+            return redirect()->route('beneficiarie-facilities-list')->with('success', 'Distributed successfully');
+        } catch (\Throwable $th) {
+            return back()->withInput()->withErrors(['error' => 'Failed to update distribution.']);
+        }
     }
+
+    public function distributefacilities(Request $request)
+    {
+        $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
+            $q->where('status', 'Distributed');
+
+            if ($request->session_filter) {
+                $q->where('session_date', $request->session_filter);
+            }
+
+            if ($request->category_filter) {
+                $q->where('facilities_category', $request->category_filter);
+            }
+        }])->where('status', 1);
+
+        // Get only beneficiaries who actually have at least one distributed survey
+        $beneficiarie = $query->whereHas('surveys', function ($q) use ($request) {
+            $q->where('status', 'Distributed');
+
+            if ($request->session_filter) {
+                $q->where('session_date', $request->session_filter);
+            }
+
+            if ($request->category_filter) {
+                $q->where('facilities_category', $request->category_filter);
+            }
+        })->orderBy('id', 'desc')->get();
+
+        // For dropdowns/filters
+        $data = academic_session::all();
+        $categories = Beneficiarie_Survey::select('facilities_category')->distinct()->pluck('facilities_category');
+
+        return view('ngo.beneficiarie.distributed-facilities-list', compact('beneficiarie', 'data', 'categories'));
+    }
+
+
 
 
 

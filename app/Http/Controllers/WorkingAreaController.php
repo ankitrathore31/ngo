@@ -76,4 +76,5 @@ class WorkingAreaController extends Controller
 
         return redirect()->back()->with('success', 'Working Area Deleted Successfully');
     }
+
 }

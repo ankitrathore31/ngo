@@ -130,7 +130,7 @@
         </div>
 
         <div class="col-md-2 mb-3">
-            <a href="{{route('online-registration') }}" class="btn btn-success w-100">
+            <a href="{{ route('online-registration') }}" class="btn btn-success w-100">
                 Online Registration
             </a>
         </div>
@@ -260,7 +260,8 @@
                                 Info</a>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <a href="{{ route('donate-page') }}" class="btn btn-success"><i class="fas fa-donate"></i>Donate
+                            <a href="{{ route('donate-page') }}" class="btn btn-success"><i
+                                    class="fas fa-donate"></i>Donate
                                 Now</a>
                         </div>
                         <div class="col-md-4 mb-3">
@@ -338,74 +339,96 @@
                             <option value="{{ $session->session_date }}">{{ $session->session_date }}</option>
                         @endforeach
                     </select>
-                    {{-- <input type="text" class="form-control w-50" value="2025"> --}}
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3 mb-2">
-                    <div class="card text-center shadow-sm bg-primary text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Country</h5>
-                            <p class="card-text fs-4 counter" data-count="1">1</p>
+                    <a href="{{ route('show-area', 'Country') }}" style="text-decoration: none;">
+                        <div class="card text-center shadow-sm bg-primary text-white">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">Country</h5>
+                                <p class="card-text fs-4 " data-type="Country">{{ $areaTypeCounts['Country'] ?? 0 }}</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
+                </div>
+
+                <div class="col-md-3 mb-2">
+                    <a href="{{ route('show-area', 'State') }}" style="text-decoration: none;">
+                        <div class="card text-center shadow-sm bg-success text-white">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">State</h5>
+                                <p class="card-text fs-4 counter">{{ $areaTypeCounts['State'] ?? 0 }}</p>
+                            </div>
+                        </div>
+                    </a>
                 </div>
                 <div class="col-md-3 mb-2">
-                    <div class="card text-center shadow-sm bg-success text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">State</h5>
-                            <p class="card-text fs-4 counter" data-count="2">2</p>
+                    <a href="{{ route('show-area', 'District') }}" style="text-decoration: none;">
+                        <div class="card text-center shadow-sm bg-warning text-white">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">District</h5>
+                                <p class="card-text fs-4 counter" >{{ $areaTypeCounts['District'] ?? 0 }}</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
+
                 <div class="col-md-3 mb-2">
-                    <div class="card text-center shadow-sm bg-warning text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">District</h5>
-                            <p class="card-text fs-4 counter" data-count="3">3</p>
+                    <a href="{{ route('show-area', 'Tehsil') }}" style="text-decoration: none;">
+                        <div class="card text-center shadow-sm bg-danger text-white">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">Tehsil</h5>
+                                <p class="card-text fs-4 counter" >{{ $areaTypeCounts['Tehsil'] ?? 0 }}</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
-                <div class="col-md-3 mb-2">
-                    <div class="card text-center shadow-sm bg-danger text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Tahsil</h5>
-                            <p class="card-text fs-4 counter" data-count="6">6</p>
-                        </div>
-                    </div>
-                </div>
+
                 <div class="col-md-3 mb-2 mt-2">
-                    <div class="card text-center shadow-sm bg-info text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Block</h5>
-                            <p class="card-text fs-4 counter" data-count="10">10</p>
+                    <a href="{{ route('show-area', 'Block') }}" style="text-decoration: none;">
+                        <div class="card text-center shadow-sm bg-info text-white">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">Block</h5>
+                                <p class="card-text fs-4 counter" >{{ $areaTypeCounts['Block'] ?? 0 }}</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
+
                 <div class="col-md-3 mb-2 mt-2">
-                    <div class="card text-center shadow-sm bg-secondary text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">City / Town</h5>
-                            <p class="card-text fs-4 counter" data-count="3">3</p>
+                    <a href="{{ route('show-area', 'City/Town') }}" style="text-decoration: none;">
+                        <div class="card text-center shadow-sm bg-secondary text-white">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">City / Town</h5>
+                                <p class="card-text fs-4 counter" >{{ $areaTypeCounts['City/Town'] ?? 0 }}</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
+
                 <div class="col-md-2 mb-2 mt-2">
-                    <div class="card text-center shadow-sm bg-info text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Village</h5>
-                            <p class="card-text fs-4 counter" data-count="21">21</p>
+                    <a href="{{ route('show-area', 'Village') }}" style="text-decoration: none;">
+                        <div class="card text-center shadow-sm bg-info text-white">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">Village</h5>
+                                <p class="card-text fs-4 counter" >{{ $areaTypeCounts['Village'] ?? 0 }}</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
+
                 <div class="col-md-2 mb-2 mt-2">
-                    <div class="card text-center shadow-sm bg-primary text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Family</h5>
-                            <p class="card-text fs-4 counter" data-count="419">419</p>
+                    <a href="{{ route('show-area', 'Family') }}" style="text-decoration: none;">
+                        <div class="card text-center shadow-sm bg-primary text-white">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">Family</h5>
+                                <p class="card-text fs-4 counter" >{{ $areaTypeCounts['Family'] ?? 0 }}</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
+
                 <div class="col-md-2 mb-2 mt-2">
                     <div class="card text-center shadow-sm bg-warning text-white">
                         <div class="card-body">
@@ -645,7 +668,8 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card shadow-lg p-3 mb-5 bg-white rounded facilities">
                         <div class="card-body text-center">
-                            <img src="{{ asset('images/sewing.jpeg') }}" class="img-fluid mb-3" alt="Clean Classroom" width="200">
+                            <img src="{{ asset('images/sewing.jpeg') }}" class="img-fluid mb-3" alt="Clean Classroom"
+                                width="200">
                             <h5 class="card-title font-weight-bold text-primary">SEWING</h5>
                             <p class="card-text text-muted">
                                 Sewing are taught here, which develops the students’
@@ -658,7 +682,8 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card shadow-lg p-3 mb-5 bg-white rounded">
                         <div class="card-body text-center">
-                            <img src="{{ asset('images/parlour.jpg') }}" alt="lunch area" class="img-fluid mb-3" width="200">
+                            <img src="{{ asset('images/parlour.jpg') }}" alt="lunch area" class="img-fluid mb-3"
+                                width="200">
                             <h5 class="card-title font-weight-bold text-primary">PARLOUR</h5>
                             <p class="card-text text-muted">
                                 Our Beauty Parlour Training empowers women with professional beauty skills,
@@ -671,7 +696,8 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card shadow-lg bg-white rounded p-3 mb-5">
                         <div class="card-body text-center ">
-                            <img src="{{ asset('images/education.jpg') }}" alt="" class="img-fluid mb-3" width="200">
+                            <img src="{{ asset('images/education.jpg') }}" alt="" class="img-fluid mb-3"
+                                width="200">
                             <h5 class="card-title font-weight-bold text-primary">EDUCATION</h5>
                             <p class="card-text text-muted">
                                 Our Sanstha provide free education to children for their
@@ -697,8 +723,8 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card shadow-lg p-3 mb-5 bg-white rounded facilities">
                         <div class="card-body text-center">
-                            <img src="{{ asset('images/enviroment.jpeg') }}" class="img-fluid mb-3" alt="Clean Classroom"
-                                width="200">
+                            <img src="{{ asset('images/enviroment.jpeg') }}" class="img-fluid mb-3"
+                                alt="Clean Classroom" width="200">
                             <h5 class="card-title font-weight-bold text-primary">Environment Meeting</h5>
                             <p class="card-text text-muted">
                                 Our Sanstha organizes cleanliness meeting events to raise
@@ -711,7 +737,8 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card shadow-lg p-3 mb-5 bg-white rounded">
                         <div class="card-body text-center">
-                            <img src="{{ asset('images/blanket.jpeg') }}" alt="lunch area" class="img-fluid mb-3" width="200">
+                            <img src="{{ asset('images/blanket.jpeg') }}" alt="lunch area" class="img-fluid mb-3"
+                                width="200">
                             <h5 class="card-title font-weight-bold text-primary">Blanket Distribution</h5>
                             <p class="card-text text-muted">
                                 Our Sanstha organizes blanket distribution drives to provide warmth and comfort to those in
@@ -725,7 +752,8 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card shadow-lg bg-white rounded p-3 mb-5">
                         <div class="card-body text-center ">
-                            <img src="{{ asset('images/peace.jpeg') }}" alt="" class="img-fluid mb-3" width="200">
+                            <img src="{{ asset('images/peace.jpeg') }}" alt="" class="img-fluid mb-3"
+                                width="200">
                             <h5 class="card-title font-weight-bold text-primary">Peace Talkin Meeting</h5>
                             <p class="card-text text-muted">
                                 Our sanstha organizes peace talk meetings to foster dialogue ,
@@ -849,27 +877,19 @@
             </div>
         </div>
     </section>
-   
-    </script>
     <script>
-        // Initialize the counters
-        document.addEventListener("DOMContentLoaded", () => {
-            const counters = document.querySelectorAll(".counter");
+    document.getElementById('session').addEventListener('change', function () {
+        const session = this.value;
 
-            counters.forEach(counter => {
-                const count = parseInt(counter.getAttribute("data-count"), 10);
-                const countUp = new CountUp(counter, count, {
-                    duration: 2, // Animation duration in seconds
-                    useEasing: true,
-                    useGrouping: true,
+        fetch(`/filter-area-counts?session=${session}`)
+            .then(res => res.json())
+            .then(data => {
+                document.querySelectorAll('.count').forEach(el => {
+                    const type = el.getAttribute('data-type');
+                    el.textContent = data[type] || 0;
                 });
-
-                if (!countUp.error) {
-                    countUp.start();
-                } else {
-                    console.error(countUp.error);
-                }
             });
-        });
-    </script>
+    });
+</script>
+
 @endsection
