@@ -11,6 +11,8 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\WorkingAreaController;
 use App\Models\academic_session;
+use Illuminate\Support\Facades\Session;
+use App\Models\Working_Area;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +35,10 @@ use App\Models\academic_session;
 Route::get('/', function () {
     $data = academic_session::all()->sortByDesc('session_date');
         Session::put('all_academic_session', $data);
-    return view('home.welcome', compact('data'));
+        $areaTypeCounts = Working_Area::select('area_type', DB::raw('count(*) as total'))
+            ->groupBy('area_type')
+            ->pluck('total', 'area_type');
+    return view('home.welcome', compact('data','areaTypeCounts'));
 });
 
 
@@ -174,6 +179,7 @@ Route::controller(BeneficiarieController::class)->group(function () {
     Route::get('ngo/distribute-beneficiarie-facilities/{beneficiarie_id}/survey/{survey_id}', 'distributebeneficiarieFacilities')->middleware('auth')->name('distribute-beneficiarie-facilities');
     Route::post('ngo/store-distribute-facilities/{beneficiarie_id}/survey/{survey_id}', 'storedistributefacilities')->middleware('auth')->name('store-distribute-facilities');
     Route::get('ngo/distributed-facilities', 'distributefacilities')->middleware('auth')->name('distributed-list');
+    Route::get('ngo/Pending-facilities', 'pendingfacilities')->middleware('auth')->name('pending-distribute-list');
     Route::get('ngo/beneficiarie-report-list', 'beneficiarieReportList')->middleware('auth')->name('beneficiarie-report-list');
     Route::get('ngo/show-beneficiarie-report/{id}', 'showbeneficiariereport')->middleware('auth')->name('show-beneficiarie-report');
 

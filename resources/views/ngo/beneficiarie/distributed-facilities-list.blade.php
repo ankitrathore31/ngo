@@ -1,14 +1,82 @@
 @extends('ngo.layout.master')
 @Section('content')
+    <style>
+        @page {
+            size: auto;
+            margin: 0;
+            /* Remove all margins including top */
+        }
+
+        @media print {
+
+            html,
+            body {
+                margin: 0 !important;
+                padding: 0 !important;
+                height: 100% !important;
+                width: 100% !important;
+            }
+
+            body * {
+                visibility: hidden;
+            }
+
+            .printable,
+            .printable * {
+                visibility: visible;
+            }
+
+            .table th,
+            .table td {
+                padding: 4px !important;
+                font-size: 9px !important;
+                border: 1px solid #000 !important;
+            }
+
+            .card,
+            .table-responsive {
+                box-shadow: none !important;
+                border: none !important;
+                overflow: visible !important;
+            }
+
+            .btn,
+            .navbar,
+            .footer,
+            .no-print {
+                display: none !important;
+            }
+
+            table {
+                page-break-inside: auto;
+            }
+
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+
+            thead {
+                display: table-header-group;
+            }
+
+            tfoot {
+                display: table-footer-group;
+            }
+        }
+    </style>
+
+
+
     <div class="wrapper">
         <div class="container-fluid mt-4">
 
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Beneficiarie Facilities List</h5>
+                <h5 class="mb-0">Distributed Beneficiarie Facilities List</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Beneficiarie Facilities List</li>
+                        <li class="breadcrumb-item active" aria-current="page">Distributed List</li>
                     </ol>
                 </nav>
             </div>
@@ -95,31 +163,31 @@
 
                         <div class="col-md-4 d-flex">
                             <button type="submit" class="btn btn-primary me-2">Search</button>
-                            <a href="{{ route('distributed-list') }}"
-                                class="btn btn-info text-white me-2">Reset</a>
+                            <a href="{{ route('distributed-list') }}" class="btn btn-info text-white me-2">Reset</a>
                         </div>
                     </form>
+                    <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
+
                 </div>
             </div>
-            <div class="card shadow-sm">
+            <div class="card shadow-sm printable">
                 <div class="card-body table-responsive">
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-primary">
                             <tr>
                                 <th>Sr. No.</th>
-                                {{-- <th>Application Date</th>
-                                <th>Application No.</th> --}}
                                 <th>Registration No.</th>
-                                {{-- <th>Registration Date</th> --}}
                                 <th>Name</th>
                                 <th>Father/Husband Name</th>
-                                <th>Number</th>
+                                <th>Address</th>
+                                <th>Mobile no.</th>
                                 <th>Session</th>
                                 <th>Distribute Date</th>
                                 <th>Facilities Category</th>
                                 <th>Facilities</th>
                                 <th>Status</th>
-                                <th>Action</th>
+                                <th>Signature</th>
+                                <th class="no-print">Action</th>
                             </tr>
                         </thead>
 
@@ -127,13 +195,17 @@
                             @foreach ($beneficiarie as $item)
                                 @foreach ($item->surveys as $survey)
                                     <tr>
-                                        <td>{{ $loop->parent->iteration }}</td> {{-- Beneficiary iteration --}}
-                                        {{-- <td>{{ \Carbon\Carbon::parse($item->application_date)->format('d-m-Y') }}</td>
-                                        <td>{{ $item->application_no }}</td> --}}
+                                        <td>{{ $loop->parent->iteration }}</td>
                                         <td>{{ $item->registration_no }}</td>
-                                        {{-- <td>{{ \Carbon\Carbon::parse($item->registraition_date)->format('d-m-Y') }}</td> --}}
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->gurdian_name }}</td>
+                                        <td>{{ $item->village }},
+                                            ({{ $item->area_type }})
+                                            ,
+                                            {{ $item->post }},
+                                            {{ $item->block }},
+                                            {{ $item->district }},
+                                            {{ $item->state }} - {{ $item->pincode }}</td>
                                         <td>{{ $item->phone }}</td>
                                         <td>{{ $item->academic_session }}</td>
                                         <td>
@@ -142,8 +214,9 @@
                                         <td>{{ $survey->facilities_category ?? 'No Found' }}</td>
                                         <td>{{ $survey->facilities ?? 'No Found' }}</td>
                                         <td>{{ $survey->status ?? 'No Found' }} </td>
+                                        <td></td>
 
-                                        <td>
+                                        <td class="no-print">
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">
                                                 <a href="{{-- route('show-beneficiarie-facilities', [$item->id, $survey->id]) --}}"
                                                     class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
@@ -161,6 +234,10 @@
                 </div>
             </div>
         </div>
-
     </div>
+    <script>
+        function printTable() {
+            window.print();
+        }
+    </script>
 @endsection

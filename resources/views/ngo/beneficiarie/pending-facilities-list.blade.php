@@ -4,11 +4,11 @@
         <div class="container-fluid mt-4">
 
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Beneficiarie Facilities List</h5>
+                <h5 class="mb-0">Pending Distribute Facilities List</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Beneficiarie Facilities List</li>
+                        <li class="breadcrumb-item active" aria-current="page">Pending List</li>
                     </ol>
                 </nav>
             </div>
@@ -19,7 +19,7 @@
             @endif
             <div class="row">
                 <div class="col-md-12">
-                    <form method="GET" action="{{ route('beneficiarie-facilities-list') }}" class="row g-3 mb-4">
+                    <form method="GET" action="{{ route('pending-distribute-list') }}" class="row g-3 mb-4">
                         <div class="col-md-4">
                             {{-- <label for="session_filter" class="form-label">Select Session</label> --}}
                             <select name="session_filter" id="session_filter" class="form-control"
@@ -40,8 +40,8 @@
                                 class="form-control @error('category_filter') is-invalid @enderror"
                                 onchange="this.form.submit()">
                                 <option value="">-- Select Facilities Category --</option>
-                                <option value="Education"
-                                    {{ request('category_filter') == 'Education' ? 'selected' : '' }}>Education</option>
+                                <option value="Education" {{ request('category_filter') == 'Education' ? 'selected' : '' }}>
+                                    Education</option>
                                 <option value="Peace Talk"
                                     {{ request('category_filter') == 'Peace Talk' ? 'selected' : '' }}>Peace Talk
                                 </option>
@@ -95,7 +95,8 @@
 
                         <div class="col-md-4 d-flex">
                             <button type="submit" class="btn btn-primary me-2">Search</button>
-                            <a href="{{ route('beneficiarie-facilities-list') }}" class="btn btn-info text-white me-2">Reset</a>
+                            <a href="{{ route('pending-distribute-list') }}"
+                                class="btn btn-info text-white me-2">Reset</a>
                         </div>
                     </form>
                 </div>
@@ -110,11 +111,12 @@
                                 <th>Name</th>
                                 <th>Father/Husband Name</th>
                                 <th>Address</th>
-                                <th>Mobile No.</th>
+                                <th>Mobile no.</th>
                                 <th>Session</th>
-                                <th>Survey Date</th>
+                                <th>Distribute Date</th>
                                 <th>Facilities Category</th>
                                 <th>Facilities</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -138,22 +140,18 @@
                                         <td>{{ $item->phone }}</td>
                                         <td>{{ $item->academic_session }}</td>
                                         <td>
-                                            {{ $survey->survey_date ? \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') : 'No Found' }}
+                                            {{ $survey->distribute_date ? \Carbon\Carbon::parse($survey->distribute_date)->format('d-m-Y') : 'No Found' }}
                                         </td>
                                         <td>{{ $survey->facilities_category ?? 'No Found' }}</td>
                                         <td>{{ $survey->facilities ?? 'No Found' }}</td>
-                                        {{-- Survey date --}}
+                                        <td>{{ $survey->status ?? 'No Found' }} </td>
+
                                         <td>
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                                <a href="{{ route('distribute-beneficiarie-facilities', [$item->id, $survey->id]) }}"
-                                                    class="btn btn-primary btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                    title="Distribute" style="min-width: 38px; height: 38px;">
-                                                    + Distribute
-                                                </a>
-                                                <a href="{{ route('show-beneficiarie-facilities', [$item->id, $survey->id]) }}"
+                                                <a href="{{-- route('show-beneficiarie-facilities', [$item->id, $survey->id]) --}}"
                                                     class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                     title="View" style="min-width: 38px; height: 38px;">
-                                                    <i class="fa-regular fa-eye"></i> Facilities
+                                                    <i class="fa-regular fa-eye"></i>
                                                 </a>
                                             </div>
                                         </td>

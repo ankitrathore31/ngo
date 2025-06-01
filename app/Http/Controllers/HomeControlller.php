@@ -16,10 +16,10 @@ class HomeControlller extends Controller
 {
     public function home()
     {
-        $data = academic_session::all(); // if you're using this in the view
+        $data = academic_session::all(); 
         $areaTypeCounts = Working_Area::select('area_type', DB::raw('count(*) as total'))
             ->groupBy('area_type')
-            ->pluck('total', 'area_type'); // returns key-value pair: ['Country' => 1, ...]
+            ->pluck('total', 'area_type'); 
 
         return view('home.welcome', compact('data', 'areaTypeCounts'));
     }
@@ -159,9 +159,9 @@ class HomeControlller extends Controller
         // Remove spaces from Aadhar
         $identityNo = str_replace(' ', '', $request->identity_no);
 
-        $beneficiarie = \App\Models\beneficiarie::withTrashed()
-            ->where('identity_no', $identityNo)
-            ->first();
+        $beneficiarie = \App\Models\beneficiarie::with(['surveys'])->withTrashed()
+        ->where('identity_no', $identityNo)
+        ->first();
 
         if (!$beneficiarie) {
             return back()->with('error', 'Facilities not found.')->withInput();

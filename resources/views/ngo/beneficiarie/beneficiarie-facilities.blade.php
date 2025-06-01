@@ -23,13 +23,11 @@
                         <thead class="table-primary">
                             <tr>
                                 <th>Sr. No.</th>
-                                {{-- <th>Application Date</th>
-                                <td>Application No.</td> --}}
                                 <th>Registration No.</th>
-                                {{-- <th>Registration Date.</th> --}}
                                 <th>Name</th>
                                 <th>Father/Husband Name</th>
-                                <th>Number</th>
+                                <th>Address</th>
+                                <th>Mobile No.</th>
                                 <th>Survey Date</th>
                                 <th>Survey Details</th>
                                 <th>Session</th>
@@ -41,19 +39,22 @@
                                 @foreach ($item->surveys as $survey)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        {{-- <td>
-                                            {{ \Carbon\Carbon::parse($item->application_date)->format('d-m-Y') }}<br>
-                                        </td>
-                                        <td>{{ $item->application_no }}</td> --}}
+
                                         <td>{{ $item->registration_no }}</td>
-                                        {{-- <td>{{ \Carbon\Carbon::parse($item->registraition_date)->format('d-m-Y') }}</td> --}}
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->gurdian_name }}</td>
+                                        <td>{{ $item->village }},
+                                            ({{ $item->area_type }})
+                                            ,
+                                            {{ $item->post }},
+                                            {{ $item->block }},
+                                            {{ $item->district }},
+                                            {{ $item->state }} - {{ $item->pincode }}</td>
                                         <td>{{ $item->phone }}</td>
                                         <td>
-                                            {{ $survey->survey_date ? \Carbon\Carbon::parse($survey->distribute_date)->format('d-m-Y') : 'No Found' }}
+                                            {{ $survey->survey_date ? \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') : 'No Found' }}
                                         </td>
-                                        <td>{{ $survey->survey_details}}</td>
+                                        <td>{{ $survey->survey_details }}</td>
                                         <td>{{ $item->academic_session }}</td>
                                         <td>
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">
@@ -65,11 +66,11 @@
                                                 </a>
 
                                                 {{-- @foreach ($item->surveys as $survey) --}}
-                                                    <a href="{{ route('show-beneficiarie-survey', [$item->id, $survey->id]) }}"
-                                                        class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                        title="View Survey" style="min-width: 38px; height: 38px;">
-                                                        <i class="fa-regular fa-eye"></i> Survey 
-                                                    </a>
+                                                <a href="{{ route('show-beneficiarie-survey', [$item->id, $survey->id]) }}"
+                                                    class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
+                                                    title="View Survey" style="min-width: 38px; height: 38px;">
+                                                    <i class="fa-regular fa-eye"></i> Survey
+                                                </a>
                                                 {{-- @endforeach --}}
 
                                             </div>

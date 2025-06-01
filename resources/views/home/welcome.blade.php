@@ -348,6 +348,7 @@
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">Country</h5>
                                 <p class="card-text fs-4 " data-type="Country">{{ $areaTypeCounts['Country'] ?? 0 }}</p>
+                                <span>Click Here</span>
                             </div>
                         </div>
                     </a>
@@ -359,6 +360,7 @@
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">State</h5>
                                 <p class="card-text fs-4 counter">{{ $areaTypeCounts['State'] ?? 0 }}</p>
+                                <span>Click Here</span>
                             </div>
                         </div>
                     </a>
@@ -369,6 +371,7 @@
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">District</h5>
                                 <p class="card-text fs-4 counter" >{{ $areaTypeCounts['District'] ?? 0 }}</p>
+                                <span>Click Here</span>
                             </div>
                         </div>
                     </a>
@@ -380,6 +383,7 @@
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">Tehsil</h5>
                                 <p class="card-text fs-4 counter" >{{ $areaTypeCounts['Tehsil'] ?? 0 }}</p>
+                                <span>Click Here</span>
                             </div>
                         </div>
                     </a>
@@ -391,6 +395,7 @@
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">Block</h5>
                                 <p class="card-text fs-4 counter" >{{ $areaTypeCounts['Block'] ?? 0 }}</p>
+                                <span>Click Here</span>
                             </div>
                         </div>
                     </a>
@@ -402,6 +407,7 @@
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">City / Town</h5>
                                 <p class="card-text fs-4 counter" >{{ $areaTypeCounts['City/Town'] ?? 0 }}</p>
+                                <span>Click Here</span>
                             </div>
                         </div>
                     </a>
@@ -413,6 +419,7 @@
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">Village</h5>
                                 <p class="card-text fs-4 counter" >{{ $areaTypeCounts['Village'] ?? 0 }}</p>
+                                <span>Click Here</span>
                             </div>
                         </div>
                     </a>
@@ -424,6 +431,7 @@
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">Family</h5>
                                 <p class="card-text fs-4 counter" >{{ $areaTypeCounts['Family'] ?? 0 }}</p>
+                                <span>Click Here</span>
                             </div>
                         </div>
                     </a>
@@ -434,6 +442,7 @@
                         <div class="card-body">
                             <h5 class="card-title fw-bold">Beneficiary</h5>
                             <p class="card-text fs-4 counter" data-count="1115">1115</p>
+                            <span>Click Here</span>
                         </div>
                     </div>
                 </div>
