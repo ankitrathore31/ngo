@@ -33,7 +33,7 @@ use App\Models\academic_session;
 Route::get('/', function () {
     $data = academic_session::all()->sortByDesc('session_date');
         Session::put('all_academic_session', $data);
-    return view('home.welcome', compact('data');
+    return view('home.welcome', compact('data'));
 });
 
 
