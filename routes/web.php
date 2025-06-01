@@ -9,6 +9,7 @@ use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\NgoController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\WorkingAreaController;
 use App\Models\academic_session;
 
 /*
@@ -128,6 +129,7 @@ Route::middleware('auth')->group(function () {
     Route::get('ngo/pending-registration', [RegistrationController::class, 'pendingRegistration'])->name('pending-registration');
     Route::patch('ngo/approve-status/{id}', [RegistrationController::class, 'approveStatus'])->name('approve-status');
     Route::get('ngo/approve-registration', [RegistrationController::class, 'approveRegistration'])->name('approve-registration');
+    Route::get('ngo/show-apporve-registration/{id}', [RegistrationController::class, 'showApporveReg'])->name('show-apporve-reg');
     Route::patch('ngo/pending-status/{id}', [RegistrationController::class, 'pendingStatus'])->name('pending-status');
     Route::get('ngo/view-registration/{id}', [RegistrationController::class, 'viewRegistration'])->name('view-reg');
     Route::get('ngo/delete-view/{id}', [RegistrationController::class, 'deleteRegistrationPage'])->name('delete-view');
@@ -173,9 +175,12 @@ Route::controller(BeneficiarieController::class)->group(function () {
 
 });
 
-
-
-
+Route::controller(WorkingAreaController::class)->group(function(){
+    Route::get('ngo/working-area', 'workingarea')->middleware('auth')->name('working-area');
+    Route::post('ngo/store-area', 'storeArea')->middleware('auth')->name('store-area');
+    Route::get('ngo/working-area-list', 'workingAreaList')->middleware('auth')->name('working-area-list');
+    Route::get('ngo/delete-Working-area/{id}', 'removeArea')->middleware('auth')->name('remove-area');
+});
 
 
 

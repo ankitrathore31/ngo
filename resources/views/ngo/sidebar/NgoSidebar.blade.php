@@ -108,6 +108,8 @@
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
                             class="fas fa-cogs"></i> SETTING</a>
                     <ul class="dropdown-menu bg-primary">
+                        <li><a class="dropdown-item" href="{{ route('working-area') }}">Add Working Area</a></li>
+                        <li><a class="dropdown-item" href="{{ route('working-area-list') }}">Working Area List</a></li>
                         <li><a class="dropdown-item" href="#">Course List</a></li>
                         <li><a class="dropdown-item" href="#">Add Course For Centre</a></li>
                     </ul>

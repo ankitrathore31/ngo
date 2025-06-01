@@ -85,7 +85,7 @@
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
 
-                                            <a href="#"
+                                            <a href="{{ route('show-apporve-reg', $item->id )}}"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="View" style="min-width: 38px; height: 38px;">
                                                 <i class="fa-regular fa-eye"></i>
