@@ -27,7 +27,7 @@
                                 <h6>Showing Areas for: <span class="text-primary">{{ $text }}</span></h6>
                             </div>
                             <div class="col-sm-6 text-end d-flex justify-content-end">
-                                <h6>Total Areas: <span class="text-primary">{{ $totalarea}}</span></h6>
+                                <h6>Total {{ $text }}: <span class="text-primary">{{ $totalarea}}</span></h6>
                             </div>
                         </div>
 

@@ -228,7 +228,39 @@ class BeneficiarieController extends Controller
     }
 
 
+     public function pendingfacilities(Request $request)
+    {
+        $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
+            $q->where('status', 'Pending');
 
+            if ($request->session_filter) {
+                $q->where('session_date', $request->session_filter);
+            }
+
+            if ($request->category_filter) {
+                $q->where('facilities_category', $request->category_filter);
+            }
+        }])->where('status', 1);
+
+        // Get only beneficiaries who actually have at least one distributed survey
+        $beneficiarie = $query->whereHas('surveys', function ($q) use ($request) {
+            $q->where('status', 'Pending');
+
+            if ($request->session_filter) {
+                $q->where('session_date', $request->session_filter);
+            }
+
+            if ($request->category_filter) {
+                $q->where('facilities_category', $request->category_filter);
+            }
+        })->orderBy('id', 'desc')->get();
+
+        // For dropdowns/filters
+        $data = academic_session::all();
+        $categories = Beneficiarie_Survey::select('facilities_category')->distinct()->pluck('facilities_category');
+
+        return view('ngo.beneficiarie.pending-facilities-list', compact('beneficiarie', 'data', 'categories'));
+    }
 
 
     public function beneficiarieReportList()

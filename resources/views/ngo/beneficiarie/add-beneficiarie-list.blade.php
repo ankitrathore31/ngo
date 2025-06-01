@@ -13,7 +13,6 @@
                 </nav>
             </div>
 
-
             @if (session('success'))
                 <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success') }}
@@ -21,22 +20,17 @@
             @endif
 
             <div class="card shadow-sm">
-                {{-- <div class="card-header d-flex justify-content-between align-items-center">
-                    <a href="{{ route('registration') }}" class="btn btn-success btn-sm">+ New Registraition</a>
-                </div> --}}
-
                 <div class="card-body table-responsive">
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-primary">
                             <tr>
                                 <th>Sr. No.</th>
-                                <th>Application Date</th>
                                 <td>Application No.</td>
                                 <th>Registration No.</th>
-                                <th>Registration Date.</th>
                                 <th>Name</th>
                                 <th>Father/Husband Name</th>
-                                <th>Number</th>
+                                <th>Address</th>
+                                <th>Mobile No.</th>
                                 <th>Session</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -46,14 +40,17 @@
                             @foreach ($beneficiarie as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>
-                                        {{ \Carbon\Carbon::parse($item->application_date)->format('d-m-Y') }}<br>
-                                    </td>
                                     <td>{{ $item->application_no }}</td>
                                     <td>{{ $item->registration_no }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($item->registraition_date)->format('d-m-Y') }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->gurdian_name }}</td>
+                                     <td>{{ $item->village }},
+                                            ({{ $item->area_type }})
+                                            ,
+                                            {{ $item->post }},
+                                            {{ $item->block }},
+                                            {{ $item->district }},
+                                            {{ $item->state }} - {{ $item->pincode }}</td>
                                     <td>{{ $item->phone }}</td>
                                      <td>{{$item->academic_session}}</td>
                                     <td>

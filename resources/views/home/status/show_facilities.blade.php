@@ -39,16 +39,16 @@
                 <!-- etails Section -->
                 <div class="row g-2 mt-1">
                     <div class="col-md-6">
-                        <p><strong>Application No:</strong> {{ $beneficiarie->application_no ?? 'Update soon' }}</p>
+                        <p><strong>Application No:</strong> {{ $beneficiarie->application_no ?? 'Pending' }}</p>
                     </div>
                     <div class="col-md-6">
-                        <p><strong>Registration No:</strong> {{ $beneficiarie->registration_no ?? 'Update soon' }}</p>
+                        <p><strong>Registration No:</strong> {{ $beneficiarie->registration_no ?? 'Pending' }}</p>
                     </div>
                     <div class="col-md-6">
-                        <p><strong>Application Date:</strong> {{ $beneficiarie->application_date ?? 'Update soon' }}</p>
+                        <p><strong>Application Date:</strong> {{ $beneficiarie->application_date ?? 'Pending' }}</p>
                     </div>
                     <div class="col-md-6">
-                        <p><strong>Registration Date:</strong> {{ $beneficiarie->registration_date ?? 'Update soon' }}</p>
+                        <p><strong>Registration Date:</strong> {{ $beneficiarie->registration_date ?? 'Pending' }}</p>
                     </div>
                     <div class="col-md-6">
                         <p><strong>Full Name:</strong> {{ $beneficiarie->name }}</p>
@@ -65,7 +65,7 @@
                     <div class="col-md-6">
                         <p><strong>Occupation:</strong> {{ $beneficiarie->occupation ?? 'N/A' }}</p>
                     </div>
-                    <div class="col-12">
+                    <div class="col-12 mb-3">
                         <div class="">
                             <p class="mb-0">
                                 <b>Full Address:</b>
@@ -78,12 +78,19 @@
                             </p>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <p><strong>Survey Date:</strong>
-                            {{ \Carbon\Carbon::parse($beneficiarie->survey_date)->format('d M Y') ?? 'Update soon'  }}</p>
+                            {{ \Carbon\Carbon::parse($beneficiarie->survey_date)->format('d M Y') ?? 'Pending'  }}</p>
                     </div>
-                    <div class="col-12">
-                        <p><strong>Survey Details:</strong> {{ $beneficiarie->survey_details ?? 'Update soon'  }}</p>
+                    <div class="col-8">
+                        <p><strong>Survey Details:</strong> {{ $beneficiarie->survey_details ?? 'Pending'  }}</p>
+                    </div>
+                       <div class="col-md-4">
+                        <p><strong>Facilities Category:</strong>
+                            {{ $beneficiarie->facilities_category ?? 'Pending'  }}</p>
+                    </div>
+                    <div class="col-8">
+                        <p><strong>Facilities:</strong> {{ $beneficiarie->facilities ?? 'Pending'  }}</p>
                     </div>
                 </div>
             </div>
