@@ -61,11 +61,11 @@
                 </nav>
             </div>
         </div>
-         @if (session('success'))
-                <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                </div>
-            @endif
+        @if (session('success'))
+            <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
         <div class="container-fluide m-3">
             <div class="card bg-white p-2 shadow rounded">
                 <div class="text-black text-center border-bottom pb-3">
@@ -358,41 +358,44 @@
                 <h5 class="text-success text-center">About Beneficiarie Survey & Facilities</h5>
 
                 <div class="row">
+                    @if ($beneficiarie->surveys)
+                        {{-- @foreach ($beneficiarie->surveys as $survey) --}}
+                        <div class="col-md-4 mb-3">
+                            <div class="bg-light border rounded p-3 h-100">
+                                <label class="form-label fw-bold">Survey Date:</label>
+                                <p>{{ \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-8 mb-3">
 
-                    @if ($beneficiarie->surveys->count())
-                        @foreach ($beneficiarie->surveys as $survey)
-                            <div class="col-md-4 mb-3">
-                                <div class="bg-light border rounded p-3 h-100">
-                                    <label class="form-label fw-bold">Survey Date:</label>
-                                    <p> {{ \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') }}</p>
-                                </div>
+                            <div class="bg-light border rounded p-3 h-100">
+                                <label class="form-label fw-bold">Survey Details:</label>
+                                <p><strong>Details:</strong> {{ $survey->survey_details ?? 'Not Found'}}</p>
                             </div>
-                            <div class="col-md-8 mb-3">
-                                <div class="bg-light border rounded p-3 h-100">
-                                    <label class="form-label fw-bold">Survey Details:</label>
-                                    <p class="card-text"><strong>Details:</strong> {{ $survey->survey_details }}</p>
-                                </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="bg-light border rounded p-3 h-100">
+                                <label class="form-label fw-bold">Facilities Category:</label>
+                                <p class="card-text"><strong>Category:</strong> {{ $survey->facilities_category ?? 'Not Found' }}</p>
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <div class="bg-light border rounded p-3 h-100">
-                                    <label class="form-label fw-bold">Facilities Category:</label>
-                                    <p class="card-text"><strong>Category:</strong> {{ $survey->facilities_category }}</p>
-                                </div>
+                        </div>
+                        <div class="col-md-8 mb-3">
+                            <div class="bg-light border rounded p-3 h-100">
+                                <label class="form-label fw-bold">Facilities Details:</label>
+                                <p class="card-text"><strong>Facilities:</strong> {{ $survey->facilities ?? 'Not Found'}}</p>
                             </div>
-                            <div class="col-md-8 mb-3">
-                                <div class="bg-light border rounded p-3 h-100">
-                                    <label class="form-label fw-bold">Facilities Details:</label>
-                                    <p class="card-text"><strong>Facilities:</strong> {{ $survey->facilities }}</p>
-                                </div>
-                            </div>
-                        @endforeach
+                        </div>
+
+                        {{-- @endforeach --}}
                     @else
-                        <div class="alert alert-warning">No survey data available for this beneficiarie.</div>
-                    @endif
-
+                        <div class="col-12">
+                            <div class="alert alert-warning">No survey data available for this beneficiary.</div>
+                        </div>
                 </div>
+                @endif
             </div>
         </div>
+    </div>
 
     </div>
     </div>

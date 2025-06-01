@@ -8,15 +8,20 @@ use App\Models\Gallery;
 use App\Models\beneficiarie;
 use App\Models\Member;
 use App\Models\academic_session;
+use App\Models\Working_Area;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 
 class HomeControlller extends Controller
 {
     public function home()
     {
-        $data = academic_session::all();
-        Session::put('all_academic_session', $data);
-        return view('home.welcome',compact('data'));
+        $data = academic_session::all(); // if you're using this in the view
+        $areaTypeCounts = Working_Area::select('area_type', DB::raw('count(*) as total'))
+            ->groupBy('area_type')
+            ->pluck('total', 'area_type'); // returns key-value pair: ['Country' => 1, ...]
+
+        return view('home.welcome', compact('data', 'areaTypeCounts'));
     }
 
     public function activitypage()
@@ -163,5 +168,27 @@ class HomeControlller extends Controller
         }
 
         return view('home.status.show_facilities', compact('beneficiarie'))->with('success', 'Facilities found.');
+    }
+
+    public function showarea($text)
+    {
+        $area = Working_Area::where('area_type', $text)->orderBy('area', 'asc')->get();
+        $totalarea = Working_Area::where('area_type', $text)->count();
+        return view('home.pages.working-area', compact('area', 'text', 'totalarea'));
+    }
+
+    public function filterAreaCounts(Request $request)
+    {
+        $query = Working_Area::query();
+
+        if ($request->has('session') && $request->session !== '') {
+            $query->where('academic_session', $request->session);
+        }
+
+        $areaTypeCounts = $query->select('area_type', DB::raw('count(*) as total'))
+            ->groupBy('area_type')
+            ->pluck('total', 'area_type');
+
+        return response()->json($areaTypeCounts);
     }
 }

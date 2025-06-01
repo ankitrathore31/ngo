@@ -59,7 +59,7 @@
         cursor: pointer;
         top: 0; left: 0;
         right: 0; bottom: 0;
-        background-color: #ccc;
+        background-color: #f01d1d;
         transition: .4s;
         border-radius: 34px;
     }
@@ -97,7 +97,7 @@
     }
 
     .badge-secondary {
-        background-color: #6c757d;
+        background-color: red;
     }
 </style>
 @endsection

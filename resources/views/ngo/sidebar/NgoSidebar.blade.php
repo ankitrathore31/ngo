@@ -136,7 +136,7 @@
                         <li><a class="dropdown-item" href="{{ route('beneficiarie-add-list') }}">Add Beneficiary</a></li>
                         <li><a class="dropdown-item" href="{{ route('beneficiarie-facilities')}}">Add Beneficiary Facilities</a></li>
                         <li><a class="dropdown-item" href="{{ route('beneficiarie-facilities-list')}}">Beneficiary Facilities List</a></li>
-                        <li><a class="dropdown-item" href="{{ route('beneficiarie-facilities-list')}}">Distributed Beneficiary Facilities List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('distributed-list')}}">Distributed Beneficiary Facilities List</a></li>
                         <li><a class="dropdown-item" href="{{route('beneficiarie-report-list')}}">Beneficiary Report</a></li>
                         <li><a class="dropdown-item" href="#">Target Beneficiaries</a></li>
                     </ul>
