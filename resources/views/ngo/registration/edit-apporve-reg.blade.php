@@ -56,19 +56,24 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('ngo') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Registraition</li>
+                        <li class="breadcrumb-item active" aria-current="page">Edit Apporve Registraition</li>
                     </ol>
                 </nav>
             </div>
         </div>
-
+          @if (session('success'))
+                <div id="successMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
         <div class="container-fluide m-3">
             <div class="card bg-white p-2 shadow rounded">
                 <div class="text-black text-center border-bottom pb-3">
-                    <h4 class=" p-3 bg-info rounded"><b>APPLICATION FORM </b></h4>
+                    <h4 class=" p-3 bg-info rounded"><b>EDIT APPORVE FORM </b></h4>
                 </div>
                 <div class="card-body m-1">
-                    <form method="POST" action="{{ route('store-registration') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('update-apporve-registration', $beneficiarie->id) }}"
+                        enctype="multipart/form-data">
                         @csrf
                         <div class="border-bottom pb-3 mb-4">
                             <h5 class="text-black"><b>Information</b></h5>
@@ -80,23 +85,25 @@
                                                     class="text-danger">*</span></label>
                                             <input type="text" name="application_date" id="application_date"
                                                 class="form-control datepicker @error('dob') is-invalid @enderror"
-                                                value="{{ old('application_date') }}" required>
+                                                value="{{ $beneficiarie->application_date }}" required>
                                             @error('application_date')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <div class="form-group">
-                                                <label for="reg_type" class="form-label">Registraition Type <span
+                                                <label for="reg_type" class="form-label">Registration Type <span
                                                         class="text-danger">*</span></label>
-                                                <select class="form-control" id="reg_type" name="reg_type">
-                                                    <option selected disabled>Select Type</option>
+                                                <select class="form-control" id="reg_type" name="reg_type" required>
+                                                    <option disabled {{ !$beneficiarie->reg_type ? 'selected' : '' }}>Select
+                                                        Type</option>
                                                     <option value="Beneficiaries"
-                                                        {{ old('reg_type') == 'Beneficiaries' ? 'selected' : '' }}>
+                                                        {{ $beneficiarie->reg_type == 'Beneficiaries' ? 'selected' : '' }}>
                                                         Beneficiaries
                                                     </option>
                                                     <option value="Member"
-                                                        {{ old('reg_type') == 'Member' ? 'selected' : '' }}>Member
+                                                        {{ $beneficiarie->reg_type == 'Member' ? 'selected' : '' }}>
+                                                        Member
                                                     </option>
                                                 </select>
                                                 @error('reg_type')
@@ -104,24 +111,28 @@
                                                 @enderror
                                             </div>
                                         </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="academic_session" class="form-label bold"> Session <span
+
+                                        <div class="col-md-6 col-sm-6  form-group mb-3">
+                                            <label for="program_session" class="form-label bold">Program Session <span
                                                     class="login-danger">*</span></label>
-                                            <select class="form-control @error('academic_session') is-invalid @enderror"
-                                                name="academic_session" required>
+                                            <select class="form-control @error('program_session') is-invalid @enderror"
+                                                name="program_session" required>
                                                 <option value="">Select Session</option>
                                                 @foreach ($data as $session)
-                                                    <option value="{{ $session->session_date }}">
-                                                        {{ $session->session_date }}</option>
+                                                    <option value="{{ $session->session_date }}"
+                                                        {{ isset($beneficiarie) && $beneficiarie->academic_session == $session->session_date ? 'selected' : '' }}>
+                                                        {{ $session->session_date }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
+
                                         <div class="col-md-6 col-sm-6  form-group mb-3">
                                             <label for="name" class="form-label">Full Name: <span
                                                     class="text-danger">*</span></label>
                                             <input type="text" name="name" id="name"
                                                 class="form-control @error('name') is-invalid @enderror"
-                                                value="{{ old('name') }}" required>
+                                                value="{{ $beneficiarie->name }}" required>
                                             @error('name')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -131,7 +142,7 @@
                                                     class="text-danger">*</span></label>
                                             <input type="text" name="dob" id="dob"
                                                 class="form-control datepicker @error('dob') is-invalid @enderror"
-                                                value="{{ old('dob') }}" required>
+                                                value="{{ $beneficiarie->dob }}" required>
                                             @error('dob')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -141,13 +152,17 @@
                                                     class="text-danger">*</span></label>
                                             <select name="gender" id="gender"
                                                 class="form-control @error('gender') is-invalid @enderror" required>
-                                                <option value="" disabled selected>Select Gender</option>
-                                                <option value="Male" {{ old('gender') == 'Male' ? 'selected' : '' }}>
+                                                <option value="" disabled
+                                                    {{ !(old('gender') ?? $beneficiarie->gender) ? 'selected' : '' }}>
+                                                    Select Gender</option>
+                                                <option value="Male"
+                                                    {{ (old('gender') ?? $beneficiarie->gender) == 'Male' ? 'selected' : '' }}>
                                                     Male</option>
-                                                <option value="Female" {{ old('gender') == 'Female' ? 'selected' : '' }}>
-                                                    Female
-                                                </option>
-                                                <option value="Other" {{ old('gender') == 'Other' ? 'selected' : '' }}>
+                                                <option value="Female"
+                                                    {{ (old('gender') ?? $beneficiarie->gender) == 'Female' ? 'selected' : '' }}>
+                                                    Female</option>
+                                                <option value="Other"
+                                                    {{ (old('gender') ?? $beneficiarie->gender) == 'Other' ? 'selected' : '' }}>
                                                     Other</option>
                                             </select>
                                             @error('gender')
@@ -156,80 +171,81 @@
                                         </div>
                                     </div>
 
+
+
+
+
+
+
+
                                 </div>
                                 <div class="col-md-4 col-sm-4">
                                     <div class="upload-container">
-                                        <div class="image-placeholder">
-                                            <img id="previewImage" alt="Preview">
-                                            <span id="placeholderText">Upload Photo</span>
-                                        </div>
+
+                                        @if (!empty($beneficiarie->image))
+                                            <img id="previewImage"
+                                                src="{{ asset('benefries_images/' . $beneficiarie->image) }}"
+                                                alt="Preview" width="160">
+                                        @endif
+
+
+
                                         <label for="uploadInput" class="upload-btn">Choose File</label>
                                         <input type="file" id="uploadInput" name="image" accept="image/*">
                                     </div>
                                 </div>
+
                             </div>
                             <div class="row">
 
                                 <div class="col-md-4 form-group mb-3">
-                                    <label for="eligibility" class="form-label">Eligibility / Education Level:
-                                        <span class="text-danger">*</span>
-                                    </label>
+                                    <label for="eligibility" class="form-label">Eligibility / Education Level: <span
+                                            class="text-danger">*</span></label>
                                     <select name="eligibility" class="form-control" id="eligibility" required>
-                                        <option value="">Select Education Level</option>
+                                        <option value="" disabled
+                                            {{ !(old('eligibility') ?? $beneficiarie->eligibility) ? 'selected' : '' }}>
+                                            Select Education Level</option>
                                         <option value="Uneducated"
-                                            {{ old('eligibility') == 'Uneducated' ? 'selected' : '' }}>Uneducated</option>
-                                        <option value="Literate" {{ old('eligibility') == 'Literate' ? 'selected' : '' }}>
-                                            Literate</option>
-                                        <option value="Nursery" {{ old('eligibility') == 'Nursery' ? 'selected' : '' }}>
-                                            Nursery</option>
-                                        <option value="Below Primary"
-                                            {{ old('eligibility') == 'Below Primary' ? 'selected' : '' }}>Below Primary
-                                        </option>
-                                        <option value="Primary Failed"
-                                            {{ old('eligibility') == 'Primary Failed' ? 'selected' : '' }}>Primary Failed
-                                        </option>
-                                        <option value="Primary Passed"
-                                            {{ old('eligibility') == 'Primary Passed' ? 'selected' : '' }}>Primary Passed
-                                        </option>
-                                        <option value="Below Middle"
-                                            {{ old('eligibility') == 'Below Middle' ? 'selected' : '' }}>Below Middle
-                                        </option>
-                                        <option value="Middle Failed"
-                                            {{ old('eligibility') == 'Middle Failed' ? 'selected' : '' }}>Middle Failed
-                                        </option>
-                                        <option value="Middle Passed"
-                                            {{ old('eligibility') == 'Middle Passed' ? 'selected' : '' }}>Middle Passed
-                                        </option>
+                                            {{ (old('eligibility') ?? $beneficiarie->eligibility) == 'Uneducated' ? 'selected' : '' }}>
+                                            Uneducated</option>
+                                        <option value="5th Pass"
+                                            {{ (old('eligibility') ?? $beneficiarie->eligibility) == '5th Pass' ? 'selected' : '' }}>
+                                            5th Pass</option>
                                         <option value="Secondary"
-                                            {{ old('eligibility') == 'Secondary' ? 'selected' : '' }}>Secondary</option>
-                                        <option value="Senior Secondary"
-                                            {{ old('eligibility') == 'Senior Secondary' ? 'selected' : '' }}>Senior
+                                            {{ (old('eligibility') ?? $beneficiarie->eligibility) == 'Secondary' ? 'selected' : '' }}>
                                             Secondary</option>
+                                        <option value="Senior Secondary"
+                                            {{ (old('eligibility') ?? $beneficiarie->eligibility) == 'Senior Secondary' ? 'selected' : '' }}>
+                                            Senior Secondary</option>
                                         <option value="Graduation"
-                                            {{ old('eligibility') == 'Graduation' ? 'selected' : '' }}>Graduation</option>
+                                            {{ (old('eligibility') ?? $beneficiarie->eligibility) == 'Graduation' ? 'selected' : '' }}>
+                                            Graduation</option>
                                         <option value="Post Graduation"
-                                            {{ old('eligibility') == 'Post Graduation' ? 'selected' : '' }}>Post Graduation
-                                        </option>
+                                            {{ (old('eligibility') ?? $beneficiarie->eligibility) == 'Post Graduation' ? 'selected' : '' }}>
+                                            Post Graduation</option>
                                         <option value="Degree Holder"
-                                            {{ old('eligibility') == 'Degree Holder' ? 'selected' : '' }}>Degree Holder
-                                        </option>
+                                            {{ (old('eligibility') ?? $beneficiarie->eligibility) == 'Degree Holder' ? 'selected' : '' }}>
+                                            Degree Holder</option>
                                     </select>
                                     @error('eligibility')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-
-
                                 <div class="col-md-4 form-group mb-3">
                                     <label for="marital_status" class="form-label">Marital Status: <span
                                             class="text-danger">*</span></label>
                                     <select name="marital_status" class="form-control" id="marital_status" required>
-                                        <option value="">Select Marital Status</option>
+                                        <option value="" disabled
+                                            {{ !(old('marital_status') ?? $beneficiarie->marital_status) ? 'selected' : '' }}>
+                                            Select Marital Status
+                                        </option>
                                         <option value="Married"
-                                            {{ old('marital_status') == 'Married' ? 'selected' : '' }}>Married
+                                            {{ (old('marital_status') ?? $beneficiarie->marital_status) == 'Married' ? 'selected' : '' }}>
+                                            Married
                                         </option>
                                         <option value="Unmarried"
-                                            {{ old('marital_status') == 'Unmarried' ? 'selected' : '' }}>Unmarried
+                                            {{ (old('marital_status') ?? $beneficiarie->marital_status) == 'Unmarried' ? 'selected' : '' }}>
+                                            Unmarried
                                         </option>
                                     </select>
                                     @error('marital_status')
@@ -243,7 +259,7 @@
                                                 class="text-danger">*</span></label>
                                         <input type="text" name="gurdian_name" id="gurdian_name"
                                             class="form-control @error('gurdian_name') is-invalid @enderror"
-                                            value="{{ old('gurdian_name') }}" required>
+                                            value="{{ $beneficiarie->gurdian_name }}" required>
                                         @error('gurdian_name')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -255,7 +271,7 @@
                                         <label class="form-label">Mother Name: <span class="text-danger">*</span></label>
                                         <input type="text" name="mother_name" id="mother_name"
                                             class="form-control @error('mother_name') is-invalid @enderror"
-                                            value="{{ old('mother_name') }}" required>
+                                            value="{{ $beneficiarie->mother_name }}" required>
                                         @error('mother_name')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -266,7 +282,7 @@
                                             class="text-danger">*</span></label>
                                     <input type="text" name="village" id="village"
                                         class="form-control @error('village') is-invalid @enderror"
-                                        value="{{ old('village') }}">
+                                        value="{{ $beneficiarie->village }}">
                                     @error('village')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -277,7 +293,7 @@
                                             class="text-danger">*</span></label>
                                     <input type="text" name="post" id="post"
                                         class="form-control @error('post') is-invalid @enderror"
-                                        value="{{ old('post') }}" required>
+                                        value="{{ $beneficiarie->post }}" required>
                                     @error('post')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -287,23 +303,28 @@
                                     <label for="area_type" class="form-label">Area Type: <span
                                             class="text-danger">*</span></label>
                                     <select name="area_type" class="form-control" id="area_type" required>
-                                        <option value="" selected></option>
-                                        <option value="Rular" {{ old('Rular') == 'Rular' ? 'selected' : '' }}>Rular
-                                        </option>
-                                        <option value="Urban" {{ old('Urban') == 'Urban' ? 'selected' : '' }}>Urban
-                                        </option>
+                                        <option value="" disabled
+                                            {{ !(old('area_type') ?? $beneficiarie->area_type) ? 'selected' : '' }}>Select
+                                            Area Type</option>
+                                        <option value="Rular"
+                                            {{ (old('area_type') ?? $beneficiarie->area_type) == 'Rular' ? 'selected' : '' }}>
+                                            Rular</option>
+                                        <option value="Urban"
+                                            {{ (old('area_type') ?? $beneficiarie->area_type) == 'Urban' ? 'selected' : '' }}>
+                                            Urban</option>
                                     </select>
                                     @error('area_type')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
 
+
                                 <div class="col-md-4 form-group mb-3">
                                     <label for="block" class="form-label">Block: <span
                                             class="text-danger">*</span></label>
                                     <input type="text" name="block" id="block"
                                         class="form-control @error('block') is-invalid @enderror"
-                                        value="{{ old('block') }}" required>
+                                        value="{{ $beneficiarie->block }}" required>
                                     @error('block')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -319,34 +340,38 @@
                                         <option value="">Select State</option>
                                         @foreach ($districtsByState as $state => $districts)
                                             <option value="{{ $state }}"
-                                                {{ old('state') == $state ? 'selected' : '' }}>{{ $state }}
+                                                {{ (old('state') ?? $beneficiarie->state) == $state ? 'selected' : '' }}>
+                                                {{ $state }}
                                             </option>
                                         @endforeach
                                     </select>
                                     @error('state')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
-
                                 </div>
+
 
                                 <div class="col-md-4 form-group mb-3">
                                     <label for="districtSelect" class="form-label">District: <span
                                             class="text-danger">*</span></label>
                                     <select class="form-control @error('district') is-invalid @enderror" name="district"
                                         id="districtSelect" required>
-                                        <option value="">Select District</option>
+                                        <option value="">
+
+                                        </option>
                                     </select>
                                     @error('district')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
 
+
                                 <div class="col-md-4 form-group mb-3">
                                     <label for="pincode" class="form-label">Pincode: <span
                                             class="text-danger">*</span></label>
                                     <input type="number" name="pincode" id="pincode"
                                         class="form-control @error('pincode') is-invalid @enderror"
-                                        value="{{ old('pincode') }}">
+                                        value="{{ $beneficiarie->pincode }}">
                                     @error('pincode')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -355,21 +380,25 @@
                                 <div class="col-md-4 form-group mb-3">
                                     <label for="country" class="form-label">Nationality: <span
                                             class="text-danger">*</span></label>
-                                    <select name="country" class="form-control" id="country">
-                                        <option value=""></option>
-                                        <option value="India" {{ old('country') == 'India' ? 'selected' : '' }}>India
-                                        </option>
+                                    <select name="country" class="form-control" id="country" required>
+                                        <option value="" disabled
+                                            {{ !(old('country') ?? $beneficiarie->country) ? 'selected' : '' }}>Select
+                                            Nationality</option>
+                                        <option value="India"
+                                            {{ (old('country') ?? $beneficiarie->country) == 'India' ? 'selected' : '' }}>
+                                            India</option>
                                     </select>
                                     @error('country')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
 
+
                                 <div class="col-md-4 col-sm-6 col-sm-12 form-group mb-3">
                                     <label for="email" class="form-label">Email:</label>
                                     <input type="email" name="email" id="email"
                                         class="form-control @error('email') is-invalid @enderror"
-                                        value="{{ old('email') }}">
+                                        value="{{ $beneficiarie->email }}">
                                     @error('email')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -380,109 +409,121 @@
                                             class="text-danger">*</span></label>
                                     <input type="text" name="phone" id="phone"
                                         class="form-control @error('phone') is-invalid @enderror"
-                                        value="{{ old('phone') }}" required>
+                                        value="{{ $beneficiarie->phone }}" required>
                                     @error('phone')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
 
-                                  <div class="col-md-4 mb-3">
-                                    <div class="form-group local-forms">
-                                        <label class="form-label">Caste: <span class="text-danger">*</span></label>
-                                        <input type="text" name="caste" id="caste"
-                                            class="form-control @error('caste') is-invalid @enderror"
-                                            value="{{ old('caste') }}" required>
-                                        @error('caste')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                               
                                 <div class="col-md-4 mb-3">
-                                    <label for="category" class="form-label">Religion Category <span
-                                            class="text-danger">*</span></label>
-                                    <select class="form-select @error('religion_category') is-invalid @enderror"
-                                        id="category" name="religion_category" required>
-                                        <option value="" disabled {{ old('religion_category') ? '' : 'selected' }}>
-                                            Select Category</option>
-                                        <option value="General"
-                                            {{ old('religion_category') == 'General' ? 'selected' : '' }}>
-                                            General
-                                        </option>
-                                        <option value="OBC" {{ old('religion_category') == 'OBC' ? 'selected' : '' }}>
-                                            OBC
-                                        </option>
-                                        <option value="SC" {{ old('religion_category') == 'SC' ? 'selected' : '' }}>SC
-                                        </option>
-                                        <option value="ST" {{ old('religion_category') == 'ST' ? 'selected' : '' }}>ST
-                                        </option>
-                                        <option value="Minority" {{ old('religion_category') == 'Minority' ? 'selected' : '' }}>Minority
-                                        </option>
-                                    </select>
-                                    @error('religion_category')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                 <div class="col-md-4 mb-3">
                                     <label for="religion" class="form-label">Religion <span
                                             class="text-danger">*</span></label>
                                     <select class="form-select select2 @error('religion') is-invalid @enderror"
                                         id="religion" name="religion" required>
-                                        <option value="" disabled {{ old('religion') ? '' : 'selected' }}>
-                                            Select
-                                            Religion</option>
-                                        <option value="Hindu" {{ old('religion') == 'Hindu' ? 'selected' : '' }}>
-                                            Hindu
+                                        <option value="" disabled
+                                            {{ old('religion') ?? $beneficiarie->religion ? '' : 'selected' }}>
+                                            Select Religion
                                         </option>
-                                        <option value="Islam" {{ old('religion') == 'Islam' ? 'selected' : '' }}>
-                                            Islam
-                                        </option>
-                                        <option value="Christian" {{ old('religion') == 'Christian' ? 'selected' : '' }}>
-                                            Christian
-                                        </option>
-                                        <option value="Sikh" {{ old('religion') == 'Sikh' ? 'selected' : '' }}>
-                                            Sikh
-                                        </option>
-                                        <option value="Buddhist" {{ old('religion') == 'Buddhist' ? 'selected' : '' }}>
-                                            Buddhist
-                                        </option>
-                                        <option value="Parsi" {{ old('religion') == 'Parsi' ? 'selected' : '' }}>
-                                            Parsi
-                                        </option>
+                                        <option value="Hindu"
+                                            {{ (old('religion') ?? $beneficiarie->religion) == 'Hindu' ? 'selected' : '' }}>
+                                            Hindu</option>
+                                        <option value="Islam"
+                                            {{ (old('religion') ?? $beneficiarie->religion) == 'Islam' ? 'selected' : '' }}>
+                                            Islam</option>
+                                        <option value="Christian"
+                                            {{ (old('religion') ?? $beneficiarie->religion) == 'Christian' ? 'selected' : '' }}>
+                                            Christian</option>
+                                        <option value="Sikh"
+                                            {{ (old('religion') ?? $beneficiarie->religion) == 'Sikh' ? 'selected' : '' }}>
+                                            Sikh</option>
+                                        <option value="Buddhist"
+                                            {{ (old('religion') ?? $beneficiarie->religion) == 'Buddhist' ? 'selected' : '' }}>
+                                            Buddhist</option>
+                                        <option value="Parsi"
+                                            {{ (old('religion') ?? $beneficiarie->religion) == 'Parsi' ? 'selected' : '' }}>
+                                            Parsi</option>
                                     </select>
                                     @error('religion')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label for="category" class="form-label">Religion Category <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-select @error('religion_category') is-invalid @enderror"
+                                        id="category" name="religion_category" required>
+                                        <option value="" disabled
+                                            {{ old('religion_category') ?? $beneficiarie->religion_category ? '' : 'selected' }}>
+                                            Select Category
+                                        </option>
+                                        <option value="General"
+                                            {{ (old('religion_category') ?? $beneficiarie->religion_category) == 'General' ? 'selected' : '' }}>
+                                            General</option>
+                                        <option value="OBC"
+                                            {{ (old('religion_category') ?? $beneficiarie->religion_category) == 'OBC' ? 'selected' : '' }}>
+                                            OBC</option>
+                                        <option value="SC"
+                                            {{ (old('religion_category') ?? $beneficiarie->religion_category) == 'SC' ? 'selected' : '' }}>
+                                            SC</option>
+                                        <option value="ST"
+                                            {{ (old('religion_category') ?? $beneficiarie->religion_category) == 'ST' ? 'selected' : '' }}>
+                                            ST</option>
+                                    </select>
+                                    @error('religion_category')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-group local-forms">
+                                        <label class="form-label">Caste: <span class="text-danger">*</span></label>
+                                        <input type="text" name="caste" id="caste"
+                                            class="form-control @error('caste') is-invalid @enderror"
+                                            value="{{ $beneficiarie->caste }}" required>
+                                        @error('caste')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         <div class="row">
-                            <!-- Identity Type -->
                             <div class="col-md-4 mb-3">
                                 <div class="form-group">
                                     <label for="identity_type" class="form-label">Identity Type: <span
                                             class="text-danger">*</span></label>
-                                    <select class="form-control" id="identity_type" name="identity_type" required>
+                                    <select class="form-control @error('identity_type') is-invalid @enderror"
+                                        id="identity_type" name="identity_type" required>
                                         <option selected disabled>Select Identity Type</option>
                                         <option value="Aadhar Card"
-                                            {{ old('identity_type') == 'Aadhar Card' ? 'selected' : '' }}>Aadhar Card
+                                            {{ (old('identity_type') ?? $beneficiarie->identity_type) == 'Aadhar Card' ? 'selected' : '' }}>
+                                            Aadhar Card
                                         </option>
                                         <option value="Voter ID Card"
-                                            {{ old('identity_type') == 'Voter ID Card' ? 'selected' : '' }}>Voter ID Card
+                                            {{ (old('identity_type') ?? $beneficiarie->identity_type) == 'Voter ID Card' ? 'selected' : '' }}>
+                                            Voter ID Card
                                         </option>
                                         <option value="Pan Card"
-                                            {{ old('identity_type') == 'Pan Card' ? 'selected' : '' }}>Pan Card</option>
+                                            {{ (old('identity_type') ?? $beneficiarie->identity_type) == 'Pan Card' ? 'selected' : '' }}>
+                                            Pan Card
+                                        </option>
                                         <option value="Markshhet"
-                                            {{ old('identity_type') == 'Markshhet' ? 'selected' : '' }}>Markshhet</option>
+                                            {{ (old('identity_type') ?? $beneficiarie->identity_type) == 'Markshhet' ? 'selected' : '' }}>
+                                            Markshhet
+                                        </option>
                                         <option value="Driving License"
-                                            {{ old('identity_type') == 'Driving License' ? 'selected' : '' }}>Driving
-                                            License</option>
+                                            {{ (old('identity_type') ?? $beneficiarie->identity_type) == 'Driving License' ? 'selected' : '' }}>
+                                            Driving License
+                                        </option>
                                         <option value="Narega Card"
-                                            {{ old('identity_type') == 'Narega Card' ? 'selected' : '' }}>Narega Card
+                                            {{ (old('identity_type') ?? $beneficiarie->identity_type) == 'Narega Card' ? 'selected' : '' }}>
+                                            Narega Card
                                         </option>
                                         <option value="Ration Card"
-                                            {{ old('identity_type') == 'Ration Card' ? 'selected' : '' }}>Ration Card
+                                            {{ (old('identity_type') ?? $beneficiarie->identity_type) == 'Ration Card' ? 'selected' : '' }}>
+                                            Ration Card
                                         </option>
                                     </select>
                                     @error('identity_type')
@@ -491,13 +532,14 @@
                                 </div>
                             </div>
 
-                            <!-- Identity Number -->
+                            <!-- Identity Number Input -->
                             <div class="col-md-4 mb-3">
                                 <div class="form-group">
                                     <label for="identity_no" class="form-label">Identity Card Number: <span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="identity_no" name="identity_no"
-                                        placeholder="Enter Identity Card No" required>
+                                    <input type="text" class="form-control @error('identity_no') is-invalid @enderror"
+                                        id="identity_no" name="identity_no" placeholder="Enter Identity Card No"
+                                        value="{{ old('identity_no') ?? ($beneficiarie->identity_no ?? '') }}" required>
                                     <small id="identity_no_hint" class="form-text text-muted"></small>
                                     @error('identity_no')
                                         <span class="text-danger">{{ $message }}</span>
@@ -511,13 +553,19 @@
                                 <label for="id_document" class="form-label">ID Document Upload</label>
                                 <input type="file" class="form-control" name="id_document" id="id_document">
                                 <small id="id_document_hint" class="form-text text-muted"></small>
+                                @if (!empty($beneficiarie->id_document))
+                                    <img id="previewImage"
+                                        src="{{ asset('benefries_images/' . $beneficiarie->id_document) }}"
+                                        alt="Preview" width="150">
+                                @endif
+
                             </div>
                             <div class="col-md-4 form-group mb-3">
                                 <label for="occupation" class="form-label">Occupation: <span
                                         class="text-danger">*</span></label>
                                 <input type="text" name="occupation" id="occupation"
                                     class="form-control @error('occupation') is-invalid @enderror"
-                                    value="{{ old('occupation') }}" required>
+                                    value="{{ $beneficiarie->occupation }}" required>
                                 @error('occupation')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -526,7 +574,7 @@
                                 <label for="beneficiary_help" class="form-label">What beneficiaries need help with: <span
                                         class="text-danger">*</span></label>
                                 <textarea name="help_needed" id="beneficiary_help" rows="4"
-                                    class="form-control @error('beneficiary_help') is-invalid @enderror" required>{{ old('beneficiary_help') }}</textarea>
+                                    class="form-control @error('beneficiary_help') is-invalid @enderror" required>{{ $beneficiarie->help_needed }}</textarea>
                                 @error('beneficiary_help')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -537,11 +585,40 @@
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <div class="form-group text-center">
-                                    <button type="submit" name="submit" class="btn btn-success w-50">Submit</button>
+                                    <button type="submit" name="submit" class="btn btn-success w-50">Update</button>
                                 </div>
                             </div>
                         </div>
                     </form>
+
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid mt-3">
+            <div class="row ">
+                <div class="col">
+                    <div class="card bg-white p-2 shadow rounded m-2">
+                        
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <form action="{{ route('pending-status', $beneficiarie->id) }}" method="POST"
+                                    class="d-inline">
+                                    @csrf
+                                    @method('PATCH')
+
+                                    <div class="form-group mb-3">
+                                        <p>Status Will be go Pending</p>
+                                       
+                                    </div>
+
+                                    <button type="submit" class="btn btn-danger btn-sm w-50" style="height: 38px;">
+                                        Pending
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -567,6 +644,11 @@
             }
         });
     </script>
+    <script>
+        document.getElementById("registraition_no").value = Math.floor(100000 + Math.random() * 9000000);
+    </script>
+
+    <!-- Inline Script to load districts -->
     <script>
         const allDistricts = @json($districtsByState);
         const oldDistrict = "{{ old('district') }}";
@@ -671,59 +753,6 @@
 
             // Listen for changes
             regTypeSelect.addEventListener('change', toggleBeneficiaryHelp);
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const identityType = document.getElementById('identity_type');
-            const identityNo = document.getElementById('identity_no');
-            const hint = document.getElementById('identity_no_hint');
-
-            identityType.addEventListener('change', function() {
-                const type = this.value;
-                let pattern = '';
-                let message = '';
-
-                switch (type) {
-                    case 'Aadhar Card':
-                        pattern = '^[2-9]{1}[0-9]{11}$';
-                        message = 'Enter 12-digit Aadhar Number.';
-                        break;
-                    case 'Voter ID Card':
-                        pattern = '^[A-Z]{3}[0-9]{7}$';
-                        message = 'Enter valid Voter ID (e.g., ABC1234567).';
-                        break;
-                    case 'Pan Card':
-                        pattern = '^[A-Z]{5}[0-9]{4}[A-Z]{1}$';
-                        message = 'Enter valid PAN number (e.g., ABCDE1234F).';
-                        break;
-                    case 'Driving License':
-                        pattern = '^[A-Z]{2}[0-9]{2} ?[0-9]{11}$';
-                        message = 'Enter valid Driving License number (e.g., RJ14 12345678901).';
-                        break;
-                    case 'Markshhet':
-                    case 'Narega Card':
-                    case 'Ration Card':
-                        pattern = '^[a-zA-Z0-9/-]{5,20}$';
-                        message = 'Enter a valid number (alphanumeric, 5-20 chars).';
-                        break;
-                    default:
-                        pattern = '';
-                        message = '';
-                }
-
-                identityNo.setAttribute('pattern', pattern);
-                identityNo.setCustomValidity('');
-                hint.textContent = message;
-            });
-
-            // Optional: Prevent form submission if invalid
-            document.querySelector('form').addEventListener('submit', function(e) {
-                if (!identityNo.checkValidity()) {
-                    e.preventDefault();
-                    identityNo.reportValidity();
-                }
-            });
         });
     </script>
 @endsection

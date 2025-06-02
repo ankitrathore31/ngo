@@ -162,8 +162,9 @@
                             <button type="submit" class="btn btn-primary me-2">Search</button>
                             <a href="{{ route('pending-distribute-list') }}" class="btn btn-info text-white me-2">Reset</a>
                         </div>
-                        <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
+                       
                     </form>
+                     <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
                 </div>
             </div>
             <div class="card shadow-sm printable">
@@ -184,9 +185,12 @@
                                 <th>Age</th>
                                 <th>Session</th>
                                 <th>Distribute Date</th>
+                                <th>Distribute Place</th>
                                 <th>Facilities Category</th>
                                 <th>Facilities</th>
                                 <th>Status</th>
+                                <th>Signature/
+                                    Thumb Impression of the Recipient</th>
                                 <th class="no-print">Action</th>
                             </tr>
                         </thead>
@@ -218,10 +222,11 @@
                                         <td>
                                             {{ $survey->distribute_date ? \Carbon\Carbon::parse($survey->distribute_date)->format('d-m-Y') : 'No Found' }}
                                         </td>
+                                        <td>{{ $item->distribute_place }}</td>
                                         <td>{{ $survey->facilities_category ?? 'No Found' }}</td>
                                         <td>{{ $survey->facilities ?? 'No Found' }}</td>
                                         <td>{{ $survey->status ?? 'No Found' }} </td>
-
+                                        <td></td>
                                         <td class="no-print">
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">
                                                 <a href="{{-- route('show-beneficiarie-facilities', [$item->id, $survey->id]) --}}"

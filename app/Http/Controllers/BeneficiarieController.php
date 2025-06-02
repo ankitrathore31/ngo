@@ -129,7 +129,7 @@ class BeneficiarieController extends Controller
     {
         $query = beneficiarie::with(['surveys' => function ($q) use ($request) {
             if ($request->session_filter) {
-                $q->where('session_date', $request->session_filter);
+                $q->where('academic_session', $request->session_filter);
             }
 
             if ($request->category_filter) {
@@ -234,7 +234,7 @@ class BeneficiarieController extends Controller
             $q->where('status', 'Pending');
 
             if ($request->session_filter) {
-                $q->where('session_date', $request->session_filter);
+                $q->where('academic_session', $request->session_filter);
             }
 
             if ($request->category_filter) {
@@ -247,7 +247,7 @@ class BeneficiarieController extends Controller
             $q->where('status', 'Pending');
 
             if ($request->session_filter) {
-                $q->where('session_date', $request->session_filter);
+                $q->where('academic_session', $request->session_filter);
             }
 
             if ($request->category_filter) {
@@ -268,7 +268,7 @@ class BeneficiarieController extends Controller
             $q->where('status', 'Distributed');
 
             if ($request->session_filter) {
-                $q->where('session_date', $request->session_filter);
+                $q->where('academic_session', $request->session_filter);
             }
 
             if ($request->category_filter) {
@@ -281,7 +281,7 @@ class BeneficiarieController extends Controller
             $q->where('status', 'Distributed');
 
             if ($request->session_filter) {
-                $q->where('session_date', $request->session_filter);
+                $q->where('academic_session', $request->session_filter);
             }
 
             if ($request->category_filter) {

@@ -20,28 +20,32 @@
                 </div>
             @endif
             <div class="row">
-                <div class="col-md-12">
-                    <form method="GET" action="{{-- route('') --}}" class="row g-3 mb-4">
-                        <div class="col-md-4">
-                            {{-- <label for="session_filter" class="form-label">Select Session</label> --}}
-                            <select name="session_filter" id="session_filter" class="form-control"
-                                onchange="this.form.submit()">
-                                <option value="">All Sessions</option> <!-- Default option to show all -->
-                                {{-- @foreach (Session::get('all_academic_session') as $session)
-                                    <option value="{{ $session->session_date }}"
-                                        {{ request('session_filter') == $session->session_date ? 'selected' : '' }}>
-                                        {{ $session->session_date }}
-                                    </option>
-                                @endforeach --}}
-                            </select>
-                        </div>
+                <form method="GET" action="{{ route('pending-registration') }}" class="row g-3 mb-4">
+                    <div class="col-md-3 col-sm-4">
+                        <select name="session_filter" id="session_filter" class="form-control"
+                            onchange="this.form.submit()">
+                            <option value="">All Sessions</option>
+                            @foreach ($data as $session)
+                                <option value="{{ $session->session_date }}"
+                                    {{ request('session_filter') == $session->session_date ? 'selected' : '' }}>
+                                    {{ $session->session_date }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-sm-4 mb-3">
+                        <input type="number" class="form-control" name="application_no"
+                            placeholder="Search By Application No.">
+                    </div>
+                    <div class="col-md-3 col-sm-4 mb-3">
+                        <input type="text" class="form-control" name="name" placeholder="Search By Name">
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary me-1">Search</button>
+                        <a href="{{ route('pending-registration') }}" class="btn btn-info text-white me-1">Reset</a>
+                    </div>
+                </form>
 
-                        <div class="col-md-4 d-flex">
-                            <button type="submit" class="btn btn-primary me-2">Search</button>
-                            <a href="{{-- route('') --}}" class="btn btn-info text-white me-2">Reset</a>
-                        </div>
-                    </form>
-                </div>
             </div>
 
 
@@ -59,6 +63,11 @@
                                 <th>Application No.</th>
                                 <th>Image</th>
                                 <th>Name</th>
+                                <th>Father/Husband Name</th>
+                                <th>Address</th>
+                                <th>Caste</th>
+                                <th>Regional Category</th>
+                                <th>Religion</th>
                                 <th>Number</th>
                                 <th>Type</th>
                                 <th>Status</th>
@@ -67,31 +76,34 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($pendingbene as $item)
+                            @foreach ($combined as $index => $item)
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>
-                                        {{ \Carbon\Carbon::parse($item->application_date)->format('d-m-Y') }}<br>
-                                    </td>
+                                    <td>{{ $index + 1 }}</td> <!-- Sr. No. -->
+                                    <td>{{ \Carbon\Carbon::parse($item->application_date)->format('d-m-Y') }}</td>
                                     <td>{{ $item->application_no }}</td>
                                     <td>
-                                        <img id="previewImage" src="{{ asset('benefries_images/' . $item->image) }}"
+                                        <img id="previewImage"
+                                            src="{{ asset(($item instanceof \App\Models\beneficiarie ? 'benefries_images/' : 'member_images/') . $item->image) }}"
                                             alt="Preview" width="100">
-
                                     </td>
                                     <td>{{ $item->name }}</td>
+                                    <td>{{ $item->gurdian_name }}</td>
+                                    <td>{{ $item->village }},
+                                            ({{ $item->area_type }})
+                                            ,
+                                            {{ $item->post }},
+                                            {{ $item->block }},
+                                            {{ $item->district }},
+                                            {{ $item->state }} - {{ $item->pincode }}</td>
+                                    <td>{{$item->caste}}</td>
+                                    <td>{{$item->religion_category}}</td>
+                                    <td>{{$item->religion}}</td>
                                     <td>{{ $item->phone }}</td>
-                                    <td>{{ $item->reg_type }}</td>
-                                    <td>
-                                        @if ($item->status == 0)
-                                            Pending
-                                        @endif
-                                        
-                                    </td>
+                                    <td>{{ $item->reg_type ?? 'Member' }}</td>
+                                    <td>Pending</td>
                                     <td>{{ $item->academic_session }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-
                                             <a href="{{ route('edit-reg', $item->id) }}"
                                                 class="btn btn-primary btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="Edit" style="min-width: 38px; height: 38px;">
@@ -104,12 +116,11 @@
                                                 <i class="fa-regular fa-eye"></i>
                                             </a>
 
-                                            <a href=" {{ route('delete-view', $item->id) }}"
+                                            <a href="{{ route('delete-view', $item->id) }}"
                                                 class="btn btn-danger btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="Delete" style="min-width: 38px; height: 38px;">
                                                 <i class="fa-regular fa-trash-can"></i>
                                             </a>
-
                                         </div>
                                     </td>
                                 </tr>

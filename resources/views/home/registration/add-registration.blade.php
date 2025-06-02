@@ -406,7 +406,48 @@
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-group local-forms">
+                                            <label class="form-label">Caste: <span class="text-danger">*</span></label>
+                                            <input type="text" name="caste" id="caste"
+                                                class="form-control @error('caste') is-invalid @enderror"
+                                                value="{{ old('caste') }}" required>
+                                            @error('caste')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
 
+                                    <div class="col-md-4 mb-3">
+                                        <label for="category" class="form-label">Religion Category <span
+                                                class="text-danger">*</span></label>
+                                        <select class="form-control @error('religion_category') is-invalid @enderror"
+                                            id="category" name="religion_category" required>
+                                            <option value="" disabled
+                                                {{ old('religion_category') ? '' : 'selected' }}>
+                                                Select Category</option>
+                                            <option value="General"
+                                                {{ old('religion_category') == 'General' ? 'selected' : '' }}>
+                                                General
+                                            </option>
+                                            <option value="OBC"
+                                                {{ old('religion_category') == 'OBC' ? 'selected' : '' }}>
+                                                OBC
+                                            </option>
+                                            <option value="SC"
+                                                {{ old('religion_category') == 'SC' ? 'selected' : '' }}>SC
+                                            </option>
+                                            <option value="ST"
+                                                {{ old('religion_category') == 'ST' ? 'selected' : '' }}>ST
+                                            </option>
+                                            <option value="Minority"
+                                                {{ old('religion_category') == 'Minority' ? 'selected' : '' }}>Minority
+                                            </option>
+                                        </select>
+                                        @error('religion_category')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="religion" class="form-label">Religion <span
                                                 class="text-danger">*</span></label>
@@ -439,44 +480,6 @@
                                         @error('religion')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label for="category" class="form-label">Religion Category <span
-                                                class="text-danger">*</span></label>
-                                        <select class="form-control @error('religion_category') is-invalid @enderror"
-                                            id="category" name="religion_category" required>
-                                            <option value="" disabled
-                                                {{ old('religion_category') ? '' : 'selected' }}>
-                                                Select Category</option>
-                                            <option value="General"
-                                                {{ old('religion_category') == 'General' ? 'selected' : '' }}>
-                                                General
-                                            </option>
-                                            <option value="OBC"
-                                                {{ old('religion_category') == 'OBC' ? 'selected' : '' }}>
-                                                OBC
-                                            </option>
-                                            <option value="SC"
-                                                {{ old('religion_category') == 'SC' ? 'selected' : '' }}>SC
-                                            </option>
-                                            <option value="ST"
-                                                {{ old('religion_category') == 'ST' ? 'selected' : '' }}>ST
-                                            </option>
-                                        </select>
-                                        @error('religion_category')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <div class="form-group local-forms">
-                                            <label class="form-label">Caste: <span class="text-danger">*</span></label>
-                                            <input type="text" name="caste" id="caste"
-                                                class="form-control @error('caste') is-invalid @enderror"
-                                                value="{{ old('caste') }}" required>
-                                            @error('caste')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div>
                                     </div>
                                 </div>
                             </div>
