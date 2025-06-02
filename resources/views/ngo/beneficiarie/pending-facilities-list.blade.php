@@ -95,8 +95,7 @@
 
                         <div class="col-md-4 d-flex">
                             <button type="submit" class="btn btn-primary me-2">Search</button>
-                            <a href="{{ route('pending-distribute-list') }}"
-                                class="btn btn-info text-white me-2">Reset</a>
+                            <a href="{{ route('pending-distribute-list') }}" class="btn btn-info text-white me-2">Reset</a>
                         </div>
                     </form>
                 </div>
@@ -111,6 +110,8 @@
                                 <th>Name</th>
                                 <th>Father/Husband Name</th>
                                 <th>Address</th>
+                                <th>Identity No.</th>
+                                <th>Identity Type</th>
                                 <th>Mobile no.</th>
                                 <th>Session</th>
                                 <th>Distribute Date</th>
@@ -136,7 +137,8 @@
                                             {{ $item->block }},
                                             {{ $item->district }},
                                             {{ $item->state }} - {{ $item->pincode }}</td>
-                                        <td>{{ $item->phone }}</td>
+                                        <td>{{ $item->identity_no }}</td>
+                                        <td>{{ $item->identity_type }}</td>
                                         <td>{{ $item->phone }}</td>
                                         <td>{{ $item->academic_session }}</td>
                                         <td>

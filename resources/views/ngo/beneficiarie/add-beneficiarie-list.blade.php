@@ -30,6 +30,8 @@
                                 <th>Name</th>
                                 <th>Father/Husband Name</th>
                                 <th>Address</th>
+                                <th>Identity No.</th>
+                                <th>Identity Type</th>
                                 <th>Mobile No.</th>
                                 <th>Session</th>
                                 <th>Status</th>
@@ -44,15 +46,17 @@
                                     <td>{{ $item->registration_no }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->gurdian_name }}</td>
-                                     <td>{{ $item->village }},
-                                            ({{ $item->area_type }})
-                                            ,
-                                            {{ $item->post }},
-                                            {{ $item->block }},
-                                            {{ $item->district }},
-                                            {{ $item->state }} - {{ $item->pincode }}</td>
+                                    <td>{{ $item->village }},
+                                        ({{ $item->area_type }})
+                                        ,
+                                        {{ $item->post }},
+                                        {{ $item->block }},
+                                        {{ $item->district }},
+                                        {{ $item->state }} - {{ $item->pincode }}</td>
+                                    <td>{{ $item->identity_no }}</td>
+                                    <td>{{ $item->identity_type }}</td>
                                     <td>{{ $item->phone }}</td>
-                                     <td>{{$item->academic_session}}</td>
+                                    <td>{{ $item->academic_session }}</td>
                                     <td>
                                         @if ($item->status == 1)
                                             Approve
@@ -60,12 +64,12 @@
                                     </td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            <a href="{{route('add-beneficiarie', $item->id )}}"
+                                            <a href="{{ route('add-beneficiarie', $item->id) }}"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="View" style="min-width: 38px; height: 38px;">
                                                 Add
                                             </a>
-                                            <a href="{{ route('view-beneficiarie', $item->id ) }}"
+                                            <a href="{{ route('view-beneficiarie', $item->id) }}"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="View" style="min-width: 38px; height: 38px;">
                                                 <i class="fa-regular fa-eye"></i>

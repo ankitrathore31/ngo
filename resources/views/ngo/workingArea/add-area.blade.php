@@ -39,8 +39,8 @@
                                     </option>
                                     <option value="Block" {{ old('area_type') == 'Block' ? 'selected' : '' }}>Block
                                     </option>
-                                    <option value="City/Town" {{ old('area_type') == 'City/Town' ? 'selected' : '' }}>
-                                        City/Town
+                                    <option value="Town" {{ old('area_type') == 'Town' ? 'selected' : '' }}>
+                                        Town
                                     </option>
                                     <option value="Village" {{ old('area_type') == 'Village' ? 'selected' : '' }}>Village
                                     </option>

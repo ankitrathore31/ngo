@@ -402,11 +402,11 @@
                 </div>
 
                 <div class="col-md-3 mb-2 mt-2">
-                    <a href="{{ route('show-area', 'City/Town') }}" style="text-decoration: none;">
+                    <a href="{{ route('show-area', 'Town') }}" style="text-decoration: none;">
                         <div class="card text-center shadow-sm bg-secondary text-white">
                             <div class="card-body">
-                                <h5 class="card-title fw-bold">City / Town</h5>
-                                <p class="card-text fs-4 counter" >{{ $areaTypeCounts['City/Town'] ?? 0 }}</p>
+                                <h5 class="card-title fw-bold">Town</h5>
+                                <p class="card-text fs-4 counter" >{{ $areaTypeCounts['Town'] ?? 0 }}</p>
                                 <span>Click Here</span>
                             </div>
                         </div>
