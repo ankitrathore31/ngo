@@ -1,5 +1,70 @@
 @extends('ngo.layout.master')
 @Section('content')
+ <style>
+        @page {
+            size: auto;
+            margin: 0;
+            /* Remove all margins including top */
+        }
+
+        @media print {
+
+            html,
+            body {
+                margin: 0 !important;
+                padding: 0 !important;
+                height: 100% !important;
+                width: 100% !important;
+            }
+
+            body * {
+                visibility: hidden;
+            }
+
+            .printable,
+            .printable * {
+                visibility: visible;
+            }
+
+            .table th,
+            .table td {
+                padding: 4px !important;
+                font-size: 9px !important;
+                border: 1px solid #000 !important;
+            }
+
+            .card,
+            .table-responsive {
+                box-shadow: none !important;
+                border: none !important;
+                overflow: visible !important;
+            }
+
+            .btn,
+            .navbar,
+            .footer,
+            .no-print {
+                display: none !important;
+            }
+
+            table {
+                page-break-inside: auto;
+            }
+
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+
+            thead {
+                display: table-header-group;
+            }
+
+            tfoot {
+                display: table-footer-group;
+            }
+        }
+    </style>
     <div class="wrapper">
         <div class="container-fluid mt-4">
 
@@ -98,9 +163,10 @@
                             <a href="{{ route('beneficiarie-facilities-list') }}" class="btn btn-info text-white me-2">Reset</a>
                         </div>
                     </form>
+                    <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
                 </div>
             </div>
-            <div class="card shadow-sm">
+            <div class="card shadow-sm printable">
                 <div class="card-body table-responsive">
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-primary">
@@ -110,12 +176,14 @@
                                 <th>Name</th>
                                 <th>Father/Husband Name</th>
                                 <th>Address</th>
+                                <th>Identity No.</th>
+                                <th>Identity Type</th>
                                 <th>Mobile No.</th>
                                 <th>Session</th>
                                 <th>Survey Date</th>
                                 <th>Facilities Category</th>
                                 <th>Facilities</th>
-                                <th>Action</th>
+                                <th class="no-print">Action</th>
                             </tr>
                         </thead>
 
@@ -134,7 +202,8 @@
                                             {{ $item->block }},
                                             {{ $item->district }},
                                             {{ $item->state }} - {{ $item->pincode }}</td>
-                                        <td>{{ $item->phone }}</td>
+                                            <td>{{ $item->identity_no }}</td>
+                                            <td>{{ $item->identity_type }}</td>
                                         <td>{{ $item->phone }}</td>
                                         <td>{{ $item->academic_session }}</td>
                                         <td>
@@ -143,7 +212,7 @@
                                         <td>{{ $survey->facilities_category ?? 'No Found' }}</td>
                                         <td>{{ $survey->facilities ?? 'No Found' }}</td>
                                         {{-- Survey date --}}
-                                        <td>
+                                        <td class="no-print">
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">
                                                 <a href="{{ route('distribute-beneficiarie-facilities', [$item->id, $survey->id]) }}"
                                                     class="btn btn-primary btn-sm px-3 d-flex align-items-center justify-content-center"
@@ -166,6 +235,10 @@
                 </div>
             </div>
         </div>
-
     </div>
+     <script>
+        function printTable() {
+            window.print();
+        }
+    </script>
 @endsection
