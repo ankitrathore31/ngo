@@ -33,6 +33,9 @@
                                 <th>Identity No.</th>
                                 <th>Identity Type</th>
                                 <th>Mobile No.</th>
+                                <th>Cast</th>
+                                <th>Religion</th>
+                                <th>Age</th>
                                 <th>Session</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -56,6 +59,11 @@
                                     <td>{{ $item->identity_no }}</td>
                                     <td>{{ $item->identity_type }}</td>
                                     <td>{{ $item->phone }}</td>
+                                    <td>{{ $item->caste }}</td>
+                                    <td>{{ $item->religion }}</td>
+                                    <td>
+                                        {{ $item->dob ? \Carbon\Carbon::parse($item->dob)->age . ' years' : 'Not Found' }}
+                                    </td>
                                     <td>{{ $item->academic_session }}</td>
                                     <td>
                                         @if ($item->status == 1)
@@ -66,8 +74,8 @@
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
                                             <a href="{{ route('add-beneficiarie', $item->id) }}"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                title="View" style="min-width: 38px; height: 38px;">
-                                                Add
+                                                title="View" style="min-width: 38px; height: auto;">
+                                                Add Beneficiarie Survey
                                             </a>
                                             <a href="{{ route('view-beneficiarie', $item->id) }}"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"

@@ -370,7 +370,7 @@
                         <div class="card text-center shadow-sm bg-warning text-white">
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">District</h5>
-                                <p class="card-text fs-4 counter" >{{ $areaTypeCounts['District'] ?? 0 }}</p>
+                                <p class="card-text fs-4 counter">{{ $areaTypeCounts['District'] ?? 0 }}</p>
                                 <span>Click Here</span>
                             </div>
                         </div>
@@ -382,31 +382,43 @@
                         <div class="card text-center shadow-sm bg-danger text-white">
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">Tehsil</h5>
-                                <p class="card-text fs-4 counter" >{{ $areaTypeCounts['Tehsil'] ?? 0 }}</p>
+                                <p class="card-text fs-4 counter">{{ $areaTypeCounts['Tehsil'] ?? 0 }}</p>
                                 <span>Click Here</span>
                             </div>
                         </div>
                     </a>
                 </div>
 
-                <div class="col-md-3 mb-2 mt-2">
+                <div class="col-md-2 mb-2 mt-2">
                     <a href="{{ route('show-area', 'Block') }}" style="text-decoration: none;">
                         <div class="card text-center shadow-sm bg-info text-white">
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">Block</h5>
-                                <p class="card-text fs-4 counter" >{{ $areaTypeCounts['Block'] ?? 0 }}</p>
+                                <p class="card-text fs-4 counter">{{ $areaTypeCounts['Block'] ?? 0 }}</p>
                                 <span>Click Here</span>
                             </div>
                         </div>
                     </a>
                 </div>
 
-                <div class="col-md-3 mb-2 mt-2">
+                <div class="col-md-2 mb-2 mt-2">
+                    <a href="{{ route('show-area', 'City') }}" style="text-decoration: none;">
+                        <div class="card text-center shadow-sm bg-success text-white">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">City</h5>
+                                <p class="card-text fs-4 counter">{{ $areaTypeCounts['City'] ?? 0 }}</p>
+                                <span>Click Here</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-2 mb-2 mt-2">
                     <a href="{{ route('show-area', 'Town') }}" style="text-decoration: none;">
                         <div class="card text-center shadow-sm bg-secondary text-white">
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">Town</h5>
-                                <p class="card-text fs-4 counter" >{{ $areaTypeCounts['Town'] ?? 0 }}</p>
+                                <p class="card-text fs-4 counter">{{ $areaTypeCounts['Town'] ?? 0 }}</p>
                                 <span>Click Here</span>
                             </div>
                         </div>
@@ -418,7 +430,7 @@
                         <div class="card text-center shadow-sm bg-info text-white">
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">Village</h5>
-                                <p class="card-text fs-4 counter" >{{ $areaTypeCounts['Village'] ?? 0 }}</p>
+                                <p class="card-text fs-4 counter">{{ $areaTypeCounts['Village'] ?? 0 }}</p>
                                 <span>Click Here</span>
                             </div>
                         </div>
@@ -430,7 +442,7 @@
                         <div class="card text-center shadow-sm bg-primary text-white">
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">Family</h5>
-                                <p class="card-text fs-4 counter" >{{ $areaTypeCounts['Family'] ?? 0 }}</p>
+                                <p class="card-text fs-4 counter">{{ $areaTypeCounts['Family'] ?? 0 }}</p>
                                 <span>Click Here</span>
                             </div>
                         </div>
@@ -887,18 +899,17 @@
         </div>
     </section>
     <script>
-    document.getElementById('session').addEventListener('change', function () {
-        const session = this.value;
+        document.getElementById('session').addEventListener('change', function() {
+            const session = this.value;
 
-        fetch(`/filter-area-counts?session=${session}`)
-            .then(res => res.json())
-            .then(data => {
-                document.querySelectorAll('.count').forEach(el => {
-                    const type = el.getAttribute('data-type');
-                    el.textContent = data[type] || 0;
+            fetch(`/filter-area-counts?session=${session}`)
+                .then(res => res.json())
+                .then(data => {
+                    document.querySelectorAll('.count').forEach(el => {
+                        const type = el.getAttribute('data-type');
+                        el.textContent = data[type] || 0;
+                    });
                 });
-            });
-    });
-</script>
-
+        });
+    </script>
 @endsection

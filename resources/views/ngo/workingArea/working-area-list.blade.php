@@ -49,9 +49,12 @@
                                     Tehsil</option>
                                 <option value="Block" {{ request('category_filter') == 'Block' ? 'selected' : '' }}>
                                     Block</option>
-                                <option value="City/Town"
-                                    {{ request('category_filter') == 'City/Town' ? 'selected' : '' }}>
-                                    City/Town</option>
+                                <option value="City"
+                                    {{ request('category_filter') == 'City' ? 'selected' : '' }}>
+                                    City</option>
+                                <option value="Town"
+                                    {{ request('category_filter') == 'Town' ? 'selected' : '' }}>
+                                    Town</option>
                                 <option value="Village" {{ request('category_filter') == 'Village' ? 'selected' : '' }}>
                                     Village</option>
                                 <option value="Family" {{ request('category_filter') == 'Family' ? 'selected' : '' }}>

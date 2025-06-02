@@ -93,7 +93,7 @@
                             <select name="session_filter" id="session_filter" class="form-control"
                                 onchange="this.form.submit()">
                                 <option value="">All Sessions</option> <!-- Default option to show all -->
-                                @foreach (Session::get('all_academic_session') as $session)
+                                @foreach ($data as $session)
                                     <option value="{{ $session->session_date }}"
                                         {{ request('session_filter') == $session->session_date ? 'selected' : '' }}>
                                         {{ $session->session_date }}
@@ -183,6 +183,9 @@
                                 <th>Identity No.</th>
                                 <th>Identity Type</th>
                                 <th>Mobile no.</th>
+                                <th>Cast</th>
+                                <th>Religion</th>
+                                <th>Age</th>
                                 <th>Session</th>
                                 <th>Distribute Date</th>
                                 <th>Distribute Place</th>
@@ -190,7 +193,7 @@
                                 <th>Facilities</th>
                                 <th>Status</th>
                                 <th>Signature/
-                                    Recipient's Thumb Impression</th>
+                                    Thumb Impression of the Recipient</th>
                                 <th class="no-print">Action</th>
                             </tr>
                         </thead>
@@ -213,6 +216,11 @@
                                         <td>{{ $item->identity_no }}</td>
                                         <td>{{ $item->identity_type }}</td>
                                         <td>{{ $item->phone }}</td>
+                                        <td>{{ $item->caste }}</td>
+                                        <td>{{ $item->religion }}</td>
+                                        <td>
+                                            {{ $item->dob ? \Carbon\Carbon::parse($item->dob)->age . ' years' : 'Not Found' }}
+                                        </td>
                                         <td>{{ $item->academic_session }}</td>
                                         <td>
                                             {{ $survey->distribute_date ? \Carbon\Carbon::parse($survey->distribute_date)->format('d-m-Y') : 'No Found' }}
@@ -225,7 +233,7 @@
 
                                         <td class="no-print">
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                                <a href="{{-- route('show-beneficiarie-facilities', [$item->id, $survey->id]) --}}"
+                                                <a href="{{ route('show-beneficiarie-report', [$item->id, $survey->id]) }}"
                                                     class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                     title="View" style="min-width: 38px; height: 38px;">
                                                     <i class="fa-regular fa-eye"></i>

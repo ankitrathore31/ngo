@@ -42,6 +42,9 @@
                                     <option value="Town" {{ old('area_type') == 'Town' ? 'selected' : '' }}>
                                         Town
                                     </option>
+                                    <option value="City" {{ old('area_type') == 'City' ? 'selected' : '' }}>
+                                        City
+                                    </option>
                                     <option value="Village" {{ old('area_type') == 'Village' ? 'selected' : '' }}>Village
                                     </option>
                                     <option value="Family" {{ old('area_type') == 'Family' ? 'selected' : '' }}>Family

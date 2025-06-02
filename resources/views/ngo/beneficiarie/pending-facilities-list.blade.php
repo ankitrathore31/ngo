@@ -1,5 +1,70 @@
 @extends('ngo.layout.master')
 @Section('content')
+  <style>
+        @page {
+            size: auto;
+            margin: 0;
+            /* Remove all margins including top */
+        }
+
+        @media print {
+
+            html,
+            body {
+                margin: 0 !important;
+                padding: 0 !important;
+                height: 100% !important;
+                width: 100% !important;
+            }
+
+            body * {
+                visibility: hidden;
+            }
+
+            .printable,
+            .printable * {
+                visibility: visible;
+            }
+
+            .table th,
+            .table td {
+                padding: 4px !important;
+                font-size: 9px !important;
+                border: 1px solid #000 !important;
+            }
+
+            .card,
+            .table-responsive {
+                box-shadow: none !important;
+                border: none !important;
+                overflow: visible !important;
+            }
+
+            .btn,
+            .navbar,
+            .footer,
+            .no-print {
+                display: none !important;
+            }
+
+            table {
+                page-break-inside: auto;
+            }
+
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+
+            thead {
+                display: table-header-group;
+            }
+
+            tfoot {
+                display: table-footer-group;
+            }
+        }
+    </style>
     <div class="wrapper">
         <div class="container-fluid mt-4">
 
@@ -25,7 +90,7 @@
                             <select name="session_filter" id="session_filter" class="form-control"
                                 onchange="this.form.submit()">
                                 <option value="">All Sessions</option> <!-- Default option to show all -->
-                                @foreach (Session::get('all_academic_session') as $session)
+                                @foreach ($data as $session)
                                     <option value="{{ $session->session_date }}"
                                         {{ request('session_filter') == $session->session_date ? 'selected' : '' }}>
                                         {{ $session->session_date }}
@@ -97,10 +162,11 @@
                             <button type="submit" class="btn btn-primary me-2">Search</button>
                             <a href="{{ route('pending-distribute-list') }}" class="btn btn-info text-white me-2">Reset</a>
                         </div>
+                        <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
                     </form>
                 </div>
             </div>
-            <div class="card shadow-sm">
+            <div class="card shadow-sm printable">
                 <div class="card-body table-responsive">
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-primary">
@@ -113,12 +179,15 @@
                                 <th>Identity No.</th>
                                 <th>Identity Type</th>
                                 <th>Mobile no.</th>
+                                <th>Cast</th>
+                                <th>Religion</th>
+                                <th>Age</th>
                                 <th>Session</th>
                                 <th>Distribute Date</th>
                                 <th>Facilities Category</th>
                                 <th>Facilities</th>
                                 <th>Status</th>
-                                <th>Action</th>
+                                <th class="no-print">Action</th>
                             </tr>
                         </thead>
 
@@ -140,6 +209,11 @@
                                         <td>{{ $item->identity_no }}</td>
                                         <td>{{ $item->identity_type }}</td>
                                         <td>{{ $item->phone }}</td>
+                                          <td>{{ $item->caste }}</td>
+                                        <td>{{ $item->religion }}</td>
+                                        <td>
+                                            {{ $item->dob ? \Carbon\Carbon::parse($item->dob)->age . ' years' : 'Not Found' }}
+                                        </td>
                                         <td>{{ $item->academic_session }}</td>
                                         <td>
                                             {{ $survey->distribute_date ? \Carbon\Carbon::parse($survey->distribute_date)->format('d-m-Y') : 'No Found' }}
@@ -148,7 +222,7 @@
                                         <td>{{ $survey->facilities ?? 'No Found' }}</td>
                                         <td>{{ $survey->status ?? 'No Found' }} </td>
 
-                                        <td>
+                                        <td class="no-print">
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">
                                                 <a href="{{-- route('show-beneficiarie-facilities', [$item->id, $survey->id]) --}}"
                                                     class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
