@@ -141,12 +141,14 @@ Route::middleware('auth')->group(function () {
     Route::patch('ngo/pending-status/{id}', [RegistrationController::class, 'pendingStatus'])->name('pending-status');
     Route::get('ngo/view-registration/{id}', [RegistrationController::class, 'viewRegistration'])->name('view-reg');
     Route::get('ngo/delete-view/{id}', [RegistrationController::class, 'deleteRegistrationPage'])->name('delete-view');
-    Route::get('ngo/edit-registration/{id}', [RegistrationController::class, 'editRegistration'])->name('edit-reg');
     Route::post('ngo/delete-registration/{id}', [RegistrationController::class, 'deleteRegistration'])->name('delete-reg');
     Route::get('ngo/recover-registration', [RegistrationController::class, 'recover'])->name('recover');
     Route::get('/recover/{id}', [RegistrationController::class,'recoverItem'])->name('recover-item');
     Route::get('ngo/online-registration-setting', [RegistrationController::class, 'onlineregistrationSetting'])->name('reg-setting');
     Route::post('ngo/registration-toggle', [RegistrationController::class, 'toggleSetting'])->name('registration.toggle');
+    Route::get('ngo/edit-registration/{id}', [RegistrationController::class, 'editRegistration'])->name('edit-reg');
+    Route::get('ngo/edit-apporve-registration/{id}', [RegistrationController::class, 'editApproveRegistration'])->name('edit-apporve-reg');
+    Route::post('ngo/update-apporve-registration/{id}', [RegistrationController::class, 'UpdateApproveRegistration'])->name('update-apporve-registration');
 
 });
 
@@ -190,6 +192,8 @@ Route::controller(WorkingAreaController::class)->group(function(){
     Route::get('ngo/working-area', 'workingarea')->middleware('auth')->name('working-area');
     Route::post('ngo/store-area', 'storeArea')->middleware('auth')->name('store-area');
     Route::get('ngo/working-area-list', 'workingAreaList')->middleware('auth')->name('working-area-list');
+    Route::get('ngo/edit-area/{id}', 'editarea')->middleware('auth')->name('edit-area');
+    Route::post('ngo/update-area/{id}', 'updatearea')->middleware('auth')->name('update-area');
     Route::get('ngo/delete-Working-area/{id}', 'removeArea')->middleware('auth')->name('remove-area');
 });
 

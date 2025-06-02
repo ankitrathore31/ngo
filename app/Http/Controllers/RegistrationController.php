@@ -218,25 +218,72 @@ class RegistrationController extends Controller
         return redirect()->route('pending-registration')->with('success', 'Registration updated successfully.');
     }
 
-     public function viewRegistration($id)
+    public function viewRegistration($id)
     {
 
         $beneficiarie = beneficiarie::find($id);
         return view('ngo.registration.view-reg', compact('beneficiarie'));
     }
 
-    public function pendingRegistration()
+    public function pendingRegistration(Request $request)
     {
+        $queryBene = beneficiarie::where('status', 0);
+        $queryMember = Member::where('status', 0);
 
-        $pendingbene = beneficiarie::where('status', 0)->get();
-        $pendingmemeber = Member::where('status', 0)->get();
-        return view('ngo.registration.pending-reg-list', compact('pendingbene', 'pendingmemeber'));
+        if ($request->filled('session_filter')) {
+            $queryBene->where('academic_session', $request->session_filter);
+            $queryMember->where('academic_session', $request->session_filter);
+        }
+
+        if ($request->filled('application_no')) {
+            $queryBene->where('application_no', $request->application_no);
+            $queryMember->where('application_no', $request->application_no);
+        }
+
+        if ($request->filled('name')) {
+            $queryBene->where('name', 'like', '%' . $request->name . '%');
+            $queryMember->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        $pendingbene = $queryBene->get();
+        $pendingmemeber = $queryMember->get();
+        $combined = $pendingbene->merge($pendingmemeber);
+        $data = academic_session::all();
+
+        return view('ngo.registration.pending-reg-list', compact('data', 'pendingbene', 'pendingmemeber','combined'));
+    }
+
+    public function approveRegistration(Request $request)
+    {
+      $queryBene = beneficiarie::where('status', 1);
+        $queryMember = Member::where('status', 1);
+
+        if ($request->filled('session_filter')) {
+            $queryBene->where('academic_session', $request->session_filter);
+            $queryMember->where('academic_session', $request->session_filter);
+        }
+
+        if ($request->filled('application_no')) {
+            $queryBene->where('application_no', $request->application_no);
+            $queryMember->where('application_no', $request->application_no);
+        }
+
+        if ($request->filled('name')) {
+            $queryBene->where('name', 'like', '%' . $request->name . '%');
+            $queryMember->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        $approvebeneficiarie = $queryBene->get();
+        $approvemember = $queryMember->get();
+        $data = academic_session::all();
+        $combined = $approvebeneficiarie->merge($approvemember);
+        return view('ngo.registration.apporve-reg-list', compact('data','approvebeneficiarie', 'approvemember','combined'));
     }
 
     public function approveStatus(Request $request, $id)
     {
         $request->validate([
-            'registration_date' => 'required|date_format:d-m-Y',
+            'registration_date' => 'required',
         ]);
 
         $beneficiarie = beneficiarie::find($id);
@@ -256,7 +303,7 @@ class RegistrationController extends Controller
             }
 
             $beneficiarie->registration_no = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
-            $beneficiarie->registration_date = Carbon::createFromFormat('d-m-Y', $request->registration_date)->toDateString();
+            $beneficiarie->registration_date = Carbon::parse($request->input('registration_date'));
             $beneficiarie->save();
 
             return redirect()->route('approve-registration')->with('success', 'Beneficiarie approved successfully.');
@@ -268,7 +315,7 @@ class RegistrationController extends Controller
             $prefix = '2192000';
             $sequence_number = 55;
             $member->registration_no = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
-            $member->registration_date = Carbon::createFromFormat('d-m-Y', $request->registration_date)->format('Y-m-d');
+            $member->registration_date = Carbon::parse($request->input('registration_date'));
             $member->save();
 
             return redirect()->back()->with('success', 'Member approved successfully.');
@@ -277,45 +324,114 @@ class RegistrationController extends Controller
         return redirect()->back()->with('error', 'Record not found or unknown type.');
     }
 
-    public function showApporveReg($id){
+
+     public function showApporveReg($id)
+    {
 
         $beneficiarie = beneficiarie::where('status', 1)->find($id);
 
         return view('ngo.registration.show-apporve-reg', compact('beneficiarie'));
     }
-
-
-    public function approveRegistration()
+     public function editApproveRegistration($id)
     {
-        $approvebeneficiarie = beneficiarie::where('status', 1)->get();
-        $approvegmemeber = Member::where('status', 1)->get();
-        return view('ngo.registration.apporve-reg-list', compact('approvebeneficiarie', 'approvegmemeber'));
+
+        $beneficiarie = beneficiarie::find($id);
+        $data = academic_session::all();
+        Session::put('all_academic_session', $data);
+        return view('ngo.registration.edit-apporve-reg', compact('beneficiarie', 'data'));
     }
 
+    public function UpdateApporveRegistration(Request $request, $id)
+    {
+
+        $data = $request->only([
+            'academic_session',
+            'application_date',
+            'reg_type',
+            'name',
+            'dob',
+            'gender',
+            'phone',
+            'gurdian_name',
+            'mother_name',
+            'village',
+            'post',
+            'block',
+            'state',
+            'district',
+            'pincode',
+            'country',
+            'email',
+            'religion',
+            'religion_category',
+            'caste',
+            'identity_type',
+            'identity_no',
+            'occupation',
+            'eligibility',
+            'marital_status',
+            'area_type',
+            'help_needed',
+        ]);
+
+        // Handle file uploads
+        if ($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('benefries_images'), $imageName);
+            $data['image'] = $imageName;
+        }
+
+        if ($request->hasFile('id_document')) {
+            $idDocName = time() . '_iddoc.' . $request->id_document->extension();
+            $request->id_document->move(public_path('benefries_images'), $idDocName);
+            $data['id_document'] = $idDocName;
+        }
+
+        try {
+            if (!empty($data['application_date'])) {
+                $data['application_date'] = Carbon::parse($data['application_date'])->format('Y-m-d');
+            }
+
+            if (!empty($data['dob'])) {
+                $data['dob'] = Carbon::parse($data['dob'])->format('Y-m-d');
+            }
+        } catch (\Exception $e) {
+            return back()->withErrors(['date_error' => 'Invalid date format for Application Date or Date of Birth.']);
+        }
+
+        // Update the existing record based on reg_type
+        if ($request->reg_type === 'Beneficiaries') {
+            beneficiarie::where('id', $id)->update($data);
+        } else if ($request->reg_type === 'Member') {
+            Member::where('id', $id)->update($data);
+        }
+
+        return redirect()->route('pending-registration')->with('success', 'Registration updated successfully.');
+    }
 
     public function pendingStatus($id)
     {
         $beneficiarie = beneficiarie::find($id);
-        if ($beneficiarie && $beneficiarie->reg_type === 'beneficiaries') {
+        if ($beneficiarie && $beneficiarie->reg_type === 'Beneficiaries') {
             $beneficiarie->status = 0;
             $beneficiarie->save();
 
-            return redirect()->back()->with('success', 'Beneficiarie approved successfully.');
+            return redirect()->back()->with('success', 'Beneficiarie Pending successfully.');
         }
 
-        // If not found, try member
+        
         $member = Member::find($id);
-        if ($member && $member->reg_type === 'member') {
+        if ($member && $member->reg_type === 'Member') {
             $member->status = 0;
             $member->save();
 
-            return redirect()->back()->with('success', 'Member approved successfully.');
+            return redirect()->back()->with('success', 'Member Pending successfully.');
         }
 
         return redirect()->back()->with('error', 'Record not found or unknown type.');
     }
 
-   
+
 
 
     public function deleteRegistrationPage($id)

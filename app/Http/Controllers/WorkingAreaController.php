@@ -68,6 +68,34 @@ class WorkingAreaController extends Controller
         return view('ngo.workingArea.working-area-list', compact('area', 'areaTypeCounts'));
     }
 
+    public function editarea($id)
+    {
+
+        $states = config('states');
+        $area = Working_Area::find($id);
+        $data = academic_session::all()->sortByDesc('session_date');
+        Session::put('all_academic_session', $data);
+        return view('ngo.workingArea.edit-area', compact('data', 'states', 'area'));
+    }
+
+    public function updatearea(request $request, $id)
+    {
+
+        $areaValue = $request->area_type === 'State' ? $request->state : $request->area;
+
+        if (empty($areaValue)) {
+            return redirect()->back()->withErrors(['area' => 'The area field is required.'])->withInput();
+        }
+
+        $area = Working_Area::find($id);
+
+        $area->area_type = $request->area_type;
+        $area->area = $areaValue;
+        $area->academic_session = $request->academic_session;
+        $area->save();
+
+        return redirect()->route('working-area-list')->with('success', 'Working Area Updated Successfully');
+    }
     public function removeArea($id)
     {
 
@@ -76,5 +104,4 @@ class WorkingAreaController extends Controller
 
         return redirect()->back()->with('success', 'Working Area Deleted Successfully');
     }
-
 }

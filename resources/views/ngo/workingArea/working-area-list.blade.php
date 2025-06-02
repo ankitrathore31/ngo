@@ -14,7 +14,11 @@
                     </ol>
                 </nav>
             </div>
-
+             @if (session('success'))
+                <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
             <div class="row">
                 <div class="col-md-12">
                     <form method="GET" action="{{ route('working-area-list') }}" class="row g-3 mb-4">
@@ -49,11 +53,9 @@
                                     Tehsil</option>
                                 <option value="Block" {{ request('category_filter') == 'Block' ? 'selected' : '' }}>
                                     Block</option>
-                                <option value="City"
-                                    {{ request('category_filter') == 'City' ? 'selected' : '' }}>
+                                <option value="City" {{ request('category_filter') == 'City' ? 'selected' : '' }}>
                                     City</option>
-                                <option value="Town"
-                                    {{ request('category_filter') == 'Town' ? 'selected' : '' }}>
+                                <option value="Town" {{ request('category_filter') == 'Town' ? 'selected' : '' }}>
                                     Town</option>
                                 <option value="Village" {{ request('category_filter') == 'Village' ? 'selected' : '' }}>
                                     Village</option>
@@ -108,6 +110,12 @@
                                     <td>{{ $item->area }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
+
+                                            <a href="{{ route('edit-area', $item->id) }}" class="btn btn-sm btn-Primary"
+                                                title="Edit"
+                                                >
+                                                <i class="fa-regular fa-edit"></i>
+                                            </a>
 
                                             <a href="{{ route('remove-area', $item->id) }}" class="btn btn-sm btn-danger"
                                                 title="Delete"
