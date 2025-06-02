@@ -93,7 +93,7 @@
                             <select name="session_filter" id="session_filter" class="form-control"
                                 onchange="this.form.submit()">
                                 <option value="">All Sessions</option> <!-- Default option to show all -->
-                                @foreach (Session::get('all_academic_session') as $session)
+                                @foreach ($data as $session)
                                     <option value="{{ $session->session_date }}"
                                         {{ request('session_filter') == $session->session_date ? 'selected' : '' }}>
                                         {{ $session->session_date }}
@@ -183,6 +183,9 @@
                                 <th>Identity No.</th>
                                 <th>Identity Type</th>
                                 <th>Mobile no.</th>
+                                <th>Cast</th>
+                                <th>Religion</th>
+                                <th>Age</th>
                                 <th>Session</th>
                                 <th>Distribute Date</th>
                                 <th>Distribute Place</th>
@@ -214,6 +217,11 @@
                                             <td>{{ $item->identity_type }}</td>
                                            
                                         <td>{{ $item->phone }}</td>
+                                          <td>{{ $item->caste }}</td>
+                                        <td>{{ $item->religion }}</td>
+                                        <td>
+                                            {{ $item->dob ? \Carbon\Carbon::parse($item->dob)->age . ' years' : 'Not Found' }}
+                                        </td>
                                         <td>{{ $item->academic_session }}</td>
                                         
                                         <td>

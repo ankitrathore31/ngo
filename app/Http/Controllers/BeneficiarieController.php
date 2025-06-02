@@ -263,7 +263,7 @@ class BeneficiarieController extends Controller
     }
 
      public function allbeneficiarielist(Request $request)
-    {
+    {   
         $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
             $q->where('status', 'Distributed');
 
@@ -296,18 +296,23 @@ class BeneficiarieController extends Controller
         return view('ngo.beneficiarie.all-beneficiarie-list', compact('beneficiarie', 'data', 'categories'));
     }
 
-    public function beneficiarieReportList()
+    public function beneficiarieReportList($beneficiarie_id, $survey_id)
     {
-        $beneficiarie = Beneficiarie::where('status', 1)
-            ->whereNotNull('help_by_ngo')
-            ->get();
+       $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->find($beneficiarie_id);
+         $survey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+            ->where('id', $survey_id)
+            ->with('beneficiarie')
+            ->firstOrFail();
         return view('ngo.beneficiarie.beneficiarie-report-list', compact('beneficiarie'));
     }
 
-    public function showbeneficiariereport($id)
+    public function showbeneficiariereport($beneficiarie_id, $survey_id)
     {
-
-        $beneficiarie = beneficiarie::find($id);
-        return view('ngo.beneficiarie.show-beneficiarie-report', compact('beneficiarie'));
+        $survey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+            ->where('id', $survey_id)
+            ->with('beneficiarie')
+            ->firstOrFail();
+        $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->find($beneficiarie_id);
+        return view('ngo.beneficiarie.show-beneficiarie-report', compact('beneficiarie', 'survey'));
     }
 }

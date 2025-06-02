@@ -26,8 +26,13 @@
                                 <th>Registration No.</th>
                                 <th>Name</th>
                                 <th>Father/Husband Name</th>
-                                <th>Address</th>
+                                 <th>Address</th>
+                                <th>Identity No.</th>
+                                <th>Identity Type</th>
                                 <th>Mobile No.</th>
+                                <th>Cast</th>
+                                <th>Religion</th>
+                                <th>Age</th>
                                 <th>Survey Date</th>
                                 <th>Survey Details</th>
                                 <th>Session</th>
@@ -50,7 +55,14 @@
                                             {{ $item->block }},
                                             {{ $item->district }},
                                             {{ $item->state }} - {{ $item->pincode }}</td>
+                                        <td>{{ $item->identity_no }}</td>
+                                        <td>{{ $item->identity_type }}</td>
                                         <td>{{ $item->phone }}</td>
+                                        <td>{{ $item->caste }}</td>
+                                        <td>{{ $item->religion }}</td>
+                                        <td>
+                                            {{ $item->dob ? \Carbon\Carbon::parse($item->dob)->age . ' years' : 'Not Found' }}
+                                        </td>
                                         <td>
                                             {{ $survey->survey_date ? \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') : 'No Found' }}
                                         </td>
@@ -61,7 +73,7 @@
 
                                                 <a href="{{ route('add-beneficiarie-facilities', [$item->id, $survey->id]) }}"
                                                     class="btn btn-primary btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                    title="Edit" style="min-width: 38px; height: 38px;">
+                                                    title="Edit" style="min-width: 38px; height: auto;">
                                                     + Facilities
                                                 </a>
 

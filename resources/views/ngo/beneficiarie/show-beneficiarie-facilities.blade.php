@@ -121,7 +121,7 @@
                             <strong>Registraition Type:</strong> {{ $beneficiarie->reg_type }}
                         </div>
                         <div class="col-sm-4 mb-3">
-                            <strong>Registraition No:</strong>
+                            <strong>Registraition No:</strong> {{ $beneficiarie->registration_no }}
                         </div>
                         <div class="col-sm-4 mb-3">
                             <strong>Session:</strong> {{ $beneficiarie->academic_session }}
@@ -205,7 +205,9 @@
                         <div class="col-sm-4 mb-3">
                             <strong>Identity Number:</strong> {{ $beneficiarie->identity_no }}
                         </div>
-
+                        <div class="col-sm-10 mb-3">
+                            <strong>Help Needed:</strong> {{ $beneficiarie->help_needed }}
+                        </div>
                     </div>
                     <hr>
                     <b class="mb-3 text-center"><U>About Beneficiarie Survey & Facilities</U></b>
