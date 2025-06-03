@@ -66,10 +66,10 @@
                                 <th>Father/Husband Name</th>
                                 <th>Address</th>
                                 <th>Caste</th>
-                                <th>Regional Category</th>
+                                <th>Caste Category</th>
                                 <th>Religion</th>
-                                <th>Number</th>
-                                <th>Type</th>
+                                <th>Mobile No.</th>
+                                <th>Registration Type</th>
                                 <th>Session</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -102,8 +102,9 @@
                                     <td>{{$item->religion}}</td>
                                     <td>{{ $item->phone }}</td>
                                     <td>{{ $item->reg_type ?? 'Member' }}</td>
-                                    <td>Apporve</td>
+                                    
                                     <td>{{ $item->academic_session }}</td>
+                                    <td>Apporve</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
                                             <a href="{{ route('edit-apporve-reg', $item->id) }}"
