@@ -24,11 +24,18 @@
                         <thead class="table-primary">
                             <tr>
                                 <th>Sr. No.</th>
-                                <th>Application Date</th>
-                                <th>Application No.</th>
+                                 <th>Application Date</th>
+                                <td>Application No.</td>
+                                <th>Registration Date.</th>
+                                <th>Registration No.</th>
                                 <th>Name</th>
-                                <th>Phone Number</th>
-                                <th>Email</th>
+                                <th>Father/Husband Name</th>
+                                <th>Address</th>
+                                <th>Mobile No.</th>
+                                <th>Caste</th>
+                                <th>Caste Category</th>
+                                <th>Religion</th>
+                                <th>Registration Type</th>
                                 <th>Delete Date</th>
                                 <th>Reason for Deletion</th>
                                 <th>Actions</th>
@@ -38,13 +45,20 @@
                             @foreach ($deletedBeneficiaries as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>
-                                        {{ \Carbon\Carbon::parse($item->application_date)->format('d-m-Y') }}<br>
-                                    </td>
-                                    <td>{{ $item->application_no }}</td>
-                                    <td>{{ $item->name }}</td>
+                                   <td>{{ $item->name }}</td>
+                                    <td>{{ $item->gurdian_name}}</td>
+                                    <td>{{ $item->village }},
+                                            ({{ $item->area_type }})
+                                            ,
+                                            {{ $item->post }},
+                                            {{ $item->block }},
+                                            {{ $item->district }},
+                                            {{ $item->state }} - {{ $item->pincode }}</td>
                                     <td>{{ $item->phone }}</td>
-                                    <td>{{ $item->email }}</td>
+                                    <td>{{$item->caste}}</td>
+                                    <td>{{$item->religion_category}}</td>
+                                    <td>{{$item->religion}}</td>
+                                    <td>{{ $item->reg_type ?? 'Member' }}</td>
                                     <td>
                                         {{ \Carbon\Carbon::parse($item->delete_date)->format('d-m-Y') }}<br>
                                     </td>

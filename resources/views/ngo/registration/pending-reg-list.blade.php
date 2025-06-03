@@ -66,10 +66,10 @@
                                 <th>Father/Husband Name</th>
                                 <th>Address</th>
                                 <th>Caste</th>
-                                <th>Regional Category</th>
+                                <th>Caste Category</th>
                                 <th>Religion</th>
-                                <th>Number</th>
-                                <th>Type</th>
+                                <th>Mobile No.</th>
+                                <th>Registration Type</th>
                                 <th>Status</th>
                                 <th>Session</th>
                                 <th>Action</th>

@@ -30,7 +30,8 @@
                                 <th>Identity No.</th>
                                 <th>Identity Type</th>
                                 <th>Mobile No.</th>
-                                <th>Cast</th>
+                                <th>Caste</th>
+                                <th>Caste Category</th>
                                 <th>Religion</th>
                                 <th>Age</th>
                                 <th>Survey Date</th>
@@ -59,6 +60,7 @@
                                         <td>{{ $item->identity_type }}</td>
                                         <td>{{ $item->phone }}</td>
                                         <td>{{ $item->caste }}</td>
+                                        <td>{{ $item->religion_category }}</td>
                                         <td>{{ $item->religion }}</td>
                                         <td>
                                             {{ $item->dob ? \Carbon\Carbon::parse($item->dob)->age . ' years' : 'Not Found' }}

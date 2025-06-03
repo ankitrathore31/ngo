@@ -399,7 +399,7 @@
                                 </div>
                                
                                 <div class="col-md-4 mb-3">
-                                    <label for="category" class="form-label">Religion Category <span
+                                    <label for="category" class="form-label">Caste Category <span
                                             class="text-danger">*</span></label>
                                     <select class="form-select @error('religion_category') is-invalid @enderror"
                                         id="category" name="religion_category" required>
