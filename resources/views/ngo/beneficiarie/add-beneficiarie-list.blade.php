@@ -51,12 +51,11 @@
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->gurdian_name }}</td>
                                     <td>{{ $item->village }},
-                                        ({{ $item->area_type }})
-                                        ,
                                         {{ $item->post }},
                                         {{ $item->block }},
                                         {{ $item->district }},
-                                        {{ $item->state }} - {{ $item->pincode }}</td>
+                                        {{ $item->state }} - {{ $item->pincode }},
+                                    ({{ $item->area_type }})</td>
                                     <td>{{ $item->identity_no }}</td>
                                     <td>{{ $item->identity_type }}</td>
                                     <td>{{ $item->phone }}</td>

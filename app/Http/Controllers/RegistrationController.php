@@ -120,20 +120,26 @@ class RegistrationController extends Controller
             return back()->withErrors(['date_error' => 'Invalid date format for Application Date or Date of Birth.']);
         }
 
-        if ($request->hasFile('image')) {
-            $imageName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('benefries_images'), $imageName);
-            $data['image'] = $imageName;
-        }
-
-        if ($request->hasFile('id_document')) {
-            $idDocName = time() . '_iddoc.' . $request->id_document->extension();
-            $request->id_document->move(public_path('benefries_images'), $idDocName);
-            $data['id_document'] = $idDocName;
-        }
-
         if ($request->reg_type === 'Beneficiaries') {
+
+            // Handle profile image upload
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('benefries_images'), $imageName);
+                $data['image'] = $imageName;
+            }
+
+            // Handle ID document upload
+            if ($request->hasFile('id_document')) {
+                $idDoc = $request->file('id_document');
+                $idDocName = time() . '_iddoc.' . $idDoc->getClientOriginalExtension();
+                $idDoc->move(public_path('benefries_images'), $idDocName);
+                $data['id_document'] = $idDocName;
+            }
+
             beneficiarie::create($data);
+            
         } else if ($request->reg_type === 'Member') {
             Member::create($data);
         }
@@ -250,12 +256,12 @@ class RegistrationController extends Controller
         $combined = $pendingbene->merge($pendingmemeber);
         $data = academic_session::all();
 
-        return view('ngo.registration.pending-reg-list', compact('data', 'pendingbene', 'pendingmemeber','combined'));
+        return view('ngo.registration.pending-reg-list', compact('data', 'pendingbene', 'pendingmemeber', 'combined'));
     }
 
     public function approveRegistration(Request $request)
     {
-      $queryBene = beneficiarie::where('status', 1);
+        $queryBene = beneficiarie::where('status', 1);
         $queryMember = Member::where('status', 1);
 
         if ($request->filled('session_filter')) {
@@ -277,7 +283,7 @@ class RegistrationController extends Controller
         $approvemember = $queryMember->get();
         $data = academic_session::all();
         $combined = $approvebeneficiarie->merge($approvemember);
-        return view('ngo.registration.apporve-reg-list', compact('data','approvebeneficiarie', 'approvemember','combined'));
+        return view('ngo.registration.apporve-reg-list', compact('data', 'approvebeneficiarie', 'approvemember', 'combined'));
     }
 
     public function approveStatus(Request $request, $id)
@@ -325,14 +331,14 @@ class RegistrationController extends Controller
     }
 
 
-     public function showApporveReg($id)
+    public function showApporveReg($id)
     {
 
         $beneficiarie = beneficiarie::where('status', 1)->find($id);
 
         return view('ngo.registration.show-apporve-reg', compact('beneficiarie'));
     }
-     public function editApproveRegistration($id)
+    public function editApproveRegistration($id)
     {
 
         $beneficiarie = beneficiarie::find($id);
@@ -419,7 +425,7 @@ class RegistrationController extends Controller
             return redirect()->back()->with('success', 'Beneficiarie Pending successfully.');
         }
 
-        
+
         $member = Member::find($id);
         if ($member && $member->reg_type === 'Member') {
             $member->status = 0;

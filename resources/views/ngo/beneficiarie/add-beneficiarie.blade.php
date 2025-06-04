@@ -215,7 +215,7 @@
             <div class="card mt-4 p-3 border border-success rounded">
                 <form action="{{ route('store-beneficiarie', $beneficiarie->id) }}" method="POST">
                     @csrf
-                    <h5 class="text-success text-center">Add Beneficiarie</h5>
+                    <h5 class="text-success text-center">Survey Start Beneficiarie </h5>
 
                     <!-- Survey Details -->
                     <input type="text" name="beneficiarie_id" value="{{ $beneficiarie->id }}" hidden>
