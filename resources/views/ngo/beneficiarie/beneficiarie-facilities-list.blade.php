@@ -69,11 +69,11 @@
         <div class="container-fluid mt-4">
 
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Beneficiarie Facilities List</h5>
+                <h5 class="mb-0">Approval Demand Beneficiarie Facilities List</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Beneficiarie Facilities List</li>
+                        <li class="breadcrumb-item active" aria-current="page">Demand Approval Facilities List</li>
                     </ol>
                 </nav>
             </div>
@@ -225,12 +225,12 @@
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">
                                                 <a href="{{ route('distribute-beneficiarie-facilities', [$item->id, $survey->id]) }}"
                                                     class="btn btn-primary btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                    title="Distribute" style="min-width: 38px; height: 38px;">
-                                                    + Distribute
+                                                    title="Distribute" style="min-width: 38px; height: auto;">
+                                                    Distribute
                                                 </a>
                                                 <a href="{{ route('show-beneficiarie-facilities', [$item->id, $survey->id]) }}"
                                                     class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                    title="View" style="min-width: 38px; height: 38px;">
+                                                    title="View" style="min-width: 38px; height: auto;">
                                                     <i class="fa-regular fa-eye"></i> Facilities
                                                 </a>
                                             </div>

@@ -46,6 +46,7 @@ class beneficiarie extends Model
         'delete_reason',
         'delete_date',
         'status',
+        'survey_status',
     ];
 
     public function surveys()

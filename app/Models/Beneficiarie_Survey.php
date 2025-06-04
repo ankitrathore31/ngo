@@ -14,9 +14,13 @@ class Beneficiarie_Survey extends Model
         'beneficiarie_id',
         'survey_details',
         'survey_date',
+        'survey_officer',
         'facilities_category',
         'facilities',
         'status',
+    ];
+    protected $casts = [
+        'surveyfacility_status' => 'array',
     ];
 
     public function beneficiarie()
