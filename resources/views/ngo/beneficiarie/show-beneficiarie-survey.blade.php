@@ -107,7 +107,7 @@
                                 <p><b>Website : www.gyanbhartingo.org Email : gyanbhartingo600@gmail.com Mob- 9411484111</b>
                                 </p>
                             </div>
-                            
+
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -122,7 +122,7 @@
                             <strong>Registraition Type:</strong> {{ $beneficiarie->reg_type }}
                         </div>
                         <div class="col-sm-4 mb-3">
-                            <strong>Registraition No:</strong> {{ $beneficiarie->registration_no}}
+                            <strong>Registraition No:</strong> {{ $beneficiarie->registration_no }}
                         </div>
                         <div class="col-sm-4 mb-3">
                             <strong>Session:</strong> {{ $beneficiarie->academic_session }}
@@ -206,27 +206,102 @@
                         <div class="col-sm-4 mb-3">
                             <strong>Identity Number:</strong> {{ $beneficiarie->identity_no }}
                         </div>
-                         <div class="col-sm-10 mb-3">
+                        <div class="col-sm-10 mb-3">
                             <strong>Help Needed:</strong> {{ $beneficiarie->help_needed }}
                         </div>
                     </div>
                     <hr>
-                    <b class="mb-3 text-center"><U>About Beneficiarie Survey & Facilities</U></b>
-                    <div class="row">
-                        
-                        <div class="col-sm-4 mb-3">
-                            <strong>Survey Date:</strong> {{ \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') }}
+                    <b class="mb-3 text-center"><U>About Beneficiarie Survey</U></b>
+                    <div class="row mb-3">
+
+                        <div class="col-sm-4 mb-3 p-4">
+                            <strong>Survey Date:</strong>
+                            {{ \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') }}
                         </div>
-                        <div class="col-sm-8 mb-3">
+                        <div class="col-sm-8 mb-3 p-4">
                             <strong>Survey Details.</strong> {{ $survey->survey_details }}
                         </div>
-                        {{-- <div class="col-sm-4 mb-3">
-                            <strong>Facilities Category:</strong> {{ $survey->facilities_category }}
-                        </div>
-                        <div class="col-sm-8 mb-3">
-                            <strong>Facilities</strong> {{ $survey->facilities }}
-                        </div> --}}
                     </div>
+                    @php
+                        $facilities = [
+                            'Housing',
+                            'Toilet',
+                            'Ration Card',
+                            'Antyodaya Card',
+                            'Eligible Household APL Card',
+                            'Green Card',
+                            'MNREGA Card',
+                            'Shramik Card',
+                            'E-Shram Card',
+                            'Ayushman Card',
+                            'Pension in the family',
+                            'Loan',
+                            'Health Card',
+                            'Education Grant',
+                            'Tree Distribution',
+                            'Cleaning Kit',
+                            'Health Kit',
+                            'Nutrition Kit',
+                            'Ration Kit',
+                            'Festival Kit',
+                            'Awareness Meeting',
+                            'Gas Connection',
+                            'Electricity Connection',
+                            'Water Connection',
+                            'Water Supply',
+                            'Family Dispute',
+                            'Peace Dialogue Meeting',
+                            'Self Help Group',
+                            'Training',
+                            'Employment',
+                            'Cloth Distribution',
+                            'Blanket Distribution',
+                            'Gifts',
+                            'Travelling, Picnic or Tour',
+                            'Fruit Distribution',
+                            'Cultural Programme',
+                            'Animal Food',
+                            'Food',
+                            'Agriculture Grant',
+                            'Economic Help',
+                            'Marriage Grant',
+                            'Children studying',
+                            'The person seeking pension',
+                            'The person getting married',
+                            'facility do you want',
+                            // 'Behavior of the survey family',
+                        ];
+
+                        // use directly if already an array
+                        $facilityStatus = $survey->surveyfacility_status ?? [];
+                    @endphp
+
+                    <div id="survey_section" class="border">
+                        @foreach ($facilities as $index => $facility)
+                            @php
+                                $status = $facilityStatus[$facility] ?? null;
+                            @endphp
+                            <div class="mb-4 p-2 m-3  rounded">
+                                <label><strong>{{ $index + 1 }}. {{ $facility }}:</strong></label>
+                                <div class="form-check form-check-inline ml-3">
+                                    <input class="form-check-input" type="radio"
+                                        name="surveyfacility_status[{{ $facility }}]" value="Yes"
+                                        id="{{ Str::slug($facility) }}_yes" {{ $status === 'Yes' ? 'checked' : '' }}
+                                        disabled>
+                                    <label class="form-check-label" for="{{ Str::slug($facility) }}_yes">Yes</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio"
+                                        name="surveyfacility_status[{{ $facility }}]" value="No"
+                                        id="{{ Str::slug($facility) }}_no" {{ $status === 'No' ? 'checked' : '' }}
+                                        disabled>
+                                    <label class="form-check-label" for="{{ Str::slug($facility) }}_no">No</label>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+
                     {{-- <div class="row">
                     @if ($beneficiarie->image)
                         <div class="row mb-3">
@@ -248,7 +323,8 @@
                     <hr>
                     <div class="row d-flex justify-content-between mt-2">
                         <div class="col-sm-4 mb-5">
-                            <label for="" class="from-label"><b>{{ $beneficiarie->reg_type }} Signature</b></label>
+                            <label for="" class="from-label"><b>{{ $beneficiarie->reg_type }}Signature/
+                            Thumb Impression of the Recipient</b></label>
                         </div>
                         <div class="col-sm-4 mb-5">
                             <label for="" class="from-label"><b>Signature</b></label>

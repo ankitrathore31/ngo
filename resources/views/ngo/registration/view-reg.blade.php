@@ -143,7 +143,7 @@
                         <strong>Identity Number:</strong> {{ $beneficiarie->identity_no }}
                     </div>
                     <div class="col-sm-8 mb-3">
-                        <strong>Help Neede:</strong> {{ $beneficiarie->help_needed }}
+                        <strong>Help Needed:</strong> {{ $beneficiarie->help_needed }}
                     </div>
                 </div>
                 {{-- <div class="row">
@@ -167,7 +167,7 @@
                 <hr>
                 <div class="row d-flex justify-content-between mt-2">
                     <div class="col-sm-4 mb-5">
-                        <label for="" class="from-label"><b>{{ $beneficiarie->reg_type }} Signature</b></label>
+                        <label for="" class="from-label"><b>{{ $beneficiarie->reg_type }}Signature/ Thumb Impression of the Recipient</b></label>
                     </div>
                     <div class="col-sm-4 mb-5">
                         <label for="" class="from-label"><b>Signature</b></label>

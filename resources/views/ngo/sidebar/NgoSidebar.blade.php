@@ -134,7 +134,7 @@
                             class="fas fa-project-diagram"></i> BENEFICIARIES</a>
                     <ul class="dropdown-menu bg-primary">
                         <li><a class="dropdown-item" href="{{ route('beneficiarie-add-list') }}">Survey Add Beneficiary List</a></li>
-                        <li><a class="dropdown-item" href="{{-- route('beneficiarie-add-list') --}}">Survey Recived List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('survey-received-list') }}">Survey Recived List</a></li>
                         <li><a class="dropdown-item" href="{{ route('beneficiarie-facilities')}}">Demand Beneficiary Facilities</a></li>
                         <li><a class="dropdown-item" href="{{ route('beneficiarie-facilities-list')}}">Apporval Demand Distribut Facilities List</a></li>
                         <li><a class="dropdown-item" href="{{ route('distributed-list')}}">Distributed Beneficiary Facilities List</a></li>

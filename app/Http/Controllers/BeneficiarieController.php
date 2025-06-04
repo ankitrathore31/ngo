@@ -14,7 +14,9 @@ class BeneficiarieController extends Controller
 {
     public function AddbeneficiarieList()
     {
-        $beneficiarie = beneficiarie::where('status', 1)->get();
+        $beneficiarie = beneficiarie::where('status', 1)
+            ->where('survey_status', 0)
+            ->get();
         return view('ngo.beneficiarie.add-beneficiarie-list', compact('beneficiarie'));
     }
 
@@ -43,8 +45,15 @@ class BeneficiarieController extends Controller
         $beneficiarie = new Beneficiarie_Survey;
         $beneficiarie->beneficiarie_id = $request->input('beneficiarie_id');
         $beneficiarie->survey_details = $request->input('survey_details');
+        $beneficiarie->survey_officer = $request->input('survey_officer');
         $beneficiarie->survey_date = Carbon::parse($request->input('survey_date'));
+        $beneficiarie->surveyfacility_status = $request->input('surveyfacility_status', []);
         $beneficiarie->save();
+
+        // $beneficiarie = beneficiarie::find($id);
+        // $beneficiarie->survey_status = 1;
+        // $beneficiarie->save();
+        beneficiarie::where('id', $id)->update(['survey_status' => 1]);
 
         return redirect()->route('beneficiarie-facilities')->with('success', 'Beneficiare added successfully.');
     }
@@ -68,7 +77,7 @@ class BeneficiarieController extends Controller
 
     public function beneficiarieFacilities()
     {
-        $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->get();
+        $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->where('survey_status', 1)->get();
 
         return view('ngo.beneficiarie.beneficiarie-facilities', compact('beneficiarie'));
     }
@@ -228,7 +237,7 @@ class BeneficiarieController extends Controller
     }
 
 
-     public function pendingfacilities(Request $request)
+    public function pendingfacilities(Request $request)
     {
         $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
             $q->where('status', 'Pending');
@@ -262,8 +271,8 @@ class BeneficiarieController extends Controller
         return view('ngo.beneficiarie.pending-facilities-list', compact('beneficiarie', 'data', 'categories'));
     }
 
-     public function allbeneficiarielist(Request $request)
-    {   
+    public function allbeneficiarielist(Request $request)
+    {
         $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
             $q->where('status', 'Distributed');
 
@@ -298,8 +307,8 @@ class BeneficiarieController extends Controller
 
     public function beneficiarieReportList($beneficiarie_id, $survey_id)
     {
-       $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->find($beneficiarie_id);
-         $survey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+        $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->find($beneficiarie_id);
+        $survey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
             ->where('id', $survey_id)
             ->with('beneficiarie')
             ->firstOrFail();
@@ -314,5 +323,12 @@ class BeneficiarieController extends Controller
             ->firstOrFail();
         $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->find($beneficiarie_id);
         return view('ngo.beneficiarie.show-beneficiarie-report', compact('beneficiarie', 'survey'));
+    }
+
+     public function surveyrecivedlist()
+    {
+        $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->where('survey_status', 1)->get();
+
+        return view('ngo.beneficiarie.survey-received-list', compact('beneficiarie'));
     }
 }

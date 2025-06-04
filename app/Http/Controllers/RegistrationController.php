@@ -139,7 +139,6 @@ class RegistrationController extends Controller
             }
 
             beneficiarie::create($data);
-            
         } else if ($request->reg_type === 'Member') {
             Member::create($data);
         }
@@ -310,6 +309,7 @@ class RegistrationController extends Controller
 
             $beneficiarie->registration_no = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
             $beneficiarie->registration_date = Carbon::parse($request->input('registration_date'));
+            $beneficiarie->survey_status = 0;
             $beneficiarie->save();
 
             return redirect()->route('approve-registration')->with('success', 'Beneficiarie approved successfully.');
@@ -607,19 +607,34 @@ class RegistrationController extends Controller
             return back()->withErrors(['date_error' => 'Invalid date format for Application Date or Date of Birth.']);
         }
 
-        if ($request->hasFile('image')) {
-            $imageName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('benefries_images'), $imageName);
-            $data['image'] = $imageName;
-        }
+        // if ($request->hasFile('image')) {
+        //     $imageName = time() . '.' . $request->image->extension();
+        //     $request->image->move(public_path('benefries_images'), $imageName);
+        //     $data['image'] = $imageName;
+        // }
 
-        if ($request->hasFile('id_document')) {
-            $idDocName = time() . '_iddoc.' . $request->id_document->extension();
-            $request->id_document->move(public_path('benefries_images'), $idDocName);
-            $data['id_document'] = $idDocName;
-        }
+        // if ($request->hasFile('id_document')) {
+        //     $idDocName = time() . '_iddoc.' . $request->id_document->extension();
+        //     $request->id_document->move(public_path('benefries_images'), $idDocName);
+        //     $data['id_document'] = $idDocName;
+        // }
 
         if ($request->reg_type === 'Beneficiaries') {
+            // Handle profile image upload
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('benefries_images'), $imageName);
+                $data['image'] = $imageName;
+            }
+
+            // Handle ID document upload
+            if ($request->hasFile('id_document')) {
+                $idDoc = $request->file('id_document');
+                $idDocName = time() . '_iddoc.' . $idDoc->getClientOriginalExtension();
+                $idDoc->move(public_path('benefries_images'), $idDocName);
+                $data['id_document'] = $idDocName;
+            }
             $beneficiarie = beneficiarie::create($data);
         } else if ($request->reg_type === 'Member') {
             Member::create($data);

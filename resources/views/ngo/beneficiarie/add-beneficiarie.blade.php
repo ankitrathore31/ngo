@@ -62,136 +62,138 @@
             </div>
         </div>
         @if (session('success'))
-                <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                </div>
-            @endif
+            <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
         <div class="container-fluide m-3">
-             <div class="container-fluide m-3">
-            <div class="container my-4">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2 class="fw-bold">Add Beneficiarie</h2>
-                    {{-- <button onclick="window.print()" class="btn btn-primary">Print / Download</button> --}}
-                </div>
+            <div class="container-fluide m-3">
+                <div class="container my-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="fw-bold">Add Beneficiarie</h2>
+                        {{-- <button onclick="window.print()" class="btn btn-primary">Print / Download</button> --}}
+                    </div>
 
-                <div class="card p-4 shadow rounded print-card">
-                    <div class="text-center mb-4 border-bottom">
-                        <div class="row align-items-center">
-                            <div class="col-sm-2 text-center text-md-start">
-                                <a href="https://gyanbhartingo.org">
-                                    <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="80" height="80"
-                                        class="">
-                                </a>
+                    <div class="card p-4 shadow rounded print-card">
+                        <div class="text-center mb-4 border-bottom">
+                            <div class="row align-items-center">
+                                <div class="col-sm-2 text-center text-md-start">
+                                    <a href="https://gyanbhartingo.org">
+                                        <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="80"
+                                            height="80" class="">
+                                    </a>
+                                </div>
+                                <div class="col-sm-10 text-center">
+                                    <h4 style="color: red; font-weight:500; font-size:25px;"><b>GYAN BHARTI SANSTHA</b></h4>
+                                    <h6 style="color: blue;"><b>Head Office: Kainchu Tanda Amaria Pilibhit UP 262121</b>
+                                    </h6>
+                                    <p><b>Website : www.gyanbhartingo.org Email : gyanbhartingo600@gmail.com Mob-
+                                            9411484111</b>
+                                    </p>
+                                </div>
+
                             </div>
-                            <div class="col-sm-10 text-center">
-                                <h4 style="color: red; font-weight:500; font-size:25px;"><b>GYAN BHARTI SANSTHA</b></h4>
-                                <h6 style="color: blue;"><b>Head Office: Kainchu Tanda Amaria Pilibhit UP 262121</b></h6>
-                                <p><b>Website : www.gyanbhartingo.org Email : gyanbhartingo600@gmail.com Mob- 9411484111</b>
-                                </p>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-4 mb-3">
+                                <strong>Application Date:</strong>
+                                {{ \Carbon\Carbon::parse($beneficiarie->application_date)->format('d-m-Y') }}
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <strong>Application No:</strong> {{ $beneficiarie->application_no }}
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <strong>Registraition Type:</strong> {{ $beneficiarie->reg_type }}
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <strong>Registraition No:</strong>
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <strong>Session:</strong> {{ $beneficiarie->academic_session }}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row mb-3">
+                            <div class="col-sm-4 mb-3">
+                                <strong>Name:</strong> {{ $beneficiarie->name }}
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <strong>Guardian's Name:</strong> {{ $beneficiarie->gurdian_name }}
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <strong>Mother's Name:</strong> {{ $beneficiarie->mother_name }}
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <strong>Area Type:</strong> {{ $beneficiarie->area_type }}
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <strong>Village/Locality:</strong>{{ $beneficiarie->village }}
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <strong>Post/Town:</strong> {{ $beneficiarie->post }}
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <strong>Block:</strong> {{ $beneficiarie->block }}
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <strong>District</strong> {{ $beneficiarie->district }}
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <strong>State</strong> {{ $beneficiarie->state }}
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <strong>Pincode:</strong> {{ $beneficiarie->pincode }}
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <strong>Country:</strong> {{ $beneficiarie->country }}
+                            </div>
+
+                            <div class="col-sm-4 mb-3">
+                                <strong>Gender:</strong> {{ $beneficiarie->gender }}
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <strong>Phone:</strong> {{ $beneficiarie->phone }}
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <strong>Email:</strong> {{ $beneficiarie->email ?? 'N/A' }}
+                            </div>
+
+
+                            <div class="col-sm-4 mb-3">
+                                <strong>Eligibility:</strong> {{ $beneficiarie->eligibility ?? 'N/A' }}
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <strong>Caste:</strong> {{ $beneficiarie->caste }}
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <strong>Religion:</strong> {{ $beneficiarie->religion }}
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <strong>Religion Category:</strong> {{ $beneficiarie->religion_category }}
+                            </div>
+
+
+                            <div class="col-sm-4 mb-3">
+                                <strong>Date of Birth:</strong>
+                                {{ \Carbon\Carbon::parse($beneficiarie->dob)->format('d-m-Y') }}
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <strong>Marital Status:</strong> {{ $beneficiarie->marital_status }}
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <strong>Occupation:</strong> {{ $beneficiarie->occupation }}
+                            </div>
+
+                            <div class="col-sm-4 mb-3">
+                                <strong>Identity Type:</strong> {{ $beneficiarie->identity_type }}
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <strong>Identity Number:</strong> {{ $beneficiarie->identity_no }}
                             </div>
 
                         </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-sm-4 mb-3">
-                            <strong>Application Date:</strong>
-                            {{ \Carbon\Carbon::parse($beneficiarie->application_date)->format('d-m-Y') }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Application No:</strong> {{ $beneficiarie->application_no }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Registraition Type:</strong> {{ $beneficiarie->reg_type }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Registraition No:</strong>
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Session:</strong> {{ $beneficiarie->academic_session }}
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row mb-3">
-                        <div class="col-sm-4 mb-3">
-                            <strong>Name:</strong> {{ $beneficiarie->name }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Guardian's Name:</strong> {{ $beneficiarie->gurdian_name }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Mother's Name:</strong> {{ $beneficiarie->mother_name }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Area Type:</strong> {{ $beneficiarie->area_type }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Village/Locality:</strong>{{ $beneficiarie->village }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Post/Town:</strong> {{ $beneficiarie->post }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Block:</strong> {{ $beneficiarie->block }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>District</strong> {{ $beneficiarie->district }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>State</strong> {{ $beneficiarie->state }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Pincode:</strong> {{ $beneficiarie->pincode }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Country:</strong> {{ $beneficiarie->country }}
-                        </div>
-
-                        <div class="col-sm-4 mb-3">
-                            <strong>Gender:</strong> {{ $beneficiarie->gender }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Phone:</strong> {{ $beneficiarie->phone }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Email:</strong> {{ $beneficiarie->email ?? 'N/A' }}
-                        </div>
-
-
-                        <div class="col-sm-4 mb-3">
-                            <strong>Eligibility:</strong> {{ $beneficiarie->eligibility ?? 'N/A' }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Caste:</strong> {{ $beneficiarie->caste }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Religion:</strong> {{ $beneficiarie->religion }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Religion Category:</strong> {{ $beneficiarie->religion_category }}
-                        </div>
-
-
-                        <div class="col-sm-4 mb-3">
-                            <strong>Date of Birth:</strong>
-                            {{ \Carbon\Carbon::parse($beneficiarie->dob)->format('d-m-Y') }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Marital Status:</strong> {{ $beneficiarie->marital_status }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Occupation:</strong> {{ $beneficiarie->occupation }}
-                        </div>
-
-                        <div class="col-sm-4 mb-3">
-                            <strong>Identity Type:</strong> {{ $beneficiarie->identity_type }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Identity Number:</strong> {{ $beneficiarie->identity_no }}
-                        </div>
-
-                    </div>
-                    <hr>
-                    {{-- <div class="row">
+                        <hr>
+                        {{-- <div class="row">
                     @if ($beneficiarie->image)
                         <div class="row mb-3">
                             <div class="col-sm-4 mb-3">
@@ -209,17 +211,109 @@
                         @endif
                     </div>
                 </div> --}}
+                    </div>
                 </div>
             </div>
-        </div>
             <div class="card mt-4 p-3 border border-success rounded">
                 <form action="{{ route('store-beneficiarie', $beneficiarie->id) }}" method="POST">
                     @csrf
                     <h5 class="text-success text-center">Survey Start Beneficiarie </h5>
+                    <div class="row">
+                        <div class="col">
+                            @php
+                                $facilities = [
+                                    'Housing',
+                                    'Toilet',
+                                    'Ration Card',
+                                    'Antyodaya Card',
+                                    'Eligible Household APL Card',
+                                    'Green Card',
+                                    'MNREGA Card',
+                                    'Shramik Card',
+                                    'E-Shram Card',
+                                    'Ayushman Card',
+                                    'Pension in the family',
+                                    'Loan',
+                                    'Health Card',
+                                    'Education Grant',
+                                    'Tree Distribution',
+                                    'Cleaning Kit',
+                                    'Health Kit',
+                                    'Nutrition Kit',
+                                    'Ration Kit',
+                                    'Festival Kit',
+                                    'Awareness Meeting',
+                                    'Gas Connection',
+                                    'Electricity Connection',
+                                    'Water Connection',
+                                    'Water Supply',
+                                    'Family Dispute',
+                                    'Peace Dialogue Meeting',
+                                    'Self Help Group',
+                                    'Training',
+                                    'Employment',
+                                    'Cloth Distribution',
+                                    'Blanket Distribution',
+                                    'Gifts',
+                                    'Travelling, Picnic or Tour',
+                                    'Fruit Distribution',
+                                    'Cultural Programme',
+                                    'Animal Food',
+                                    'Food',
+                                    'Agriculture Grant',
+                                    'Economic Help',
+                                    'Marriage Grant',
+                                    'children studying',
+                                    'person seeking pension',
+                                    'person getting married',
+                                    'facility do you want',
+                                    // 'Behavior of the survey family',
+                                    'Occupation of head of the family',
+                                    // 'Report of the survey employee',
+                                ];
+                            @endphp
+
+                            <div class="mb-4">
+                                <label><strong>Do you want to fill the survey?</strong></label>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="start_survey" value="Yes"
+                                        id="start_survey_yes">
+                                    <label class="form-check-label" for="start_survey_yes">Yes</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="start_survey" value="No"
+                                        id="start_survey_no">
+                                    <label class="form-check-label" for="start_survey_no">No</label>
+                                </div>
+                            </div>
+
+                            <div id="survey_section" style="display: none;">
+                                @foreach ($facilities as $index => $facility)
+                                    <div class="mb-4 p-2 rounded">
+                                        <label><strong>{{ $index + 1 }}. {{ $facility }}:</strong></label>
+                                        <div class="form-check form-check-inline ml-3">
+                                            <input class="form-check-input" type="radio"
+                                                name="surveyfacility_status[{{ $facility }}]" value="Yes"
+                                                id="{{ Str::slug($facility) }}_yes">
+                                            <label class="form-check-label"
+                                                for="{{ Str::slug($facility) }}_yes">Yes</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="surveyfacility_status[{{ $facility }}]" value="No"
+                                                id="{{ Str::slug($facility) }}_no">
+                                            <label class="form-check-label"
+                                                for="{{ Str::slug($facility) }}_no">No</label>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Survey Details -->
                     <input type="text" name="beneficiarie_id" value="{{ $beneficiarie->id }}" hidden>
-                    <div class="mb-3">
+                    <div class="col-md-8 mb-3">
                         <label for="survey_details" class="form-label">
                             Survey Details<span class="text-danger">*</span>
                         </label>
@@ -228,18 +322,27 @@
                         @error('survey_details')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
-                    </div> 
+                    </div>
 
-                    <!-- Survey Date -->
-                    <div class="mb-3">
-                        <label for="survey_date" class="form-label">
-                            Survey Date<span class="text-danger">*</span>
-                        </label>
-                        <input type="date" class="form-control @error('survey_date') is-invalid @enderror"
-                            name="survey_date" value="{{ old('survey_date') }}" required>
-                        @error('survey_date')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
+                    <div class="row">
+                        <!-- Survey Date -->
+                        <div class=" col-md-4 mb-3">
+                            <label for="survey_date" class="form-label">
+                                Survey Date<span class="text-danger">*</span>
+                            </label>
+                            <input type="date" class="form-control @error('survey_date') is-invalid @enderror"
+                                name="survey_date" value="{{ old('survey_date') }}" required>
+                            @error('survey_date')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="survey_officer" class="form-label">Survey Officer:</label>
+                            <select name="survey_officer" class="form-control" id="survey_officer">
+                                <option value="" selected>Select Officer</option>
+                                <option value="Sanstha Head">Sanstha Head</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="d-flex justify-content-between">
@@ -250,4 +353,22 @@
 
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const yesRadio = document.getElementById('start_survey_yes');
+            const noRadio = document.getElementById('start_survey_no');
+            const surveySection = document.getElementById('survey_section');
+
+            function toggleSurvey() {
+                if (yesRadio.checked) {
+                    surveySection.style.display = 'block';
+                } else {
+                    surveySection.style.display = 'none';
+                }
+            }
+
+            yesRadio.addEventListener('change', toggleSurvey);
+            noRadio.addEventListener('change', toggleSurvey);
+        });
+    </script>
 @endsection
