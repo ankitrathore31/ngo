@@ -1,6 +1,25 @@
 @extends('home.layout.MasterLayout')
 
 @section('content')
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            .print-card,
+            .print-card * {
+                visibility: visible;
+            }
+
+            .print-card {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+        }
+    </style>
     <div class="wrapper">
         {{-- <div class="main-content"> --}}
         <!-- Breadcrumb -->
@@ -16,7 +35,11 @@
         </div>
 
         <div class="container my-5">
-            <div class="card shadow-lg p-4 print-area">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold">Online Registration Form</h2>
+                <button onclick="window.print()" class="btn btn-primary">Print / Download</button>
+            </div>
+            <div class="card shadow-lg p-4 print-card">
                 <!-- Report Header -->
                 <div class="text-center mb-4 border-bottom">
                     <div class="row align-items-center">
@@ -91,31 +114,38 @@
                         </div> --}}
 
                         <h5><u>Facilities Details</u></h5>
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
+                        <div class="card-body table-responsive">
+                            <table class="table table-bordered table-hover align-middle text-center">
+                                <thead class="table-primary">
                                     <tr>
                                         <th>Sr. No.</th>
                                         <th>Date</th>
                                         <th>Facilities Name</th>
                                         <th>Facilities</th>
                                         <th>Status</th>
+                                        <th>Remark</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td>1</td>
-                                        <td>{{ $beneficiarie->application_date ?? 'Pending' }}</td>
+                                        <td>
+                                            {{ $beneficiarie->application_date ? \Carbon\Carbon::parse($beneficiarie->application_date)->format('d-m-Y') : 'No Found' }}
+                                        </td>
                                         <td>Application No.</td>
                                         <td>{{ $beneficiarie->application_no ?? 'Pending' }}</td>
                                         <td>{{ $beneficiarie->status == 1 ? 'Approved' : 'Pending' }}</td>
+                                        <td></td>
                                     </tr>
                                     <tr>
                                         <td>2</td>
-                                        <td>{{ $beneficiarie->registration_date ?? 'Pending' }}</td>
+                                        <td>
+                                            {{ $beneficiarie->registration_date ? \Carbon\Carbon::parse($beneficiarie->registration_date)->format('d-m-Y') : 'No Found' }}
+                                        </td>
                                         <td>Registration No.</td>
                                         <td>{{ $beneficiarie->registration_no ?? 'Pending' }}</td>
                                         <td>{{ $beneficiarie->status == 1 ? 'Approved' : 'Pending' }}</td>
+                                        <td></td>
                                     </tr>
                                     {{-- @if ($beneficiarie->surveys->isEmpty())
                                     <div class="alert alert-warning">No Facilities records found.</div> --}}
@@ -124,10 +154,13 @@
                                     @foreach ($beneficiarie->surveys as $survey)
                                         <tr>
                                             <td>{{ $serial++ }}</td>
-                                            <td>{{ $survey->distribute_place ?? 'Pending' }}</td>
+                                            <td>
+                                                {{ $survey->distribute_date ? \Carbon\Carbon::parse($survey->distribute_date)->format('d-m-Y') : 'No Found' }}
+                                            </td>
                                             <td>{{ $survey->facilities_category ?? 'Pending' }}</td>
                                             <td>{{ $survey->facilities ?? 'Pending' }}</td>
                                             <td>{{ $survey->status ?? 'Pending' }}</td>
+                                            <td> Distribute Place: {{ $survey->distribute_place ?? 'Pending' }}</td>
                                         </tr>
                                     @endforeach
                                     {{-- @endif --}}
