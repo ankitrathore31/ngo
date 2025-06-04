@@ -158,9 +158,11 @@
                         <strong>Identity Type:</strong> {{ $beneficiarie->identity_type }}
                     </div>
                     <div class="col-sm-4 mb-3">
-                        <strong>Identity Number.</strong> {{ $beneficiarie->identity_no }}
+                        <strong>Identity Number:</strong> {{ $beneficiarie->identity_no }}
                     </div>
-
+                    <div class="col-sm-4 mb-3">
+                        <strong>{{ $beneficiarie->reg_type }} Needed:</strong> {{ $beneficiarie->help_needed }}
+                    </div>
                 </div>
                 {{-- <div class="row">
                     @if ($beneficiarie->image)

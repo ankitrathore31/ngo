@@ -133,11 +133,12 @@
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
                             class="fas fa-project-diagram"></i> BENEFICIARIES</a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="{{ route('beneficiarie-add-list') }}">Add Beneficiary</a></li>
-                        <li><a class="dropdown-item" href="{{ route('beneficiarie-facilities')}}">Add Beneficiary Facilities</a></li>
-                        <li><a class="dropdown-item" href="{{ route('beneficiarie-facilities-list')}}">Beneficiary Facilities List</a></li>
-                        <li><a class="dropdown-item" href="{{ route('pending-distribute-list')}}">Pending Beneficiary Facilities List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('beneficiarie-add-list') }}">Survey Add Beneficiary List</a></li>
+                        <li><a class="dropdown-item" href="{{-- route('beneficiarie-add-list') --}}">Survey Recived List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('beneficiarie-facilities')}}">Demand Beneficiary Facilities</a></li>
+                        <li><a class="dropdown-item" href="{{ route('beneficiarie-facilities-list')}}">Apporval Demand Distribut Facilities List</a></li>
                         <li><a class="dropdown-item" href="{{ route('distributed-list')}}">Distributed Beneficiary Facilities List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('pending-distribute-list')}}">Pending Beneficiary Facilities List</a></li>
                         <li><a class="dropdown-item" href="{{route('all-beneficiarie-list')}}">All Beneficiary List</a></li>
                         {{-- <li><a class="dropdown-item" href="#">Target Beneficiaries</a></li> --}}
                     </ul>

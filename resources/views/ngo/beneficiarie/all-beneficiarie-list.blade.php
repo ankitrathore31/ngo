@@ -208,12 +208,11 @@
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->gurdian_name }}</td>
                                         <td>{{ $item->village }},
-                                            ({{ $item->area_type }})
-                                            ,
                                             {{ $item->post }},
                                             {{ $item->block }},
                                             {{ $item->district }},
-                                            {{ $item->state }} - {{ $item->pincode }}</td>
+                                            {{ $item->state }} - {{ $item->pincode }},
+                                            ({{ $item->area_type }})</td>
                                             <td>{{ $item->identity_no }}</td>
                                             <td>{{ $item->identity_type }}</td>
                                            
@@ -236,7 +235,7 @@
                                         <td></td>
                                         <td class="no-print">
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                                <a href="{{-- route('show-beneficiarie-facilities', [$item->id, $survey->id]) --}}"
+                                                <a href="{{ route('show-beneficiarie-report', [$item->id, $survey->id]) }}"
                                                     class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                     title="View" style="min-width: 38px; height: 38px;">
                                                     <i class="fa-regular fa-eye"></i>

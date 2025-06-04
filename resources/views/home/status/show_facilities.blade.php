@@ -70,28 +70,57 @@
                             <p class="mb-0">
                                 <b>Full Address:</b>
                                 {{ $beneficiarie->village }},
-                                ({{ $beneficiarie->area_type }}),
                                 {{ $beneficiarie->post }},
                                 {{ $beneficiarie->block }},
                                 {{ $beneficiarie->district }},
                                 {{ $beneficiarie->state }} - {{ $beneficiarie->pincode }},
+                                ({{ $beneficiarie->area_type }}),
                             </p>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <p><strong>Survey Date:</strong>
-                            {{ \Carbon\Carbon::parse($beneficiarie->survey_date)->format('d M Y') ?? 'Pending'  }}</p>
+                    {{-- <hr> --}}
+                    <div class="col-sm-12 mb-3 mt-1">
+                        {{-- <h5><u>Survey Details</u></h5>
+                        <div class="col-sm-12">
+                            <div class="col-md-4">
+                                <p><strong>Survey Date:</strong>
+                                    {{ \Carbon\Carbon::parse($beneficiarie->$surveys->survey_date)->format('d M Y') ?? 'Pending' }}
+                                </p>
+                            </div>
+                            <div class="col-8">
+                                <p><strong>Survey Details:</strong> {{$beneficiarie->$surveys->survey_details ?? 'Pending' }}</p>
+                            </div>
+                        </div> --}}
+                        <h5><u>Facilities Details</u></h5>
+                        @if ($beneficiarie->surveys->isEmpty())
+                            <div class="alert alert-warning">No Facilities records found.</div>
+                        @else
+                            @foreach ($beneficiarie->surveys as $survey)
+                                <div class="row g-2 mt-3 border rounded p-2 bg-light">
+                                    <div class="col-md-4">
+                                        <p><strong>Facilities Category:</strong>
+                                            {{ $survey->facilities_category ?? 'Pending' }}</p>
+                                    </div>
+                                    <div class="col-8">
+                                        <p><strong>Facilities:</strong> {{ $survey->facilities ?? 'Pending' }}</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Distribute Date:</strong>
+                                            {{ \Carbon\Carbon::parse($survey->distribute_date)->format('d M Y') ?? 'Pending' }}
+                                        </p>
+                                    </div>
+                                    <div class="col-8">
+                                        <p><strong>Distribute Place:</strong> {{ $survey->distribute_place ?? 'Pending' }}
+                                        </p>
+                                    </div>
+                                    <div class="col-8">
+                                        <p><strong>Distribute Status:</strong> {{ $survey->status ?? 'Pending' }}</p>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
                     </div>
-                    <div class="col-8">
-                        <p><strong>Survey Details:</strong> {{ $beneficiarie->survey_details ?? 'Pending'  }}</p>
-                    </div>
-                       <div class="col-md-4">
-                        <p><strong>Facilities Category:</strong>
-                            {{ $beneficiarie->facilities_category ?? 'Pending'  }}</p>
-                    </div>
-                    <div class="col-8">
-                        <p><strong>Facilities:</strong> {{ $beneficiarie->facilities ?? 'Pending'  }}</p>
-                    </div>
+
                 </div>
             </div>
         </div>

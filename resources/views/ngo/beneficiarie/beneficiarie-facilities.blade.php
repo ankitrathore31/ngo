@@ -87,6 +87,12 @@
                                                 </a>
                                                 {{-- @endforeach --}}
 
+                                                <a href="{{ route('show-beneficiarie-survey', [$item->id, $survey->id]) }}"
+                                                    class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
+                                                    title="View Survey" style="min-width: 38px; height: 38px;">
+                                                    <i class="fa-regular "></i> Survey Send
+                                                </a>
+
                                             </div>
                                         </td>
                                     </tr>
