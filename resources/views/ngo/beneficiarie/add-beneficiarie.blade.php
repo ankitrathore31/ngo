@@ -338,37 +338,38 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="survey_officer" class="form-label">Survey Officer:</label>
-                            <select name="survey_officer" class="form-control" id="survey_officer">
-                                <option value="" selected>Select Officer</option>
-                                <option value="Sanstha Head">Sanstha Head</option>
-                            </select>
+                            <input type="text" name="survey_officer"
+                                class="form-control @error('survey_officer') is-invalid @enderror"
+                                value="{{ old('survey_officer') }} ">
+                            @error('survey_officer')
+                                <span class="text-danger">{{ $message }}</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="d-flex justify-content-between">
-                        <button type="submit" class="btn btn-success">Add Beneficiarie</button>
-                    </div>
-                </form>
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-success">Add Beneficiarie</button>
+                        </div>
+                    </form>
+                </div>
+
             </div>
-
         </div>
-    </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const yesRadio = document.getElementById('start_survey_yes');
-            const noRadio = document.getElementById('start_survey_no');
-            const surveySection = document.getElementById('survey_section');
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const yesRadio = document.getElementById('start_survey_yes');
+                const noRadio = document.getElementById('start_survey_no');
+                const surveySection = document.getElementById('survey_section');
 
-            function toggleSurvey() {
-                if (yesRadio.checked) {
-                    surveySection.style.display = 'block';
-                } else {
-                    surveySection.style.display = 'none';
+                function toggleSurvey() {
+                    if (yesRadio.checked) {
+                        surveySection.style.display = 'block';
+                    } else {
+                        surveySection.style.display = 'none';
+                    }
                 }
-            }
 
-            yesRadio.addEventListener('change', toggleSurvey);
-            noRadio.addEventListener('change', toggleSurvey);
-        });
-    </script>
-@endsection
+                yesRadio.addEventListener('change', toggleSurvey);
+                noRadio.addEventListener('change', toggleSurvey);
+            });
+        </script>
+    @endsection
