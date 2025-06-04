@@ -1,6 +1,6 @@
 @extends('ngo.layout.master')
 @Section('content')
- <style>
+    <style>
         @page {
             size: auto;
             margin: 0;
@@ -105,8 +105,8 @@
                                 class="form-control @error('category_filter') is-invalid @enderror"
                                 onchange="this.form.submit()">
                                 <option value="">-- Select Facilities Category --</option>
-                                <option value="Education"
-                                    {{ request('category_filter') == 'Education' ? 'selected' : '' }}>Education</option>
+                                <option value="Education" {{ request('category_filter') == 'Education' ? 'selected' : '' }}>
+                                    Education</option>
                                 <option value="Peace Talk"
                                     {{ request('category_filter') == 'Peace Talk' ? 'selected' : '' }}>Peace Talk
                                 </option>
@@ -160,7 +160,8 @@
 
                         <div class="col-md-4 d-flex">
                             <button type="submit" class="btn btn-primary me-2">Search</button>
-                            <a href="{{ route('beneficiarie-facilities-list') }}" class="btn btn-info text-white me-2">Reset</a>
+                            <a href="{{ route('beneficiarie-facilities-list') }}"
+                                class="btn btn-info text-white me-2">Reset</a>
                         </div>
                     </form>
                     <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
@@ -192,10 +193,11 @@
                         </thead>
 
                         <tbody>
+                            @php $serial = 1; @endphp
                             @foreach ($beneficiarie as $item)
                                 @foreach ($item->surveys as $survey)
                                     <tr>
-                                        <td>{{ $loop->parent->iteration }}</td>
+                                        <td>{{ $serial++ }}</td>
                                         <td>{{ $item->registration_no }}</td>
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->gurdian_name }}</td>
@@ -204,12 +206,13 @@
                                             {{ $item->block }},
                                             {{ $item->district }},
                                             {{ $item->state }} - {{ $item->pincode }},
-                                        ({{ $item->area_type }})</td>
-                                            <td>{{ $item->identity_no }}</td>
-                                            <td>{{ $item->identity_type }}</td>
+                                            ({{ $item->area_type }})
+                                        </td>
+                                        <td>{{ $item->identity_no }}</td>
+                                        <td>{{ $item->identity_type }}</td>
                                         <td>{{ $item->phone }}</td>
-                                          <td>{{ $item->caste }}</td>
-                                          <td>{{ $item->religion_category }}</td>
+                                        <td>{{ $item->caste }}</td>
+                                        <td>{{ $item->religion_category }}</td>
                                         <td>{{ $item->religion }}</td>
                                         <td>
                                             {{ $item->dob ? \Carbon\Carbon::parse($item->dob)->age . ' years' : 'Not Found' }}
@@ -220,7 +223,6 @@
                                         </td>
                                         <td>{{ $survey->facilities_category ?? 'No Found' }}</td>
                                         <td>{{ $survey->facilities ?? 'No Found' }}</td>
-                                        {{-- Survey date --}}
                                         <td class="no-print">
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">
                                                 <a href="{{ route('distribute-beneficiarie-facilities', [$item->id, $survey->id]) }}"
@@ -238,14 +240,13 @@
                                     </tr>
                                 @endforeach
                             @endforeach
-
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-     <script>
+    <script>
         function printTable() {
             window.print();
         }
