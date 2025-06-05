@@ -170,7 +170,6 @@
         <div class="item ">
             <div class="background-image">
                 <img src="https://srv1276-files.hstgr.io/e4aef852a4f6e947/files/public_html/public/images/ach1.jpeg" alt="slider image">
-                <img src="{{ asset('images/peace-talk.jpeg') }}" alt="slider image">
                 <div class="carousel-caption d-none d-md-block">
                     <h1 class="text-white"></h1>
                     <h2 class="text-white"></h2>
