@@ -346,9 +346,8 @@
                                 value="{{ old('survey_officer') }} ">
                             @error('survey_officer')
                                 <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            </div>
                         </div>
-                    </div>
 
                     <div class="d-flex justify-content-between">
                         <button type="submit" class="btn btn-success">Add Beneficiarie</button>
