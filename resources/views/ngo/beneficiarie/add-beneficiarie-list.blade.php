@@ -55,7 +55,8 @@
                                         {{ $item->block }},
                                         {{ $item->district }},
                                         {{ $item->state }} - {{ $item->pincode }},
-                                    ({{ $item->area_type }})</td>
+                                        ({{ $item->area_type }})
+                                    </td>
                                     <td>{{ $item->identity_no }}</td>
                                     <td>{{ $item->identity_type }}</td>
                                     <td>{{ $item->phone }}</td>
@@ -82,6 +83,11 @@
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="View" style="min-width: 38px; height: 38px;">
                                                 <i class="fa-regular fa-eye"></i>
+                                            </a>
+                                            <a href="{{-- route('show-beneficiarie-survey', [$item->id, $survey->id]) --}}"
+                                                class="btn btn-primary btn-sm px-3 d-flex align-items-center justify-content-center"
+                                                title="View Survey" style="min-width: 38px; height: 38px;">
+                                                <i class="fa-regular "></i> Survey Send
                                             </a>
                                         </div>
                                     </td>

@@ -190,6 +190,9 @@
                             <div class="col-sm-4 mb-3">
                                 <strong>Identity Number:</strong> {{ $beneficiarie->identity_no }}
                             </div>
+                            <div class="col-sm-8 mb-3">
+                                <strong>Help Needed:</strong> {{ $beneficiarie->help_needed }}
+                            </div>
 
                         </div>
                         <hr>
@@ -343,33 +346,42 @@
                                 value="{{ old('survey_officer') }} ">
                             @error('survey_officer')
                                 <span class="text-danger">{{ $message }}</span>
-                            </div>
+                            @enderror
                         </div>
+                    </div>
 
-                        <div class="d-flex justify-content-between">
-                            <button type="submit" class="btn btn-success">Add Beneficiarie</button>
-                        </div>
-                    </form>
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-success">Add Beneficiarie</button>
+                    </div>
+                </form>
+            </div>
+            <div class="row">
+                <div class="col-md-4 col-sm-6">
+                    <a href="{{-- route('show-beneficiarie-survey', [$item->id, $survey->id]) --}}"
+                        class="btn btn-primary btn-sm px-3 d-flex align-items-center justify-content-center"
+                        title="View Survey">
+                        <i class="fa-regular "></i> Survey Send
+                    </a>
                 </div>
-
             </div>
         </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const yesRadio = document.getElementById('start_survey_yes');
-                const noRadio = document.getElementById('start_survey_no');
-                const surveySection = document.getElementById('survey_section');
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const yesRadio = document.getElementById('start_survey_yes');
+            const noRadio = document.getElementById('start_survey_no');
+            const surveySection = document.getElementById('survey_section');
 
-                function toggleSurvey() {
-                    if (yesRadio.checked) {
-                        surveySection.style.display = 'block';
-                    } else {
-                        surveySection.style.display = 'none';
-                    }
+            function toggleSurvey() {
+                if (yesRadio.checked) {
+                    surveySection.style.display = 'block';
+                } else {
+                    surveySection.style.display = 'none';
                 }
+            }
 
-                yesRadio.addEventListener('change', toggleSurvey);
-                noRadio.addEventListener('change', toggleSurvey);
-            });
-        </script>
-    @endsection
+            yesRadio.addEventListener('change', toggleSurvey);
+            noRadio.addEventListener('change', toggleSurvey);
+        });
+    </script>
+@endsection

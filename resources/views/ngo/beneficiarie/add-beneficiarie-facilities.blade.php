@@ -217,7 +217,7 @@
                 </div>
             </div>
             <div class="card mt-4 p-3 border border-success rounded">
-                <form action="{{ route('store-beneficiarie-facilities', ['beneficiarie_id' => $beneficiarie->id, 'survey_id' => $survey->id]) }}" method="POST">
+                <form action="{{ route('store-beneficiarie-facilities', ['beneficiarie_id' => $beneficiarie->id]) }}" method="POST">
                     @csrf
                     <h5 class="text-success text-center">Add Beneficiarie Facilities</h5>
 

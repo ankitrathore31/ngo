@@ -230,11 +230,19 @@
                                                     title="Distribute" style="min-width: 38px; height: auto;">
                                                     Distribute
                                                 </a>
+
                                                 <a href="{{ route('show-beneficiarie-facilities', [$item->id, $survey->id]) }}"
                                                     class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                     title="View" style="min-width: 38px; height: auto;">
                                                     <i class="fa-regular fa-eye"></i> Facilities
                                                 </a>
+
+                                                {{-- <a href="{{ route('delete-facilities', [$item->id, $survey->id]) }}"
+                                                    class="btn btn-danger btn-sm px-3 d-flex align-items-center justify-content-center"
+                                                    title="View Survey" style="min-width: 38px; height: 38px;" 
+                                                    onclick="return confirm('Are you sure want to delete survey')">
+                                                    <i class="fa-regular fa-trash"></i> 
+                                                </a> --}}
                                             </div>
                                         </td>
                                     </tr>
