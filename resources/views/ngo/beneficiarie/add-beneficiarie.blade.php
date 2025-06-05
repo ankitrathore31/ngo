@@ -347,6 +347,7 @@
                             @error('survey_officer')
                                 <span class="text-danger">{{ $message }}</span>
                             </div>
+                            @enderror
                         </div>
 
                     <div class="d-flex justify-content-between">
