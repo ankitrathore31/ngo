@@ -93,6 +93,18 @@ class BeneficiarieController extends Controller
         return view('ngo.beneficiarie.show-beneficiarie-survey', compact('beneficiarie', 'survey'));
     }
 
+    public function deletesurvey($beneficiarie_id, $survey_id)
+    {
+        $survey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+            ->where('id', $survey_id)
+            ->with('beneficiarie')
+            ->firstOrFail();
+
+        beneficiarie::where('id', $beneficiarie_id)->update(['survey_status' => 0]);
+
+        return redirect()->back()->with('success', 'Survey Delete Successfully');
+    }
+
     public function addbeneficiarieFacilities($beneficiarie_id, $survey_id)
     {
         $survey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
@@ -163,6 +175,18 @@ class BeneficiarieController extends Controller
             ->firstOrFail();
         $beneficiarie = beneficiarie::with('surveys')->find($beneficiarie_id);
         return view('ngo.beneficiarie.show-beneficiarie-facilities', compact('beneficiarie', 'survey'));
+    }
+
+    public function deletefacilities($beneficiarie_id, $survey_id)
+    {
+        $survey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+        ->where('id', $survey_id)
+        ->with('beneficiarie')
+        ->firstOrFail();
+
+        // beneficiarie::where('id', $beneficiarie_id)->update(['survey_status' => 0]);
+
+        return redirect()->back()->with('success', 'Facilities Delete Successfully');
     }
 
     public function distributebeneficiarieFacilities($beneficiarie_id, $survey_id)
@@ -325,7 +349,7 @@ class BeneficiarieController extends Controller
         return view('ngo.beneficiarie.show-beneficiarie-report', compact('beneficiarie', 'survey'));
     }
 
-     public function surveyrecivedlist()
+    public function surveyrecivedlist()
     {
         $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->where('survey_status', 1)->get();
 
