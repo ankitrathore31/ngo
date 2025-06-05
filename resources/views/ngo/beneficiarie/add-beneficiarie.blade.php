@@ -343,6 +343,7 @@
                                 value="{{ old('survey_officer') }} ">
                             @error('survey_officer')
                                 <span class="text-danger">{{ $message }}</span>
+                            @enderror
                             </div>
                         </div>
 
