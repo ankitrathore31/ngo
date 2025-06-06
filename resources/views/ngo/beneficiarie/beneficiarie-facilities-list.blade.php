@@ -217,7 +217,7 @@
                                         <td>
                                             {{ $item->dob ? \Carbon\Carbon::parse($item->dob)->age . ' years' : 'Not Found' }}
                                         </td>
-                                        <td>{{ $item->academic_session }}</td>
+                                        <td>{{ $survey->academic_session }}</td>
                                         <td>
                                             {{ $survey->survey_date ? \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') : 'No Found' }}
                                         </td>
@@ -243,6 +243,12 @@
                                                     onclick="return confirm('Are you sure want to delete survey')">
                                                     <i class="fa-regular fa-trash"></i> 
                                                 </a> --}}
+
+                                                 <a href="{{ route('edit-facilities', [$item->id, $survey->id]) }}"
+                                                    class="btn btn-primary btn-sm px-3 d-flex align-items-center justify-content-center"
+                                                    title="View" style="min-width: 38px; height: auto;">
+                                                    <i class="fa-regular fa-edit me-1"></i> Edit
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>

@@ -365,12 +365,42 @@
                         @enderror
                     </div>
 
+                    <div class="mb-3 mt-1" id="pendingDiv" style="display: none;">
+                        <label for="pending_reason" class="form-label">
+                            Pending Reason: <span class="text-danger"></span>
+                        </label>
+                       <textarea name="pending_reason" id="pending_reason" class="form-control">
+
+                       </textarea>
+                        @error('pending_reason')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
                     <div class="d-flex justify-content-between">
                         <button type="submit" class="btn btn-success">Distribute Beneficiarie Facilities</button>
                     </div>
                 </form>
             </div>
-
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            const statusSelect = document.getElementById('status');
+            const PendingDiv = document.getElementById('pendingDiv');
+
+            function togglePendingReason(){
+                if(statusSelect.value === 'Pending'){
+                    PendingDiv.style.display = 'block';
+                }
+                else{
+                    PendingDiv.style.display = 'none';
+                }
+            }
+
+            togglePendingReason();
+
+            statusSelect.addEventListener('change', togglePendingReason);
+        })
+    </script>
 @endsection

@@ -220,97 +220,74 @@
             </div>
             <div class="card mt-4 p-3 border border-success rounded">
                 <form
-                    action="{{ route('store-beneficiarie-facilities', ['beneficiarie_id' => $beneficiarie->id, 'survey_id' => $survey->id]) }}"
+                    action="{{ route('update-facilities', ['beneficiarie_id' => $beneficiarie->id, 'survey_id' => $survey->id, 'facility_id' => $survey->id]) }}"
                     method="POST">
                     @csrf
-                    <h5 class="text-success text-center">Add Beneficiarie Facilities</h5>
-
                     <div class="col-md-6 mb-3">
-                        <label for="session" class="form-label bold"> Session <span
-                                class="login-danger">*</span></label>
+                        <label for="session" class="form-label">Session <span class="text-danger">*</span></label>
                         <select class="form-control @error('session') is-invalid @enderror" name="session"
                             required>
                             <option value="">Select Session</option>
                             @foreach ($session as $session)
-                                <option value="{{ $session->session_date }}">{{ $session->session_date }}</option>
+                                <option value="{{ $session->session_date }}"
+                                    {{ isset($survey) && $survey->academic_session == $session->session_date ? 'selected' : '' }}>
+                                    {{ $session->session_date }}
+                                </option>
                             @endforeach
                         </select>
+                        @error('session')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
 
-                    <div class=" col-md-6 mb-3">
-                        <label for="facilities_category" class="form-label">
-                            Facilities Category<span class="text-danger">*</span>
-                        </label>
+                    <div class="col-md-6 mb-3">
+                        <label for="facilities_category" class="form-label">Facilities Category <span
+                                class="text-danger">*</span></label>
                         <select name="facilities_category" id="facilities_category"
                             class="form-select @error('facilities_category') is-invalid @enderror" required>
                             <option value="">-- Select Category --</option>
-                            <option value="Education" {{ old('facilities_category') == 'Education' ? 'selected' : '' }}>
-                                Education</option>
-                            <option value="Peace Talk" {{ old('facilities_category') == 'Peace Talk' ? 'selected' : '' }}>
-                                Peace Talk</option>
-                            <option value="Environment"
-                                {{ old('facilities_category') == 'Environment' ? 'selected' : '' }}>Environment</option>
-                            <option value="Food" {{ old('facilities_category') == 'Food' ? 'selected' : '' }}>Food
-                            </option>
-                            <option value="Skill Development"
-                                {{ old('facilities_category') == 'Skill Development' ? 'selected' : '' }}>Skill Development
-                            </option>
-                            <option value="Women Empowerment"
-                                {{ old('facilities_category') == 'Women Empowerment' ? 'selected' : '' }}>Women Empowerment
-                            </option>
-                            <option value="Awareness" {{ old('facilities_category') == 'Awareness' ? 'selected' : '' }}>
-                                Awareness</option>
-                            <option value="Cultural Program"
-                                {{ old('facilities_category') == 'Cultural Program' ? 'selected' : '' }}>Cultural Program
-                            </option>
-                            <option value="Clean Campaign"
-                                {{ old('facilities_category') == 'Clean Campaign' ? 'selected' : '' }}>Clean Campaign
-                            </option>
-                            <option value="Health Mission"
-                                {{ old('facilities_category') == 'Health Mission' ? 'selected' : '' }}>Health Mission
-                            </option>
-                            <option value="Poor Alleviation"
-                                {{ old('facilities_category') == 'Poor Alleviation' ? 'selected' : '' }}>Poor Alleviation
-                            </option>
-                            <option value="Religious Program"
-                                {{ old('facilities_category') == 'Religious Program' ? 'selected' : '' }}>Religious Program
-                            </option>
-                            <option value="Agriculture Program"
-                                {{ old('facilities_category') == 'Agriculture Program' ? 'selected' : '' }}>Agriculture
-                                Program</option>
-                            <option value="Drinking Water"
-                                {{ old('facilities_category') == 'Drinking Water' ? 'selected' : '' }}>Drinking Water
-                            </option>
-                            <option value="Natural Disaster"
-                                {{ old('facilities_category') == 'Natural Disaster' ? 'selected' : '' }}>Natural Disaster
-                            </option>
-                            <option value="Animal Service"
-                                {{ old('facilities_category') == 'Animal Service' ? 'selected' : '' }}>Animal Service
-                            </option>
+                            @php
+                                $categories = [
+                                    'Education',
+                                    'Peace Talk',
+                                    'Environment',
+                                    'Food',
+                                    'Skill Development',
+                                    'Women Empowerment',
+                                    'Awareness',
+                                    'Cultural Program',
+                                    'Clean Campaign',
+                                    'Health Mission',
+                                    'Poor Alleviation',
+                                    'Religious Program',
+                                    'Agriculture Program',
+                                    'Drinking Water',
+                                    'Natural Disaster',
+                                    'Animal Service',
+                                ];
+                            @endphp
+
+                            @foreach ($categories as $category)
+                                <option value="{{ $category }}"
+                                    {{ old('facilities_category', $survey->facilities_category) == $category ? 'selected' : '' }}>
+                                    {{ $category }}
+                                </option>
+                            @endforeach
                         </select>
                         @error('facilities_category')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
 
-
-                    <!-- Survey Date -->
-                    <!-- Survey Details -->
-                    <div class="mb-3">
-                        <label for="facilities" class="form-label">
-                            Facilities <span class="text-danger">*</span>
-                        </label>
+                    <div class="col-md-12 mb-3">
                         <textarea class="form-control @error('facilities') is-invalid @enderror" id="facilities" name="facilities"
-                            rows="3" required>{{ $beneficiarie->survey_details }}</textarea>
-                        @error('facilities')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
+                            rows="3" required>{{ old('facilities', $survey->facilities) }}</textarea>
                     </div>
 
-                    <div class="d-flex justify-content-between">
-                        <button type="submit" class="btn btn-success">Add Beneficiarie Facilities</button>
-                    </div>
+                    <button type="submit" class="btn btn-success">Update Beneficiarie Facilities</button>
+                    
                 </form>
+
             </div>
 
         </div>
