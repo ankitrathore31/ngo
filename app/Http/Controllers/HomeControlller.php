@@ -14,6 +14,15 @@ use Illuminate\Support\Facades\DB;
 
 class HomeControlller extends Controller
 {
+    public function home()
+    {
+        $data = academic_session::all();
+        $areaTypeCounts = Working_Area::select('area_type', DB::raw('count(*) as total'))
+            ->groupBy('area_type')
+            ->pluck('total', 'area_type');
+
+        return view('home.welcome', compact('data', 'areaTypeCounts'));
+    }
     public function index()
     {
         $data = academic_session::all()->sortByDesc('session_date');

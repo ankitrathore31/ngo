@@ -147,10 +147,25 @@
                                         <td>{{ $beneficiarie->status == 1 ? 'Approved' : 'Pending' }}</td>
                                         <td></td>
                                     </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>
+                                            {{ optional($beneficiarie->surveys->first())->survey_date
+                                                ? \Carbon\Carbon::parse($beneficiarie->surveys->first()->survey_date)->format('d-m-Y')
+                                                : 'No survey Date' }}
+                                        </td>
+                                        
+                                        <td>Survey</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            {{ optional($beneficiarie->surveys->first())->survey_details ?? 'No survey details' }}
+                                        </td>
+                                    </tr>
                                     {{-- @if ($beneficiarie->surveys->isEmpty())
                                     <div class="alert alert-warning">No Facilities records found.</div> --}}
                                     {{-- @else --}}
-                                    @php $serial =3; @endphp
+                                    @php $serial =4; @endphp
                                     @foreach ($beneficiarie->surveys as $survey)
                                         <tr>
                                             <td>{{ $serial++ }}</td>
