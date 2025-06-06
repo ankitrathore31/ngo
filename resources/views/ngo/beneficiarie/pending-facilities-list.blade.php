@@ -190,6 +190,7 @@
                                 <th>Facilities Category</th>
                                 <th>Facilities</th>
                                 <th>Status</th>
+                                <th>Pending Reason</th>
                                 <th>Signature/
                                     Thumb Impression of the Recipient</th>
                                 <th class="no-print">Action</th>
@@ -219,7 +220,7 @@
                                         <td>
                                             {{ $item->dob ? \Carbon\Carbon::parse($item->dob)->age . ' years' : 'Not Found' }}
                                         </td>
-                                        <td>{{ $item->academic_session }}</td>
+                                        <td>{{ $survey->academic_session }}</td>
                                         <td>
                                             {{ $survey->distribute_date ? \Carbon\Carbon::parse($survey->distribute_date)->format('d-m-Y') : 'No Found' }}
                                         </td>
@@ -227,6 +228,7 @@
                                         <td>{{ $survey->facilities_category ?? 'No Found' }}</td>
                                         <td>{{ $survey->facilities ?? 'No Found' }}</td>
                                         <td>{{ $survey->status ?? 'No Found' }} </td>
+                                         <td>{{ $survey->pending_reason ?? 'No Found' }}</td>
                                         <td></td>
                                         <td class="no-print">
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">

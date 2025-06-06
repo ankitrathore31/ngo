@@ -112,7 +112,8 @@ class BeneficiarieController extends Controller
             ->with('beneficiarie')
             ->firstOrFail();
         $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->find($beneficiarie_id);
-        return view('ngo.beneficiarie.add-beneficiarie-facilities', compact('beneficiarie', 'survey'));
+        $session = academic_session::all();
+        return view('ngo.beneficiarie.add-beneficiarie-facilities', compact('session', 'beneficiarie', 'survey'));
     }
 
     public function storebeneficiariefacilities(Request $request, $beneficiarie_id, $survey_id)
@@ -121,6 +122,7 @@ class BeneficiarieController extends Controller
         $request->validate([
             'facilities_category' => 'required',
             'facilities' => 'required',
+            'session' => 'required',
         ]);
 
         try {
@@ -130,6 +132,7 @@ class BeneficiarieController extends Controller
                 ->firstOrFail();
 
             $facilities->facilities_category = $request->input('facilities_category');
+            $facilities->academic_session = $request->input('session');
             $facilities->facilities = $request->input('facilities');
             $facilities->save();
 
@@ -139,10 +142,35 @@ class BeneficiarieController extends Controller
         }
     }
 
-    public function editbeneficiarieFacilities($id)
+    public function editFacilities($beneficiarie_id, $survey_id)
     {
-        $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->find($id);
-        return view('ngo.beneficiarie.edit-beneficiarie-facilities', compact('beneficiarie'));
+        $survey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+            ->where('id', $survey_id)
+            ->with('beneficiarie')
+            ->firstOrFail();
+        $beneficiarie = beneficiarie::with('surveys')->find($beneficiarie_id);
+        $session = academic_session::all();
+        return view('ngo.beneficiarie.edit-facilities', compact('session','beneficiarie', 'survey'));
+    }
+
+    public function updateFacilities(Request $request, $beneficiarie_id, $survey_id)
+    {
+
+        try {
+            $facilities = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+                ->where('id', $survey_id)
+                ->with('beneficiarie')
+                ->firstOrFail();
+
+            $facilities->facilities_category = $request->input('facilities_category');
+            $facilities->academic_session = $request->input('session');
+            $facilities->facilities = $request->input('facilities');
+            $facilities->save();
+
+            return redirect()->route('beneficiarie-facilities-list')->with('success', 'Facilities Update successfully');
+        } catch (\Throwable $th) {
+            return back()->withInput()->withErrors(['error' => 'Failed to update facilities.']);
+        }
     }
 
 
@@ -166,7 +194,6 @@ class BeneficiarieController extends Controller
         return view('ngo.beneficiarie.beneficiarie-facilities-list', compact('data', 'categories', 'beneficiarie'));
     }
 
-
     public function showbeneficiariefacilities($beneficiarie_id, $survey_id)
     {
         $survey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
@@ -180,9 +207,9 @@ class BeneficiarieController extends Controller
     public function deletefacilities($beneficiarie_id, $survey_id)
     {
         $survey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
-        ->where('id', $survey_id)
-        ->with('beneficiarie')
-        ->firstOrFail();
+            ->where('id', $survey_id)
+            ->with('beneficiarie')
+            ->firstOrFail();
 
         // beneficiarie::where('id', $beneficiarie_id)->update(['survey_status' => 0]);
 
@@ -207,6 +234,7 @@ class BeneficiarieController extends Controller
             'distribute_date' => 'required|date',
             'status' => 'required',
             'distribute_place' => 'required|string',
+            'pending_reason'=> 'required',
         ]);
 
         try {
@@ -218,6 +246,7 @@ class BeneficiarieController extends Controller
             $distribute->distribute_date = Carbon::parse($request->input('distribute_date'));
             $distribute->distribute_place = $request->input('distribute_place'); // FIXED here
             $distribute->status = $request->input('status');
+            $distribute->pending_reason = $request->input('pending_reason');
             $distribute->save();
 
             return redirect()->route('beneficiarie-facilities-list')->with('success', 'Distributed successfully');
