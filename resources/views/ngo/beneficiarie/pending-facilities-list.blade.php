@@ -220,7 +220,7 @@
                                         <td>
                                             {{ $item->dob ? \Carbon\Carbon::parse($item->dob)->age . ' years' : 'Not Found' }}
                                         </td>
-                                        <td>{{ $item->academic_session }}</td>
+                                        <td>{{ $survey->academic_session }}</td>
                                         <td>
                                             {{ $survey->distribute_date ? \Carbon\Carbon::parse($survey->distribute_date)->format('d-m-Y') : 'No Found' }}
                                         </td>
