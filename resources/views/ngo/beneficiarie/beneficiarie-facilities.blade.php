@@ -40,11 +40,12 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
+                        @php $srNo = 1; @endphp
                         <tbody>
                             @foreach ($beneficiarie as $item)
                                 @foreach ($item->surveys as $survey)
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $srNo++ }}</td>
 
                                         <td>{{ $item->registration_no }}</td>
                                         <td>{{ $item->name }}</td>
@@ -54,7 +55,7 @@
                                             {{ $item->block }},
                                             {{ $item->district }},
                                             {{ $item->state }} - {{ $item->pincode }},({{ $item->area_type }})
-                                            </td>
+                                        </td>
                                         <td>{{ $item->identity_no }}</td>
                                         <td>{{ $item->identity_type }}</td>
                                         <td>{{ $item->phone }}</td>
@@ -94,9 +95,9 @@
 
                                                 <a href="{{ route('delete-survey', [$item->id, $survey->id]) }}"
                                                     class="btn btn-danger btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                    title="View Survey" style="min-width: 38px; height: 38px;" 
+                                                    title="View Survey" style="min-width: 38px; height: 38px;"
                                                     onclick="return confirm('Are you sure want to delete survey')">
-                                                    <i class="fa-regular fa-trash-can"></i> 
+                                                    <i class="fa-regular fa-trash-can"></i>
                                                 </a>
 
                                             </div>

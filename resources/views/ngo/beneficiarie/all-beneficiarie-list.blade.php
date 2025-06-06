@@ -193,7 +193,7 @@
                                 <th>Facilities Category</th>
                                 <th>Facilities</th>
                                 <th>Signature/
-                                    Recipient's Thumb Impression</th>
+                                    Thumb Impression of the Recipient</th>
                                 <th>Remark</th>
                                 <th class="no-print">Action</th>
                             </tr>
