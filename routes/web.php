@@ -13,6 +13,7 @@ use App\Http\Controllers\WorkingAreaController;
 use App\Models\academic_session;
 use Illuminate\Support\Facades\Session;
 use App\Models\Working_Area;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,16 +33,12 @@ use App\Models\Working_Area;
 
 
 
-Route::get('/', function () {
-    $data = academic_session::all()->sortByDesc('session_date');
-        Session::put('all_academic_session', $data);
-        $areaTypeCounts = Working_Area::select('area_type', DB::raw('count(*) as total'))
-            ->groupBy('area_type')
-            ->pluck('total', 'area_type');
-    return view('home.welcome', compact('data','areaTypeCounts'));
-});
 
+Route::get('/', [HomeControlller::class, 'index']);
 
+// Route::get('/link', function(){
+//     Artisan::call('storage:link');
+// });
 
 Route::controller(HomeControlller::class)->group(function () {
     Route::get('/welcome', 'home')->name('welcome');

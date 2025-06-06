@@ -14,19 +14,22 @@ use Illuminate\Support\Facades\DB;
 
 class HomeControlller extends Controller
 {
-    public function home()
+    public function index()
     {
-        $data = academic_session::all(); 
+        $data = academic_session::all()->sortByDesc('session_date');
+
+        Session::put('all_academic_session', $data);
+
         $areaTypeCounts = Working_Area::select('area_type', DB::raw('count(*) as total'))
             ->groupBy('area_type')
-            ->pluck('total', 'area_type'); 
+            ->pluck('total', 'area_type');
 
         return view('home.welcome', compact('data', 'areaTypeCounts'));
     }
 
     public function activitypage()
     {
-        $activity = Activity::orderBy('activity_no', 'asc')->get();
+        $activity = Activity::orderBy('program_date', 'asc')->get();
         return view('home.activity.SocialActivity', compact('activity'));
     }
 
@@ -160,8 +163,8 @@ class HomeControlller extends Controller
         $identityNo = str_replace(' ', '', $request->identity_no);
 
         $beneficiarie = \App\Models\beneficiarie::with(['surveys'])->withTrashed()
-        ->where('identity_no', $identityNo)
-        ->first();
+            ->where('identity_no', $identityNo)
+            ->first();
 
         if (!$beneficiarie) {
             return back()->with('error', 'Facilities not found.')->withInput();

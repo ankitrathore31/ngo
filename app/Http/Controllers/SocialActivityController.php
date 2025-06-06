@@ -18,12 +18,12 @@ class SocialActivityController extends Controller
             $query->where('academic_session', $request->session_filter);
         }
 
-        // Filter by category (exact match)
+        
         if ($request->category_filter) {
             $query->where('program_category', $request->category_filter);
         }
 
-        $activity = $query->orderBy('activity_no', 'asc')->get();
+        $activity = $query->orderBy('program_date', 'asc')->get();
         return view('ngo.activity.activitylist', compact('activity'));
     }
 
@@ -43,10 +43,14 @@ class SocialActivityController extends Controller
             'program_category' => 'required|string|max:255',
             'program_date' => 'required|date',
             'program_session' => 'required',
-            'program_time' => 'required|date_format:h:i A',
+            'program_time' => 'required|date_format:H:i',
             'program_address' => 'required|string',
             'program_report' => 'required|string',
-            'program_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'program_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:25600',
+        ], [
+            'program_image.image' => 'The uploaded file must be an image.',
+            'program_image.mimes' => 'Only jpeg, png, jpg, gif, and svg formats are allowed.',
+            'program_image.max' => 'The image size must not exceed 25MB.',
         ]);
 
         // die($request->program_time);
@@ -87,38 +91,38 @@ class SocialActivityController extends Controller
     }
 
     public function updateactivity(Request $request, $id)
-{
-    $activity = Activity::find($id);
+    {
+        $activity = Activity::find($id);
 
-    $activity->activity_no = $request->activity_no;
-    $activity->program_name = $request->program_name;
-    $activity->program_category = $request->program_category;
-    $activity->program_date = \Carbon\Carbon::parse($request->program_date)->format('Y-m-d');
-    $activity->academic_session = $request->program_session;
-    $activity->program_time = $request->program_time;
-    $activity->program_address = $request->program_address;
-    $activity->program_report = $request->program_report;
+        $activity->activity_no = $request->activity_no;
+        $activity->program_name = $request->program_name;
+        $activity->program_category = $request->program_category;
+        $activity->program_date = \Carbon\Carbon::parse($request->program_date)->format('Y-m-d');
+        $activity->academic_session = $request->program_session;
+        $activity->program_time = $request->program_time;
+        $activity->program_address = $request->program_address;
+        $activity->program_report = $request->program_report;
 
-    
-    if ($request->hasFile('program_image')) {
-        // Optional: Delete old image
-        if ($activity->program_image && file_exists(public_path('program_images/' . $activity->program_image))) {
-            unlink(public_path('program_images/' . $activity->program_image));
+
+        if ($request->hasFile('program_image')) {
+            // Optional: Delete old image
+            if ($activity->program_image && file_exists(public_path('program_images/' . $activity->program_image))) {
+                unlink(public_path('program_images/' . $activity->program_image));
+            }
+
+            // Upload new image
+            $file = $request->file('program_image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $file->move(public_path('program_images'), $filename);
+            $activity->program_image = $filename;
         }
 
-        // Upload new image
-        $file = $request->file('program_image');
-        $extension = $file->getClientOriginalExtension();
-        $filename = time() . '.' . $extension;
-        $file->move(public_path('program_images'), $filename);
-        $activity->program_image = $filename;
+
+        $activity->save();
+
+        return redirect()->route('activitylist')->with('success', 'Program updated successfully');
     }
-    
-
-    $activity->save();
-
-    return redirect()->route('activitylist')->with('success', 'Program updated successfully');
-}
 
 
 

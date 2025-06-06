@@ -21,12 +21,12 @@
             <div class="card-body">
                 <form action="{{ route('saveactivity') }}" method="POST" enctype="multipart/form-data" class="m-3">
                     @csrf
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="col-md-4 col-sm-2 mb-3 text-start">
                             <span class="me-2">Activity Sr. No. </span><input type="number" name="activity_no"
                                 class="w-50 @error('activity_no') is-invalid @enderror">
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="row">
                         <div class="col-md-6 mb-3 form-group local-from">
                             {{-- <label for="">Program name <span class="login-danger">*</span></label> --}}
@@ -52,9 +52,6 @@
                                 <option value="Skill Development">Skill Development</option>
                                 <option value="Religious Program">Religious Program</option>
                                 <option value="Agriculture Program">Agriculture Program</option>
-
-
-                                <!-- Added new options -->
                                 <option value="Labour Tools Distribution">Labour Tools Distribution</option>
                                 <option value="Drinking Water">Drinking Water</option>
                                 <option value="Ration Distribution">Ration Distribution</option>
@@ -91,11 +88,11 @@
                         <div class="col-md-4 mb-3">
                             <label for="program_time" class="form-label bold">Program Time <span
                                     class="login-danger">*</span></label>
-                            <input type="text" id="program_time" name="program_time"
+                            <input type="time" id="program_time" name="program_time"
                                 class="form-control @error('program_time') is-invalid @enderror" placeholder="Select Time"
                                 required>
                         </div>
-                        `
+                        
                         <div class="row">
                             <div class="col-md-12 mb-3">
                                 {{-- <label for="">Program Address <span class="login-danger">*</span></label> --}}
@@ -180,7 +177,7 @@
                 const fileType = file.type.split('/')[0];
 
                 if (fileSize > 40) {
-                    fileError.textContent = 'File size should be less than or equal to 2MB.';
+                    fileError.textContent = 'File size should be less than or equal to 25MB.';
                     fileError.style.display = 'block';
                     document.getElementById('program_image').value = ''; // Reset the file input
                     document.getElementById('imagePreview').style.display = 'none'; // Hide the preview
