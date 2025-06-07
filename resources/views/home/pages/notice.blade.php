@@ -30,8 +30,11 @@
                     </div>
 
                     <div class="card-body">
-                        <p><strong>Date:</strong> <span class="text-primary"
-                                id="noticeDate">{{ \Carbon\Carbon::parse($notice->date)->format('d-m-Y') }}</span></p>
+                        <p><strong>Date:</strong>
+                            <span class="text-primary" id="noticeDate">
+                                {{ $notice && $notice->date ? \Carbon\Carbon::parse($notice->date)->format('d-m-Y') : 'N/A' }}
+                            </span>
+                        </p>
                         <p><strong>Sanstha Name:</strong> <span class="text-danger" id="orgName">Gyan Bharti
                                 Sanstha</span></p>
                         <p class="text-info"><i class="bi bi-geo-alt-fill me-1"></i><strong>Head Office:</strong> <span
