@@ -80,7 +80,7 @@ class BeneficiarieController extends Controller
         $beneficiarie = Beneficiarie::with('surveys')
             ->where('status', 1)
             ->where('survey_status', 1)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->get();
 
         return view('ngo.beneficiarie.beneficiarie-facilities', compact('beneficiarie'));
