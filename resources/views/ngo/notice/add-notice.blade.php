@@ -23,7 +23,7 @@
                             <a href="" class="btn btn-success">Notice List</a>
                         </div>
                         <div class="card-body">
-                            <form action="" method="POST">
+                            <form action="{{ route('store-notice')}}" method="POST">
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-4 mb-3 form-group">
