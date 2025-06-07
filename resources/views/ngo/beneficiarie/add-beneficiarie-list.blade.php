@@ -66,13 +66,12 @@
                                     <td>
                                         {{ $item->dob ? \Carbon\Carbon::parse($item->dob)->age . ' years' : 'Not Found' }}
                                     </td>
-                                    <td>{{ $item->academic_session }}</td>
                                     <td>
                                         @if ($item->status == 1)
                                             Approve
                                         @endif
                                     </td>
-                                    <td>{{ $item>academic_session }}</td>
+                                    <td>{{ $item->academic_session }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
                                             <a href="{{ route('add-beneficiarie', $item->id) }}"
