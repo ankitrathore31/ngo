@@ -42,7 +42,7 @@
                         <hr>
                         <p class="fs-5"><strong>📝 Notice:</strong>
                             <br>
-                            <span id="noticeText">{{ $notice->notice }}</span>
+                            <span id="noticeText">{{ $notice->notice ?? 'Wait For Notice' }}</span>
                         </p>
                         <p class="text-muted text-end fst-italic mb-0">– Gyan Bharti Sanstha</p>
                     </div>
