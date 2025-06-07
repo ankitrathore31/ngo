@@ -72,7 +72,7 @@
                                             Approve
                                         @endif
                                     </td>
-                                    <td>{{ $survey->academic_session }}</td>
+                                    <td>{{ $item>academic_session }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
                                             <a href="{{ route('add-beneficiarie', $item->id) }}"
