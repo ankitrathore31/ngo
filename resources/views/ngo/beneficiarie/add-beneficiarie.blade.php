@@ -103,10 +103,14 @@
                                 <strong>Application No:</strong> {{ $beneficiarie->application_no }}
                             </div>
                             <div class="col-sm-4 mb-3">
-                                <strong>Registraition Type:</strong> {{ $beneficiarie->reg_type }}
+                                <strong>Registration Type:</strong> {{ $beneficiarie->reg_type }}
                             </div>
                             <div class="col-sm-4 mb-3">
-                                <strong>Registraition No:</strong>
+                                <strong>Registration Date:</strong>
+                                {{ \Carbon\Carbon::parse($beneficiarie->registraition_date)->format('d-m-Y') }}
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <strong>Registration No:</strong> {{ $beneficiarie->registration_no}}
                             </div>
                             <div class="col-sm-4 mb-3">
                                 <strong>Session:</strong> {{ $beneficiarie->academic_session }}
@@ -351,7 +355,7 @@
                         </div>
 
                     <div class="d-flex justify-content-between">
-                        <button type="submit" class="btn btn-success">Add Beneficiarie</button>
+                        <button type="submit" class="btn btn-success">Add Beneficiarie Survey</button>
                     </div>
                 </form>
             </div>

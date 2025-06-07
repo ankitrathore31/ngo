@@ -188,18 +188,6 @@ class RegistrationController extends Controller
             'help_needed',
         ]);
 
-        // Handle file uploads
-        if ($request->hasFile('image')) {
-            $imageName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('benefries_images'), $imageName);
-            $data['image'] = $imageName;
-        }
-
-        if ($request->hasFile('id_document')) {
-            $idDocName = time() . '_iddoc.' . $request->id_document->extension();
-            $request->id_document->move(public_path('benefries_images'), $idDocName);
-            $data['id_document'] = $idDocName;
-        }
 
         try {
             if (!empty($data['application_date'])) {
@@ -215,6 +203,31 @@ class RegistrationController extends Controller
 
         // Update the existing record based on reg_type
         if ($request->reg_type === 'Beneficiaries') {
+            // Handle new profile image upload (if any)
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '_image'; // Add extension if needed
+                $image->move(public_path('benefries_images'), $imageName);
+                $data['image'] = $imageName;
+
+                // Optional: delete old image
+                // if ($imageName->image && file_exists(public_path('benefries_images/' . $data->image))) {
+                //     unlink(public_path('benefries_images/' . $data->image));
+                // }
+            }
+
+            // Handle new ID document upload (if any)
+            if ($request->hasFile('id_document')) {
+                $idDoc = $request->file('id_document');
+                $idDocName = time() . '_iddoc'; // Add extension if needed
+                $idDoc->move(public_path('benefries_images'), $idDocName);
+                $data['id_document'] = $idDocName;
+
+                // Optional: delete old ID document
+                // if ($record->id_document && file_exists(public_path('benefries_images/' . $record->id_document))) {
+                //     unlink(public_path('benefries_images/' . $record->id_document));
+                // }
+            }
             beneficiarie::where('id', $id)->update($data);
         } else if ($request->reg_type === 'Member') {
             Member::where('id', $id)->update($data);
@@ -380,18 +393,7 @@ class RegistrationController extends Controller
             'help_needed',
         ]);
 
-        // Handle file uploads
-        if ($request->hasFile('image')) {
-            $imageName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('benefries_images'), $imageName);
-            $data['image'] = $imageName;
-        }
 
-        if ($request->hasFile('id_document')) {
-            $idDocName = time() . '_iddoc.' . $request->id_document->extension();
-            $request->id_document->move(public_path('benefries_images'), $idDocName);
-            $data['id_document'] = $idDocName;
-        }
 
         try {
             if (!empty($data['application_date'])) {
@@ -407,12 +409,37 @@ class RegistrationController extends Controller
 
         // Update the existing record based on reg_type
         if ($request->reg_type === 'Beneficiaries') {
+            // Handle new profile image upload (if any)
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '_image'; // Add extension if needed
+                $image->move(public_path('benefries_images'), $imageName);
+                $data['image'] = $imageName;
+
+                // Optional: delete old image
+                // if ($record->image && file_exists(public_path('benefries_images/' . $record->image))) {
+                //     unlink(public_path('benefries_images/' . $record->image));
+                // }
+            }
+
+            // Handle new ID document upload (if any)
+            if ($request->hasFile('id_document')) {
+                $idDoc = $request->file('id_document');
+                $idDocName = time() . '_iddoc'; // Add extension if needed
+                $idDoc->move(public_path('benefries_images'), $idDocName);
+                $data['id_document'] = $idDocName;
+
+                // Optional: delete old ID document
+                // if ($record->id_document && file_exists(public_path('benefries_images/' . $record->id_document))) {
+                //     unlink(public_path('benefries_images/' . $record->id_document));
+                // }
+            }
             beneficiarie::where('id', $id)->update($data);
         } else if ($request->reg_type === 'Member') {
             Member::where('id', $id)->update($data);
         }
 
-        return redirect()->route('pending-registration')->with('success', 'Registration updated successfully.');
+        return redirect()->route('approve-registration')->with('success', 'Registration updated successfully.');
     }
 
     public function pendingStatus($id)

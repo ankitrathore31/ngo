@@ -38,7 +38,7 @@ class SocialActivityController extends Controller
     public function saveactivity(Request $request)
     {
         $request->validate([
-            'activity_no' => 'required',
+            // 'activity_no' => 'required',
             'program_name' => 'required|string|max:255',
             'program_category' => 'required|string|max:255',
             'program_date' => 'required|date',
@@ -62,7 +62,7 @@ class SocialActivityController extends Controller
         }
 
         $activity = new Activity;
-        $activity->activity_no = $request->activity_no;
+        // $activity->activity_no = $request->activity_no;
         $activity->program_name = $request->program_name;
         $activity->program_category = $request->program_category;
         $activity->program_date = \Carbon\Carbon::createFromFormat('d-m-Y', $request->program_date)->format('Y-m-d');
@@ -94,7 +94,7 @@ class SocialActivityController extends Controller
     {
         $activity = Activity::find($id);
 
-        $activity->activity_no = $request->activity_no;
+        // $activity->activity_no = $request->activity_no;
         $activity->program_name = $request->program_name;
         $activity->program_category = $request->program_category;
         $activity->program_date = \Carbon\Carbon::parse($request->program_date)->format('Y-m-d');

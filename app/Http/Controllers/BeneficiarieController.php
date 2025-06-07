@@ -77,10 +77,15 @@ class BeneficiarieController extends Controller
 
     public function beneficiarieFacilities()
     {
-        $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->where('survey_status', 1)->get();
+        $beneficiarie = Beneficiarie::with('surveys')
+            ->where('status', 1)
+            ->where('survey_status', 1)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('ngo.beneficiarie.beneficiarie-facilities', compact('beneficiarie'));
     }
+
 
     public function showbeneficiariesurvey($beneficiarie_id, $survey_id)
     {
@@ -97,12 +102,15 @@ class BeneficiarieController extends Controller
     {
         $survey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
             ->where('id', $survey_id)
-            ->with('beneficiarie')
             ->firstOrFail();
 
-        beneficiarie::where('id', $beneficiarie_id)->update(['survey_status' => 0]);
+        
+        $survey->delete();
 
-        return redirect()->back()->with('success', 'Survey Delete Successfully');
+        
+        Beneficiarie::where('id', $beneficiarie_id)->update(['survey_status' => 0]);
+
+        return redirect()->back()->with('success', 'Survey deleted successfully');
     }
 
     public function addbeneficiarieFacilities($beneficiarie_id, $survey_id)
@@ -150,7 +158,7 @@ class BeneficiarieController extends Controller
             ->firstOrFail();
         $beneficiarie = beneficiarie::with('surveys')->find($beneficiarie_id);
         $session = academic_session::all();
-        return view('ngo.beneficiarie.edit-facilities', compact('session','beneficiarie', 'survey'));
+        return view('ngo.beneficiarie.edit-facilities', compact('session', 'beneficiarie', 'survey'));
     }
 
     public function updateFacilities(Request $request, $beneficiarie_id, $survey_id)
@@ -234,7 +242,7 @@ class BeneficiarieController extends Controller
             'distribute_date' => 'required|date',
             'status' => 'required',
             'distribute_place' => 'required|string',
-            'pending_reason'=> 'required',
+            'pending_reason' => 'required',
         ]);
 
         try {
