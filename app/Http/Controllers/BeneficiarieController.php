@@ -183,30 +183,44 @@ class BeneficiarieController extends Controller
     }
 
 
-    public function beneficiarieFacilitiesList(Request $request)
-    {
-        $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
-            // Always filter facilities_status = 1
-            $q->where('facilities_status', 1);
+public function beneficiarieFacilitiesList(Request $request)
+{
+    $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
+        $q->where('facilities_status', 1)
+          ->whereNull('status'); // Filter surveys where status is NULL
 
-            // Optional filters
-            if ($request->session_filter) {
-                $q->where('academic_session', $request->session_filter);
-            }
+        if ($request->session_filter) {
+            $q->where('academic_session', $request->session_filter);
+        }
 
-            if ($request->category_filter) {
-                $q->where('facilities_category', $request->category_filter);
-            }
-        }])
-            ->where('status', 1);
+        if ($request->category_filter) {
+            $q->where('facilities_category', $request->category_filter);
+        }
+    }])
+    // Filter only beneficiaries that have surveys matching the same conditions
+    ->whereHas('surveys', function ($q) use ($request) {
+        $q->where('facilities_status', 1)
+          ->whereNull('status');
 
-        $beneficiarie = $query->orderBy('id', 'desc')->get();
+        if ($request->session_filter) {
+            $q->where('academic_session', $request->session_filter);
+        }
 
-        $data = academic_session::all();
-        $categories = Beneficiarie_Survey::select('facilities_category')->distinct()->pluck('facilities_category');
+        if ($request->category_filter) {
+            $q->where('facilities_category', $request->category_filter);
+        }
+    })
+    ->where('status', 1)
+    ->orderBy('id', 'desc');
 
-        return view('ngo.beneficiarie.beneficiarie-facilities-list', compact('data', 'categories', 'beneficiarie'));
-    }
+    $beneficiarie = $query->get();
+
+    $data = academic_session::all();
+    $categories = Beneficiarie_Survey::select('facilities_category')->distinct()->pluck('facilities_category');
+
+    return view('ngo.beneficiarie.beneficiarie-facilities-list', compact('data', 'categories', 'beneficiarie'));
+}
+
 
 
     public function showbeneficiariefacilities($beneficiarie_id, $survey_id)
