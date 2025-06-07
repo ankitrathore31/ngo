@@ -106,7 +106,11 @@
                                 <strong>Registraition Type:</strong> {{ $beneficiarie->reg_type }}
                             </div>
                             <div class="col-sm-4 mb-3">
-                                <strong>Registraition No:</strong>
+                                <strong>Registration Date:</strong>
+                                {{ \Carbon\Carbon::parse($beneficiarie->registraition_date)->format('d-m-Y') }}
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <strong>Registration No:</strong> {{ $beneficiarie->registration_no }}
                             </div>
                             <div class="col-sm-4 mb-3">
                                 <strong>Session:</strong> {{ $beneficiarie->academic_session }}
@@ -226,10 +230,8 @@
                     <h5 class="text-success text-center">Add Beneficiarie Facilities</h5>
 
                     <div class="col-md-6 mb-3">
-                        <label for="session" class="form-label bold"> Session <span
-                                class="login-danger">*</span></label>
-                        <select class="form-control @error('session') is-invalid @enderror" name="session"
-                            required>
+                        <label for="session" class="form-label bold"> Session <span class="login-danger">*</span></label>
+                        <select class="form-control @error('session') is-invalid @enderror" name="session" required>
                             <option value="">Select Session</option>
                             @foreach ($session as $session)
                                 <option value="{{ $session->session_date }}">{{ $session->session_date }}</option>

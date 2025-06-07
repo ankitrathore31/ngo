@@ -309,20 +309,18 @@
                     </ul>
                 </li>
 
-                <!-- Work Plan -->
                 <li class="nav-item">
                     <a class="nav-link text-white" href="#"><i class="fas fa-tasks"></i> WORK PLAN</a>
                 </li>
 
-                <!-- Notice -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
                             class="fas fa-bullhorn"></i> NOTICE</a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="#">Beneficiary Notice</a></li>
-                        <li><a class="dropdown-item" href="#">Staff Notice</a></li>
-                        <li><a class="dropdown-item" href="#">User Notice</a></li>
-                        <li><a class="dropdown-item" href="#">Member Notice</a></li>
+                        <li><a class="dropdown-item" href="{{ route('add-notice') }}">Add Notice</a></li>
+                        <li><a class="dropdown-item" href="#">Notice List</a></li>
+                        {{-- <li><a class="dropdown-item" href="#">User Notice</a></li>
+                        <li><a class="dropdown-item" href="#">Member Notice</a></li> --}}
                     </ul>
                 </li>
 

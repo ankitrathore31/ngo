@@ -352,10 +352,17 @@
                                             class="text-danger">*</span></label>
                                     <select class="form-control @error('district') is-invalid @enderror" name="district"
                                         id="districtSelect" required>
-                                        <option value="">
-
-                                        </option>
+                                        <option value="">Select District</option>
+                                        @if (!empty($selectedState) && isset($districtsByState[$selectedState]))
+                                            @foreach ($districtsByState[$selectedState] as $district)
+                                                <option value="{{ $district }}"
+                                                    {{ $selectedDistrict == $district ? 'selected' : '' }}>
+                                                    {{ $district }}
+                                                </option>
+                                            @endforeach
+                                        @endif
                                     </select>
+
                                     @error('district')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -594,7 +601,7 @@
             <div class="row ">
                 <div class="col">
                     <div class="card bg-white p-2 shadow rounded m-2">
-                        
+
                         <div class="row">
                             <div class="col-md-8 mb-3">
                                 <form action="{{ route('approve-status', $beneficiarie->id) }}" method="POST"
@@ -647,15 +654,15 @@
             }
         });
     </script>
-    <script>
-        document.getElementById("registraition_no").value = Math.floor(100000 + Math.random() * 9000000);
-    </script>
+
 
     <!-- Inline Script to load districts -->
     <script>
         const allDistricts = @json($districtsByState);
-        const oldDistrict = "{{ old('district') }}";
-        const oldState = "{{ old('state') }}";
+
+        // Use old values if they exist, otherwise fallback to $beneficiarie
+        const oldState = "{{ old('state', $beneficiarie->state) }}";
+        const oldDistrict = "{{ old('district', $beneficiarie->district) }}";
 
         function populateDistricts(state) {
             const districtSelect = document.getElementById('districtSelect');
@@ -669,7 +676,7 @@
             }
         }
 
-        // Initial load if editing or validation failed
+        // Initial load
         if (oldState) {
             populateDistricts(oldState);
         }

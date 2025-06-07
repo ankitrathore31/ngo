@@ -9,6 +9,7 @@ use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\NgoController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\WorkingAreaController;
 use App\Models\academic_session;
 use Illuminate\Support\Facades\Session;
@@ -145,7 +146,7 @@ Route::middleware('auth')->group(function () {
     Route::post('ngo/registration-toggle', [RegistrationController::class, 'toggleSetting'])->name('registration.toggle');
     Route::get('ngo/edit-registration/{id}', [RegistrationController::class, 'editRegistration'])->name('edit-reg');
     Route::get('ngo/edit-apporve-registration/{id}', [RegistrationController::class, 'editApproveRegistration'])->name('edit-apporve-reg');
-    Route::post('ngo/update-apporve-registration/{id}', [RegistrationController::class, 'UpdateApproveRegistration'])->name('update-apporve-registration');
+    Route::post('ngo/update-apporve-registration/{id}', [RegistrationController::class, 'UpdateApporveRegistration'])->name('update-apporve-registration');
 
 });
 
@@ -200,8 +201,9 @@ Route::controller(WorkingAreaController::class)->group(function(){
     Route::get('ngo/delete-Working-area/{id}', 'removeArea')->middleware('auth')->name('remove-area');
 });
 
-
-
+Route::controller(NoticeController::class)->group(function(){
+    Route::get('ngo/add-notice', 'addnotice')->middleware('auth')->name('add-notice');
+});
 
 
 
