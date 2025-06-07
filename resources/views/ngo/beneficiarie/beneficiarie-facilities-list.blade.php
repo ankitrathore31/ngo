@@ -184,10 +184,10 @@
                                 <th>Caste Category</th>
                                 <th>Religion</th>
                                 <th>Age</th>
-                                <th>Session</th>
                                 <th>Survey Date</th>
                                 <th>Facilities Category</th>
                                 <th>Facilities</th>
+                                <th>Session</th>
                                 <th class="no-print">Action</th>
                             </tr>
                         </thead>
@@ -217,12 +217,12 @@
                                         <td>
                                             {{ $item->dob ? \Carbon\Carbon::parse($item->dob)->age . ' years' : 'Not Found' }}
                                         </td>
-                                        <td>{{ $survey->academic_session }}</td>
                                         <td>
                                             {{ $survey->survey_date ? \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') : 'No Found' }}
                                         </td>
                                         <td>{{ $survey->facilities_category ?? 'No Found' }}</td>
                                         <td>{{ $survey->facilities ?? 'No Found' }}</td>
+                                        <td>{{ $survey->academic_session }}</td>
                                         <td class="no-print">
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">
                                                 <a href="{{ route('distribute-beneficiarie-facilities', [$item->id, $survey->id]) }}"

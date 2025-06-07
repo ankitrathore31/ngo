@@ -168,7 +168,6 @@ class HomeControlller extends Controller
             'identity_no' => 'required',
         ]);
 
-        // Remove spaces from Aadhar
         $identityNo = str_replace(' ', '', $request->identity_no);
 
         $beneficiarie = \App\Models\beneficiarie::with(['surveys'])->withTrashed()

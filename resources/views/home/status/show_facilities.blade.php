@@ -157,7 +157,7 @@
                                         
                                         <td>Survey</td>
                                         <td></td>
-                                        <td></td>
+                                        <td> </td>
                                         <td>
                                             {{ optional($beneficiarie->surveys->first())->survey_details ?? 'No survey details' }}
                                         </td>
