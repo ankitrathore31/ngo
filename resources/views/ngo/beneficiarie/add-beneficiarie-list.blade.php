@@ -37,8 +37,8 @@
                                 <th>Caste Category</th>
                                 <th>Religion</th>
                                 <th>Age</th>
-                                <th>Session</th>
                                 <th>Status</th>
+                                <th>Session</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -72,6 +72,7 @@
                                             Approve
                                         @endif
                                     </td>
+                                    <td>{{ $survey->academic_session }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
                                             <a href="{{ route('add-beneficiarie', $item->id) }}"

@@ -187,14 +187,15 @@
                                 <th>Caste Category</th>
                                 <th>Religion</th>
                                 <th>Age</th>
-                                <th>Session</th>
                                 <th>Distribute Date</th>
                                 <th>Distribute Place</th>
                                 <th>Facilities Category</th>
                                 <th>Facilities</th>
                                 <th>Status</th>
                                 <th>Signature/
-                                    Thumb Impression of the Recipient</th>
+                                    Thumb Impression of the Recipient
+                                </th>
+                                <th>Session</th>
                                 <th class="no-print">Action</th>
                             </tr>
                         </thead>
@@ -222,7 +223,6 @@
                                         <td>
                                             {{ $item->dob ? \Carbon\Carbon::parse($item->dob)->age . ' years' : 'Not Found' }}
                                         </td>
-                                        <td>{{ $survey->academic_session }}</td>
                                         <td>
                                             {{ $survey->distribute_date ? \Carbon\Carbon::parse($survey->distribute_date)->format('d-m-Y') : 'No Found' }}
                                         </td>
@@ -231,7 +231,7 @@
                                         <td>{{ $survey->facilities ?? 'No Found' }}</td>
                                         <td>{{ $survey->status ?? 'No Found' }} </td>
                                         <td></td>
-
+                                        <td>{{ $survey->academic_session }}</td>
                                         <td class="no-print">
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">
                                                 <a href="{{ route('show-beneficiarie-report', [$item->id, $survey->id]) }}"

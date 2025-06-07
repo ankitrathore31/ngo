@@ -14,7 +14,11 @@
                     </ol>
                 </nav>
             </div>
-
+            @if (session('success'))
+                <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
             <div class="row">
                 <div class="col-md-12">
                     <form method="GET" action="{{ route('activitylist') }}" class="row g-3 mb-4">

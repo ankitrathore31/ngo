@@ -280,6 +280,7 @@
                     </div>
 
                     <div class="col-md-12 mb-3">
+                        <label for="" class="form-label">Facilities:</label>
                         <textarea class="form-control @error('facilities') is-invalid @enderror" id="facilities" name="facilities"
                             rows="3" required>{{ old('facilities', $survey->facilities) }}</textarea>
                     </div>

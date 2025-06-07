@@ -29,11 +29,12 @@
                     </div> --}}
                     <div class="row">
                         <div class="col-md-6 mb-3 form-group local-from">
-                            {{-- <label for="">Program name <span class="login-danger">*</span></label> --}}
+                            <label class="form-label">Program name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control @error('program_name') is-invalid @enderror"
                                 name="program_name" placeholder="Program Name" required>
                         </div>
                         <div class="col-md-6 mb-3">
+                            <label for="" class="form-label">Program Category <span class="text-danger">*</span></label>
                             <select class="form-control select @error('program_category') is-invalid @enderror"
                                 name="program_category" required>
                                 <option value="" selected>Select Category</option>
@@ -62,20 +63,18 @@
                                 <option value="Other Activities">Other Activities</option>
                             </select>
                         </div>
-
-
                     </div>
                     <div class="row">
                         <div class="col-md-4 mb-3">
-                            <label for="" class="form-label bold">Program Date <span
-                                    class="login-danger">*</span></label>
+                            <label for="" class="form-label">Program Date <span
+                                    class="text-danger">*</span></label>
                             <input type="text" id="datepicker"
                                 class="datepicker form-control @error('program_date') is-invalid @enderror"
                                 name="program_date" placeholder="Select Date" required>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="program_session" class="form-label bold">Program Session <span
-                                    class="login-danger">*</span></label>
+                            <label for="program_session" class="form-label ">Program Session <span
+                                    class="text-danger">*</span></label>
                             <select class="form-control @error('program_session') is-invalid @enderror"
                                 name="program_session" required>
                                 <option value="">Select Session</option>
@@ -87,7 +86,7 @@
 
                         <div class="col-md-4 mb-3">
                             <label for="program_time" class="form-label bold">Program Time <span
-                                    class="login-danger">*</span></label>
+                                    class="text-danger">*</span></label>
                             <input type="time" id="program_time" name="program_time"
                                 class="form-control @error('program_time') is-invalid @enderror" placeholder="Select Time"
                                 required>
@@ -95,12 +94,12 @@
                         
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                {{-- <label for="">Program Address <span class="login-danger">*</span></label> --}}
+                                <label for="" class="form-label">Program Address <span class="text-danger">*</span></label>
                                 <textarea class="form-control @error('program_address') is-invalid @enderror" name="program_address" rows="3"
                                     placeholder="Address" required></textarea>
                             </div>
                             <div class="col-md-12 mb-3">
-                                {{-- <label for="">Program Report <span class="login-danger">*</span></label> --}}
+                                <label for="" class="form-label">Program Report <span class="text-danger">*</span></label>
                                 <textarea class="form-control @error('program_report') is-invalid @enderror" name="program_report" rows="3"
                                     placeholder="Program Report" required></textarea>
                             </div>
