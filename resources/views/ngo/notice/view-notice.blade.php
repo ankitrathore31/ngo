@@ -1,15 +1,14 @@
-@extends('home.layout.MasterLayout')
-@Section('content')
+@extends('ngo.layout.master')
+@section('content')
     <div class="wrapper">
-        <div class="row d-flex justify-content-end">
-            <div class="col-auto  mb-3">
-                <nav aria-label="breadcrumb  bg-white">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Notice Board</li>
-                    </ol>
-                </nav>
-            </div>
+        <div class="d-flex justify-content-between align-item-center mb-2 mt-2">
+            <h5 class="mb-0">Notice Board</h5>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
+                    <li class="breadcrumb-item"><a href="{{ url('dashboard') }}"></a></li>
+                    <li class="breadcrumb active" aria-current="page">Notice Board</li>
+                </ol>
+            </nav>
         </div>
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show">
@@ -24,7 +23,7 @@
 
             <div class="card shadow-lg" id="printArea">
                 <div class="card border-danger border-2">
-                    <div class="card-header bg-info text-white d-flex align-items-center">
+                    <div class="card-header bg-danger text-white d-flex align-items-center">
                         <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
                         <h5 class="mb-0">Important Notice</h5>
                     </div>
@@ -32,18 +31,14 @@
                     <div class="card-body">
                         <p><strong>Date:</strong> <span class="text-primary"
                                 id="noticeDate">{{ \Carbon\Carbon::parse($notice->date)->format('d-m-Y') }}</span></p>
-                        <p><strong>Sanstha Name:</strong> <span class="text-danger" id="orgName">Gyan Bharti
+                        <p><strong>Sanstha Name:</strong> <span class="text-success" id="orgName">Gyan Bharti
                                 Sanstha</span></p>
                         <p class="text-info"><i class="bi bi-geo-alt-fill me-1"></i><strong>Head Office:</strong> <span
                                 id="officeAddress">Kainchu Tanda, Amaria, Pilibhit, UP 262121</span></p>
                         <hr>
-                        <p class="fs-5"><strong>📝 Notice:</strong>
-                            <br>
-                            <span id="noticeText">{{ $notice->notice }}</span>
-                        </p>
+                        <p class="fs-5"><strong>📝 Notice:</strong> <span id="noticeText">{{ $notice->notice }}</span></p>
                         <p class="text-muted text-end fst-italic mb-0">– Gyan Bharti Sanstha</p>
                     </div>
-
                 </div>
             </div>
         </div>

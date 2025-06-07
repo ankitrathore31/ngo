@@ -205,6 +205,11 @@ Route::controller(NoticeController::class)->group(function(){
     Route::get('ngo/add-notice', 'addnotice')->middleware('auth')->name('add-notice');
     Route::post('ngo/store-notice', 'storeNotice')->middleware('auth')->name('store-notice');
     Route::get('ngo/notice-list', 'NoticeList')->middleware('auth')->name('notice-list');
+    Route::get('ngo/view-notice/{id}', 'ViewNotice')->middleware('auth')->name('view-notice');
+    Route::get('ngo/edit-notice/{id}', 'editNotice')->middleware('auth')->name('edit-notice');
+    Route::post('ngo/update-notice/{id}', 'updateNotice')->middleware('auth')->name('update-notice');
+    Route::get('ngo/delete-notice/{id}', 'deleteNotice')->middleware('auth')->name('delete-notice');
+    Route::get('ngo/notice-status/{id}', 'NoticeStatus')->middleware('auth')->name('notice-status');
 });
 
 

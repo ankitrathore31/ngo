@@ -187,7 +187,8 @@ class BeneficiarieController extends Controller
     {
         $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
             $q->where('facilities_status', 1)
-                ->whereNull('status'); // Filter surveys where status is NULL
+                ->whereNull('status')
+                ->orderBy('created_at', 'asc'); 
 
             if ($request->session_filter) {
                 $q->where('academic_session', $request->session_filter);
@@ -291,7 +292,8 @@ class BeneficiarieController extends Controller
     public function distributefacilities(Request $request)
     {
         $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
-            $q->where('status', 'Distributed');
+            $q->where('status', 'Distributed')
+            ->orderBy('created_at', 'asc');
 
             if ($request->session_filter) {
                 $q->where('session_date', $request->session_filter);
@@ -326,7 +328,8 @@ class BeneficiarieController extends Controller
     public function pendingfacilities(Request $request)
     {
         $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
-            $q->where('status', 'Pending');
+            $q->where('status', 'Pending')
+            ->orderBy('created_at', 'asc');
 
             if ($request->session_filter) {
                 $q->where('academic_session', $request->session_filter);
@@ -339,7 +342,8 @@ class BeneficiarieController extends Controller
 
         // Get only beneficiaries who actually have at least one distributed survey
         $beneficiarie = $query->whereHas('surveys', function ($q) use ($request) {
-            $q->where('status', 'Pending');
+            $q->where('status', 'Pending')
+            ->orderBy('created_at', 'asc');
 
             if ($request->session_filter) {
                 $q->where('academic_session', $request->session_filter);
@@ -360,7 +364,8 @@ class BeneficiarieController extends Controller
     public function allbeneficiarielist(Request $request)
     {
         $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
-            $q->where('status', 'Distributed');
+            $q->where('status', 'Distributed')
+            ->orderBy('created_at', 'asc');
 
             if ($request->session_filter) {
                 $q->where('academic_session', $request->session_filter);
@@ -373,7 +378,8 @@ class BeneficiarieController extends Controller
 
         // Get only beneficiaries who actually have at least one distributed survey
         $beneficiarie = $query->whereHas('surveys', function ($q) use ($request) {
-            $q->where('status', 'Distributed');
+            $q->where('status', 'Distributed')
+            ->orderBy('created_at', 'asc');
 
             if ($request->session_filter) {
                 $q->where('academic_session', $request->session_filter);
@@ -391,15 +397,6 @@ class BeneficiarieController extends Controller
         return view('ngo.beneficiarie.all-beneficiarie-list', compact('beneficiarie', 'data', 'categories'));
     }
 
-    public function beneficiarieReportList($beneficiarie_id, $survey_id)
-    {
-        $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->find($beneficiarie_id);
-        $survey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
-            ->where('id', $survey_id)
-            ->with('beneficiarie')
-            ->firstOrFail();
-        return view('ngo.beneficiarie.beneficiarie-report-list', compact('beneficiarie'));
-    }
 
     public function showbeneficiariereport($beneficiarie_id, $survey_id)
     {

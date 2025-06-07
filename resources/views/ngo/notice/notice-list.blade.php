@@ -42,19 +42,19 @@
                                     <td>{{ $item->academic_session }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            <a href="{{-- route('edit-area', $item->id) --}}" class="btn btn-sm btn-success" title="status">
-                                                Show
+                                            <a href="{{ route('notice-status', $item->id) }}" class="btn btn-sm btn-success" title="status">
+                                                {{$item->status == 1 ? 'Showed' : 'Hide' }}
                                             </a>
 
-                                            <a href="{{-- route('edit-area', $item->id) --}}" class="btn btn-sm btn-info" title="view">
+                                            <a href="{{ route('view-notice', $item->id) }}" class="btn btn-sm btn-info" title="view">
                                                 <i class="fa-regular fa-eye"></i>
                                             </a>
 
-                                            <a href="{{-- route('edit-area', $item->id) --}}" class="btn btn-sm btn-Primary" title="Edit">
+                                            <a href="{{ route('edit-notice', $item->id) }}" class="btn btn-sm btn-Primary" title="Edit">
                                                 <i class="fa-regular fa-edit"></i>
                                             </a>
 
-                                            <a href="{{-- route('remove-area', $item->id) --}}" class="btn btn-sm btn-danger" title="Delete"
+                                            <a href="{{ route('delete-notice', $item->id) }}" class="btn btn-sm btn-danger" title="Delete"
                                                 onclick="return confirm('Are you sure you want to delete this notice?')">
                                                 <i class="fa-regular fa-trash-can"></i>
                                             </a>
