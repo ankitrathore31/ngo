@@ -17,6 +17,10 @@ class Beneficiarie_Survey extends Model
         'survey_officer',
         'facilities_category',
         'facilities',
+        'facilities_status',
+        'distribute_date',
+        'distribute_place',
+        'pending_reason',
         'status',
     ];
     protected $casts = [

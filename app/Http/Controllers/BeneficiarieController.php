@@ -183,43 +183,43 @@ class BeneficiarieController extends Controller
     }
 
 
-public function beneficiarieFacilitiesList(Request $request)
-{
-    $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
-        $q->where('facilities_status', 1)
-          ->whereNull('status'); // Filter surveys where status is NULL
+    public function beneficiarieFacilitiesList(Request $request)
+    {
+        $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
+            $q->where('facilities_status', 1)
+                ->whereNull('status'); // Filter surveys where status is NULL
 
-        if ($request->session_filter) {
-            $q->where('academic_session', $request->session_filter);
-        }
+            if ($request->session_filter) {
+                $q->where('academic_session', $request->session_filter);
+            }
 
-        if ($request->category_filter) {
-            $q->where('facilities_category', $request->category_filter);
-        }
-    }])
-    // Filter only beneficiaries that have surveys matching the same conditions
-    ->whereHas('surveys', function ($q) use ($request) {
-        $q->where('facilities_status', 1)
-          ->whereNull('status');
+            if ($request->category_filter) {
+                $q->where('facilities_category', $request->category_filter);
+            }
+        }])
+            // Filter only beneficiaries that have surveys matching the same conditions
+            ->whereHas('surveys', function ($q) use ($request) {
+                $q->where('facilities_status', 1)
+                    ->whereNull('status');
 
-        if ($request->session_filter) {
-            $q->where('academic_session', $request->session_filter);
-        }
+                if ($request->session_filter) {
+                    $q->where('academic_session', $request->session_filter);
+                }
 
-        if ($request->category_filter) {
-            $q->where('facilities_category', $request->category_filter);
-        }
-    })
-    ->where('status', 1)
-    ->orderBy('id', 'desc');
+                if ($request->category_filter) {
+                    $q->where('facilities_category', $request->category_filter);
+                }
+            })
+            ->where('status', 1)
+            ->orderBy('id', 'desc');
 
-    $beneficiarie = $query->get();
+        $beneficiarie = $query->get();
 
-    $data = academic_session::all();
-    $categories = Beneficiarie_Survey::select('facilities_category')->distinct()->pluck('facilities_category');
+        $data = academic_session::all();
+        $categories = Beneficiarie_Survey::select('facilities_category')->distinct()->pluck('facilities_category');
 
-    return view('ngo.beneficiarie.beneficiarie-facilities-list', compact('data', 'categories', 'beneficiarie'));
-}
+        return view('ngo.beneficiarie.beneficiarie-facilities-list', compact('data', 'categories', 'beneficiarie'));
+    }
 
 
 
@@ -263,7 +263,7 @@ public function beneficiarieFacilitiesList(Request $request)
             'distribute_date' => 'required|date',
             'status' => 'required',
             'distribute_place' => 'required|string',
-            'pending_reason' => 'required',
+            'pending_reason' => 'required_if:status,Pending',
         ]);
 
         try {
@@ -278,7 +278,11 @@ public function beneficiarieFacilitiesList(Request $request)
             $distribute->pending_reason = $request->input('pending_reason');
             $distribute->save();
 
-            return redirect()->route('beneficiarie-facilities-list')->with('success', 'Distributed successfully');
+            if ($request->input('status') === 'Disributed') {
+                return redirect()->route('distributed-list')->with('success', 'Distributed successfully');
+            } else {
+                return redirect()->route('pending-distribute-list')->with('success', 'Facilities Now Pending');
+            }
         } catch (\Throwable $th) {
             return back()->withInput()->withErrors(['error' => 'Failed to update distribution.']);
         }
