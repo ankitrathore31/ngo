@@ -104,10 +104,10 @@ class BeneficiarieController extends Controller
             ->where('id', $survey_id)
             ->firstOrFail();
 
-        
+
         $survey->delete();
 
-        
+
         Beneficiarie::where('id', $beneficiarie_id)->update(['survey_status' => 0]);
 
         return redirect()->back()->with('success', 'Survey deleted successfully');
@@ -142,6 +142,7 @@ class BeneficiarieController extends Controller
             $facilities->facilities_category = $request->input('facilities_category');
             $facilities->academic_session = $request->input('session');
             $facilities->facilities = $request->input('facilities');
+            $facilities->facilities_status = 1;
             $facilities->save();
 
             return redirect()->route('beneficiarie-facilities-list')->with('success', 'Facilities added successfully');
@@ -184,7 +185,11 @@ class BeneficiarieController extends Controller
 
     public function beneficiarieFacilitiesList(Request $request)
     {
-        $query = beneficiarie::with(['surveys' => function ($q) use ($request) {
+        $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
+            // Always filter facilities_status = 1
+            $q->where('facilities_status', 1);
+
+            // Optional filters
             if ($request->session_filter) {
                 $q->where('academic_session', $request->session_filter);
             }
@@ -192,7 +197,8 @@ class BeneficiarieController extends Controller
             if ($request->category_filter) {
                 $q->where('facilities_category', $request->category_filter);
             }
-        }])->where('status', 1);
+        }])
+            ->where('status', 1);
 
         $beneficiarie = $query->orderBy('id', 'desc')->get();
 
@@ -201,6 +207,7 @@ class BeneficiarieController extends Controller
 
         return view('ngo.beneficiarie.beneficiarie-facilities-list', compact('data', 'categories', 'beneficiarie'));
     }
+
 
     public function showbeneficiariefacilities($beneficiarie_id, $survey_id)
     {

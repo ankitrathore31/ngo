@@ -318,7 +318,7 @@
                             class="fas fa-bullhorn"></i> NOTICE</a>
                     <ul class="dropdown-menu bg-primary">
                         <li><a class="dropdown-item" href="{{ route('add-notice') }}">Add Notice</a></li>
-                        <li><a class="dropdown-item" href="#">Notice List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('notice-list') }}">Notice List</a></li>
                         {{-- <li><a class="dropdown-item" href="#">User Notice</a></li>
                         <li><a class="dropdown-item" href="#">Member Notice</a></li> --}}
                     </ul>

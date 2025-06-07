@@ -203,6 +203,8 @@ Route::controller(WorkingAreaController::class)->group(function(){
 
 Route::controller(NoticeController::class)->group(function(){
     Route::get('ngo/add-notice', 'addnotice')->middleware('auth')->name('add-notice');
+    Route::post('ngo/store-notice', 'storeNotice')->middleware('auth')->name('store-notice');
+    Route::get('ngo/notice-list', 'NoticeList')->middleware('auth')->name('notice-list');
 });
 
 
