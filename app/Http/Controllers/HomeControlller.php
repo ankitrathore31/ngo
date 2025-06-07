@@ -8,9 +8,11 @@ use App\Models\Gallery;
 use App\Models\beneficiarie;
 use App\Models\Member;
 use App\Models\academic_session;
+use App\Models\Notice;
 use App\Models\Working_Area;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class HomeControlller extends Controller
 {
@@ -123,7 +125,8 @@ class HomeControlller extends Controller
 
     public function notice()
     {
-        return view('home.pages.notice');
+        $notice = Notice::where('status', 1)->latest()->first();
+        return view('home.pages.notice', compact('notice'));
     }
 
     public function applictionStatus()

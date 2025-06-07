@@ -12,13 +12,13 @@
                     enctype="multipart/form-data" class="m-3">
                     @csrf
                     <input type="text" hidden value="{{ $activity->id }}">
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="col-md-4 col-sm-2 mb-3 text-start">
                             <span class="me-2">Activity Sr. No. </span><input type="number"
                                 value="{{ $activity->activity_no }}" name="activity_no"
                                 class="w-50 @error('activity_no') is-invalid @enderror">
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="row">
                         <div class="col-md-6 mb-3 form-group local-from">
                             <input type="text" class="form-control @error('program_name') is-invalid @enderror"
