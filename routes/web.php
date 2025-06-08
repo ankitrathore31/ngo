@@ -10,6 +10,7 @@ use App\Http\Controllers\NgoController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\NoticeController;
+use App\Http\Controllers\StaffController;
 use App\Http\Controllers\WorkingAreaController;
 use App\Models\academic_session;
 use Illuminate\Support\Facades\Session;
@@ -210,6 +211,11 @@ Route::controller(NoticeController::class)->group(function(){
     Route::post('ngo/update-notice/{id}', 'updateNotice')->middleware('auth')->name('update-notice');
     Route::get('ngo/delete-notice/{id}', 'deleteNotice')->middleware('auth')->name('delete-notice');
     Route::get('ngo/notice-status/{id}', 'NoticeStatus')->middleware('auth')->name('notice-status');
+});
+
+Route::controller(StaffController::class)->group( function(){
+    Route::get('ngo/add-staff', 'addstaff')->middleware('auth')->name('add-staff');
+    Route::get('ngo/staff-list', 'staffList')->middleware('auth')->name('staff-list');
 });
 
 

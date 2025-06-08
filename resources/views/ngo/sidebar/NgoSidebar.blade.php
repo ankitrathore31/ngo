@@ -161,8 +161,8 @@
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
                             class="fas fa-users"></i> STAFF</a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="#">Add Staff</a></li>
-                        <li><a class="dropdown-item" href="#">Staff List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('add-staff')}}">Add Staff</a></li>
+                        <li><a class="dropdown-item" href="{{ route('staff-list')}}">Staff List</a></li>
                         <li><a class="dropdown-item" href="#">Staff Appointment Letter</a></li>
                         <li><a class="dropdown-item" href="#">Staff Resign Letter</a></li>
                         <li><a class="dropdown-item" href="#">Staff Salary</a></li>
