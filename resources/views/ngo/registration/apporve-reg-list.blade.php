@@ -91,12 +91,10 @@
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->gurdian_name}}</td>
                                     <td>{{ $item->village }},
-                                            ({{ $item->area_type }})
-                                            ,
                                             {{ $item->post }},
                                             {{ $item->block }},
                                             {{ $item->district }},
-                                            {{ $item->state }} - {{ $item->pincode }}</td>
+                                            {{ $item->state }} - {{ $item->pincode }},({{ $item->area_type }})</td>
                                     <td>{{$item->caste}}</td>
                                     <td>{{$item->religion_category}}</td>
                                     <td>{{$item->religion}}</td>
@@ -119,7 +117,7 @@
                                                 <i class="fa-regular fa-eye"></i>
                                             </a>
 
-                                            <a href="{{ route('delete-view', $item->id) }}"
+                                            <a href="{{ route('delete-reg', $item->id) }}"
                                                 class="btn btn-danger btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="Delete" style="min-width: 38px; height: 38px;">
                                                 <i class="fa-regular fa-trash-can"></i>
