@@ -38,7 +38,7 @@ class NoticeController extends Controller
         $notice->notice = $request->notice;
         $notice->save();
 
-        return redirect()->route('')->with('success', 'Notice Add Successfully');
+        return redirect()->route('notice-list')->with('success', 'Notice Add Successfully');
     }
 
     public function NoticeList(){
