@@ -2,8 +2,8 @@
 @section('content')
     <style>
         /* ::placeholder {
-            font-size: 8px;
-        } */
+                font-size: 8px;
+            } */
 
         .upload-container {
             text-align: center;
@@ -121,7 +121,7 @@
                                 <select name="position" id="position"
                                     class="form-control @error('position') is-invalid @enderror" required>
                                     <option value="">Select Position</option>
-                                    @foreach (['Director', 'Consultant/Adviser', 'NGO Manager', 'Finance Manager', 'Project Coordinator', 'Program Officer', 'Project Manager', 'Area Manager', 'Human Resource Management', 'Supervisor', 'Coordinator', 'Computer Operator', 'Head Clerk', 'Assistant Clerk', 'Surveyor', 'सुबिधा दाता', 'कृषि सखी', 'समूह सखी', 'विकास सखी', 'पशु सखी', 'सवास्थ्य सखी', 'सहयोगी सखी', 'Animator', 'Volunteer'] as $role)
+                                    @foreach (['Director', 'Consultant/Adviser', 'NGO Manager', 'Finance Manager', 'Project Coordinator', 'Master Trainer', 'Trainer', 'Program Officer', 'Project Manager', 'Area Manager', 'Human Resource Management', 'Supervisor', 'Coordinator', 'Computer Operator', 'Head Clerk', 'Assistant Clerk', 'Surveyor', 'Peon', 'Guard', 'Driver', 'Gardener', 'सुबिधा दाता', 'कृषि सखी', 'समूह सखी', 'विकास सखी', 'पशु सखी', 'सवास्थ्य सखी', 'सहयोगी सखी', 'Animator', 'Volunteer'] as $role)
                                         <option value="{{ $role }}"
                                             {{ old('position') == $role ? 'selected' : '' }}>
                                             {{ $role }}</option>
@@ -468,9 +468,9 @@
                                 Below
                                 Primary
                             </option>
-                            <option value="Primary Failed" {{ old('eligibility') == 'Primary Failed' ? 'selected' : '' }}>
+                            {{-- <option value="Primary Failed" {{ old('eligibility') == 'Primary Failed' ? 'selected' : '' }}>
                                 Primary Failed
-                            </option>
+                            </option> --}}
                             <option value="Primary Passed" {{ old('eligibility') == 'Primary Passed' ? 'selected' : '' }}>
                                 Primary Passed
                             </option>
@@ -478,30 +478,45 @@
                                 Below
                                 Middle
                             </option>
-                            <option value="Middle Failed" {{ old('eligibility') == 'Middle Failed' ? 'selected' : '' }}>
+                            {{-- <option value="Middle Failed" {{ old('eligibility') == 'Middle Failed' ? 'selected' : '' }}>
                                 Middle
                                 Failed
-                            </option>
+                            </option> --}}
                             <option value="Middle Passed" {{ old('eligibility') == 'Middle Passed' ? 'selected' : '' }}>
                                 Middle
                                 Passed
                             </option>
-                            <option value="Secondary" {{ old('eligibility') == 'Secondary' ? 'selected' : '' }}>Secondary
+                            <option value="Highschool" {{ old('eligibility') == 'Highschool' ? 'selected' : '' }}>
+                                Highschool
                             </option>
-                            <option value="Senior Secondary"
-                                {{ old('eligibility') == 'Senior Secondary' ? 'selected' : '' }}>
-                                Senior
-                                Secondary</option>
-                            <option value="Graduation" {{ old('eligibility') == 'Graduation' ? 'selected' : '' }}>
-                                Graduation
+                            <option value="Intermediate" {{ old('eligibility') == 'Intermediate' ? 'selected' : '' }}>
+                                Intermediate</option>
+                            <option value="B.A." {{ old('eligibility') == 'B.A.' ? 'selected' : '' }}>
+                                B.A.
                             </option>
-                            <option value="Post Graduation"
-                                {{ old('eligibility') == 'Post Graduation' ? 'selected' : '' }}>
-                                Post Graduation
+                            <option value="B.Sc." {{ old('eligibility') == 'B.Sc.' ? 'selected' : '' }}>
+                                B.Sc.
                             </option>
-                            <option value="Degree Holder" {{ old('eligibility') == 'Degree Holder' ? 'selected' : '' }}>
-                                Degree
-                                Holder
+                            <option value="B.Com." {{ old('eligibility') == 'B.Com.' ? 'selected' : '' }}>
+                                B.Com.
+                            </option>
+                            <option value="B.Tech." {{ old('eligibility') == 'B.Tech.' ? 'selected' : '' }}>
+                                B.Tech.
+                            </option>
+                            <option value="M.A." {{ old('eligibility') == 'M.A.' ? 'selected' : '' }}>
+                                M.A.
+                            </option>
+                            <option value="M.Sc." {{ old('eligibility') == 'M.Sc.' ? 'selected' : '' }}>
+                                M.Sc.
+                            </option>
+                            <option value="M.Com." {{ old('eligibility') == 'M.Com.' ? 'selected' : '' }}>
+                                M.Com.
+                            </option>
+                            <option value="M.Tech." {{ old('eligibility') == 'M.Tech.' ? 'selected' : '' }}>
+                                M.Tech.
+                            </option>
+                            <option value="Other" {{ old('eligibility') == 'Other' ? 'selected' : '' }}>
+                                Other
                             </option>
                         </select>
                         @error('eligibility')
