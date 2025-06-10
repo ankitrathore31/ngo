@@ -12,6 +12,7 @@ class Member extends Model
     protected $fillable = [
     'application_date',
     'registration_no',
+    'registration_date',
     'name',
     'reg_type',
     'dob',

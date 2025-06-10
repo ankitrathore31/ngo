@@ -555,7 +555,7 @@
                                     <label for="beneficiary_help" class="form-label">What beneficiaries need help with:
                                         <span class="text-danger">*</span></label>
                                     <textarea name="help_needed" id="beneficiary_help" rows="4"
-                                        class="form-control @error('beneficiary_help') is-invalid @enderror" required>{{ old('beneficiary_help') }}</textarea>
+                                        class="form-control @error('beneficiary_help') is-invalid @enderror">{{ old('beneficiary_help') }}</textarea>
                                     @error('beneficiary_help')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror

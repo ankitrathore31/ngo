@@ -314,7 +314,7 @@
                                 <div class="col-md-4 form-group mb-3">
                                     <label for="stateSelect" class="form-label">State: <span
                                             class="text-danger">*</span></label>
-                                    <select class="form-control select2 @error('state') is-invalid @enderror"
+                                    <select class="form-control @error('state') is-invalid @enderror"
                                         name="state" id="stateSelect" required>
                                         <option value="">Select State</option>
                                         @foreach ($districtsByState as $state => $districts)
@@ -426,7 +426,7 @@
                                  <div class="col-md-4 mb-3">
                                     <label for="religion" class="form-label">Religion <span
                                             class="text-danger">*</span></label>
-                                    <select class="form-select select2 @error('religion') is-invalid @enderror"
+                                    <select class="form-select @error('religion') is-invalid @enderror"
                                         id="religion" name="religion" required>
                                         <option value="" disabled {{ old('religion') ? '' : 'selected' }}>
                                             Select
@@ -526,7 +526,7 @@
                                 <label for="beneficiary_help" class="form-label">What beneficiaries need help with: <span
                                         class="text-danger">*</span></label>
                                 <textarea name="help_needed" id="beneficiary_help" rows="4"
-                                    class="form-control @error('beneficiary_help') is-invalid @enderror" required>{{ old('beneficiary_help') }}</textarea>
+                                    class="form-control @error('beneficiary_help') is-invalid @enderror">{{ old('beneficiary_help') }}</textarea>
                                 @error('beneficiary_help')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror

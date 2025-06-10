@@ -119,6 +119,114 @@
                 display: none !important;
             }
         }
+
+        /* Shared style */
+        .category-card {
+            color: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.2s ease-in-out;
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            transform: scale(1.03);
+        }
+
+        /* Unique background colors */
+        .Public-Program {
+            background-color: #3498db;
+        }
+
+        .Government-Program {
+            background-color: #1abc9c;
+        }
+
+        .Education {
+            background-color: #e67e22;
+        }
+
+        .Environment {
+            background-color: #2ecc71;
+        }
+
+        .Social-Awareness-Program {
+            background-color: #9b59b6;
+        }
+
+        .Cultural-Program {
+            background-color: #8e44ad;
+        }
+
+        .Sanitation-Program {
+            background-color: #16a085;
+        }
+
+        .Health-Program {
+            background-color: #e74c3c;
+        }
+
+        .Poor-Alleviation {
+            background-color: #d35400;
+        }
+
+        .Women-Empowerment {
+            background-color: #f39c12;
+        }
+
+        .Social-Problem {
+            background-color: #c0392b;
+        }
+
+        .Peace-Talks-Program {
+            background-color: #2980b9;
+        }
+
+        .Skill-Development {
+            background-color: #27ae60;
+        }
+
+        .Religious-Program {
+            background-color: #7f8c8d;
+        }
+
+        .Agriculture-Program {
+            background-color: #2c3e50;
+        }
+
+        .Labour-Tools-Distribution {
+            background-color: #f1c40f;
+        }
+
+        .Drinking-Water {
+            background-color: #5dade2;
+        }
+
+        .Ration-Distribution {
+            background-color: #af7ac5;
+        }
+
+        .Disaster-Management {
+            background-color: #e84393;
+        }
+
+        .Economic-Help {
+            background-color: #d98880;
+        }
+
+        .Cow-Service {
+            background-color: #52be80;
+        }
+
+        .Animal-Food {
+            background-color: #f1948a;
+        }
+
+        .Other-Activities {
+            background-color: #7d3c98;
+        }
     </style>
 
     <div class="row d-flex justify-content-between m-3">
@@ -169,7 +277,8 @@
     <div class="owl-carousel owl-theme slider">
         <div class="item ">
             <div class="background-image">
-                <img src="https://srv1276-files.hstgr.io/e4aef852a4f6e947/files/public_html/public/images/ach1.jpeg" alt="slider image">
+                <img src="https://srv1276-files.hstgr.io/e4aef852a4f6e947/files/public_html/public/images/ach1.jpeg"
+                    alt="slider image">
                 <div class="carousel-caption d-none d-md-block">
                     <h1 class="text-white"></h1>
                     <h2 class="text-white"></h2>
@@ -480,198 +589,33 @@
             <!-- Activity Cards -->
             <div class="row">
                 <div class="col-md-3 mb-3">
-                    <div class="card text-center shadow-sm bg-warning text-white">
+                    <div class="ccategory-card bg-primary p-3 rounded text-white">
                         <div class="card-body">
-                            <h5 class="card-title fw-bold">Total Activity</h5>
-                            <p class="card-text fs-4 counter" data-count="10">358</p>
+                            <a href="{{route('activity')}}" class="text-white " style="text-decoration: none;">
+                                <h5 class="card-title fw-bold">Total Activity</h5>
+                                <p class="card-text fs-4 counter" data-count="10">{{ $allacti }}</p>
+                            </a>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card text-center shadow-sm bg-primary text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Education</h5>
-                            <p class="card-text fs-4 counter" data-count="10">52</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card text-center shadow-sm bg-success text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Environment</h5>
-                            <p class="card-text fs-4 counter" data-count="15">45</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card text-center shadow-sm bg-warning text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Social Awareness Program</h5>
-                            <p class="card-text fs-4 counter" data-count="20">78</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card text-center shadow-sm bg-info text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Cultural Program</h5>
-                            <p class="card-text fs-4 counter" data-count="25">18</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card text-center shadow-sm bg-secondary text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Sanitation Program</h5>
-                            <p class="card-text fs-4 counter" data-count="30">42</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card text-center shadow-sm bg-light text-dark">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Health Program</h5>
-                            <p class="card-text fs-4 counter" data-count="35">35</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card text-center shadow-sm bg-success text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Poor Alleviation</h5>
-                            <p class="card-text fs-4 counter" data-count="40">68</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card text-center shadow-sm bg-warning text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Women Empowerment</h5>
-                            <p class="card-text fs-4 counter" data-count="45">55</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card text-center shadow-sm bg-info text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Social Problem</h5>
-                            <p class="card-text fs-4 counter" data-count="50">68</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card text-center shadow-sm bg-success text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Peace Talks Program</h5>
-                            <p class="card-text fs-4 counter" data-count="55">70</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card text-center shadow-sm bg-ingo text-dark">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Skill development</h5>
-                            <p class="card-text fs-4 counter" data-count="55">48</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card text-center shadow-sm bg-info text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Religious Program</h5>
-                            <p class="card-text fs-4 counter" data-count="55">60</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card text-center shadow-sm bg-primary text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Agriculture Program</h5>
-                            <p class="card-text fs-4 counter" data-count="55">38</p>
-                        </div>
-                    </div>
-                </div>
+                @php
+                    use Illuminate\Support\Str;
+                @endphp
 
-                {{-- <div class="col-md-3 mb-3">
-                    <div class="card text-center shadow-sm bg-light text-dark">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Other Activities</h5>
-                            <p class="card-text fs-4 counter" data-count="60">42</p>
+                @foreach ($categoryCounts as $category => $count)
+                    @php
+                        $className = str_replace(' ', '-', $category);
+                    @endphp
+                    <div class="col-md-3 col-sm-4 mb-3">
+                        <div class="category-card {{ $className }}">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">{{ $category }}</h5>
+                                <p class="card-text fs-4 counter" data-count="{{ $count }}">{{ $count }}
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div> --}}
-
-                <div class="col-md-3 mb-3">
-                    <div class="card text-center shadow-sm bg-success text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Labour Tools Distribution</h5>
-                            <p class="card-text fs-4 counter" data-count="70">50</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 mb-3">
-                    <div class="card text-center shadow-sm bg-info text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Drinking Water</h5>
-                            <p class="card-text fs-4 counter" data-count="80">65</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 mb-3">
-                    <div class="card text-center shadow-sm bg-warning text-dark">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Ration Distribution</h5>
-                            <p class="card-text fs-4 counter" data-count="90">75</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 mb-3">
-                    <div class="card text-center shadow-sm bg-danger text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Disaster Management</h5>
-                            <p class="card-text fs-4 counter" data-count="100">85</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 mb-3">
-                    <div class="card text-center shadow-sm bg-secondary text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Economic Help</h5>
-                            <p class="card-text fs-4 counter" data-count="110">90</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 mb-3">
-                    <div class="card text-center shadow-sm bg-dark text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Cow Service</h5>
-                            <p class="card-text fs-4 counter" data-count="120">100</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 mb-3">
-                    <div class="card text-center shadow-sm bg-muted text-dark">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Animal Food</h5>
-                            <p class="card-text fs-4 counter" data-count="130">110</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 mb-3">
-                    <div class="card text-center shadow-sm bg-light text-dark">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Other Activities</h5>
-                            <p class="card-text fs-4 counter" data-count="60">42</p>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -909,6 +853,13 @@
                         el.textContent = data[type] || 0;
                     });
                 });
+        });
+    </script>
+    <script>
+        document.querySelectorAll('.category-card').forEach(card => {
+            const hue = Math.floor(Math.random() * 360);
+            card.style.backgroundColor = `hsl(${hue}, 70%, 60%)`;
+            card.style.color = '#fff';
         });
     </script>
 @endsection
