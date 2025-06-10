@@ -68,7 +68,7 @@
                     <h4 class=" p-3 bg-info rounded"><b>EDIT FORM </b></h4>
                 </div>
                 <div class="card-body m-1">
-                    <form method="POST" action="{{ route('update-registration', $beneficiarie->id) }}"
+                    <form method="POST" action="{{ route('update-registration', $record->id) }}"
                         enctype="multipart/form-data">
                         @csrf
                         <div class="border-bottom pb-3 mb-4">
@@ -81,7 +81,7 @@
                                                     class="text-danger">*</span></label>
                                             <input type="text" name="application_date" id="application_date"
                                                 class="form-control datepicker @error('dob') is-invalid @enderror"
-                                                value="{{ $beneficiarie->application_date }}" required>
+                                                value="{{ $record->application_date }}" required>
                                             @error('application_date')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -91,14 +91,14 @@
                                                 <label for="reg_type" class="form-label">Registration Type <span
                                                         class="text-danger">*</span></label>
                                                 <select class="form-control" id="reg_type" name="reg_type" required>
-                                                    <option disabled {{ !$beneficiarie->reg_type ? 'selected' : '' }}>Select
+                                                    <option disabled {{ !$record->reg_type ? 'selected' : '' }}>Select
                                                         Type</option>
                                                     <option value="Beneficiaries"
-                                                        {{ $beneficiarie->reg_type == 'Beneficiaries' ? 'selected' : '' }}>
+                                                        {{ $record->reg_type == 'Beneficiaries' ? 'selected' : '' }}>
                                                         Beneficiaries
                                                     </option>
                                                     <option value="Member"
-                                                        {{ $beneficiarie->reg_type == 'Member' ? 'selected' : '' }}>
+                                                        {{ $record->reg_type == 'Member' ? 'selected' : '' }}>
                                                         Member
                                                     </option>
                                                 </select>
@@ -116,7 +116,7 @@
                                                 <option value="">Select Session</option>
                                                 @foreach ($data as $session)
                                                     <option value="{{ $session->session_date }}"
-                                                        {{ isset($beneficiarie) && $beneficiarie->academic_session == $session->session_date ? 'selected' : '' }}>
+                                                        {{ isset($record) && $record->academic_session == $session->session_date ? 'selected' : '' }}>
                                                         {{ $session->session_date }}
                                                     </option>
                                                 @endforeach
@@ -128,7 +128,7 @@
                                                     class="text-danger">*</span></label>
                                             <input type="text" name="name" id="name"
                                                 class="form-control @error('name') is-invalid @enderror"
-                                                value="{{ $beneficiarie->name }}" required>
+                                                value="{{ $record->name }}" required>
                                             @error('name')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -138,7 +138,7 @@
                                                     class="text-danger">*</span></label>
                                             <input type="text" name="dob" id="dob"
                                                 class="form-control datepicker @error('dob') is-invalid @enderror"
-                                                value="{{ $beneficiarie->dob }}" required>
+                                                value="{{ $record->dob }}" required>
                                             @error('dob')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -149,16 +149,16 @@
                                             <select name="gender" id="gender"
                                                 class="form-control @error('gender') is-invalid @enderror" required>
                                                 <option value="" disabled
-                                                    {{ !(old('gender') ?? $beneficiarie->gender) ? 'selected' : '' }}>
+                                                    {{ !(old('gender') ?? $record->gender) ? 'selected' : '' }}>
                                                     Select Gender</option>
                                                 <option value="Male"
-                                                    {{ (old('gender') ?? $beneficiarie->gender) == 'Male' ? 'selected' : '' }}>
+                                                    {{ (old('gender') ?? $record->gender) == 'Male' ? 'selected' : '' }}>
                                                     Male</option>
                                                 <option value="Female"
-                                                    {{ (old('gender') ?? $beneficiarie->gender) == 'Female' ? 'selected' : '' }}>
+                                                    {{ (old('gender') ?? $record->gender) == 'Female' ? 'selected' : '' }}>
                                                     Female</option>
                                                 <option value="Other"
-                                                    {{ (old('gender') ?? $beneficiarie->gender) == 'Other' ? 'selected' : '' }}>
+                                                    {{ (old('gender') ?? $record->gender) == 'Other' ? 'selected' : '' }}>
                                                     Other</option>
                                             </select>
                                             @error('gender')
@@ -178,9 +178,8 @@
                                 <div class="col-md-4 col-sm-4">
                                     <div class="upload-container">
 
-                                        @if (!empty($beneficiarie->image))
-                                            <img id="previewImage"
-                                                src="{{ asset('benefries_images/' . $beneficiarie->image) }}"
+                                        @if (!empty($record->image))
+                                            <img id="previewImage" src="{{ asset('benefries_images/' . $record->image) }}"
                                                 alt="Preview" width="160">
                                         @endif
 
@@ -199,28 +198,28 @@
                                             class="text-danger">*</span></label>
                                     <select name="eligibility" class="form-control" id="eligibility" required>
                                         <option value="" disabled
-                                            {{ !(old('eligibility') ?? $beneficiarie->eligibility) ? 'selected' : '' }}>
+                                            {{ !(old('eligibility') ?? $record->eligibility) ? 'selected' : '' }}>
                                             Select Education Level</option>
                                         <option value="Uneducated"
-                                            {{ (old('eligibility') ?? $beneficiarie->eligibility) == 'Uneducated' ? 'selected' : '' }}>
+                                            {{ (old('eligibility') ?? $record->eligibility) == 'Uneducated' ? 'selected' : '' }}>
                                             Uneducated</option>
                                         <option value="5th Pass"
-                                            {{ (old('eligibility') ?? $beneficiarie->eligibility) == '5th Pass' ? 'selected' : '' }}>
+                                            {{ (old('eligibility') ?? $record->eligibility) == '5th Pass' ? 'selected' : '' }}>
                                             5th Pass</option>
                                         <option value="Secondary"
-                                            {{ (old('eligibility') ?? $beneficiarie->eligibility) == 'Secondary' ? 'selected' : '' }}>
+                                            {{ (old('eligibility') ?? $record->eligibility) == 'Secondary' ? 'selected' : '' }}>
                                             Secondary</option>
                                         <option value="Senior Secondary"
-                                            {{ (old('eligibility') ?? $beneficiarie->eligibility) == 'Senior Secondary' ? 'selected' : '' }}>
+                                            {{ (old('eligibility') ?? $record->eligibility) == 'Senior Secondary' ? 'selected' : '' }}>
                                             Senior Secondary</option>
                                         <option value="Graduation"
-                                            {{ (old('eligibility') ?? $beneficiarie->eligibility) == 'Graduation' ? 'selected' : '' }}>
+                                            {{ (old('eligibility') ?? $record->eligibility) == 'Graduation' ? 'selected' : '' }}>
                                             Graduation</option>
                                         <option value="Post Graduation"
-                                            {{ (old('eligibility') ?? $beneficiarie->eligibility) == 'Post Graduation' ? 'selected' : '' }}>
+                                            {{ (old('eligibility') ?? $record->eligibility) == 'Post Graduation' ? 'selected' : '' }}>
                                             Post Graduation</option>
                                         <option value="Degree Holder"
-                                            {{ (old('eligibility') ?? $beneficiarie->eligibility) == 'Degree Holder' ? 'selected' : '' }}>
+                                            {{ (old('eligibility') ?? $record->eligibility) == 'Degree Holder' ? 'selected' : '' }}>
                                             Degree Holder</option>
                                     </select>
                                     @error('eligibility')
@@ -232,15 +231,15 @@
                                             class="text-danger">*</span></label>
                                     <select name="marital_status" class="form-control" id="marital_status" required>
                                         <option value="" disabled
-                                            {{ !(old('marital_status') ?? $beneficiarie->marital_status) ? 'selected' : '' }}>
+                                            {{ !(old('marital_status') ?? $record->marital_status) ? 'selected' : '' }}>
                                             Select Marital Status
                                         </option>
                                         <option value="Married"
-                                            {{ (old('marital_status') ?? $beneficiarie->marital_status) == 'Married' ? 'selected' : '' }}>
+                                            {{ (old('marital_status') ?? $record->marital_status) == 'Married' ? 'selected' : '' }}>
                                             Married
                                         </option>
                                         <option value="Unmarried"
-                                            {{ (old('marital_status') ?? $beneficiarie->marital_status) == 'Unmarried' ? 'selected' : '' }}>
+                                            {{ (old('marital_status') ?? $record->marital_status) == 'Unmarried' ? 'selected' : '' }}>
                                             Unmarried
                                         </option>
                                     </select>
@@ -255,7 +254,7 @@
                                                 class="text-danger">*</span></label>
                                         <input type="text" name="gurdian_name" id="gurdian_name"
                                             class="form-control @error('gurdian_name') is-invalid @enderror"
-                                            value="{{ $beneficiarie->gurdian_name }}" required>
+                                            value="{{ $record->gurdian_name }}" required>
                                         @error('gurdian_name')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -267,7 +266,7 @@
                                         <label class="form-label">Mother Name: <span class="text-danger">*</span></label>
                                         <input type="text" name="mother_name" id="mother_name"
                                             class="form-control @error('mother_name') is-invalid @enderror"
-                                            value="{{ $beneficiarie->mother_name }}" required>
+                                            value="{{ $record->mother_name }}" required>
                                         @error('mother_name')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -278,7 +277,7 @@
                                             class="text-danger">*</span></label>
                                     <input type="text" name="village" id="village"
                                         class="form-control @error('village') is-invalid @enderror"
-                                        value="{{ $beneficiarie->village }}">
+                                        value="{{ $record->village }}">
                                     @error('village')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -289,7 +288,7 @@
                                             class="text-danger">*</span></label>
                                     <input type="text" name="post" id="post"
                                         class="form-control @error('post') is-invalid @enderror"
-                                        value="{{ $beneficiarie->post }}" required>
+                                        value="{{ $record->post }}" required>
                                     @error('post')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -300,13 +299,13 @@
                                             class="text-danger">*</span></label>
                                     <select name="area_type" class="form-control" id="area_type" required>
                                         <option value="" disabled
-                                            {{ !(old('area_type') ?? $beneficiarie->area_type) ? 'selected' : '' }}>Select
+                                            {{ !(old('area_type') ?? $record->area_type) ? 'selected' : '' }}>Select
                                             Area Type</option>
                                         <option value="Rular"
-                                            {{ (old('area_type') ?? $beneficiarie->area_type) == 'Rular' ? 'selected' : '' }}>
+                                            {{ (old('area_type') ?? $record->area_type) == 'Rular' ? 'selected' : '' }}>
                                             Rular</option>
                                         <option value="Urban"
-                                            {{ (old('area_type') ?? $beneficiarie->area_type) == 'Urban' ? 'selected' : '' }}>
+                                            {{ (old('area_type') ?? $record->area_type) == 'Urban' ? 'selected' : '' }}>
                                             Urban</option>
                                     </select>
                                     @error('area_type')
@@ -320,7 +319,7 @@
                                             class="text-danger">*</span></label>
                                     <input type="text" name="block" id="block"
                                         class="form-control @error('block') is-invalid @enderror"
-                                        value="{{ $beneficiarie->block }}" required>
+                                        value="{{ $record->block }}" required>
                                     @error('block')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -331,12 +330,12 @@
                                 <div class="col-md-4 form-group mb-3">
                                     <label for="stateSelect" class="form-label">State: <span
                                             class="text-danger">*</span></label>
-                                    <select class="form-control select2 @error('state') is-invalid @enderror"
-                                        name="state" id="stateSelect" required>
+                                    <select class="form-control  @error('state') is-invalid @enderror" name="state"
+                                        id="stateSelect" required>
                                         <option value="">Select State</option>
                                         @foreach ($districtsByState as $state => $districts)
                                             <option value="{{ $state }}"
-                                                {{ (old('state') ?? $beneficiarie->state) == $state ? 'selected' : '' }}>
+                                                {{ (old('state') ?? $record->state) == $state ? 'selected' : '' }}>
                                                 {{ $state }}
                                             </option>
                                         @endforeach
@@ -374,7 +373,7 @@
                                             class="text-danger">*</span></label>
                                     <input type="number" name="pincode" id="pincode"
                                         class="form-control @error('pincode') is-invalid @enderror"
-                                        value="{{ $beneficiarie->pincode }}">
+                                        value="{{ $record->pincode }}">
                                     @error('pincode')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -385,10 +384,10 @@
                                             class="text-danger">*</span></label>
                                     <select name="country" class="form-control" id="country" required>
                                         <option value="" disabled
-                                            {{ !(old('country') ?? $beneficiarie->country) ? 'selected' : '' }}>Select
+                                            {{ !(old('country') ?? $record->country) ? 'selected' : '' }}>Select
                                             Nationality</option>
                                         <option value="India"
-                                            {{ (old('country') ?? $beneficiarie->country) == 'India' ? 'selected' : '' }}>
+                                            {{ (old('country') ?? $record->country) == 'India' ? 'selected' : '' }}>
                                             India</option>
                                     </select>
                                     @error('country')
@@ -401,7 +400,7 @@
                                     <label for="email" class="form-label">Email:</label>
                                     <input type="email" name="email" id="email"
                                         class="form-control @error('email') is-invalid @enderror"
-                                        value="{{ $beneficiarie->email }}">
+                                        value="{{ $record->email }}">
                                     @error('email')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -412,7 +411,7 @@
                                             class="text-danger">*</span></label>
                                     <input type="text" name="phone" id="phone"
                                         class="form-control @error('phone') is-invalid @enderror"
-                                        value="{{ $beneficiarie->phone }}" required>
+                                        value="{{ $record->phone }}" required>
                                     @error('phone')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -421,29 +420,29 @@
                                 <div class="col-md-4 mb-3">
                                     <label for="religion" class="form-label">Religion <span
                                             class="text-danger">*</span></label>
-                                    <select class="form-select select2 @error('religion') is-invalid @enderror"
-                                        id="religion" name="religion" required>
+                                    <select class="form-select  @error('religion') is-invalid @enderror" id="religion"
+                                        name="religion" required>
                                         <option value="" disabled
-                                            {{ old('religion') ?? $beneficiarie->religion ? '' : 'selected' }}>
+                                            {{ old('religion') ?? $record->religion ? '' : 'selected' }}>
                                             Select Religion
                                         </option>
                                         <option value="Hindu"
-                                            {{ (old('religion') ?? $beneficiarie->religion) == 'Hindu' ? 'selected' : '' }}>
+                                            {{ (old('religion') ?? $record->religion) == 'Hindu' ? 'selected' : '' }}>
                                             Hindu</option>
                                         <option value="Islam"
-                                            {{ (old('religion') ?? $beneficiarie->religion) == 'Islam' ? 'selected' : '' }}>
+                                            {{ (old('religion') ?? $record->religion) == 'Islam' ? 'selected' : '' }}>
                                             Islam</option>
                                         <option value="Christian"
-                                            {{ (old('religion') ?? $beneficiarie->religion) == 'Christian' ? 'selected' : '' }}>
+                                            {{ (old('religion') ?? $record->religion) == 'Christian' ? 'selected' : '' }}>
                                             Christian</option>
                                         <option value="Sikh"
-                                            {{ (old('religion') ?? $beneficiarie->religion) == 'Sikh' ? 'selected' : '' }}>
+                                            {{ (old('religion') ?? $record->religion) == 'Sikh' ? 'selected' : '' }}>
                                             Sikh</option>
                                         <option value="Buddhist"
-                                            {{ (old('religion') ?? $beneficiarie->religion) == 'Buddhist' ? 'selected' : '' }}>
+                                            {{ (old('religion') ?? $record->religion) == 'Buddhist' ? 'selected' : '' }}>
                                             Buddhist</option>
                                         <option value="Parsi"
-                                            {{ (old('religion') ?? $beneficiarie->religion) == 'Parsi' ? 'selected' : '' }}>
+                                            {{ (old('religion') ?? $record->religion) == 'Parsi' ? 'selected' : '' }}>
                                             Parsi</option>
                                     </select>
                                     @error('religion')
@@ -457,20 +456,20 @@
                                     <select class="form-select @error('religion_category') is-invalid @enderror"
                                         id="category" name="religion_category" required>
                                         <option value="" disabled
-                                            {{ old('religion_category') ?? $beneficiarie->religion_category ? '' : 'selected' }}>
+                                            {{ old('religion_category') ?? $record->religion_category ? '' : 'selected' }}>
                                             Select Category
                                         </option>
                                         <option value="General"
-                                            {{ (old('religion_category') ?? $beneficiarie->religion_category) == 'General' ? 'selected' : '' }}>
+                                            {{ (old('religion_category') ?? $record->religion_category) == 'General' ? 'selected' : '' }}>
                                             General</option>
                                         <option value="OBC"
-                                            {{ (old('religion_category') ?? $beneficiarie->religion_category) == 'OBC' ? 'selected' : '' }}>
+                                            {{ (old('religion_category') ?? $record->religion_category) == 'OBC' ? 'selected' : '' }}>
                                             OBC</option>
                                         <option value="SC"
-                                            {{ (old('religion_category') ?? $beneficiarie->religion_category) == 'SC' ? 'selected' : '' }}>
+                                            {{ (old('religion_category') ?? $record->religion_category) == 'SC' ? 'selected' : '' }}>
                                             SC</option>
                                         <option value="ST"
-                                            {{ (old('religion_category') ?? $beneficiarie->religion_category) == 'ST' ? 'selected' : '' }}>
+                                            {{ (old('religion_category') ?? $record->religion_category) == 'ST' ? 'selected' : '' }}>
                                             ST</option>
                                     </select>
                                     @error('religion_category')
@@ -483,7 +482,7 @@
                                         <label class="form-label">Caste: <span class="text-danger">*</span></label>
                                         <input type="text" name="caste" id="caste"
                                             class="form-control @error('caste') is-invalid @enderror"
-                                            value="{{ $beneficiarie->caste }}" required>
+                                            value="{{ $record->caste }}" required>
                                         @error('caste')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -501,31 +500,31 @@
                                         id="identity_type" name="identity_type" required>
                                         <option selected disabled>Select Identity Type</option>
                                         <option value="Aadhar Card"
-                                            {{ (old('identity_type') ?? $beneficiarie->identity_type) == 'Aadhar Card' ? 'selected' : '' }}>
+                                            {{ (old('identity_type') ?? $record->identity_type) == 'Aadhar Card' ? 'selected' : '' }}>
                                             Aadhar Card
                                         </option>
                                         <option value="Voter ID Card"
-                                            {{ (old('identity_type') ?? $beneficiarie->identity_type) == 'Voter ID Card' ? 'selected' : '' }}>
+                                            {{ (old('identity_type') ?? $record->identity_type) == 'Voter ID Card' ? 'selected' : '' }}>
                                             Voter ID Card
                                         </option>
                                         <option value="Pan Card"
-                                            {{ (old('identity_type') ?? $beneficiarie->identity_type) == 'Pan Card' ? 'selected' : '' }}>
+                                            {{ (old('identity_type') ?? $record->identity_type) == 'Pan Card' ? 'selected' : '' }}>
                                             Pan Card
                                         </option>
                                         <option value="Markshhet"
-                                            {{ (old('identity_type') ?? $beneficiarie->identity_type) == 'Markshhet' ? 'selected' : '' }}>
+                                            {{ (old('identity_type') ?? $record->identity_type) == 'Markshhet' ? 'selected' : '' }}>
                                             Markshhet
                                         </option>
                                         <option value="Driving License"
-                                            {{ (old('identity_type') ?? $beneficiarie->identity_type) == 'Driving License' ? 'selected' : '' }}>
+                                            {{ (old('identity_type') ?? $record->identity_type) == 'Driving License' ? 'selected' : '' }}>
                                             Driving License
                                         </option>
                                         <option value="Narega Card"
-                                            {{ (old('identity_type') ?? $beneficiarie->identity_type) == 'Narega Card' ? 'selected' : '' }}>
+                                            {{ (old('identity_type') ?? $record->identity_type) == 'Narega Card' ? 'selected' : '' }}>
                                             Narega Card
                                         </option>
                                         <option value="Ration Card"
-                                            {{ (old('identity_type') ?? $beneficiarie->identity_type) == 'Ration Card' ? 'selected' : '' }}>
+                                            {{ (old('identity_type') ?? $record->identity_type) == 'Ration Card' ? 'selected' : '' }}>
                                             Ration Card
                                         </option>
                                     </select>
@@ -542,7 +541,7 @@
                                             class="text-danger">*</span></label>
                                     <input type="text" class="form-control @error('identity_no') is-invalid @enderror"
                                         id="identity_no" name="identity_no" placeholder="Enter Identity Card No"
-                                        value="{{ old('identity_no') ?? ($beneficiarie->identity_no ?? '') }}" required>
+                                        value="{{ old('identity_no') ?? ($record->identity_no ?? '') }}" required>
                                     <small id="identity_no_hint" class="form-text text-muted"></small>
                                     @error('identity_no')
                                         <span class="text-danger">{{ $message }}</span>
@@ -556,9 +555,8 @@
                                 <label for="id_document" class="form-label">ID Document Upload</label>
                                 <input type="file" class="form-control" name="id_document" id="id_document">
                                 <small id="id_document_hint" class="form-text text-muted"></small>
-                                @if (!empty($beneficiarie->id_document))
-                                    <img id="previewImage"
-                                        src="{{ asset('benefries_images/' . $beneficiarie->id_document) }}"
+                                @if (!empty($record->id_document))
+                                    <img id="previewImage" src="{{ asset('benefries_images/' . $record->id_document) }}"
                                         alt="Preview" width="150">
                                 @endif
 
@@ -568,7 +566,7 @@
                                         class="text-danger">*</span></label>
                                 <input type="text" name="occupation" id="occupation"
                                     class="form-control @error('occupation') is-invalid @enderror"
-                                    value="{{ $beneficiarie->occupation }}" required>
+                                    value="{{ $record->occupation }}" required>
                                 @error('occupation')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -577,7 +575,7 @@
                                 <label for="beneficiary_help" class="form-label">What beneficiaries need help with: <span
                                         class="text-danger">*</span></label>
                                 <textarea name="help_needed" id="beneficiary_help" rows="4"
-                                    class="form-control @error('beneficiary_help') is-invalid @enderror" required>{{ $beneficiarie->help_needed }}</textarea>
+                                    class="form-control @error('beneficiary_help') is-invalid @enderror">{{ $record->help_needed }}</textarea>
                                 @error('beneficiary_help')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -604,8 +602,9 @@
 
                         <div class="row">
                             <div class="col-md-8 mb-3">
-                                <form action="{{ route('approve-status', $beneficiarie->id) }}" method="POST"
-                                    class="d-inline">
+                                <form
+                                    action="{{ route('approve-status', ['type' => $record->reg_type, 'id' => $record->id]) }}"
+                                    method="POST" class="d-inline">
                                     @csrf
                                     @method('PATCH')
 
@@ -625,6 +624,7 @@
                                         Approve
                                     </button>
                                 </form>
+
                             </div>
                         </div>
                     </div>
@@ -661,8 +661,8 @@
         const allDistricts = @json($districtsByState);
 
         // Use old values if they exist, otherwise fallback to $beneficiarie
-        const oldState = "{{ old('state', $beneficiarie->state) }}";
-        const oldDistrict = "{{ old('district', $beneficiarie->district) }}";
+        const oldState = "{{ old('state', $record->state) }}";
+        const oldDistrict = "{{ old('district', $record->district) }}";
 
         function populateDistricts(state) {
             const districtSelect = document.getElementById('districtSelect');

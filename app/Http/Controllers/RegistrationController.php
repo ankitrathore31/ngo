@@ -10,6 +10,7 @@ use App\Models\academic_session;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class RegistrationController extends Controller
 {
@@ -25,7 +26,8 @@ class RegistrationController extends Controller
     {
         // die($request);
         // exit();
-        $request->validate([
+        $validator = Validator::make($request->all(), [
+            // common rules
             'academic_session' => 'required',
             'application_date' => 'required|date',
             'reg_type' => 'required',
@@ -54,7 +56,17 @@ class RegistrationController extends Controller
             'eligibility' => 'nullable|string|max:100',
             'marital_status' => 'required|string|in:Married,Unmarried',
             'area_type' => 'required|string|in:Rular,Urban',
+            'help_needed' => 'nullable|string|max:255', // default as optional
         ]);
+
+        // Conditionally require help_needed if reg_type is 'Beneficiaries'
+        $validator->sometimes('help_needed', 'required|string|max:255', function ($input) {
+            return $input->reg_type === 'Beneficiaries';
+        });
+
+        $validator->validate(); // Run validation
+
+
 
         $data = $request->only([
             'academic_session',
@@ -146,14 +158,21 @@ class RegistrationController extends Controller
         return redirect()->route('pending-registration')->with('success', 'Registration saved successfully.');
     }
 
-    public function editRegistration($id)
-    {
 
-        $beneficiarie = beneficiarie::find($id);
+    public function editRegistration($id, $type)
+    {
+        if ($type === 'Member') {
+            $record = Member::findOrFail($id);
+        } else {
+            $record = Beneficiarie::findOrFail($id);
+        }
+
         $data = academic_session::all();
         Session::put('all_academic_session', $data);
-        return view('ngo.registration.edit-reg', compact('beneficiarie', 'data'));
+
+        return view('ngo.registration.edit-reg', compact('record', 'data', 'type'));
     }
+
 
     public function UpdateRegistration(Request $request, $id)
     {
@@ -298,49 +317,58 @@ class RegistrationController extends Controller
         return view('ngo.registration.apporve-reg-list', compact('data', 'approvebeneficiarie', 'approvemember', 'combined'));
     }
 
-    public function approveStatus(Request $request, $id)
+    public function approveStatus(Request $request, $type, $id)
     {
         $request->validate([
-            'registration_date' => 'required',
+            'registration_date' => 'required|date',
         ]);
 
-        $beneficiarie = beneficiarie::find($id);
-        if ($beneficiarie && $beneficiarie->reg_type === 'Beneficiaries') {
+        if ($type === 'Beneficiaries') {
+            $beneficiarie = Beneficiarie::find($id);
+            if (!$beneficiarie) {
+                return back()->with('error', 'Beneficiarie not found.');
+            }
+
             $beneficiarie->status = 1;
             $prefix = '2192000';
 
-            $latest = beneficiarie::where('registration_no', 'LIKE', $prefix . '%')
+            $latest = Beneficiarie::where('registration_no', 'LIKE', $prefix . '%')
                 ->orderBy('registration_no', 'desc')
                 ->first();
 
-            if ($latest) {
-                $last_sequence = (int)substr($latest->registration_no, strlen($prefix));
-                $sequence_number = $last_sequence + 1;
-            } else {
-                $sequence_number = 55;
-            }
+            $last_sequence = $latest ? (int)substr($latest->registration_no, strlen($prefix)) : 54;
+            $sequence_number = $last_sequence + 1;
 
             $beneficiarie->registration_no = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
-            $beneficiarie->registration_date = Carbon::parse($request->input('registration_date'));
+            $beneficiarie->registration_date = Carbon::parse($request->registration_date);
             $beneficiarie->survey_status = 0;
             $beneficiarie->save();
 
             return redirect()->route('approve-registration')->with('success', 'Beneficiarie approved successfully.');
-        }
+        } elseif ($type === 'Member') {
+            $member = Member::find($id);
+            if (!$member) {
+                return back()->with('error', 'Member not found.');
+            }
 
-        $member = Member::find($id);
-        if ($member && $member->reg_type === 'Member') {
+            $prefix = '3192000';
+
+            $latest = Member::where('registration_no', 'LIKE', $prefix . '%')
+                ->orderBy('registration_no', 'desc')
+                ->first();
+
+            $last_sequence = $latest ? (int)substr($latest->registration_no, strlen($prefix)) : 54;
+            $sequence_number = $last_sequence + 1;
+
             $member->status = 1;
-            $prefix = '2192000';
-            $sequence_number = 55;
             $member->registration_no = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
-            $member->registration_date = Carbon::parse($request->input('registration_date'));
+            $member->registration_date = Carbon::parse($request->registration_date);
             $member->save();
 
-            return redirect()->back()->with('success', 'Member approved successfully.');
+            return redirect()->route('approve-registration')->with('success', 'Member approved successfully.');
         }
 
-        return redirect()->back()->with('error', 'Record not found or unknown type.');
+        return redirect()->back()->with('error', 'Unknown registration type.');
     }
 
 
@@ -539,7 +567,8 @@ class RegistrationController extends Controller
     {
         // die($request);
         // exit();
-        $request->validate([
+        $validator = Validator::make($request->all(), [
+            // common rules
             'academic_session' => 'required',
             'application_date' => 'required|date',
             'reg_type' => 'required',
@@ -568,7 +597,15 @@ class RegistrationController extends Controller
             'eligibility' => 'nullable|string|max:100',
             'marital_status' => 'required|string|in:Married,Unmarried',
             'area_type' => 'required|string|in:Rular,Urban',
+            'help_needed' => 'nullable|string|max:255', // default as optional
         ]);
+
+        // Conditionally require help_needed if reg_type is 'Beneficiaries'
+        $validator->sometimes('help_needed', 'required|string|max:255', function ($input) {
+            return $input->reg_type === 'Beneficiaries';
+        });
+
+        $validator->validate(); // Run validation
 
         $data = $request->only([
             'academic_session',

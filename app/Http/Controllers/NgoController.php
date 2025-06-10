@@ -9,33 +9,40 @@ use Carbon\Carbon;
 use App\Models\Ngo;
 use App\Models\User;
 use App\Models\academic_session;
+use App\Models\Activity;
+use App\Models\beneficiarie;
+use App\Models\donor_data;
+use App\Models\Member;
 use Illuminate\Support\Facades\Session;
 
 class NgoController extends Controller
 {
 
-    public function totalngo(){
+    public function totalngo()
+    {
 
         $ngo = Ngo::get();
         // $totalngo = Ngo::where('status', 0)->count();
 
-        return view('admin.ngo.totalngo-list',compact('ngo'));
+        return view('admin.ngo.totalngo-list', compact('ngo'));
     }
 
-    public function activengo(){
-        
+    public function activengo()
+    {
+
         $ngo = Ngo::where('status', 1)->get();
         // $totalngo = Ngo::where('status', 1)->count();
 
-        return view('admin.ngo.activengo-list',compact('ngo'));
+        return view('admin.ngo.activengo-list', compact('ngo'));
     }
 
-    public function deactivengo(){
+    public function deactivengo()
+    {
 
         $ngo = Ngo::where('status', 0)->get();
         // $totalngo = Ngo::where('status', 0)->count();
 
-        return view('admin.ngo.deactivengo-list',compact('ngo'));
+        return view('admin.ngo.deactivengo-list', compact('ngo'));
     }
 
     public function savengo(Request $request)
@@ -155,7 +162,7 @@ class NgoController extends Controller
         $ngo->post = $request->post;
         $ngo->district = $request->district;
         $ngo->package = $request->package;
-        $ngo->start_date = \Carbon\Carbon::parse( $request->start_date)->format('Y-m-d');
+        $ngo->start_date = \Carbon\Carbon::parse($request->start_date)->format('Y-m-d');
         $ngo->end_date = \Carbon\Carbon::parse($request->end_date)->format('Y-m-d');
         $ngo->password = Hash::make($request->password);
 
@@ -189,9 +196,28 @@ class NgoController extends Controller
         return redirect()->back()->with('success', 'NGO deleted successfully!');
     }
 
-    public function viewngo($id){
+    public function viewngo($id)
+    {
         $ngo = Ngo::find($id);
 
         return view('admin.ngo.view-ngo', compact('ngo'));
+    }
+
+    public function ngo()
+    {
+        // $stats = get_bene_stats();
+        $allbene = beneficiarie::count();
+        $penbene = beneficiarie::where('status', 0)->count();
+        $apbene = beneficiarie::where('status', 1)->count();
+        $rebene = Beneficiarie::onlyTrashed()->count();
+        $allacti = Activity::count();
+        $todayacti = Activity::whereDate('created_at', Carbon::today())->count();
+        $allmem = Member::count();
+        $appmem = Member::where('status', 1)->count();
+        $penmem= Member::where('status', 0)->count();
+        $succdonate= donor_data::where('status', 'Successful')->sum('donation_amount');
+        $succtodaydonate= donor_data::where('status', 'Successful')->whereDate('created_at', Carbon::today())->sum('donation_amount');
+        return view('ngo.dashboard', compact('allbene', 'penbene', 'apbene','rebene',
+        'allacti','todayacti','allmem','appmem','penmem','succdonate','succtodaydonate'));
     }
 }

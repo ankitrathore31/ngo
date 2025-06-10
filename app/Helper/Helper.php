@@ -17,23 +17,23 @@ use Session;
 use Auth;
 
 
-    // public static function getUSer()
-    // {
-    //     $user = Auth::User();
-    //     return $user;
-    // }
+// public static function getUSer()
+// {
+//     $user = Auth::User();
+//     return $user;
+// }
 
-    
-    // function say_hello($name = 'Guest') {
-    //     return "Hello, $name!";
-    // }
 
-    if (!function_exists('say_hello')) {
-    function say_hello($name = 'Guest') {
-        return "Hello, $name!";
+// function say_hello($name = 'Guest') {
+//     return "Hello, $name!";
+// }
+
+if (!function_exists('get_bene_stats')) {
+    function get_bene_stats()
+    {
+        return [
+            'allbene' => Beneficiarie::count(),
+            'inactive' => Beneficiarie::where('status', 0)->count(),
+        ];
     }
 }
-   
-?>
-
-

@@ -9,6 +9,7 @@ use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\NgoController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\WorkingAreaController;
@@ -101,11 +102,14 @@ Route::controller(AdminController::class)->group(function () {
 
 // *=========================== Ngo Controllers ======================================= *//
 
-Route::get('/ngo', function () {
-    return view('ngo.dashboard');
-})->middleware(['auth'])->name('ngo');
+Route::get('/ngo', [NgoController::class, 'ngo'])
+    ->middleware(['auth'])
+    ->name('ngo');
 
-
+// Route::get('/ngo', [NgoController::class, 'allbene']);
+// Route::get('/test-stats', function () {
+//     dd(get_bene_stats());
+// });
 Route::controller(NgoController::class)->group(function () {
     Route::post('save-ngo', 'savengo')->middleware('auth')->name('save-ngo');
     Route::get('edit-ngo/{id}', 'editngo')->middleware('auth')->name('edit-ngo');
@@ -134,7 +138,7 @@ Route::middleware('auth')->group(function () {
     Route::post('ngo/store-registration', [RegistrationController::class, 'StoreRegistration'])->name('store-registration');
     Route::post('ngo/update-registration/{id}', [RegistrationController::class, 'UpdateRegistration'])->name('update-registration');
     Route::get('ngo/pending-registration', [RegistrationController::class, 'pendingRegistration'])->name('pending-registration');
-    Route::patch('ngo/approve-status/{id}', [RegistrationController::class, 'approveStatus'])->name('approve-status');
+    Route::patch('ngo/approve-status/{type}/{id}', [RegistrationController::class, 'approveStatus'])->name('approve-status');
     Route::get('ngo/approve-registration', [RegistrationController::class, 'approveRegistration'])->name('approve-registration');
     Route::get('ngo/show-apporve-registration/{id}', [RegistrationController::class, 'showApporveReg'])->name('show-apporve-reg');
     Route::patch('ngo/pending-status/{id}', [RegistrationController::class, 'pendingStatus'])->name('pending-status');
@@ -145,7 +149,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/recover/{id}', [RegistrationController::class,'recoverItem'])->name('recover-item');
     Route::get('ngo/online-registration-setting', [RegistrationController::class, 'onlineregistrationSetting'])->name('reg-setting');
     Route::post('ngo/registration-toggle', [RegistrationController::class, 'toggleSetting'])->name('registration.toggle');
-    Route::get('ngo/edit-registration/{id}', [RegistrationController::class, 'editRegistration'])->name('edit-reg');
+    Route::get('ngo/edit-registration/{id}/{type}', [RegistrationController::class, 'editRegistration'])->name('edit-reg');
     Route::get('ngo/edit-apporve-registration/{id}', [RegistrationController::class, 'editApproveRegistration'])->name('edit-apporve-reg');
     Route::post('ngo/update-apporve-registration/{id}', [RegistrationController::class, 'UpdateApporveRegistration'])->name('update-apporve-registration');
 
@@ -216,6 +220,10 @@ Route::controller(NoticeController::class)->group(function(){
 Route::controller(StaffController::class)->group( function(){
     Route::get('ngo/add-staff', 'addstaff')->middleware('auth')->name('add-staff');
     Route::get('ngo/staff-list', 'staffList')->middleware('auth')->name('staff-list');
+});
+
+Route::controller(MemberController::class)->group( function(){
+    Route::get('ngo/member-list', 'memberlist')->middleware('auth')->name('add-member-list');
 });
 
 

@@ -89,12 +89,10 @@
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->gurdian_name }}</td>
                                     <td>{{ $item->village }},
-                                            ({{ $item->area_type }})
-                                            ,
                                             {{ $item->post }},
                                             {{ $item->block }},
                                             {{ $item->district }},
-                                            {{ $item->state }} - {{ $item->pincode }}</td>
+                                            {{ $item->state }} - {{ $item->pincode }},({{ $item->area_type }})</td>
                                     <td>{{$item->caste}}</td>
                                     <td>{{$item->religion_category}}</td>
                                     <td>{{$item->religion}}</td>
@@ -104,7 +102,7 @@
                                     <td>{{ $item->academic_session }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            <a href="{{ route('edit-reg', $item->id) }}"
+                                            <a href="{{ route('edit-reg',['id' => $item->id, 'type' => $item->reg_type]) }}"
                                                 class="btn btn-primary btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="Edit" style="min-width: 38px; height: 38px;">
                                                 Approve
