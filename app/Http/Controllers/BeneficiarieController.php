@@ -8,6 +8,7 @@ use App\Models\Member;
 use App\Models\Beneficiarie_Survey;
 use App\Models\academic_session;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class BeneficiarieController extends Controller
@@ -74,15 +75,21 @@ class BeneficiarieController extends Controller
 
     public function beneficiarieFacilities()
     {
-        $beneficiarie = Beneficiarie::where('status', 1)
-            ->where('survey_status', 1)
-            ->with(['surveys' => function ($query) {
-                $query->orderBy('id', 'asc')->limit(1); // Just get the first row
-            }])
-            ->orderBy('created_at', 'asc')
+        $firstSurveyIds = DB::table('beneficiarie__surveys')
+            ->selectRaw('MIN(id) as id')
+            ->groupBy('beneficiarie_id')
+            ->pluck('id');
+
+        // Step 2: Load the surveys with related beneficiary data
+        $surveys = Beneficiarie_Survey::with('beneficiarie')
+            ->whereIn('id', $firstSurveyIds)
+            ->orderBy('id', 'asc')
             ->get();
 
-        return view('ngo.beneficiarie.beneficiarie-facilities', compact('beneficiarie'));
+        // Step 3: Pass to view
+        // return view('ngo.beneficiarie.beneficiarie-facilities', compact('uniqueSurveys'));
+
+        return view('ngo.beneficiarie.beneficiarie-facilities', compact('surveys'));
     }
 
 

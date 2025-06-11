@@ -53,4 +53,15 @@ class beneficiarie extends Model
     {
         return $this->hasMany(Beneficiarie_Survey::class, 'beneficiarie_id');
     }
+
+    public function firstSurvey()
+    {
+        return $this->hasOne(Beneficiarie_Survey::class)->orderBy('id', 'asc');
+    }
+
+    public function uniqueSurvey()
+    {
+        return $this->hasOne(Beneficiarie_Survey::class)
+            ->orderBy('id', 'asc');
+    }
 }

@@ -42,65 +42,48 @@
                         </thead>
                         @php $srNo = 1; @endphp
                         <tbody>
-                            @foreach ($beneficiarie as $item)
-                                @foreach ($item->surveys as $survey)
-                                    <tr>
-                                        <td>{{ $srNo++ }}</td>
+                            @foreach ($surveys as $survey)
+                                @php $item = $survey->beneficiarie; @endphp
+                                <tr>
+                                    <td>{{ $srNo++ }}</td>
+                                    <td>{{ $item->registration_no }}</td>
+                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->gurdian_name }}</td>
+                                    <td>{{ $item->village }}, {{ $item->post }}, {{ $item->block }},
+                                        {{ $item->district }}, {{ $item->state }} - {{ $item->pincode }},
+                                        ({{ $item->area_type }})</td>
+                                    <td>{{ $item->identity_no }}</td>
+                                    <td>{{ $item->identity_type }}</td>
+                                    <td>{{ $item->phone }}</td>
+                                    <td>{{ $item->caste }}</td>
+                                    <td>{{ $item->religion_category }}</td>
+                                    <td>{{ $item->religion }}</td>
+                                    <td>{{ $item->dob ? \Carbon\Carbon::parse($item->dob)->age . ' years' : 'Not Found' }}
+                                    </td>
+                                    <td>{{ $survey->survey_date ? \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') : 'Not Found' }}
+                                    </td>
+                                    <td>{{ $survey->survey_details }}</td>
+                                    <td>{{ $item->academic_session }}</td>
+                                    <td>
+                                        <div class="d-flex justify-content-center gap-2 flex-wrap">
+                                            <a href="{{ route('add-beneficiarie-facilities', [$item->id, $survey->id]) }}"
+                                                class="btn btn-primary btn-sm px-3">+ Facilities</a>
 
-                                        <td>{{ $item->registration_no }}</td>
-                                        <td>{{ $item->name }}</td>
-                                        <td>{{ $item->gurdian_name }}</td>
-                                        <td>{{ $item->village }},
-                                            {{ $item->post }},
-                                            {{ $item->block }},
-                                            {{ $item->district }},
-                                            {{ $item->state }} - {{ $item->pincode }},({{ $item->area_type }})
-                                        </td>
-                                        <td>{{ $item->identity_no }}</td>
-                                        <td>{{ $item->identity_type }}</td>
-                                        <td>{{ $item->phone }}</td>
-                                        <td>{{ $item->caste }}</td>
-                                        <td>{{ $item->religion_category }}</td>
-                                        <td>{{ $item->religion }}</td>
-                                        <td>
-                                            {{ $item->dob ? \Carbon\Carbon::parse($item->dob)->age . ' years' : 'Not Found' }}
-                                        </td>
-                                        <td>
-                                            {{ $survey->survey_date ? \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') : 'No Found' }}
-                                        </td>
-                                        <td>{{ $survey->survey_details }}</td>
-                                        <td>{{ $item->academic_session }}</td>
-                                        <td>
-                                            <div class="d-flex justify-content-center gap-2 flex-wrap">
+                                            <a href="{{ route('show-beneficiarie-survey', [$item->id, $survey->id]) }}"
+                                                class="btn btn-success btn-sm px-3"><i class="fa-regular fa-eye"></i>
+                                                Survey</a>
 
-                                                <a href="{{ route('add-beneficiarie-facilities', [$item->id, $survey->id]) }}"
-                                                    class="btn btn-primary btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                    title="Edit" style="min-width: 38px; height: auto;">
-                                                    + Facilities
-                                                </a>
-
-                                                {{-- @foreach ($item->surveys as $survey) --}}
-                                                <a href="{{ route('show-beneficiarie-survey', [$item->id, $survey->id]) }}"
-                                                    class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                    title="View Survey" style="min-width: 38px; height: 38px;">
-                                                    <i class="fa-regular fa-eye"></i> Survey
-                                                </a>
-                                                {{-- @endforeach --}}
-
-
-                                                <a href="{{ route('delete-survey', [$item->id, $survey->id]) }}"
-                                                    class="btn btn-danger btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                    title="View Survey" style="min-width: 38px; height: 38px;"
-                                                    onclick="return confirm('Are you sure want to delete survey')">
-                                                    <i class="fa-regular fa-trash-can"></i>
-                                                </a>
-
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                            <a href="{{ route('delete-survey', [$item->id, $survey->id]) }}"
+                                                class="btn btn-danger btn-sm px-3"
+                                                onclick="return confirm('Are you sure want to delete survey?')">
+                                                <i class="fa-regular fa-trash-can"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
                             @endforeach
                         </tbody>
+
                     </table>
                 </div>
             </div>
