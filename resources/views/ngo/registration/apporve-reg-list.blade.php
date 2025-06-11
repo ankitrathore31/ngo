@@ -103,7 +103,7 @@
                                     <td>Apporve</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            <a href="{{ route('edit-apporve-reg', $item->id) }}"
+                                            <a href="{{ route('edit-apporve-reg', ['id'=> $item->id, 'type' => $item->reg_type]) }}"
                                                 class="btn btn-info btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="Edit" style="min-width: 38px; height: 38px;">
                                                 Decline

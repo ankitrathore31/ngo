@@ -59,12 +59,11 @@ class RegistrationController extends Controller
             'help_needed' => 'nullable|string|max:255', // default as optional
         ]);
 
-        // Conditionally require help_needed if reg_type is 'Beneficiaries'
         $validator->sometimes('help_needed', 'required|string|max:255', function ($input) {
             return $input->reg_type === 'Beneficiaries';
         });
 
-        $validator->validate(); // Run validation
+        $validator->validate();
 
 
 
@@ -324,7 +323,7 @@ class RegistrationController extends Controller
         ]);
 
         if ($type === 'Beneficiaries') {
-            $beneficiarie = Beneficiarie::find($id);
+            $beneficiarie = beneficiarie::find($id);
             if (!$beneficiarie) {
                 return back()->with('error', 'Beneficiarie not found.');
             }
@@ -332,7 +331,7 @@ class RegistrationController extends Controller
             $beneficiarie->status = 1;
             $prefix = '2192000';
 
-            $latest = Beneficiarie::where('registration_no', 'LIKE', $prefix . '%')
+            $latest = beneficiarie::where('registration_no', 'LIKE', $prefix . '%')
                 ->orderBy('registration_no', 'desc')
                 ->first();
 
@@ -379,13 +378,20 @@ class RegistrationController extends Controller
 
         return view('ngo.registration.show-apporve-reg', compact('beneficiarie'));
     }
-    public function editApproveRegistration($id)
+
+    public function editApproveRegistration($id, $type)
     {
 
-        $beneficiarie = beneficiarie::find($id);
+        if ($type === 'Member') {
+            $record = Member::findOrFail($id);
+        } else {
+            $record = Beneficiarie::findOrFail($id);
+        }
+
         $data = academic_session::all();
         Session::put('all_academic_session', $data);
-        return view('ngo.registration.edit-apporve-reg', compact('beneficiarie', 'data'));
+
+        return view('ngo.registration.edit-apporve-reg', compact('record', 'data', 'type'));
     }
 
     public function UpdateApporveRegistration(Request $request, $id)
@@ -470,28 +476,32 @@ class RegistrationController extends Controller
         return redirect()->route('approve-registration')->with('success', 'Registration updated successfully.');
     }
 
-    public function pendingStatus($id)
+    public function pendingStatus($type, $id)
     {
-        $beneficiarie = beneficiarie::find($id);
-        if ($beneficiarie && $beneficiarie->reg_type === 'Beneficiaries') {
-            $beneficiarie->status = 0;
-            $beneficiarie->save();
+        if ($type === 'Beneficiaries') {
+            $beneficiarie = Beneficiarie::find($id);
 
-            return redirect()->back()->with('success', 'Beneficiarie Pending successfully.');
+            if ($beneficiarie) {
+                $beneficiarie->status = 0;
+                $beneficiarie->save();
+
+                return redirect()->back()->with('success', 'Beneficiarie marked as pending successfully.');
+            }
         }
 
+        if ($type === 'Member') {
+            $member = Member::find($id);
 
-        $member = Member::find($id);
-        if ($member && $member->reg_type === 'Member') {
-            $member->status = 0;
-            $member->save();
+            if ($member) {
+                $member->status = 0;
+                $member->save();
 
-            return redirect()->back()->with('success', 'Member Pending successfully.');
+                return redirect()->back()->with('success', 'Member marked as pending successfully.');
+            }
         }
 
-        return redirect()->back()->with('error', 'Record not found or unknown type.');
+        return redirect()->back()->with('error', 'Record not found or type is invalid.');
     }
-
 
 
 
