@@ -19,12 +19,54 @@ class HomeControlller extends Controller
     public function home()
     {
         $data = academic_session::all();
-        $areaTypeCounts = Working_Area::select('area_type', DB::raw('count(*) as total'))
+        $$areaTypeCounts = Working_Area::select('area_type', DB::raw('count(*) as total'))
             ->groupBy('area_type')
             ->pluck('total', 'area_type');
 
-        return view('home.welcome', compact('data', 'areaTypeCounts'));
+        $allacti = Activity::count();
+        $todayacti = Activity::whereDate('created_at', Carbon::today())->count();
+
+        $allCategories = [
+            "Public Program",
+            "Government Program",
+            "Education",
+            "Environment",
+            "Social Awareness Program",
+            "Cultural Program",
+            "Sanitation Program",
+            "Health Program",
+            "Poor Alleviation",
+            "Women Empowerment",
+            "Social Problem",
+            "Peace Talks Program",
+            "Skill Development",
+            "Religious Program",
+            "Agriculture Program",
+            "Labour Tools Distribution",
+            "Drinking Water",
+            "Ration Distribution",
+            "Disaster Management",
+            "Economic Help",
+            "Cow Service",
+            "Animal Food",
+            "Other Activities",
+        ];
+
+        // Fetch actual counts from DB
+        $rawCounts = Activity::select('program_category', DB::raw('count(*) as total'))
+            ->groupBy('program_category')
+            ->pluck('total', 'program_category')
+            ->toArray();
+
+        // Merge with default categories
+        $categoryCounts = [];
+        foreach ($allCategories as $cat) {
+            $categoryCounts[$cat] = $rawCounts[$cat] ?? 0;
+        }
+
+        return view('home.welcome', compact('data', 'areaTypeCounts', 'allacti', 'todayacti', 'categoryCounts'));
     }
+    
     public function index()
     {
         $data = academic_session::all()->sortByDesc('session_date');
