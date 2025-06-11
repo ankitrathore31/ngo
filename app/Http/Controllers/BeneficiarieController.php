@@ -42,17 +42,14 @@ class BeneficiarieController extends Controller
             'survey_date' => 'required',
         ]);
 
-        $beneficiarie = new Beneficiarie_Survey;
-        $beneficiarie->beneficiarie_id = $request->input('beneficiarie_id');
-        $beneficiarie->survey_details = $request->input('survey_details');
-        $beneficiarie->survey_officer = $request->input('survey_officer');
-        $beneficiarie->survey_date = Carbon::parse($request->input('survey_date'));
-        $beneficiarie->surveyfacility_status = $request->input('surveyfacility_status', []);
-        $beneficiarie->save();
+        $survey = new Beneficiarie_Survey;
+        $survey->beneficiarie_id = $request->input('beneficiarie_id');
+        $survey->survey_details = $request->input('survey_details');
+        $survey->survey_officer = $request->input('survey_officer');
+        $survey->survey_date = Carbon::parse($request->input('survey_date'));
+        $survey->surveyfacility_status = $request->input('surveyfacility_status', []);
+        $survey->save();
 
-        // $beneficiarie = beneficiarie::find($id);
-        // $beneficiarie->survey_status = 1;
-        // $beneficiarie->save();
         beneficiarie::where('id', $id)->update(['survey_status' => 1]);
 
         return redirect()->route('beneficiarie-facilities')->with('success', 'Beneficiare added successfully.');
@@ -77,14 +74,17 @@ class BeneficiarieController extends Controller
 
     public function beneficiarieFacilities()
     {
-        $beneficiarie = Beneficiarie::with('surveys')
-            ->where('status', 1)
+        $beneficiarie = Beneficiarie::where('status', 1)
             ->where('survey_status', 1)
+            ->with(['surveys' => function ($query) {
+                $query->orderBy('id', 'asc')->limit(1); // Just get the first row
+            }])
             ->orderBy('created_at', 'asc')
             ->get();
 
         return view('ngo.beneficiarie.beneficiarie-facilities', compact('beneficiarie'));
     }
+
 
 
     public function showbeneficiariesurvey($beneficiarie_id, $survey_id)
@@ -126,26 +126,32 @@ class BeneficiarieController extends Controller
 
     public function storebeneficiariefacilities(Request $request, $beneficiarie_id, $survey_id)
     {
-
         $request->validate([
             'facilities_category' => 'required',
-            'facilities' => 'required',
+            'facilities' => 'required', // Single text value
             'session' => 'required',
         ]);
 
         try {
-            $facilities = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+            // Get previous survey
+            $previousSurvey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
                 ->where('id', $survey_id)
-                ->with('beneficiarie')
                 ->firstOrFail();
 
-            $facilities->facilities_category = $request->input('facilities_category');
-            $facilities->academic_session = $request->input('session');
-            $facilities->facilities = $request->input('facilities');
-            $facilities->facilities_status = 1;
-            $facilities->save();
+            // Create a new row using previous survey details + new facility
+            $newSurvey = new Beneficiarie_Survey;
+            $newSurvey->beneficiarie_id = $previousSurvey->beneficiarie_id;
+            $newSurvey->survey_details = $previousSurvey->survey_details;
+            $newSurvey->survey_officer = $previousSurvey->survey_officer;
+            $newSurvey->survey_date = $previousSurvey->survey_date;
+            $newSurvey->surveyfacility_status = $previousSurvey->surveyfacility_status;
+            $newSurvey->facilities_category = $request->input('facilities_category');
+            $newSurvey->academic_session = $request->input('session');
+            $newSurvey->facilities = $request->input('facilities'); // Single facility
+            $newSurvey->facilities_status = 1;
+            $newSurvey->save();
 
-            return redirect()->route('beneficiarie-facilities-list')->with('success', 'Facilities added successfully');
+            return redirect()->route('beneficiarie-facilities-list')->with('success', 'Facility added successfully');
         } catch (\Throwable $th) {
             return back()->withInput()->withErrors(['error' => 'Failed to update facilities.']);
         }
@@ -188,7 +194,7 @@ class BeneficiarieController extends Controller
         $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
             $q->where('facilities_status', 1)
                 ->whereNull('status')
-                ->orderBy('created_at', 'asc'); 
+                ->orderBy('created_at', 'asc');
 
             if ($request->session_filter) {
                 $q->where('academic_session', $request->session_filter);
@@ -293,7 +299,7 @@ class BeneficiarieController extends Controller
     {
         $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
             $q->where('status', 'Distributed')
-            ->orderBy('created_at', 'asc');
+                ->orderBy('created_at', 'asc');
 
             if ($request->session_filter) {
                 $q->where('session_date', $request->session_filter);
@@ -329,7 +335,7 @@ class BeneficiarieController extends Controller
     {
         $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
             $q->where('status', 'Pending')
-            ->orderBy('created_at', 'asc');
+                ->orderBy('created_at', 'asc');
 
             if ($request->session_filter) {
                 $q->where('academic_session', $request->session_filter);
@@ -343,7 +349,7 @@ class BeneficiarieController extends Controller
         // Get only beneficiaries who actually have at least one distributed survey
         $beneficiarie = $query->whereHas('surveys', function ($q) use ($request) {
             $q->where('status', 'Pending')
-            ->orderBy('created_at', 'asc');
+                ->orderBy('created_at', 'asc');
 
             if ($request->session_filter) {
                 $q->where('academic_session', $request->session_filter);
@@ -365,7 +371,7 @@ class BeneficiarieController extends Controller
     {
         $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
             $q->where('status', 'Distributed')
-            ->orderBy('created_at', 'asc');
+                ->orderBy('created_at', 'asc');
 
             if ($request->session_filter) {
                 $q->where('academic_session', $request->session_filter);
@@ -379,7 +385,7 @@ class BeneficiarieController extends Controller
         // Get only beneficiaries who actually have at least one distributed survey
         $beneficiarie = $query->whereHas('surveys', function ($q) use ($request) {
             $q->where('status', 'Distributed')
-            ->orderBy('created_at', 'asc');
+                ->orderBy('created_at', 'asc');
 
             if ($request->session_filter) {
                 $q->where('academic_session', $request->session_filter);

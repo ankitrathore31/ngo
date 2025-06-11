@@ -141,7 +141,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('ngo/approve-status/{type}/{id}', [RegistrationController::class, 'approveStatus'])->name('approve-status');
     Route::get('ngo/approve-registration', [RegistrationController::class, 'approveRegistration'])->name('approve-registration');
     Route::get('ngo/show-apporve-registration/{id}', [RegistrationController::class, 'showApporveReg'])->name('show-apporve-reg');
-    Route::patch('ngo/pending-status/{id}', [RegistrationController::class, 'pendingStatus'])->name('pending-status');
+    Route::patch('ngo/pending-status/{type}/{id}', [RegistrationController::class, 'pendingStatus'])->name('pending-status');
     Route::get('ngo/view-registration/{id}', [RegistrationController::class, 'viewRegistration'])->name('view-reg');
     Route::get('ngo/delete-view/{id}', [RegistrationController::class, 'deleteRegistrationPage'])->name('delete-view');
     Route::post('ngo/delete-registration/{id}', [RegistrationController::class, 'deleteRegistration'])->name('delete-reg');
@@ -150,7 +150,7 @@ Route::middleware('auth')->group(function () {
     Route::get('ngo/online-registration-setting', [RegistrationController::class, 'onlineregistrationSetting'])->name('reg-setting');
     Route::post('ngo/registration-toggle', [RegistrationController::class, 'toggleSetting'])->name('registration.toggle');
     Route::get('ngo/edit-registration/{id}/{type}', [RegistrationController::class, 'editRegistration'])->name('edit-reg');
-    Route::get('ngo/edit-apporve-registration/{id}', [RegistrationController::class, 'editApproveRegistration'])->name('edit-apporve-reg');
+    Route::get('ngo/edit-apporve-registration/{id}/{type}', [RegistrationController::class, 'editApproveRegistration'])->name('edit-apporve-reg');
     Route::post('ngo/update-apporve-registration/{id}', [RegistrationController::class, 'UpdateApporveRegistration'])->name('update-apporve-registration');
 
 });
