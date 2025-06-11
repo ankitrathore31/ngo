@@ -277,7 +277,7 @@
     <div class="owl-carousel owl-theme slider">
         <div class="item ">
             <div class="background-image">
-                <img src="https://srv1276-files.hstgr.io/e4aef852a4f6e947/files/public_html/public/images/ach1.jpeg"
+                <img src="public/images/ach1.jpeg"
                     alt="slider image">
                 <div class="carousel-caption d-none d-md-block">
                     <h1 class="text-white"></h1>
@@ -687,7 +687,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card shadow-lg p-3 mb-5 bg-white rounded facilities">
                         <div class="card-body text-center">
-                            <img src="{{ asset('images/enviroment.jpeg') }}" class="img-fluid mb-3"
+                            <img src="{{ asset('public/images/enviroment.jpeg') }}" class="img-fluid mb-3"
                                 alt="Clean Classroom" width="200">
                             <h5 class="card-title font-weight-bold text-primary">Environment Meeting</h5>
                             <p class="card-text text-muted">
@@ -701,7 +701,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card shadow-lg p-3 mb-5 bg-white rounded">
                         <div class="card-body text-center">
-                            <img src="{{ asset('images/blanket.jpeg') }}" alt="lunch area" class="img-fluid mb-3"
+                            <img src="{{ asset('public/images/blanket.jpeg') }}" alt="lunch area" class="img-fluid mb-3"
                                 width="200">
                             <h5 class="card-title font-weight-bold text-primary">Blanket Distribution</h5>
                             <p class="card-text text-muted">
@@ -716,7 +716,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card shadow-lg bg-white rounded p-3 mb-5">
                         <div class="card-body text-center ">
-                            <img src="{{ asset('images/peace.jpeg') }}" alt="" class="img-fluid mb-3"
+                            <img src="{{ asset('public/images/peace.jpeg') }}" alt="" class="img-fluid mb-3"
                                 width="200">
                             <h5 class="card-title font-weight-bold text-primary">Peace Talkin Meeting</h5>
                             <p class="card-text text-muted">
@@ -742,7 +742,7 @@
                 <div class="col-md-4 mb-4">
                     <div class="card shadow-lg bg-white rounded p-3 mb-5">
                         <div class="card-body text-center">
-                            <img src="{{ asset('images/education2.jpg') }}" class="img-fluid mb-3" width="200">
+                            <img src="{{ asset('public/images/education2.jpg') }}" class="img-fluid mb-3" width="200">
                             <div class="card-body">
                                 <h5 class="card-title">Help For Education</h5>
                                 <p class="card-text">Providing Free Education by our NGO</p>
