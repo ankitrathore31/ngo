@@ -10,6 +10,7 @@ use App\Models\Member;
 use App\Models\academic_session;
 use App\Models\Notice;
 use App\Models\Working_Area;
+use App\Models\Event;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -66,7 +67,7 @@ class HomeControlller extends Controller
 
         return view('home.welcome', compact('data', 'areaTypeCounts', 'allacti', 'todayacti', 'categoryCounts'));
     }
-    
+
     public function index()
     {
         $data = academic_session::all()->sortByDesc('session_date');
@@ -144,9 +145,28 @@ class HomeControlller extends Controller
         return view('home.pages.about_us');
     }
 
-    public function eventpage()
+    public function eventpage(Request $request)
     {
-        return view('home.pages.event');
+        $query = Event::query();
+
+        if ($request->session_filter) {
+            $query->where('academic_session', $request->session_filter);
+        }
+
+        if ($request->category_filter) {
+            $query->where('event_category', $request->category_filter);
+        }
+
+        $event = $query->orderBy('event_date', 'asc')->get();
+        return view('home.event.event', compact('event'));
+    }
+
+
+    public function showEvent($id)
+    {
+        $event = Event::find($id);
+
+        return view('home.event.show-event', compact('event'));
     }
 
     public function projectpage()
@@ -256,7 +276,13 @@ class HomeControlller extends Controller
 
         $identityNo = str_replace(' ', '', $request->identity_no);
 
-        $beneficiarie = \App\Models\beneficiarie::with(['surveys'])->withTrashed()
+        $beneficiarie = \App\Models\Beneficiarie::with([
+            'surveys' => function ($query) {
+                $query->whereNotNull('facilities');
+                    // ->where('facilities', 1);
+            }
+        ])
+            ->withTrashed()
             ->where('identity_no', $identityNo)
             ->first();
 

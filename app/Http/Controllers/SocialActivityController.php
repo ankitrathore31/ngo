@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Activity;
 use Illuminate\Http\Request;
 use App\Models\academic_session;
+use App\Models\Event;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 
@@ -18,7 +19,7 @@ class SocialActivityController extends Controller
             $query->where('academic_session', $request->session_filter);
         }
 
-        
+
         if ($request->category_filter) {
             $query->where('program_category', $request->category_filter);
         }
@@ -124,9 +125,6 @@ class SocialActivityController extends Controller
         return redirect()->route('activitylist')->with('success', 'Program updated successfully');
     }
 
-
-
-
     public function removeactivity($id)
     {
         $activity = Activity::find($id);
@@ -145,5 +143,131 @@ class SocialActivityController extends Controller
     {
         $activity = Activity::find($id);
         return view('ngo.activity.viewactivity', compact('activity'));
+    }
+
+    public function eventlist(Request $request)
+    {
+        $query = Event::query();
+
+        if ($request->session_filter) {
+            $query->where('academic_session', $request->session_filter);
+        }
+
+        if ($request->category_filter) {
+            $query->where('event_category', $request->category_filter);
+        }
+
+        $event = $query->orderBy('event_date', 'asc')->get();
+        return view('ngo.event.event-list', compact('event'));
+    }
+
+    public function addevent()
+    {
+        $data = academic_session::all()->sortByDesc('session_date');
+        Session::put('all_academic_session', $data);
+        return view('ngo.event.add-event', compact('data'));
+    }
+
+    public function saveEvent(Request $request)
+    {
+        $request->validate([
+            'event' => 'required|string|max:255',
+            'event_category' => 'required|string|max:255',
+            'event_date' => 'required|date',
+            'event_session' => 'required',
+            'event_time' => 'required|date_format:H:i',
+            'event_address' => 'required|string',
+            'event_report' => 'required|string',
+            'event_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:25600',
+        ], [
+            'event_image.image' => 'The uploaded file must be an image.',
+            'event_image.mimes' => 'Only jpeg, png, jpg, gif, and svg formats are allowed.',
+            'event_image.max' => 'The image size must not exceed 25MB.',
+        ]);
+
+        $imagePath = null;
+        if ($request->hasFile('event_image')) {
+            $imagePath = $request->file('event_image')->store('program_images', 'public');
+        }
+
+        $event = new Event;
+        $event->event = $request->event;
+        $event->event_category = $request->event_category;
+        $event->event_date = $request->event_date;
+        $event->academic_session = $request->event_session;
+        $event->event_time = $request->event_time;
+        $event->event_address = $request->event_address;
+        $event->event_report = $request->event_report;
+        if ($request->hasFile('event_image')) {
+            $file = $request->file('event_image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $file->move(public_path('program_images'), $filename);
+            $event->event_image = $filename;
+        }
+        $event->save();
+
+        return redirect()->route('event-list')->with('success', 'Event Save successfully!');
+    }
+
+    public function removeEvent($id)
+    {
+        $event = Event::find($id);
+
+        if ($event) {
+            $destination = 'program_images/' . $event->event_image;
+
+            $event->delete();
+            return redirect()->back()->with('Success', 'Event Deleted');
+        } else {
+            return redirect()->back()->with('Error', 'Event Not Found');
+        }
+    }
+
+    public function viewEvent($id)
+    {
+
+        $event = Event::find($id);
+
+        return view('ngo.event.view-event', compact('event'));
+    }
+
+    public function editEvent($id)
+    {
+
+        $event = Event::find($id);
+        $data = academic_session::all();
+        return view('ngo.event.edit-event', compact('data', 'event'));
+    }
+
+    public function updateEvent(Request $request, $id)
+    {
+
+        $event = Event::find($id);
+        $event->event = $request->event;
+        $event->event_category = $request->event_category;
+        $event->event_date = $request->event_date;
+        $event->academic_session = $request->event_session;
+        $event->event_time = $request->event_time;
+        $event->event_address = $request->event_address;
+        $event->event_report = $request->event_report;
+        
+        if ($request->hasFile('event_image')) {
+            
+            if ($event->event_image && file_exists(public_path('program_images/' . $event->event_image))) {
+                unlink(public_path('program_images/' . $event->event_image));
+            }
+
+            
+            $file = $request->file('event_image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $file->move(public_path('program_images'), $filename);
+            $event->event_image = $filename;
+        }
+
+        $event->save();
+
+        return redirect()->route('event-list')->with('success', 'Event Update successfully!');
     }
 }

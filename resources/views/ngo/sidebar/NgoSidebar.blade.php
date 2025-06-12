@@ -98,8 +98,8 @@
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
                             class="fas fa-tasks"></i> EVENT</a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="">Add Event</a></li>
-                        <li><a class="dropdown-item" href="">Event List</a></li>
+                        <li><a class="dropdown-item" href="{{route('add-event')}}">Add Event</a></li>
+                        <li><a class="dropdown-item" href="{{ route('event-list')}}">Event List</a></li>
                     </ul>
                 </li>
 
@@ -151,6 +151,7 @@
                     <ul class="dropdown-menu bg-primary">
                         <li><a class="dropdown-item" href="#">Deposite Donations</a></li>
                         <li><a class="dropdown-item" href="#">Donations List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('online-donor-list')}}">Online Donations List</a></li>
                         <li><a class="dropdown-item" href="#">Donations Report</a></li>
                         <li><a class="dropdown-item" href="#">Donation Card</a></li>
                     </ul>

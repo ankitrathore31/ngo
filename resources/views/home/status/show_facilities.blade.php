@@ -174,7 +174,12 @@
                                             </td>
                                             <td>{{ $survey->facilities_category ?? 'Pending' }}</td>
                                             <td>{{ $survey->facilities ?? 'Pending' }}</td>
-                                            <td>{{ $survey->status ?? 'Pending' }}</td>
+                                            <td>{{ $survey->status ?? 'Pending' }}
+                                                <br>@if($survey->status != 'Distribute'){
+                                                    Pending reason: {{ $survey->pending_reason }}
+                                                }
+                                                @endif
+                                            </td>
                                             <td> Distribute Place: {{ $survey->distribute_place ?? 'Pending' }}</td>
                                         </tr>
                                     @endforeach

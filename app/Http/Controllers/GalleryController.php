@@ -25,7 +25,7 @@ class GalleryController extends Controller
     {
         $request->validate([
             'images' => 'required',
-            'date' => 'required',
+            // 'date' => 'required',
             'images.*' => 'image|mimes:jpeg,png,jpg|max:2048',
             'gallery_type' => 'required',
         ]);
@@ -38,7 +38,7 @@ class GalleryController extends Controller
                 $file->move(public_path('gallery'), $filename);
 
                 $date = $request->filled('date')
-                    ? Carbon::createFromFormat('d-m-Y', $request->date)->format('Y-m-d')
+                    ? $request->date
                     : now()->format('Y-m-d');
 
                 Gallery::create([
