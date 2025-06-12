@@ -72,11 +72,11 @@
         <div class="container-fluid mt-4">
 
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Donor List</h5>
+                <h5 class="mb-0">Donation Card List</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Donor List</li>
+                        <li class="breadcrumb-item active" aria-current="page">Donor Card</li>
                     </ol>
                 </nav>
             </div>
