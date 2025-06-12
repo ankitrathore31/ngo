@@ -149,11 +149,11 @@
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
                             class="fas fa-donate"></i> DONATION</a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="#">Deposite Donations</a></li>
-                        <li><a class="dropdown-item" href="#">Donations List</a></li>
+                        <li><a class="dropdown-item" href="{{route('donation')}}">Deposite Donations</a></li>
+                        <li><a class="dropdown-item" href="{{ 'donation-list'}}">Donations List</a></li>
                         <li><a class="dropdown-item" href="{{ route('online-donor-list')}}">Online Donations List</a></li>
-                        <li><a class="dropdown-item" href="#">Donations Report</a></li>
-                        <li><a class="dropdown-item" href="#">Donation Card</a></li>
+                        {{-- <li><a class="dropdown-item" href="#">Donations Report</a></li> --}}
+                        <li><a class="dropdown-item" href="{{route('donation-card-list')}}">Donation Card</a></li>
                     </ul>
                 </li>
 

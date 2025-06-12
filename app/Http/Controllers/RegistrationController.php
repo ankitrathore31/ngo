@@ -503,8 +503,6 @@ class RegistrationController extends Controller
         return redirect()->back()->with('error', 'Record not found or type is invalid.');
     }
 
-
-
     public function deleteRegistrationPage($id)
     {
 
