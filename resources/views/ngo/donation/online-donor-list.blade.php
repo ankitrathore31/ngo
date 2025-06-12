@@ -147,7 +147,7 @@
                                         </td>
                                         <td>{{ $item->donor_aadhar }} {{ $item->donor_pancard}}</td>
                                         <td>{{ $item->id_type }}</td>
-                                        <td>{{ $item->donor_phone }}</td>  
+                                        <td>{{ $item->donor_number }}</td>  
                                         <td>{{ $item->donor_email }}</td>                                       
                                         <td>{{ $item->donation_category ?? 'No Found' }}</td>
                                         <td>{{ $item->donation_amount}}</td>
