@@ -5,6 +5,7 @@ use App\Http\Controllers\SocialActivityController;
 use App\Http\Controllers\HomeControlller;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BeneficiarieController;
+use App\Http\Controllers\DonationController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\NgoController;
 use App\Http\Controllers\PaymentController;
@@ -39,9 +40,6 @@ use Illuminate\Support\Facades\DB;
 
 Route::get('/', [HomeControlller::class, 'index']);
 
-// Route::get('/link', function(){
-//     Artisan::call('storage:link');
-// });
 
 Route::controller(HomeControlller::class)->group(function () {
     Route::get('/welcome', 'home')->name('welcome');
@@ -50,6 +48,7 @@ Route::controller(HomeControlller::class)->group(function () {
     Route::get('/Services', 'servicepage')->name('service');
     Route::get('/About', 'aboutpage')->name('about');
     Route::get('/Event', 'eventpage')->name('event');
+    Route::get('/event/show-event/{id}', 'showEvent')->name('show-event');
     Route::get('/Project', 'projectpage')->name('project');
     Route::get('/News', 'newspage')->name('news');
     Route::get('/Certificates', 'certificatepage')->name('certificate');
@@ -130,6 +129,13 @@ Route::controller(SocialActivityController::class)->group(function () {
     Route::post('ngo/updateactivity/{id}', 'updateactivity')->middleware('auth')->name('updateactivity');
     Route::get('ngo/removeactivity/{id}', 'removeactivity')->middleware('auth')->name('removeactivity');
     Route::get('ngo/viewactivity/{id}', 'viewactivity')->middleware('auth')->name('viewactivity');
+    Route::get('ngo/addevent', 'addevent')->middleware('auth')->name('add-event');
+    Route::post('ngo/save-event', 'saveEvent')->middleware('auth')->name('save-event');
+    Route::get('ngo/event-list', 'eventList')->middleware('auth')->name('event-list');
+    Route::get('ngo/delete-event/{id}', 'removeEvent')->middleware('auth')->name('remove-event');
+    Route::get('ngo/view-event/{id}', 'viewEvent')->middleware('auth')->name('view-event');
+    Route::get('ngo/edit-event/{id}', 'editEvent')->middleware('auth')->name('edit-event');
+    Route::post('ngo/update-event/{id}', 'updateEvent')->middleware('auth')->name('update-event');
 });
 
 
@@ -224,6 +230,10 @@ Route::controller(StaffController::class)->group( function(){
 
 Route::controller(MemberController::class)->group( function(){
     Route::get('ngo/member-list', 'memberlist')->middleware('auth')->name('add-member-list');
+});
+
+Route::controller(DonationController::class)->group(function(){
+    Route::get('ngo/online-donor-list', 'onlineDonor')->middleware('auth')->name('online-donor-list');
 });
 
 

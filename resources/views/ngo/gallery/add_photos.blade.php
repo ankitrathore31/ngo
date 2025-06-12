@@ -42,7 +42,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label for=" " class="form-label">Date:</label>
-                        <input type="text" name="date" class="datepicker form-control" >
+                        <input type="date" name="date" class="datepicker form-control" >
                         @error('date')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

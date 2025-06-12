@@ -31,4 +31,6 @@ class Beneficiarie_Survey extends Model
     {
         return $this->belongsTo(beneficiarie::class, 'beneficiarie_id');
     }
+
+    
 }
