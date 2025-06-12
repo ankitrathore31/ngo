@@ -72,7 +72,7 @@
         <div class="container-fluid mt-4">
 
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Online Donation List</h5>
+                <h5 class="mb-0">Donor List</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
@@ -87,7 +87,7 @@
             @endif
             <div class="row">
                 <div class="col-md-12">
-                    <form method="GET" action="{{ route('online-donor-list') }}" class="row g-3 mb-4">
+                    <form method="GET" action="{{ route('donation-card-list') }}" class="row g-3 mb-4">
                         <div class="col-md-4">
                             {{-- <label for="session_filter" class="form-label">Select Session</label> --}}
                             <select name="session_filter" id="session_filter" class="form-control"
@@ -101,10 +101,12 @@
                                 @endforeach
                             </select>
                         </div>
-
-                        <div class="col-md-4 d-flex">
+                        <div class="col-md-4 col-sm-4 mb-3">
+                            <input type="text" class="form-control" name="name" placeholder="Search By Name">
+                        </div>
+                        <div class="col-md-4">
                             <button type="submit" class="btn btn-primary me-2">Search</button>
-                            <a href="{{ route('online-donor-list') }}" class="btn btn-info text-white me-2">Reset</a>
+                            <a href="{{ route('donation-card-list') }}" class="btn btn-info text-white me-2">Reset</a>
                         </div>
                     </form>
                     <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
@@ -117,57 +119,47 @@
                         <thead class="table-primary">
                             <tr>
                                 <th>Sr. No.</th>
-                                {{-- <th>Order ID</th> --}}
                                 <th>Name</th>
                                 <th>Address</th>
-                                <th>Identity No.</th>
-                                <th>Identity Type</th>
+                                {{-- <th>Identity No.</th>
+                                <th>Identity Type</th> --}}
                                 <th>Mobile no.</th>
-                                <th>Email</th>
-                                <th>Donation Category</th>
+                                {{-- <th>Email</th> --}}
+                                {{-- <th>Donation Category</th> --}}
                                 <th>Donation Amount</th>
                                 <th>Donate Date</th>
-                                <th>Status</th>
-                                <th>Remark</th>
-                                {{-- <th>Session</th> --}}
+                                {{-- <th>Status</th> --}}
+                                <th>Payment Mode</th>
+                                <th>Session</th>
                                 <th class="no-print">Action</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             @foreach ($donor as $item)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        {{-- <td>{{ $item->order_id }}</td> --}}
-                                        <td>{{ $item->donor_name }}</td>
-                                        <td>{{ $item->donor_village }}
-                                            {{ $item->donor_post }}
-                                            {{ $item->donor_district }}
-                                            {{ $item->donor_state }} - {{ $item->donor_pincode }}
-                                        </td>
-                                        <td>{{ $item->donor_aadhar }} {{ $item->donor_pancard}}</td>
-                                        <td>{{ $item->id_type }}</td>
-                                        <td>{{ $item->donor_number }}</td>  
-                                        <td>{{ $item->donor_email }}</td>                                       
-                                        <td>{{ $item->donation_category ?? 'No Found' }}</td>
-                                        <td>{{ $item->donation_amount}}</td>
-                                        <td>
-                                            {{ $item->donate_date ? \Carbon\Carbon::parse($item->donate_date)->format('d-m-Y') : 'No Found' }}
-                                        </td>
-                                        <td>{{ $item->status}} </td>
-                                        <td>{{ $item->donation_remark}}</td>
-                                        {{-- <td>{{ $survey->academic_session }}</td> --}}
-                                        <td class="no-print">
-                                            <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                                <a href=""
-                                                    class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                    title="View" style="min-width: 38px; height: 38px;">
-                                                    <i class="fa-regular fa-eye"></i>
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->address }}
+                                    </td>
+                                    <td>{{ $item->mobile }}</td>
+                                    <td>{{ $item->amount }}</td>
+                                    <td>
+                                        {{ $item->date ? \Carbon\Carbon::parse($item->date)->format('d-m-Y') : 'No Found' }}
+                                    </td>
+                                    <td>{{ $item->payment_method }}</td>
+                                    <td>{{ $item->academic_session }}</td>
+                                    <td class="no-print">
+                                        <div class="d-flex justify-content-center gap-2 flex-wrap">
+                                            <a href="{{route('view-donation', $item->id) }}"
+                                                class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
+                                                title="View" style="min-width: 38px; height: auto;">
+                                                Donation Card
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

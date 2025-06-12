@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\academic_session;
 use App\Models\Activity;
 use App\Models\beneficiarie;
+use App\Models\Donation;
 use App\Models\donor_data;
 use App\Models\Member;
 use Illuminate\Support\Facades\Session;
@@ -215,9 +216,10 @@ class NgoController extends Controller
         $allmem = Member::count();
         $appmem = Member::where('status', 1)->count();
         $penmem= Member::where('status', 0)->count();
+        $offlinedonate= Donation::sum('amount');
         $succdonate= donor_data::where('status', 'Successful')->sum('donation_amount');
         $succtodaydonate= donor_data::where('status', 'Successful')->whereDate('created_at', Carbon::today())->sum('donation_amount');
         return view('ngo.dashboard', compact('allbene', 'penbene', 'apbene','rebene',
-        'allacti','todayacti','allmem','appmem','penmem','succdonate','succtodaydonate'));
+        'allacti','todayacti','allmem','appmem','penmem','succdonate','succtodaydonate','offlinedonate'));
     }
 }
