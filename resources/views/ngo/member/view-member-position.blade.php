@@ -30,11 +30,11 @@
         <div class="container-fluid mt-4">
 
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Approve Registraition Form</h5>
+                <h5 class="mb-0">Member</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Approve Form</li>
+                        <li class="breadcrumb-item active" aria-current="page">View Member</li>
                     </ol>
                 </nav>
             </div>
@@ -45,7 +45,7 @@
             @endif
             <div class="container my-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2 class="fw-bold">Apporve Registration Form</h2>
+                    <h2 class="fw-bold">Member</h2>
                     <button onclick="window.print()" class="btn btn-primary">Print / Download</button>
                 </div>
 
@@ -127,7 +127,6 @@
                         <div class="col-sm-4 mb-3">
                             <strong>Country:</strong> {{ $record->country }}
                         </div>
-
                         <div class="col-sm-4 mb-3">
                             <strong>Gender:</strong> {{ $record->gender }}
                         </div>
@@ -137,8 +136,6 @@
                         <div class="col-sm-4 mb-3">
                             <strong>Email:</strong> {{ $record->email ?? 'N/A' }}
                         </div>
-
-
                         <div class="col-sm-4 mb-3">
                             <strong>Eligibility:</strong> {{ $record->eligibility ?? 'N/A' }}
                         </div>
@@ -151,9 +148,6 @@
                         <div class="col-sm-4 mb-3">
                             <strong>Religion:</strong> {{ $record->religion }}
                         </div>
-
-
-
                         <div class="col-sm-4 mb-3">
                             <strong>Date of Birth:</strong>
                             {{ \Carbon\Carbon::parse($record->dob)->format('d-m-Y') }}
@@ -171,20 +165,21 @@
                         <div class="col-sm-4 mb-3">
                             <strong>Identity Number:</strong> {{ $record->identity_no }}
                         </div>
-                        <div class="col-sm-8 mb-3">
-                            <strong>Help Neede:</strong> {{ $record->help_needed }}
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 mb-3">
+                            <strong>Postion Type:</strong> {{ $record->position_type }}
+                        </div>
+                        <div class="col-sm-4 mb-3">
+                            <strong>Position:</strong> {{ $record->position }}
                         </div>
                     </div>
                     <div class="row">
-                        @php
-                            $imagePath = $record->reg_type === 'Member' ? 'member_images/' : 'benefries_images/';
-                        @endphp
-
                         @if ($record->image)
                             <div class="row mb-3">
                                 <div class="col-sm-4 mb-3">
                                     <strong>Profile Image:</strong><br>
-                                    <img src="{{ asset($imagePath . $record->image) }}" alt="Profile Image"
+                                    <img src="{{ asset('member_images/' . $record->image) }}" alt="Profile Image"
                                         class="img-thumbnail" width="150">
                                 </div>
                             </div>
@@ -193,7 +188,8 @@
                         <div class="col-sm-3 mb-3">
                             @if ($record->id_document)
                                 <strong>ID Document:</strong>
-                                <a href="{{ asset($imagePath . $record->id_document) }}" target="_blank">View Document</a>
+                                <a href="{{ asset('member_images/' . $record->id_document) }}" target="_blank">View
+                                    Document</a>
                             @endif
                         </div>
                     </div>

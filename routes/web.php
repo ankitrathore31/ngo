@@ -146,9 +146,9 @@ Route::middleware('auth')->group(function () {
     Route::get('ngo/pending-registration', [RegistrationController::class, 'pendingRegistration'])->name('pending-registration');
     Route::patch('ngo/approve-status/{type}/{id}', [RegistrationController::class, 'approveStatus'])->name('approve-status');
     Route::get('ngo/approve-registration', [RegistrationController::class, 'approveRegistration'])->name('approve-registration');
-    Route::get('ngo/show-apporve-registration/{id}', [RegistrationController::class, 'showApporveReg'])->name('show-apporve-reg');
+    Route::get('ngo/show-apporve-registration/{id}/{type}', [RegistrationController::class, 'showApporveReg'])->name('show-apporve-reg');
     Route::patch('ngo/pending-status/{type}/{id}', [RegistrationController::class, 'pendingStatus'])->name('pending-status');
-    Route::get('ngo/view-registration/{id}', [RegistrationController::class, 'viewRegistration'])->name('view-reg');
+    Route::get('ngo/view-registration/{id}/{type}', [RegistrationController::class, 'viewRegistration'])->name('view-reg');
     Route::get('ngo/delete-view/{id}', [RegistrationController::class, 'deleteRegistrationPage'])->name('delete-view');
     Route::post('ngo/delete-registration/{id}', [RegistrationController::class, 'deleteRegistration'])->name('delete-reg');
     Route::get('ngo/recover-registration', [RegistrationController::class, 'recover'])->name('recover');
@@ -230,6 +230,11 @@ Route::controller(StaffController::class)->group( function(){
 
 Route::controller(MemberController::class)->group( function(){
     Route::get('ngo/member-list', 'memberlist')->middleware('auth')->name('add-member-list');
+    Route::get('ngo/view-member/{id}', 'showMember')->middleware('auth')->name('view-member');
+    Route::post('/member/save-position',  'savePosition')->middleware('auth')->name('save-member-position');
+    Route::get('ngo/member-position-list', 'memberPostionlist')->middleware('auth')->name('member-list');
+    Route::get('ngo/show-member/{id}', 'showMemberPosition')->middleware('auth')->name('show-member');
+
 });
 
 Route::controller(DonationController::class)->group(function(){

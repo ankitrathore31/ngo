@@ -101,23 +101,29 @@ class RegistrationController extends Controller
         $data['status'] = 0;
         $prefix = '2191000';
 
-        // Get the latest application_no starting with the prefix
-        $latest = beneficiarie::where('application_no', 'LIKE', $prefix . '%')
+        // Get the latest application_no from both tables starting with prefix
+        $latestBeneficiarie = beneficiarie::where('application_no', 'LIKE', $prefix . '%')
             ->orderBy('application_no', 'desc')
             ->first();
 
-        if ($latest) {
-            // Extract the numeric sequence after the prefix
-            $last_sequence = (int)substr($latest->application_no, strlen($prefix));
-            $sequence_number = $last_sequence + 1;
-        } else {
-            // First record starts at 60
-            $sequence_number = 60;
-        }
+        $latestMember = Member::where('application_no', 'LIKE', $prefix . '%')
+            ->orderBy('application_no', 'desc')
+            ->first();
 
-        // Generate the new application number
+        // Determine the highest sequence from both models
+        $lastSequenceBeneficiarie = $latestBeneficiarie
+            ? (int)substr($latestBeneficiarie->application_no, strlen($prefix))
+            : 0;
+
+        $lastSequenceMember = $latestMember
+            ? (int)substr($latestMember->application_no, strlen($prefix))
+            : 0;
+
+        $last_sequence = max($lastSequenceBeneficiarie, $lastSequenceMember);
+        $sequence_number = $last_sequence + 1;
+
+        // Generate new application_no
         $data['application_no'] = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
-
 
         try {
             if (!empty($data['application_date'])) {
@@ -151,6 +157,20 @@ class RegistrationController extends Controller
 
             beneficiarie::create($data);
         } else if ($request->reg_type === 'Member') {
+
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('member_images'), $imageName);
+                $data['image'] = $imageName;
+            }
+
+            if ($request->hasFile('id_document')) {
+                $idDoc = $request->file('id_document');
+                $idDocName = time() . '_iddoc.' . $idDoc->getClientOriginalExtension();
+                $idDoc->move(public_path('member_images'), $idDocName);
+                $data['id_document'] = $idDocName;
+            }
             Member::create($data);
         }
 
@@ -163,7 +183,7 @@ class RegistrationController extends Controller
         if ($type === 'Member') {
             $record = Member::findOrFail($id);
         } else {
-            $record = Beneficiarie::findOrFail($id);
+            $record = beneficiarie::findOrFail($id);
         }
 
         $data = academic_session::all();
@@ -254,11 +274,14 @@ class RegistrationController extends Controller
         return redirect()->route('pending-registration')->with('success', 'Registration updated successfully.');
     }
 
-    public function viewRegistration($id)
+    public function viewRegistration($id, $type)
     {
-
-        $beneficiarie = beneficiarie::find($id);
-        return view('ngo.registration.view-reg', compact('beneficiarie'));
+        if ($type === 'Beneficiaries') {
+            $record = beneficiarie::where('status', 0)->findorFail($id);
+        } else {
+            $record = Member::where('status', 0)->findorFail($id);
+        }
+        return view('ngo.registration.view-reg', compact('record'));
     }
 
     public function pendingRegistration(Request $request)
@@ -371,12 +394,14 @@ class RegistrationController extends Controller
     }
 
 
-    public function showApporveReg($id)
+    public function showApporveReg($id, $type)
     {
-
-        $beneficiarie = beneficiarie::where('status', 1)->find($id);
-
-        return view('ngo.registration.show-apporve-reg', compact('beneficiarie'));
+        if ($type === 'Beneficiaries') {
+            $record = beneficiarie::where('status', 1)->findorFail($id);
+        } else {
+            $record = Member::where('status', 1)->findorFail($id);
+        }
+        return view('ngo.registration.show-apporve-reg', compact('record'));
     }
 
     public function editApproveRegistration($id, $type)
@@ -385,7 +410,7 @@ class RegistrationController extends Controller
         if ($type === 'Member') {
             $record = Member::findOrFail($id);
         } else {
-            $record = Beneficiarie::findOrFail($id);
+            $record = beneficiarie::findOrFail($id);
         }
 
         $data = academic_session::all();
@@ -470,6 +495,31 @@ class RegistrationController extends Controller
             }
             beneficiarie::where('id', $id)->update($data);
         } else if ($request->reg_type === 'Member') {
+            // Handle new profile image upload (if any)
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '_image'; // Add extension if needed
+                $image->move(public_path('member_images'), $imageName);
+                $data['image'] = $imageName;
+
+                // Optional: delete old image
+                // if ($record->image && file_exists(public_path('benefries_images/' . $record->image))) {
+                //     unlink(public_path('benefries_images/' . $record->image));
+                // }
+            }
+
+            // Handle new ID document upload (if any)
+            if ($request->hasFile('id_document')) {
+                $idDoc = $request->file('id_document');
+                $idDocName = time() . '_iddoc'; // Add extension if needed
+                $idDoc->move(public_path('member_images'), $idDocName);
+                $data['id_document'] = $idDocName;
+
+                // Optional: delete old ID document
+                // if ($record->id_document && file_exists(public_path('benefries_images/' . $record->id_document))) {
+                //     unlink(public_path('benefries_images/' . $record->id_document));
+                // }
+            }
             Member::where('id', $id)->update($data);
         }
 

@@ -276,7 +276,7 @@ class HomeControlller extends Controller
 
         $identityNo = str_replace(' ', '', $request->identity_no);
 
-        $beneficiarie = \App\Models\Beneficiarie::with([
+        $beneficiarie = \App\Models\beneficiarie::with([
             'surveys' => function ($query) {
                 $query->whereNotNull('facilities');
                     // ->where('facilities', 1);

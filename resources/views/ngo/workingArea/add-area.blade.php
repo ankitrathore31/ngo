@@ -2,7 +2,6 @@
 @Section('content')
     <div class="wrapper">
         <div class="container-fluid mt-4">
-
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="mb-0">Working Area</h5>
                 <nav aria-label="breadcrumb">

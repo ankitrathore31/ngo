@@ -17,8 +17,46 @@ class MemberController extends Controller
     public function memberlist()
     {
         $member = Member::where('status', 1)
-            // ->where('survey_status', 0)
+            ->whereNull('position')
             ->get();
         return view('ngo.member.add-member-list', compact('member'));
+    }
+
+    public function showMember($id)
+    {
+        $record = Member::where('status', 1)->find($id);
+
+        return view('ngo.member.view-member', compact('record'));
+    }
+
+    public function savePosition(Request $request)
+    {
+        $request->validate([
+            'member_id' => 'required|exists:members,id',
+            'position_type' => 'required',
+            'position' => 'required',
+        ]);
+
+        $member = Member::find($request->member_id);
+        $member->position_type = $request->position_type;
+        $member->position = $request->position;
+        $member->save();
+
+        return redirect()->route('member-list')->with('success', 'Positon Successfully Added');
+    }
+
+    public function memberPostionlist()
+    {
+        $member = Member::where('status', 1)
+            ->whereNotNull('position')
+            ->get();
+        return view('ngo.member.member-position-list', compact('member'));
+    }
+
+    public function showMemberPosition($id)
+    {
+        $record = Member::where('status', 1)->find($id);
+
+        return view('ngo.member.view-member-position', compact('record'));
     }
 }
