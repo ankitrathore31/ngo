@@ -102,13 +102,13 @@
                                     <td>{{ $item->academic_session }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            <a href="{{ route('edit-reg',['id' => $item->id, 'type' => $item->reg_type]) }}"
+                                            <a href="{{ route('edit-reg',['id' => $item->id, 'type' => $item->reg_type ?? 'Member']) }}"
                                                 class="btn btn-primary btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="Edit" style="min-width: 38px; height: 38px;">
                                                 Approve
                                             </a>
 
-                                            <a href="{{ route('view-reg', $item->id) }}"
+                                            <a href="{{ route('view-reg', ['id' => $item->id, 'type' => $item->reg_type ?? 'Member']) }}"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="View" style="min-width: 38px; height: 38px;">
                                                 <i class="fa-regular fa-eye"></i>

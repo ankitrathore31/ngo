@@ -150,7 +150,7 @@
                             class="fas fa-donate"></i> DONATION</a>
                     <ul class="dropdown-menu bg-primary">
                         <li><a class="dropdown-item" href="{{route('donation')}}">Deposite Donations</a></li>
-                        <li><a class="dropdown-item" href="{{ 'donation-list'}}">Donations List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('donation-list') }}">Donations List</a></li>
                         <li><a class="dropdown-item" href="{{ route('online-donor-list')}}">Online Donations List</a></li>
                         {{-- <li><a class="dropdown-item" href="#">Donations Report</a></li> --}}
                         <li><a class="dropdown-item" href="{{route('donation-card-list')}}">Donation Card</a></li>
@@ -176,10 +176,10 @@
                 <!-- Membership -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
-                            class="fas fa-user-friends"></i> MEMBERSHIP</a>
+                        class="fas fa-user-friends"></i> MEMBERSHIP</a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="{{route('add-member-list') }}">Add Member</a></li>
-                        <li><a class="dropdown-item" href="#">Member List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('add-member-list') }}">Add Member Position</a></li>
+                        <li><a class="dropdown-item" href="{{ route('member-list') }}">Member List</a></li>
                         <li><a class="dropdown-item" href="#">Member Activity</a></li>
                         <li><a class="dropdown-item" href="#">Active Members</a></li>
                         <li><a class="dropdown-item" href="#">Unactive Members</a></li>

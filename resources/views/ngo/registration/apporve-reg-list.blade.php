@@ -109,7 +109,7 @@
                                                 Decline
                                             </a>
 
-                                            <a href="{{ route('show-apporve-reg', $item->id) }}"
+                                            <a href="{{ route('show-apporve-reg',['id' => $item->id, 'type' => $item->reg_type]) }}"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="View" style="min-width: 38px; height: 38px;">
                                                 <i class="fa-regular fa-eye"></i>

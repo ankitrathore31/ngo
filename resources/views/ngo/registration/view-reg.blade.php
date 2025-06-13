@@ -70,129 +70,133 @@
                     <div class="row mb-3">
                         <div class="col-sm-4 mb-3">
                             <strong>Application Date:</strong>
-                            {{ \Carbon\Carbon::parse($beneficiarie->application_date)->format('d-m-Y') }}
+                            {{ \Carbon\Carbon::parse($record->application_date)->format('d-m-Y') }}
                         </div>
                         <div class="col-sm-4 mb-3">
-                            <strong>Application No:</strong> {{ $beneficiarie->application_no }}
+                            <strong>Application No:</strong> {{ $record->application_no }}
                         </div>
                         <div class="col-sm-4 mb-3">
-                            <strong>Registraition Type:</strong> {{ $beneficiarie->reg_type }}
+                            <strong>Registraition Type:</strong> {{ $record->reg_type }}
                         </div>
                         {{-- <div class="col-sm-4 mb-3">
-                        <strong>Registraition No:</strong> {{ $beneficiarie->registration_no ?? 'Not '}}
+                        <strong>Registraition No:</strong> {{ $record->registration_no ?? 'Not '}}
                     </div>
                     <div class="col-sm-4 mb-3">
-                        <strong>Registraition Date:</strong> {{ \Carbon\Carbon::parse($beneficiarie->registraition_date)->format('d-m-Y') }}
+                        <strong>Registraition Date:</strong> {{ \Carbon\Carbon::parse($record->registraition_date)->format('d-m-Y') }}
                     </div> --}}
                         <div class="col-sm-4 mb-3">
-                            <strong>Session:</strong> {{ $beneficiarie->academic_session }}
+                            <strong>Session:</strong> {{ $record->academic_session }}
                         </div>
                     </div>
                     <hr>
                     <div class="row mb-3">
                         <div class="col-sm-4 mb-3">
-                            <strong>Name:</strong> {{ $beneficiarie->name }}
+                            <strong>Name:</strong> {{ $record->name }}
                         </div>
                         <div class="col-sm-4 mb-3">
-                            <strong>Guardian's Name:</strong> {{ $beneficiarie->gurdian_name }}
+                            <strong>Guardian's Name:</strong> {{ $record->gurdian_name }}
                         </div>
                         <div class="col-sm-4 mb-3">
-                            <strong>Mother's Name:</strong> {{ $beneficiarie->mother_name }}
+                            <strong>Mother's Name:</strong> {{ $record->mother_name }}
                         </div>
                         <div class="col-sm-4 mb-3">
-                            <strong>Area Type:</strong> {{ $beneficiarie->area_type }}
+                            <strong>Area Type:</strong> {{ $record->area_type }}
                         </div>
                         <div class="col-sm-4 mb-3">
-                            <strong>Village/Locality:</strong>{{ $beneficiarie->village }}
+                            <strong>Village/Locality:</strong>{{ $record->village }}
                         </div>
                         <div class="col-sm-4 mb-3">
-                            <strong>Post/Town:</strong> {{ $beneficiarie->post }}
+                            <strong>Post/Town:</strong> {{ $record->post }}
                         </div>
                         <div class="col-sm-4 mb-3">
-                            <strong>Block:</strong> {{ $beneficiarie->block }}
+                            <strong>Block:</strong> {{ $record->block }}
                         </div>
                         <div class="col-sm-4 mb-3">
-                            <strong>District</strong> {{ $beneficiarie->district }}
+                            <strong>District</strong> {{ $record->district }}
                         </div>
                         <div class="col-sm-4 mb-3">
-                            <strong>State</strong> {{ $beneficiarie->state }}
+                            <strong>State</strong> {{ $record->state }}
                         </div>
                         <div class="col-sm-4 mb-3">
-                            <strong>Pincode:</strong> {{ $beneficiarie->pincode }}
+                            <strong>Pincode:</strong> {{ $record->pincode }}
                         </div>
                         <div class="col-sm-4 mb-3">
-                            <strong>Country:</strong> {{ $beneficiarie->country }}
-                        </div>
-
-                        <div class="col-sm-4 mb-3">
-                            <strong>Gender:</strong> {{ $beneficiarie->gender }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Phone:</strong> {{ $beneficiarie->phone }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Email:</strong> {{ $beneficiarie->email ?? 'N/A' }}
+                            <strong>Country:</strong> {{ $record->country }}
                         </div>
 
+                        <div class="col-sm-4 mb-3">
+                            <strong>Gender:</strong> {{ $record->gender }}
+                        </div>
+                        <div class="col-sm-4 mb-3">
+                            <strong>Phone:</strong> {{ $record->phone }}
+                        </div>
+                        <div class="col-sm-4 mb-3">
+                            <strong>Email:</strong> {{ $record->email ?? 'N/A' }}
+                        </div>
+
 
                         <div class="col-sm-4 mb-3">
-                            <strong>Eligibility:</strong> {{ $beneficiarie->eligibility ?? 'N/A' }}
+                            <strong>Eligibility:</strong> {{ $record->eligibility ?? 'N/A' }}
                         </div>
                         <div class="col-sm-4 mb-3">
-                            <strong>Caste:</strong> {{ $beneficiarie->caste }}
+                            <strong>Caste:</strong> {{ $record->caste }}
                         </div>
                         <div class="col-sm-4 mb-3">
-                            <strong>Religion Category:</strong> {{ $beneficiarie->religion_category }}
+                            <strong>Religion Category:</strong> {{ $record->religion_category }}
                         </div>
                         <div class="col-sm-4 mb-3">
-                            <strong>Religion:</strong> {{ $beneficiarie->religion }}
+                            <strong>Religion:</strong> {{ $record->religion }}
                         </div>
 
 
 
                         <div class="col-sm-4 mb-3">
                             <strong>Date of Birth:</strong>
-                            {{ \Carbon\Carbon::parse($beneficiarie->dob)->format('d-m-Y') }}
+                            {{ \Carbon\Carbon::parse($record->dob)->format('d-m-Y') }}
                         </div>
                         <div class="col-sm-4 mb-3">
-                            <strong>Marital Status:</strong> {{ $beneficiarie->marital_status }}
+                            <strong>Marital Status:</strong> {{ $record->marital_status }}
                         </div>
                         <div class="col-sm-4 mb-3">
-                            <strong>Occupation:</strong> {{ $beneficiarie->occupation }}
+                            <strong>Occupation:</strong> {{ $record->occupation }}
                         </div>
 
                         <div class="col-sm-4 mb-3">
-                            <strong>Identity Type:</strong> {{ $beneficiarie->identity_type }}
+                            <strong>Identity Type:</strong> {{ $record->identity_type }}
                         </div>
                         <div class="col-sm-4 mb-3">
-                            <strong>Identity Number:</strong> {{ $beneficiarie->identity_no }}
+                            <strong>Identity Number:</strong> {{ $record->identity_no }}
                         </div>
                         <div class="col-sm-8 mb-3">
-                            <strong>Help Needed:</strong> {{ $beneficiarie->help_needed }}
+                            <strong>Help Needed:</strong> {{ $record->help_needed }}
                         </div>
                     </div>
-                    {{-- <div class="row">
-                    @if ($beneficiarie->image)
-                        <div class="row mb-3">
-                            <div class="col-sm-4 mb-3">
-                                <strong>Profile Image:</strong><br>
-                                <img src="{{ asset('benefries_images/' . $beneficiarie->image) }}" alt="Profile Image"
-                                    class="img-thumbnail" width="150">
+                    <div class="row">
+                        @php
+                            $imagePath = $record->reg_type === 'Member' ? 'member_images/' : 'benefries_images/';
+                        @endphp
+
+                        @if ($record->image)
+                            <div class="row mb-3">
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Profile Image:</strong><br>
+                                    <img src="{{ asset($imagePath . $record->image) }}" alt="Profile Image"
+                                        class="img-thumbnail" width="150">
+                                </div>
                             </div>
-                        </div>
-                    @endif
-                    <div class="col-sm-3 mb-3">
-                        @if ($beneficiarie->id_document)
-                            <strong>ID Document:</strong>
-                            <a href="{{ asset('benefries_images/' . $beneficiarie->id_document) }}" target="_blank">View
-                                Document</a>
                         @endif
+
+                        <div class="col-sm-3 mb-3">
+                            @if ($record->id_document)
+                                <strong>ID Document:</strong>
+                                <a href="{{ asset($imagePath . $record->id_document) }}" target="_blank">View Document</a>
+                            @endif
+                        </div>
                     </div>
-                </div> --}}
                     <hr>
                     <div class="row d-flex justify-content-between mt-2">
                         <div class="col-sm-4 mb-5">
-                            <label for="" class="from-label"><b>{{ $beneficiarie->reg_type }}Signature/ Thumb
+                            <label for="" class="from-label"><b>{{ $record->reg_type }}Signature/ Thumb
                                     Impression of the Recipient</b></label>
                         </div>
                         <div class="col-sm-4 mb-5">
