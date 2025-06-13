@@ -36,7 +36,7 @@
 
         <div class="container my-5">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="fw-bold">Online Registration Form</h2>
+                <h2 class="fw-bold">Facilities Status</h2>
                 <button onclick="window.print()" class="btn btn-primary">Print / Download</button>
             </div>
             <div class="card shadow-lg p-4 print-card">
