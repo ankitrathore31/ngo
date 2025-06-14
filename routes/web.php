@@ -229,12 +229,13 @@ Route::controller(StaffController::class)->group( function(){
 });
 
 Route::controller(MemberController::class)->group( function(){
-    Route::get('ngo/member-list', 'memberlist')->middleware('auth')->name('add-member-list');
+    Route::get('ngo/member-list', 'memberList')->middleware('auth')->name('member-list');
+    Route::get('ngo/add-member-list', 'addmemberlist')->middleware('auth')->name('add-member-list');
     Route::get('ngo/view-member/{id}', 'showMember')->middleware('auth')->name('view-member');
     Route::post('/member/save-position',  'savePosition')->middleware('auth')->name('save-member-position');
-    Route::get('ngo/member-position-list', 'memberPostionlist')->middleware('auth')->name('member-list');
+    Route::get('ngo/member-position-list', 'memberPostionlist')->middleware('auth')->name('member-position-list');
     Route::get('ngo/show-member/{id}', 'showMemberPosition')->middleware('auth')->name('show-member');
-
+    Route::get('ngo/member-certificate/{id}', 'MemberCerti')->middleware('auth')->name('member-certi');
 });
 
 Route::controller(DonationController::class)->group(function(){

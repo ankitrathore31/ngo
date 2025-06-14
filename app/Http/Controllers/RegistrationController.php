@@ -373,7 +373,7 @@ class RegistrationController extends Controller
                 return back()->with('error', 'Member not found.');
             }
 
-            $prefix = '3192000';
+            $prefix = '2192000';
 
             $latest = Member::where('registration_no', 'LIKE', $prefix . '%')
                 ->orderBy('registration_no', 'desc')
@@ -699,24 +699,29 @@ class RegistrationController extends Controller
         $data['status'] = 0;
         $prefix = '2191000';
 
-        // Get the latest application_no starting with the prefix
-        $latest = beneficiarie::where('application_no', 'LIKE', $prefix . '%')
+        // Get the latest application_no from both tables starting with prefix
+        $latestBeneficiarie = beneficiarie::where('application_no', 'LIKE', $prefix . '%')
             ->orderBy('application_no', 'desc')
             ->first();
 
-        if ($latest) {
-            // Extract the numeric sequence after the prefix
-            $last_sequence = (int)substr($latest->application_no, strlen($prefix));
-            $sequence_number = $last_sequence + 1;
-        } else {
-            // First record starts at 60
-            $sequence_number = 60;
-        }
+        $latestMember = Member::where('application_no', 'LIKE', $prefix . '%')
+            ->orderBy('application_no', 'desc')
+            ->first();
 
-        // Generate the new application number
+        // Determine the highest sequence from both models
+        $lastSequenceBeneficiarie = $latestBeneficiarie
+            ? (int)substr($latestBeneficiarie->application_no, strlen($prefix))
+            : 0;
+
+        $lastSequenceMember = $latestMember
+            ? (int)substr($latestMember->application_no, strlen($prefix))
+            : 0;
+
+        $last_sequence = max($lastSequenceBeneficiarie, $lastSequenceMember);
+        $sequence_number = $last_sequence + 1;
+
+        // Generate new application_no
         $data['application_no'] = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
-
-
         try {
             if (!empty($data['application_date'])) {
                 $data['application_date'] = Carbon::parse($data['application_date'])->format('Y-m-d');
@@ -759,6 +764,19 @@ class RegistrationController extends Controller
             }
             $beneficiarie = beneficiarie::create($data);
         } else if ($request->reg_type === 'Member') {
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('member_images'), $imageName);
+                $data['image'] = $imageName;
+            }
+
+            if ($request->hasFile('id_document')) {
+                $idDoc = $request->file('id_document');
+                $idDocName = time() . '_iddoc.' . $idDoc->getClientOriginalExtension();
+                $idDoc->move(public_path('member_images'), $idDocName);
+                $data['id_document'] = $idDocName;
+            }
             Member::create($data);
         }
 

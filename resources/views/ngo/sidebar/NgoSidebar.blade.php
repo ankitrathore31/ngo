@@ -178,8 +178,9 @@
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
                         class="fas fa-user-friends"></i> MEMBERSHIP</a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="{{ route('add-member-list') }}">Add Member Position</a></li>
                         <li><a class="dropdown-item" href="{{ route('member-list') }}">Member List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('add-member-list') }}">Add Member Position</a></li>
+                        <li><a class="dropdown-item" href="{{ route('member-position-list') }}">Member Position List</a></li>
                         <li><a class="dropdown-item" href="#">Member Activity</a></li>
                         <li><a class="dropdown-item" href="#">Active Members</a></li>
                         <li><a class="dropdown-item" href="#">Unactive Members</a></li>

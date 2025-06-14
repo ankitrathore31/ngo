@@ -42,6 +42,7 @@ class Member extends Model
         'occupation',
         'position_type',
         'position',
+        'receipt_no',
         'status',
     ];
 }
