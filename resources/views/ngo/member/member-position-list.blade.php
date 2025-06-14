@@ -32,6 +32,7 @@
                                 <th>Address</th>
                                 <th>Position Type</th>
                                 <th>Position</th>
+                                <th>Working Area</th>
                                 <th>Identity No.</th>
                                 <th>Identity Type</th>
                                 <th>Mobile No.</th>
@@ -63,6 +64,7 @@
                                     </td>
                                     <td>{{ $item->position_type ?? 'No Found'}}</td>
                                     <td>{{ $item->position ?? 'No Found'}}</td>
+                                    <td>{{ $item->working_area ?? 'No Found'}}</td>
                                     <td>{{ $item->identity_no }}</td>
                                     <td>{{ $item->identity_type }}</td>
                                     <td>{{ $item->phone }}</td>
@@ -96,7 +98,7 @@
                                             </a>
                                     </td>
                                      <td>
-                                          <a href="{{-- route('member-certi', $item->id) --}}"
+                                          <a href="{{ route('member-letter', $item->id) }}"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="View" style="min-width: 38px; height: 38px;"
                                                 onclick="alert('Update Soon')">

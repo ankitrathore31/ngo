@@ -108,10 +108,6 @@
                             </div>
 
                             <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label for="" class="form-label">Recipt No.</label>
-                                        <input type="number" class="form-control" name="receipt_no" required>
-                                    </div>
                                 <div class="mb-3">
                                     <label for="position_type" class="form-label">स्तर चुनें (Select Level)</label>
                                     <select class="form-select" id="position_type" name="position_type"
@@ -132,6 +128,10 @@
                                     <select class="form-select" id="position" name="position" required>
                                         <option selected disabled>पद चुनें</option>
                                     </select>
+                                    <div class="mb-2 mt-1">
+                                        <label for="" class="form-label">Working Area</label>
+                                        <input type="text" class="form-control" name="working_area" required>
+                                    </div>
                                 </div>
                             </div>
 

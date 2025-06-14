@@ -2,31 +2,20 @@
 @Section('content')
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="mb-0">Add Activity</h5>
+            <h5 class="mb-0">Add Member Activity</h5>
 
             <!-- Breadcrumb aligned to right -->
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                     <li class="breadcrumb-item"><a href="{{ route('activitylist') }}">Activity List</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Add Activity</li>
+                    <li class="breadcrumb-item active" aria-current="page">Add Member Activity</li>
                 </ol>
             </nav>
         </div>
         <div class="card m-1">
-            {{-- <div class="card-header">
-                <div class="card-title border-bottom p-2 bg-info text-center">
-                    <h3><b>ADD ACTIVITY</b></h3>
-                </div>
-            </div> --}}
             <div class="card-body">
-                <form action="{{ route('saveactivity') }}" method="POST" enctype="multipart/form-data" class="m-3">
+                <form action="{{ route('save-memberactivity') }}" method="POST" enctype="multipart/form-data" class="m-3">
                     @csrf
-                    {{-- <div class="row">
-                        <div class="col-md-4 col-sm-2 mb-3 text-start">
-                            <span class="me-2">Activity Sr. No. </span><input type="number" name="activity_no"
-                                class="w-50 @error('activity_no') is-invalid @enderror">
-                        </div>
-                    </div> --}}
                     <div class="row">
                         <div class="col-md-6 mb-3 form-group local-from">
                             <label class="form-label">Program name <span class="text-danger">*</span></label>
@@ -106,10 +95,6 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <!-- Label for Program Image -->
-                                {{-- <label for="program_image" class="form-label">Choose Program Image <span
-                                        class="login-danger">*</span></label> --}}
-
                                 <!-- Custom File Input (hidden default) -->
                                 <input type="file" class="form-control @error('program_image') is-invalid @enderror"
                                     name="program_image" id="program_image" required accept="image/*" style="display: none;"

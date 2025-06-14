@@ -181,7 +181,7 @@
                         <li><a class="dropdown-item" href="{{ route('member-list') }}">Member List</a></li>
                         <li><a class="dropdown-item" href="{{ route('add-member-list') }}">Add Member Position</a></li>
                         <li><a class="dropdown-item" href="{{ route('member-position-list') }}">Member Position List</a></li>
-                        <li><a class="dropdown-item" href="#">Member Activity</a></li>
+                        <li><a class="dropdown-item" href="{{ route('member-activitylist')}}">Member Activity</a></li>
                         <li><a class="dropdown-item" href="#">Active Members</a></li>
                         <li><a class="dropdown-item" href="#">Unactive Members</a></li>
                     </ul>
