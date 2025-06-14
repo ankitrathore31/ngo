@@ -52,7 +52,7 @@
 
     <div class="wrapper">
         <div class="d-flex justify-content-between align-item-centre mb-0 mt-4">
-            <h5 class="mb-0">Member Certificate</h5>
+            <h5 class="mb-0">Member Activity Certificate</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                     <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
@@ -70,7 +70,7 @@
             <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
                 <h5 class="mb-0">
                     {{-- <span data-lang="hi">दान रसीद</span> --}}
-                    <span>Member Certificate</span>
+                    <span>Member Activity Certificate</span>
                 </h5>
                 <div>
                     <button onclick="window.print()" class="btn btn-primary">Print / Download</button>
@@ -124,8 +124,8 @@
                     <div class="col-sm-6 mb-2">
                         <p class="text-center"
                             style="background-color: red; color: white; font-weight: bold; padding: 5px; border-radius: 10px;">
-                            <span data-lang="hi">मनोनयन प्रमाण </span>
-                            <span data-lang="en">Member Certificate </span>
+                            {{-- <span data-lang="hi"> प्रमाण </span> --}}
+                            <span>Activity Certificate </span>
                         </p>
                     </div>
 
@@ -234,31 +234,26 @@
                     <div class="col-sm-7 mb-2">
                         <div style="display: flex; align-items: flex-start; width: 100%;">
                             <strong style="white-space: nowrap; margin-right: 5px;">
-                                <span data-lang="hi">के निवासी हैं तथा ज्ञान भारती संस्था में</span>
-                                <span data-lang="en">is a resident of and nominated in Gyan Bharti Sanstha</span>
+                                <span data-lang="hi">के निवासी हैं तथा ज्ञान भारती संस्था के साथ मिलकर समाज में </span>
+                                <span data-lang="en">is a resident of and has contributed towards in Gyan Bharti Sanstha</span>
                             </strong>
                             <div
                                 style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: normal; overflow-wrap: break-word;">
-                                &nbsp;{{ $record->position }}
+                                &nbsp;{{ $category }}
                             </div>
                         </div>
                     </div>
-
                 </div>
-                <span data-lang="en">We have full faith in you that you will cooperate with full honesty and dedication in
-                    the promotion, expansion and social work of the organization. We wish you a bright future.</span>
-                <span data-lang="hi">के रूप में नामित हैं। हमें आप पर पूर्ण विश्वास है कि आप संस्था के प्रचार-प्रसार,
-                    विस्तार एवं सामाजिक कार्यों में पूर्ण ईमानदारी एवं निष्ठा से सहयोग करेंगे। हम आपके उज्ज्वल भविष्य की
-                    कामना
-                    करते हैं।
+                <span data-lang="en">The Institution is greatful to him and we wish him a bright future</span>
+                <span data-lang="hi">में योगदान दिया है। संस्था उनके प्रति आभारी है और हम उनके उज्ज्वल भविष्य की कामना करते हैं
                 </span>
-                <div class="d-flex justify-content-center align-items-center mt-3">
+                <div class="d-flex justify-content-between align-items-center mt-3">
                     <div class="col-sm-5 text-center">
                         Program Officer & Program Manager Signature with stamp
                     </div>
-                    <div class="col-sm-2 text-center">
+                    {{-- <div class="col-sm-2 text-center">
                         <img src="{{ asset('images/iso.png') }}" alt="Logo" width="100" height="100">
-                    </div>
+                    </div> --}}
                     <div class="col-sm-5 text-center">
                         Director Signature with stamp
                     </div>

@@ -125,17 +125,17 @@ class RegistrationController extends Controller
         // Generate new application_no
         $data['application_no'] = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
 
-        try {
-            if (!empty($data['application_date'])) {
-                $data['application_date'] = Carbon::parse($data['application_date'])->format('Y-m-d');
-            }
+        // try {
+        //     if (!empty($data['application_date'])) {
+        //         $data['application_date'] = Carbon::parse($data['application_date'])->format('Y-m-d');
+        //     }
 
-            if (!empty($data['dob'])) {
-                $data['dob'] = Carbon::parse($data['dob'])->format('Y-m-d');
-            }
-        } catch (\Exception $e) {
-            return back()->withErrors(['date_error' => 'Invalid date format for Application Date or Date of Birth.']);
-        }
+        //     if (!empty($data['dob'])) {
+        //         $data['dob'] = Carbon::parse($data['dob'])->format('Y-m-d');
+        //     }
+        // } catch (\Exception $e) {
+        //     return back()->withErrors(['date_error' => 'Invalid date format for Application Date or Date of Birth.']);
+        // }
 
         if ($request->reg_type === 'Beneficiaries') {
 
@@ -722,29 +722,6 @@ class RegistrationController extends Controller
 
         // Generate new application_no
         $data['application_no'] = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
-        try {
-            if (!empty($data['application_date'])) {
-                $data['application_date'] = Carbon::parse($data['application_date'])->format('Y-m-d');
-            }
-
-            if (!empty($data['dob'])) {
-                $data['dob'] = Carbon::parse($data['dob'])->format('Y-m-d');
-            }
-        } catch (\Exception $e) {
-            return back()->withErrors(['date_error' => 'Invalid date format for Application Date or Date of Birth.']);
-        }
-
-        // if ($request->hasFile('image')) {
-        //     $imageName = time() . '.' . $request->image->extension();
-        //     $request->image->move(public_path('benefries_images'), $imageName);
-        //     $data['image'] = $imageName;
-        // }
-
-        // if ($request->hasFile('id_document')) {
-        //     $idDocName = time() . '_iddoc.' . $request->id_document->extension();
-        //     $request->id_document->move(public_path('benefries_images'), $idDocName);
-        //     $data['id_document'] = $idDocName;
-        // }
 
         if ($request->reg_type === 'Beneficiaries') {
             // Handle profile image upload
@@ -762,7 +739,7 @@ class RegistrationController extends Controller
                 $idDoc->move(public_path('benefries_images'), $idDocName);
                 $data['id_document'] = $idDocName;
             }
-            $beneficiarie = beneficiarie::create($data);
+            $record = beneficiarie::create($data);
         } else if ($request->reg_type === 'Member') {
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
@@ -777,10 +754,10 @@ class RegistrationController extends Controller
                 $idDoc->move(public_path('member_images'), $idDocName);
                 $data['id_document'] = $idDocName;
             }
-            Member::create($data);
+            $record = Member::create($data);
         }
 
-        return view('home.registration.success-registration', compact('beneficiarie'))->with('success', 'Registration saved successfully.');
+        return view('home.registration.success-registration', compact('record'))->with('success', 'Registration saved successfully.');
     }
 
     public function onlineregistrationSetting()

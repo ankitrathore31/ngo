@@ -91,8 +91,8 @@
                                             <div class="col-md-6 col-sm-6 form-group mb-3">
                                                 <label for="application_date" class="form-label">Application Date: <span
                                                         class="text-danger">*</span></label>
-                                                <input type="text" name="application_date" id="application_date"
-                                                    class="form-control datepicker @error('dob') is-invalid @enderror"
+                                                <input type="date" name="application_date" id="application_date"
+                                                    class="form-control  @error('dob') is-invalid @enderror"
                                                     value="{{ old('application_date') }}" required>
                                                 @error('application_date')
                                                     <span class="text-danger">{{ $message }}</span>
@@ -142,8 +142,8 @@
                                             <div class="col-md-6 col-sm-6 form-group mb-3">
                                                 <label for="dob" class="form-label">Date of Birth: <span
                                                         class="text-danger">*</span></label>
-                                                <input type="text" name="dob" id="dob"
-                                                    class="form-control datepicker @error('dob') is-invalid @enderror"
+                                                <input type="date" name="dob" id="dob"
+                                                    class="form-control @error('dob') is-invalid @enderror"
                                                     value="{{ old('dob') }}" required>
                                                 @error('dob')
                                                     <span class="text-danger">{{ $message }}</span>

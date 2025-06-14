@@ -66,7 +66,7 @@ class SocialActivityController extends Controller
         // $activity->activity_no = $request->activity_no;
         $activity->program_name = $request->program_name;
         $activity->program_category = $request->program_category;
-        $activity->program_date = \Carbon\Carbon::createFromFormat('d-m-Y', $request->program_date)->format('Y-m-d');
+        $activity->program_date = $request->program_date;
         $activity->academic_session = $request->program_session;
         $activity->program_time = $request->program_time;
         $activity->program_address = $request->program_address;
@@ -98,7 +98,7 @@ class SocialActivityController extends Controller
         // $activity->activity_no = $request->activity_no;
         $activity->program_name = $request->program_name;
         $activity->program_category = $request->program_category;
-        $activity->program_date = \Carbon\Carbon::parse($request->program_date)->format('Y-m-d');
+        $activity->program_date = $request->program_date;
         $activity->academic_session = $request->program_session;
         $activity->program_time = $request->program_time;
         $activity->program_address = $request->program_address;

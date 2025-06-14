@@ -129,37 +129,57 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="row mb-3">
-                        <div class="col-sm-4 mb-3">
-                            <strong>Name:</strong> {{ $beneficiarie->name }}
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="row">
+                                <div class="col-sm-6 mb-3">
+                                    <strong>Name:</strong> {{ $beneficiarie->name }}
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <strong>Guardian's Name:</strong> {{ $beneficiarie->gurdian_name }}
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <strong>Mother's Name:</strong> {{ $beneficiarie->mother_name }}
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <strong>Area Type:</strong> {{ $beneficiarie->area_type }}
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <strong>Village/Locality:</strong>{{ $beneficiarie->village }}
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <strong>Post/Town:</strong> {{ $beneficiarie->post }}
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <strong>Block:</strong> {{ $beneficiarie->block }}
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <strong>District</strong> {{ $beneficiarie->district }}
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <strong>State</strong> {{ $beneficiarie->state }}
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <strong>Pincode:</strong> {{ $beneficiarie->pincode }}
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Guardian's Name:</strong> {{ $beneficiarie->gurdian_name }}
+                        <div class="col-sm-4">
+                            @php
+                                $imagePath = $beneficiarie->reg_type === 'Member' ? 'member_images/' : 'benefries_images/';
+                            @endphp
+
+                            {{-- @if ($beneficiarie->image) --}}
+                            <div class=" mb-3">
+                                <img src="{{ asset($imagePath . $beneficiarie->image) }}" alt="Image" class="img-thumbnail"
+                                    width="150">
+                                {{-- <br>
+                                    <strong class="text-center"> Image:</strong> --}}
+                            </div>
+                            {{-- @endif --}}
                         </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Mother's Name:</strong> {{ $beneficiarie->mother_name }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Area Type:</strong> {{ $beneficiarie->area_type }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Village/Locality:</strong>{{ $beneficiarie->village }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Post/Town:</strong> {{ $beneficiarie->post }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Block:</strong> {{ $beneficiarie->block }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>District</strong> {{ $beneficiarie->district }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>State</strong> {{ $beneficiarie->state }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Pincode:</strong> {{ $beneficiarie->pincode }}
-                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-sm-4 mb-3">
                             <strong>Country:</strong> {{ $beneficiarie->country }}
                         </div>
@@ -182,11 +202,12 @@
                             <strong>Caste:</strong> {{ $beneficiarie->caste }}
                         </div>
                         <div class="col-sm-4 mb-3">
-                            <strong>Religion:</strong> {{ $beneficiarie->religion }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
                             <strong>Religion Category:</strong> {{ $beneficiarie->religion_category }}
                         </div>
+                        <div class="col-sm-4 mb-3">
+                            <strong>Religion:</strong> {{ $beneficiarie->religion }}
+                        </div>
+
 
 
                         <div class="col-sm-4 mb-3">
@@ -206,50 +227,30 @@
                         <div class="col-sm-4 mb-3">
                             <strong>Identity Number:</strong> {{ $beneficiarie->identity_no }}
                         </div>
-                        <div class="col-sm-10 mb-3">
-                            <strong>Help Needed:</strong> {{ $beneficiarie->help_needed }}
-                        </div>
-                    </div>
-                    <hr>
-                    {{-- <b class="mb-3 text-center"><U>About Beneficiarie Survey & Facilities</U></b>
-                    <div class="row">
+                        @php
+                            $imagePath = $beneficiarie->reg_type === 'Member' ? 'member_images/' : 'benefries_images/';
+                        @endphp
 
                         <div class="col-sm-4 mb-3">
-                            <strong>Survey Date:</strong>
-                            {{ \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') }}
-                        </div>
-                        <div class="col-sm-8 mb-3">
-                            <strong>Survey Details.</strong> {{ $survey->survey_details }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Facilities Category:</strong> {{ $survey->facilities_category }}
-                        </div>
-                        <div class="col-sm-8 mb-3">
-                            <strong>Facilities</strong> {{ $survey->facilities }}
-                        </div>
-                    </div> --}}
-                    {{-- <div class="row">
-                    @if ($beneficiarie->image)
-                        <div class="row mb-3">
-                            <div class="col-sm-4 mb-3">
-                                <strong>Profile Image:</strong><br>
-                                <img src="{{ asset('benefries_images/' . $beneficiarie->image) }}" alt="Profile Image"
-                                    class="img-thumbnail" width="150">
-                            </div>
-                        </div>
-                    @endif
-                    <div class="col-sm-3 mb-3">
-                        @if ($beneficiarie->id_document)
+
                             <strong>ID Document:</strong>
-                            <a href="{{ asset('benefries_images/' . $beneficiarie->id_document) }}" target="_blank">View
-                                Document</a>
+                            <a href="{{ asset($imagePath . $beneficiarie->id_document) }}" target="_blank">View Document</a>
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        @if ($beneficiarie->reg_type == 'Beneficiaries')
+                            <div class="col-sm-8 mb-3">
+                                <strong>Help Needed:</strong> {{ $beneficiarie->help_needed }}
+                            </div>
                         @endif
                     </div>
-                </div> --}}
                     <hr>
                     <div class="row d-flex justify-content-between mt-2">
                         <div class="col-sm-4 mb-5">
-                            <label for="" class="from-label"><b>{{ $beneficiarie->reg_type }}Signature/ Thumb Impression of the Recipient</b></label>
+                            <label for="" class="from-label"><b>{{ $beneficiarie->reg_type }}Signature/ Thumb
+                                    Impression of the Recipient</b></label>
                         </div>
                         <div class="col-sm-4 mb-5">
                             <label for="" class="from-label"><b>Signature</b></label>

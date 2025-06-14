@@ -232,10 +232,15 @@ Route::controller(MemberController::class)->group( function(){
     Route::get('ngo/member-list', 'memberList')->middleware('auth')->name('member-list');
     Route::get('ngo/add-member-list', 'addmemberlist')->middleware('auth')->name('add-member-list');
     Route::get('ngo/view-member/{id}', 'showMember')->middleware('auth')->name('view-member');
-    Route::post('/member/save-position',  'savePosition')->middleware('auth')->name('save-member-position');
+    Route::post('ngo/save-position',  'savePosition')->middleware('auth')->name('save-member-position');
     Route::get('ngo/member-position-list', 'memberPostionlist')->middleware('auth')->name('member-position-list');
     Route::get('ngo/show-member/{id}', 'showMemberPosition')->middleware('auth')->name('show-member');
     Route::get('ngo/member-certificate/{id}', 'MemberCerti')->middleware('auth')->name('member-certi');
+    Route::get('ngo/member-letter/{id}', 'MemberLetter')->middleware('auth')->name('member-letter');
+    Route::get('ngo/member-activity-list', 'Memberactivitylist')->middleware('auth')->name('member-activitylist');
+    Route::get('ngo/add-member-activity', 'addmemberactivity')->middleware('auth')->name('add-memberactivity');
+    Route::post('ngo/save-member-activity',  'saveMemberactivity')->middleware('auth')->name('save-memberactivity');
+    Route::get('ngo/activity-certificate/{id}/{category}', 'MemberActivityCerti')->middleware('auth')->name('member-activity-certi');
 });
 
 Route::controller(DonationController::class)->group(function(){
