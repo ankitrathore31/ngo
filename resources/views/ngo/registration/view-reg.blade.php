@@ -167,9 +167,9 @@
                         <div class="col-sm-4 mb-3">
                             <strong>Identity Number:</strong> {{ $record->identity_no }}
                         </div>
-                        <div class="col-sm-8 mb-3">
+                        {{-- <div class="col-sm-8 mb-3">
                             <strong>Help Needed:</strong> {{ $record->help_needed }}
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="row">
                         @php

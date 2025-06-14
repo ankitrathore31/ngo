@@ -108,10 +108,14 @@
                             </div>
 
                             <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="" class="form-label">Recipt No.</label>
+                                        <input type="number" class="form-control" name="receipt_no" required>
+                                    </div>
                                 <div class="mb-3">
                                     <label for="position_type" class="form-label">स्तर चुनें (Select Level)</label>
-                                    <select class="form-select" id="position_type" name="position_type" onchange="updatePositions()"
-                                        required>
+                                    <select class="form-select" id="position_type" name="position_type"
+                                        onchange="updatePositions()" required>
                                         <option selected disabled>स्तर चुनें</option>
                                         <option value="rashtriya">राष्ट्रीय स्तर</option>
                                         <option value="pradesh">प्रदेश स्तर</option>

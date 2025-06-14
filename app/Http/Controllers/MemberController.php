@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Validator;
 
 class MemberController extends Controller
 {
-    public function memberlist()
+    public function addmemberlist()
     {
         $member = Member::where('status', 1)
             ->whereNull('position')
@@ -35,11 +35,13 @@ class MemberController extends Controller
             'member_id' => 'required|exists:members,id',
             'position_type' => 'required',
             'position' => 'required',
+            'receipt_no' =>'required',
         ]);
 
         $member = Member::find($request->member_id);
         $member->position_type = $request->position_type;
         $member->position = $request->position;
+        $member->receipt_no = $request->receipt_no;
         $member->save();
 
         return redirect()->route('member-list')->with('success', 'Positon Successfully Added');
@@ -53,10 +55,26 @@ class MemberController extends Controller
         return view('ngo.member.member-position-list', compact('member'));
     }
 
+      public function memberList()
+    {
+        $member = Member::where('status', 1)
+            ->get();
+        return view('ngo.member.member-list', compact('member'));
+    }
+
     public function showMemberPosition($id)
     {
         $record = Member::where('status', 1)->find($id);
 
         return view('ngo.member.view-member-position', compact('record'));
+    }
+
+     public function MemberCerti($id)
+    {
+        $record = Member::where('status', 1)
+            ->whereNotNull('position')
+            ->find($id);
+
+        return view('ngo.member.member-certificate', compact('record'));
     }
 }
