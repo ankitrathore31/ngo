@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Member extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'academic_session',
@@ -44,5 +46,7 @@ class Member extends Model
         'position',
         'working_area',
         'status',
+        'deleted_reason',
+        'deleted_date',
     ];
 }

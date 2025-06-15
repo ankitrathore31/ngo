@@ -138,19 +138,19 @@
                 <div class="row mb-3">
                     <div class="col-sm-4 mb-3">
                         <strong>Application Date:</strong>
-                        {{ \Carbon\Carbon::parse($beneficiarie->application_date)->format('d-m-Y') }}
+                        {{ \Carbon\Carbon::parse($record->application_date)->format('d-m-Y') }}
                     </div>
                     <div class="col-sm-4 mb-3">
-                        <strong>Application No:</strong> {{ $beneficiarie->application_no }}
+                        <strong>Application No:</strong> {{ $record->application_no }}
                     </div>
                     <div class="col-sm-4 mb-3">
-                        <strong>Registraition Type:</strong> {{ $beneficiarie->reg_type }}
+                        <strong>Registraition Type:</strong> {{ $record->reg_type }}
                     </div>
                     <div class="col-sm-4 mb-3">
                         <strong>Registraition No:</strong>
                     </div>
                     <div class="col-sm-4 mb-3">
-                        <strong>Session:</strong> {{ $beneficiarie->academic_session }}
+                        <strong>Session:</strong> {{ $record->academic_session }}
                     </div>
                 </div>
                 <hr>
@@ -274,7 +274,7 @@
                 <hr>
                 <div class="row d-flex justify-content-between mt-2">
                     <div class="col-sm-4 mb-5">
-                        <label for="" class="from-label"><b>{{ $beneficiarie->reg_type }}Signature</b></label>
+                        <label for="" class="from-label"><b>{{ $record->reg_type }}Signature</b></label>
                     </div>
                     <div class="col-sm-4 mb-5">
                         <label for="" class="from-label"><b>Applicant Signature</b></label>

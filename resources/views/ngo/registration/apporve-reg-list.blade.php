@@ -115,7 +115,7 @@
                                                 <i class="fa-regular fa-eye"></i>
                                             </a>
 
-                                            <a href="{{ route('delete-reg', $item->id) }}"
+                                            <a href="{{ route('delete-view',['id' => $item->id, 'type' => $item->reg_type ?? 'Member']) }}"
                                                 class="btn btn-danger btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="Delete" style="min-width: 38px; height: 38px;">
                                                 <i class="fa-regular fa-trash-can"></i>
