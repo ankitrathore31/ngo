@@ -101,7 +101,7 @@
                                           <a href="{{ route('member-letter', $item->id) }}"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="View" style="min-width: 38px; height: 38px;"
-                                                onclick="alert('Update Soon')">
+                                                >
                                                 Letter
                                             </a>
                                     </td>
