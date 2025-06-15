@@ -99,20 +99,33 @@ class RegistrationController extends Controller
         ]);
 
         $data['status'] = 0;
+        $prefix = '2191000';
+
+        $latestMember = Member::where('application_no', 'LIKE', $prefix . '%')
+            ->orderBy('application_no', 'desc')
+            ->first();
+
+        $latestBeneficiary = beneficiarie::where('application_no', 'LIKE', $prefix . '%')
+            ->orderBy('application_no', 'desc')
+            ->first();
+
+        $lastSequenceMember = $latestMember
+            ? (int)substr($latestMember->application_no, strlen($prefix))
+            : 0;
+
+        $lastSequenceBeneficiary = $latestBeneficiary
+            ? (int)substr($latestBeneficiary->application_no, strlen($prefix))
+            : 0;
+
+        $lastSequence = max($lastSequenceMember, $lastSequenceBeneficiary);
+
+        $sequenceNumber = $lastSequence + 1;
+
+        $data['application_no'] = $prefix . str_pad($sequenceNumber, 3, '0', STR_PAD_LEFT);
+
 
         if ($request->reg_type === 'Beneficiaries') {
-            $prefix = '2191000';
-            $latestBeneficiary = beneficiarie::where('application_no', 'LIKE', $prefix . '%')
-                ->orderBy('application_no', 'desc')
-                ->first();
 
-            $lastSequenceBeneficiary = $latestBeneficiary
-                ? (int)substr($latestBeneficiary->application_no, strlen($prefix))
-                : 0;
-
-            $sequence_number = $lastSequenceBeneficiary + 1;
-
-            $data['application_no'] = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
 
             // Handle profile image upload
             if ($request->hasFile('image')) {
@@ -132,18 +145,7 @@ class RegistrationController extends Controller
 
             beneficiarie::create($data);
         } else if ($request->reg_type === 'Member') {
-            $prefix = '2191000';
-            $latestMember = Member::where('application_no', 'LIKE', $prefix . '%')
-                ->orderBy('application_no', 'desc')
-                ->first();
 
-            $lastSequenceMember = $latestMember
-                ? (int)substr($latestMember->application_no, strlen($prefix))
-                : 0;
-
-            $sequence_number = $lastSequenceMember + 1;
-
-            $data['application_no'] = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
 
             // Handle profile image upload
             if ($request->hasFile('image')) {
@@ -335,6 +337,31 @@ class RegistrationController extends Controller
             'registration_date' => 'required|date',
         ]);
 
+        $prefix = '2192000';
+
+        // Get latest registration_no from both models
+        $latestBeneficiarie = beneficiarie::where('registration_no', 'LIKE', $prefix . '%')
+            ->orderBy('registration_no', 'desc')
+            ->first();
+
+        $latestMember = Member::where('registration_no', 'LIKE', $prefix . '%')
+            ->orderBy('registration_no', 'desc')
+            ->first();
+
+        // Extract sequence numbers, fallback to 54
+        $lastSequenceBeneficiarie = $latestBeneficiarie
+            ? (int)substr($latestBeneficiarie->registration_no, strlen($prefix))
+            : 54;
+
+        $lastSequenceMember = $latestMember
+            ? (int)substr($latestMember->registration_no, strlen($prefix))
+            : 54;
+
+        // Determine the next sequence number
+        $lastSequence = max($lastSequenceBeneficiarie, $lastSequenceMember);
+        $sequenceNumber = $lastSequence + 1;
+        $registrationNo = $prefix . str_pad($sequenceNumber, 3, '0', STR_PAD_LEFT);
+
         if ($type === 'Beneficiaries') {
             $beneficiarie = beneficiarie::find($id);
             if (!$beneficiarie) {
@@ -342,38 +369,22 @@ class RegistrationController extends Controller
             }
 
             $beneficiarie->status = 1;
-            $prefix = '2192000';
-
-            $latest = beneficiarie::where('registration_no', 'LIKE', $prefix . '%')
-                ->orderBy('registration_no', 'desc')
-                ->first();
-
-            $last_sequence = $latest ? (int)substr($latest->registration_no, strlen($prefix)) : 54;
-            $sequence_number = $last_sequence + 1;
-
-            $beneficiarie->registration_no = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
+            $beneficiarie->registration_no = $registrationNo;
             $beneficiarie->registration_date = Carbon::parse($request->registration_date);
             $beneficiarie->survey_status = 0;
             $beneficiarie->save();
 
             return redirect()->route('approve-registration')->with('success', 'Beneficiarie approved successfully.');
-        } elseif ($type === 'Member') {
+        }
+
+        if ($type === 'Member') {
             $member = Member::find($id);
             if (!$member) {
                 return back()->with('error', 'Member not found.');
             }
 
-            $prefix = '2192000';
-
-            $latest = Member::where('registration_no', 'LIKE', $prefix . '%')
-                ->orderBy('registration_no', 'desc')
-                ->first();
-
-            $last_sequence = $latest ? (int)substr($latest->registration_no, strlen($prefix)) : 54;
-            $sequence_number = $last_sequence + 1;
-
             $member->status = 1;
-            $member->registration_no = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
+            $member->registration_no = $registrationNo;
             $member->registration_date = Carbon::parse($request->registration_date);
             $member->save();
 
@@ -382,6 +393,7 @@ class RegistrationController extends Controller
 
         return redirect()->back()->with('error', 'Unknown registration type.');
     }
+
 
 
     public function showApporveReg($id, $type)
@@ -740,20 +752,32 @@ class RegistrationController extends Controller
         ]);
 
         $data['status'] = 0;
+        $prefix = '2191000';
+
+        $latestMember = Member::where('application_no', 'LIKE', $prefix . '%')
+            ->orderBy('application_no', 'desc')
+            ->first();
+
+        $latestBeneficiary = beneficiarie::where('application_no', 'LIKE', $prefix . '%')
+            ->orderBy('application_no', 'desc')
+            ->first();
+
+        $lastSequenceMember = $latestMember
+            ? (int)substr($latestMember->application_no, strlen($prefix))
+            : 0;
+
+        $lastSequenceBeneficiary = $latestBeneficiary
+            ? (int)substr($latestBeneficiary->application_no, strlen($prefix))
+            : 0;
+
+        $lastSequence = max($lastSequenceMember, $lastSequenceBeneficiary);
+
+        $sequenceNumber = $lastSequence + 1;
+
+        $data['application_no'] = $prefix . str_pad($sequenceNumber, 3, '0', STR_PAD_LEFT);
 
         if ($request->reg_type === 'Beneficiaries') {
-            $prefix = '2191000';
-            $latestBeneficiary = beneficiarie::where('application_no', 'LIKE', $prefix . '%')
-                ->orderBy('application_no', 'desc')
-                ->first();
-
-            $lastSequenceBeneficiary = $latestBeneficiary
-                ? (int)substr($latestBeneficiary->application_no, strlen($prefix))
-                : 0;
-
-            $sequence_number = $lastSequenceBeneficiary + 1;
-
-            $data['application_no'] = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
+        
 
             // Handle profile image upload
             if ($request->hasFile('image')) {
@@ -773,18 +797,6 @@ class RegistrationController extends Controller
 
             $record =  beneficiarie::create($data);
         } else if ($request->reg_type === 'Member') {
-            $prefix = '2191000';
-            $latestMember = Member::where('application_no', 'LIKE', $prefix . '%')
-                ->orderBy('application_no', 'desc')
-                ->first();
-
-            $lastSequenceMember = $latestMember
-                ? (int)substr($latestMember->application_no, strlen($prefix))
-                : 0;
-
-            $sequence_number = $lastSequenceMember + 1;
-
-            $data['application_no'] = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
 
             // Handle profile image upload
             if ($request->hasFile('image')) {
