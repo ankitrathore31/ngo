@@ -76,7 +76,7 @@
                         <tbody>
                             @foreach ($combined as $index => $item)
                                 <tr>
-                                    <td>{{ $index + 1 }}</td> <!-- Sr. No. -->
+                                    <td>{{ $index + 1 }}</td>
                                     <td>{{ \Carbon\Carbon::parse($item->application_date)->format('d-m-Y') }}</td>
                                     <td>{{ $item->application_no }}</td>
                                     <td>{{ \Carbon\Carbon::parse($item->registration_date)->format('d-m-Y') }}</td>

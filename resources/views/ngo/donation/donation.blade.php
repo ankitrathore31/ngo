@@ -1,12 +1,12 @@
 @extends('ngo.layout.master')
 @section('content')
     <div class="wrapper">
-        <div class="d-flex justify-content-between align-item-centre mb-0 mt-3">
+        <div class="d-flex justify-content-between align-record-centre mb-2 mt-3">
             <h5 class="mb-0">Donation</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
-                    <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Donation</li>
+                    <li class="breadcrumb-record"><a href="{{ url('dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-record active" aria-current="page">Donation</li>
                 </ol>
             </nav>
         </div>
@@ -15,21 +15,35 @@
                 {{ session('success') }}
             </div>
         @endif
-        <div class="container">
+        <div class="container mt-2">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">
+                    <span data-lang="hi">दान पंजीकरण फॉर्म</span>
+                    <span data-lang="en">Donation Registration Form</span>
+                </h5>
+                <div>
+                    <button class="btn btn-sm btn-outline-primary" onclick="setLanguage('en')">English</button>
+                    <button class="btn btn-sm btn-outline-success" onclick="setLanguage('hi')">हिंदी</button>
+                </div>
+            </div>
             <div class="card">
                 <div class="card-header">
                     <a href="{{ route('donation-list') }}" class="btn btn-success">Donation List</a>
                 </div>
                 <div class="card-body shadow rounded p-4 my-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="mb-0">
-                            <span data-lang="hi">दान पंजीकरण फॉर्म</span>
-                            <span data-lang="en">Donation Registration Form</span>
-                        </h5>
-                        <div>
-                            <button class="btn btn-sm btn-outline-primary" onclick="setLanguage('en')">English</button>
-                            <button class="btn btn-sm btn-outline-success" onclick="setLanguage('hi')">हिंदी</button>
-                        </div>
+
+                    <div class="row">
+                        {{-- <div class="col-md-12"> --}}
+                        <form method="GET" action="{{ route('donation') }}" class="row mb-4">
+                            <div class="col-md-4">
+                                <input type="text" name="search_key" class="form-control"
+                                    placeholder="Registration No. or Name" value="{{ request('search_key') }}">
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-success">Search</button>
+                            </div>
+                        </form>
+                        {{-- </div> --}}
                     </div>
                     <form action="{{ route('save-donation') }}" method="post">
                         @csrf
@@ -41,7 +55,7 @@
                                     <span data-lang="en">Receipt No.</span>
                                 </label>
                                 <input type="text" class="form-control @error('receipt_no') is-invalid @enderror"
-                                    name="receipt_no" value="{{ old('receipt_no') }}">
+                                    name="receipt_no" value="{{ old('receipt_no', $newReceiptNo) }}">
                                 @error('receipt_no')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -57,7 +71,7 @@
                                     <option value="">Select Session</option>
                                     @foreach ($data as $session)
                                         <option value="{{ $session->session_date }}"
-                                            {{ old('session') == $session->session_date ? 'selected' : '' }}>
+                                            {{ old('session', $record->academic_session ?? '') == $session->session_date ? 'selected' : '' }}>
                                             {{ $session->session_date }}
                                         </option>
                                     @endforeach
@@ -66,6 +80,7 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+
 
                             <!-- Date -->
                             <div class="col-md-4">
@@ -90,7 +105,7 @@
                                         <span data-lang="en">Full Name</span>
                                     </label>
                                     <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                        name="name" value="{{ old('name') }}">
+                                        name="name" value="{{ old('name', $record->name ?? '') }}">
                                     @error('name')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -102,8 +117,8 @@
                                         <span data-lang="en">Mobile Number</span>
                                     </label>
                                     <input type="text" class="form-control @error('mobile') is-invalid @enderror"
-                                        name="mobile" value="{{ old('mobile') }}" maxlength="10" pattern="[0-9]{10}"
-                                        placeholder="10-digit number">
+                                        name="mobile" value="{{ old('mobile', $record->phone ?? '') }}" maxlength="10"
+                                        pattern="[0-9]{10}" placeholder="10-digit number">
                                     @error('mobile')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -118,7 +133,7 @@
                                 <span data-lang="en">Father/Husband's Name</span>
                             </label>
                             <input type="text" class="form-control @error('gurdian_name') is-invalid @enderror"
-                                name="gurdian_name" value="{{ old('gurdian_name') }}">
+                                name="gurdian_name" value="{{ old('gurdian_name', $record->gurdian_name ?? '') }}">
                             @error('gurdian_name')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -130,8 +145,10 @@
                                 <span data-lang="hi">पता</span>
                                 <span data-lang="en">Address</span>
                             </label>
-                            <input type="text" class="form-control @error('address') is-invalid @enderror" name="address"
-                                value="{{ old('address') }}">
+                            <input type="text" class="form-control @error('address') is-invalid @enderror"
+                                name="address"
+                                value="{{ old('address', optional($record)->village . ', ' . optional($record)->post . ', ' . optional($record)->block . ', ' . optional($record)->district . ', ' . optional($record)->state . ' - ' . optional($record)->pincode) }}">
+
                             @error('address')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
