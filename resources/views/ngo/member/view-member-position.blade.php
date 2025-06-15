@@ -158,8 +158,6 @@
                         <div class="col-sm-4 mb-3">
                             <strong>Email:</strong> {{ $record->email ?? 'N/A' }}
                         </div>
-
-
                         <div class="col-sm-4 mb-3">
                             <strong>Eligibility:</strong> {{ $record->eligibility ?? 'N/A' }}
                         </div>
@@ -172,8 +170,6 @@
                         <div class="col-sm-4 mb-3">
                             <strong>Religion:</strong> {{ $record->religion }}
                         </div>
-
-
 
                         <div class="col-sm-4 mb-3">
                             <strong>Date of Birth:</strong>

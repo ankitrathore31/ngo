@@ -99,51 +99,26 @@ class RegistrationController extends Controller
         ]);
 
         $data['status'] = 0;
-        $prefix = '2191000';
-
-        // Get the latest application_no from both tables starting with prefix
-        $latestBeneficiarie = beneficiarie::where('application_no', 'LIKE', $prefix . '%')
-            ->orderBy('application_no', 'desc')
-            ->first();
-
-        $latestMember = Member::where('application_no', 'LIKE', $prefix . '%')
-            ->orderBy('application_no', 'desc')
-            ->first();
-
-        // Determine the highest sequence from both models
-        $lastSequenceBeneficiarie = $latestBeneficiarie
-            ? (int)substr($latestBeneficiarie->application_no, strlen($prefix))
-            : 0;
-
-        $lastSequenceMember = $latestMember
-            ? (int)substr($latestMember->application_no, strlen($prefix))
-            : 0;
-
-        $last_sequence = max($lastSequenceBeneficiarie, $lastSequenceMember);
-        $sequence_number = $last_sequence + 1;
-
-        // Generate new application_no
-        $data['application_no'] = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
-
-        // try {
-        //     if (!empty($data['application_date'])) {
-        //         $data['application_date'] = Carbon::parse($data['application_date'])->format('Y-m-d');
-        //     }
-
-        //     if (!empty($data['dob'])) {
-        //         $data['dob'] = Carbon::parse($data['dob'])->format('Y-m-d');
-        //     }
-        // } catch (\Exception $e) {
-        //     return back()->withErrors(['date_error' => 'Invalid date format for Application Date or Date of Birth.']);
-        // }
 
         if ($request->reg_type === 'Beneficiaries') {
+            $prefix = '2191000';
+            $latestBeneficiary = beneficiarie::where('application_no', 'LIKE', $prefix . '%')
+                ->orderBy('application_no', 'desc')
+                ->first();
+
+            $lastSequenceBeneficiary = $latestBeneficiary
+                ? (int)substr($latestBeneficiary->application_no, strlen($prefix))
+                : 0;
+
+            $sequence_number = $lastSequenceBeneficiary + 1;
+
+            $data['application_no'] = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
 
             // Handle profile image upload
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('benefries_images'), $imageName);
+                $image->move(public_path('beneficiaries_images'), $imageName);
                 $data['image'] = $imageName;
             }
 
@@ -151,13 +126,26 @@ class RegistrationController extends Controller
             if ($request->hasFile('id_document')) {
                 $idDoc = $request->file('id_document');
                 $idDocName = time() . '_iddoc.' . $idDoc->getClientOriginalExtension();
-                $idDoc->move(public_path('benefries_images'), $idDocName);
+                $idDoc->move(public_path('beneficiaries_images'), $idDocName);
                 $data['id_document'] = $idDocName;
             }
 
             beneficiarie::create($data);
         } else if ($request->reg_type === 'Member') {
+            $prefix = '2191000';
+            $latestMember = Member::where('application_no', 'LIKE', $prefix . '%')
+                ->orderBy('application_no', 'desc')
+                ->first();
 
+            $lastSequenceMember = $latestMember
+                ? (int)substr($latestMember->application_no, strlen($prefix))
+                : 0;
+
+            $sequence_number = $lastSequenceMember + 1;
+
+            $data['application_no'] = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
+
+            // Handle profile image upload
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
@@ -165,18 +153,20 @@ class RegistrationController extends Controller
                 $data['image'] = $imageName;
             }
 
+            // Handle ID document upload
             if ($request->hasFile('id_document')) {
                 $idDoc = $request->file('id_document');
                 $idDocName = time() . '_iddoc.' . $idDoc->getClientOriginalExtension();
                 $idDoc->move(public_path('member_images'), $idDocName);
                 $data['id_document'] = $idDocName;
             }
+
             Member::create($data);
         }
 
+
         return redirect()->route('pending-registration')->with('success', 'Registration saved successfully.');
     }
-
 
     public function editRegistration($id, $type)
     {
@@ -191,7 +181,6 @@ class RegistrationController extends Controller
 
         return view('ngo.registration.edit-reg', compact('record', 'data', 'type'));
     }
-
 
     public function UpdateRegistration(Request $request, $id)
     {
@@ -304,9 +293,9 @@ class RegistrationController extends Controller
             $queryMember->where('name', 'like', '%' . $request->name . '%');
         }
 
-        $pendingbene = $queryBene->get();
-        $pendingmemeber = $queryMember->get();
-        $combined = $pendingbene->merge($pendingmemeber);
+        $pendingbene = $queryBene->orderBy('created_at', 'asc')->get();
+        $pendingmemeber = $queryMember->orderBy('created_at', 'asc')->get();
+        $combined = $pendingbene->merge($pendingmemeber)->sortBy('created_at');
         $data = academic_session::all();
 
         return view('ngo.registration.pending-reg-list', compact('data', 'pendingbene', 'pendingmemeber', 'combined'));
@@ -332,10 +321,11 @@ class RegistrationController extends Controller
             $queryMember->where('name', 'like', '%' . $request->name . '%');
         }
 
-        $approvebeneficiarie = $queryBene->get();
-        $approvemember = $queryMember->get();
+        $approvebeneficiarie = $queryBene->orderBy('created_at', 'asc')->get();
+        $approvemember = $queryMember->orderBy('created_at', 'asc')->get();
+
         $data = academic_session::all();
-        $combined = $approvebeneficiarie->merge($approvemember);
+        $combined = $approvebeneficiarie->merge($approvemember)->sortBy('created_at');
         return view('ngo.registration.apporve-reg-list', compact('data', 'approvebeneficiarie', 'approvemember', 'combined'));
     }
 
@@ -553,55 +543,108 @@ class RegistrationController extends Controller
         return redirect()->back()->with('error', 'Record not found or type is invalid.');
     }
 
-    public function deleteRegistrationPage($id)
+    public function deleteRegistrationPage($id, $type)
     {
 
-        $beneficiarie = beneficiarie::find($id);
-        return view('ngo.registration.delete-reg', compact('beneficiarie'));
+        if ($type === 'Beneficiaries') {
+            $record = beneficiarie::find($id);
+        } else {
+            $record = Member::find($id);
+        }
+        return view('ngo.registration.delete-reg', compact('record'));
     }
 
-    public function deleteRegistration(Request $request, $id)
+    public function deleteRegistration(Request $request, $id, $type)
     {
-        $beneficiarie = beneficiarie::find($id);
-        if (!$beneficiarie) {
+        // Validate delete reason and date
+        $request->validate([
+            'reason' => 'required|string',
+            'delete_date' => 'required|date',
+        ]);
+
+        // Find the record based on type
+        if ($type === 'Beneficiaries') {
+            $record = beneficiarie::find($id);
+        } else if ($type === 'Member') {
+            $record = Member::find($id);
+        } else {
+            return redirect()->back()->with('error', 'Invalid type provided.');
+        }
+
+        if (!$record) {
             return redirect()->back()->with('error', 'Record not found.');
         }
 
-        // Validate reason
-        $request->validate([
-            'reason' => 'required|string',
-            'delete_date',
-        ]);
+        // Update delete reason and date before deletion
+        $record->delete_reason = $request->input('reason');
+        $record->delete_date = Carbon::parse($request->input('delete_date'));
+        $record->save();
 
+        // Soft delete the record (ensure your model uses SoftDeletes)
+        $record->delete();
 
-        $beneficiarie->delete_reason = $request->input('reason');
-        $beneficiarie->delete_date = Carbon::parse($request->input('delete_date'));
-        $beneficiarie->save();
-
-
-        $beneficiarie->delete();
-
-        return redirect()->route('recover')->with('success', 'Registration deleted successfully.');
+        return redirect()->route('recover')->with('success', ucfirst($type) . ' registration deleted successfully.');
     }
 
-    public function recover()
+    //   public function deleteAppRegistrationPage($id, $type)
+    // {
+
+    //     if ($type === 'Beneficiaries') {
+    //         $record = beneficiarie::where('status', 0)->findorFail($id);
+    //     } else {
+    //         $record = Member::where('status', 0)->findorFail($id);
+    //     }
+    //     return view('ngo.registration.delete-reg', compact('record'));
+    // }
+
+    public function recover(Request $request)
     {
-        $deletedBeneficiaries = beneficiarie::onlyTrashed()->get();
-        return view('ngo.registration.recover-reg', compact('deletedBeneficiaries'));
+        $queryBene = beneficiarie::onlyTrashed();
+        $queryMember = Member::onlyTrashed();
+
+        // Apply filters
+        if ($request->filled('session_filter')) {
+            $queryBene->where('academic_session', $request->session_filter);
+            $queryMember->where('academic_session', $request->session_filter);
+        }
+
+        if ($request->filled('application_no')) {
+            $queryBene->where('application_no', $request->application_no);
+            $queryMember->where('application_no', $request->application_no);
+        }
+
+        if ($request->filled('name')) {
+            $queryBene->where('name', 'like', '%' . $request->name . '%');
+            $queryMember->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        $deletedBeneficiaries = $queryBene->get();
+        $deletedMembers = $queryMember->get();
+        $combined = $deletedBeneficiaries->merge($deletedMembers);
+        $data = academic_session::all();
+
+        return view('ngo.registration.recover-reg', compact('combined', 'deletedBeneficiaries', 'deletedMembers', 'data'));
     }
 
-    public function recoverItem($id)
-    {
-        $beneficiarie = beneficiarie::onlyTrashed()->find($id);
 
-        if (!$beneficiarie) {
+    public function recoverItem($id, $type)
+    {
+        if ($type === 'Beneficiaries') {
+            $record = beneficiarie::onlyTrashed()->find($id);
+        } elseif ($type === 'Member') {
+            $record = Member::onlyTrashed()->find($id);
+        } else {
+            return redirect()->route('recover')->with('error', 'Invalid type provided.');
+        }
+
+        if (!$record) {
             return redirect()->route('recover')->with('error', 'Record not found in deleted items.');
         }
 
-        // Restore the record
-        $beneficiarie->restore();
+        // Restore the soft-deleted record
+        $record->restore();
 
-        return redirect()->route('recover')->with('success', 'Beneficiary recovered successfully.');
+        return redirect()->route('recover')->with('success', ucfirst($type) . ' recovered successfully.');
     }
 
     public function onlineregistration()
@@ -697,38 +740,26 @@ class RegistrationController extends Controller
         ]);
 
         $data['status'] = 0;
-        $prefix = '2191000';
-
-        // Get the latest application_no from both tables starting with prefix
-        $latestBeneficiarie = beneficiarie::where('application_no', 'LIKE', $prefix . '%')
-            ->orderBy('application_no', 'desc')
-            ->first();
-
-        $latestMember = Member::where('application_no', 'LIKE', $prefix . '%')
-            ->orderBy('application_no', 'desc')
-            ->first();
-
-        // Determine the highest sequence from both models
-        $lastSequenceBeneficiarie = $latestBeneficiarie
-            ? (int)substr($latestBeneficiarie->application_no, strlen($prefix))
-            : 0;
-
-        $lastSequenceMember = $latestMember
-            ? (int)substr($latestMember->application_no, strlen($prefix))
-            : 0;
-
-        $last_sequence = max($lastSequenceBeneficiarie, $lastSequenceMember);
-        $sequence_number = $last_sequence + 1;
-
-        // Generate new application_no
-        $data['application_no'] = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
 
         if ($request->reg_type === 'Beneficiaries') {
+            $prefix = '2191000';
+            $latestBeneficiary = beneficiarie::where('application_no', 'LIKE', $prefix . '%')
+                ->orderBy('application_no', 'desc')
+                ->first();
+
+            $lastSequenceBeneficiary = $latestBeneficiary
+                ? (int)substr($latestBeneficiary->application_no, strlen($prefix))
+                : 0;
+
+            $sequence_number = $lastSequenceBeneficiary + 1;
+
+            $data['application_no'] = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
+
             // Handle profile image upload
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('benefries_images'), $imageName);
+                $image->move(public_path('beneficiaries_images'), $imageName);
                 $data['image'] = $imageName;
             }
 
@@ -736,11 +767,26 @@ class RegistrationController extends Controller
             if ($request->hasFile('id_document')) {
                 $idDoc = $request->file('id_document');
                 $idDocName = time() . '_iddoc.' . $idDoc->getClientOriginalExtension();
-                $idDoc->move(public_path('benefries_images'), $idDocName);
+                $idDoc->move(public_path('beneficiaries_images'), $idDocName);
                 $data['id_document'] = $idDocName;
             }
-            $record = beneficiarie::create($data);
+
+            $record =  beneficiarie::create($data);
         } else if ($request->reg_type === 'Member') {
+            $prefix = '2191000';
+            $latestMember = Member::where('application_no', 'LIKE', $prefix . '%')
+                ->orderBy('application_no', 'desc')
+                ->first();
+
+            $lastSequenceMember = $latestMember
+                ? (int)substr($latestMember->application_no, strlen($prefix))
+                : 0;
+
+            $sequence_number = $lastSequenceMember + 1;
+
+            $data['application_no'] = $prefix . str_pad($sequence_number, 3, '0', STR_PAD_LEFT);
+
+            // Handle profile image upload
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
@@ -748,14 +794,17 @@ class RegistrationController extends Controller
                 $data['image'] = $imageName;
             }
 
+            // Handle ID document upload
             if ($request->hasFile('id_document')) {
                 $idDoc = $request->file('id_document');
                 $idDocName = time() . '_iddoc.' . $idDoc->getClientOriginalExtension();
                 $idDoc->move(public_path('member_images'), $idDocName);
                 $data['id_document'] = $idDocName;
             }
+
             $record = Member::create($data);
         }
+
 
         return view('home.registration.success-registration', compact('record'))->with('success', 'Registration saved successfully.');
     }
