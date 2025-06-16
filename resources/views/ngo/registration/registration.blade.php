@@ -61,7 +61,24 @@
                 </nav>
             </div>
         </div>
-
+        @if (!empty($error))
+            <div class="card shadow-sm border-0 mb-3">
+                <div class="card-body bg-danger text-white">
+                    <h5 class="card-title mb-2">Error</h5>
+                    <p class="card-text">{{ $error }}</p>
+                </div>
+            </div>
+        @else
+        @if (session('success'))
+            <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
+        @if (session('error'))
+            <div id="successMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
         <div class="container-fluide m-3">
             <div class="card bg-white p-2 shadow rounded">
                 <div class="text-black text-center border-bottom pb-3">
@@ -105,16 +122,21 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6 mb-3">
-                                            <label for="academic_session" class="form-label bold"> Session <span
+                                            <label for="academic_session" class="form-label bold">Session <span
                                                     class="login-danger">*</span></label>
                                             <select class="form-control @error('academic_session') is-invalid @enderror"
-                                                name="academic_session" required>
+                                                name="academic_session" id="academic_session" required>
                                                 <option value="">Select Session</option>
                                                 @foreach ($data as $session)
-                                                    <option value="{{ $session->session_date }}">
-                                                        {{ $session->session_date }}</option>
+                                                    <option value="{{ $session->session_date }}"
+                                                        {{ old('academic_session') == $session->session_date ? 'selected' : '' }}>
+                                                        {{ $session->session_date }}
+                                                    </option>
                                                 @endforeach
                                             </select>
+                                            @error('academic_session')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div class="col-md-6 col-sm-6  form-group mb-3">
                                             <label for="name" class="form-label">Full Name: <span
@@ -287,17 +309,16 @@
                                     <label for="area_type" class="form-label">Area Type: <span
                                             class="text-danger">*</span></label>
                                     <select name="area_type" class="form-control" id="area_type" required>
-                                        <option value="" selected></option>
-                                        <option value="Rular" {{ old('Rular') == 'Rular' ? 'selected' : '' }}>Rular
+                                        <option value="" selected disabled>Select Area</option>
+                                        <option value="Rular" {{ old('area_type') == 'Rular' ? 'selected' : '' }}>Rular
                                         </option>
-                                        <option value="Urban" {{ old('Urban') == 'Urban' ? 'selected' : '' }}>Urban
+                                        <option value="Urban" {{ old('area_type') == 'Urban' ? 'selected' : '' }}>Urban
                                         </option>
                                     </select>
                                     @error('area_type')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-
                                 <div class="col-md-4 form-group mb-3">
                                     <label for="block" class="form-label">Block: <span
                                             class="text-danger">*</span></label>
@@ -314,8 +335,8 @@
                                 <div class="col-md-4 form-group mb-3">
                                     <label for="stateSelect" class="form-label">State: <span
                                             class="text-danger">*</span></label>
-                                    <select class="form-control @error('state') is-invalid @enderror"
-                                        name="state" id="stateSelect" required>
+                                    <select class="form-control @error('state') is-invalid @enderror" name="state"
+                                        id="stateSelect" required>
                                         <option value="">Select State</option>
                                         @foreach ($districtsByState as $state => $districts)
                                             <option value="{{ $state }}"
@@ -386,7 +407,7 @@
                                     @enderror
                                 </div>
 
-                                  <div class="col-md-4 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <div class="form-group local-forms">
                                         <label class="form-label">Caste: <span class="text-danger">*</span></label>
                                         <input type="text" name="caste" id="caste"
@@ -397,7 +418,8 @@
                                         @enderror
                                     </div>
                                 </div>
-                               
+
+                                <!-- Caste Category -->
                                 <div class="col-md-4 mb-3">
                                     <label for="category" class="form-label">Caste Category <span
                                             class="text-danger">*</span></label>
@@ -405,66 +427,50 @@
                                         id="category" name="religion_category" required>
                                         <option value="" disabled {{ old('religion_category') ? '' : 'selected' }}>
                                             Select Category</option>
-                                        <option value="General"
-                                            {{ old('religion_category') == 'General' ? 'selected' : '' }}>
-                                            General
-                                        </option>
-                                        <option value="OBC" {{ old('religion_category') == 'OBC' ? 'selected' : '' }}>
-                                            OBC
-                                        </option>
-                                        <option value="SC" {{ old('religion_category') == 'SC' ? 'selected' : '' }}>SC
-                                        </option>
-                                        <option value="ST" {{ old('religion_category') == 'ST' ? 'selected' : '' }}>ST
-                                        </option>
-                                        <option value="Minority" {{ old('religion_category') == 'Minority' ? 'selected' : '' }}>Minority
-                                        </option>
+                                        @foreach (['General', 'OBC', 'SC', 'ST', 'Minority'] as $category)
+                                            <option value="{{ $category }}"
+                                                {{ old('religion_category') == $category ? 'selected' : '' }}>
+                                                {{ $category }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                     @error('religion_category')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                 <div class="col-md-4 mb-3">
+
+                                <!-- Religion -->
+                                <div class="col-md-4 mb-3">
                                     <label for="religion" class="form-label">Religion <span
                                             class="text-danger">*</span></label>
-                                    <select class="form-select @error('religion') is-invalid @enderror"
-                                        id="religion" name="religion" required>
-                                        <option value="" disabled {{ old('religion') ? '' : 'selected' }}>
-                                            Select
+                                    <select class="form-select @error('religion') is-invalid @enderror" id="religion"
+                                        name="religion" required>
+                                        <option value="" disabled {{ old('religion') ? '' : 'selected' }}>Select
                                             Religion</option>
-                                        <option value="Hindu" {{ old('religion') == 'Hindu' ? 'selected' : '' }}>
-                                            Hindu
-                                        </option>
-                                        <option value="Islam" {{ old('religion') == 'Islam' ? 'selected' : '' }}>
-                                            Islam
-                                        </option>
-                                        <option value="Christian" {{ old('religion') == 'Christian' ? 'selected' : '' }}>
-                                            Christian
-                                        </option>
-                                        <option value="Sikh" {{ old('religion') == 'Sikh' ? 'selected' : '' }}>
-                                            Sikh
-                                        </option>
-                                        <option value="Buddhist" {{ old('religion') == 'Buddhist' ? 'selected' : '' }}>
-                                            Buddhist
-                                        </option>
-                                        <option value="Parsi" {{ old('religion') == 'Parsi' ? 'selected' : '' }}>
-                                            Parsi
-                                        </option>
+                                        @foreach (['Hindu', 'Islam', 'Christian', 'Sikh', 'Buddhist', 'Parsi'] as $religion)
+                                            <option value="{{ $religion }}"
+                                                {{ old('religion') == $religion ? 'selected' : '' }}>
+                                                {{ $religion }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                     @error('religion')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
+
                             </div>
                         </div>
-
                         <div class="row">
                             <!-- Identity Type -->
                             <div class="col-md-4 mb-3">
                                 <div class="form-group">
                                     <label for="identity_type" class="form-label">Identity Type: <span
                                             class="text-danger">*</span></label>
-                                    <select class="form-control" id="identity_type" name="identity_type" required>
-                                        <option selected disabled>Select Identity Type</option>
+                                    <select class="form-control @error('identity_type') is-invalid @enderror"
+                                        id="identity_type" name="identity_type" required>
+                                        <option value="" disabled {{ old('identity_type') ? '' : 'selected' }}>
+                                            Select Identity Type</option>
                                         <option value="Aadhar Card"
                                             {{ old('identity_type') == 'Aadhar Card' ? 'selected' : '' }}>Aadhar Card
                                         </option>
@@ -490,7 +496,6 @@
                                     @enderror
                                 </div>
                             </div>
-
                             <!-- Identity Number -->
                             <div class="col-md-4 mb-3">
                                 <div class="form-group">
@@ -532,8 +537,6 @@
                                 @enderror
                             </div>
                         </div>
-
-
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <div class="form-group text-center">

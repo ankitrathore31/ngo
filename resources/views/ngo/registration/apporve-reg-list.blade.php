@@ -83,7 +83,7 @@
                                     <td>{{ $item->registration_no }}</td>
                                     <td>
                                         <img id="previewImage"
-                                            src="{{ asset(($item instanceof \App\Models\beneficiarie ? 'benefries_images/' : 'member_images/') . $item->image) }}"
+                                            src="{{ asset(($item instanceof \App\Models\beneficiarie ? 'beneficiaries_images/' : 'member_images/') . $item->image) }}"
                                             alt="Preview" width="100">
                                     </td>
                                     <td>{{ $item->name }}</td>

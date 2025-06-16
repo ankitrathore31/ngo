@@ -65,7 +65,7 @@
                 {{ session('success') }}
             </div>
         @endif
-        <div class="container-fluid">
+        <div class="container">
             <!-- Language Toggle -->
             <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
                 <h5 class="mb-0">
