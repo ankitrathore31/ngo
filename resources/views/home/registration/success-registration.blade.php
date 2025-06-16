@@ -86,7 +86,7 @@
             label.from-label {
                 font-weight: bold;
             }
-            
+
         }
     </style>
 
@@ -191,17 +191,12 @@
                     </div>
                     <div class="col-sm-4">
                         @php
-                            $imagePath = $record->reg_type === 'Member' ? 'member_images/' : 'benefries_images/';
+                            $imagePath = $record->reg_type === 'Member' ? 'member_images/' : 'beneficiaries_images/';
                         @endphp
-
-                        {{-- @if ($record->image) --}}
-                        <div class=" mb-3">
+                        <div class="mb-3">
                             <img src="{{ asset($imagePath . $record->image) }}" alt="Image" class="img-thumbnail"
-                                width="150">
-                            {{-- <br>
-                                    <strong class="text-center"> Image:</strong> --}}
+                                style="width: 150px; height: 150px; object-fit: cover;">
                         </div>
-                        {{-- @endif --}}
                     </div>
                 </div>
                 <div class="row">
@@ -253,7 +248,7 @@
                         <strong>Identity Number:</strong> {{ $record->identity_no }}
                     </div>
                     @php
-                        $imagePath = $record->reg_type === 'Member' ? 'member_images/' : 'benefries_images/';
+                        $imagePath = $record->reg_type === 'Member' ? 'member_images/' : 'beneficiaries_images/';
                     @endphp
 
                     <div class="col-sm-4 mb-3">

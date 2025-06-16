@@ -46,7 +46,7 @@
                                 @php $item = $survey->beneficiarie; @endphp
                                 <tr>
                                     <td>{{ $srNo++ }}</td>
-                                    <td>{{ $item->registration_no }}</td>
+                                    <td>{{ $item->registration_no ?? 'No Found'}}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->gurdian_name }}</td>
                                     <td>{{ $item->village }}, {{ $item->post }}, {{ $item->block }},
