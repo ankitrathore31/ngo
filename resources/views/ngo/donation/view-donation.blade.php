@@ -1,28 +1,31 @@
 @extends('ngo.layout.master')
 @section('content')
-<style>
-    @media print {
-        body * {
-            visibility: hidden;
-        }
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
 
-        .print-card, .print-card * {
-            visibility: visible;
-        }
+            .print-card,
+            .print-card * {
+                visibility: visible;
+            }
 
-        .print-card {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-        }
+            .print-card {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
 
-        /* Optional: Hide buttons like Print/Download and Language Toggle */
-        button, .btn, .d-flex.justify-content-between {
-            display: none !important;
+            /* Optional: Hide buttons like Print/Download and Language Toggle */
+            button,
+            .btn,
+            .d-flex.justify-content-between {
+                display: none !important;
+            }
         }
-    }
-</style>
+    </style>
 
     <div class="wrapper">
         <div class="d-flex justify-content-between align-item-centre mb-0 mt-3">
@@ -155,7 +158,10 @@
                         <p><strong>
                                 <span data-lang="hi">राशि (₹):</span>
                                 <span data-lang="en">Amount (₹):</span>
-                            </strong><span id="amountInput" oninput="updateAmountInWords()">{{ $donor->amount }}</span>
+                            </strong>
+                            <span id="amountInput" oninput="updateAmountInWords()">
+                                {{ $donor->amount }}
+                            </span>
                         </p>
                     </div>
 
@@ -163,13 +169,14 @@
                         <p><strong>
                                 <span data-lang="hi">रुपये (शब्दों में):</span>
                                 <span data-lang="en">Amount (in words):</span>
-                            </strong><span data-lang="en" id="amount-words-en"></span>
+                            </strong>
+                            <span data-lang="en" id="amount-words-en"></span>
                             <span data-lang="hi" id="amount-words-hi"></span>
                         </p>
                     </div>
-
                 </div>
 
+                {{-- Show Payment Method --}}
                 <div class="row">
                     <div class="col-sm-6">
                         <p><strong>
@@ -184,16 +191,43 @@
                             </strong> {{ \Carbon\Carbon::parse($donor->date)->format('d-m-Y') }}</p>
                     </div>
                 </div>
+
+                {{-- Conditionally Show Cheque Details --}}
+                @if ($donor->payment_method === 'Cheque')
+                    <div class="row">
+                        <div class="col-sm-3 mb-2"><strong>Cheque No:</strong> {{ $donor->cheque_no }}</div>
+                        <div class="col-sm-3 mb-2"><strong>Bank Name:</strong> {{ $donor->bank_name }}</div>
+                        <div class="col-sm-3 mb-2"><strong>Bank Branch:</strong> {{ $donor->bank_branch }}</div>
+                        <div class="col-sm-3 mb-2"><strong>Cheque Date:</strong> {{ $donor->cheque_date }}</div>
+                    </div>
+                @endif
+
+                {{-- Conditionally Show UPI Details --}}
+                @if ($donor->payment_method === 'UPI')
+                    <div class="row">
+                        <div class="col-sm-6 mb-2"><strong>Transaction No:</strong> {{ $donor->transaction_no }}</div>
+                        <div class="col-sm-6 mb-2"><strong>Transaction Date:</strong> {{ $donor->transaction_date }}</div>
+                    </div>
+                @endif
+
+
+
                 <!-- Footer Note and Signature -->
                 {{-- <hr> --}}
-                <p style="margin: 0;">
+                {{-- <p style="margin: 0;">
                     <span data-lang="hi"><b>सदस्यता/दान हेतु सद्भावपूर्वक प्राप्त किये।</b></span><br>
                     <span data-lang="en"><b>Gratefully received for membership/donation purpose.</b></span>
-                </p>
+                </p> --}}
 
-                <div class="d-flex justify-content-between">
-                    <div>
+                <div class="d-flex justify-content-between mt-4 mb-4">
+                    {{-- <div>
                         <strong><span data-lang="hi">₹</span><span data-lang="en">₹</span></strong>{{ $donor->amount }}
+                    </div> --}}
+                    <div class="">
+                        <strong>
+                            <span data-lang="hi">हस्ताक्षर</span> |
+                            <span data-lang="en">Depositor's name</span>
+                        </strong>
                     </div>
                     <div>
                         <strong>
@@ -204,7 +238,7 @@
                 </div>
 
                 <!-- Bottom NGO Info -->
-                <hr>
+                {{-- <hr>
                 <p style="font-size: 14px; margin: 0;">
                     <b>
                         <span data-lang="hi">NGO ID: UP/00033062 | नीति आयोग ID: UP/2023/0360430 | SRN No: F65124000 | CSR
@@ -220,7 +254,7 @@
                         <span data-lang="en">Website: www.gyanbhartingo.org | Email: gyanbhartingo600@gmail.com | Mob:
                             9411484111</span>
                     </b>
-                </p>
+                </p> --}}
             </div>
         </div>
 

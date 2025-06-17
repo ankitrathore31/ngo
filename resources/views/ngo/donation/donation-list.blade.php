@@ -132,6 +132,7 @@
                                 <th>Payment Mode</th>
                                 <th>Session</th>
                                 <th class="no-print">Action</th>
+                                <th>Certificate</th>
                             </tr>
                         </thead>
 
@@ -155,6 +156,15 @@
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="View" style="min-width: 38px; height: 38px;">
                                                 <i class="fa-regular fa-eye"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                      <td class="no-print">
+                                        <div class="d-flex justify-content-center gap-2 flex-wrap">
+                                            <a href="{{route('certi-donation', $item->id) }}"
+                                                class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
+                                                title="View" style="min-width: 38px; height: 38px;">
+                                                Certificate
                                             </a>
                                         </div>
                                     </td>
