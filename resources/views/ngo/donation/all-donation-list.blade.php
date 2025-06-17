@@ -87,7 +87,7 @@
             @endif
             <div class="row">
                 <div class="col-md-12">
-                    <form method="GET" action="{{ route('donation-list') }}" class="row g-3 mb-4">
+                    <form method="GET" action="{{ route('all-donor-list') }}" class="row g-3 mb-4">
                         <div class="col-md-4">
                             {{-- <label for="session_filter" class="form-label">Select Session</label> --}}
                             <select name="session_filter" id="session_filter" class="form-control"
@@ -106,7 +106,7 @@
                         </div>
                         <div class="col-md-4">
                             <button type="submit" class="btn btn-primary me-2">Search</button>
-                            <a href="{{ route('donation-list') }}" class="btn btn-info text-white me-2">Reset</a>
+                            <a href="{{ route('all-donor-list') }}" class="btn btn-info text-white me-2">Reset</a>
                         </div>
                     </form>
                     <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
@@ -136,22 +136,20 @@
                         </thead>
 
                         <tbody>
-                            @foreach ($donor as $item)
+                            @foreach ($donors as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $item->name }}</td>
-                                    <td>{{ $item->address }}
-                                    </td>
-                                    <td>{{ $item->mobile }}</td>
+                                    <td>{{ $item->donor_name ?? '-' }}</td>
+                                    <td>{{ $item->donor_address ?? '-' }}</td>
+                                    <td>{{ $item->donor_mobile ?? '-' }}</td>
                                     <td>{{ $item->amount }}</td>
-                                    <td>
-                                        {{ $item->date ? \Carbon\Carbon::parse($item->date)->format('d-m-Y') : 'No Found' }}
+                                    <td>{{ $item->date ? \Carbon\Carbon::parse($item->date)->format('d-m-Y') : 'Not Found' }}
                                     </td>
-                                    <td>{{ $item->payment_method }}</td>
+                                    <td>{{ $item->payment_method ?? 'Online cashfree' }}</td>
                                     <td>{{ $item->academic_session }}</td>
                                     <td class="no-print">
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            <a href="{{route('view-donation', $item->id) }}"
+                                            <a href="{{ route('view-donation', $item->id) }}"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="View" style="min-width: 38px; height: 38px;">
                                                 <i class="fa-regular fa-eye"></i>
@@ -161,6 +159,8 @@
                                 </tr>
                             @endforeach
                         </tbody>
+
+
                     </table>
                 </div>
             </div>

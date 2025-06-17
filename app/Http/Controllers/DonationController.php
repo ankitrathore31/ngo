@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\donor_data;
 use App\Models\beneficiarie;
 use App\Models\Member;
+use Illuminate\Support\Facades\DB;
+
 
 class DonationController extends Controller
 {
@@ -37,37 +39,23 @@ class DonationController extends Controller
     public function donation(Request $request)
     {
         $data = academic_session::all();
-        $searchKey = $request->search_key;
 
-        $record = null;
+        // Get all Beneficiaries and Members, and merge them
+        $beneficiaries = beneficiarie::all();
+        $members = Member::all();
+        $record = $beneficiaries->merge($members);
 
-        if ($searchKey) {
-            // Search in Beneficiaries
-            $query = beneficiarie::where('registration_no', $searchKey)
-                ->orWhere('name', 'like', '%' . $searchKey . '%')
-                ->first();
+        $lastReceiptNo = Donation::max('receipt_no');
+        $newReceiptNo = is_numeric($lastReceiptNo) ? ((int) $lastReceiptNo + 1) : 1;
 
-            // If not found, search in Members
-            if (!$query) {
-                $query = Member::where('registration_no', $searchKey)
-                    ->orWhere('name', 'like', '%' . $searchKey . '%')
-                    ->first();
-            }
-
-            $record = $query;
-        }
-
-        $newReceiptNo = (\App\Models\Donation::max('receipt_no') ?? 0) + 1;
-
-        return view('ngo.donation.donation', compact('data', 'record','newReceiptNo'));
+        return view('ngo.donation.donation', compact('data', 'record', 'newReceiptNo'));
     }
+
 
 
     public function saveDonation(Request $request)
     {
-
         $request->validate([
-            // 'receipt_no' => 'required',
             'session' => 'required',
             'date' => 'required|date',
             'name' => 'required',
@@ -78,16 +66,16 @@ class DonationController extends Controller
             'payment_method' => 'required',
         ]);
 
-        // Get the last receipt_no (assuming it's numeric)
-        $lastReceipt = \App\Models\Donation::orderBy('receipt_no', 'desc')->first();
-
-        // Generate new receipt number
-        $newReceiptNo = $lastReceipt ? ((int) $lastReceipt->receipt_no + 1) : 1;
-
+        $lastReceipt = \App\Models\Donation::orderBy('id', 'desc')->first();
+        if ($lastReceipt && is_numeric($lastReceipt->receipt_no)) {
+            $newReceiptNo = (int)$lastReceipt->receipt_no + 1;
+        } else {
+            $newReceiptNo = 1;
+        }
+        $formattedReceiptNo = str_pad($newReceiptNo, 3, '0', STR_PAD_LEFT);
 
         $donation = new Donation;
-        // Assign it to the model
-        $donation->receipt_no = 'REC-' . str_pad($newReceiptNo, 3, '0', STR_PAD_LEFT);
+        $donation->receipt_no = $formattedReceiptNo;
         $donation->academic_session = $request->session;
         $donation->date = $request->date;
         $donation->name = $request->name;
@@ -97,10 +85,25 @@ class DonationController extends Controller
         $donation->amount = $request->amount;
         $donation->payment_method = $request->payment_method;
 
+        // Conditional Cheque fields
+        if ($request->payment_method == 'Cheque') {
+            $donation->cheque_no = $request->cheque_no;
+            $donation->bank_name = $request->bank_name;
+            $donation->bank_branch = $request->bank_branch;
+            $donation->cheque_date = $request->cheque_date;
+        }
+
+        // Conditional UPI fields
+        if ($request->payment_method == 'UPI') {
+            $donation->transaction_no = $request->transaction_no;
+            $donation->transaction_date = $request->transaction_date;
+        }
+
         $donation->save();
 
-        return redirect()->route('donation-list')->with('success', 'Donation Save Successfully');
+        return redirect()->route('donation-list')->with('success', 'Donation saved successfully!');
     }
+
 
     public function viewDonation($id)
     {
@@ -108,6 +111,14 @@ class DonationController extends Controller
         $donor = Donation::find($id);
 
         return view('ngo.donation.view-donation', compact('donor'));
+    }
+
+    public function viewDonationCertificate($id)
+    {
+
+        $donor = Donation::find($id);
+
+        return view('ngo.donation.donation-certificate', compact('donor'));
     }
 
     public function donationCardList(Request $request)
@@ -124,5 +135,29 @@ class DonationController extends Controller
         $donor = $query->get();
 
         return view('ngo.donation.donation-card-list', compact('data', 'donor'));
+    }
+
+    public function allDonations(Request $request)
+    {
+        $query = DB::table('donations')
+            ->leftJoin('donors', 'donations.mobile', '=', 'donors.donor_mobile')
+            ->select(
+                'donations.*',
+                'donors.donor_name as donor_name',
+                'donors.donor_address as donor_address',
+                'donors.donor_mobile as donor_mobile'
+            );
+
+        $donors = Donation::query();
+
+        if ($request->filled('session_filter')) {
+            $donors->where('academic_session', $request->session_filter);
+        }
+        if ($request->filled('name')) {
+            $donors->where('name', 'like', '%' . $request->name . '%');
+        }
+        $donors = $query->get();
+        $data = academic_session::all(); // for session filter dropdown    
+        return view('ngo.donation.all-donation-list', compact('data', 'donors'));
     }
 }

@@ -258,13 +258,13 @@
                             <select class="form-select @error('payment_method') is-invalid @enderror"
                                 name="payment_method">
                                 <option value="">Select...</option>
-                                <option value="Cash" {{ old('payment_method') == 'cash' ? 'selected' : '' }}>नकद / Cash
+                                <option value="cash" {{ old('payment_method') == 'cash' ? 'selected' : '' }}>नकद / Cash
                                 </option>
-                                <option value="Cheque" {{ old('payment_method') == 'cheque' ? 'selected' : '' }}>चेक /
+                                <option value="cheque" {{ old('payment_method') == 'cheque' ? 'selected' : '' }}>चेक /
                                     Cheque</option>
-                                <option value="UPI" {{ old('payment_method') == 'upi' ? 'selected' : '' }}>यूपीआई / UPI
+                                <option value="upi" {{ old('payment_method') == 'upi' ? 'selected' : '' }}>यूपीआई / UPI
                                 </option>
-                                <option value="Other" {{ old('payment_method') == 'other' ? 'selected' : '' }}>अन्य /
+                                <option value="other" {{ old('payment_method') == 'other' ? 'selected' : '' }}>अन्य /
                                     Other</option>
                             </select>
                             @error('payment_method')
@@ -495,8 +495,8 @@
             function togglePaymentFields() {
                 const method = paymentMethod.value;
 
-                chequeFields.style.display = method === 'Cheque' ? 'block' : 'none';
-                upiFields.style.display = method === 'UPI' ? 'block' : 'none';
+                chequeFields.style.display = method === 'cheque' ? 'block' : 'none';
+                upiFields.style.display = method === 'upi' ? 'block' : 'none';
             }
 
             // Initial check (for old input value on validation error)
