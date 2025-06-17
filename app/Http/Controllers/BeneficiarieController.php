@@ -86,9 +86,6 @@ class BeneficiarieController extends Controller
             ->orderBy('id', 'asc')
             ->get();
 
-        // Step 3: Pass to view
-        // return view('ngo.beneficiarie.beneficiarie-facilities', compact('uniqueSurveys'));
-
         return view('ngo.beneficiarie.beneficiarie-facilities', compact('surveys'));
     }
 
