@@ -140,12 +140,12 @@ class DonationController extends Controller
     public function allDonations(Request $request)
     {
         $query = DB::table('donations')
-            ->leftJoin('donors', 'donations.mobile', '=', 'donors.donor_mobile')
+            ->leftJoin('donor_datas', 'donations.mobile', '=', 'donor_datas.donor_number')
             ->select(
                 'donations.*',
-                'donors.donor_name as donor_name',
-                'donors.donor_address as donor_address',
-                'donors.donor_mobile as donor_mobile'
+                'donor_datas.donor_name as donor_name',
+                // 'donor_datas.donor_address as donor_address',
+                'donor_datas.donor_number as donor_number'
             );
 
         $donors = Donation::query();

@@ -216,8 +216,8 @@
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
                             class="fas fa-chalkboard-teacher"></i> TRAINING</a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="#">Add Training Centre</a></li>
-                        <li><a class="dropdown-item" href="#">Training Centre List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('add-center') }}">Add Training Centre</a></li>
+                        <li><a class="dropdown-item" href="{{ route('center-list') }}">Training Centre List</a></li>
                         <li><a class="dropdown-item" href="#">Exam Time Table</a></li>
                     </ul>
                 </li>
