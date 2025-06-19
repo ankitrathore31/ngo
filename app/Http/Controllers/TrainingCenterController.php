@@ -1,0 +1,95 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\academic_session;
+use App\Models\Training_Center;
+use Illuminate\Http\Request;
+
+class TrainingCenterController extends Controller
+{
+    public function Addcenter()
+    {
+
+        $session = academic_session::all();
+
+        return view('ngo.training.add-center', compact('session'));
+    }
+
+    public function storeCenter(Request $request)
+    {
+        $request->validate([
+            'session' => 'required',
+            'center_code' => 'required|string',
+            'center_name' => 'required|string',
+            'center_address' => 'required|string',
+        ]);
+
+        Training_Center::create([
+            'academic_session' => $request->session,
+            'center_code' => $request->center_code,
+            'center_name' => $request->center_name,
+            'center_address' => $request->center_address,
+        ]);
+
+        // Optionally, redirect back or do something else after saving
+        return redirect()->route('center-list')->with('success', 'Training center details saved successfully.');
+    }
+
+    public function CenterList(Request $request)
+    {
+        $query = Training_Center::query();
+
+        // Filtering logic
+        if ($request->filled('session_filter')) {
+            $query->where('session_date', $request->session_filter);
+        }
+
+        if ($request->filled('center_code')) {
+            $query->where('center_code', $request->center_code);
+        }
+
+        if ($request->filled('center_name')) {
+            $query->where('center_name', 'like', '%' . $request->center_name . '%');
+        }
+
+        // Get distinct sessions for filter dropdown
+        $data = academic_session::all();
+
+        // Get filtered list
+        $center = $query->orderBy('id', 'desc')->paginate(10); // with pagination
+
+        return view('ngo.training.center-list', compact('center', 'data'));
+    }
+
+    public function Editcenter($id)
+    {
+        $center = Training_Center::find($id);
+        $session = academic_session::all();
+
+        return view('ngo.training.edit-center', compact('session', 'center'));
+    }
+    
+    public function updateCenter(Request $request, $id)
+    {
+        $center = Training_Center::findOrFail($id);
+
+        $center->update([
+            'academic_session' => $request->session,
+            'center_code' => $request->center_code,
+            'center_name' => $request->center_name,
+            'center_address' => $request->center_address,
+        ]);
+
+        return redirect()->route('center-list')->with('success', 'Training center details updated successfully.');
+    }
+
+    public function Deletecenter($id)
+    {
+
+        $center = Training_Center::find($id);
+        $center->delete();
+
+        return redirect()->back()->with('success', 'Training center deleted successfully.');
+    }
+}

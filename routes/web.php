@@ -13,6 +13,7 @@ use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\TrainingCenterController;
 use App\Http\Controllers\WorkingAreaController;
 use App\Models\academic_session;
 use Illuminate\Support\Facades\Session;
@@ -252,6 +253,15 @@ Route::controller(DonationController::class)->group(function(){
     Route::get('ngo/donation-certificate/{id}', 'viewDonationCertificate')->middleware('auth')->name('certi-donation');
     Route::get('ngo/donation-card-list', 'donationCardList')->middleware('auth')->name('donation-card-list');
     Route::get('ngo/all-donor-list', 'allDonations')->middleware('auth')->name('all-donor-list');
+});
+
+Route::controller(TrainingCenterController::class)->group(function(){
+    Route::get('ngo/add-center', 'AddCenter')->middleware('auth')->name('add-center');
+    Route::post('ngo/store-center', 'storeCenter')->middleware('auth')->name('store-center');
+    Route::get('ngo/center-list', 'CenterList')->middleware('auth')->name('center-list');
+    Route::get('ngo/edit-center/{id}', 'EditCenter')->middleware('auth')->name('edit-center');
+    Route::post('ngo/update-center/{id}', 'updateCenter')->middleware('auth')->name('update-center');
+    Route::get('ngo/delete-center/{id}', 'DeleteCenter')->middleware('auth')->name('delete-center');
 });
 
 
