@@ -218,6 +218,7 @@
                     <ul class="dropdown-menu bg-primary">
                         <li><a class="dropdown-item" href="{{ route('add-center') }}">Add Training Centre</a></li>
                         <li><a class="dropdown-item" href="{{ route('center-list') }}">Training Centre List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('taining-demand-bene') }}">Training Demand Beneficiary List </a></li>
                         <li><a class="dropdown-item" href="#">Exam Time Table</a></li>
                     </ul>
                 </li>

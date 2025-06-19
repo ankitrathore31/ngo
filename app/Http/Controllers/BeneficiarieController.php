@@ -195,7 +195,7 @@ class BeneficiarieController extends Controller
 
     public function beneficiarieFacilitiesList(Request $request)
     {
-        $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
+        $query = beneficiarie::with(['surveys' => function ($q) use ($request) {
             $q->where('facilities_status', 1)
                 ->whereNull('status')
                 ->orderBy('created_at', 'asc');

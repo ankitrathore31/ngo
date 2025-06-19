@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\academic_session;
+use App\Models\beneficiarie;
+use App\Models\Beneficiarie_Survey;
+use App\Models\Training_Beneficiarie;
 use App\Models\Training_Center;
 use Illuminate\Http\Request;
 
@@ -69,7 +72,7 @@ class TrainingCenterController extends Controller
 
         return view('ngo.training.edit-center', compact('session', 'center'));
     }
-    
+
     public function updateCenter(Request $request, $id)
     {
         $center = Training_Center::findOrFail($id);
@@ -91,5 +94,55 @@ class TrainingCenterController extends Controller
         $center->delete();
 
         return redirect()->back()->with('success', 'Training center deleted successfully.');
+    }
+
+    public function AddBeneForCenter(Request $request)
+    {
+
+        $session = academic_session::all();
+
+        $queryBene = beneficiarie::where('status', 1);
+
+        if ($request->filled('session_filter')) {
+            $queryBene->where('academic_session', $request->session_filter);
+        }
+
+        if ($request->filled('application_no')) {
+            $queryBene->where('application_no', $request->application_no);
+        }
+
+        if ($request->filled('name')) {
+            $queryBene->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        $record = $queryBene->orderBy('created_at', 'asc')->get();
+
+        
+
+        return view('ngo.training.taining-demand-bene', compact('session', 'record'));
+    }
+
+    public function storeTrainingDemand(Request $request)
+    {
+        $validated = $request->validate([
+            'training_center' => 'required|string|max:255',
+            'facilities_category' => 'required|string',
+            'training_course' => 'nullable|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'duration' => 'nullable|string|max:100',
+        ]);
+
+        $training = new Training_Beneficiarie();
+        $training->beneficiarie_id = $request->beneficiarie_id;
+        $training->training_center = $request->training_center;
+        $training->facilities_category = $request->facilities_category;
+        $training->training_course = $request->training_course;
+        $training->start_date = $request->start_date;
+        $training->end_date = $request->end_date;
+        $training->duration = $request->duration;
+        $training->save();
+
+        return redirect()->back()->with('success', 'Training demand saved successfully!');
     }
 }

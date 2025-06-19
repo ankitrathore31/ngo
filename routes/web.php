@@ -262,6 +262,9 @@ Route::controller(TrainingCenterController::class)->group(function(){
     Route::get('ngo/edit-center/{id}', 'EditCenter')->middleware('auth')->name('edit-center');
     Route::post('ngo/update-center/{id}', 'updateCenter')->middleware('auth')->name('update-center');
     Route::get('ngo/delete-center/{id}', 'DeleteCenter')->middleware('auth')->name('delete-center');
+    Route::get('ngo/taining-demand-bene', 'AddBeneForCenter')->middleware('auth')->name('taining-demand-bene');
+    Route::post('ngo/store-demand', 'storeTrainingDemand')->middleware('auth')->name('store-demand');
+
 });
 
 
