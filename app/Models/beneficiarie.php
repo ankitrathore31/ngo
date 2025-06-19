@@ -64,4 +64,9 @@ class beneficiarie extends Model
         return $this->hasOne(Beneficiarie_Survey::class)
             ->orderBy('id', 'asc');
     }
+
+    public function centers(){
+        return $this->hasMany(Training_Beneficiarie::class, 'beneficiarie_id')
+        ->orderBy('id', 'asc');
+    }
 }

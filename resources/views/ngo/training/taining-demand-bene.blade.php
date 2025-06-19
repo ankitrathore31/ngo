@@ -103,7 +103,7 @@
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
                                             <a href="javascript:void(0);" class="btn btn-success btn-sm px-3"
                                                 data-bs-toggle="modal" data-bs-target="#Modal">
-                                                Add Beneficiarie In Center
+                                                Demand Beneficiarie In Training Center
                                             </a>
                                             <a href="{{ route('view-beneficiarie', $item->id) }}"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
@@ -129,10 +129,27 @@
                         <form action="{{ route('store-demand') }}" method="POST">
                             @csrf
                             <div class="modal-body">
-                                <input type="text" name="beneficiarie_id" value="{{$item->id}}" hidden>
+                                <input type="text" name="beneficiarie_id" value="{{ $item->id }}" hidden>
                                 <div class="mb-3">
-                                    <label for="training_center" class="form-label">Training Center ka Naam</label>
-                                    <input type="text" class="form-control" id="training_center" name="training_center">
+                                    <label class="form-label">Center Name</label>
+                                    <input type="text" class="form-control" id="searchInout" name="training_center"
+                                        placeholder="Search Name & Code">
+                                </div>
+
+                                <!-- Suggestions dropdown -->
+                                <ul id="centerList" class="list-group position-absolute z-3"
+                                    style="width: 100%; display: none;"></ul>
+
+                                <!-- Readonly fields for selected center -->
+                                <div class="mb-3 mt-2">
+                                    <label class="form-label">Center Code</label>
+                                    <input type="text" class="form-control" name="center_code" id="center_code" readonly>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Center Address</label>
+                                    <input type="text" class="form-control" name="center_address" id="center_address"
+                                        readonly>
                                 </div>
 
                                 <div class=" col-md-6 mb-3">
@@ -208,7 +225,7 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="training_course" class="form-label">Training Course ka Naam</label>
+                                    <label for="training_course" class="form-label">Training Course</label>
                                     <input type="text" class="form-control" id="training_course"
                                         name="training_course">
                                 </div>
@@ -273,35 +290,101 @@
                 return;
             }
 
-            let result = 0;
+            let years = end.getFullYear() - start.getFullYear();
+            let months = end.getMonth() - start.getMonth();
+            let days = end.getDate() - start.getDate();
 
-            switch (type) {
-                case 'days':
-                    result = Math.round((end - start) / (1000 * 60 * 60 * 24));
-                    break;
-
-                case 'months':
-                    result = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
-                    if (end.getDate() < start.getDate()) result--;
-                    break;
-
-                case 'years':
-                    result = end.getFullYear() - start.getFullYear();
-                    if (
-                        end.getMonth() < start.getMonth() ||
-                        (end.getMonth() === start.getMonth() && end.getDate() < start.getDate())
-                    ) {
-                        result--;
-                    }
-                    break;
+            if (days < 0) {
+                months--;
+                const prevMonth = new Date(end.getFullYear(), end.getMonth(), 0);
+                days += prevMonth.getDate(); // get last date of previous month
             }
 
-            durationResultInput.value = `${result} ${type}`;
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+
+            let result = '';
+
+            if (type === 'days') {
+                const totalDays = Math.round((end - start) / (1000 * 60 * 60 * 24));
+                result = `${totalDays} days`;
+            } else if (type === 'months') {
+                if (years > 0) result += `${years} year${years > 1 ? 's' : ''} `;
+                if (months > 0) result += `${months} month${months > 1 ? 's' : ''} `;
+                if (days > 0) result += `${days} day${days > 1 ? 's' : ''}`;
+                result = result.trim() || '0 months';
+            } else if (type === 'years') {
+                result = `${years} year${years > 1 ? 's' : ''}`;
+            }
+
+            durationResultInput.value = result;
         }
 
-        // Add event listeners to all fields
         startDateInput.addEventListener('change', calculateDuration);
         endDateInput.addEventListener('change', calculateDuration);
         durationTypeSelect.addEventListener('change', calculateDuration);
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInout');
+            const centerList = document.getElementById('centerList');
+            const centerCodeInput = document.getElementById('center_code');
+            const centerAddressInput = document.getElementById('center_address');
+
+            let centers = @json($centers); // Laravel Blade injects PHP variable into JS
+
+            // Search and display dropdown
+            searchInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase();
+                centerList.innerHTML = '';
+
+                if (query.trim() === '') {
+                    centerList.style.display = 'none';
+                    return;
+                }
+
+                let filtered = centers.filter(center =>
+                    center.center_name.toLowerCase().includes(query) ||
+                    center.center_code.toLowerCase().includes(query)
+                );
+
+                if (filtered.length === 0) {
+                    centerList.innerHTML = '<li class="list-group-item disabled">No centers found</li>';
+                } else {
+                    filtered.forEach(center => {
+                        let li = document.createElement('li');
+                        li.classList.add('list-group-item', 'list-group-item-action');
+                        li.textContent = `${center.center_name} (${center.center_code})`;
+                        li.dataset.name = center.center_name;
+                        li.dataset.code = center.center_code;
+                        li.dataset.address = center.center_address;
+                        centerList.appendChild(li);
+                    });
+                }
+
+                centerList.style.display = 'block';
+            });
+
+            // On click of a suggestion
+            centerList.addEventListener('click', function(e) {
+                if (e.target && e.target.matches('li.list-group-item')) {
+                    const selected = e.target;
+                    searchInput.value = selected.dataset.name;
+                    centerCodeInput.value = selected.dataset.code;
+                    centerAddressInput.value = selected.dataset.address;
+                    centerList.style.display = 'none';
+                }
+            });
+
+            // Hide list when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('#searchInout') && !e.target.closest('#centerList')) {
+                    centerList.style.display = 'none';
+                }
+            });
+        });
     </script>
 @endsection

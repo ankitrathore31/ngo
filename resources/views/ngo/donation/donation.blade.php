@@ -506,4 +506,5 @@
             paymentMethod.addEventListener('change', togglePaymentFields);
         });
     </script>
+    
 @endsection

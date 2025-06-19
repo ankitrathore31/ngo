@@ -116,16 +116,16 @@ class TrainingCenterController extends Controller
         }
 
         $record = $queryBene->orderBy('created_at', 'asc')->get();
+        $centers = Training_Center::select('center_name', 'center_code', 'center_address')->get();
 
-        
 
-        return view('ngo.training.taining-demand-bene', compact('session', 'record'));
+        return view('ngo.training.taining-demand-bene', compact('session', 'record', 'centers'));
     }
 
     public function storeTrainingDemand(Request $request)
     {
         $validated = $request->validate([
-            'training_center' => 'required|string|max:255',
+            'center_code' => 'required|string|max:255',
             'facilities_category' => 'required|string',
             'training_course' => 'nullable|string|max:255',
             'start_date' => 'required|date',
@@ -135,7 +135,7 @@ class TrainingCenterController extends Controller
 
         $training = new Training_Beneficiarie();
         $training->beneficiarie_id = $request->beneficiarie_id;
-        $training->training_center = $request->training_center;
+        $training->center_code = $request->center_code;
         $training->facilities_category = $request->facilities_category;
         $training->training_course = $request->training_course;
         $training->start_date = $request->start_date;
@@ -144,5 +144,40 @@ class TrainingCenterController extends Controller
         $training->save();
 
         return redirect()->back()->with('success', 'Training demand saved successfully!');
+    }
+
+    public function ApproveBeneForTraining(Request $request)
+    {
+        $session = academic_session::all();
+
+        $queryBene = Training_Beneficiarie::with(['center', 'beneficiare']);
+
+        if ($request->filled('session_filter')) {
+            $queryBene->where('academic_session', $request->session_filter);
+        }
+
+        if ($request->filled('application_no')) {
+            $queryBene->whereHas('beneficiare', function ($q) use ($request) {
+                $q->where('application_no', $request->application_no);
+            });
+        }
+
+        if ($request->filled('name')) {
+            $queryBene->whereHas('beneficiare', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->name . '%');
+            });
+        }
+
+        $record = $queryBene->orderBy('created_at', 'asc')->get();
+
+        return view('ngo.training.training-approve-bene-list', compact('session', 'record'));
+    }
+
+    public function ShowApproveBeneTraining($id)
+    {
+        $session = academic_session::all();
+        $record = Training_Beneficiarie::with(['center', 'beneficiare'])->findOrFail($id);
+
+        return view('ngo.training.view-bene', compact('session', 'record'));
     }
 }
