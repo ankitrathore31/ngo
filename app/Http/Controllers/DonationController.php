@@ -40,7 +40,6 @@ class DonationController extends Controller
     {
         $data = academic_session::all();
 
-        // Get all Beneficiaries and Members, and merge them
         $beneficiaries = beneficiarie::all();
         $members = Member::all();
         $record = $beneficiaries->merge($members);
