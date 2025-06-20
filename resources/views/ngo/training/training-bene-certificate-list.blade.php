@@ -105,7 +105,7 @@
                                     <td>{{ $item->beneficiare->academic_session ?? 'N/A' }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            <a href="{{ route('training-certificate', $item->id) }}" class="btn btn-success btn-sm px-3"
+                                            <a href="{{ route('training-certificate', ['id' => $item->id, 'center_code' => $item->center_code]) }}" class="btn btn-success btn-sm px-3"
                                             >
                                             Certificate
                                             </a>
