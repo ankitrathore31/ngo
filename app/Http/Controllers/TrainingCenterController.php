@@ -173,11 +173,120 @@ class TrainingCenterController extends Controller
         return view('ngo.training.training-approve-bene-list', compact('session', 'record'));
     }
 
-    public function ShowApproveBeneTraining($id)
+    public function ShowApproveBeneTraining($id, $center_code)
     {
         $session = academic_session::all();
         $record = Training_Beneficiarie::with(['center', 'beneficiare'])->findOrFail($id);
+        $center = Training_Center::where('center_code', $center_code)->first();
+        return view('ngo.training.view-bene', compact('session', 'record','center'));
+    }
 
-        return view('ngo.training.view-bene', compact('session', 'record'));
+    public function GenrateTrainingCerti(Request $request)
+    {
+        $session = academic_session::all();
+
+        $queryBene = Training_Beneficiarie::with(['center', 'beneficiare']);
+
+        if ($request->filled('session_filter')) {
+            $queryBene->where('academic_session', $request->session_filter);
+        }
+
+        if ($request->filled('application_no')) {
+            $queryBene->whereHas('beneficiare', function ($q) use ($request) {
+                $q->where('application_no', $request->application_no);
+            });
+        }
+
+        if ($request->filled('name')) {
+            $queryBene->whereHas('beneficiare', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->name . '%');
+            });
+        }
+
+        $record = $queryBene->orderBy('created_at', 'asc')->get();
+
+        return view('ngo.training.generate-certificate-list', compact('session', 'record'));
+    }
+
+    public function GenrateTrainingCertificate($id)
+    {
+
+        $session = academic_session::all();
+        $record = Training_Beneficiarie::with(['center', 'beneficiare'])->find($id);
+
+        return view('ngo.training.genrate-training-certificate', compact('session', 'record'));
+    }
+
+    public function SaveGenrateTrainingCertificate(Request $request)
+    {
+
+
+        // Validate input
+        $validated = $request->validate([
+            'roll_no'       => 'required|numeric',
+            'organised_by'  => 'nullable|string|max:255',
+            'grade'         => 'nullable|string|max:100',
+            'talent'        => 'nullable|string|max:255',
+            'issue_date'    => 'required|date',
+        ]);
+
+        // Check if record exists for update
+        $certificate = Training_Beneficiarie::where('beneficiarie_id', $request->beneficiarie_id)
+            ->where('id', $request->id)
+            ->first();
+
+        if (!$certificate) {
+            $certificate = new Training_Beneficiarie();
+            $certificate->beneficiarie_id = $request->beneficiarie_id;
+            $certificate->record_id = $request->id;
+        }
+
+        // Assign fields from form
+        $certificate->roll_no = $request->roll_no;
+        $certificate->organised_by = $request->organised_by;
+        $certificate->grade = $request->grade;
+        $certificate->talent = $request->talent;
+        $certificate->issue_date = $request->issue_date;
+
+        // Save to DB
+        $certificate->save();
+
+        return redirect()->back()->with('success', 'Training Certificate saved successfully.');
+    }
+
+    public function TrainingCerti(Request $request)
+    {
+        $session = academic_session::all();
+
+        $queryBene = Training_Beneficiarie::with(['center', 'beneficiare']);
+
+        if ($request->filled('session_filter')) {
+            $queryBene->where('academic_session', $request->session_filter);
+        }
+
+        if ($request->filled('application_no')) {
+            $queryBene->whereHas('beneficiare', function ($q) use ($request) {
+                $q->where('application_no', $request->application_no);
+            });
+        }
+
+        if ($request->filled('name')) {
+            $queryBene->whereHas('beneficiare', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->name . '%');
+            });
+        }
+
+        $record = $queryBene->orderBy('created_at', 'asc')->get();
+
+        return view('ngo.training.training-bene-certificate-list', compact('session', 'record'));
+    }
+
+    public function TrainingCertificate($id)
+    {
+
+        $session = academic_session::all();
+        $record = Training_Beneficiarie::with(['center', 'beneficiare'])->find($id);
+
+        return view('ngo.training.training-bene-certificate', compact('session', 'record'));
     }
 }
