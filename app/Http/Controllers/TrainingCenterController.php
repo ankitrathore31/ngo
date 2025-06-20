@@ -281,12 +281,12 @@ class TrainingCenterController extends Controller
         return view('ngo.training.training-bene-certificate-list', compact('session', 'record'));
     }
 
-    public function TrainingCertificate($id)
+    public function TrainingCertificate($id, $center_code)
     {
 
         $session = academic_session::all();
         $record = Training_Beneficiarie::with(['center', 'beneficiare'])->find($id);
-
-        return view('ngo.training.training-bene-certificate', compact('session', 'record'));
+        $center = Training_Center::where('center_code', $center_code)->first();
+        return view('ngo.training.training-bene-certificate', compact('session', 'record','center'));
     }
 }
