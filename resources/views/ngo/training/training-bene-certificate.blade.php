@@ -259,7 +259,31 @@
                                 </div> --}}
                                 <div
                                     style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: normal; overflow-wrap: break-word;">
-                                    &nbsp;{{ $record->organised_by }}
+                                    &nbsp;{{ $center->center_name }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 mb-2">
+                            <div style="display: flex; align-items: flex-start; width: 100%;">
+                                <strong style="white-space: nowrap; margin-right: 5px;">
+                                    <span data-lang="hi">प्रशिक्षण प्रारंभ तिथि</span>
+                                    <span data-lang="en">Training start date </span>
+                                </strong>
+                                <div
+                                    style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: normal; overflow-wrap: break-word;">
+                                    &nbsp;{{ $record->start_date }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 mb-2">
+                            <div style="display: flex; align-items: flex-start; width: 100%;">
+                                <strong style="white-space: nowrap; margin-right: 5px;">
+                                    <span data-lang="hi">प्रशिक्षण समाप्ति तिथि</span>
+                                    <span data-lang="en">Training end date </span>
+                                </strong>
+                                <div
+                                    style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: normal; overflow-wrap: break-word;">
+                                    &nbsp;{{ $record->end_date }}
                                 </div>
                             </div>
                         </div>
@@ -267,7 +291,7 @@
                             <div style="display: flex; align-items: flex-start; width: 100%;">
                                 <strong style="white-space: nowrap; margin-right: 5px;">
                                     <span data-lang="hi">अवधि</span>
-                                    <span data-lang="en">Duration</span>
+                                    <span data-lang="en">Training Duration</span>
                                 </strong>
                                 <div
                                     style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: normal; overflow-wrap: break-word;">
@@ -278,34 +302,10 @@
                         <div class="col-sm-1 mb-2">
                             <div style="display: flex; align-items: flex-start; width: 100%;">
                                 <strong style="white-space: nowrap; margin-right: 5px;">
-                                    <span data-lang="hi">महीने/दिन</span>
-                                    <span data-lang="en">Month/Day</span>
+                                    <span data-lang="hi">महीने/दिन/साल</span>
+                                    <span data-lang="en">Month/Day/Year</span>
                                 </strong>
 
-                            </div>
-                        </div>&nbsp; &nbsp;
-                        <div class="col-sm-3 mb-2">
-                            <div style="display: flex; align-items: flex-start; width: 100%;">
-                                <strong style="white-space: nowrap; margin-right: 5px;">
-                                    <span data-lang="hi">की तिथि से</span>
-                                    <span data-lang="en">from date</span>
-                                </strong>
-                                <div
-                                    style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: normal; overflow-wrap: break-word;">
-                                    &nbsp;{{ \Carbon\Carbon::parse($record->start_date)->format('d-m-Y') }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3 mb-2">
-                            <div style="display: flex; align-items: flex-start; width: 100%;">
-                                <strong style="white-space: nowrap; margin-right: 5px;">
-                                    <span data-lang="hi">तारीख तक</span>
-                                    <span data-lang="en">to date</span>
-                                </strong>
-                                <div
-                                    style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: normal; overflow-wrap: break-word;">
-                                    &nbsp;{{ \Carbon\Carbon::parse($record->end_date)->format('d-m-Y') }}
-                                </div>
                             </div>
                         </div>
                         <div class="col-sm-3">
@@ -386,15 +386,15 @@
                         </div>
                         <div class="col-sm-2 text-center">
                             <img src="{{ asset('images/iso.png') }}" alt="Logo" width="100" height="100">
-                            
+
                         </div>
                         <div class="col-sm-5 text-center">
                             Director Signature with stamp
                         </div>
                     </div>
-                     <div class="col-sm-12 text-center">
-                            Grade Marks : A=76 to 100 B= 51 to 75 C= 26 to 50 D= 1 to 25
-                        </div>
+                    <div class="col-sm-12 text-center">
+                        Grade Marks : A=76 to 100 B= 51 to 75 C= 26 to 50 D= 1 to 25
+                    </div>
                 </form>
             </div>
         </div>

@@ -253,38 +253,22 @@
                                     <span data-lang="hi">द्वारा आयोजित</span>
                                     <span data-lang="en">Organised by</span>
                                 </strong>
-                                <div>
+                                {{-- <div>
                                     <input type="text" name="organised_by"
-                                        value="{{ old('organised_by', $record->organised_by ?? '') }}">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3 mb-2">
-                            <div style="display: flex; align-items: flex-start; width: 100%;">
-                                <strong style="white-space: nowrap; margin-right: 5px;">
-                                    <span data-lang="hi">अवधि</span>
-                                    <span data-lang="en">Duration</span>
-                                </strong>
+                                        value="{{ $center->center_name }}">
+                                </div> --}}
                                 <div
                                     style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: normal; overflow-wrap: break-word;">
-                                    &nbsp;{{ $record->duration }}
+                                    &nbsp;{{ $center->center_name }}
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-1 mb-2">
-                            <div style="display: flex; align-items: flex-start; width: 100%;">
-                                <strong style="white-space: nowrap; margin-right: 5px;">
-                                    <span data-lang="hi">महीने/दिन</span>
-                                    <span data-lang="en">Month/Day</span>
-                                </strong>
 
-                            </div>
-                        </div>&nbsp; &nbsp;
                         <div class="col-sm-3 mb-2">
                             <div style="display: flex; align-items: flex-start; width: 100%;">
                                 <strong style="white-space: nowrap; margin-right: 5px;">
-                                    <span data-lang="hi">की तिथि से</span>
-                                    <span data-lang="en">from date</span>
+                                    <span data-lang="hi">प्रशिक्षण प्रारंभ तिथि</span>
+                                    <span data-lang="en">Training start date </span>
                                 </strong>
                                 <div
                                     style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: normal; overflow-wrap: break-word;">
@@ -295,13 +279,34 @@
                         <div class="col-sm-3 mb-2">
                             <div style="display: flex; align-items: flex-start; width: 100%;">
                                 <strong style="white-space: nowrap; margin-right: 5px;">
-                                    <span data-lang="hi">तारीख तक</span>
-                                    <span data-lang="en">to date</span>
+                                    <span data-lang="hi">प्रशिक्षण समाप्ति तिथि</span>
+                                    <span data-lang="en">Training end date </span>
                                 </strong>
                                 <div
                                     style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: normal; overflow-wrap: break-word;">
                                     &nbsp;{{ $record->end_date }}
                                 </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 mb-2">
+                            <div style="display: flex; align-items: flex-start; width: 100%;">
+                                <strong style="white-space: nowrap; margin-right: 5px;">
+                                    <span data-lang="hi">अवधि</span>
+                                    <span data-lang="en">Training Duration</span>
+                                </strong>
+                                <div
+                                    style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: normal; overflow-wrap: break-word;">
+                                    &nbsp;{{ $record->duration }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-1 mb-2">
+                            <div style="display: flex; align-items: flex-start; width: 100%;">
+                                <strong style="white-space: nowrap; margin-right: 5px;">
+                                    <span data-lang="hi">महीने/दिन/साल</span>
+                                    <span data-lang="en">Month/Day/Year</span>
+                                </strong>
+
                             </div>
                         </div>
                         <div class="col-sm-3">

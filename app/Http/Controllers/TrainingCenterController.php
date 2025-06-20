@@ -208,13 +208,13 @@ class TrainingCenterController extends Controller
         return view('ngo.training.generate-certificate-list', compact('session', 'record'));
     }
 
-    public function GenrateTrainingCertificate($id)
+    public function GenrateTrainingCertificate($id,$center_code)
     {
 
         $session = academic_session::all();
         $record = Training_Beneficiarie::with(['center', 'beneficiare'])->find($id);
-
-        return view('ngo.training.genrate-training-certificate', compact('session', 'record'));
+        $center = Training_Center::where('center_code', $center_code)->first();
+        return view('ngo.training.genrate-training-certificate', compact('session', 'record','center'));
     }
 
     public function SaveGenrateTrainingCertificate(Request $request)
@@ -224,7 +224,7 @@ class TrainingCenterController extends Controller
         // Validate input
         $validated = $request->validate([
             'roll_no'       => 'required|numeric',
-            'organised_by'  => 'nullable|string|max:255',
+            // 'organised_by'  => 'nullable|string|max:255',
             'grade'         => 'nullable|string|max:100',
             'talent'        => 'nullable|string|max:255',
             'issue_date'    => 'required|date',
@@ -243,7 +243,7 @@ class TrainingCenterController extends Controller
 
         // Assign fields from form
         $certificate->roll_no = $request->roll_no;
-        $certificate->organised_by = $request->organised_by;
+        // $certificate->organised_by = $request->organised_by;
         $certificate->grade = $request->grade;
         $certificate->talent = $request->talent;
         $certificate->issue_date = $request->issue_date;

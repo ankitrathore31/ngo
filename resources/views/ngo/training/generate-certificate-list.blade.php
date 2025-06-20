@@ -105,11 +105,11 @@
                                     <td>{{ $item->beneficiare->academic_session ?? 'N/A' }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            <a href="{{ route('genrate-training-certificate', $item->id) }}" class="btn btn-success btn-sm px-3"
+                                            <a href="{{ route('genrate-training-certificate',['id' => $item->id, 'center_code' => $item->center_code]) }}" class="btn btn-success btn-sm px-3"
                                             >
                                             Genrate Certificate
                                             </a>
-                                            <a href="{{ route('show-approve-bene-training', $item->id) }}"
+                                            <a href="{{ route('show-approve-bene-training',['id' => $item->id, 'center_code' => $item->center_code]) }}"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="View" style="min-width: 38px; height: 38px;">
                                                 <i class="fa-regular fa-eye"></i>
