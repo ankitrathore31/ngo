@@ -101,8 +101,10 @@
                                     <td>{{ $item->academic_session }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            <a href="javascript:void(0);" class="btn btn-success btn-sm px-3"
-                                                data-bs-toggle="modal" data-bs-target="#Modal">
+                                            <a href="javascript:void(0);" class="btn btn-success btn-sm px-3 demand-btn"
+                                                data-bs-toggle="modal" data-bs-target="#Modal"
+                                                data-id="{{ $item->id }}" data-name="{{ $item->name }}"
+                                                data-gurdian="{{ $item->gurdian_name }}">
                                                 Demand Beneficiarie In Training Center
                                             </a>
                                             <a href="{{ route('view-beneficiarie', $item->id) }}"
@@ -126,6 +128,10 @@
                             <h5 class="modal-title" id="positionModalLabel">Add Beneficiary In Center</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
+                        <h6 class="modal-title" id="positionModalLabel">
+                            &nbsp; &nbsp; Name: <span id="beneName"></span> &nbsp;&nbsp; Father/Husband Name: <span
+                                id="guardianName"></span>
+                        </h6>
                         <form action="{{ route('store-demand') }}" method="POST">
                             @csrf
                             <div class="modal-body">
@@ -384,6 +390,24 @@
                 if (!e.target.closest('#searchInout') && !e.target.closest('#centerList')) {
                     centerList.style.display = 'none';
                 }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const demandButtons = document.querySelectorAll('.demand-btn');
+
+            demandButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const name = this.getAttribute('data-name');
+                    const guardian = this.getAttribute('data-gurdian');
+                    const id = this.getAttribute('data-id');
+
+                    // Set values in modal
+                    document.getElementById('beneName').textContent = name;
+                    document.getElementById('guardianName').textContent = guardian;
+                    document.querySelector('input[name="beneficiarie_id"]').value = id;
+                });
             });
         });
     </script>
