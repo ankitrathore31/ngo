@@ -91,11 +91,11 @@
         <div class="container-fluid mt-4">
 
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Approve Registraition Form</h5>
+                <h5 class="mb-0">Approve Demand Training</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-record"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-record active" aria-current="page">Approve Form</li>
+                        <li class="breadcrumb-record active" aria-current="page">Approve Demand</li>
                     </ol>
                 </nav>
             </div>
@@ -106,7 +106,7 @@
             @endif
             <div class="container my-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2 class="fw-bold">Apporve Registration Form</h2>
+                    <h2 class="fw-bold">Apporve Demand Training</h2>
                     <button onclick="window.print()" class="btn btn-primary">Print / Download</button>
                 </div>
 
@@ -278,7 +278,7 @@
                             </div>
                         @endif
                     </div>
-                    <h4>Training Information</h4>
+                    <h5>- Training Information</h5>
                     <div class="row">
                         <div class="col-sm-4 mb-3">
                             <strong>Center Code:</strong> {{ $center->center_code }}

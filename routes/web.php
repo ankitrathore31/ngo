@@ -264,6 +264,7 @@ Route::controller(TrainingCenterController::class)->group(function(){
     Route::get('ngo/delete-center/{id}', 'DeleteCenter')->middleware('auth')->name('delete-center');
     Route::get('ngo/taining-demand-bene', 'AddBeneForCenter')->middleware('auth')->name('taining-demand-bene');
     Route::post('ngo/store-demand', 'storeTrainingDemand')->middleware('auth')->name('store-demand');
+    // Route::get('ngo')
     Route::get('ngo/approve-training-beneficiaries', 'ApproveBeneForTraining')->middleware('auth')->name('approve-taining-demand-bene');
     Route::get('ngo/view-approve-training-bene/{id}/{center_code}', 'ShowApproveBeneTraining')->middleware('auth')->name('show-approve-bene-training');
     Route::get('ngo/genrate-training-certificate', 'GenrateTrainingCerti')->middleware('auth')->name('genrate-training-certi');
