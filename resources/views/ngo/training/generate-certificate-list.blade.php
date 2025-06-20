@@ -4,11 +4,11 @@
         <div class="container-fluid mt-4">
 
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Approve Training Beneficiarie List</h5>
+                <h5 class="mb-0">Genrate Training Beneficiarie List</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Approve Beneficiaries </li>
+                        <li class="breadcrumb-item active" aria-current="page">Genrate Certificate </li>
                     </ol>
                 </nav>
             </div>
@@ -18,8 +18,9 @@
                     {{ session('success') }}
                 </div>
             @endif
+
             <div class="row">
-                <form method="GET" action="{{ route('approve-taining-demand-bene') }}" class="row g-3 mb-4">
+                <form method="GET" action="{{ route('genrate-training-certi') }}" class="row g-3 mb-4">
                     <div class="col-md-3 col-sm-4">
                         <select name="session_filter" id="session_filter" class="form-control"
                             onchange="this.form.submit()">
@@ -41,7 +42,7 @@
                     </div>
                     <div class="col-md-3">
                         <button type="submit" class="btn btn-primary me-1">Search</button>
-                        <a href="{{ route('approve-taining-demand-bene') }}" class="btn btn-info text-white me-1">Reset</a>
+                        <a href="{{ route('genrate-training-certi') }}" class="btn btn-info text-white me-1">Reset</a>
                     </div>
                 </form>
 
@@ -104,11 +105,11 @@
                                     <td>{{ $item->beneficiare->academic_session ?? 'N/A' }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            {{-- <a href="javascript:void(0);" class="btn btn-success btn-sm px-3"
-                                                data-bs-toggle="modal" data-bs-target="#Modal">
-                                                Add Beneficiarie In Center
-                                            </a> --}}
-                                            <a href="{{ route('show-approve-bene-training', ['id' => $item->id, 'center_code' => $item->center_code]) }}"
+                                            <a href="{{ route('genrate-training-certificate', $item->id) }}" class="btn btn-success btn-sm px-3"
+                                            >
+                                            Genrate Certificate
+                                            </a>
+                                            <a href="{{ route('show-approve-bene-training', $item->id) }}"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="View" style="min-width: 38px; height: 38px;">
                                                 <i class="fa-regular fa-eye"></i>

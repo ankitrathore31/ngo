@@ -220,6 +220,8 @@
                         <li><a class="dropdown-item" href="{{ route('center-list') }}">Training Centre List</a></li>
                         <li><a class="dropdown-item" href="{{ route('taining-demand-bene') }}">Training Demand Beneficiary List </a></li>
                         <li><a class="dropdown-item" href="{{ route('approve-taining-demand-bene') }}">Training Approve Beneficiary List </a></li>
+                        <li><a class="dropdown-item" href="{{ route('genrate-training-certi') }}">Genrate Training Beneficiary Certificate</a></li>
+                        <li><a class="dropdown-item" href="{{ route('training-certi-list') }}">Training Beneficiary Certificate</a></li>
                         <li><a class="dropdown-item" href="#">Exam Time Table</a></li>
                     </ul>
                 </li>

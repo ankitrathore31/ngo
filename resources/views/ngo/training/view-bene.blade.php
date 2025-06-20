@@ -281,7 +281,15 @@
                     <h4>Training Information</h4>
                     <div class="row">
                         <div class="col-sm-4 mb-3">
-                            <strong>Center Code:</strong> {{ $record->center_code }}
+                            <strong>Center Code:</strong> {{ $center->center_code }}
+                        </div>
+
+                        <div class="col-sm-4 mb-3">
+                            <strong>Center Name:</strong> {{ $center->center_name }}
+                        </div>
+
+                        <div class="col-sm-8 mb-3">
+                            <strong>Center Address:</strong> {{ $center->center_address }}
                         </div>
 
                         <div class="col-sm-4 mb-3">
