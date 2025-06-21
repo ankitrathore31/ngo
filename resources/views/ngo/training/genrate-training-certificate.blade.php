@@ -117,19 +117,29 @@
                     action="{{ route('save-genrate-training-record', ['beneficiarie_id' => $record->beneficiare->id, 'id' => $record->id]) }}"
                     method="POST">
                     @csrf <div class="row d-flex justify-content-between">
-                        <div class="col-sm-3 mb-2">
-                            <p><strong>
-                                    <span data-lang="hi">प्रमाण-पत्र क्रमांक:</span>
-                                    <span data-lang="en">Certificate No.:</span>
-                                </strong> &nbsp;{{ $record->beneficiare->registration_no }}</p>
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-sm-5 mb-2">
+                                <p class="text-center"
+                                    style="background-color: red; color: white; font-weight: bold; padding: 5px; border-radius: 10px;">
+                                    <span data-lang="hi">प्रशिक्षण प्रमाणपत्र</span>
+                                    <span data-lang="en">Training Certificate </span>
+                                </p>
+                            </div>
                         </div>
 
-                        <div class="col-sm-5 mb-2">
-                            <p class="text-center"
-                                style="background-color: red; color: white; font-weight: bold; padding: 5px; border-radius: 10px;">
-                                <span data-lang="hi">प्रशिक्षण प्रमाणपत्र</span>
-                                <span data-lang="en">Training Certificate </span>
-                            </p>
+                        <div class="col-sm-4 mb-2">
+                            <p><strong>
+                                    <span data-lang="hi">प्रमाण-पत्र क्रमांक:</span>
+                                    <span data-lang="en">Certificate No.: </span>
+                                </strong> &nbsp; <input type="number" name="certificate_no"
+                                    value="{{ old('certificate_no', $record->certificate_no ?? '') }}" required></p>
+                        </div>
+
+                        <div class="col-sm-3 mb-2">
+                            <p><strong>
+                                    <span data-lang="hi">पंजीकरण क्रमांक:</span>
+                                    <span data-lang="en">Registration No.:</span>
+                                </strong> &nbsp;{{ $record->beneficiare->registration_no }}</p>
                         </div>
 
                         <div class="col-sm-4 mb-2">

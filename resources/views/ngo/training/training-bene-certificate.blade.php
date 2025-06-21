@@ -73,7 +73,7 @@
                     <span>Training Certificate</span>
                 </h5>
                 <div>
-                    <button onclick="window.print()" class="btn btn-primary">Print / Download</button>
+                    <button onclick="window.print()" class="btn btn-primary">Print Certificate</button>
                     <button class="btn btn-sm btn-outline-primary" onclick="setLanguage('en')">English</button>
                     <button class="btn btn-sm btn-outline-success" onclick="setLanguage('hi')">हिंदी</button>
                 </div>
@@ -117,19 +117,27 @@
                     action="{{ route('save-genrate-training-record', ['beneficiarie_id' => $record->beneficiare->id, 'id' => $record->id]) }}"
                     method="POST">
                     @csrf <div class="row d-flex justify-content-between">
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-sm-5 mb-2">
+                                <p class="text-center"
+                                    style="background-color: red; color: white; font-weight: bold; padding: 5px; border-radius: 10px;">
+                                    <span data-lang="hi">प्रशिक्षण प्रमाणपत्र</span>
+                                    <span data-lang="en">Training Certificate </span>
+                                </p>
+                            </div>
+                        </div>
                         <div class="col-sm-3 mb-2">
                             <p><strong>
                                     <span data-lang="hi">प्रमाण-पत्र क्रमांक:</span>
                                     <span data-lang="en">Certificate No.:</span>
-                                </strong> &nbsp;{{ $record->beneficiare->registration_no }}</p>
+                                </strong> &nbsp;{{ $record->certificate_no }}</p>
                         </div>
 
-                        <div class="col-sm-5 mb-2">
-                            <p class="text-center"
-                                style="background-color: red; color: white; font-weight: bold; padding: 5px; border-radius: 10px;">
-                                <span data-lang="hi">प्रशिक्षण प्रमाणपत्र</span>
-                                <span data-lang="en">Training Certificate </span>
-                            </p>
+                        <div class="col-sm-3 mb-2">
+                            <p><strong>
+                                    <span data-lang="hi">पंजीकरण क्रमांक:</span>
+                                    <span data-lang="en">Registration No.:</span>
+                                </strong> &nbsp;{{ $record->beneficiare->registration_no }}</p>
                         </div>
 
                         <div class="col-sm-4 mb-2">
@@ -381,14 +389,14 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-center align-items-center mt-3">
-                        <div class="col-sm-5 text-center">
+                        <div class="col-sm-5 text-danger fw-bold text-center">
                             Program Officer & Program Manager Signature with stamp
                         </div>
                         <div class="col-sm-2 text-center">
-                            <img src="{{ asset('images/iso.png') }}" alt="Logo" width="100" height="100">
+                            <img src="{{ asset('images/iso.png') }}" alt="Logo" width="130" height="130">
 
                         </div>
-                        <div class="col-sm-5 text-center">
+                        <div class="col-sm-5 text-danger fw-bold text-center">
                             Director Signature with stamp
                         </div>
                     </div>
