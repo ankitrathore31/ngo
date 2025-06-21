@@ -224,7 +224,7 @@ class TrainingCenterController extends Controller
         // Validate input
         $validated = $request->validate([
             'roll_no'       => 'required|numeric',
-            // 'organised_by'  => 'nullable|string|max:255',
+            'certificate_no'  => 'nullable|string|max:255',
             'grade'         => 'nullable|string|max:100',
             'talent'        => 'nullable|string|max:255',
             'issue_date'    => 'required|date',
@@ -243,7 +243,7 @@ class TrainingCenterController extends Controller
 
         // Assign fields from form
         $certificate->roll_no = $request->roll_no;
-        // $certificate->organised_by = $request->organised_by;
+        $certificate->certificate_no = $request->certificate_no;
         $certificate->grade = $request->grade;
         $certificate->talent = $request->talent;
         $certificate->issue_date = $request->issue_date;
