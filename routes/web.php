@@ -272,7 +272,7 @@ Route::controller(TrainingCenterController::class)->group(function(){
     Route::post('ngo/save-genrate-training-record', 'SaveGenrateTrainingCertificate')->middleware('auth')->name('save-genrate-training-record');
     Route::get('ngo/training-certificate-list', 'TrainingCerti')->middleware('auth')->name('training-certi-list');
     Route::get('ngo/tarining-certificate/{id}/{center_code}', 'TrainingCertificate')->middleware('auth')->name('training-certificate');
-
+    Route::get('ngo/genrate-experience', 'GenrateExperience')->middleware('auth')->name('genrate-experience');
 });
 
 
