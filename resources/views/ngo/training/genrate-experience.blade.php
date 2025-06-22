@@ -215,8 +215,8 @@
                             This is to certify that Mr./Ms./Mrs. <strong id="certNameEn">__________</strong>,
                             Son/Daughter/Wife of <strong id="certGurdianEn">__________</strong>,
                             resident of <strong id="certAddressEn">__________</strong> from
-                            <strong><span id="fromDateText">__________</span></strong> to
-                            <strong><span id="toDateText">__________</span></strong> as a
+                            <span><input type="date" id="fromDate"></span> to
+                            <span><input type="date" id="toDate"></span>as a
                             Coordinator.
                             In the working period I found him a since, honest, hardworking. Dedicated with
                             a professional attitude and very good office and field job knowledge. His
@@ -225,17 +225,32 @@
                         </span>
                     </div>
 
-                    <div class="row d-flex justify-content-between mt-5">
-                        <div class="col-sm-4 fw-bold">
-                            <strong><span> Program Officer
-                                    & Program Manager Signature with stamp
-                                </span></strong>
+                    {{-- <div class="row d-flex justify-content-between mt-5">
+                        <div class="col-sm-4 text-center">
+                            <strong>Program Officer & Program Manager Signature with stamp</strong><br>
+
+                            @if (!empty($signatures['program_manager']) && file_exists(public_path($signatures['program_manager'])))
+                                <p class="text-success mt-2">Attached</p>
+                                <img src="{{ asset($signatures['program_manager']) }}" alt="Program Manager Signature"
+                                    class="img-thumbnail mt-2" style="max-height: 100px;">
+                            @else
+                                <p class="text-muted mt-2">Not attached</p>
+                            @endif
                         </div>
-                        
-                        <div class="col-sm-4 fw-bold">
-                            <strong><span> Director Signature with stamp</span></strong>
+
+                        <div class="col-sm-4 text-center">
+                            <strong>Director Signature with stamp</strong><br>
+
+                            @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
+                                <p class="text-success mt-2">Attached</p>
+                                <img src="{{ asset($signatures['director']) }}" alt="Director Signature"
+                                    class="img-thumbnail mt-2" style="max-height: 100px;">
+                            @else
+                                <p class="text-muted mt-2">Not attached</p>
+                            @endif
                         </div>
-                    </div>
+                    </div> --}}
+
                 </div>
             </div>
         </div>

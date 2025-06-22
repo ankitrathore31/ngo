@@ -6,6 +6,7 @@ use App\Models\academic_session;
 use App\Models\beneficiarie;
 use App\Models\Beneficiarie_Survey;
 use App\Models\Member;
+use App\Models\Signature;
 use App\Models\Training_Beneficiarie;
 use App\Models\Training_Center;
 use Illuminate\Http\Request;
@@ -298,7 +299,7 @@ class TrainingCenterController extends Controller
         $beneficiaries = beneficiarie::all();
         $members = Member::all();
         $record = $beneficiaries->merge($members);
-
-        return view('ngo.training.genrate-experience', compact('data', 'record'));
+        $signatures = Signature::pluck('file_path', 'role');
+        return view('ngo.training.genrate-experience', compact('data', 'record','signatures'));
     }
 }

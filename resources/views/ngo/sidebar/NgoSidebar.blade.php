@@ -112,6 +112,7 @@
                         <li><a class="dropdown-item" href="{{ route('working-area-list') }}">Working Area List</a></li>
                         <li><a class="dropdown-item" href="#">Course List</a></li>
                         <li><a class="dropdown-item" href="#">Add Course For Centre</a></li>
+                        <li><a class="dropdown-item" href="{{ route('signature') }}">Signature</a></li>
                     </ul>
                 </li>
 

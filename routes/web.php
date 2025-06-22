@@ -12,6 +12,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\NoticeController;
+use App\Http\Controllers\SignatureController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\TrainingCenterController;
 use App\Http\Controllers\WorkingAreaController;
@@ -273,6 +274,11 @@ Route::controller(TrainingCenterController::class)->group(function(){
     Route::get('ngo/training-certificate-list', 'TrainingCerti')->middleware('auth')->name('training-certi-list');
     Route::get('ngo/tarining-certificate/{id}/{center_code}', 'TrainingCertificate')->middleware('auth')->name('training-certificate');
     Route::get('ngo/genrate-experience', 'GenrateExperience')->middleware('auth')->name('genrate-experience');
+});
+
+Route::controller(SignatureController::class)->group(function(){
+    Route::get('ngo/signature', 'addSignature')->middleware('auth')->name('signature');
+    Route::post('ngo/save-signature', 'saveSignature')->middleware('auth')->name('save-signature');
 });
 
 
