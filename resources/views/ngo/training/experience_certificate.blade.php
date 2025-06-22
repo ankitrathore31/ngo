@@ -127,7 +127,7 @@
                                         No.:</span></strong>
                                 {{ $record->registration_no }}
                             </div>
-                           
+
                             <div class="col-sm-6 text-end">
                                 <strong><span data-lang="hi">तारीख:</span> <span data-lang="en">Date:</span></strong>
                                 {{ \Carbon\Carbon::parse($record->registration_date)->format('d-m-Y') }}
@@ -161,19 +161,31 @@
 
                     <!-- Signature Section -->
                     <div class="row d-flex justify-content-between mt-5">
-                        <div class="col-sm-4 fw-bold">
-                            <strong><span> Program Officer
-                                    & Program Manager Signature with stamp
-                                </span></strong>
+                        <div class="col-sm-4 text-center">
+                            <strong>Program Officer & Program Manager Signature with stamp</strong><br>
+
+                            @if (!empty($signatures['program_manager']) && file_exists(public_path($signatures['program_manager'])))
+                                <p class="text-success mt-2">Attached</p>
+                                <img src="{{ asset($signatures['program_manager']) }}" alt="Program Manager Signature"
+                                    class="img-thumbnail mt-2" style="max-height: 100px;">
+                            @else
+                                <p class="text-muted mt-2">Not attached</p>
+                            @endif
                         </div>
-                        {{-- <div class="col-sm-4">
-                            <strong><span data-lang="hi">आवेदक हस्ताक्षर</span><br><span data-lang="en">Applicant's
-                                    Signature</span></strong>
-                        </div> --}}
-                        <div class="col-sm-4 fw-bold">
-                            <strong><span> Director Signature with stamp</span></strong>
+
+                        <div class="col-sm-4 text-center">
+                            <strong>Director Signature with stamp</strong><br>
+
+                            @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
+                                <p class="text-success mt-2">Attached</p>
+                                <img src="{{ asset($signatures['director']) }}" alt="Director Signature"
+                                    class="img-thumbnail mt-2" style="max-height: 100px;">
+                            @else
+                                <p class="text-muted mt-2">Not attached</p>
+                            @endif
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
