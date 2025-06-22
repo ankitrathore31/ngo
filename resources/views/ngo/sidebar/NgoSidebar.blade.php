@@ -204,6 +204,8 @@
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
                             class="fas fa-certificate"></i> CERTIFICATE</a>
                     <ul class="dropdown-menu bg-primary">
+                        <li><a class="dropdown-item" href="{{ route('genrate-experience')}}">Genrate Experience Certificate</a></li>
+                        <li><a class="dropdown-item" href="#">Experience Certificate List</a></li>
                         <li><a class="dropdown-item" href="#">Add Member Certificate</a></li>
                         <li><a class="dropdown-item" href="#">Member Certificate List</a></li>
                         <li><a class="dropdown-item" href="#">Add Beneficiary Certificate</a></li>

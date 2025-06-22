@@ -282,28 +282,38 @@
         const durationResultInput = document.getElementById('duration_result');
 
         function calculateDuration() {
-            const start = new Date(startDateInput.value);
-            const end = new Date(endDateInput.value);
+            const startVal = startDateInput.value;
+            const endVal = endDateInput.value;
             const type = durationTypeSelect.value;
 
-            if (!startDateInput.value || !endDateInput.value || !type) {
+            if (!startVal || !endVal || !type) {
                 durationResultInput.value = '';
                 return;
             }
+
+            const start = new Date(startVal);
+            const end = new Date(endVal);
 
             if (end < start) {
                 durationResultInput.value = 'Invalid date range';
                 return;
             }
 
-            let years = end.getFullYear() - start.getFullYear();
-            let months = end.getMonth() - start.getMonth();
-            let days = end.getDate() - start.getDate();
+            const msInDay = 1000 * 60 * 60 * 24;
+            const totalDays = Math.round((end - start) / msInDay);
+
+            // Clone dates to avoid mutation
+            let s = new Date(start.getTime());
+            let e = new Date(end.getTime());
+
+            let years = e.getFullYear() - s.getFullYear();
+            let months = e.getMonth() - s.getMonth();
+            let days = e.getDate() - s.getDate();
 
             if (days < 0) {
                 months--;
-                const prevMonth = new Date(end.getFullYear(), end.getMonth(), 0);
-                days += prevMonth.getDate(); // get last date of previous month
+                const tempDate = new Date(e.getFullYear(), e.getMonth(), 0); // last day of previous month
+                days += tempDate.getDate();
             }
 
             if (months < 0) {
@@ -314,15 +324,17 @@
             let result = '';
 
             if (type === 'days') {
-                const totalDays = Math.round((end - start) / (1000 * 60 * 60 * 24));
-                result = `${totalDays} days`;
+                result = `${totalDays} day${totalDays !== 1 ? 's' : ''}`;
             } else if (type === 'months') {
-                if (years > 0) result += `${years} year${years > 1 ? 's' : ''} `;
-                if (months > 0) result += `${months} month${months > 1 ? 's' : ''} `;
-                if (days > 0) result += `${days} day${days > 1 ? 's' : ''}`;
+                const totalMonths = (years * 12) + months;
+                result += totalMonths ? `${totalMonths} month${totalMonths !== 1 ? 's' : ''} ` : '';
+                result += days ? `${days} day${days !== 1 ? 's' : ''}` : '';
                 result = result.trim() || '0 months';
             } else if (type === 'years') {
-                result = `${years} year${years > 1 ? 's' : ''}`;
+                result += years ? `${years} year${years !== 1 ? 's' : ''} ` : '';
+                result += months ? `${months} month${months !== 1 ? 's' : ''} ` : '';
+                result += days ? `${days} day${days !== 1 ? 's' : ''}` : '';
+                result = result.trim() || '0 years';
             }
 
             durationResultInput.value = result;
@@ -332,6 +344,7 @@
         endDateInput.addEventListener('change', calculateDuration);
         durationTypeSelect.addEventListener('change', calculateDuration);
     </script>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

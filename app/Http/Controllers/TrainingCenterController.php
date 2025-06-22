@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\academic_session;
 use App\Models\beneficiarie;
 use App\Models\Beneficiarie_Survey;
+use App\Models\Member;
 use App\Models\Training_Beneficiarie;
 use App\Models\Training_Center;
 use Illuminate\Http\Request;
@@ -288,5 +289,16 @@ class TrainingCenterController extends Controller
         $record = Training_Beneficiarie::with(['center', 'beneficiare'])->find($id);
         $center = Training_Center::where('center_code', $center_code)->first();
         return view('ngo.training.training-bene-certificate', compact('session', 'record','center'));
+    }
+
+      public function GenrateExperience(Request $request)
+    {
+        
+        $data = academic_session::all();
+        $beneficiaries = beneficiarie::all();
+        $members = Member::all();
+        $record = $beneficiaries->merge($members);
+
+        return view('ngo.training.genrate-experience', compact('data', 'record'));
     }
 }
