@@ -14,11 +14,14 @@ use Illuminate\Http\Request;
 
 class ExperienceController extends Controller
 {
+
+
     public function GenrateExperience(Request $request)
     {
         $data = academic_session::all();
         $beneficiaries = beneficiarie::all();
         $members = Member::all();
+        // $staff = Staff::all();
         $record = $beneficiaries->merge($members);
         $signatures = Signature::pluck('file_path', 'role');
 
