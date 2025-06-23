@@ -163,9 +163,6 @@
                             I wish his all the best and success in future career endeavours.
                         </span>
                     </div>
-
-                    <!-- Signature Section -->
-
                     <div class="row d-flex justify-content-between mt-5">
                         <div class="col-sm-4 text-center">
                             @if (!empty($signatures['program_manager']) && file_exists(public_path($signatures['program_manager'])))
@@ -185,7 +182,7 @@
                             @else
                                 <p class="text-muted mt-2 no-print">Not attached</p>
                             @endif
-                            <strong>Program Officer & Program Manager Signature with stamp</strong><br>
+                            <strong>Program Officer & Manager Signature with stamp</strong><br>
                         </div>
                         <div class="col-sm-4 text-center">
                             @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))

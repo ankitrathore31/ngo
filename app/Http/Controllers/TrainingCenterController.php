@@ -290,7 +290,8 @@ class TrainingCenterController extends Controller
         $session = academic_session::all();
         $record = Training_Beneficiarie::with(['center', 'beneficiare'])->find($id);
         $center = Training_Center::where('center_code', $center_code)->first();
-        return view('ngo.training.training-bene-certificate', compact('session', 'record', 'center'));
+        $signatures = Signature::pluck('file_path', 'role');
+        return view('ngo.training.training-bene-certificate', compact('session', 'record', 'center','signatures'));
     }
 
 }

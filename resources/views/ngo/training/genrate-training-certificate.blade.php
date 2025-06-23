@@ -159,7 +159,7 @@
                                     <span data-lang="en">It is Certified that Shri/Km./Smt:</span>
                                 </strong>
                                 <div
-                                    style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
+                                    style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: rap;">
                                     &nbsp; {{ $record->beneficiare->name }}
                                 </div>
                             </div>
@@ -167,12 +167,12 @@
 
                         <div class="col-sm-6 mb-2">
                             <div style="display: flex; align-items: center; width: 100%;">
-                                <strong style="white-space: nowrap; margin-right: 5px;">
+                                <strong style="white-space: wrap; margin-right: 5px;">
                                     <span data-lang="hi">पिता/पति का नाम</span>
                                     <span data-lang="en">Father/Husband's Name:</span>
                                 </strong>
                                 <div
-                                    style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
+                                    style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap;">
                                     &nbsp;{{ $record->beneficiare->gurdian_name }}
                                 </div>
                             </div>
@@ -269,7 +269,7 @@
                                 </div> --}}
                                 <div
                                     style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: normal; overflow-wrap: break-word;">
-                                    &nbsp;{{ $center->center_name }}
+                                    &nbsp;{{ $center->center_code }}, {{ $center->center_name }}, {{ $center->center_address }}
                                 </div>
                             </div>
                         </div>
