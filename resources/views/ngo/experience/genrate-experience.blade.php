@@ -1,6 +1,10 @@
 @extends('ngo.layout.master')
 @section('content')
     <style>
+        #recordTableDiv {
+            transition: opacity 0.3s ease;
+        }
+
         @media print {
             @page {
                 size: A4 portrait;
@@ -148,12 +152,13 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($record as $item)
-                                        <tr class="record-row" data-name="{{ $item->name }}"
-                                            data-phone="{{ $item->phone }}"
-                                            data-gurdian="{{ $item->gurdian_name }}"data-registration="{{ $item->registration_no }}"
-                                            data-registrationDate="{{ $item->registration_date }}"
+                                        <tr class="record-row" data-id="{{ $item->id }}" data-name="{{ $item->name }}"
+                                            data-phone="{{ $item->phone }}" data-gurdian="{{ $item->gurdian_name }}"
+                                            data-registration="{{ $item->registration_no }}"
+                                            data-registrationdate="{{ $item->registration_date }}"
                                             data-address="{{ $item->village }}, {{ $item->post }}, {{ $item->block }}, {{ $item->district }}, {{ $item->state }} - {{ $item->pincode }}"
                                             style="cursor: pointer;">
+
                                             <td>{{ get_class($item) === 'App\\Models\\beneficiarie' ? 'Beneficiary' : 'Member' }}
                                             </td>
                                             <td>{{ $item->registration_no ?? 'Not Found' }}</td>
@@ -165,6 +170,7 @@
                                             <td>{{ $item->academic_session ?? '_' }}</td>
                                         </tr>
                                     @endforeach
+
                                 </tbody>
                             </table>
                         </div>
@@ -182,74 +188,73 @@
                             </div>
                         </div>
                     </div>
-                    <div class=" p-4 lh-lg" style="font-size: 16px;">
-                        <div class="row justify-content-between mb-3">
-                            <div class="col-sm-6">
-                                <strong><span data-lang="hi">प्रमाण-पत्र क्रमांक:</span> <span data-lang="en">Certificate
-                                        No.:</span></strong>
-                                <span id="certRegNo">__________</span>
+                    <form action="{{ route('save-experience') }}" method="post">
+                        @csrf
+                        <input type="text" name="beneficiarie_id"
+                            value="{{ old('beneficiarie_id', $experience->beneficiarie_id ?? '') }}" id="beneficiarie_id"
+                            hidden>
+                        <div class=" p-4 lh-lg" style="font-size: 16px;">
+                            <div class="row justify-content-between mb-3">
+                                <div class="col-sm-6">
+                                    <strong><span data-lang="hi">प्रमाण-पत्र क्रमांक:</span> <span
+                                            data-lang="en">Certificate
+                                            No.:</span></strong>
+                                    <span id=""><input id="certRegNo" type="text" name="certiNo"
+                                            value=""></span>
+                                </div>
+
+                                <div class="col-sm-6 text-end">
+                                    <strong><span data-lang="hi">तारीख:</span> <span data-lang="en">Date:</span></strong>
+                                    <span id="certDate"><input type="date" name="date" id="date"
+                                            >
+                                    </span>
+                                </div>
                             </div>
 
-                            <div class="col-sm-6 text-end">
-                                <strong><span data-lang="hi">तारीख:</span> <span data-lang="en">Date:</span></strong>
-                                <span id="certDate">__________</span>
+                            <span data-lang="hi">
+                                यह प्रमाणित किया जाता है कि श्री/श्रीमती/कुमारी <strong id="certNameHi">__________</strong>,
+                                पिता/पति <strong id="certGurdianHi">__________</strong>,
+                                निवासी <strong id="certAddressHi">__________</strong>
+                                भारत में दिनांक <span><input type="date" id="fromDate" name="fromDate"
+                                        >
+                                </span> से
+                                <strong><input type="date" id="toDate" name="toDate"
+                                       >
+                                </strong>
+                                तक समन्वयक के पद पर कार्यरत हैं। कार्य अवधि में मैंने पाया कि वे एक ईमानदार, मेहनती,
+                                समर्पित,
+                                पेशेवर दृष्टिकोण वाले तथा कार्यालय और क्षेत्र की नौकरी के बारे में बहुत अच्छे ज्ञान वाले
+                                व्यक्ति
+                                हैं। इस अवधि के दौरान उनका चरित्र और आचरण अनुकरणीय रहा है। मैं उन्हें भविष्य के करियर
+                                प्रयासों
+                                में शुभकामनाएं और सफलता की कामना करता हूं।
+                            </span>
+
+                            <span data-lang="en">
+                                This is to certify that Mr./Ms./Mrs. <strong id="certNameEn">__________</strong>,
+                                Son/Daughter/Wife of <strong id="certGurdianEn">__________</strong>,
+                                resident of <strong id="certAddressEn">__________</strong> from
+                                <span><input type="date" id="fromDate" name="fromDate"
+                                        value="{{ old('fromDate', $experience->fromDate ?? '') }}"></span> to
+                                <span><input type="date" id="toDate" name="toDate"
+                                        value="{{ old('toDate', $experience->toDate ?? '') }}">
+                                </span>as a
+                                Coordinator.
+                                In the working period I found him a since, honest, hardworking. Dedicated with
+                                a professional attitude and very good office and field job knowledge. His
+                                character and conduct during this period hasbeen exemplary.
+                                I wish his all the best and success in future career endeavours.
+                            </span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <input type="submit" class="btn btn-success p-2 mt-2" value="Save">
                             </div>
                         </div>
+                    </form>
 
-                        <span data-lang="hi">
-                            यह प्रमाणित किया जाता है कि श्री/श्रीमती/कुमारी <strong id="certNameHi">__________</strong>,
-                            पिता/पति <strong id="certGurdianHi">__________</strong>,
-                            निवासी <strong id="certAddressHi">__________</strong>
-                            भारत में दिनांक <span><input type="date" id="fromDate"></span> से
-                            <strong><input type="date" id="toDate"></strong>
-                            तक समन्वयक के पद पर कार्यरत हैं। कार्य अवधि में मैंने पाया कि वे एक ईमानदार, मेहनती,
-                            समर्पित,
-                            पेशेवर दृष्टिकोण वाले तथा कार्यालय और क्षेत्र की नौकरी के बारे में बहुत अच्छे ज्ञान वाले
-                            व्यक्ति
-                            हैं। इस अवधि के दौरान उनका चरित्र और आचरण अनुकरणीय रहा है। मैं उन्हें भविष्य के करियर
-                            प्रयासों
-                            में शुभकामनाएं और सफलता की कामना करता हूं।
-                        </span>
-
-                        <span data-lang="en">
-                            This is to certify that Mr./Ms./Mrs. <strong id="certNameEn">__________</strong>,
-                            Son/Daughter/Wife of <strong id="certGurdianEn">__________</strong>,
-                            resident of <strong id="certAddressEn">__________</strong> from
-                            <span><input type="date" id="fromDate"></span> to
-                            <span><input type="date" id="toDate"></span>as a
-                            Coordinator.
-                            In the working period I found him a since, honest, hardworking. Dedicated with
-                            a professional attitude and very good office and field job knowledge. His
-                            character and conduct during this period hasbeen exemplary.
-                            I wish his all the best and success in future career endeavours.
-                        </span>
-                    </div>
-
-                    {{-- <div class="row d-flex justify-content-between mt-5">
-                        <div class="col-sm-4 text-center">
-                            <strong>Program Officer & Program Manager Signature with stamp</strong><br>
-
-                            @if (!empty($signatures['program_manager']) && file_exists(public_path($signatures['program_manager'])))
-                                <p class="text-success mt-2">Attached</p>
-                                <img src="{{ asset($signatures['program_manager']) }}" alt="Program Manager Signature"
-                                    class="img-thumbnail mt-2" style="max-height: 100px;">
-                            @else
-                                <p class="text-muted mt-2">Not attached</p>
-                            @endif
-                        </div>
-
-                        <div class="col-sm-4 text-center">
-                            <strong>Director Signature with stamp</strong><br>
-
-                            @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
-                                <p class="text-success mt-2">Attached</p>
-                                <img src="{{ asset($signatures['director']) }}" alt="Director Signature"
-                                    class="img-thumbnail mt-2" style="max-height: 100px;">
-                            @else
-                                <p class="text-muted mt-2">Not attached</p>
-                            @endif
-                        </div>
-                    </div> --}}
+                    <!-- Signature Section -->
 
                 </div>
             </div>
@@ -292,14 +297,16 @@
             // Fill fields when table row is clicked
             tableRows.forEach(row => {
                 row.addEventListener('click', function() {
+                    const id = this.dataset.id;
                     const name = this.dataset.name;
                     const phone = this.dataset.phone;
                     const gurdian = this.dataset.gurdian;
                     const address = this.dataset.address;
                     const registration = this.dataset.registration;
-                    const registrationDate = this.dataset.registrationdate;
+                    const registrationDate = this.dataset.registrationDate;
 
                     // Certificate section filling by ID
+                    document.getElementById('beneficiarie_id').value = id;
                     document.getElementById('certNameHi').textContent = name;
                     document.getElementById('certGurdianHi').textContent = gurdian;
                     document.getElementById('certAddressHi').textContent = address;
@@ -308,38 +315,34 @@
                     document.getElementById('certGurdianEn').textContent = gurdian;
                     document.getElementById('certAddressEn').textContent = address;
 
-                    document.getElementById('certRegNo').textContent = registration;
-                    document.getElementById('certDate').textContent = registrationDate;
+                    document.getElementById('certRegNo').value = registration;
+                    // document.getElementById('certDate').textContent = registrationDate;
 
-                    // Set input dates and their display versions
-                    const today = new Date().toISOString().split('T')[0];
-                    document.getElementById('fromDate').value = registrationDate;
-                    document.getElementById('toDate').value = today;
-                    document.getElementById('fromDateText').textContent = registrationDate;
-                    document.getElementById('toDateText').textContent = today;
 
-                    // Optional display section for confirmation
+
+                    // Show selected record summary
                     selectedInfo.innerHTML = `
-                    <div class="row">
-                        <div class="col-md-3"><strong>Name:</strong> ${name}</div>
-                        <div class="col-md-3"><strong>Mobile:</strong> ${phone}</div>
-                        <div class="col-md-3"><strong>Registration No.:</strong> ${registration}</div>
-                    </div>
-                `;
+        <div class="row">
+            <div class="col-md-3"><strong>Name:</strong> ${name}</div>
+            <div class="col-md-3"><strong>Mobile:</strong> ${phone}</div>
+            <div class="col-md-3"><strong>Registration No.:</strong> ${registration}</div>
+        </div>
+    `;
 
-                    selectedRecord.style.display = 'block';
-                    tableDiv.style.display = 'none';
-                    searchInput.value = '';
+                    selectedRecord.style.display = 'block'; // shows the selected record info
+                    tableDiv.style.display = 'none'; // hides the table
+                    searchInput.value = ''; // clears the search box
+
                 });
+
+                tableDiv.style.opacity = '0';
+                setTimeout(() => {
+                    tableDiv.style.display = 'none';
+                    tableDiv.style.opacity = '1'; // reset for next time
+                }, 300);
+
             });
 
-            // Auto-update display when date inputs change
-            // document.getElementById('fromDate').addEventListener('change', function() {
-            //     document.getElementById('fromDateText').textContent = this.value;
-            // });
-            // document.getElementById('toDate').addEventListener('change', function() {
-            //     document.getElementById('toDateText').textContent = this.value;
-            // });
         });
     </script>
 @endsection

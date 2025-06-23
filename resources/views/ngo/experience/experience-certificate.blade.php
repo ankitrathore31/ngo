@@ -125,20 +125,24 @@
                             <div class="col-sm-6">
                                 <strong><span data-lang="hi">प्रमाण-पत्र क्रमांक:</span> <span data-lang="en">Certificate
                                         No.:</span></strong>
-                                {{ $record->registration_no }}
+                                {{ $record->certiNo }}
                             </div>
 
                             <div class="col-sm-6 text-end">
                                 <strong><span data-lang="hi">तारीख:</span> <span data-lang="en">Date:</span></strong>
-                                {{ \Carbon\Carbon::parse($record->registration_date)->format('d-m-Y') }}
+                                {{ \Carbon\Carbon::parse($record->date)->format('d-m-Y') }}
                             </div>
                         </div>
                         <span data-lang="hi">
-                            यह प्रमाणित किया जाता है कि श्री/श्रीमती/कुमारी <strong>{{ $record->name }}</strong>,
-                            पिता/पति <strong>{{ $record->gurdian_name }}</strong>,
-                            निवासी <strong>{{ $record->village }}</strong>, पोस्ट <strong>{{ $record->post }}</strong>,
-                            जिला <strong>{{ $record->district }}</strong>, राज्य <strong>{{ $record->state }}</strong>
-                            भारत में दिनांक <strong>{{-- $record->position --}}</strong> से <strong>{{-- $record->position --}}</strong>
+                            यह प्रमाणित किया जाता है कि श्री/श्रीमती/कुमारी
+                            <strong>{{ $record->beneficiare->name }}</strong>,
+                            पिता/पति <strong>{{ $record->beneficiare->gurdian_name }}</strong>,
+                            निवासी <strong>{{ $record->beneficiare->village }}</strong>, पोस्ट
+                            <strong>{{ $record->beneficiare->post }}</strong>,
+                            जिला <strong>{{ $record->beneficiare->district }}</strong>, राज्य
+                            <strong>{{ $record->beneficiare->state }}</strong>
+                            भारत में दिनांक <strong>{{ $record->fromDate }}</strong> से
+                            <strong>{{ $record->toDate }}</strong>
                             तक समन्वयक के पद पर कार्यरत हैं। कार्य अवधि में मैंने पाया कि वे एक ईमानदार, मेहनती, समर्पित,
                             पेशेवर दृष्टिकोण वाले तथा कार्यालय और क्षेत्र की नौकरी के बारे में बहुत अच्छे ज्ञान वाले व्यक्ति
                             हैं। इस अवधि के दौरान उनका चरित्र और आचरण अनुकरणीय रहा है। मैं उन्हें भविष्य के करियर प्रयासों
@@ -146,11 +150,12 @@
                         </span>
 
                         <span data-lang="en">
-                            This is to certify that Mr./Ms./Mrs. <strong>{{ $record->name }}</strong>,
-                            Son/Daughter/Wife of <strong>{{ $record->gurdian_name }}</strong>,
-                            resident of <strong>{{ $record->village }}, {{ $record->post }}, {{ $record->district }},
-                                {{ $record->state }}, {{ $record->country }}</strong> from
-                            <strong>{{-- $record->position --}}</strong> to <strong>{{-- $record->position --}}</strong> as a
+                            This is to certify that Mr./Ms./Mrs. <strong>{{ $record->beneficiare->name }}</strong>,
+                            Son/Daughter/Wife of <strong>{{ $record->beneficiare->gurdian_name }}</strong>,
+                            resident of <strong>{{ $record->beneficiare->village }}, {{ $record->post }},
+                                {{ $record->beneficiare->district }},
+                                {{ $record->beneficiare->state }}, {{ $record->beneficiare->country }}</strong> from
+                            <strong>{{ $record->fromDate }}</strong> to <strong>{{ $record->toDate }}</strong> as a
                             Coordinator.
                             In the working period I found him a since, honest, hardworking. Dedicated with
                             a professional attitude and very good office and field job knowledge. His
@@ -160,32 +165,49 @@
                     </div>
 
                     <!-- Signature Section -->
+
                     <div class="row d-flex justify-content-between mt-5">
                         <div class="col-sm-4 text-center">
-                            <strong>Program Officer & Program Manager Signature with stamp</strong><br>
-
                             @if (!empty($signatures['program_manager']) && file_exists(public_path($signatures['program_manager'])))
-                                <p class="text-success mt-2">Attached</p>
-                                <img src="{{ asset($signatures['program_manager']) }}" alt="Program Manager Signature"
-                                    class="img-thumbnail mt-2" style="max-height: 100px;">
+                                <div id="pmSignatureBox" class="mt-2">
+                                    <p class="text-success no-print">Attached</p>
+                                    <img src="{{ asset($signatures['program_manager']) }}" alt="PM Signature"
+                                        class="img-thumbnail" style="max-height: 100px;">
+                                    <br>
+                                    <button class="btn btn-danger btn-sm mt-2 no-print"
+                                        onclick="togglePM(false)">Remove</button>
+                                </div>
+
+                                <div id="pmShowBtnBox" class="mt-2 d-none">
+                                    <button class="btn btn-primary btn-sm no-print" onclick="togglePM(true)">Attached
+                                        Signature</button>
+                                </div>
                             @else
-                                <p class="text-muted mt-2">Not attached</p>
+                                <p class="text-muted mt-2 no-print">Not attached</p>
                             @endif
+                            <strong>Program Officer & Program Manager Signature with stamp</strong><br>
                         </div>
-
                         <div class="col-sm-4 text-center">
-                            <strong>Director Signature with stamp</strong><br>
-
                             @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
-                                <p class="text-success mt-2">Attached</p>
-                                <img src="{{ asset($signatures['director']) }}" alt="Director Signature"
-                                    class="img-thumbnail mt-2" style="max-height: 100px;">
+                                <div id="directorSignatureBox" class="mt-2">
+                                    <p class="text-success no-print">Attached</p>
+                                    <img src="{{ asset($signatures['director']) }}" alt="Director Signature"
+                                        class="img-thumbnail" style="max-height: 100px;">
+                                    <br>
+                                    <button class="btn btn-danger btn-sm mt-2 no-print"
+                                        onclick="toggleDirector(false)">Remove</button>
+                                </div>
+
+                                <div id="directorShowBtnBox" class="mt-2 d-none no-print">
+                                    <button class="btn btn-primary btn-sm" onclick="toggleDirector(true)">Attached
+                                        Signature</button>
+                                </div>
                             @else
-                                <p class="text-muted mt-2">Not attached</p>
+                                <p class="text-muted mt-2 no-print">Not attached</p>
                             @endif
+                            <strong>Director Signature with stamp</strong><br>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -197,5 +219,73 @@
             });
         }
         window.onload = () => setLanguage('en'); // Set Eng as default
+    </script>
+    <script>
+        // --- PM Logic ---
+        const pmInput = document.getElementById('pmInput');
+        const pmAttachBtn = document.getElementById('pmAttachBtn');
+        const pmPreview = document.getElementById('pmPreview');
+        const pmContainer = document.getElementById('pmPreviewContainer');
+        const pmRemoveBtn = document.getElementById('pmRemoveBtn');
+
+        pmAttachBtn.onclick = () => pmInput.click();
+
+        pmInput.onchange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    pmPreview.src = e.target.result;
+                    pmContainer.style.display = 'block';
+                    pmRemoveBtn.classList.remove('d-none');
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        pmRemoveBtn.onclick = () => {
+            pmInput.value = '';
+            pmContainer.style.display = 'none';
+            pmRemoveBtn.classList.add('d-none');
+        };
+
+        // --- Director Logic ---
+        const directorInput = document.getElementById('directorInput');
+        const directorAttachBtn = document.getElementById('directorAttachBtn');
+        const directorPreview = document.getElementById('directorPreview');
+        const directorContainer = document.getElementById('directorPreviewContainer');
+        const directorRemoveBtn = document.getElementById('directorRemoveBtn');
+
+        directorAttachBtn.onclick = () => directorInput.click();
+
+        directorInput.onchange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    directorPreview.src = e.target.result;
+                    directorContainer.style.display = 'block';
+                    directorRemoveBtn.classList.remove('d-none');
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        directorRemoveBtn.onclick = () => {
+            directorInput.value = '';
+            directorContainer.style.display = 'none';
+            directorRemoveBtn.classList.add('d-none');
+        };
+    </script>
+    <script>
+        function togglePM(show) {
+            document.getElementById('pmSignatureBox').classList.toggle('d-none', !show);
+            document.getElementById('pmShowBtnBox').classList.toggle('d-none', show);
+        }
+
+        function toggleDirector(show) {
+            document.getElementById('directorSignatureBox').classList.toggle('d-none', !show);
+            document.getElementById('directorShowBtnBox').classList.toggle('d-none', show);
+        }
     </script>
 @endsection
