@@ -59,7 +59,6 @@
             /* Optional: Hide any interactive or irrelevant UI */
             button,
             .btn,
-            .d-flex.justify-content-between,
             .no-print {
                 display: none !important;
             }
@@ -82,7 +81,7 @@
                 {{ session('success') }}
             </div>
         @endif
-        <div class="container-fluid">
+        <div class="container-fluid mt-5">
             <!-- Language Toggle -->
             <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
                 <h5 class="mb-0">
@@ -108,10 +107,12 @@
                                     &nbsp; &nbsp;<span>NGO NO. UP/00033062</span>&nbsp; &nbsp;
                                     &nbsp; &nbsp;<span>PAN: AAEAG7650B</span>&nbsp;
                                 </b></p>
-                            <h4 style="color: red;"><b>
-                                    <span data-lang="hi">ज्ञान भारती संस्था</span>
-                                    <span data-lang="en">GYAN BHARTI SANSTHA</span>
-                                </b></h4>
+                            <h2 class="fw-bold text-uppercase"
+                                style="letter-spacing: 2px; word-spacing: 5px; margin:0; color:red;">
+                                <span data-lang="hi">ज्ञान भारती संस्था</span>
+                                {{-- <br> --}}
+                                <span data-lang="en">GYAN BHARTI SANSTHA</span>
+                            </h2>
                             <h6 style="color: blue;"><b>
                                     <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर प्रदेश -
                                         262121</span>
@@ -374,23 +375,19 @@
                     <div class="col-sm-4 text-center">
                         @if (!empty($signatures['program_manager']) && file_exists(public_path($signatures['program_manager'])))
                             <div id="pmSignatureBox" class="mt-2">
-                                <p class="text-success no-print">Attached</p>
+                                <p class="text-success no-print">Attached</p> <!-- This line is hidden in print -->
                                 <img src="{{ asset($signatures['program_manager']) }}" alt="PM Signature"
-                                    class="img-thumbnail" style="max-height: 100px;">
+                                    class="img-thumbnail" style="max-height: 100px;"> <!-- This will print -->
                                 <br>
                                 <button class="btn btn-danger btn-sm mt-2 no-print"
                                     onclick="togglePM(false)">Remove</button>
                             </div>
-
-                            <div id="pmShowBtnBox" class="mt-2 d-none">
-                                <button class="btn btn-primary btn-sm no-print" onclick="togglePM(true)">Attached
-                                    Signature</button>
-                            </div>
                         @else
-                            <p class="text-muted mt-2 no-print">Not attached</p>
+                            <p class="text-muted mt-2 no-print">Not attached</p> <!-- Hidden only in print -->
                         @endif
                         <strong>Program Officer & Program Manager Signature with stamp</strong><br>
                     </div>
+
                     <div class="col-sm-4 text-center">
                         @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
                             <div id="directorSignatureBox" class="mt-2">
@@ -426,15 +423,15 @@
             }
             window.onload = () => setLanguage('en'); // Set Eng as default
         </script>
-         <script>
-        function togglePM(show) {
-            document.getElementById('pmSignatureBox').classList.toggle('d-none', !show);
-            document.getElementById('pmShowBtnBox').classList.toggle('d-none', show);
-        }
+        <script>
+            function togglePM(show) {
+                document.getElementById('pmSignatureBox').classList.toggle('d-none', !show);
+                document.getElementById('pmShowBtnBox').classList.toggle('d-none', show);
+            }
 
-        function toggleDirector(show) {
-            document.getElementById('directorSignatureBox').classList.toggle('d-none', !show);
-            document.getElementById('directorShowBtnBox').classList.toggle('d-none', show);
-        }
-    </script>
+            function toggleDirector(show) {
+                document.getElementById('directorSignatureBox').classList.toggle('d-none', !show);
+                document.getElementById('directorShowBtnBox').classList.toggle('d-none', show);
+            }
+        </script>
     @endsection
