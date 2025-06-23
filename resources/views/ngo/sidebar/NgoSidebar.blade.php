@@ -110,9 +110,9 @@
                     <ul class="dropdown-menu bg-primary">
                         <li><a class="dropdown-item" href="{{ route('working-area') }}">Add Working Area</a></li>
                         <li><a class="dropdown-item" href="{{ route('working-area-list') }}">Working Area List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('signature') }}">Signature</a></li>
                         <li><a class="dropdown-item" href="#">Course List</a></li>
                         <li><a class="dropdown-item" href="#">Add Course For Centre</a></li>
-                        <li><a class="dropdown-item" href="{{ route('signature') }}">Signature</a></li>
                     </ul>
                 </li>
 
@@ -206,7 +206,7 @@
                             class="fas fa-certificate"></i> CERTIFICATE</a>
                     <ul class="dropdown-menu bg-primary">
                         <li><a class="dropdown-item" href="{{ route('genrate-experience')}}">Genrate Experience Certificate</a></li>
-                        <li><a class="dropdown-item" href="#">Experience Certificate List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('experience-list')}}">Experience Certificate List</a></li>
                         <li><a class="dropdown-item" href="#">Add Member Certificate</a></li>
                         <li><a class="dropdown-item" href="#">Member Certificate List</a></li>
                         <li><a class="dropdown-item" href="#">Add Beneficiary Certificate</a></li>

@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeControlller;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BeneficiarieController;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\NgoController;
 use App\Http\Controllers\PaymentController;
@@ -154,19 +155,17 @@ Route::middleware('auth')->group(function () {
     Route::get('ngo/delete-view/{id}/{type}', [RegistrationController::class, 'deleteRegistrationPage'])->name('delete-view');
     Route::post('ngo/delete-registration/{id}/{type}', [RegistrationController::class, 'deleteRegistration'])->name('delete-reg');
     Route::get('ngo/recover-registration', [RegistrationController::class, 'recover'])->name('recover');
-    Route::get('ngo/recover/{id}/{type}', [RegistrationController::class,'recoverItem'])->name('recover-item');
+    Route::get('ngo/recover/{id}/{type}', [RegistrationController::class, 'recoverItem'])->name('recover-item');
     Route::get('ngo/online-registration-setting', [RegistrationController::class, 'onlineregistrationSetting'])->name('reg-setting');
     Route::post('ngo/registration-toggle', [RegistrationController::class, 'toggleSetting'])->name('registration.toggle');
     Route::get('ngo/edit-registration/{id}/{type}', [RegistrationController::class, 'editRegistration'])->name('edit-reg');
     Route::get('ngo/edit-apporve-registration/{id}/{type}', [RegistrationController::class, 'editApproveRegistration'])->name('edit-apporve-reg');
     Route::post('ngo/update-apporve-registration/{id}', [RegistrationController::class, 'UpdateApporveRegistration'])->name('update-apporve-registration');
-
 });
 
 Route::controller(RegistrationController::class)->group(function () {
     Route::get('ngo/online-registration', 'onlineregistration')->name('online-registration');
     Route::post('ngo/online-store-registration', 'onlineStoreRegistration')->name('onlinestore-registration');
-
 });
 
 Route::controller(GalleryController::class)->group(function () {
@@ -201,11 +200,9 @@ Route::controller(BeneficiarieController::class)->group(function () {
     Route::get('ngo/beneficiarie-report-list', 'beneficiarieReportList')->middleware('auth')->name('beneficiarie-report-list');
     Route::get('ngo/show-beneficiarie-report/{beneficiarie_id}/survey/{survey_id}', 'showbeneficiariereport')->middleware('auth')->name('show-beneficiarie-report');
     Route::get('ngo/Survey-received-list', 'surveyrecivedlist')->middleware('auth')->name('survey-received-list');
-
-
 });
 
-Route::controller(WorkingAreaController::class)->group(function(){
+Route::controller(WorkingAreaController::class)->group(function () {
     Route::get('ngo/working-area', 'workingarea')->middleware('auth')->name('working-area');
     Route::post('ngo/store-area', 'storeArea')->middleware('auth')->name('store-area');
     Route::get('ngo/working-area-list', 'workingAreaList')->middleware('auth')->name('working-area-list');
@@ -214,7 +211,7 @@ Route::controller(WorkingAreaController::class)->group(function(){
     Route::get('ngo/delete-Working-area/{id}', 'removeArea')->middleware('auth')->name('remove-area');
 });
 
-Route::controller(NoticeController::class)->group(function(){
+Route::controller(NoticeController::class)->group(function () {
     Route::get('ngo/add-notice', 'addnotice')->middleware('auth')->name('add-notice');
     Route::post('ngo/store-notice', 'storeNotice')->middleware('auth')->name('store-notice');
     Route::get('ngo/notice-list', 'NoticeList')->middleware('auth')->name('notice-list');
@@ -225,12 +222,12 @@ Route::controller(NoticeController::class)->group(function(){
     Route::get('ngo/notice-status/{id}', 'NoticeStatus')->middleware('auth')->name('notice-status');
 });
 
-Route::controller(StaffController::class)->group( function(){
+Route::controller(StaffController::class)->group(function () {
     Route::get('ngo/add-staff', 'addstaff')->middleware('auth')->name('add-staff');
     Route::get('ngo/staff-list', 'staffList')->middleware('auth')->name('staff-list');
 });
 
-Route::controller(MemberController::class)->group( function(){
+Route::controller(MemberController::class)->group(function () {
     Route::get('ngo/member-list', 'memberList')->middleware('auth')->name('member-list');
     Route::get('ngo/add-member-list', 'addmemberlist')->middleware('auth')->name('add-member-list');
     Route::get('ngo/view-member/{id}', 'showMember')->middleware('auth')->name('view-member');
@@ -245,7 +242,7 @@ Route::controller(MemberController::class)->group( function(){
     Route::get('ngo/activity-certificate/{id}/{category}', 'MemberActivityCerti')->middleware('auth')->name('member-activity-certi');
 });
 
-Route::controller(DonationController::class)->group(function(){
+Route::controller(DonationController::class)->group(function () {
     Route::get('ngo/online-donor-list', 'onlineDonor')->middleware('auth')->name('online-donor-list');
     Route::get('ngo/donation-list', 'donationList')->middleware('auth')->name('donation-list');
     Route::get('ngo/donation', 'donation')->middleware('auth')->name('donation');
@@ -256,7 +253,7 @@ Route::controller(DonationController::class)->group(function(){
     Route::get('ngo/all-donor-list', 'allDonations')->middleware('auth')->name('all-donor-list');
 });
 
-Route::controller(TrainingCenterController::class)->group(function(){
+Route::controller(TrainingCenterController::class)->group(function () {
     Route::get('ngo/add-center', 'AddCenter')->middleware('auth')->name('add-center');
     Route::post('ngo/store-center', 'storeCenter')->middleware('auth')->name('store-center');
     Route::get('ngo/center-list', 'CenterList')->middleware('auth')->name('center-list');
@@ -273,12 +270,20 @@ Route::controller(TrainingCenterController::class)->group(function(){
     Route::post('ngo/save-genrate-training-record', 'SaveGenrateTrainingCertificate')->middleware('auth')->name('save-genrate-training-record');
     Route::get('ngo/training-certificate-list', 'TrainingCerti')->middleware('auth')->name('training-certi-list');
     Route::get('ngo/tarining-certificate/{id}/{center_code}', 'TrainingCertificate')->middleware('auth')->name('training-certificate');
-    Route::get('ngo/genrate-experience', 'GenrateExperience')->middleware('auth')->name('genrate-experience');
 });
 
-Route::controller(SignatureController::class)->group(function(){
+Route::controller(ExperienceController::class)->group(function () {
+    Route::get('ngo/genrate-experience', 'GenrateExperience')->middleware('auth')->name('genrate-experience');
+    Route::post('ngo/save-experience', 'saveExperience')->middleware('auth')->name('save-experience');
+    Route::get('ngo/experience-list', 'ExperienceCerti')->middleware('auth')->name('experience-list');
+    Route::get('ngo/experience-certificate/{id}', 'ExperienceCertificate')->middleware('auth')->name('experience-certificate');
+
+});
+
+Route::controller(SignatureController::class)->group(function () {
     Route::get('ngo/signature', 'addSignature')->middleware('auth')->name('signature');
     Route::post('ngo/save-signature', 'saveSignature')->middleware('auth')->name('save-signature');
+
 });
 
 

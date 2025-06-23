@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\academic_session;
 use App\Models\beneficiarie;
 use App\Models\Beneficiarie_Survey;
+use App\Models\ExperienceCertificate;
 use App\Models\Member;
 use App\Models\Signature;
 use App\Models\Training_Beneficiarie;
@@ -180,7 +181,7 @@ class TrainingCenterController extends Controller
         $session = academic_session::all();
         $record = Training_Beneficiarie::with(['center', 'beneficiare'])->findOrFail($id);
         $center = Training_Center::where('center_code', $center_code)->first();
-        return view('ngo.training.view-bene', compact('session', 'record','center'));
+        return view('ngo.training.view-bene', compact('session', 'record', 'center'));
     }
 
     public function GenrateTrainingCerti(Request $request)
@@ -210,13 +211,13 @@ class TrainingCenterController extends Controller
         return view('ngo.training.generate-certificate-list', compact('session', 'record'));
     }
 
-    public function GenrateTrainingCertificate($id,$center_code)
+    public function GenrateTrainingCertificate($id, $center_code)
     {
 
         $session = academic_session::all();
         $record = Training_Beneficiarie::with(['center', 'beneficiare'])->find($id);
         $center = Training_Center::where('center_code', $center_code)->first();
-        return view('ngo.training.genrate-training-certificate', compact('session', 'record','center'));
+        return view('ngo.training.genrate-training-certificate', compact('session', 'record', 'center'));
     }
 
     public function SaveGenrateTrainingCertificate(Request $request)
@@ -289,17 +290,7 @@ class TrainingCenterController extends Controller
         $session = academic_session::all();
         $record = Training_Beneficiarie::with(['center', 'beneficiare'])->find($id);
         $center = Training_Center::where('center_code', $center_code)->first();
-        return view('ngo.training.training-bene-certificate', compact('session', 'record','center'));
+        return view('ngo.training.training-bene-certificate', compact('session', 'record', 'center'));
     }
 
-      public function GenrateExperience(Request $request)
-    {
-        
-        $data = academic_session::all();
-        $beneficiaries = beneficiarie::all();
-        $members = Member::all();
-        $record = $beneficiaries->merge($members);
-        $signatures = Signature::pluck('file_path', 'role');
-        return view('ngo.training.genrate-experience', compact('data', 'record','signatures'));
-    }
 }
