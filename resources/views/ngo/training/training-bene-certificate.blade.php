@@ -377,7 +377,7 @@
                             <div id="pmSignatureBox" class="mt-2">
                                 <p class="text-success no-print">Attached</p> <!-- This line is hidden in print -->
                                 <img src="{{ asset($signatures['program_manager']) }}" alt="PM Signature"
-                                    class="img-thumbnail" style="max-height: 100px;"> <!-- This will print -->
+                                    class="img" style="max-height: 100px;"> <!-- This will print -->
                                 <br>
                                 <button class="btn btn-danger btn-sm mt-2 no-print"
                                     onclick="togglePM(false)">Remove</button>
@@ -393,7 +393,7 @@
                             <div id="directorSignatureBox" class="mt-2">
                                 <p class="text-success no-print">Attached</p>
                                 <img src="{{ asset($signatures['director']) }}" alt="Director Signature"
-                                    class="img-thumbnail" style="max-height: 100px;">
+                                    class="img" style="max-height: 100px;">
                                 <br>
                                 <button class="btn btn-danger btn-sm mt-2 no-print"
                                     onclick="toggleDirector(false)">Remove</button>
