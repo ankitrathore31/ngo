@@ -98,7 +98,7 @@
                                         &nbsp; &nbsp;<span>NGO NO. UP/00033062</span>&nbsp; &nbsp;
                                         &nbsp; &nbsp;<span>PAN: AAEAG7650B</span>&nbsp;
                                     </b></p>
-                                <h4 style="color: red;"><b>
+                                <h4 style="background-color: red; color:white;"><b>
                                         <span data-lang="hi">ज्ञान भारती संस्था</span>
                                         <span data-lang="en">GYAN BHARTI SANSTHA</span>
                                     </b></h4>
@@ -125,7 +125,7 @@
                         <!-- Header Section -->
                         <div class="row justify-content-between mb-3">
                             <div class="col-sm-6">
-                                <strong><span data-lang="hi">प्रमाण-पत्र क्रमांक:</span> <span data-lang="en">Certificate
+                                <strong><span data-lang="hi">पत्र क्रमांक:</span> <span data-lang="en">Letter
                                         No.:</span></strong>
                                 {{ $record->registration_no }}
                             </div>
