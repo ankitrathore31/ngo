@@ -104,7 +104,9 @@
                                             <a href="javascript:void(0);" class="btn btn-success btn-sm px-3 demand-btn"
                                                 data-bs-toggle="modal" data-bs-target="#Modal"
                                                 data-id="{{ $item->id }}" data-name="{{ $item->name }}"
-                                                data-gurdian="{{ $item->gurdian_name }}">
+                                                data-gurdian="{{ $item->gurdian_name }}" data-address="{{ $item->village }}, 
+                                                {{ $item->post }}, {{ $item->town }}, {{ $item->district }}, 
+                                                 {{ $item->state }}">
                                                 Demand Beneficiarie In Training Center
                                             </a>
                                             <a href="{{ route('view-beneficiarie', $item->id) }}"
@@ -131,6 +133,8 @@
                         <h6 class="modal-title" id="positionModalLabel">
                             &nbsp; &nbsp; Name: <span id="beneName"></span> &nbsp;&nbsp; Father/Husband Name: <span
                                 id="guardianName"></span>
+                                <br>
+                                &nbsp;&nbsp; Address: <span id="addressBene"></span>
                         </h6>
                         <form action="{{ route('store-demand') }}" method="POST">
                             @csrf
@@ -414,11 +418,13 @@
                 button.addEventListener('click', function() {
                     const name = this.getAttribute('data-name');
                     const guardian = this.getAttribute('data-gurdian');
+                    const address = this.getAttribute('data-address');
                     const id = this.getAttribute('data-id');
 
                     // Set values in modal
                     document.getElementById('beneName').textContent = name;
                     document.getElementById('guardianName').textContent = guardian;
+                    document.getElementById('addressBene').textContent = address;
                     document.querySelector('input[name="beneficiarie_id"]').value = id;
                 });
             });

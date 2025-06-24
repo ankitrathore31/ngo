@@ -21,34 +21,33 @@ class ExperienceController extends Controller
         $data = academic_session::all();
         $beneficiaries = beneficiarie::all();
         $members = Member::all();
-        // $staff = Staff::all();
         $record = $beneficiaries->merge($members);
         $signatures = Signature::pluck('file_path', 'role');
-
-        return view('ngo.experience.genrate-experience', compact('data', 'record', 'signatures'));
+        return view('ngo.letter.genrate-letter', compact('data', 'record', 'signatures'));
     }
 
 
     public function saveExperience(Request $request)
     {
         $request->validate([
-            'academic_session' => 'nullable|string',
-            'certiNo' => 'required|string',
+            'academic_session' => 'string',
+            'letterNo' => 'required|string',
             'date' => 'nullable|date',
-            'fromDate' => 'nullable|date',
-            'toDate' => 'nullable|date',
+            'to' => 'required',
+            'subject' => 'required',
+            'letter' => 'required',
         ]);
 
-        $certificate = ExperienceCertificate::updateOrCreate(
-            ['certiNo' => $request->certiNo],
-            [
-                'academic_session' => $request->academic_session,
-                'beneficiarie_id' => $request->beneficiarie_id,
-                'date' => $request->date,
-                'fromDate' => $request->fromDate,
-                'toDate' => $request->toDate,
-            ]
-        );
+        ExperienceCertificate::create([
+            'academic_session' => $request->session,
+            'letterNo' => $request->letterNo,
+            'date' => $request->date,
+            'fromDate' => $request->fromDate,
+            'toDate' => $request->toDate,
+            'to' => $request->to,
+            'subject' => $request->subject,
+            'letter' => $request->letter,
+        ]);
 
         return back()->with('success', 'Certificate saved successfully!');
     }
@@ -65,26 +64,24 @@ class ExperienceController extends Controller
             $query->where('academic_session', $request->session_filter);
         }
 
-        $records = $query->orderBy('created_at', 'desc')->get();
+        $record = $query->orderBy('created_at', 'desc')->get();
 
-        $filtered = $records->filter(function ($record) use ($request) {
-            $person = beneficiarie::find($record->beneficiarie_id) ?? Member::find($record->beneficiarie_id);
-            $record->person = $person;
+        $filtered = $record->filter(function ($record) use ($request) {
 
-            $matchesApp = $request->filled('application_no')
-                ? str_contains($person->application_no ?? '', $request->application_no)
+            $matchesApp = $request->filled('letterNo')
+                ? str_contains($person->letterNo ?? '', $request->letterNo)
                 : true;
 
-            $matchesName = $request->filled('name')
-                ? str_contains(strtolower($person->name ?? ''), strtolower($request->name))
+            $matchesName = $request->filled('to')
+                ? str_contains(strtolower($person->to ?? ''), strtolower($request->to))
                 : true;
 
             return $matchesApp && $matchesName;
         });
 
-        return view('ngo.experience.experience-list', [
+        return view('ngo.letter.letter-list', [
             'session' => $session,
-            'records' => $filtered,
+            'record' => $filtered,
         ]);
     }
 
@@ -94,8 +91,8 @@ class ExperienceController extends Controller
     {
 
         $session = academic_session::all();
-        $record = ExperienceCertificate::with('beneficiare')->find($id);
+        $record = ExperienceCertificate::find($id);
         $signatures = Signature::pluck('file_path', 'role');
-        return view('ngo.experience.experience-certificate', compact('session', 'record', 'signatures'));
+        return view('ngo.letter.letter', compact('session', 'record', 'signatures'));
     }
 }

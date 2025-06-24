@@ -188,70 +188,78 @@
                             </div>
                         </div>
                     </div>
-                    <form action="{{ route('save-experience') }}" method="post">
+                    <form action="{{ route('save-letter') }}" method="post">
                         @csrf
                         <input type="text" name="beneficiarie_id"
                             value="{{ old('beneficiarie_id', $experience->beneficiarie_id ?? '') }}" id="beneficiarie_id"
                             hidden>
                         <div class=" p-4 lh-lg" style="font-size: 16px;">
                             <div class="row justify-content-between mb-3">
-                                <div class="col-sm-6">
-                                    <strong><span data-lang="hi">प्रमाण-पत्र क्रमांक:</span> <span
-                                            data-lang="en">Certificate
+                                <div class="col-sm-4">
+                                    <strong><span data-lang="hi">पत्र सं.</span> <span data-lang="en">Letter
                                             No.:</span></strong>
-                                    <span id=""><input id="certRegNo" type="text" name="certiNo"
-                                            value=""></span>
+                                    <span id=""><input id="letterNo" class="form-control" type="text"
+                                            name="letterNo" value=""></span>
                                 </div>
 
-                                <div class="col-sm-6 text-end">
-                                    <strong><span data-lang="hi">तारीख:</span> <span data-lang="en">Date:</span></strong>
-                                    <span id="certDate"><input type="date" name="date" id="date"
-                                            >
+                                <div class="col-sm-4">
+                                    <strong><span data-lang="hi">पत्र तारीख:</span> <span data-lang="en">Letter Date:</span></strong>
+                                    <span id="certDate"><input type="date" class="form-control" name="date"
+                                            id="date">
                                     </span>
                                 </div>
+                                <div class="col-md-4 mb-3">
+                                    <strong><span data-lang="hi">सत्र:</span> <span
+                                            data-lang="en">Session:</span></strong>
+
+                                    <select class="form-select @error('session') is-invalid @enderror" name="session"
+                                        required>
+                                        <option value="">Select Session</option>
+                                        @foreach ($data as $session)
+                                            <option value="{{ $session->session_date }}">{{ $session->session_date }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="to">To</label>
+                                    <input type="text" name="to" id="to" class="form-control"
+                                        value="{{ old('to') }}">
+                                    @error('to')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
                             </div>
 
-                            <span data-lang="hi">
-                                यह प्रमाणित किया जाता है कि श्री/श्रीमती/कुमारी <strong id="certNameHi">__________</strong>,
-                                पिता/पति <strong id="certGurdianHi">__________</strong>,
-                                निवासी <strong id="certAddressHi">__________</strong>
-                                भारत में दिनांक <span><input type="date" id="fromDate" name="fromDate"
-                                        >
-                                </span> से
-                                <strong><input type="date" id="toDate" name="toDate"
-                                       >
-                                </strong>
-                                तक समन्वयक के पद पर कार्यरत हैं। कार्य अवधि में मैंने पाया कि वे एक ईमानदार, मेहनती,
-                                समर्पित,
-                                पेशेवर दृष्टिकोण वाले तथा कार्यालय और क्षेत्र की नौकरी के बारे में बहुत अच्छे ज्ञान वाले
-                                व्यक्ति
-                                हैं। इस अवधि के दौरान उनका चरित्र और आचरण अनुकरणीय रहा है। मैं उन्हें भविष्य के करियर
-                                प्रयासों
-                                में शुभकामनाएं और सफलता की कामना करता हूं।
-                            </span>
-
-                            <span data-lang="en">
-                                This is to certify that Mr./Ms./Mrs. <strong id="certNameEn">__________</strong>,
-                                Son/Daughter/Wife of <strong id="certGurdianEn">__________</strong>,
-                                resident of <strong id="certAddressEn">__________</strong> from
-                                <span><input type="date" id="fromDate" name="fromDate"
-                                        value="{{ old('fromDate', $experience->fromDate ?? '') }}"></span> to
-                                <span><input type="date" id="toDate" name="toDate"
-                                        value="{{ old('toDate', $experience->toDate ?? '') }}">
-                                </span>as a
-                                Coordinator.
-                                In the working period I found him a since, honest, hardworking. Dedicated with
-                                a professional attitude and very good office and field job knowledge. His
-                                character and conduct during this period hasbeen exemplary.
-                                I wish his all the best and success in future career endeavours.
-                            </span>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-4">
-                                <input type="submit" class="btn btn-success p-2 mt-2" value="Save">
+                            <div class="row mt-2">
+                                <div class="col-md-6">
+                                    <label for="subject">Subject</label>
+                                    <input type="text" name="subject" class="form-control"
+                                        value="{{ old('subject') }}">
+                                    @error('subject')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
                             </div>
-                        </div>
+
+                            <div class="row mt-2">
+                                <div class="col-md-12">
+                                    <label for="letter">Write Letter</label>
+                                    <textarea name="letter" id="letter" cols="30" rows="10" class="form-control">{{ old('letter') }}</textarea>
+                                    @error('letter')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <input type="submit" class="btn btn-success p-2 mt-2" value="Save">
+                                </div>
+                            </div>
+
                     </form>
 
                     <!-- Signature Section -->
@@ -307,15 +315,15 @@
 
                     // Certificate section filling by ID
                     document.getElementById('beneficiarie_id').value = id;
-                    document.getElementById('certNameHi').textContent = name;
-                    document.getElementById('certGurdianHi').textContent = gurdian;
-                    document.getElementById('certAddressHi').textContent = address;
+                    document.getElementById('to').value = name;
+                    // document.getElementById('certGurdianHi').textContent = gurdian;
+                    // document.getElementById('certAddressHi').textContent = address;
 
-                    document.getElementById('certNameEn').textContent = name;
-                    document.getElementById('certGurdianEn').textContent = gurdian;
-                    document.getElementById('certAddressEn').textContent = address;
+                    // document.getElementById('certNameEn').textContent = name;
+                    // document.getElementById('certGurdianEn').textContent = gurdian;
+                    // document.getElementById('certAddressEn').textContent = address;
 
-                    document.getElementById('certRegNo').value = registration;
+                    // document.getElementById('certRegNo').value = registration;
                     // document.getElementById('certDate').textContent = registrationDate;
 
 

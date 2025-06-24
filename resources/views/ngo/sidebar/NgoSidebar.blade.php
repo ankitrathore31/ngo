@@ -172,6 +172,8 @@
                         <li><a class="dropdown-item" href="#">Staff ID Card</a></li>
                         <li><a class="dropdown-item" href="#">Staff Passbook</a></li>
                         <li><a class="dropdown-item" href="#">Staff Activity</a></li>
+                        <li><a class="dropdown-item" href="{{ route('genrate-letter')}}">Generate Letter</a></li>
+                        <li><a class="dropdown-item" href="{{ route('letter-list')}}">Letter List</a></li>
                     </ul>
                 </li>
 
@@ -205,8 +207,6 @@
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
                             class="fas fa-certificate"></i> CERTIFICATE</a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="{{ route('genrate-experience')}}">Genrate Experience Certificate</a></li>
-                        <li><a class="dropdown-item" href="{{ route('experience-list')}}">Experience Certificate List</a></li>
                         <li><a class="dropdown-item" href="#">Add Member Certificate</a></li>
                         <li><a class="dropdown-item" href="#">Member Certificate List</a></li>
                         <li><a class="dropdown-item" href="#">Add Beneficiary Certificate</a></li>
