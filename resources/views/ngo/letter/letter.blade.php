@@ -94,41 +94,38 @@
                                 <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="80" height="80">
                             </div>
                             <div class="col-sm-10">
-                                <p style="margin: 0;" class="d-flex justify-content-around"><b>
-                                        <span>CSR NO. CSR00059991</span>&nbsp;
-                                        &nbsp; &nbsp;<span>12A AAEAG7650BE20231</span>&nbsp; &nbsp;
-                                        &nbsp; &nbsp;<span>80G AAEAG7650BF20231</span>&nbsp;
-                                    </b></p>
-                                <p style="margin: 0;" class="d-flex justify-content-around"><b>
-                                        <span>NEETI AYOG ID NO. UP/2023/0360430</span>&nbsp;
-                                        &nbsp; &nbsp;<span>NGO NO. UP/00033062</span>&nbsp; &nbsp;
-                                        &nbsp; &nbsp;<span>PAN: AAEAG7650B</span>&nbsp;
-                                    </b></p>
-                                <h4 class="text-center"
-                                    style="color: red; font-size: 26px; font-weight: 700; word-spacing: 7px; display: flex; justify-content: center; flex-wrap: wrap; gap: 20px;">
-                                    <span data-lang="hi"
-                                        style="font-size: inherit; font-weight: inherit; word-spacing: inherit;">ज्ञान भारती
+                                <p class="d-flex justify-content-between w-100" style="margin: 0; font-weight: bold;">
+                                    <span>CSR NO. CSR00059991</span>
+                                    <span>12A AAEAG7650BE20231</span>
+                                    <span>80G AAEAG7650BF20231</span>
+                                </p>
+
+                                <p class="d-flex justify-content-between w-100" style="margin: 0; font-weight: bold;">
+                                    <span>NEETI AYOG ID NO. UP/2023/0360430</span>
+                                    <span>NGO NO. UP/00033062</span>
+                                    <span>PAN: AAEAG7650B</span>
+                                </p>
+
+                                <h4 class="text-center w-100"
+                                    style=" margin: 0; background-color: red; color:white; font-size: 28px; font-weight: 700; word-spacing: 12px; display: flex; justify-content: center; flex-wrap: wrap; gap: 20px;">
+                                    <span data-lang="hi" style="font-size: inherit; font-weight: inherit;">ज्ञान भारती
                                         संस्था</span>
-                                    <span data-lang="en"
-                                        style="font-size: inherit; font-weight: inherit; word-spacing: inherit;">GYAN BHARTI
+                                    <span data-lang="en" style="font-size: inherit; font-weight: inherit;">GYAN BHARTI
                                         SANSTHA</span>
                                 </h4>
-                                <h6 style="color: blue;"><b>
-                                        <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर
-                                            प्रदेश -
-                                            262121</span>
-                                        <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit, UP
-                                            -
-                                            262121</span>
-                                    </b></h6>
-                                <p style="font-size: 14px; margin: 0;">
-                                    <b>
-                                        <span>Website: www.gyanbhartingo.org | Email: gyanbhartingo600@gmail.com
-                                            | Mob:
-                                            9411484111</span>
-                                    </b>
+
+                                <h6 class="w-100" style="color: blue; font-weight: bold;">
+                                    <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर प्रदेश -
+                                        262121</span><br>
+                                    <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit, UP -
+                                        262121</span>
+                                </h6>
+
+                                <p class="w-100" style="font-size: 14px; margin: 0; font-weight: bold;">
+                                    Website: www.gyanbhartingo.org | Email: gyanbhartingo600@gmail.com | Mob: 9411484111
                                 </p>
                             </div>
+
                         </div>
                     </div>
                     <div class="container py-4" style="font-size: 16px; line-height: 1.8;">
