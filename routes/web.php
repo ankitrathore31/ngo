@@ -273,10 +273,10 @@ Route::controller(TrainingCenterController::class)->group(function () {
 });
 
 Route::controller(ExperienceController::class)->group(function () {
-    Route::get('ngo/genrate-experience', 'GenrateExperience')->middleware('auth')->name('genrate-experience');
-    Route::post('ngo/save-experience', 'saveExperience')->middleware('auth')->name('save-experience');
-    Route::get('ngo/experience-list', 'ExperienceCerti')->middleware('auth')->name('experience-list');
-    Route::get('ngo/experience-certificate/{id}', 'ExperienceCertificate')->middleware('auth')->name('experience-certificate');
+    Route::get('ngo/genrate-letter', 'GenrateExperience')->middleware('auth')->name('genrate-letter');
+    Route::post('ngo/save-letter', 'saveExperience')->middleware('auth')->name('save-letter');
+    Route::get('ngo/letter-list', 'ExperienceCerti')->middleware('auth')->name('letter-list');
+    Route::get('ngo/letter-certificate/{id}', 'ExperienceCertificate')->middleware('auth')->name('letter');
 
 });
 
