@@ -282,7 +282,7 @@
                                 </strong>
                                 <div
                                     style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: normal;">
-                                    &nbsp;{{ /Carbon/Carbon::parse($record->start_date)->format('d-m-Y') }}
+                                    &nbsp;{{ \Carbon\Carbon::parse($record->start_date)->format('d-m-Y') }}
                                 </div>
                             </div>
                         </div>
@@ -294,7 +294,7 @@
                                 </strong>
                                 <div
                                     style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: normal;">
-                                    &nbsp;{{ /Carbon/Carbon::parse($record->end_date)->format('d-m-Y') }}
+                                    &nbsp;{{ \Carbon\Carbon::parse($record->end_date)->format('d-m-Y') }}
                                 </div>
                             </div>
                         </div>
