@@ -13,6 +13,7 @@ class ExperienceCertificate extends Model
         'academic_session',
         'date',
         'to',
+        'toaddress',
         'subject',
         'letter',
     ];

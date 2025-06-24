@@ -8,19 +8,21 @@
 
     /* Navbar item hover effect */
     .navbar-nav .nav-link:hover {
-        background-color: rgba(255, 255, 255, 0.2); /* Subtle background on hover */
+        background-color: rgba(255, 255, 255, 0.2);
+        /* Subtle background on hover */
         border-radius: 5px;
     }
 
     /* Dropdown hover effect */
-    .navbar-nav .nav-item.dropdown:hover > .dropdown-menu {
+    .navbar-nav .nav-item.dropdown:hover>.dropdown-menu {
         display: block;
         animation: fadeIn 0.3s ease;
     }
 
     .navbar-nav .dropdown-menu {
         display: none;
-        background-color: #007bff; /* Make sure dropdown menu has the same background */
+        background-color: #007bff;
+        /* Make sure dropdown menu has the same background */
     }
 
     .dropdown-item {
@@ -41,6 +43,7 @@
             opacity: 0;
             transform: translateY(-5px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -79,7 +82,8 @@
                 <!-- Dashboard -->
 
                 <li class="nav-item">
-                    <a href="{{ route('ngo')}}" class="nav-link text-white"><i class="fas fa-tachometer-alt"></i> DASHBOARD</a>
+                    <a href="{{ route('ngo') }}" class="nav-link text-white"><i class="fas fa-tachometer-alt"></i>
+                        DASHBOARD</a>
                 </li>
 
 
@@ -88,18 +92,18 @@
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
                             class="fas fa-tasks"></i> ACTIVITY</a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="{{route('addactivity') }}">Add Activity</a></li>
-                        <li><a class="dropdown-item" href="{{ route('activitylist')}}">Activity List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('addactivity') }}">Add Activity</a></li>
+                        <li><a class="dropdown-item" href="{{ route('activitylist') }}">Activity List</a></li>
                     </ul>
                 </li>
 
-                  <!-- Activity & Event -->
-                  <li class="nav-item dropdown">
+                <!-- Activity & Event -->
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
                             class="fas fa-tasks"></i> EVENT</a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="{{route('add-event')}}">Add Event</a></li>
-                        <li><a class="dropdown-item" href="{{ route('event-list')}}">Event List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('add-event') }}">Add Event</a></li>
+                        <li><a class="dropdown-item" href="{{ route('event-list') }}">Event List</a></li>
                     </ul>
                 </li>
 
@@ -121,11 +125,14 @@
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
                             class="fas fa-clipboard-list"></i> REGISTRATION</a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="{{ route('registration')}}">New Registration</a></li>
-                        <li><a class="dropdown-item" href="{{route('pending-registration') }}">Pending Registration</a></li>
-                        <li><a class="dropdown-item" href="{{ route('approve-registration')}}">Approve Registration</a></li>
-                        <li><a class="dropdown-item" href="{{ route('recover')}}">Deleted Registration</a></li>
-                        <li><a class="dropdown-item" href="{{ route('reg-setting') }}">online Registration Setting</a></li>
+                        <li><a class="dropdown-item" href="{{ route('registration') }}">New Registration</a></li>
+                        <li><a class="dropdown-item" href="{{ route('pending-registration') }}">Pending Registration</a>
+                        </li>
+                        <li><a class="dropdown-item" href="{{ route('approve-registration') }}">Approve
+                                Registration</a></li>
+                        <li><a class="dropdown-item" href="{{ route('recover') }}">Deleted Registration</a></li>
+                        <li><a class="dropdown-item" href="{{ route('reg-setting') }}">online Registration Setting</a>
+                        </li>
                     </ul>
                 </li>
 
@@ -134,13 +141,20 @@
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
                             class="fas fa-project-diagram"></i> BENEFICIARIES</a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="{{ route('beneficiarie-add-list') }}">Survey Add Beneficiary List</a></li>
-                        <li><a class="dropdown-item" href="{{ route('survey-received-list') }}">Survey Recived List</a></li>
-                        <li><a class="dropdown-item" href="{{ route('beneficiarie-facilities')}}">Demand Beneficiary Facilities</a></li>
-                        <li><a class="dropdown-item" href="{{ route('beneficiarie-facilities-list')}}">Apporval Demand Distribut Facilities List</a></li>
-                        <li><a class="dropdown-item" href="{{ route('distributed-list')}}">Distributed Beneficiary Facilities List</a></li>
-                        <li><a class="dropdown-item" href="{{ route('pending-distribute-list')}}">Pending Beneficiary Facilities List</a></li>
-                        <li><a class="dropdown-item" href="{{route('all-beneficiarie-list')}}">All Beneficiary List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('beneficiarie-add-list') }}">Survey Add Beneficiary
+                                List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('survey-received-list') }}">Survey Recived List</a>
+                        </li>
+                        <li><a class="dropdown-item" href="{{ route('beneficiarie-facilities') }}">Demand Beneficiary
+                                Facilities</a></li>
+                        <li><a class="dropdown-item" href="{{ route('beneficiarie-facilities-list') }}">Apporval Demand
+                                Distribut Facilities List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('distributed-list') }}">Distributed Beneficiary
+                                Facilities List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('pending-distribute-list') }}">Pending Beneficiary
+                                Facilities List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('all-beneficiarie-list') }}">All Beneficiary
+                                List</a></li>
                         {{-- <li><a class="dropdown-item" href="#">Target Beneficiaries</a></li> --}}
                     </ul>
                 </li>
@@ -150,11 +164,12 @@
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
                             class="fas fa-donate"></i> DONATION</a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="{{route('donation')}}">Deposite Donations</a></li>
+                        <li><a class="dropdown-item" href="{{ route('donation') }}">Deposite Donations</a></li>
                         <li><a class="dropdown-item" href="{{ route('donation-list') }}">Donations List</a></li>
-                        <li><a class="dropdown-item" href="{{ route('online-donor-list')}}">Online Donations List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('online-donor-list') }}">Online Donations List</a>
+                        </li>
                         {{-- <li><a class="dropdown-item" href="#">Donations Report</a></li> --}}
-                        <li><a class="dropdown-item" href="{{route('donation-card-list')}}">Donation Card</a></li>
+                        <li><a class="dropdown-item" href="{{ route('donation-card-list') }}">Donation Card</a></li>
                         <li><a href="{{ route('all-donor-list') }}" class="dropdown-item">All Donation List</a></li>
                     </ul>
                 </li>
@@ -164,28 +179,29 @@
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
                             class="fas fa-users"></i> STAFF</a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="{{ route('add-staff')}}">Add Staff</a></li>
-                        <li><a class="dropdown-item" href="{{ route('staff-list')}}">Staff List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('add-staff') }}">Add Staff</a></li>
+                        <li><a class="dropdown-item" href="{{ route('staff-list') }}">Staff List</a></li>
                         <li><a class="dropdown-item" href="#">Staff Appointment Letter</a></li>
                         <li><a class="dropdown-item" href="#">Staff Resign Letter</a></li>
                         <li><a class="dropdown-item" href="#">Staff Salary</a></li>
                         <li><a class="dropdown-item" href="#">Staff ID Card</a></li>
                         <li><a class="dropdown-item" href="#">Staff Passbook</a></li>
                         <li><a class="dropdown-item" href="#">Staff Activity</a></li>
-                        <li><a class="dropdown-item" href="{{ route('genrate-letter')}}">Generate Letter</a></li>
-                        <li><a class="dropdown-item" href="{{ route('letter-list')}}">Letter List</a></li>
                     </ul>
                 </li>
 
                 <!-- Membership -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
-                        class="fas fa-user-friends"></i> MEMBERSHIP</a>
+                            class="fas fa-user-friends"></i> MEMBERSHIP</a>
                     <ul class="dropdown-menu bg-primary">
                         <li><a class="dropdown-item" href="{{ route('member-list') }}">Member List</a></li>
-                        <li><a class="dropdown-item" href="{{ route('add-member-list') }}">Add Member Position</a></li>
-                        <li><a class="dropdown-item" href="{{ route('member-position-list') }}">Member Position List</a></li>
-                        <li><a class="dropdown-item" href="{{ route('member-activitylist')}}">Member Activity</a></li>
+                        <li><a class="dropdown-item" href="{{ route('add-member-list') }}">Add Member Position</a>
+                        </li>
+                        <li><a class="dropdown-item" href="{{ route('member-position-list') }}">Member Position
+                                List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('member-activitylist') }}">Member Activity</a>
+                        </li>
                         <li><a class="dropdown-item" href="#">Active Members</a></li>
                         <li><a class="dropdown-item" href="#">Unactive Members</a></li>
                     </ul>
@@ -214,6 +230,16 @@
                     </ul>
                 </li>
 
+                <!-- letter -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
+                            class="fas fa-certificate"></i> Letter</a>
+                    <ul class="dropdown-menu bg-primary">
+                        <li><a class="dropdown-item" href="{{ route('genrate-letter') }}">Generate Letter</a></li>
+                        <li><a class="dropdown-item" href="{{ route('letter-list') }}">Letter List</a></li>
+                    </ul>
+                </li>
+
                 <!-- Training -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
@@ -221,10 +247,14 @@
                     <ul class="dropdown-menu bg-primary">
                         <li><a class="dropdown-item" href="{{ route('add-center') }}">Add Training Centre</a></li>
                         <li><a class="dropdown-item" href="{{ route('center-list') }}">Training Centre List</a></li>
-                        <li><a class="dropdown-item" href="{{ route('taining-demand-bene') }}">Training Demand Beneficiary List </a></li>
-                        <li><a class="dropdown-item" href="{{ route('approve-taining-demand-bene') }}">Training Approve Beneficiary List </a></li>
-                        <li><a class="dropdown-item" href="{{ route('genrate-training-certi') }}">Genrate Training Beneficiary Certificate</a></li>
-                        <li><a class="dropdown-item" href="{{ route('training-certi-list') }}">Training Beneficiary Certificate</a></li>
+                        <li><a class="dropdown-item" href="{{ route('taining-demand-bene') }}">Training Demand
+                                Beneficiary List </a></li>
+                        <li><a class="dropdown-item" href="{{ route('approve-taining-demand-bene') }}">Training
+                                Approve Beneficiary List </a></li>
+                        <li><a class="dropdown-item" href="{{ route('genrate-training-certi') }}">Genrate Training
+                                Beneficiary Certificate</a></li>
+                        <li><a class="dropdown-item" href="{{ route('training-certi-list') }}">Training Beneficiary
+                                Certificate</a></li>
                         <li><a class="dropdown-item" href="#">Exam Time Table</a></li>
                     </ul>
                 </li>

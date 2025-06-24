@@ -55,6 +55,7 @@
                                 <th>Letter No.</th>
                                 <th>Letter Date</th>
                                 <th>To</th>
+                                <th>To Address</th>
                                 <th>Subject</th>
                                 <th>Session</th>
                                 <th>Action</th>
@@ -65,8 +66,9 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->letterNo }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($item->date)->format('d-m-Y') }} To </td>
+                                    <td>{{ \Carbon\Carbon::parse($item->date)->format('d-m-Y') }} </td>
                                     <td>{{ $item->to }}</td>
+                                    <td>{{ $item->toaddress}}</td>
                                     <td>{{ $item->subject }}</td>
                                     <td>{{ $item->academic_session ?? 'N/A' }}</td>
                                     <td>

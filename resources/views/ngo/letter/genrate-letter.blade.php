@@ -190,9 +190,9 @@
                     </div>
                     <form action="{{ route('save-letter') }}" method="post">
                         @csrf
-                        <input type="text" name="beneficiarie_id"
+                        {{-- <input type="text" name="beneficiarie_id"
                             value="{{ old('beneficiarie_id', $experience->beneficiarie_id ?? '') }}" id="beneficiarie_id"
-                            hidden>
+                            hidden> --}}
                         <div class=" p-4 lh-lg" style="font-size: 16px;">
                             <div class="row justify-content-between mb-3">
                                 <div class="col-sm-4">
@@ -201,16 +201,15 @@
                                     <span id=""><input id="letterNo" class="form-control" type="text"
                                             name="letterNo" value=""></span>
                                 </div>
-
                                 <div class="col-sm-4">
-                                    <strong><span data-lang="hi">पत्र तारीख:</span> <span data-lang="en">Letter Date:</span></strong>
+                                    <strong><span data-lang="hi">पत्र तारीख:</span> <span data-lang="en">Letter
+                                            Date:</span></strong>
                                     <span id="certDate"><input type="date" class="form-control" name="date"
                                             id="date">
                                     </span>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <strong><span data-lang="hi">सत्र:</span> <span
-                                            data-lang="en">Session:</span></strong>
+                                    <strong><span data-lang="hi">सत्र:</span> <span data-lang="en">Session:</span></strong>
 
                                     <select class="form-select @error('session') is-invalid @enderror" name="session"
                                         required>
@@ -225,9 +224,12 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <label for="to">To</label>
-                                    <input type="text" name="to" id="to" class="form-control"
-                                        value="{{ old('to') }}">
-                                    @error('to')
+                                    <input type="text" name="to" id="to" class="form-control mb-2"
+                                        value="{{ old('to') }}" placeholder="Name">
+
+                                    <input type="text" name="toaddress" id="toaddress" class="form-control"
+                                        value="{{ old('toaddress') }}" placeholder="Address">
+                                    @error('toaddress')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
@@ -283,6 +285,7 @@
             const tableRows = document.querySelectorAll('.record-row');
             const selectedRecord = document.getElementById('selectedRecord');
             const selectedInfo = document.getElementById('selectedInfo');
+            const addressInput = document.getElementById('toaddress'); // Added address input element
 
             // Filter on search input
             searchInput.addEventListener('input', function() {
@@ -308,48 +311,39 @@
                     const id = this.dataset.id;
                     const name = this.dataset.name;
                     const phone = this.dataset.phone;
-                    const gurdian = this.dataset.gurdian;
+                    const guardian = this.dataset.guardian;
                     const address = this.dataset.address;
                     const registration = this.dataset.registration;
                     const registrationDate = this.dataset.registrationDate;
 
-                    // Certificate section filling by ID
-                    document.getElementById('beneficiarie_id').value = id;
+                    // Clear previous data
+                    selectedInfo.innerHTML = '';
+
+                    // Fill new data
                     document.getElementById('to').value = name;
-                    // document.getElementById('certGurdianHi').textContent = gurdian;
-                    // document.getElementById('certAddressHi').textContent = address;
-
-                    // document.getElementById('certNameEn').textContent = name;
-                    // document.getElementById('certGurdianEn').textContent = gurdian;
-                    // document.getElementById('certAddressEn').textContent = address;
-
-                    // document.getElementById('certRegNo').value = registration;
-                    // document.getElementById('certDate').textContent = registrationDate;
-
-
+                    addressInput.value = address; // Populate address input
 
                     // Show selected record summary
                     selectedInfo.innerHTML = `
-        <div class="row">
-            <div class="col-md-3"><strong>Name:</strong> ${name}</div>
-            <div class="col-md-3"><strong>Mobile:</strong> ${phone}</div>
-            <div class="col-md-3"><strong>Registration No.:</strong> ${registration}</div>
-        </div>
-    `;
+                    <div class="row">
+                        <div class="col-md-3"><strong>Name:</strong> ${name}</div>
+                        <div class="col-md-3"><strong>Mobile:</strong> ${phone}</div>
+                        <div class="col-md-3"><strong>Registration No.:</strong> ${registration}</div>
+                    </div>
+                `;
 
-                    selectedRecord.style.display = 'block'; // shows the selected record info
-                    tableDiv.style.display = 'none'; // hides the table
-                    searchInput.value = ''; // clears the search box
-
+                    selectedRecord.style.display = 'block'; // Show selected record info
+                    tableDiv.style.display = 'none'; // Hide the table
+                    searchInput.value = ''; // Clear the search box
                 });
-
-                tableDiv.style.opacity = '0';
-                setTimeout(() => {
-                    tableDiv.style.display = 'none';
-                    tableDiv.style.opacity = '1'; // reset for next time
-                }, 300);
-
             });
+
+            // Reset tableDiv after animation
+            tableDiv.style.opacity = '0';
+            setTimeout(() => {
+                tableDiv.style.display = 'none';
+                tableDiv.style.opacity = '1'; // Reset for next time
+            }, 300);
 
         });
     </script>
