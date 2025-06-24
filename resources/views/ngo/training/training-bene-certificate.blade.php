@@ -287,7 +287,7 @@
                                 <span data-lang="en">Training start date </span>
                             </strong>
                             <div class="flex-grow-1 border-bottom border-dark text-break">
-                                &nbsp;{{ $record->start_date }}
+                                &nbsp;{{/Carbon/Carbon::parse($record->start_date)->format('d-m-Y') }}
                             </div>
                         </div>
                     </div>
@@ -299,7 +299,7 @@
                                 <span data-lang="en">Training end date </span>
                             </strong>
                             <div class="flex-grow-1 border-bottom border-dark text-break">
-                                &nbsp;{{ $record->end_date }}
+                                &nbsp;{{ /Carbon/Carbon::parse($record->end_date)->format('d-m-Y') }}
                             </div>
                         </div>
                     </div>
