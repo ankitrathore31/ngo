@@ -36,6 +36,7 @@ class ExperienceController extends Controller
             'to' => 'required',
             'subject' => 'required',
             'letter' => 'required',
+            'toaddress' => 'required',
         ]);
 
         ExperienceCertificate::create([
@@ -45,11 +46,12 @@ class ExperienceController extends Controller
             'fromDate' => $request->fromDate,
             'toDate' => $request->toDate,
             'to' => $request->to,
+            'toaddress' => $request->toaddress,
             'subject' => $request->subject,
             'letter' => $request->letter,
         ]);
 
-        return back()->with('success', 'Certificate saved successfully!');
+        return back()->with('success', 'Letter saved successfully!');
     }
 
 

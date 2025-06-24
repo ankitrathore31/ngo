@@ -12,7 +12,7 @@
                 padding: 0;
                 font-family: 'Noto Sans Devanagari', 'Arial', sans-serif;
                 font-size: 12pt;
-                color: #000;
+                color: #000000;
             }
 
             body * {
@@ -35,7 +35,7 @@
             h4,
             h5,
             h6 {
-                font-size: 14pt !important;
+                font-size: 15pt !important;
                 font-weight: 600 !important;
                 margin: 4px 0;
             }
@@ -44,7 +44,7 @@
             span,
             b,
             strong {
-                font-weight: normal !important;
+                font-weight: 500 !important;
                 font-size: 12pt !important;
                 line-height: 1.5 !important;
             }
@@ -74,11 +74,9 @@
                 {{ session('success') }}
             </div>
         @endif
-        <!-- Language Toggle -->
         <div class="container">
             <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
                 <h5 class="mb-0">
-                    {{-- <span data-lang="hi">दान रसीद</span> --}}
                     <span> Letter</span>
                 </h5>
                 <div>
@@ -106,10 +104,15 @@
                                         &nbsp; &nbsp;<span>NGO NO. UP/00033062</span>&nbsp; &nbsp;
                                         &nbsp; &nbsp;<span>PAN: AAEAG7650B</span>&nbsp;
                                     </b></p>
-                                <h4 style="color: red;"><b>
-                                        <span data-lang="hi">ज्ञान भारती संस्था</span>
-                                        <span data-lang="en">GYAN BHARTI SANSTHA</span>
-                                    </b></h4>
+                                <h4 class="text-center"
+                                    style="color: red; font-size: 26px; font-weight: 700; word-spacing: 7px; display: flex; justify-content: center; flex-wrap: wrap; gap: 20px;">
+                                    <span data-lang="hi"
+                                        style="font-size: inherit; font-weight: inherit; word-spacing: inherit;">ज्ञान भारती
+                                        संस्था</span>
+                                    <span data-lang="en"
+                                        style="font-size: inherit; font-weight: inherit; word-spacing: inherit;">GYAN BHARTI
+                                        SANSTHA</span>
+                                </h4>
                                 <h6 style="color: blue;"><b>
                                         <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर
                                             प्रदेश -
@@ -129,18 +132,22 @@
                         </div>
                     </div>
                     <div class="container py-4" style="font-size: 16px; line-height: 1.8;">
-                        <div class="text-end mb-3">
-                            <strong>
-                                <span data-lang="hi">पत्र सं.</span>
-                                <span data-lang="en">Letter No.:</span>
-                            </strong>
-                            {{ $record->letterNo }}<br>
+                        <div class=" d-flex justify-content-between mb-3">
+                            <div>
+                                <strong>
+                                    <span data-lang="hi">पत्र सं.</span>
+                                    <span data-lang="en">Letter No.:</span>
+                                </strong>
+                                {{ $record->letterNo }}
+                            </div>
 
-                            <strong>
-                                <span data-lang="hi">दिनांक</span>
-                                <span data-lang="en">Date:</span>
-                            </strong>
-                            {{ \Carbon\Carbon::parse($record->date)->format('d-m-Y') }}
+                            <div>
+                                <strong>
+                                    <span data-lang="hi">दिनांक</span>
+                                    <span data-lang="en">Date:</span>
+                                </strong>
+                                {{ \Carbon\Carbon::parse($record->date)->format('d-m-Y') }}
+                            </div>
                         </div>
 
                         <div class="mb-2">
@@ -148,27 +155,28 @@
                                 <span data-lang="hi">प्रति</span><br>
                                 <span data-lang="en">To:</span>
                             </strong><br>
-                            {{ $record->to }}
+                            {{ $record->to }} <br>
+                            {{ $record->toaddress }}
                         </div>
 
                         <div class="mb-2">
                             <strong>
                                 <span data-lang="hi">विषय</span><br>
                                 <span data-lang="en">Subject:</span>
-                            </strong><br>
-                            {{ $record->subject }}
+                            </strong>
+                            &nbsp; {{ $record->subject }}
                         </div>
 
                         <div class="mb-4">
-                            <strong>
+                            {{-- <strong>
                                 <span data-lang="hi">पत्र का विवरण</span><br>
                                 <span data-lang="en">Letter Content:</span>
-                            </strong><br>
+                            </strong><br> --}}
                             {!! nl2br(e($record->letter)) !!}
                         </div>
 
-                        <div class="row d-flex justify-content-between mt-5">
-                            <div class="col-sm-4 text-center">
+                        <div class="row d-flex justify-content-end mt-5">
+                            {{-- <div class="col-sm-4 text-center">
                                 @if (!empty($signatures['program_manager']) && file_exists(public_path($signatures['program_manager'])))
                                     <div id="pmSignatureBox" class="mt-2">
                                         <p class="text-success no-print">Attached</p> <!-- This line is hidden in print -->
@@ -182,7 +190,7 @@
                                     <p class="text-muted mt-2 no-print">Not attached</p> <!-- Hidden only in print -->
                                 @endif
                                 <strong>Program Officer & Program Manager Signature with stamp</strong><br>
-                            </div>
+                            </div> --}}
 
                             <div class="col-sm-4 text-center">
                                 @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
