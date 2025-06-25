@@ -139,7 +139,7 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         {{-- <td>{{ $item->order_id }}</td> --}}
-                                        <td>{{ $item->donor_name }}</td>
+                                        <td>{{ $item->name }}</td>
                                         <td>{{ $item->donor_village }}
                                             {{ $item->donor_post }}
                                             {{ $item->donor_district }}
@@ -147,12 +147,12 @@
                                         </td>
                                         <td>{{ $item->donor_aadhar }} {{ $item->donor_pancard}}</td>
                                         <td>{{ $item->id_type }}</td>
-                                        <td>{{ $item->donor_number }}</td>  
-                                        <td>{{ $item->donor_email }}</td>                                       
+                                        <td>{{ $item->mobile }}</td>  
+                                        <td>{{ $item->email }}</td>                                       
                                         <td>{{ $item->donation_category ?? 'No Found' }}</td>
-                                        <td>{{ $item->donation_amount}}</td>
+                                        <td>{{ $item->amount}}</td>
                                         <td>
-                                            {{ $item->donate_date ? \Carbon\Carbon::parse($item->donate_date)->format('d-m-Y') : 'No Found' }}
+                                            {{ $item->date ? \Carbon\Carbon::parse($item->date)->format('d-m-Y') : 'No Found' }}
                                         </td>
                                         <td>{{ $item->status}} </td>
                                         <td>{{ $item->donation_remark}}</td>

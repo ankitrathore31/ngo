@@ -39,11 +39,9 @@ class DonationController extends Controller
     public function donation(Request $request)
     {
         $data = academic_session::all();
-
         $beneficiaries = beneficiarie::all();
         $members = Member::all();
         $record = $beneficiaries->merge($members);
-
         $lastReceiptNo = Donation::max('receipt_no');
         $newReceiptNo = is_numeric($lastReceiptNo) ? ((int) $lastReceiptNo + 1) : 1;
 
@@ -138,25 +136,78 @@ class DonationController extends Controller
 
     public function allDonations(Request $request)
     {
-        $query = DB::table('donations')
-            ->leftJoin('donor_datas', 'donations.mobile', '=', 'donor_datas.donor_number')
-            ->select(
-                'donations.*',
-                'donor_datas.donor_name as donor_name',
-                // 'donor_datas.donor_address as donor_address',
-                'donor_datas.donor_number as donor_number'
-            );
+        // Get all donor_data records, filtered by name if needed
+        $donorQuery = donor_data::query();
 
-        $donors = Donation::query();
+        if ($request->filled('name')) {
+            $donorQuery->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        $donors = $donorQuery->get();
+        $donorIds = $donors->pluck('id'); // Extract donor IDs
+
+        // Get all donations, filtered by session and donor_id (from matched donor_data)
+        $donationQuery = Donation::query();
 
         if ($request->filled('session_filter')) {
-            $donors->where('academic_session', $request->session_filter);
+            $donationQuery->where('academic_session', $request->session_filter);
         }
+
         if ($request->filled('name')) {
-            $donors->where('name', 'like', '%' . $request->name . '%');
+            $donationQuery->whereIn('donor_id', $donorIds); // Only donations from matching donors
         }
-        $donors = $query->get();
-        $data = academic_session::all(); // for session filter dropdown    
-        return view('ngo.donation.all-donation-list', compact('data', 'donors'));
+
+        $donations = $donationQuery->get();
+
+        // For dropdown
+        $data = academic_session::all();
+
+        return view('ngo.donation.all-donation-list', compact('data', 'donations'));
+    }
+
+
+    public function DonationReport(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+        ]);
+
+        $data = academic_session::all(); // session list
+
+        $donationsQuery = Donation::query(); // base query
+
+        // Apply filters (session + date range)
+        if ($request->filled('session_filter')) {
+            $donationsQuery->where('session', $request->input('session_filter'));
+        }
+
+        if ($request->filled('start_date')) {
+            $donationsQuery->whereDate('date', '>=', $request->input('start_date'));
+        }
+
+        if ($request->filled('end_date')) {
+            $donationsQuery->whereDate('date', '<=', $request->input('end_date'));
+        }
+
+        $filteredDonations = $donationsQuery->get();
+
+        // 🟢 This is your "Range Donation"
+        $rangeDonation = $filteredDonations->sum('amount');
+
+        // Unfiltered general stats
+        $totalDonation = Donation::sum('amount');
+        $thisYear = Donation::whereYear('date', now()->year)->sum('amount');
+        $thisMonth = Donation::whereYear('date', now()->year)->whereMonth('date', now()->month)->sum('amount');
+        $today = Donation::whereDate('date', now())->sum('amount');
+
+        return view('ngo.donation.donation-report', compact(
+            'data',
+            'totalDonation',
+            'thisYear',
+            'thisMonth',
+            'today',
+            'rangeDonation'
+        ));
     }
 }

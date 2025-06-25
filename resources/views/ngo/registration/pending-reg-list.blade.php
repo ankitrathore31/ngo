@@ -48,7 +48,6 @@
 
             </div>
 
-
             <div class="card shadow-sm">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <a href="{{ route('registration') }}" class="btn btn-success btn-sm">+ New Registraition</a>

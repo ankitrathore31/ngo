@@ -251,6 +251,7 @@ Route::controller(DonationController::class)->group(function () {
     Route::get('ngo/donation-certificate/{id}', 'viewDonationCertificate')->middleware('auth')->name('certi-donation');
     Route::get('ngo/donation-card-list', 'donationCardList')->middleware('auth')->name('donation-card-list');
     Route::get('ngo/all-donor-list', 'allDonations')->middleware('auth')->name('all-donor-list');
+    Route::get('ngo/dontaion-report', 'DonationReport')->middleware('auth')->name('dontaion-report');
 });
 
 Route::controller(TrainingCenterController::class)->group(function () {
