@@ -35,9 +35,9 @@ class PaymentController extends Controller
 
         // Save donor data
         $donor = new donor_data();
-        $donor->donor_name        = $request->donor_name;
-        $donor->donor_email       = $request->donor_email ?? null;
-        $donor->donor_number      = $request->donor_number ?? null;
+        $donor->name        = $request->donor_name;
+        $donor->email       = $request->donor_email ?? null;
+        $donor->mobile      = $request->donor_number ?? null;
         $donor->donor_country     = $request->donor_country ?? null;
         $donor->donor_state       = $request->donor_state ?? null;
         $donor->donor_district    = $request->donor_district ?? null;
@@ -49,9 +49,9 @@ class PaymentController extends Controller
         $donor->donor_pancard     = $request->donor_pancard ?? null;
         $donor->donation_category = $request->donation_category ?? null;
         $donor->donation_remark      = $request->donation_remark ?? null;
-        $donor->donation_amount   = $request->donation_amount;
+        $donor->amount   = $request->donation_amount;
         $donor->status = 'pending';
-        $donor->donate_date       = now();
+        $donor->date       = now();
 
         // Save donor to get the ID
         $donor->save();

@@ -217,8 +217,8 @@ class NgoController extends Controller
         $appmem = Member::where('status', 1)->count();
         $penmem= Member::where('status', 0)->count();
         $offlinedonate= Donation::sum('amount');
-        $succdonate= donor_data::where('status', 'Successful')->sum('donation_amount');
-        $succtodaydonate= donor_data::where('status', 'Successful')->whereDate('created_at', Carbon::today())->sum('donation_amount');
+        $succdonate= donor_data::where('status', 'Successful')->sum('amount');
+        $succtodaydonate= donor_data::where('status', 'Successful')->whereDate('created_at', Carbon::today())->sum('amount');
         return view('ngo.dashboard', compact('allbene', 'penbene', 'apbene','rebene',
         'allacti','todayacti','allmem','appmem','penmem','succdonate','succtodaydonate','offlinedonate'));
     }

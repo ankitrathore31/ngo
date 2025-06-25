@@ -168,9 +168,9 @@
                         <li><a class="dropdown-item" href="{{ route('donation-list') }}">Donations List</a></li>
                         <li><a class="dropdown-item" href="{{ route('online-donor-list') }}">Online Donations List</a>
                         </li>
-                        {{-- <li><a class="dropdown-item" href="#">Donations Report</a></li> --}}
                         <li><a class="dropdown-item" href="{{ route('donation-card-list') }}">Donation Card</a></li>
                         <li><a href="{{ route('all-donor-list') }}" class="dropdown-item">All Donation List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('dontaion-report')}}">Donations Report</a></li>
                     </ul>
                 </li>
 
