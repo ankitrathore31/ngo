@@ -210,54 +210,41 @@
                     </div>
                 @endif
 
-
-
-                <!-- Footer Note and Signature -->
-                {{-- <hr> --}}
-                {{-- <p style="margin: 0;">
-                    <span data-lang="hi"><b>सदस्यता/दान हेतु सद्भावपूर्वक प्राप्त किये।</b></span><br>
-                    <span data-lang="en"><b>Gratefully received for membership/donation purpose.</b></span>
-                </p> --}}
-
-                <div class="d-flex justify-content-between mt-4 mb-4">
-                    {{-- <div>
-                        <strong><span data-lang="hi">₹</span><span data-lang="en">₹</span></strong>{{ $donor->amount }}
-                    </div> --}}
-                    <div class="">
-                        <strong>
-                            <span data-lang="hi">हस्ताक्षर</span> |
-                            <span data-lang="en">Depositor's name</span>
-                        </strong>
+                <div class="row">
+                    <div class="col-sm-6 mb-2">
+                        <p><strong>
+                                <span data-lang="hi">जमाकर्ता का नाम:</span>
+                                <span data-lang="en">Depositor Name:</span>
+                            </strong> {{ $donor->depositor_name }}</p>
                     </div>
-                    <div>
-                        <strong>
-                            <span data-lang="hi">हस्ताक्षर प्राप्तकर्ता</span> |
-                            <span data-lang="en">Recipient's Signature</span>
-                        </strong>
+                    <div class="col-sm-6">
+                        <p>
+                            <strong>
+                                <span data-lang="hi">जमाकर्ता का संबंध:</span>
+                                <span data-lang="en">Relationship:</span>
+                            </strong> {{ $donor->relationship ?? null }}
+                        </p>
                     </div>
                 </div>
 
-                <!-- Bottom NGO Info -->
-                {{-- <hr>
-                <p style="font-size: 14px; margin: 0;">
-                    <b>
-                        <span data-lang="hi">NGO ID: UP/00033062 | नीति आयोग ID: UP/2023/0360430 | SRN No: F65124000 | CSR
-                            No: CSR00059991</span><br>
-                        <span data-lang="en">NGO ID: UP/00033062 | NITI Aayog ID: UP/2023/0360430 | SRN No: F65124000 | CSR
-                            No: CSR00059991</span>
-                    </b>
-                </p>
-                <p style="font-size: 14px; margin: 0;">
-                    <b>
-                        <span data-lang="hi">Website: www.gyanbhartingo.org | ईमेल: gyanbhartingo600@gmail.com | मोब:
-                            9411484111</span><br>
-                        <span data-lang="en">Website: www.gyanbhartingo.org | Email: gyanbhartingo600@gmail.com | Mob:
-                            9411484111</span>
-                    </b>
-                </p> --}}
+                <div class="row">
+                    <div class="col-sm-6 mb-2">
+                        <p><strong>
+                                <span data-lang="hi">प्राप्तकर्ता का नाम:</span>
+                                <span data-lang="en">Recipient Name:</span>
+                            </strong> {{ $donor->recipient_name }}</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p>
+                            <strong>
+                                <span data-lang="hi">टिप्पणी / संदेश:</span>
+                                <span data-lang="en">Remark:</span>
+                            </strong> {{ $donor->remark }}
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
     <script>
         function setLanguage(lang) {

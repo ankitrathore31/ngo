@@ -130,6 +130,8 @@
                                 <th>Donate Date</th>
                                 {{-- <th>Status</th> --}}
                                 <th>Payment Mode</th>
+                                <th>depositor Name</th>
+                                <th>Recipient Name</th>
                                 <th>Session</th>
                                 <th class="no-print">Action</th>
                                 <th>Certificate</th>
@@ -149,6 +151,8 @@
                                         {{ $item->date ? \Carbon\Carbon::parse($item->date)->format('d-m-Y') : 'No Found' }}
                                     </td>
                                     <td>{{ $item->payment_method }}</td>
+                                    <td>{{ $item->depositor_name }}</td>
+                                    <td>{{ $item->recipient_name }}</td>
                                     <td>{{ $item->academic_session }}</td>
                                     <td class="no-print">
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">

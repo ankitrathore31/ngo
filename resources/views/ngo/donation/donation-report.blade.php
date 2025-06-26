@@ -101,7 +101,7 @@
     <div class="container-fluid">
         <div class="card shadow">
             <div class="card-body">
-                <p><b>- Offline Donation</b></p>
+                <p><b>- Donation</b></p>
                 <div class="row dashboard-row justify-content-between">
                     <div class="col-md-2 col-sm-6 mb-3">
                         <div class="card bg-info text-white ">
