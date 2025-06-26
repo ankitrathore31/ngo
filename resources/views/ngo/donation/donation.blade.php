@@ -328,7 +328,46 @@
                             </div>
                         </div>
 
+                        <div class="row">
+                            <!-- Depositor Name -->
+                            <div class="mb-4 col-md-4">
+                                <label for="depositor_name" class="form-label">Depositor Name</label>
+                                <input type="text" name="depositor_name" id="depositor_name"
+                                    value="{{ old('depositor_name') }}" class="form-control">
+                                @error('depositor_name')
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                @enderror
+                            </div>
 
+                            <!-- Relationship of Depositor -->
+                            <div class="mb-4 col-md-4">
+                                <label for="relationship" class="form-label">Relationship of Depositor</label>
+                                <input type="text" name="relationship" id="relationship"
+                                    value="{{ old('relationship') }}" class="form-control">
+                                @error('relationship')
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <!-- Recipient Name -->
+                            <div class="mb-4 col-md-4">
+                                <label for="recipient_name" class="form-label">Recipient Name</label>
+                                <input type="text" name="recipient_name" id="recipient_name"
+                                    value="{{ old('recipient_name') }}" class="form-control">
+                                @error('recipient_name')
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <!-- Remark / Comment / SMS -->
+                            <div class="mb-4">
+                                <label for="remark" class="form-label">Remark / Comment / SMS</label>
+                                <textarea name="remark" id="remark" rows="3" class="form-control">{{ old('remark') }}</textarea>
+                                @error('remark')
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
 
                         <!-- Submit -->
                         <button type="submit" class="btn btn-primary">
@@ -506,5 +545,4 @@
             paymentMethod.addEventListener('change', togglePaymentFields);
         });
     </script>
-    
 @endsection

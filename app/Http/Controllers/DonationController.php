@@ -78,9 +78,14 @@ class DonationController extends Controller
         $donation->name = $request->name;
         $donation->mobile = $request->mobile;
         $donation->gurdian_name = $request->gurdian_name;
+        $donation->payment_method = $request->payment_method;
         $donation->address = $request->address;
         $donation->amount = $request->amount;
-        $donation->payment_method = $request->payment_method;
+        $donation->depositor_name = $request->depositor_name;
+        $donation->relationship = $request->relationship;
+        $donation->recipient_name = $request->recipient_name;
+        $donation->remark = $request->remark;
+
 
         // Conditional Cheque fields
         if ($request->payment_method == 'Cheque') {
@@ -136,37 +141,40 @@ class DonationController extends Controller
 
     public function allDonations(Request $request)
     {
-        // Get all donor_data records, filtered by name if needed
-        $donorQuery = donor_data::query();
+        // Apply filters to donor_data (online donations)
+        $online = donor_data::query();
 
         if ($request->filled('name')) {
-            $donorQuery->where('name', 'like', '%' . $request->name . '%');
+            $online->where('name', 'like', '%' . $request->name . '%');
         }
-
-        $donors = $donorQuery->get();
-        $donorIds = $donors->pluck('id'); // Extract donor IDs
-
-        // Get all donations, filtered by session and donor_id (from matched donor_data)
-        $donationQuery = Donation::query();
-
         if ($request->filled('session_filter')) {
-            $donationQuery->where('academic_session', $request->session_filter);
+            $online->where('academic_session', $request->session_filter);
         }
+
+        // Apply filters to Donation (offline donations)
+        $offline = Donation::query();
 
         if ($request->filled('name')) {
-            $donationQuery->whereIn('donor_id', $donorIds); // Only donations from matching donors
+            $offline->where('name', 'like', '%' . $request->name . '%');
+        }
+        if ($request->filled('session_filter')) {
+            $offline->where('academic_session', $request->session_filter);
         }
 
-        $donations = $donationQuery->get();
+        // Get both collections and merge
+        $donations = $online->get()->merge($offline->get());
 
-        // For dropdown
+        // Optional: sort the merged collection (e.g., by date)
+        $donations = $donations->sortByDesc('created_at'); // or any other column you have
+
+        // For academic session dropdown
         $data = academic_session::all();
 
         return view('ngo.donation.all-donation-list', compact('data', 'donations'));
     }
 
 
-    public function DonationReport(Request $request)
+    public function TTDonationReport(Request $request)
     {
         $request->validate([
             'start_date' => 'nullable|date',
@@ -200,6 +208,78 @@ class DonationController extends Controller
         $thisYear = Donation::whereYear('date', now()->year)->sum('amount');
         $thisMonth = Donation::whereYear('date', now()->year)->whereMonth('date', now()->month)->sum('amount');
         $today = Donation::whereDate('date', now())->sum('amount');
+
+        return view('ngo.donation.donation-report', compact(
+            'data',
+            'totalDonation',
+            'thisYear',
+            'thisMonth',
+            'today',
+            'rangeDonation'
+        ));
+    }
+
+    public function DonationReport(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+        ]);
+
+        $data = academic_session::all(); // For session dropdown
+
+        // ----- Base Queries -----
+        $offlineQuery = Donation::query();      // Offline
+        $onlineQuery = donor_data::query();     // Online
+
+        // ----- Apply Filters to Both -----
+        if ($request->filled('session_filter')) {
+            $offlineQuery->where('session', $request->input('session_filter'));
+            $onlineQuery->where('session', $request->input('session_filter'));
+        }
+
+        if ($request->filled('start_date')) {
+            $offlineQuery->whereDate('date', '>=', $request->input('start_date'));
+            $onlineQuery->whereDate('date', '>=', $request->input('start_date'));
+        }
+
+        if ($request->filled('end_date')) {
+            $offlineQuery->whereDate('date', '<=', $request->input('end_date'));
+            $onlineQuery->whereDate('date', '<=', $request->input('end_date'));
+        }
+
+        // Check if user applied any range filter
+        $hasDateRange = $request->filled('start_date') || $request->filled('end_date');
+
+        // Calculate only if a range is selected
+        $rangeDonation = 0;
+
+        if ($hasDateRange) {
+            $filteredOffline = $offlineQuery->get();
+            $filteredOnline = $onlineQuery->get();
+            $filteredDonations = $filteredOffline->merge($filteredOnline);
+
+            $rangeDonation = $filteredDonations->sum('amount');
+        }
+
+        // ----- Global Stats (All-Time) -----
+        $totalOffline = Donation::sum('amount');
+        $totalOnline = donor_data::sum('amount');
+        $totalDonation = $totalOffline + $totalOnline;
+
+        // ----- This Year -----
+        $thisYear = Donation::whereYear('date', now()->year)->sum('amount')
+            + donor_data::whereYear('date', now()->year)->sum('amount');
+
+        // ----- This Month -----
+        $thisMonth = Donation::whereYear('date', now()->year)
+            ->whereMonth('date', now()->month)->sum('amount')
+            + donor_data::whereYear('date', now()->year)
+            ->whereMonth('date', now()->month)->sum('amount');
+
+        // ----- Today -----
+        $today = Donation::whereDate('date', now())->sum('amount')
+            + donor_data::whereDate('date', now())->sum('amount');
 
         return view('ngo.donation.donation-report', compact(
             'data',
