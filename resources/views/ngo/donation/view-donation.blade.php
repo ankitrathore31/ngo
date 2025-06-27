@@ -102,7 +102,7 @@
                         <p><strong>
                                 <span data-lang="hi">रसीद क्रमांक:</span>
                                 <span data-lang="en">Receipt No.:</span>
-                            </strong> {{ $donor->receipt_no }}</p>
+                            </strong> {{ $donor->receipt_no ?? 'Donation with OnlineCashfree' }}</p>
                     </div>
 
                     {{-- <div class="col-sm-4 mb-2">
@@ -132,7 +132,7 @@
                         <p><strong>
                                 <span data-lang="hi">पिता/पति का नाम:</span>
                                 <span data-lang="en">Father/Husband's Name:</span>
-                            </strong> {{ $donor->gurdian_name }}</p>
+                            </strong> {{ $donor->gurdian_name ?? 'Donation with OnlineCashfree'}}</p>
                     </div>
                 </div>
 
@@ -141,7 +141,7 @@
                         <p><strong>
                                 <span data-lang="hi">पता:</span>
                                 <span data-lang="en">Address:</span>
-                            </strong> {{ $donor->address }}</p>
+                            </strong> {{ $donor->address ?? $donor->donor_village}}</p>
                     </div>
                     <div class="col-sm-6">
                         <p>
@@ -182,7 +182,7 @@
                         <p><strong>
                                 <span data-lang="hi">भुगतान का प्रकार नकद/चेक/यूपीआई/अन्य द्वारा:</span>
                                 <span data-lang="en">Payment Method (Cash/Cheque/UPI/Other):</span>
-                            </strong>{{ $donor->payment_method }}</p>
+                            </strong>{{ $donor->payment_method ?? 'Donation with OnlineCashfree'}}</p>
                     </div>
                     <div class="col-sm-6">
                         <p><strong>
@@ -215,14 +215,14 @@
                         <p><strong>
                                 <span data-lang="hi">जमाकर्ता का नाम:</span>
                                 <span data-lang="en">Depositor Name:</span>
-                            </strong> {{ $donor->depositor_name }}</p>
+                            </strong> {{ $donor->depositor_name ?? 'Donation with OnlineCashfree'}}</p>
                     </div>
                     <div class="col-sm-6">
                         <p>
                             <strong>
                                 <span data-lang="hi">जमाकर्ता का संबंध:</span>
                                 <span data-lang="en">Relationship:</span>
-                            </strong> {{ $donor->relationship ?? null }}
+                            </strong> {{ $donor->relationship ?? 'Donation with OnlineCashfree' }}
                         </p>
                     </div>
                 </div>
@@ -232,14 +232,14 @@
                         <p><strong>
                                 <span data-lang="hi">प्राप्तकर्ता का नाम:</span>
                                 <span data-lang="en">Recipient Name:</span>
-                            </strong> {{ $donor->recipient_name }}</p>
+                            </strong> {{ $donor->recipient_name ?? 'Donation with OnlineCashfree' }}</p>
                     </div>
                     <div class="col-sm-6">
                         <p>
                             <strong>
                                 <span data-lang="hi">टिप्पणी / संदेश:</span>
                                 <span data-lang="en">Remark:</span>
-                            </strong> {{ $donor->remark }}
+                            </strong> {{ $donor->remark ?? $donor->donation_remark }}
                         </p>
                     </div>
                 </div>

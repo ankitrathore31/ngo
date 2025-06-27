@@ -111,6 +111,7 @@ class DonationController extends Controller
     {
 
         $donor = Donation::find($id);
+        $donor = donor_data::find($id);
 
         return view('ngo.donation.view-donation', compact('donor'));
     }

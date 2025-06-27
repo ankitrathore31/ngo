@@ -135,12 +135,12 @@
                         </thead>
 
                         <tbody>
-                            @foreach ($donors as $item)
+                            @foreach ($donations as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $item->donor_name ?? '-' }}</td>
-                                    <td>{{ $item->donor_address ?? '-' }}</td>
-                                    <td>{{ $item->donor_mobile ?? '-' }}</td>
+                                    <td>{{ $item->name ?? '-' }}</td>
+                                    <td>{{ $item->address ?? $item->donor_village }}</td>
+                                    <td>{{ $item->mobile ?? '-' }}</td>
                                     <td>{{ $item->amount }}</td>
                                     <td>{{ $item->date ? \Carbon\Carbon::parse($item->date)->format('d-m-Y') : 'Not Found' }}
                                     </td>
