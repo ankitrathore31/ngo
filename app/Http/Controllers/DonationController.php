@@ -107,24 +107,46 @@ class DonationController extends Controller
     public function viewDonation($id)
     {
 
+        // Try to find donor in offline donations first
         $donor = Donation::find($id);
-        $donor = donor_data::find($id);
+
+        // If not found in offline, try in online
+        if (!$donor) {
+            $donor = donor_data::find($id);
+        }
+
+        // Optionally handle not found
+        if (!$donor) {
+            return redirect()->back()->with('error', 'Donation not found.');
+        }
 
         return view('ngo.donation.view-donation', compact('donor'));
     }
 
     public function viewDonationCertificate($id)
     {
-
+        // Try to find donor in offline donations first
         $donor = Donation::find($id);
-        $donor = donor_data::find($id);
+
+        // If not found in offline, try in online
+        if (!$donor) {
+            $donor = donor_data::find($id);
+        }
+
+        // Optionally handle not found
+        if (!$donor) {
+            return redirect()->back()->with('error', 'Donation not found.');
+        }
+
         return view('ngo.donation.donation-certificate', compact('donor'));
     }
+
 
     public function donationCardList(Request $request)
     {
 
         $query = Donation::query();
+        // $query
         if ($request->filled('session_filter')) {
             $query->where('academic_session', $request->session_filter);
         }
@@ -135,6 +157,25 @@ class DonationController extends Controller
         $donor = $query->get();
 
         return view('ngo.donation.donation-card-list', compact('data', 'donor'));
+    }
+
+    public function viewDonationCard($id)
+    {
+
+        // Try to find donor in offline donations first
+        $donor = Donation::find($id);
+
+        // If not found in offline, try in online
+        if (!$donor) {
+            $donor = donor_data::find($id);
+        }
+
+        // Optionally handle not found
+        if (!$donor) {
+            return redirect()->back()->with('error', 'Donation not found.');
+        }
+
+        return view('ngo.donation.donation-card', compact('donor'));
     }
 
     public function allDonations(Request $request)
@@ -219,37 +260,26 @@ class DonationController extends Controller
 
     public function DonationReport(Request $request)
     {
-        $request->validate([
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'donation_type' => 'nullable|in:all,offline,online'
-        ]);
-
         $data = academic_session::all(); // For session dropdown
 
-        // Build base queries
+        $startDate = $request->input('start_date', now()->toDateString());
+        $endDate = $request->input('end_date', now()->toDateString());
+        $donationType = $request->input('donation_type', 'all');
+
+        // Base Queries
         $offlineQuery = Donation::query();
         $onlineQuery = donor_data::where('status', 'Successful');
 
-        // Filters
+        // Apply filters
         if ($request->filled('session_filter')) {
             $offlineQuery->where('academic_session', $request->input('session_filter'));
             // $onlineQuery->where('academic_session', $request->input('session_filter'));
         }
 
-        if ($request->filled('start_date')) {
-            $offlineQuery->whereDate('date', '>=', $request->input('start_date'));
-            $onlineQuery->whereDate('date', '>=', $request->input('start_date'));
-        }
-
-        if ($request->filled('end_date')) {
-            $offlineQuery->whereDate('date', '<=', $request->input('end_date'));
-            $onlineQuery->whereDate('date', '<=', $request->input('end_date'));
-        }
+        $offlineQuery->whereBetween('date', [$startDate, $endDate]);
+        $onlineQuery->whereBetween('date', [$startDate, $endDate]);
 
         // Filter by donation type
-        $donationType = $request->input('donation_type', 'all');
-
         if ($donationType === 'offline') {
             $donations = $offlineQuery->get();
         } elseif ($donationType === 'online') {
@@ -258,22 +288,26 @@ class DonationController extends Controller
             $donations = $offlineQuery->get()->merge($onlineQuery->get());
         }
 
-        // Calculate totals
-        $hasDateRange = $request->filled('start_date') || $request->filled('end_date');
-        $rangeDonation = $hasDateRange ? $donations->sum('amount') : 0;
+        // Calculate Range Total
+        $rangeDonation = $donations->sum('amount');
 
+        // Total Stats
         $totalOffline = Donation::sum('amount');
         $totalOnline = donor_data::where('status', 'Successful')->sum('amount');
         $totalDonation = $totalOffline + $totalOnline;
+        $thisYear = Donation::whereYear('date', now()->year)->sum('amount')
+            + donor_data::where('status', 'Successful')->whereYear('date', now()->year)->sum('amount');
 
-        $thisYear = Donation::whereYear('date', now()->year)->sum('amount') +
-            donor_data::where('status', 'Successful')->whereYear('date', now()->year)->sum('amount');
+        $thisMonth = Donation::whereYear('date', now()->year)
+            ->whereMonth('date', now()->month)->sum('amount')
+            + donor_data::where('status', 'Successful')
+            ->whereYear('date', now()->year)
+            ->whereMonth('date', now()->month)->sum('amount');
 
-        $thisMonth = Donation::whereYear('date', now()->year)->whereMonth('date', now()->month)->sum('amount') +
-            donor_data::where('status', 'Successful')->whereYear('date', now()->year)->whereMonth('date', now()->month)->sum('amount');
+        $today = Donation::whereDate('date', now())->sum('amount')
+            + donor_data::where('status', 'Successful')
+            ->whereDate('date', now())->sum('amount');
 
-        $today = Donation::whereDate('date', now())->sum('amount') +
-            donor_data::where('status', 'Successful')->whereDate('date', now())->sum('amount');
 
         return view('ngo.donation.donation-report', compact(
             'data',

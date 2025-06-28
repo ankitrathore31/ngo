@@ -119,6 +119,7 @@
                             <tr>
                                 <th>Sr. No.</th>
                                 <th>Name</th>
+                                <th>Father/Husband Name</th>
                                 <th>Address</th>
                                 {{-- <th>Identity No.</th>
                                 <th>Identity Type</th> --}}
@@ -139,6 +140,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->name ?? '-' }}</td>
+                                    <td>{{ $item->gurdian_name ?? 'Donation with Online cashfree' }}</td>
                                     <td>{{ $item->address ?? $item->donor_village }}</td>
                                     <td>{{ $item->mobile ?? '-' }}</td>
                                     <td>{{ $item->amount }}</td>

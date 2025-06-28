@@ -119,7 +119,9 @@
                         <thead class="table-primary">
                             <tr>
                                 <th>Sr. No.</th>
+                                <th>Receipt No.</th>
                                 <th>Name</th>
+                                <th>Father/Husband Name</th>
                                 <th>Address</th>
                                 {{-- <th>Identity No.</th>
                                 <th>Identity Type</th> --}}
@@ -139,7 +141,9 @@
                             @foreach ($donor as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
+                                    <th>{{$item->receipt_no}}</th>
                                     <td>{{ $item->name }}</td>
+                                    <td>{{ $item->gurdian_name}}</td>
                                     <td>{{ $item->address }}
                                     </td>
                                     <td>{{ $item->mobile }}</td>
@@ -151,7 +155,7 @@
                                     <td>{{ $item->academic_session }}</td>
                                     <td class="no-print">
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            <a href="{{route('view-donation', $item->id) }}"
+                                            <a href="{{route('view-donation-card', $item->id) }}"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="View" style="min-width: 38px; height: auto;">
                                                 Donation Card
