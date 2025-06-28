@@ -295,7 +295,6 @@ class DonationController extends Controller
         $totalOffline = Donation::sum('amount');
         $totalOnline = donor_data::where('status', 'Successful')->sum('amount');
         $totalDonation = $totalOffline + $totalOnline;
-
         $thisYear = Donation::whereYear('date', now()->year)->sum('amount')
             + donor_data::where('status', 'Successful')->whereYear('date', now()->year)->sum('amount');
 
