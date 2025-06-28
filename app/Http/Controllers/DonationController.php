@@ -139,7 +139,7 @@ class DonationController extends Controller
 
     public function allDonations(Request $request)
     {
-        $online = donor_data::where('status', 'successfully')->get();
+        $online = donor_data::where('status', 'successfully');
 
         if ($request->filled('name')) {
             $online->where('name', 'like', '%' . $request->name . '%');
