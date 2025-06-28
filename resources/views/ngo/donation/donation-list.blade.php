@@ -122,6 +122,7 @@
                                 <th>Receipt No.</th>
                                 <th>Donate Date</th>
                                 <th>Name</th>
+                                <th>Father/Husband Name</th>
                                 <th>Address</th>
                                 {{-- <th>Identity No.</th>
                                 <th>Identity Type</th> --}}
@@ -148,6 +149,7 @@
                                         {{ $item->date ? \Carbon\Carbon::parse($item->date)->format('d-m-Y') : 'No Found' }}
                                     </td>
                                     <td>{{ $item->name }}</td>
+                                    <td>{{ $item->gurdian_name}}</td>
                                     <td>{{ $item->address }}
                                     </td>
                                     <td>{{ $item->mobile }}</td>
