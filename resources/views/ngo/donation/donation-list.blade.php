@@ -119,6 +119,8 @@
                         <thead class="table-primary">
                             <tr>
                                 <th>Sr. No.</th>
+                                <th>Receipt No.</th>
+                                <th>Donate Date</th>
                                 <th>Name</th>
                                 <th>Address</th>
                                 {{-- <th>Identity No.</th>
@@ -127,7 +129,6 @@
                                 {{-- <th>Email</th> --}}
                                 {{-- <th>Donation Category</th> --}}
                                 <th>Donation Amount</th>
-                                <th>Donate Date</th>
                                 {{-- <th>Status</th> --}}
                                 <th>Payment Mode</th>
                                 <th>depositor Name</th>
@@ -142,14 +143,15 @@
                             @foreach ($donor as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $loop->receipt_no }}</td>
+                                    <td>
+                                        {{ $item->date ? \Carbon\Carbon::parse($item->date)->format('d-m-Y') : 'No Found' }}
+                                    </td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->address }}
                                     </td>
                                     <td>{{ $item->mobile }}</td>
                                     <td>{{ $item->amount }}</td>
-                                    <td>
-                                        {{ $item->date ? \Carbon\Carbon::parse($item->date)->format('d-m-Y') : 'No Found' }}
-                                    </td>
                                     <td>{{ $item->payment_method }}</td>
                                     <td>{{ $item->depositor_name }}</td>
                                     <td>{{ $item->recipient_name }}</td>

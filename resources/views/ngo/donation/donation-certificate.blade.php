@@ -1,33 +1,72 @@
 @extends('ngo.layout.master')
 @section('content')
     <style>
-        #recordTable {
-            border-collapse: collapse;
-            width: 100%;
+        .print-red-bg {
+            background-color: #dc3545 !important;
+            /* Bootstrap 'bg-danger' color */
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            color: white !important;
         }
 
-        #recordTable th,
-        #recordTable td {
-            border: 1px solid #dee2e6;
-            padding: 8px;
-            text-align: left;
-            vertical-align: middle;
-        }
+        @media print {
+            body * {
+                visibility: hidden;
+                font-size: 12px;
 
-        #recordTable th {
-            background-color: #e9f2fb;
-            font-weight: bold;
-        }
+            }
 
-        .record-row:hover {
-            background-color: #f0f8ff;
-            cursor: pointer;
+            .print-card,
+            .print-card * {
+                visibility: visible;
+            }
+
+            .print-card {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                max-width: 210mm;
+                /* A4 width */
+                padding: 15mm;
+                /* Print-friendly padding */
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                width: 210mm;
+                height: 297mm;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+
+            .print-red-bg {
+                background-color: #dc3545 !important;
+                /* Bootstrap 'bg-danger' color */
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                color: white !important;
+            }
+
+
+            @page {
+                size: A4;
+                margin: 20mm;
+            }
+
+            /* Optional: Hide any interactive or irrelevant UI */
+            button,
+            .btn,
+            .no-print {
+                display: none !important;
+            }
         }
     </style>
-
     <div class="wrapper">
         <div class="d-flex justify-content-between align-record-centre mb-2 mt-3">
-            <h5 class="mb-0">Donation</h5>
+            <h5 class="mb-0">Donation Certificate</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                     <li class="breadcrumb-record"><a href="{{ url('dashboard') }}">Dashboard</a></li>
@@ -52,290 +91,94 @@
                 </div>
             </div>
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between">
                     <a href="{{ route('donation-list') }}" class="btn btn-success">Donation List</a>
+                    <button onclick="window.print()" class="btn btn-primary">Print Certificate</button>
                 </div>
-                <div class="card-body shadow rounded p-4 my-4">
-                    <!-- Search Input -->
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <input type="text" id="searchInput" class="form-control"
-                                placeholder="Search by Reg. No, Name, Phone, or ID No">
-                        </div>
-                    </div>
+                <div class="card-body shadow rounded p-4 my-4 print-card">
+                    <div class="text-center mb-4 border-bottom pb-2">
+                        <!-- Header -->
+                        <div class="row">
+                            <div class="col-sm-2 text-center text-md-start">
+                                <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="80" height="80">
+                            </div>
+                            <div class="col-sm-10">
+                                <p style="margin: 0;">
+                                    <span data-lang="hi"><b>सोसाइटीज रजिस्ट्रेशन एक्ट 1860 के अंतर्गत पंजीकृत</b></span>
+                                    <span data-lang="en"><b>Registered under Societies Registration Act 1860</b></span>
+                                </p>
+                                <h4 style="color: red;"><b>
+                                        <span data-lang="hi">ज्ञान भारती संस्था</span>
+                                        <span data-lang="en">GYAN BHARTI SANSTHA</span>
+                                    </b></h4>
+                                <h6 style="color: blue;"><b>
+                                        <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर
+                                            प्रदेश -
+                                            262121</span>
+                                        <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit, UP
+                                            -
+                                            262121</span>
+                                    </b></h6>
+                                <p style="margin: 0;">
+                                    <span data-lang="hi"><b>आयकर अधिनियम 80G, 12A, के अंतर्गत रजिस्टर्ड</b></span>
+                                    <span data-lang="en"><b>Registered under Income Tax Act 80G, 12A</b></span>
+                                </p>
+                                <p style="margin: 0;"><b>
+                                        <span data-lang="hi">पंजीकरण सं.: 80G-AAEAG7650BF20231 | 12A: AAEAG7650BE20231 |
+                                            दिनांक:
+                                            02-10-2023</span>
+                                        <span data-lang="en">Reg. No: 80G-AAEAG7650BF20231 | 12A: AAEAG7650BE20231 | Date:
+                                            02-10-2023</span>
+                                        <span data-lang="hi">| पैन: AAEAG7650B</span>
+                                        <span data-lang="en">| PAN: AAEAG7650B</span>
+                                    </b></p>
+                                {{-- <p style="margin: 0;"><b>
 
-                    <!-- Results Table -->
-                    <!-- Results Table -->
-                    <div id="recordTableDiv" style="display: none;" class="table-responsive">
-                        <table id="recordTable" class="table table-bordered table-striped table-hover"
-                            style="border-collapse: collapse; width: 100%;">
-                            <thead class="table-primary">
-                                <tr>
-                                    <th>Type</th>
-                                    <th>Registration No</th>
-                                    <th>Name</th>
-                                    <th>Father/Husband</th>
-                                    <th>Phone</th>
-                                    <th>Identity Type</th>
-                                    <th>Identity No</th>
-                                    <th>Session</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($record as $item)
-                                    <tr class="record-row" data-name="{{ $item->name }}" data-phone="{{ $item->phone }}"
-                                        data-gurdian="{{ $item->gurdian_name }}"data-registration="{{ $item->registration_no }}"
-                                        data-registrationDate="{{ $item->registration_date }}"
-                                        data-address="{{ $item->village }}, {{ $item->post }}, {{ $item->block }}, {{ $item->district }}, {{ $item->state }} - {{ $item->pincode }}"
-                                        style="cursor: pointer;">
-                                        <td>{{ get_class($item) === 'App\\Models\\beneficiarie' ? 'Beneficiary' : 'Member' }}
-                                        </td>
-                                        <td>{{ $item->registration_no ?? 'Not Found' }}</td>
-                                        <td>{{ $item->name }}</td>
-                                        <td>{{ $item->gurdian_name }}</td>
-                                        <td>{{ $item->phone }}</td>
-                                        <td>{{ $item->identity_type ?? '—' }}</td>
-                                        <td>{{ $item->identity_no ?? '—' }}</td>
-                                        <td>{{ $item->academic_session ?? '_' }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-
-
-
-                    <!-- Selected Record Info -->
-                    <div id="selectedRecord" class="mt-3" style="display: none;">
-                        <div class="card shadow-sm border rounded p-3 bg-light">
-                            <h5 class="card-title text-primary">Selected Person Details</h5>
-                            <div class="card-body">
-                                <ul class="list-unstyled mb-0" id="selectedInfo">
-                                </ul>
+                                </b></p> --}}
                             </div>
                         </div>
                     </div>
+                    <h4 class="text-center mb-4">
+                        <strong data-lang="en">DONATION CERTIFICATE</strong>
+                        <strong data-lang="hi">डोनेशन प्रमाण पत्र</strong>
+                    </h4>
+
+                    <p style="font-size: 1.2rem; line-height: 1.8;" data-lang="hi">
+                        यह प्रमाणित किया जाता है कि
+                        <strong>ज्ञान भारती संस्था</strong> को
+                        <strong>₹{{ $donor->amount }}</strong>
+                        की राशि <strong>{{ $donor->name }}</strong>
+                        पुत्र/पत्नी <strong>{{ $donor->gurdian_name }}</strong>, निवासी
+                        <strong>{{ $donor->address }}</strong>
+                        द्वारा दान स्वरूप प्राप्त हुई है। संस्था इस धनराशि का उपयोग
+                        गरीब, असहाय एवं निराश्रित लोगों के कल्याण हेतु करेगी। संस्था
+                        आपके उज्ज्वल भविष्य की कामना करती है एवं आपका हार्दिक आभार प्रकट करती है।
+                    </p>
 
                     <hr>
 
+                    <p style="font-size: 1.2rem; line-height: 1.8;" data-lang="en">
+                        This is to certify that <strong>Gyan Bharti Sanstha</strong> has received a donation of
+                        <strong>₹{{ $donor->amount }}</strong> from <strong>{{ $donor->name }}</strong>,
+                        S/O or W/O <strong>{{ $donor->gurdian_name }}</strong>, resident of
+                        <strong>{{ $donor->address }}</strong>. The Sanstha will utilize this amount for the welfare
+                        of the poor, helpless and destitute. We sincerely thank you and wish you a bright future.
+                    </p>
 
-                    <form action="{{ route('save-donation') }}" method="post">
-                        @csrf
-                        <div class="row mb-3">
-                            <!-- Receipt No. -->
-                            <div class="col-md-4">
-                                <label class="form-label">
-                                    <span data-lang="hi">रसीद क्रमांक</span>
-                                    <span data-lang="en">Receipt No.</span>
-                                </label>
-                                <input type="text" class="form-control @error('receipt_no') is-invalid @enderror"
-                                    name="receipt_no" value="{{ old('receipt_no', $newReceiptNo) }}">
-                                @error('receipt_no')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <!-- Session -->
-                            <div class="col-md-4">
-                                <label class="form-label">
-                                    <span data-lang="hi">सेशन</span>
-                                    <span data-lang="en">Session</span>
-                                </label>
-                                <select class="form-control @error('session') is-invalid @enderror" name="session" required>
-                                    <option value="">Select Session</option>
-                                    @foreach ($data as $session)
-                                        <option value="{{ $session->session_date }}"
-                                            {{ old('session') == $session->session_date ? 'selected' : '' }}>
-                                            {{ $session->session_date }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('session')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-
-                            <!-- Date -->
-                            <div class="col-md-4">
-                                <label class="form-label">
-                                    <span data-lang="hi">तारीख</span>
-                                    <span data-lang="en">Date</span>
-                                </label>
-                                <input type="date" class="form-control @error('date') is-invalid @enderror"
-                                    name="date" value="{{ old('date') }}">
-                                @error('date')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
+                    <div class="mt-5 d-flex justify-content-between">
+                        <div>
+                            <strong>Date:</strong> {{ \Carbon\Carbon::parse($donor->date)->format('d-m-Y') }}<br>
+                            <strong>Receipt No:</strong> {{ $donor->receipt_no }}<br>
+                            <strong>Session:</strong> {{ $donor->academic_session }}<br>
+                            <strong>Payment Method:</strong> {{ ucfirst($donor->payment_method) }}
                         </div>
 
-                        <!-- Full Name -->
-                        <div class="mb-3">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label class="form-label">
-                                        <span data-lang="hi">श्री / श्रीमती का नाम</span>
-                                        <span data-lang="en">Full Name</span>
-                                    </label>
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                        name="name" value="{{ old('name') }}">
-                                    @error('name')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <!-- Mobile Number -->
-                                <div class="col-md-6">
-                                    <label class="form-label">
-                                        <span data-lang="hi">मोबाइल नंबर</span>
-                                        <span data-lang="en">Mobile Number</span>
-                                    </label>
-                                    <input type="text" class="form-control @error('mobile') is-invalid @enderror"
-                                        name="mobile" value="{{ old('mobile') }}" maxlength="10" pattern="[0-9]{10}"
-                                        placeholder="10-digit number">
-                                    @error('mobile')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
+                        <div class="text-end">
+                            <strong>Authorized Signature</strong><br><br>
+                            {{-- <img src="{{ asset('images/signature.png') }}" alt="Signature" height="60"> --}}
+                            <!-- optional -->
                         </div>
-
-                        <!-- Father/Husband Name -->
-                        <div class="mb-3">
-                            <label class="form-label">
-                                <span data-lang="hi">पिता/पति का नाम</span>
-                                <span data-lang="en">Father/Husband's Name</span>
-                            </label>
-                            <input type="text" class="form-control @error('gurdian_name') is-invalid @enderror"
-                                name="gurdian_name" value="{{ old('gurdian_name') }}">
-                            @error('gurdian_name')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- Address -->
-                        <div class="mb-3">
-                            <label class="form-label">
-                                <span data-lang="hi">पता</span>
-                                <span data-lang="en">Address</span>
-                            </label>
-                            <input type="text" class="form-control @error('address') is-invalid @enderror"
-                                name="address" value="{{ old('address') }}">
-
-                            @error('address')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- Amount -->
-                        <div class="mb-3">
-                            <label class="form-label">
-                                <span data-lang="hi">राशि (₹)</span>
-                                <span data-lang="en">Amount (₹)</span>
-                            </label>
-                            <div class="row g-2">
-                                <div class="col-md-6">
-                                    <input type="number" class="form-control @error('amount') is-invalid @enderror"
-                                        name="amount" id="amountInput" value="{{ old('amount') }}"
-                                        oninput="updateAmountInWords()" placeholder="₹">
-                                    @error('amount')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="text" class="form-control" id="amountWords" readonly
-                                        placeholder="Amount in words">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Payment Method -->
-                        <div class="mb-3">
-                            <label class="form-label">
-                                <span data-lang="hi">भुगतान का प्रकार</span>
-                                <span data-lang="en">Payment Method</span>
-                            </label>
-                            <select class="form-select @error('payment_method') is-invalid @enderror"
-                                name="payment_method">
-                                <option value="">Select...</option>
-                                <option value="cash" {{ old('payment_method') == 'cash' ? 'selected' : '' }}>नकद / Cash
-                                </option>
-                                <option value="cheque" {{ old('payment_method') == 'cheque' ? 'selected' : '' }}>चेक /
-                                    Cheque</option>
-                                <option value="upi" {{ old('payment_method') == 'upi' ? 'selected' : '' }}>यूपीआई / UPI
-                                </option>
-                                <option value="other" {{ old('payment_method') == 'other' ? 'selected' : '' }}>अन्य /
-                                    Other</option>
-                            </select>
-                            @error('payment_method')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <!-- Conditional Fields for Cheque -->
-                        <!-- Cheque Fields -->
-                        <div id="chequeFields" style="display: none;">
-                            <div class="mb-3">
-                                <label class="form-label">Cheque No.</label>
-                                <input type="text" class="form-control" name="cheque_no"
-                                    value="{{ old('cheque_no') }}">
-                                @error('cheque_no')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Bank Name</label>
-                                <input type="text" class="form-control" name="bank_name"
-                                    value="{{ old('bank_name') }}">
-                                @error('bank_name')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Bank Branch</label>
-                                <input type="text" class="form-control" name="bank_branch"
-                                    value="{{ old('bank_branch') }}">
-                                @error('bank_branch')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Cheque Date</label>
-                                <input type="date" class="form-control" name="cheque_date"
-                                    value="{{ old('cheque_date') }}">
-                                @error('cheque_date')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <!-- UPI Fields -->
-                        <div id="upiFields" style="display: none;">
-                            <div class="mb-3">
-                                <label class="form-label">Transaction Number</label>
-                                <input type="text" class="form-control" name="transaction_no"
-                                    value="{{ old('transaction_no') }}">
-                                @error('transaction_no')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Transaction Date</label>
-                                <input type="date" class="form-control" name="transaction_date"
-                                    value="{{ old('transaction_date') }}">
-                                @error('transaction_date')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-
-
-
-                        <!-- Submit -->
-                        <button type="submit" class="btn btn-primary">
-                            {{-- <span data-lang="hi">सहेजें</span> --}}
-                            <span>Deposite</span>
-                        </button>
-                    </form>
+                    </div>
 
                 </div>
             </div>
@@ -415,95 +258,5 @@
 
             document.getElementById('amountWords').value = words;
         }
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.getElementById('searchInput');
-            const tableDiv = document.getElementById('recordTableDiv');
-            const tableRows = document.querySelectorAll('.record-row');
-            const selectedRecord = document.getElementById('selectedRecord');
-            const selectedInfo = document.getElementById('selectedInfo');
-
-            // Filter on search input
-            searchInput.addEventListener('input', function() {
-                const query = this.value.toLowerCase();
-                let match = false;
-
-                tableRows.forEach(row => {
-                    const text = row.innerText.toLowerCase();
-                    if (text.includes(query)) {
-                        row.style.display = '';
-                        match = true;
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-
-                if (query.trim() === '') {
-                    tableDiv.style.display = 'none';
-                } else {
-                    tableDiv.style.display = match ? 'block' : 'none';
-                }
-            });
-
-            // Fill input fields on row click
-            // Fill input fields on row click
-            tableRows.forEach(row => {
-                row.addEventListener('click', function() {
-                    const name = this.dataset.name;
-                    const phone = this.dataset.phone;
-                    const gurdian = this.dataset.gurdian;
-                    const address = this.dataset.address;
-                    const identityNo = this.dataset
-                        .identityno;
-                    const registration = this.dataset.registration;
-                    const registrationDate = this.dataset.registrationDate;
-
-                    // Fill the form inputs
-                    document.querySelector('input[name="name"]').value = name;
-                    document.querySelector('input[name="mobile"]').value = phone;
-                    document.querySelector('input[name="gurdian_name"]').value = gurdian;
-                    document.querySelector('input[name="address"]').value = address;
-
-                    // Show selected info in a better format
-                    selectedInfo.innerHTML = `
-                        <div class="row">
-                        <div class="col-md-3"><strong>Name:</strong> ${name}</div>
-                        <div class="col-md-3"><strong>Mobile:</strong> ${phone}</div>
-                        <div class="col-md-3"><strong>Registration No.:</strong> ${registration}</div>
-                        
-                        
-                    `;
-
-                    selectedRecord.style.display = 'block';
-                    tableDiv.style.display = 'none';
-
-                    // Clear and hide the search input
-                    searchInput.value = '';
-                    // searchInput.style.display = 'none';
-                });
-            });
-
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const paymentMethod = document.querySelector('select[name="payment_method"]');
-            const chequeFields = document.getElementById('chequeFields');
-            const upiFields = document.getElementById('upiFields');
-
-            function togglePaymentFields() {
-                const method = paymentMethod.value;
-
-                chequeFields.style.display = method === 'cheque' ? 'block' : 'none';
-                upiFields.style.display = method === 'upi' ? 'block' : 'none';
-            }
-
-            // Initial check (for old input value on validation error)
-            togglePaymentFields();
-
-            // On change
-            paymentMethod.addEventListener('change', togglePaymentFields);
-        });
     </script>
 @endsection
