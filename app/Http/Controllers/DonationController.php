@@ -106,7 +106,6 @@ class DonationController extends Controller
         return redirect()->route('donation-list')->with('success', 'Donation saved successfully!');
     }
 
-
     public function viewDonation($id)
     {
 
@@ -120,7 +119,7 @@ class DonationController extends Controller
     {
 
         $donor = Donation::find($id);
-
+        $donor = donor_data::find($id);
         return view('ngo.donation.donation-certificate', compact('donor'));
     }
 
@@ -142,8 +141,7 @@ class DonationController extends Controller
 
     public function allDonations(Request $request)
     {
-        // Apply filters to donor_data (online donations)
-        $online = donor_data::query();
+        $online = donor_data::where('status', 'successfully')->get();
 
         if ($request->filled('name')) {
             $online->where('name', 'like', '%' . $request->name . '%');
