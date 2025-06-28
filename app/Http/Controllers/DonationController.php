@@ -48,8 +48,6 @@ class DonationController extends Controller
         return view('ngo.donation.donation', compact('data', 'record', 'newReceiptNo'));
     }
 
-
-
     public function saveDonation(Request $request)
     {
         $request->validate([
@@ -218,23 +216,25 @@ class DonationController extends Controller
         ));
     }
 
+
     public function DonationReport(Request $request)
     {
         $request->validate([
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
+            'donation_type' => 'nullable|in:all,offline,online'
         ]);
 
         $data = academic_session::all(); // For session dropdown
 
-        // ----- Base Queries -----
-        $offlineQuery = Donation::query();      // Offline
-        $onlineQuery = donor_data::query();     // Online
+        // Build base queries
+        $offlineQuery = Donation::query();
+        $onlineQuery = donor_data::where('status', 'successfully');
 
-        // ----- Apply Filters to Both -----
+        // Filters
         if ($request->filled('session_filter')) {
-            $offlineQuery->where('session', $request->input('session_filter'));
-            $onlineQuery->where('session', $request->input('session_filter'));
+            $offlineQuery->where('academic_session', $request->input('session_filter'));
+            // $onlineQuery->where('academic_session', $request->input('session_filter'));
         }
 
         if ($request->filled('start_date')) {
@@ -247,41 +247,37 @@ class DonationController extends Controller
             $onlineQuery->whereDate('date', '<=', $request->input('end_date'));
         }
 
-        // Check if user applied any range filter
-        $hasDateRange = $request->filled('start_date') || $request->filled('end_date');
+        // Filter by donation type
+        $donationType = $request->input('donation_type', 'all');
 
-        // Calculate only if a range is selected
-        $rangeDonation = 0;
-
-        if ($hasDateRange) {
-            $filteredOffline = $offlineQuery->get();
-            $filteredOnline = $onlineQuery->get();
-            $filteredDonations = $filteredOffline->merge($filteredOnline);
-
-            $rangeDonation = $filteredDonations->sum('amount');
+        if ($donationType === 'offline') {
+            $donations = $offlineQuery->get();
+        } elseif ($donationType === 'online') {
+            $donations = $onlineQuery->get();
+        } else {
+            $donations = $offlineQuery->get()->merge($onlineQuery->get());
         }
 
-        // ----- Global Stats (All-Time) -----
+        // Calculate totals
+        $hasDateRange = $request->filled('start_date') || $request->filled('end_date');
+        $rangeDonation = $hasDateRange ? $donations->sum('amount') : 0;
+
         $totalOffline = Donation::sum('amount');
-        $totalOnline = donor_data::sum('amount');
+        $totalOnline = donor_data::where('status', 'successfully')->sum('amount');
         $totalDonation = $totalOffline + $totalOnline;
 
-        // ----- This Year -----
-        $thisYear = Donation::whereYear('date', now()->year)->sum('amount')
-            + donor_data::whereYear('date', now()->year)->sum('amount');
+        $thisYear = Donation::whereYear('date', now()->year)->sum('amount') +
+            donor_data::where('status', 'successfully')->whereYear('date', now()->year)->sum('amount');
 
-        // ----- This Month -----
-        $thisMonth = Donation::whereYear('date', now()->year)
-            ->whereMonth('date', now()->month)->sum('amount')
-            + donor_data::whereYear('date', now()->year)
-            ->whereMonth('date', now()->month)->sum('amount');
+        $thisMonth = Donation::whereYear('date', now()->year)->whereMonth('date', now()->month)->sum('amount') +
+            donor_data::where('status', 'successfully')->whereYear('date', now()->year)->whereMonth('date', now()->month)->sum('amount');
 
-        // ----- Today -----
-        $today = Donation::whereDate('date', now())->sum('amount')
-            + donor_data::whereDate('date', now())->sum('amount');
+        $today = Donation::whereDate('date', now())->sum('amount') +
+            donor_data::where('status', 'successfully')->whereDate('date', now())->sum('amount');
 
         return view('ngo.donation.donation-report', compact(
             'data',
+            'donations',
             'totalDonation',
             'thisYear',
             'thisMonth',

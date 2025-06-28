@@ -143,7 +143,7 @@
                             @foreach ($donor as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $loop->receipt_no }}</td>
+                                    <td>{{ $item->receipt_no }}</td>
                                     <td>
                                         {{ $item->date ? \Carbon\Carbon::parse($item->date)->format('d-m-Y') : 'No Found' }}
                                     </td>

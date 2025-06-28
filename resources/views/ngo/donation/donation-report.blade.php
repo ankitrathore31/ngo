@@ -51,6 +51,71 @@
             max-height: 100% !important;
         }
     </style>
+    <style>
+        @page {
+            size: auto;
+            margin: 0;
+            /* Remove all margins including top */
+        }
+
+        @media print {
+
+            html,
+            body {
+                margin: 0 !important;
+                padding: 0 !important;
+                height: 100% !important;
+                width: 100% !important;
+            }
+
+            body * {
+                visibility: hidden;
+            }
+
+            .printable,
+            .printable * {
+                visibility: visible;
+            }
+
+            .table th,
+            .table td {
+                padding: 4px !important;
+                font-size: 9px !important;
+                border: 1px solid #000 !important;
+            }
+
+            .card,
+            .table-responsive {
+                box-shadow: none !important;
+                border: none !important;
+                overflow: visible !important;
+            }
+
+            .btn,
+            .navbar,
+            .footer,
+            .no-print {
+                display: none !important;
+            }
+
+            table {
+                page-break-inside: auto;
+            }
+
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+
+            thead {
+                display: table-header-group;
+            }
+
+            tfoot {
+                display: table-footer-group;
+            }
+        }
+    </style>
     <div class="d-flex justify-content-between align-items-center mb-3 mt-2">
         <h5 class="mb-0">Donation Report</h5>
 
@@ -83,18 +148,28 @@
                 </div>
 
                 <div class="col-md-2 col-sm-4">
-                    <input type="date" name="start_date" class="form-control" value="{{ request('start_date') }}"
-                        placeholder="Start Date">
+                    <input type="date" name="start_date" class="form-control" value="{{ request('start_date') }}">
                 </div>
+
                 <div class="col-md-2 col-sm-4">
-                    <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}"
-                        placeholder="End Date">
+                    <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}">
                 </div>
+
+                <div class="col-md-2 col-sm-4">
+                    <select name="donation_type" class="form-control">
+                        <option value="all" {{ request('donation_type') == 'all' ? 'selected' : '' }}>All</option>
+                        <option value="offline" {{ request('donation_type') == 'offline' ? 'selected' : '' }}>Offline
+                        </option>
+                        <option value="online" {{ request('donation_type') == 'online' ? 'selected' : '' }}>Online</option>
+                    </select>
+                </div>
+
                 <div class="col-md-2">
                     <button type="submit" class="btn btn-primary me-1">Search</button>
                     <a href="{{ route('dontaion-report') }}" class="btn btn-info text-white me-1">Reset</a>
                 </div>
             </form>
+
         </div>
     </div>
 
@@ -153,6 +228,62 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid mt-3">
+        <button onclick="printTable()" class="btn btn-primary mb-1 text-end">Print Table</button>
+        <div class="card shadow-sm printable">
+            <div class="card-body table-responsive">
+                <table class="table table-bordered table-hover align-middle text-center">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Sr. No.</th>
+                            <th>Receipt No.</th>
+                            <th>Donation date</th>
+                            <th>Name</th>
+                            <th>Address</th>
+                            {{-- <th>Identity No.</th>
+                                <th>Identity Type</th> --}}
+                            <th>Mobile no.</th>
+                            {{-- <th>Email</th> --}}
+                            {{-- <th>Donation Category</th> --}}
+                            <th>Donation Amount</th>
+                            {{-- <th>Status</th> --}}
+                            <th>Payment Mode</th>
+                            <th>Session</th>
+                            {{-- <th class="no-print">Action</th> --}}
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach ($donations as $item)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $item->receipt_no ?? '-' }}</td>
+                                <td>{{ $item->date ? \Carbon\Carbon::parse($item->date)->format('d-m-Y') : 'Not Found' }}
+                                </td>
+                                <td>{{ $item->name ?? '-' }}</td>
+                                <td>{{ $item->address ?? $item->donor_village }}</td>
+                                <td>{{ $item->mobile ?? '-' }}</td>
+                                <td>{{ $item->amount }}</td>
+                                <td>{{ $item->payment_method ?? 'Online cashfree' }}</td>
+                                <td>{{ $item->academic_session }}</td>
+                                {{-- <td class="no-print">
+                                    <div class="d-flex justify-content-center gap-2 flex-wrap">
+                                        <a href="{{ route('view-donation', $item->id) }}"
+                                            class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
+                                            title="View" style="min-width: 38px; height: 38px;">
+                                            <i class="fa-regular fa-eye"></i>
+                                        </a>
+                                    </div>
+                                </td> --}}
+                            </tr>
+                        @endforeach
+                    </tbody>
+
+
+                </table>
             </div>
         </div>
     </div>
