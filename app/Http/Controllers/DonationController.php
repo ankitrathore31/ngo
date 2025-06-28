@@ -139,7 +139,7 @@ class DonationController extends Controller
 
     public function allDonations(Request $request)
     {
-        $online = donor_data::where('status', 'successfully');
+        $online = donor_data::where('status', 'Successful');
 
         if ($request->filled('name')) {
             $online->where('name', 'like', '%' . $request->name . '%');
@@ -229,7 +229,7 @@ class DonationController extends Controller
 
         // Build base queries
         $offlineQuery = Donation::query();
-        $onlineQuery = donor_data::where('status', 'successfully');
+        $onlineQuery = donor_data::where('status', 'Successful');
 
         // Filters
         if ($request->filled('session_filter')) {
@@ -263,17 +263,17 @@ class DonationController extends Controller
         $rangeDonation = $hasDateRange ? $donations->sum('amount') : 0;
 
         $totalOffline = Donation::sum('amount');
-        $totalOnline = donor_data::where('status', 'successfully')->sum('amount');
+        $totalOnline = donor_data::where('status', 'Successful')->sum('amount');
         $totalDonation = $totalOffline + $totalOnline;
 
         $thisYear = Donation::whereYear('date', now()->year)->sum('amount') +
-            donor_data::where('status', 'successfully')->whereYear('date', now()->year)->sum('amount');
+            donor_data::where('status', 'Successful')->whereYear('date', now()->year)->sum('amount');
 
         $thisMonth = Donation::whereYear('date', now()->year)->whereMonth('date', now()->month)->sum('amount') +
-            donor_data::where('status', 'successfully')->whereYear('date', now()->year)->whereMonth('date', now()->month)->sum('amount');
+            donor_data::where('status', 'Successful')->whereYear('date', now()->year)->whereMonth('date', now()->month)->sum('amount');
 
         $today = Donation::whereDate('date', now())->sum('amount') +
-            donor_data::where('status', 'successfully')->whereDate('date', now())->sum('amount');
+            donor_data::where('status', 'Successful')->whereDate('date', now())->sum('amount');
 
         return view('ngo.donation.donation-report', compact(
             'data',
