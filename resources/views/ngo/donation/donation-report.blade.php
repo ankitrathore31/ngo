@@ -146,14 +146,16 @@
                         @endforeach
                     </select>
                 </div>
-
+                {{-- In your form --}}
                 <div class="col-md-2 col-sm-4">
-                    <input type="date" name="start_date" class="form-control" value="{{ request('start_date') }}">
+                    <input type="date" name="start_date" class="form-control"
+                        value="{{ request('start_date', now()->format('Y-m-d')) }}" placeholder="Start Date">
+                </div>
+                <div class="col-md-2 col-sm-4">
+                    <input type="date" name="end_date" class="form-control"
+                        value="{{ request('end_date', now()->format('Y-m-d')) }}" placeholder="End Date">
                 </div>
 
-                <div class="col-md-2 col-sm-4">
-                    <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}">
-                </div>
 
                 <div class="col-md-2 col-sm-4">
                     <select name="donation_type" class="form-control">
@@ -232,7 +234,12 @@
         </div>
     </div>
     <div class="container-fluid mt-3">
-        <button onclick="printTable()" class="btn btn-primary mb-1 text-end">Print Table</button>
+        <div class="row">
+            <div class="d-flex justify-content-between">
+                <button onclick="printTable()" class="btn btn-primary mb-1 text-end">Print Table</button>
+                <h5>Today Collection ({{ now()->format('d-m-Y') }}): &nbsp;₹{{ number_format($today, 2) }}</h5>
+            </div>
+        </div>
         <div class="card shadow-sm printable">
             <div class="card-body table-responsive">
                 <table class="table table-bordered table-hover align-middle text-center">
