@@ -247,6 +247,9 @@ Route::controller(DonationController::class)->group(function () {
     Route::get('ngo/donation-list', 'donationList')->middleware('auth')->name('donation-list');
     Route::get('ngo/donation', 'donation')->middleware('auth')->name('donation');
     Route::post('ngo/save-donation', 'saveDonation')->middleware('auth')->name('save-donation');
+    Route::get('ngo/edit-donation/{id}', 'EditDonation')->middleware('auth')->name('edit-donation');
+    Route::post('ngo/update-donation/{id}','updateDonation')->middleware('auth')->name('update-donation');
+    Route::get('ngo/delete-donation/{id}', 'deleteDonation')->middleware('auth')->name('delete-donation');
     Route::get('ngo/view-donation/{id}', 'viewDonation')->middleware('auth')->name('view-donation');
     Route::get('ngo/donation-card/{id}', 'viewDonationCard')->middleware('auth')->name('view-donation-card');
     Route::get('ngo/donation-certificate/{id}', 'viewDonationCertificate')->middleware('auth')->name('certi-donation');

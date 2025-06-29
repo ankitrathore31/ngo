@@ -215,11 +215,30 @@ class NgoController extends Controller
         $todayacti = Activity::whereDate('created_at', Carbon::today())->count();
         $allmem = Member::count();
         $appmem = Member::where('status', 1)->count();
-        $penmem= Member::where('status', 0)->count();
-        $offlinedonate= Donation::sum('amount');
-        $succdonate= donor_data::where('status', 'Successful')->sum('amount');
-        $succtodaydonate= donor_data::where('status', 'Successful')->whereDate('created_at', Carbon::today())->sum('amount');
-        return view('ngo.dashboard', compact('allbene', 'penbene', 'apbene','rebene',
-        'allacti','todayacti','allmem','appmem','penmem','succdonate','succtodaydonate','offlinedonate'));
+        $penmem = Member::where('status', 0)->count();
+        $offlinedonate = Donation::sum('amount');
+        $succdonate = donor_data::where('status', 'Successful')->sum('amount');
+        $totaldonation = $offlinedonate + $succdonate;
+        $todayOffline = Donation::whereDate('created_at', Carbon::today())->sum('amount');
+        $todayOnline = donor_data::where('status', 'Successful')
+            ->whereDate('created_at', Carbon::today())
+            ->sum('amount');
+
+        $todaydonate = $todayOffline + $todayOnline;
+        return view('ngo.dashboard', compact(
+            'allbene',
+            'penbene',
+            'apbene',
+            'rebene',
+            'allacti',
+            'todayacti',
+            'allmem',
+            'appmem',
+            'penmem',
+            'succdonate',
+            'todaydonate',
+            'offlinedonate',
+            'totaldonation'
+        ));
     }
 }

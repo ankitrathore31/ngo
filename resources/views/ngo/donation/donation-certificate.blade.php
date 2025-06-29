@@ -107,10 +107,13 @@
                                     <span data-lang="hi"><b>सोसाइटीज रजिस्ट्रेशन एक्ट 1860 के अंतर्गत पंजीकृत</b></span>
                                     <span data-lang="en"><b>Registered under Societies Registration Act 1860</b></span>
                                 </p>
-                                <h4 style="color: red;"><b>
+                                <h4
+                                    style="background-color: red; color: white; font-size: 28px; word-spacing: 8px; text-align: center;">
+                                    <b>
                                         <span data-lang="hi">ज्ञान भारती संस्था</span>
                                         <span data-lang="en">GYAN BHARTI SANSTHA</span>
-                                    </b></h4>
+                                    </b>
+                                </h4>
                                 <h6 style="color: blue;"><b>
                                         <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर
                                             प्रदेश -
@@ -177,7 +180,8 @@
 
                     <p style="font-size: 1.2rem; line-height: 1.8;" data-lang="en">
                         This is to certify that <strong>Gyan Bharti Sanstha</strong> has received a donation of
-                        <strong class="text-success">₹{{ $donor->amount }}</strong> from <strong>{{ $donor->name }}</strong>,
+                        <strong class="text-success">₹{{ $donor->amount }}</strong> from
+                        <strong>{{ $donor->name }}</strong>,
                         S/O or W/O <strong>{{ $donor->gurdian_name }}</strong>, resident of
                         <strong>{{ $donor->address }}</strong>. The Sanstha will utilize this amount for the welfare
                         of the poor, helpless and destitute. We sincerely thank you and wish you a bright future.

@@ -149,7 +149,7 @@
                                         {{ $item->date ? \Carbon\Carbon::parse($item->date)->format('d-m-Y') : 'No Found' }}
                                     </td>
                                     <td>{{ $item->name }}</td>
-                                    <td>{{ $item->gurdian_name}}</td>
+                                    <td>{{ $item->gurdian_name }}</td>
                                     <td>{{ $item->address }}
                                     </td>
                                     <td>{{ $item->mobile }}</td>
@@ -160,17 +160,27 @@
                                     <td>{{ $item->academic_session }}</td>
                                     <td class="no-print">
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            <a href="{{route('view-donation', $item->id) }}"
-                                                class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                title="View" style="min-width: 38px; height: 38px;">
+                                            <a href="{{ route('view-donation', $item->id) }}"
+                                                class="btn btn-success btn-sm "
+                                                title="View">
                                                 <i class="fa-regular fa-eye"></i>
+                                            </a>
+                                            <a href="{{ route('edit-donation', $item->id) }}"
+                                                class="btn btn-success btn-sm"
+                                                title="Edit">
+                                                <i class="fa-regular fa-edit"></i>
+                                            </a>
+                                             <a href="{{ route('delete-donation', $item->id) }}" class="btn btn-sm btn-danger"
+                                                title="Delete"
+                                                onclick="return confirm('Are you sure you want to delete this area?')">
+                                                <i class="fa-regular fa-trash-can"></i>
                                             </a>
                                         </div>
                                     </td>
-                                      <td class="no-print">
+                                    <td class="no-print">
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            <a href="{{route('certi-donation', $item->id) }}"
-                                                class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
+                                            <a href="{{ route('certi-donation', $item->id) }}"
+                                                class="btn btn-success btn-sm"
                                                 title="View" style="min-width: 38px; height: 38px;">
                                                 Certificate
                                             </a>
