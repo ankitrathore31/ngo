@@ -67,10 +67,14 @@
                                 <span data-lang="hi"><b>सोसाइटीज रजिस्ट्रेशन एक्ट 1860 के अंतर्गत पंजीकृत</b></span>
                                 <span data-lang="en"><b>Registered under Societies Registration Act 1860</b></span>
                             </p>
-                            <h4 style="color: red;"><b>
+                            <h4
+                                style="background-color: red; color: white; font-size: 28px; word-spacing: 8px; text-align: center;">
+                                <b>
                                     <span data-lang="hi">ज्ञान भारती संस्था</span>
-                                    <span data-lang="en">Gyan Bharti Sanstha</span>
-                                </b></h4>
+                                    <span data-lang="en">GYAN BHARTI SANSTHA</span>
+                                </b>
+                            </h4>
+
                             <h6 style="color: blue;"><b>
                                     <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर प्रदेश -
                                         262121</span>
@@ -229,6 +233,7 @@
                         </p>
                     </div>
                 </div>
+                <hr>
                 <div class="row justify-content-between align-items-end mt-5">
                     <div class="col-sm-6 text-center">
                         <p><strong>

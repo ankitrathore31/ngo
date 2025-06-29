@@ -38,7 +38,7 @@
                                 <i class="fas fa-user-plus fa-2x me-3"></i>
                                 <div>
                                     <p class="mb-1">Total Beneficiaries</p>
-                                    <h5 class="mb-0">{{ $allbene  }}</h5>
+                                    <h5 class="mb-0">{{ $allbene }}</h5>
                                 </div>
                             </div>
                         </div>
@@ -101,7 +101,7 @@
                                 <i class="fas fa-running fa-2x me-3"></i>
                                 <div>
                                     <p class="mb-1">Today's Activities</p>
-                                    <h5 class="mb-0">{{$todayacti}}</h5>
+                                    <h5 class="mb-0">{{ $todayacti }}</h5>
                                 </div>
                             </div>
                         </div>
@@ -113,7 +113,7 @@
                                 <i class="fas fa-clipboard-list fa-2x me-3"></i>
                                 <div>
                                     <p class="mb-1">Total Activities</p>
-                                    <h5 class="mb-0">{{$allacti}}</h5>
+                                    <h5 class="mb-0">{{ $allacti }}</h5>
                                 </div>
                             </div>
                         </div>
@@ -163,7 +163,7 @@
                                 <i class="fas fa-check-circle fa-2x me-3"></i>
                                 <div>
                                     <p class="mb-1">Active Members</p>
-                                    <h5 class="mb-0">{{$appmem}}</h5>
+                                    <h5 class="mb-0">{{ $appmem }}</h5>
                                 </div>
                             </div>
                         </div>
@@ -175,7 +175,7 @@
                                 <i class="fas fa-times-circle fa-2x me-3"></i>
                                 <div>
                                     <p class="mb-1">Inactive Members</p>
-                                    <h5 class="mb-0">{{$penmem}}</h5>
+                                    <h5 class="mb-0">{{ $penmem }}</h5>
                                 </div>
                             </div>
                         </div>
@@ -221,37 +221,48 @@
                 </div>
                 <div class="row">
                     <h5 class="fw-bold mb-2">- Donation</h5>
-                    <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="col-md-3 col-sm-6 mb-3">
                         <div class="card text-white bg-success p-3 h-100 card-hover">
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-hand-holding-usd fa-2x me-3"></i>
                                 <div>
                                     <p class="mb-1">Today's Donation</p>
-                                    <h5 class="mb-0">₹ {{$succtodaydonate}}</h5>
+                                    <h5 class="mb-0">₹ {{ $todaydonate }}</h5>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="col-md-3 col-sm-6 mb-3">
                         <div class="card text-white bg-primary p-3 h-100 card-hover">
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-donate fa-2x me-3"></i>
                                 <div>
                                     <p class="mb-1">Total Online Donation</p>
-                                    <h5 class="mb-0">₹ {{$succdonate}}</h5>
+                                    <h5 class="mb-0">₹ {{ $succdonate }}</h5>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                      <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="col-md-3 col-sm-6 mb-3">
                         <div class="card text-white bg-info p-3 h-100 card-hover">
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-donate fa-2x me-3"></i>
                                 <div>
                                     <p class="mb-1">Total Offline Donation</p>
-                                    <h5 class="mb-0">₹ {{$offlinedonate}}</h5>
+                                    <h5 class="mb-0">₹ {{ $offlinedonate }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="card text-white bg-success p-3 h-100 card-hover">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-hand-holding-usd fa-2x me-3"></i>
+                                <div>
+                                    <p class="mb-1">Total Donation</p>
+                                    <h5 class="mb-0">₹ {{ $totaldonation }}</h5>
                                 </div>
                             </div>
                         </div>

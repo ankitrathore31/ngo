@@ -104,6 +104,78 @@ class DonationController extends Controller
         return redirect()->route('donation-list')->with('success', 'Donation saved successfully!');
     }
 
+    public function EditDonation($id)
+    {
+        $data = academic_session::all();
+        $donation = Donation::find($id);
+        return view('ngo.donation.edit-donation', compact('data', 'donation'));
+    }
+
+    public function updateDonation(Request $request, $id)
+    {
+        $request->validate([
+            'session' => 'required',
+            'date' => 'required|date',
+            'name' => 'required',
+            'mobile' => 'required',
+            'gurdian_name' => 'required',
+            'address' => 'required',
+            'amount' => 'required|numeric',
+            'payment_method' => 'required',
+        ]);
+
+        // Find the existing donation
+        $donation = Donation::findOrFail($id);
+
+        // Update fields
+        $donation->academic_session = $request->session;
+        $donation->date = $request->date;
+        $donation->name = $request->name;
+        $donation->mobile = $request->mobile;
+        $donation->gurdian_name = $request->gurdian_name;
+        $donation->payment_method = $request->payment_method;
+        $donation->address = $request->address;
+        $donation->amount = $request->amount;
+        $donation->depositor_name = $request->depositor_name;
+        $donation->relationship = $request->relationship;
+        $donation->recipient_name = $request->recipient_name;
+        $donation->remark = $request->remark;
+
+        // Reset conditional fields
+        $donation->cheque_no = null;
+        $donation->bank_name = null;
+        $donation->bank_branch = null;
+        $donation->cheque_date = null;
+        $donation->transaction_no = null;
+        $donation->transaction_date = null;
+
+        // Conditional Cheque fields
+        if ($request->payment_method === 'Cheque') {
+            $donation->cheque_no = $request->cheque_no;
+            $donation->bank_name = $request->bank_name;
+            $donation->bank_branch = $request->bank_branch;
+            $donation->cheque_date = $request->cheque_date;
+        }
+
+        // Conditional UPI fields
+        if ($request->payment_method === 'UPI') {
+            $donation->transaction_no = $request->transaction_no;
+            $donation->transaction_date = $request->transaction_date;
+        }
+
+        $donation->save();
+
+        return redirect()->route('donation-list')->with('success', 'Donation updated successfully!');
+    }
+
+    public function deleteDonation($id)
+    {
+        $donation = Donation::findOrFail($id);
+        $donation->delete();
+        return redirect()->route('donation-list')->with('success', 'Donation deleted successfully!');
+    }
+
+
     public function viewDonation($id)
     {
 

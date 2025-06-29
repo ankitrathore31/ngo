@@ -235,36 +235,38 @@
     </div>
     <div class="container-fluid mt-3">
         <div class="row">
-            <div class="d-flex justify-content-between">
-                <button onclick="printTable()" class="btn btn-primary mb-1 text-end">Print Table</button>
-                <h5>Today Collection ({{ now()->format('d-m-Y') }}): &nbsp;₹{{ number_format($today, 2) }}</h5>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <button onclick="printTable()" class="btn btn-primary">Print Table</button>
+                <h5 class="mb-0">Today Collection ({{ now()->format('d-m-Y') }}): ₹{{ number_format($today, 2) }}</h5>
             </div>
         </div>
+
         <div class="card shadow-sm printable">
             <div class="card-body table-responsive">
-                <table class="table table-bordered table-hover align-middle text-center">
-                    <thead class="table-primary">
+                <table class="table table-bordered table-hover align-middle text-center" style="border: 1px solid #000;">
+                    <thead class="table-primary" style="border: 1px solid #000;">
                         <tr>
                             <th>Sr. No.</th>
                             <th>Receipt No.</th>
-                            <th>Donation date</th>
+                            <th>Donation Date</th>
                             <th>Name</th>
                             <th>Address</th>
-                            {{-- <th>Identity No.</th>
-                                <th>Identity Type</th> --}}
-                            <th>Mobile no.</th>
-                            {{-- <th>Email</th> --}}
-                            {{-- <th>Donation Category</th> --}}
+                            <th>Mobile No.</th>
                             <th>Donation Amount</th>
-                            {{-- <th>Status</th> --}}
                             <th>Payment Mode</th>
                             <th>Session</th>
-                            {{-- <th class="no-print">Action</th> --}}
                         </tr>
                     </thead>
 
                     <tbody>
+                        @php
+                            $totalAmount = 0;
+                        @endphp
+
                         @foreach ($donations as $item)
+                            @php
+                                $totalAmount += $item->amount;
+                            @endphp
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->receipt_no ?? '-' }}</td>
@@ -273,23 +275,21 @@
                                 <td>{{ $item->name ?? '-' }}</td>
                                 <td>{{ $item->address ?? $item->donor_village }}</td>
                                 <td>{{ $item->mobile ?? '-' }}</td>
-                                <td>{{ $item->amount }}</td>
+                                <td>₹{{ number_format($item->amount, 2) }}</td>
                                 <td>{{ $item->payment_method ?? 'Online cashfree' }}</td>
                                 <td>{{ $item->academic_session }}</td>
-                                {{-- <td class="no-print">
-                                    <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                        <a href="{{ route('view-donation', $item->id) }}"
-                                            class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
-                                            title="View" style="min-width: 38px; height: 38px;">
-                                            <i class="fa-regular fa-eye"></i>
-                                        </a>
-                                    </div>
-                                </td> --}}
                             </tr>
                         @endforeach
                     </tbody>
 
-
+                    <!-- Total Row -->
+                    <tfoot>
+                        <tr style="font-weight: bold; background-color: #f2f2f2;">
+                            <td colspan="6" class="text-end">Total Records: {{ $donations->count() }}</td>
+                            <td>₹{{ number_format($totalAmount, 2) }}</td>
+                            <td colspan="2">--</td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
