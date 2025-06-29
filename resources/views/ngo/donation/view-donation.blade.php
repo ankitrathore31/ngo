@@ -132,7 +132,7 @@
                         <p><strong>
                                 <span data-lang="hi">पिता/पति का नाम:</span>
                                 <span data-lang="en">Father/Husband's Name:</span>
-                            </strong> {{ $donor->gurdian_name ?? 'Donation with OnlineCashfree'}}</p>
+                            </strong> {{ $donor->gurdian_name ?? 'Donation with OnlineCashfree' }}</p>
                     </div>
                 </div>
 
@@ -141,7 +141,7 @@
                         <p><strong>
                                 <span data-lang="hi">पता:</span>
                                 <span data-lang="en">Address:</span>
-                            </strong> {{ $donor->address ?? $donor->donor_village}}</p>
+                            </strong> {{ $donor->address ?? $donor->donor_village }}</p>
                     </div>
                     <div class="col-sm-6">
                         <p>
@@ -182,7 +182,7 @@
                         <p><strong>
                                 <span data-lang="hi">भुगतान का प्रकार नकद/चेक/यूपीआई/अन्य द्वारा:</span>
                                 <span data-lang="en">Payment Method (Cash/Cheque/UPI/Other):</span>
-                            </strong>{{ $donor->payment_method ?? 'Donation with OnlineCashfree'}}</p>
+                            </strong>{{ $donor->payment_method ?? 'Donation with OnlineCashfree' }}</p>
                     </div>
                     <div class="col-sm-6">
                         <p><strong>
@@ -211,12 +211,7 @@
                 @endif
 
                 <div class="row">
-                    <div class="col-sm-6 mb-2">
-                        <p><strong>
-                                <span data-lang="hi">जमाकर्ता का नाम:</span>
-                                <span data-lang="en">Depositor Name:</span>
-                            </strong> {{ $donor->depositor_name ?? 'Donation with OnlineCashfree'}}</p>
-                    </div>
+
                     <div class="col-sm-6">
                         <p>
                             <strong>
@@ -224,15 +219,6 @@
                                 <span data-lang="en">Relationship:</span>
                             </strong> {{ $donor->relationship ?? 'Donation with OnlineCashfree' }}
                         </p>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-6 mb-2">
-                        <p><strong>
-                                <span data-lang="hi">प्राप्तकर्ता का नाम:</span>
-                                <span data-lang="en">Recipient Name:</span>
-                            </strong> {{ $donor->recipient_name ?? 'Donation with OnlineCashfree' }}</p>
                     </div>
                     <div class="col-sm-6">
                         <p>
@@ -243,6 +229,28 @@
                         </p>
                     </div>
                 </div>
+                <div class="row justify-content-between align-items-end mt-5">
+                    <div class="col-sm-6 text-center">
+                        <p><strong>
+                                <span data-lang="hi">जमाकर्ता का नाम:</span>
+                                <span data-lang="en">Depositor Name:</span>
+                            </strong></p>
+                        <p>{{ $donor->depositor_name ?? 'Donation with OnlineCashfree' }}</p>
+                        {{-- <hr style="width: 80%; margin: 10px auto 0;">
+                        <small>Signature</small> --}}
+                    </div>
+
+                    <div class="col-sm-6 text-center">
+                        <p><strong>
+                                <span data-lang="hi">प्राप्तकर्ता का नाम:</span>
+                                <span data-lang="en">Recipient Name:</span>
+                            </strong></p>
+                        <p>{{ $donor->recipient_name ?? 'Donation with OnlineCashfree' }}</p>
+                        {{-- <hr style="width: 80%; margin: 10px auto 0;">
+                        <small>Signature</small> --}}
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

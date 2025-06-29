@@ -79,22 +79,22 @@
                 {{ session('success') }}
             </div>
         @endif
-        <div class="container mt-2">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">
-                    <span data-lang="hi">दान पंजीकरण फॉर्म</span>
-                    <span data-lang="en">Donation Registration Form</span>
-                </h5>
-                <div>
-                    <button class="btn btn-sm btn-outline-primary" onclick="setLanguage('en')">English</button>
-                    <button class="btn btn-sm btn-outline-success" onclick="setLanguage('hi')">हिंदी</button>
-                </div>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">
+                <span data-lang="hi">दान पंजीकरण फॉर्म</span>
+                <span data-lang="en">Donation Registration Form</span>
+            </h5>
+            <div>
+                <button class="btn btn-sm btn-outline-primary" onclick="setLanguage('en')">English</button>
+                <button class="btn btn-sm btn-outline-success" onclick="setLanguage('hi')">हिंदी</button>
             </div>
+            <div class=" d-flex justify-content-between">
+                <a href="{{ route('donation-list') }}" class="btn btn-success">Donation List</a>
+                <button onclick="window.print()" class="btn btn-primary">Print Certificate</button>
+            </div>
+        </div>
+        <div class="container-fluid mt-2">
             <div class="card">
-                <div class="card-header d-flex justify-content-between">
-                    <a href="{{ route('donation-list') }}" class="btn btn-success">Donation List</a>
-                    <button onclick="window.print()" class="btn btn-primary">Print Certificate</button>
-                </div>
                 <div class="card-body shadow rounded p-4 my-4 print-card">
                     <div class="text-center mb-4 border-bottom pb-2">
                         <!-- Header -->
@@ -138,15 +138,33 @@
                             </div>
                         </div>
                     </div>
-                    <h4 class="text-center mb-4">
-                        <strong data-lang="en">DONATION CERTIFICATE</strong>
-                        <strong data-lang="hi">डोनेशन प्रमाण पत्र</strong>
-                    </h4>
+                    <div class="row ">
+
+                    </div>
+
+                    <div class="row d-flex justify-content-between">
+                        <div class="col-md-4">
+                            <strong>Receipt No:</strong> {{ $donor->receipt_no }}
+                        </div>
+
+                        <div class="col-4">
+                            <h4 class="text-center mb-4 bg-danger text-white p-2">
+                                <strong data-lang="en">DONATION CERTIFICATE</strong>
+                                <strong data-lang="hi">डोनेशन प्रमाण पत्र</strong>
+                            </h4>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <strong>Date:</strong> {{ \Carbon\Carbon::parse($donor->date)->format('d-m-Y') }}
+                        </div>
+                        {{-- <div class="col-md-4">
+                            <strong>Session:</strong> {{ $donor->academic_session }}
+                        </div> --}}
+                    </div>
 
                     <p style="font-size: 1.2rem; line-height: 1.8;" data-lang="hi">
                         यह प्रमाणित किया जाता है कि
                         <strong>ज्ञान भारती संस्था</strong> को
-                        <strong>₹{{ $donor->amount }}</strong>
+                        <strong class="text-success">₹{{ $donor->amount }}</strong>
                         की राशि <strong>{{ $donor->name }}</strong>
                         पुत्र/पत्नी <strong>{{ $donor->gurdian_name }}</strong>, निवासी
                         <strong>{{ $donor->address }}</strong>
@@ -159,7 +177,7 @@
 
                     <p style="font-size: 1.2rem; line-height: 1.8;" data-lang="en">
                         This is to certify that <strong>Gyan Bharti Sanstha</strong> has received a donation of
-                        <strong>₹{{ $donor->amount }}</strong> from <strong>{{ $donor->name }}</strong>,
+                        <strong class="text-success">₹{{ $donor->amount }}</strong> from <strong>{{ $donor->name }}</strong>,
                         S/O or W/O <strong>{{ $donor->gurdian_name }}</strong>, resident of
                         <strong>{{ $donor->address }}</strong>. The Sanstha will utilize this amount for the welfare
                         of the poor, helpless and destitute. We sincerely thank you and wish you a bright future.
@@ -167,9 +185,7 @@
 
                     <div class="mt-5 d-flex justify-content-between">
                         <div>
-                            <strong>Date:</strong> {{ \Carbon\Carbon::parse($donor->date)->format('d-m-Y') }}<br>
-                            <strong>Receipt No:</strong> {{ $donor->receipt_no }}<br>
-                            <strong>Session:</strong> {{ $donor->academic_session }}<br>
+
                             <strong>Payment Method:</strong> {{ ucfirst($donor->payment_method) }}
                         </div>
 
