@@ -18,7 +18,7 @@
                 </div>
             @endif
             <div class="row">
-                <form method="GET" action="{{ route('pending-registration') }}" class="row g-3 mb-4">
+                <form method="GET" action="{{ route('approve-registration') }}" class="row g-3 mb-4">
                     <div class="row">
                         <div class="col-md-4 col-sm-4">
                             <select name="session_filter" id="session_filter" class="form-control"
@@ -102,7 +102,7 @@
                     <div class="row">
                         <div class="col-md-4">
                             <button type="submit" class="btn btn-primary me-1">Search</button>
-                            <a href="{{ route('pending-registration') }}" class="btn btn-info text-white me-1">Reset</a>
+                            <a href="{{ route('approve-registration') }}" class="btn btn-info text-white me-1">Reset</a>
                         </div>
                     </div>
                 </form>
