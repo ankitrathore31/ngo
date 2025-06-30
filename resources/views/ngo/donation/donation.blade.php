@@ -86,8 +86,9 @@
                                     <tr class="record-row" data-name="{{ $item->name }}" data-phone="{{ $item->phone }}"
                                         data-gurdian="{{ $item->gurdian_name }}"data-registration="{{ $item->registration_no }}"
                                         data-registrationDate="{{ $item->registration_date }}"
-                                        data-address="{{ $item->village }}, {{ $item->post }}, {{ $item->block }}, {{ $item->district }}, {{ $item->state }} - {{ $item->pincode }}"
-                                        style="cursor: pointer;">
+                                        data-address="{{ $item->village }}, {{ $item->post }}"
+                                        data-block="{{ $item->block }}" data-district="{{ $item->district }}"
+                                        data-state="{{ $item->state }}" style="cursor: pointer;">
                                         <td>{{ get_class($item) === 'App\\Models\\beneficiarie' ? 'Beneficiary' : 'Member' }}
                                         </td>
                                         <td>{{ $item->registration_no ?? 'Not Found' }}</td>
@@ -213,18 +214,63 @@
                             @enderror
                         </div>
 
-                        <!-- Address -->
-                        <div class="mb-3">
-                            <label class="form-label">
-                                <span data-lang="hi">पता</span>
-                                <span data-lang="en">Address</span>
-                            </label>
-                            <input type="text" class="form-control @error('address') is-invalid @enderror"
-                                name="address" value="{{ old('address') }}">
+                        <div class="row">
+                            <!-- Address -->
+                            <div class="mb-3 col-md-3">
+                                <label class="form-label">
+                                    <span data-lang="hi">पता</span>
+                                    <span data-lang="en">Address</span>
+                                </label>
+                                <input type="text" class="form-control @error('address') is-invalid @enderror"
+                                    name="address" value="{{ old('address') }}">
 
-                            @error('address')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                                @error('address')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-3 form-group mb-3">
+                                <label for="block" class="form-label">Block: <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" name="block" id="block"
+                                    class="form-control @error('block') is-invalid @enderror" value="{{ old('block') }}"
+                                    required>
+                                @error('block')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            @php
+                                $districtsByState = config('districts');
+                            @endphp
+                            <div class="col-md-3 form-group mb-3">
+                                <label for="stateSelect" class="form-label">State: <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-control @error('state') is-invalid @enderror" name="state"
+                                    id="stateSelect" required>
+                                    <option value="">Select State</option>
+                                    @foreach ($districtsByState as $state => $districts)
+                                        <option value="{{ $state }}"
+                                            {{ old('state') == $state ? 'selected' : '' }}>
+                                            {{ $state }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('state')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+
+                            </div>
+
+                            <div class="col-md-3 form-group mb-3">
+                                <label for="districtSelect" class="form-label">District: <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-control @error('district') is-invalid @enderror" name="district"
+                                    id="districtSelect" required>
+                                    <option value="">Select District</option>
+                                </select>
+                                @error('district')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
                         </div>
 
                         <!-- Amount -->
@@ -493,6 +539,9 @@
                     const phone = this.dataset.phone;
                     const gurdian = this.dataset.gurdian;
                     const address = this.dataset.address;
+                    const block = this.dataset.block;
+                    const state = this.dataset.state;
+                    const district = this.dataset.district;
                     const identityNo = this.dataset
                         .identityno;
                     const registration = this.dataset.registration;
@@ -503,6 +552,10 @@
                     document.querySelector('input[name="mobile"]').value = phone;
                     document.querySelector('input[name="gurdian_name"]').value = gurdian;
                     document.querySelector('input[name="address"]').value = address;
+                    document.querySelector('input[name="block"]').value = block;
+                    document.querySelector('select[name="state"]').value = state;
+                    document.querySelector('select[name="state"]').value = state;
+                    populateDistricts(state, district);
 
                     // Show selected info in a better format
                     selectedInfo.innerHTML = `
@@ -544,5 +597,31 @@
             // On change
             paymentMethod.addEventListener('change', togglePaymentFields);
         });
+    </script>
+    <script>
+        const allDistricts = @json($districtsByState);
+
+        function populateDistricts(state, selectedDistrict = '') {
+            const districtSelect = document.getElementById('districtSelect');
+            districtSelect.innerHTML = '<option value="">Select District</option>';
+
+            if (allDistricts[state]) {
+                allDistricts[state].forEach(function(district) {
+                    const isSelected = (district === selectedDistrict) ? 'selected' : '';
+                    districtSelect.innerHTML += `<option value="${district}" ${isSelected}>${district}</option>`;
+                });
+            }
+        }
+
+        function setStateAndDistrictFromButton(element) {
+            const state = element.dataset.state;
+            const district = element.dataset.district;
+
+            const stateSelect = document.getElementById('stateSelect');
+            stateSelect.value = state;
+
+            // Populate districts after setting state
+            populateDistricts(state, district);
+        }
     </script>
 @endsection

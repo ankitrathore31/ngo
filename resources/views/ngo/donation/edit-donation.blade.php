@@ -19,19 +19,19 @@
             font-weight: bold;
         }
 
-        .record-row:hover {
+        .donation-row:hover {
             background-color: #f0f8ff;
             cursor: pointer;
         }
     </style>
 
     <div class="wrapper">
-        <div class="d-flex justify-content-between align-record-centre mb-2 mt-3">
+        <div class="d-flex justify-content-between align-donation-centre mb-2 mt-3">
             <h5 class="mb-0">Donation</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
-                    <li class="breadcrumb-record"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-record active" aria-current="page">Donation</li>
+                    <li class="breadcrumb-donation"><a href="{{ url('dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-donation active" aria-current="page">Donation</li>
                 </ol>
             </nav>
         </div>
@@ -149,20 +149,70 @@
                             @enderror
                         </div>
 
-                        <!-- Address -->
-                        <div class="mb-3">
-                            <label class="form-label">
-                                <span data-lang="hi">पता</span>
-                                <span data-lang="en">Address</span>
-                            </label>
-                            <input type="text" class="form-control @error('address') is-invalid @enderror" name="address"
-                                value="{{ $donation->address }}">
+                        <div class="row">
+                            <!-- Address -->
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">
+                                    <span data-lang="hi">पता</span>
+                                    <span data-lang="en">Address</span>
+                                </label>
+                                <input type="text" class="form-control @error('address') is-invalid @enderror"
+                                    name="address" value="{{ $donation->address }}">
 
-                            @error('address')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                                @error('address')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-3 form-group mb-3">
+                                <label for="block" class="form-label">Block: <span class="text-danger">*</span></label>
+                                <input type="text" name="block" id="block"
+                                    class="form-control @error('block') is-invalid @enderror"
+                                    value="{{ $donation->block }}" required>
+                                @error('block')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            @php
+                                $districtsByState = config('districts');
+                            @endphp
+                            <div class="col-md-3 form-group mb-3">
+                                <label for="stateSelect" class="form-label">State: <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-control  @error('state') is-invalid @enderror" name="state"
+                                    id="stateSelect" required>
+                                    <option value="">Select State</option>
+                                    @foreach ($districtsByState as $state => $districts)
+                                        <option value="{{ $state }}"
+                                            {{ (old('state') ?? $donation->state) == $state ? 'selected' : '' }}>
+                                            {{ $state }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('state')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col-md-3 form-group mb-3">
+                                <label for="districtSelect" class="form-label">District: <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-control @error('district') is-invalid @enderror" name="district"
+                                    id="districtSelect" required>
+                                    <option value="">Select District</option>
+                                    @if (!empty($selectedState) && isset($districtsByState[$selectedState]))
+                                        @foreach ($districtsByState[$selectedState] as $district)
+                                            <option value="{{ $district }}"
+                                                {{ $selectedDistrict == $district ? 'selected' : '' }}>
+                                                {{ $district }}
+                                            </option>
+                                        @endforeach
+                                    @endif
+                                </select>
+
+                                @error('district')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
                         </div>
-
                         <!-- Amount -->
                         <div class="mb-3">
                             <label class="form-label">
@@ -409,6 +459,35 @@
 
             // On change
             paymentMethod.addEventListener('change', togglePaymentFields);
+        });
+    </script>
+    <script>
+        const allDistricts = @json($districtsByState);
+
+        // Use old values if they exist, otherwise fallback to $beneficiarie
+        const oldState = "{{ old('state', $donation->state) }}";
+        const oldDistrict = "{{ old('district', $donation->district) }}";
+
+        function populateDistricts(state) {
+            const districtSelect = document.getElementById('districtSelect');
+            districtSelect.innerHTML = '<option value="">Select District</option>';
+
+            if (allDistricts[state]) {
+                allDistricts[state].forEach(function(district) {
+                    const selected = (district === oldDistrict) ? 'selected' : '';
+                    districtSelect.innerHTML += `<option value="${district}" ${selected}>${district}</option>`;
+                });
+            }
+        }
+
+        // Initial load
+        if (oldState) {
+            populateDistricts(oldState);
+        }
+
+        // On state change
+        document.getElementById('stateSelect').addEventListener('change', function() {
+            populateDistricts(this.value);
         });
     </script>
 @endsection

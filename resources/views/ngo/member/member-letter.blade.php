@@ -129,12 +129,12 @@
                                         No.:</span></strong>
                                 {{ $record->registration_no }}
                             </div>
-                            {{-- <div class="col-sm-6 text-center">
+                            <div class="col-sm-6 text-center">
                         <div class="bg-danger text-white fw-bold py-2 rounded">
-                            <span data-lang="hi">मनोनयन प्रमाण</span> /
-                            <span data-lang="en">Nomination Certificate</span>
+                            <span >मनोनयन प्रमाण</span>
+                            {{-- <span data-lang="en">Nomination Certificate</span> --}}
                         </div>
-                    </div> --}}
+                    </div>
                             <div class="col-sm-6 text-end">
                                 <strong><span data-lang="hi">तारीख:</span> <span data-lang="en">Date:</span></strong>
                                 {{ \Carbon\Carbon::parse($record->registration_date)->format('d-m-Y') }}
@@ -163,18 +163,45 @@
                     </div>
 
                     <!-- Signature Section -->
-                    <div class="row d-flex justify-content-between mt-5">
-                        <div class="col-sm-4">
-                            <strong><span> Program Officer
-                                    & Program Manager Signature with stamp
-                                </span></strong>
+                    <div class="d-flex justify-content-between align-items-center mt-5">
+                        <div class="col-sm-5 text-center">
+                            @if (!empty($signatures['program_manager']) && file_exists(public_path($signatures['program_manager'])))
+                                <div id="pmSignatureBox" class="mt-2">
+                                    <p class="text-success no-print">Attached</p> <!-- This line is hidden in print -->
+                                    <img src="{{ asset($signatures['program_manager']) }}" alt="PM Signature"
+                                        class="img" style="max-height: 100px;"> <!-- This will print -->
+                                    <br>
+                                    <button class="btn btn-danger btn-sm mt-2 no-print"
+                                        onclick="togglePM(false)">Remove</button>
+                                </div>
+                            @else
+                                <p class="text-muted mt-2 no-print">Not attached</p> <!-- Hidden only in print -->
+                            @endif
+                            <strong>Program Officer & Manager Signature with stamp</strong><br>
                         </div>
                         {{-- <div class="col-sm-4">
                             <strong><span data-lang="hi">आवेदक हस्ताक्षर</span><br><span data-lang="en">Applicant's
                                     Signature</span></strong>
                         </div> --}}
-                        <div class="col-sm-4">
-                            <strong><span> Director Signature with stamp</span></strong>
+                        <div class="col-sm-5 text-center">
+                            @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
+                                <div id="directorSignatureBox" class="mt-2">
+                                    <p class="text-success no-print">Attached</p>
+                                    <img src="{{ asset($signatures['director']) }}" alt="Director Signature" class="img"
+                                        style="max-height: 100px;">
+                                    <br>
+                                    <button class="btn btn-danger btn-sm mt-2 no-print"
+                                        onclick="toggleDirector(false)">Remove</button>
+                                </div>
+
+                                <div id="directorShowBtnBox" class="mt-2 d-none no-print">
+                                    <button class="btn btn-primary btn-sm" onclick="toggleDirector(true)">Attached
+                                        Signature</button>
+                                </div>
+                            @else
+                                <p class="text-muted mt-2 no-print">Not attached</p>
+                            @endif
+                            <strong>Director Signature with stamp</strong><br>
                         </div>
                     </div>
                 </div>

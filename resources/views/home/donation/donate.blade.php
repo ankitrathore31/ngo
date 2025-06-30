@@ -77,8 +77,8 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
-                                            <label for="post" class="form-label">Donor's Post/Town:</label>
-                                            <input type="text" name="donor_post" id="post" class="form-control">
+                                            <label for="post" class="form-label">Donor's Post/Block:</label>
+                                            <input type="text" name="block" id="post" class="form-control">
                                         </div>
                                     </div>
                                     <div class="row">

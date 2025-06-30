@@ -302,8 +302,7 @@ class BeneficiarieController extends Controller
     public function distributefacilities(Request $request)
     {
         $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
-            $q->where('status', 'Distributed')
-                ->orderBy('created_at', 'asc');
+            $q->where('status', 'Distributed')->orderBy('created_at', 'asc');
 
             if ($request->session_filter) {
                 $q->where('session_date', $request->session_filter);
@@ -314,8 +313,21 @@ class BeneficiarieController extends Controller
             }
         }])->where('status', 1);
 
-        // Get only beneficiaries who actually have at least one distributed survey
-        $beneficiarie = $query->whereHas('surveys', function ($q) use ($request) {
+        // Filter by block, district, and state
+        if ($request->filled('block')) {
+            $query->where('block', 'like', '%' . $request->block . '%');
+        }
+
+        if ($request->filled('district')) {
+            $query->where('district', $request->district);
+        }
+
+        if ($request->filled('state')) {
+            $query->where('state', $request->state);
+        }
+
+        // Filter only those with matching surveys
+        $query->whereHas('surveys', function ($q) use ($request) {
             $q->where('status', 'Distributed');
 
             if ($request->session_filter) {
@@ -325,14 +337,17 @@ class BeneficiarieController extends Controller
             if ($request->category_filter) {
                 $q->where('facilities_category', $request->category_filter);
             }
-        })->orderBy('id', 'desc')->get();
+        });
 
-        // For dropdowns/filters
+        $beneficiarie = $query->orderBy('id', 'desc')->get();
+
+        // Dropdown values
         $data = academic_session::all();
         $categories = Beneficiarie_Survey::select('facilities_category')->distinct()->pluck('facilities_category');
 
         return view('ngo.beneficiarie.distributed-facilities-list', compact('beneficiarie', 'data', 'categories'));
     }
+
 
 
     public function pendingfacilities(Request $request)
@@ -374,8 +389,7 @@ class BeneficiarieController extends Controller
     public function allbeneficiarielist(Request $request)
     {
         $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
-            $q->where('status', 'Distributed')
-                ->orderBy('created_at', 'asc');
+            $q->where('status', 'Distributed')->orderBy('created_at', 'asc');
 
             if ($request->session_filter) {
                 $q->where('academic_session', $request->session_filter);
@@ -386,10 +400,22 @@ class BeneficiarieController extends Controller
             }
         }])->where('status', 1);
 
-        // Get only beneficiaries who actually have at least one distributed survey
-        $beneficiarie = $query->whereHas('surveys', function ($q) use ($request) {
-            $q->where('status', 'Distributed')
-                ->orderBy('created_at', 'asc');
+        // Apply state, district, block filters
+        if ($request->filled('state')) {
+            $query->where('state', $request->state);
+        }
+
+        if ($request->filled('district')) {
+            $query->where('district', $request->district);
+        }
+
+        if ($request->filled('block')) {
+            $query->where('block', 'like', '%' . $request->block . '%');
+        }
+
+        // Only get beneficiaries with at least one matching survey
+        $query->whereHas('surveys', function ($q) use ($request) {
+            $q->where('status', 'Distributed')->orderBy('created_at', 'asc');
 
             if ($request->session_filter) {
                 $q->where('academic_session', $request->session_filter);
@@ -398,14 +424,17 @@ class BeneficiarieController extends Controller
             if ($request->category_filter) {
                 $q->where('facilities_category', $request->category_filter);
             }
-        })->orderBy('id', 'desc')->get();
+        });
 
-        // For dropdowns/filters
+        $beneficiarie = $query->orderBy('id', 'desc')->get();
+
+        // Filters for the view
         $data = academic_session::all();
         $categories = Beneficiarie_Survey::select('facilities_category')->distinct()->pluck('facilities_category');
 
         return view('ngo.beneficiarie.all-beneficiarie-list', compact('beneficiarie', 'data', 'categories'));
     }
+
 
 
     public function showbeneficiariereport($beneficiarie_id, $survey_id)

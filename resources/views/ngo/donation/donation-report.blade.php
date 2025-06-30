@@ -156,7 +156,6 @@
                         value="{{ request('end_date', now()->format('Y-m-d')) }}" placeholder="End Date">
                 </div>
 
-
                 <div class="col-md-2 col-sm-4">
                     <select name="donation_type" class="form-control">
                         <option value="all" {{ request('donation_type') == 'all' ? 'selected' : '' }}>All</option>
@@ -181,16 +180,6 @@
                 <p><b>- Donation</b></p>
                 <div class="row dashboard-row justify-content-between">
                     <div class="col-md-2 col-sm-6 mb-3">
-                        <div class="card bg-info text-white ">
-                            <i class="fas fa-dollar-sign icon"></i>
-                            <div>
-                                <p class="info-text">Today Donation</p>
-                                <h5>{{ number_format($today, 2) }}</h5>
-                            </div>
-                            <!-- </div> -->
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-sm-6 mb-3">
                         <div class="card bg-secondary text-white">
                             <!-- <div class="card-body text-center"> -->
                             <i class="fas fa-dollar-sign icon"></i>
@@ -198,6 +187,16 @@
                             <div>
                                 <p class="info-text">Range Donation</p>
                                 <h5>{{ number_format($rangeDonation, 2) }}</h5>
+                            </div>
+                            <!-- </div> -->
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6 mb-3">
+                        <div class="card bg-info text-white ">
+                            <i class="fas fa-dollar-sign icon"></i>
+                            <div>
+                                <p class="info-text">Today Donation</p>
+                                <h5>{{ number_format($today, 2) }}</h5>
                             </div>
                             <!-- </div> -->
                         </div>
