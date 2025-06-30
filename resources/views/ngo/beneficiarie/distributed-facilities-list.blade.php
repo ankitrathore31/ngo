@@ -209,7 +209,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <button type="submit" class="btn btn-primary me-1">Search</button>
-                                <a href="{{ route('pending-registration') }}"
+                                <a href="{{ route('distributed-list') }}"
                                     class="btn btn-info text-white me-1">Reset</a>
                             </div>
                         </div>
