@@ -87,7 +87,7 @@
                 <div class="card shadow rounded p-4 my-4 border border-dark">
                     <div class="text-center mb-4 border-bottom pb-3 mb-2">
                         <!-- Header -->
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-sm-2 text-center text-md-start">
                                 <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="80" height="80">
                             </div>
@@ -122,7 +122,7 @@
                                     </b>
                                 </p>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="row">
                         <!-- Search Input -->

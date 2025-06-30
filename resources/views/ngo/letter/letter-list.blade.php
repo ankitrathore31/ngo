@@ -68,14 +68,24 @@
                                     <td>{{ $item->letterNo }}</td>
                                     <td>{{ \Carbon\Carbon::parse($item->date)->format('d-m-Y') }} </td>
                                     <td>{{ $item->to }}</td>
-                                    <td>{{ $item->toaddress}}</td>
+                                    <td>{{ $item->toaddress }}</td>
                                     <td>{{ $item->subject }}</td>
                                     <td>{{ $item->academic_session ?? 'N/A' }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            <a href="{{ route('letter', $item->id) }}"
-                                                class="btn btn-success btn-sm px-3">
+                                            <a href="{{ route('letter', $item->id) }}" class="btn btn-success btn-sm px-3">
                                                 Letter
+                                            </a>
+                                            <a href="{{ route('edit-letter', $item->id) }}"
+                                                class="btn btn-primary btn-sm"
+                                                title="Edit" >
+                                                <i class="fa-regular fa-edit"></i>
+                                            </a>
+                                            <a href="{{ route('delete-letter', $item->id) }}"
+                                                class="btn btn-danger btn-sm "
+                                                onclick="return confirm('Do you want to delete Letter')"
+                                                title="Delete" >
+                                                <i class="fa-regular fa-trash-can"></i>
                                             </a>
                                         </div>
                                     </td>

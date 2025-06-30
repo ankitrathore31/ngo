@@ -42,7 +42,6 @@
             /* Optional: Hide any interactive or irrelevant UI */
             button,
             .btn,
-            .d-flex.justify-content-between,
             .no-print {
                 display: none !important;
             }
@@ -88,7 +87,7 @@
                         <div class="col-sm-10">
                             <p style="margin: 0;" class="d-flex justify-content-around"><b>
                                     <span>NEETI AYOG ID NO. UP/2023/0360430</span>&nbsp;
-                                   &nbsp; &nbsp;<span>NGO NO. UP/00033062</span>&nbsp; &nbsp;
+                                    &nbsp; &nbsp;<span>NGO NO. UP/00033062</span>&nbsp; &nbsp;
                                     &nbsp; &nbsp;<span>PAN: AAEAG7650B</span>&nbsp;
                                 </b></p>
                             <h4 style="color: red;"><b>
@@ -254,13 +253,42 @@
                 </span>
                 <div class="d-flex justify-content-center align-items-center mt-3">
                     <div class="col-sm-5 text-center">
-                        Program Officer & Program Manager Signature with stamp
-                    </div>
+                                @if (!empty($signatures['program_manager']) && file_exists(public_path($signatures['program_manager'])))
+                                    <div id="pmSignatureBox" class="mt-2">
+                                        <p class="text-success no-print">Attached</p> <!-- This line is hidden in print -->
+                                        <img src="{{ asset($signatures['program_manager']) }}" alt="PM Signature"
+                                            class="img" style="max-height: 100px;"> <!-- This will print -->
+                                        <br>
+                                        <button class="btn btn-danger btn-sm mt-2 no-print"
+                                            onclick="togglePM(false)">Remove</button>
+                                    </div>
+                                @else
+                                    <p class="text-muted mt-2 no-print">Not attached</p> <!-- Hidden only in print -->
+                                @endif
+                                <strong>Program Officer & Manager Signature with stamp</strong><br>
+                            </div> 
                     <div class="col-sm-2 text-center">
                         <img src="{{ asset('images/iso.png') }}" alt="Logo" width="100" height="100">
                     </div>
                     <div class="col-sm-5 text-center">
-                        Director Signature with stamp
+                        @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
+                            <div id="directorSignatureBox" class="mt-2">
+                                <p class="text-success no-print">Attached</p>
+                                <img src="{{ asset($signatures['director']) }}" alt="Director Signature" class="img"
+                                    style="max-height: 100px;">
+                                <br>
+                                <button class="btn btn-danger btn-sm mt-2 no-print"
+                                    onclick="toggleDirector(false)">Remove</button>
+                            </div>
+
+                            <div id="directorShowBtnBox" class="mt-2 d-none no-print">
+                                <button class="btn btn-primary btn-sm" onclick="toggleDirector(true)">Attached
+                                    Signature</button>
+                            </div>
+                        @else
+                            <p class="text-muted mt-2 no-print">Not attached</p>
+                        @endif
+                        <strong>Director Signature with stamp</strong><br>
                     </div>
                 </div>
             </div>
@@ -272,5 +300,16 @@
                 });
             }
             window.onload = () => setLanguage('en'); // Set Eng as default
+        </script>
+        <script>
+            function togglePM(show) {
+                document.getElementById('pmSignatureBox').classList.toggle('d-none', !show);
+                document.getElementById('pmShowBtnBox').classList.toggle('d-none', show);
+            }
+
+            function toggleDirector(show) {
+                document.getElementById('directorSignatureBox').classList.toggle('d-none', !show);
+                document.getElementById('directorShowBtnBox').classList.toggle('d-none', show);
+            }
         </script>
     @endsection

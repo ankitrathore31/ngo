@@ -16,7 +16,7 @@ class ExperienceController extends Controller
 {
 
 
-    public function GenrateExperience(Request $request)
+    public function GenrateLetter(Request $request)
     {
         $data = academic_session::all();
         $beneficiaries = beneficiarie::all();
@@ -27,7 +27,7 @@ class ExperienceController extends Controller
     }
 
 
-    public function saveExperience(Request $request)
+    public function saveLetter(Request $request)
     {
         $request->validate([
             'academic_session' => 'string',
@@ -51,11 +51,55 @@ class ExperienceController extends Controller
             'letter' => $request->letter,
         ]);
 
-        return back()->with('success', 'Letter saved successfully!');
+        return redirect()->route('letter-list')->with('success', 'Letter saved successfully!');
+    }
+
+    public function editLetter($id)
+    {
+        $data = academic_session::all();
+        $letter = ExperienceCertificate::find($id);
+        return view('ngo.letter.edit-letter', compact('data', 'letter'));
+    }
+
+    public function updateLetter(Request $request, $id)
+    {
+        $request->validate([
+            'academic_session' => 'string',
+            'letterNo' => 'required|string',
+            'date' => 'nullable|date',
+            'to' => 'required',
+            'subject' => 'required',
+            'letter' => 'required',
+            'toaddress' => 'required',
+        ]);
+
+        // Fetch the ExperienceCertificate instance
+        $letter = ExperienceCertificate::findOrFail($id);
+
+        // Update the attributes
+        $letter->update([
+            'academic_session' => $request->academic_session,
+            'letterNo' => $request->letterNo,
+            'date' => $request->date,
+            'to' => $request->to,
+            'toaddress' => $request->toaddress,
+            'subject' => $request->subject,
+            'letter' => $request->letter,
+        ]);
+
+        return redirect()->route('letter-list')->with('success', 'Letter updated successfully!');
     }
 
 
-    public function ExperienceCerti(Request $request)
+    public function deleteLetter($id)
+    {
+
+        $letter = ExperienceCertificate::find($id);
+        $letter->delete();
+        return back()->with('success', 'Letter Deleted successfully!');
+    }
+
+    public function LetterCerti(Request $request)
     {
         $session = academic_session::all();
 
@@ -89,7 +133,7 @@ class ExperienceController extends Controller
 
 
 
-    public function ExperienceCertificate($id)
+    public function LetterCertificate($id)
     {
 
         $session = academic_session::all();

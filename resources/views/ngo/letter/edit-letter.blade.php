@@ -87,7 +87,7 @@
                 <div class="card shadow rounded p-4 my-4 border border-dark">
                     <div class="text-center mb-4 border-bottom pb-3 mb-2">
                         <!-- Header -->
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-sm-2 text-center text-md-start">
                                 <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="80" height="80">
                             </div>
@@ -122,100 +122,95 @@
                                     </b>
                                 </p>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
-                    <div class="row">
-
-
-                        <!-- Selected Record Info -->
-                        <div id="selectedRecord" class="mt-3" style="display: none;">
-                            <div class="card shadow-sm border rounded p-3 bg-light">
-                                <h5 class="card-title text-primary">Selected Person Details</h5>
-                                <div class="card-body">
-                                    <ul class="list-unstyled mb-0" id="selectedInfo">
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <form action="{{ route('save-experience') }}" method="post">
+                    <form action="{{ route('update-letter', $letter->id) }}" method="post">
                         @csrf
-                        <input type="text" name="beneficiarie_id"
-                            value="{{ old('beneficiarie_id', $experience->beneficiarie_id ?? '') }}" id="beneficiarie_id"
-                            hidden>
                         <div class=" p-4 lh-lg" style="font-size: 16px;">
                             <div class="row justify-content-between mb-3">
-                                <div class="col-sm-6">
-                                    <strong><span data-lang="hi">प्रमाण-पत्र क्रमांक:</span> <span
-                                            data-lang="en">Certificate
+                                <div class="col-sm-4">
+                                    <strong><span data-lang="hi">पत्र सं.</span> <span data-lang="en">Letter
                                             No.:</span></strong>
-                                    <span id=""><input id="certRegNo" type="text" name="certiNo"
-                                            value="{{ old('certiNo', $experience->certiNo ?? '') }}"></span>
+                                    <span id=""><input id="letterNo" class="form-control" type="text"
+                                            name="letterNo" value="{{ $letter->letterNo }}"></span>
                                 </div>
-
-                                <div class="col-sm-6 text-end">
-                                    <strong><span data-lang="hi">तारीख:</span> <span data-lang="en">Date:</span></strong>
-                                    <span id="certDate"><input type="date" name="date" id="date"
-                                            value="{{ old('date', $experience->date ?? '') }}">
+                                <div class="col-sm-4">
+                                    <strong><span data-lang="hi">पत्र तारीख:</span> <span data-lang="en">Letter
+                                            Date:</span></strong>
+                                    <span id="certDate"><input type="date" class="form-control" name="date"
+                                            value="{{ $letter->date }}" id="date">
                                     </span>
                                 </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">
+                                        <span data-lang="hi">सेशन</span>
+                                        <span data-lang="en">Session</span>
+                                    </label>
+                                    <select class="form-control @error('session') is-invalid @enderror" name="session"
+                                        required>
+                                        <option value="">Select Session</option>
+                                        @foreach ($data as $session)
+                                            <option value="{{ $session->session_date }}"
+                                                {{ old('session', $letter->academic_session) == $session->session_date ? 'selected' : '' }}>
+                                                {{ $session->session_date }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('session')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="to">To</label>
+                                    <input type="text" name="to" id="to" class="form-control mb-2"
+                                        value="{{ $letter->to }}" placeholder="Name">
+
+                                    <input type="text" name="toaddress" id="toaddress" class="form-control"
+                                        value="{{ $letter->toaddress }}" placeholder="Address">
+                                    @error('toaddress')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
                             </div>
 
-                            <span data-lang="hi">
-                                यह प्रमाणित किया जाता है कि श्री/श्रीमती/कुमारी <strong id="certNameHi">__________</strong>,
-                                पिता/पति <strong id="certGurdianHi">__________</strong>,
-                                निवासी <strong id="certAddressHi">__________</strong>
-                                भारत में दिनांक <span><input type="date" id="fromDate" name="fromDate"
-                                        value="{{ old('fromDate', $experience->fromDate ?? '') }}">
-                                </span> से
-                                <strong><input type="date" id="toDate" name="toDate"
-                                        value="{{ old('toDate', $experience->toDate ?? '') }}">
-                                </strong>
-                                तक समन्वयक के पद पर कार्यरत हैं। कार्य अवधि में मैंने पाया कि वे एक ईमानदार, मेहनती,
-                                समर्पित,
-                                पेशेवर दृष्टिकोण वाले तथा कार्यालय और क्षेत्र की नौकरी के बारे में बहुत अच्छे ज्ञान वाले
-                                व्यक्ति
-                                हैं। इस अवधि के दौरान उनका चरित्र और आचरण अनुकरणीय रहा है। मैं उन्हें भविष्य के करियर
-                                प्रयासों
-                                में शुभकामनाएं और सफलता की कामना करता हूं।
-                            </span>
-
-                            <span data-lang="en">
-                                This is to certify that Mr./Ms./Mrs. <strong id="certNameEn">__________</strong>,
-                                Son/Daughter/Wife of <strong id="certGurdianEn">__________</strong>,
-                                resident of <strong id="certAddressEn">__________</strong> from
-                                <span><input type="date" id="fromDate" name="fromDate"
-                                        value="{{ old('fromDate', $experience->fromDate ?? '') }}"></span> to
-                                <span><input type="date" id="toDate" name="toDate"
-                                        value="{{ old('toDate', $experience->toDate ?? '') }}">
-                                </span>as a
-                                Coordinator.
-                                In the working period I found him a since, honest, hardworking. Dedicated with
-                                a professional attitude and very good office and field job knowledge. His
-                                character and conduct during this period hasbeen exemplary.
-                                I wish his all the best and success in future career endeavours.
-                            </span>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-4">
-                                <input type="submit" class="btn btn-success p-2 mt-2" value="Save">
+                            <div class="row mt-2">
+                                <div class="col-md-6">
+                                    <label for="subject">Subject</label>
+                                    <input type="text" name="subject" class="form-control"
+                                        value="{{ $letter->subject }}">
+                                    @error('subject')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
                             </div>
-                        </div>
+
+                            <div class="row mt-2">
+                                <div class="col-md-12">
+                                    <label for="letter">Write Letter</label>
+                                    <textarea name="letter" id="letter" cols="30" rows="10" class="form-control">{{ old('letter', $letter->letter) }}</textarea>
+                                    @error('letter')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <input type="submit" class="btn btn-success p-2 mt-2" value="Update">
+                                </div>
+                            </div>
                     </form>
-
-                    <!-- Signature Section -->
-
                 </div>
             </div>
         </div>
     </div>
-    <script>
+     <script>
         function setLanguage(lang) {
             document.querySelectorAll('[data-lang]').forEach(el => {
                 el.style.display = el.getAttribute('data-lang') === lang ? 'inline' : 'none';
             });
         }
-        window.onload = () => setLanguage('en'); // Set Eng as default
+        window.onload = () => setLanguage('en'); // Set Hindi as default
     </script>
 @endsection
