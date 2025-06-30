@@ -278,10 +278,13 @@ Route::controller(TrainingCenterController::class)->group(function () {
 });
 
 Route::controller(ExperienceController::class)->group(function () {
-    Route::get('ngo/genrate-letter', 'GenrateExperience')->middleware('auth')->name('genrate-letter');
-    Route::post('ngo/save-letter', 'saveExperience')->middleware('auth')->name('save-letter');
-    Route::get('ngo/letter-list', 'ExperienceCerti')->middleware('auth')->name('letter-list');
-    Route::get('ngo/letter-certificate/{id}', 'ExperienceCertificate')->middleware('auth')->name('letter');
+    Route::get('ngo/genrate-letter', 'GenrateLetter')->middleware('auth')->name('genrate-letter');
+    Route::post('ngo/save-letter', 'saveLetter')->middleware('auth')->name('save-letter');
+    Route::get('ngo/edit-letter/{id}', 'editLetter')->middleware('auth')->name('edit-letter');
+    Route::post('ngo/update-letter/{id}', 'updateLetter')->middleware('auth')->name('update-letter');
+    Route::get('ngo/delete-letter/{id}', 'deleteLetter')->middleware('auth')->name('delete-letter');
+    Route::get('ngo/letter-list', 'LetterCerti')->middleware('auth')->name('letter-list');
+    Route::get('ngo/letter-certificate/{id}', 'LetterCertificate')->middleware('auth')->name('letter');
 
 });
 

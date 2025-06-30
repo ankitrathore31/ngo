@@ -9,6 +9,7 @@ use App\Models\Member;
 use App\Models\academic_session;
 use App\Models\Activity;
 use App\Models\Setting;
+use App\Models\Signature;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
@@ -75,8 +76,9 @@ class MemberController extends Controller
         $record = Member::where('status', 1)
             ->whereNotNull('position')
             ->find($id);
-
-        return view('ngo.member.member-certificate', compact('record'));
+        
+        $signatures = Signature::pluck('file_path', 'role');
+        return view('ngo.member.member-certificate', compact('record','signatures'));
     }
 
     public function MemberLetter($id)
