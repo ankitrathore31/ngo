@@ -2,11 +2,21 @@
 @section('content')
     <style>
         .print-red-bg {
-            background-color: #dc3545 !important;
+            background-color: red !important;
             /* Bootstrap 'bg-danger' color */
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
             color: white !important;
+        }
+
+        .print-h4 {
+            background-color: red !important;
+            color: white !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-size: 28px;
+            word-spacing: 8px;
+            text-align: center;
         }
 
         @media print {
@@ -43,13 +53,22 @@
             }
 
             .print-red-bg {
-                background-color: #dc3545 !important;
+                background-color: red !important;
                 /* Bootstrap 'bg-danger' color */
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
                 color: white !important;
             }
 
+            .print-h4 {
+                background-color: red !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                font-size: 28px;
+                word-spacing: 8px;
+                text-align: center;
+            }
 
             @page {
                 size: A4;
@@ -81,15 +100,15 @@
         @endif
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h5 class="mb-0">
-                <span data-lang="hi">दान पंजीकरण फॉर्म</span>
-                <span data-lang="en">Donation Registration Form</span>
+                {{-- <span data-lang="hi">दान पंजीकरण फॉर्म</span> --}}
+                <span >Donation</span>
             </h5>
             <div>
                 <button class="btn btn-sm btn-outline-primary" onclick="setLanguage('en')">English</button>
                 <button class="btn btn-sm btn-outline-success" onclick="setLanguage('hi')">हिंदी</button>
             </div>
             <div class=" d-flex justify-content-between">
-                <a href="{{ route('donation-list') }}" class="btn btn-success">Donation List</a>
+                {{-- <a href="{{ route('donation-list') }}" class="btn btn-success">Donation List</a> --}}
                 <button onclick="window.print()" class="btn btn-primary">Print Certificate</button>
             </div>
         </div>
@@ -107,8 +126,7 @@
                                     <span data-lang="hi"><b>सोसाइटीज रजिस्ट्रेशन एक्ट 1860 के अंतर्गत पंजीकृत</b></span>
                                     <span data-lang="en"><b>Registered under Societies Registration Act 1860</b></span>
                                 </p>
-                                <h4
-                                    style="background-color: red; color: white; font-size: 28px; word-spacing: 8px; text-align: center;">
+                                <h4 class="print-h4">
                                     <b>
                                         <span data-lang="hi">ज्ञान भारती संस्था</span>
                                         <span data-lang="en">GYAN BHARTI SANSTHA</span>
@@ -134,29 +152,23 @@
                                             02-10-2023</span>
                                         <span data-lang="hi">| पैन: AAEAG7650B</span>
                                         <span data-lang="en">| PAN: AAEAG7650B</span>
-                                    </b></p>
-                                {{-- <p style="margin: 0;"><b>
-
-                                </b></p> --}}
+                                    </b>
+                                </p>
                             </div>
                         </div>
                     </div>
-                    <div class="row ">
-
-                    </div>
-
                     <div class="row d-flex justify-content-between">
-                        <div class="col-md-4">
+                        <div class="col-sm-4">
                             <strong>Receipt No:</strong> {{ $donor->receipt_no }}
                         </div>
 
-                        <div class="col-4">
-                            <h4 class="text-center mb-4 bg-danger text-white p-2">
+                        <div class="col-sm-4">
+                            <h4 class="text-center print-red-bg">
                                 <strong data-lang="en">DONATION CERTIFICATE</strong>
                                 <strong data-lang="hi">डोनेशन प्रमाण पत्र</strong>
                             </h4>
                         </div>
-                        <div class="col-md-4 text-end">
+                        <div class="col-sm-4 text-end">
                             <strong>Date:</strong> {{ \Carbon\Carbon::parse($donor->date)->format('d-m-Y') }}
                         </div>
                         {{-- <div class="col-md-4">
@@ -187,16 +199,30 @@
                         of the poor, helpless and destitute. We sincerely thank you and wish you a bright future.
                     </p>
 
-                    <div class="mt-5 d-flex justify-content-between">
+                    <div class="d-flex justify-content-between align-items-center mt-4">
                         <div>
-
                             <strong>Payment Method:</strong> {{ ucfirst($donor->payment_method) }}
                         </div>
 
-                        <div class="text-end">
-                            <strong>Authorized Signature</strong><br><br>
-                            {{-- <img src="{{ asset('images/signature.png') }}" alt="Signature" height="60"> --}}
-                            <!-- optional -->
+                        <div class="col-sm-5 text-center">
+                            @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
+                                <div id="directorSignatureBox" class="mt-2">
+                                    <p class="text-success no-print">Attached</p>
+                                    <img src="{{ asset($signatures['director']) }}" alt="Director Signature" class="img"
+                                        style="max-height: 100px;">
+                                    <br>
+                                    <button class="btn btn-danger btn-sm mt-2 no-print"
+                                        onclick="toggleDirector(false)">Remove</button>
+                                </div>
+
+                                <div id="directorShowBtnBox" class="mt-2 d-none no-print">
+                                    <button class="btn btn-primary btn-sm" onclick="toggleDirector(true)">Attached
+                                        Signature</button>
+                                </div>
+                            @else
+                                <p class="text-muted mt-2 no-print">Not attached</p>
+                            @endif
+                            <strong>Director Signature</strong><br>
                         </div>
                     </div>
 

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\donor_data;
 use App\Models\beneficiarie;
 use App\Models\Member;
+use App\Models\Signature;
 use Illuminate\Support\Facades\DB;
 
 
@@ -44,7 +45,7 @@ class DonationController extends Controller
         $record = $beneficiaries->merge($members);
         $lastReceiptNo = Donation::max('receipt_no');
         $newReceiptNo = is_numeric($lastReceiptNo) ? ((int) $lastReceiptNo + 1) : 1;
-
+        $states = config('states');
         return view('ngo.donation.donation', compact('data', 'record', 'newReceiptNo'));
     }
 
@@ -57,6 +58,9 @@ class DonationController extends Controller
             'mobile' => 'required',
             'gurdian_name' => 'required',
             'address' => 'required',
+            'block' => 'required',
+            'state' => 'required',
+            'district' => 'required',
             'amount' => 'required',
             'payment_method' => 'required',
         ]);
@@ -78,6 +82,9 @@ class DonationController extends Controller
         $donation->gurdian_name = $request->gurdian_name;
         $donation->payment_method = $request->payment_method;
         $donation->address = $request->address;
+        $donation->block = $request->block;
+        $donation->state = $request->state;
+        $donation->district = $request->district;
         $donation->amount = $request->amount;
         $donation->depositor_name = $request->depositor_name;
         $donation->relationship = $request->relationship;
@@ -135,6 +142,9 @@ class DonationController extends Controller
         $donation->gurdian_name = $request->gurdian_name;
         $donation->payment_method = $request->payment_method;
         $donation->address = $request->address;
+        $donation->block = $request->block;
+        $donation->state = $request->state;
+        $donation->district = $request->district;
         $donation->amount = $request->amount;
         $donation->depositor_name = $request->depositor_name;
         $donation->relationship = $request->relationship;
@@ -209,8 +219,8 @@ class DonationController extends Controller
         if (!$donor) {
             return redirect()->back()->with('error', 'Donation not found.');
         }
-
-        return view('ngo.donation.donation-certificate', compact('donor'));
+        $signatures = Signature::pluck('file_path', 'role');
+        return view('ngo.donation.donation-certificate', compact('donor','signatures'));
     }
 
 

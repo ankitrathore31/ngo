@@ -123,7 +123,7 @@
                     <div class="col-sm-6 mb-2">
                         <p class="text-center"
                             style="background-color: red; color: white; font-weight: bold; padding: 5px; border-radius: 10px;">
-                            <span data-lang="hi">मनोनयन प्रमाण </span>
+                            <span data-lang="hi">सदस्य प्रमाणपत्र</span>
                             <span data-lang="en">Member Certificate </span>
                         </p>
                     </div>
@@ -251,22 +251,22 @@
                     कामना
                     करते हैं।
                 </span>
-                <div class="d-flex justify-content-center align-items-center mt-3">
+                <div class="d-flex justify-content-between align-items-center mt-3">
                     <div class="col-sm-5 text-center">
-                                @if (!empty($signatures['program_manager']) && file_exists(public_path($signatures['program_manager'])))
-                                    <div id="pmSignatureBox" class="mt-2">
-                                        <p class="text-success no-print">Attached</p> <!-- This line is hidden in print -->
-                                        <img src="{{ asset($signatures['program_manager']) }}" alt="PM Signature"
-                                            class="img" style="max-height: 100px;"> <!-- This will print -->
-                                        <br>
-                                        <button class="btn btn-danger btn-sm mt-2 no-print"
-                                            onclick="togglePM(false)">Remove</button>
-                                    </div>
-                                @else
-                                    <p class="text-muted mt-2 no-print">Not attached</p> <!-- Hidden only in print -->
-                                @endif
-                                <strong>Program Officer & Manager Signature with stamp</strong><br>
-                            </div> 
+                        @if (!empty($signatures['program_manager']) && file_exists(public_path($signatures['program_manager'])))
+                            <div id="pmSignatureBox" class="mt-2">
+                                <p class="text-success no-print">Attached</p> <!-- This line is hidden in print -->
+                                <img src="{{ asset($signatures['program_manager']) }}" alt="PM Signature" class="img"
+                                    style="max-height: 100px;"> <!-- This will print -->
+                                <br>
+                                <button class="btn btn-danger btn-sm mt-2 no-print"
+                                    onclick="togglePM(false)">Remove</button>
+                            </div>
+                        @else
+                            <p class="text-muted mt-2 no-print">Not attached</p> <!-- Hidden only in print -->
+                        @endif
+                        <strong>Program Officer & Manager Signature with stamp</strong><br>
+                    </div>
                     <div class="col-sm-2 text-center">
                         <img src="{{ asset('images/iso.png') }}" alt="Logo" width="100" height="100">
                     </div>

@@ -107,7 +107,7 @@
                                 <p><b>Website : www.gyanbhartingo.org Email : gyanbhartingo600@gmail.com Mob- 9411484111</b>
                                 </p>
                             </div>
-                            
+
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -214,9 +214,10 @@
                     <hr>
                     <b class="mb-3 text-center"><U>About Beneficiarie Survey & Facilities</U></b>
                     <div class="row">
-                        
+
                         <div class="col-sm-4 mb-3">
-                            <strong>Survey Date:</strong> {{ \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') }}
+                            <strong>Survey Date:</strong>
+                            {{ \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') }}
                         </div>
                         <div class="col-sm-8 mb-3">
                             <strong>Survey Details:</strong> {{ $survey->survey_details }}
@@ -228,7 +229,8 @@
                             <strong>Facilities:</strong> {{ $survey->facilities }}
                         </div>
                         <div class="col-sm-4 mb-3">
-                            <strong>Distribute Date:</strong> {{ \Carbon\Carbon::parse($survey->distribute_date)->format('d-m-Y') }}
+                            <strong>Distribute Date:</strong>
+                            {{ \Carbon\Carbon::parse($survey->distribute_date)->format('d-m-Y') }}
                         </div>
                         <div class="col-sm-8 mb-3">
                             <strong>Distribute Place:</strong> {{ $survey->distribute_place ?? 'No Found' }}
@@ -258,7 +260,8 @@
                     <hr>
                     <div class="row d-flex justify-content-between mt-2">
                         <div class="col-sm-4 mb-5">
-                            <label for="" class="from-label"><b>{{ $beneficiarie->reg_type }} Signature/Thumb Impression of the Recipient</b></label>
+                            <label for="" class="from-label"><b>{{ $beneficiarie->reg_type }} Signature/Thumb
+                                    Impression of the Recipient</b></label>
                         </div>
                         <div class="col-sm-4 mb-5">
                             <label for="" class="from-label"><b>Signature</b></label>
@@ -267,7 +270,5 @@
                 </div>
             </div>
         </div>
-
-    </div>
     </div>
 @endsection

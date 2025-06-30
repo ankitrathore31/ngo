@@ -86,8 +86,8 @@ class MemberController extends Controller
         $record = Member::where('status', 1)
             // ->whereNotNull('position')
             ->find($id);
-
-        return view('ngo.member.member-letter', compact('record'));
+        $signatures = Signature::pluck('file_path', 'role');
+        return view('ngo.member.member-letter', compact('record','signatures'));
     }
 
     public function Memberactivitylist(Request $request)

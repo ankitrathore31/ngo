@@ -20,7 +20,7 @@ class PaymentController extends Controller
             'donor_country'     => 'nullable|string|max:100',
             'donor_state'       => 'nullable|string|max:100',
             'donor_district'    => 'nullable|string|max:100',
-            'donor_post'        => 'nullable|string|max:100',
+            'block'             => 'nullable|string|max:100',
             'donor_pincode'     => 'nullable|string|max:20',
             'donor_village'     => 'nullable|string|max:100',
             'donor_idtype'      => 'nullable|string|max:100',
@@ -39,9 +39,9 @@ class PaymentController extends Controller
         $donor->email       = $request->donor_email ?? null;
         $donor->mobile      = $request->donor_number ?? null;
         $donor->donor_country     = $request->donor_country ?? null;
-        $donor->donor_state       = $request->donor_state ?? null;
-        $donor->donor_district    = $request->donor_district ?? null;
-        $donor->donor_post        = $request->donor_post ?? null;
+        $donor->state       = $request->donor_state ?? null;
+        $donor->district    = $request->donor_district ?? null;
+        $donor->block        = $request->block ?? null;
         $donor->donor_pincode     = $request->donor_pincode ?? null;
         $donor->donor_village     = $request->donor_village ?? null;
         $donor->donor_idtype      = $request->donor_idtype ?? null;

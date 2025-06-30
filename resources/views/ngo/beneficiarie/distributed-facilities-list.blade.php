@@ -88,86 +88,133 @@
             <div class="row">
                 <div class="col-md-12">
                     <form method="GET" action="{{ route('distributed-list') }}" class="row g-3 mb-4">
-                        <div class="col-md-4">
-                            {{-- <label for="session_filter" class="form-label">Select Session</label> --}}
-                            <select name="session_filter" id="session_filter" class="form-control"
-                                onchange="this.form.submit()">
-                                <option value="">All Sessions</option> <!-- Default option to show all -->
-                                @foreach ($data as $session)
-                                    <option value="{{ $session->session_date }}"
-                                        {{ request('session_filter') == $session->session_date ? 'selected' : '' }}>
-                                        {{ $session->session_date }}
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                {{-- <label for="session_filter" class="form-label">Select Session</label> --}}
+                                <select name="session_filter" id="session_filter" class="form-control"
+                                    onchange="this.form.submit()">
+                                    <option value="">All Sessions</option> <!-- Default option to show all -->
+                                    @foreach ($data as $session)
+                                        <option value="{{ $session->session_date }}"
+                                            {{ request('session_filter') == $session->session_date ? 'selected' : '' }}>
+                                            {{ $session->session_date }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+
+                            <div class="col-md-4 mb-3">
+                                <select id="category_filter" name="category_filter"
+                                    class="form-control @error('category_filter') is-invalid @enderror"
+                                    onchange="this.form.submit()">
+                                    <option value="">-- Select Facilities Category --</option>
+                                    <option value="Education"
+                                        {{ request('category_filter') == 'Education' ? 'selected' : '' }}>
+                                        Education</option>
+                                    <option value="Peace Talk"
+                                        {{ request('category_filter') == 'Peace Talk' ? 'selected' : '' }}>Peace Talk
                                     </option>
-                                @endforeach
-                            </select>
+                                    <option value="Environment"
+                                        {{ request('category_filter') == 'Environment' ? 'selected' : '' }}>Environment
+                                    </option>
+                                    <option value="Food" {{ request('facilities_category') == 'Food' ? 'selected' : '' }}>
+                                        Food
+                                    </option>
+                                    <option value="Skill Development"
+                                        {{ request('category_filter') == 'Skill Development' ? 'selected' : '' }}>Skill
+                                        Development</option>
+                                    <option value="Women Empowerment"
+                                        {{ request('category_filter') == 'Women Empowerment' ? 'selected' : '' }}>Women
+                                        Empowerment</option>
+                                    <option value="Awareness"
+                                        {{ request('category_filter') == 'Awareness' ? 'selected' : '' }}>Awareness
+                                    </option>
+                                    <option value="Cultural Program"
+                                        {{ request('category_filter') == 'Cultural Program' ? 'selected' : '' }}>Cultural
+                                        Program</option>
+                                    <option value="Clean Campaign"
+                                        {{ request('category_filter') == 'Clean Campaign' ? 'selected' : '' }}>Clean
+                                        Campaign</option>
+                                    <option value="Health Mission"
+                                        {{ request('category_filter') == 'Health Mission' ? 'selected' : '' }}>Health
+                                        Mission</option>
+                                    <option value="Poor Alleviation"
+                                        {{ request('category_filter') == 'Poor Alleviation' ? 'selected' : '' }}>Poor
+                                        Alleviation</option>
+                                    <option value="Religious Program"
+                                        {{ request('category_filter') == 'Religious Program' ? 'selected' : '' }}>Religious
+                                        Program</option>
+                                    <option value="Agriculture Program"
+                                        {{ request('category_filter') == 'Agriculture Program' ? 'selected' : '' }}>
+                                        Agriculture Program</option>
+                                    <option value="Drinking Water"
+                                        {{ request('category_filter') == 'Drinking Water' ? 'selected' : '' }}>Drinking
+                                        Water</option>
+                                    <option value="Natural Disaster"
+                                        {{ request('category_filter') == 'Natural Disaster' ? 'selected' : '' }}>Natural
+                                        Disaster</option>
+                                    <option value="Animal Service"
+                                        {{ request('category_filter') == 'Animal Service' ? 'selected' : '' }}>Animal
+                                        Service</option>
+                                </select>
+                                @error('category_filter')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
                         </div>
+                        <div class="row">
 
+                            @php
+                                $districtsByState = config('districts');
+                            @endphp
+                            <div class="col-md-4 col-sm-6 form-group mb-3">
+                                {{-- <label for="stateSelect" class="form-label">State: <span class="text-danger">*</span></label> --}}
+                                <select class="form-control @error('state') is-invalid @enderror" name="state"
+                                    id="stateSelect" onchange="this.form.submit()">
+                                    <option value="">Select State</option>
+                                    @foreach ($districtsByState as $state => $districts)
+                                        <option value="{{ $state }}"
+                                            {{ old('state') == $state ? 'selected' : '' }}>
+                                            {{ $state }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('state')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
 
-                        <div class="col-md-4">
-                            <select id="category_filter" name="category_filter"
-                                class="form-control @error('category_filter') is-invalid @enderror"
-                                onchange="this.form.submit()">
-                                <option value="">-- Select Facilities Category --</option>
-                                <option value="Education" {{ request('category_filter') == 'Education' ? 'selected' : '' }}>
-                                    Education</option>
-                                <option value="Peace Talk"
-                                    {{ request('category_filter') == 'Peace Talk' ? 'selected' : '' }}>Peace Talk
-                                </option>
-                                <option value="Environment"
-                                    {{ request('category_filter') == 'Environment' ? 'selected' : '' }}>Environment
-                                </option>
-                                <option value="Food" {{ request('facilities_category') == 'Food' ? 'selected' : '' }}>Food
-                                </option>
-                                <option value="Skill Development"
-                                    {{ request('category_filter') == 'Skill Development' ? 'selected' : '' }}>Skill
-                                    Development</option>
-                                <option value="Women Empowerment"
-                                    {{ request('category_filter') == 'Women Empowerment' ? 'selected' : '' }}>Women
-                                    Empowerment</option>
-                                <option value="Awareness"
-                                    {{ request('category_filter') == 'Awareness' ? 'selected' : '' }}>Awareness
-                                </option>
-                                <option value="Cultural Program"
-                                    {{ request('category_filter') == 'Cultural Program' ? 'selected' : '' }}>Cultural
-                                    Program</option>
-                                <option value="Clean Campaign"
-                                    {{ request('category_filter') == 'Clean Campaign' ? 'selected' : '' }}>Clean
-                                    Campaign</option>
-                                <option value="Health Mission"
-                                    {{ request('category_filter') == 'Health Mission' ? 'selected' : '' }}>Health
-                                    Mission</option>
-                                <option value="Poor Alleviation"
-                                    {{ request('category_filter') == 'Poor Alleviation' ? 'selected' : '' }}>Poor
-                                    Alleviation</option>
-                                <option value="Religious Program"
-                                    {{ request('category_filter') == 'Religious Program' ? 'selected' : '' }}>Religious
-                                    Program</option>
-                                <option value="Agriculture Program"
-                                    {{ request('category_filter') == 'Agriculture Program' ? 'selected' : '' }}>
-                                    Agriculture Program</option>
-                                <option value="Drinking Water"
-                                    {{ request('category_filter') == 'Drinking Water' ? 'selected' : '' }}>Drinking
-                                    Water</option>
-                                <option value="Natural Disaster"
-                                    {{ request('category_filter') == 'Natural Disaster' ? 'selected' : '' }}>Natural
-                                    Disaster</option>
-                                <option value="Animal Service"
-                                    {{ request('category_filter') == 'Animal Service' ? 'selected' : '' }}>Animal
-                                    Service</option>
-                            </select>
-                            @error('category_filter')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            </div>
+                            <div class="col-md-4 col-sm-6 form-group mb-3">
+                                {{-- <label for="districtSelect" class="form-label">District: <span
+                                    class="text-danger">*</span></label> --}}
+                                <select class="form-control @error('district') is-invalid @enderror" name="district"
+                                    id="districtSelect" onchange="this.form.submit()">
+                                    <option value="">Select District</option>
+                                </select>
+                                @error('district')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col-md-4 col-sm-6 form-group mb-3">
+                                {{-- <label for="block" class="form-label">Block: <span class="text-danger">*</span></label> --}}
+                                <input type="text" name="block" id="block"
+                                    class="form-control @error('block') is-invalid @enderror" value="{{ old('block') }}"
+                                    placeholder="Search by Block">
+                                @error('block')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
                         </div>
-
-
-                        <div class="col-md-4 d-flex">
-                            <button type="submit" class="btn btn-primary me-2">Search</button>
-                            <a href="{{ route('distributed-list') }}" class="btn btn-info text-white me-2">Reset</a>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary me-1">Search</button>
+                                <a href="{{ route('pending-registration') }}"
+                                    class="btn btn-info text-white me-1">Reset</a>
+                            </div>
                         </div>
                     </form>
                     <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
-
                 </div>
             </div>
             <div class="card shadow-sm printable">
@@ -213,12 +260,13 @@
                                             {{ $item->block }},
                                             {{ $item->district }},
                                             {{ $item->state }} - {{ $item->pincode }},
-                                        ({{ $item->area_type }})</td>
+                                            ({{ $item->area_type }})
+                                        </td>
                                         <td>{{ $item->identity_no }}</td>
                                         <td>{{ $item->identity_type }}</td>
                                         <td>{{ $item->phone }}</td>
                                         <td>{{ $item->caste }}</td>
-                                        <td>{{$item->religion_category}}</td>
+                                        <td>{{ $item->religion_category }}</td>
                                         <td>{{ $item->religion }}</td>
                                         <td>
                                             {{ $item->dob ? \Carbon\Carbon::parse($item->dob)->age . ' years' : 'Not Found' }}
@@ -255,5 +303,32 @@
         function printTable() {
             window.print();
         }
+    </script>
+     <script>
+        const allDistricts = @json($districtsByState);
+        const oldDistrict = "{{ old('district') }}";
+        const oldState = "{{ old('state') }}";
+
+        function populateDistricts(state) {
+            const districtSelect = document.getElementById('districtSelect');
+            districtSelect.innerHTML = '<option value="">Select District</option>';
+
+            if (allDistricts[state]) {
+                allDistricts[state].forEach(function(district) {
+                    const selected = (district === oldDistrict) ? 'selected' : '';
+                    districtSelect.innerHTML += `<option value="${district}" ${selected}>${district}</option>`;
+                });
+            }
+        }
+
+        // Initial load if editing or validation failed
+        if (oldState) {
+            populateDistricts(oldState);
+        }
+
+        // On state change
+        document.getElementById('stateSelect').addEventListener('change', function() {
+            populateDistricts(this.value);
+        });
     </script>
 @endsection

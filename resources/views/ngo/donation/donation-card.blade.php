@@ -1,9 +1,21 @@
 @extends('ngo.layout.master')
 @section('content')
     <style>
+        .print-h4 {
+            background-color: red !important;
+            color: white !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-size: 28px;
+            word-spacing: 8px;
+            text-align: center;
+        }
+
         @media print {
             body * {
                 visibility: hidden;
+                font-size: 12px;
+
             }
 
             .print-card,
@@ -16,14 +28,42 @@
                 left: 0;
                 top: 0;
                 width: 100%;
+                max-width: 210mm;
+                /* A4 width */
+                padding: 15mm;
+                /* Print-friendly padding */
+                box-sizing: border-box;
             }
 
+            html,
+            body {
+                width: 210mm;
+                height: 297mm;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+
+            .print-h4 {
+                background-color: red !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                font-size: 28px;
+                word-spacing: 8px;
+                text-align: center;
+            }
+
+            @page {
+                size: A4;
+                margin: 20mm;
+            }
             /* Optional: Hide buttons like Print/Download and Language Toggle */
             button,
             .btn,
-            .d-flex.justify-content-between {
-                display: none !important;
-            }
+            {
+            display: none !important;
+        }
         }
     </style>
 
@@ -46,7 +86,7 @@
             <!-- Language Toggle -->
             <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
                 <h5 class="mb-0">
-                    <span data-lang="hi">दान रसीद</span>
+                    <span data-lang="hi">दान कार्ड</span>
                     <span data-lang="en">Donation Card</span>
                 </h5>
                 <div>
@@ -67,7 +107,7 @@
                                 <span data-lang="hi"><b>सोसाइटीज रजिस्ट्रेशन एक्ट 1860 के अंतर्गत पंजीकृत</b></span>
                                 <span data-lang="en"><b>Registered under Societies Registration Act 1860</b></span>
                             </p>
-                            <h4 style="color: red;"><b>
+                            <h4 class="print-h4"><b>
                                     <span data-lang="hi">ज्ञान भारती संस्था</span>
                                     <span data-lang="en">Gyan Bharti Sanstha</span>
                                 </b></h4>
@@ -89,9 +129,6 @@
                                     <span data-lang="hi">| पैन: AAEAG7650B</span>
                                     <span data-lang="en">| PAN: AAEAG7650B</span>
                                 </b></p>
-                            {{-- <p style="margin: 0;"><b>
-
-                                </b></p> --}}
                         </div>
                     </div>
                 </div>
@@ -132,7 +169,7 @@
                         <p><strong>
                                 <span data-lang="hi">पिता/पति का नाम:</span>
                                 <span data-lang="en">Father/Husband's Name:</span>
-                            </strong> {{ $donor->gurdian_name ?? 'Not Found'}}</p>
+                            </strong> {{ $donor->gurdian_name ?? 'Not Found' }}</p>
                     </div>
                 </div>
 
@@ -141,7 +178,7 @@
                         <p><strong>
                                 <span data-lang="hi">पता:</span>
                                 <span data-lang="en">Address:</span>
-                            </strong> {{ $donor->address ?? $donor->donor_village}}</p>
+                            </strong> {{ $donor->address ?? $donor->donor_village }}</p>
                     </div>
                     <div class="col-sm-6">
                         <p>
@@ -182,7 +219,7 @@
                         <p><strong>
                                 <span data-lang="hi">भुगतान का प्रकार नकद/चेक/यूपीआई/अन्य द्वारा:</span>
                                 <span data-lang="en">Payment Method (Cash/Cheque/UPI/Other):</span>
-                            </strong>{{ $donor->payment_method ?? 'Not Found'}}</p>
+                            </strong>{{ $donor->payment_method ?? 'Not Found' }}</p>
                     </div>
                     <div class="col-sm-6">
                         <p><strong>
@@ -215,7 +252,7 @@
                         <p><strong>
                                 <span data-lang="hi">जमाकर्ता का नाम:</span>
                                 <span data-lang="en">Depositor Name:</span>
-                            </strong> {{ $donor->depositor_name ?? 'Not Found'}}</p>
+                            </strong> {{ $donor->depositor_name ?? 'Not Found' }}</p>
                     </div>
                     <div class="col-sm-6">
                         <p>

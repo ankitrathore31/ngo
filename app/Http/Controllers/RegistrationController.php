@@ -293,12 +293,32 @@ class RegistrationController extends Controller
             $queryMember->where('name', 'like', '%' . $request->name . '%');
         }
 
+        if($request->filled('reg_type')){
+            $queryBene->where('reg_type', $request->reg_type);
+            $queryMember->where('reg_type', $request->reg_type);
+        }
+
+        if ($request->filled('block')) {
+            $queryBene->where('block', 'like', '%' . $request->block . '%');
+            $queryMember->where('block', 'like', '%' . $request->block . '%');
+        }
+
+        if ($request->filled('state')) {
+            $queryBene->where('state', $request->state);
+            $queryMember->where('state', $request->state);
+        }
+
+        if ($request->filled('district')) {
+            $queryBene->where('district', $request->district);
+            $queryMember->where('district', $request->district);
+        }
+
         $pendingbene = $queryBene->orderBy('created_at', 'asc')->get();
         $pendingmemeber = $queryMember->orderBy('created_at', 'asc')->get();
         $combined = $pendingbene->merge($pendingmemeber)->sortBy('created_at');
         $data = academic_session::all();
-
-        return view('ngo.registration.pending-reg-list', compact('data', 'pendingbene', 'pendingmemeber', 'combined'));
+        $states = config('states');
+        return view('ngo.registration.pending-reg-list', compact('data', 'pendingbene', 'pendingmemeber', 'combined', 'states'));
     }
 
     public function approveRegistration(Request $request)
@@ -321,12 +341,32 @@ class RegistrationController extends Controller
             $queryMember->where('name', 'like', '%' . $request->name . '%');
         }
 
+           if($request->filled('reg_type')){
+            $queryBene->where('reg_type', $request->reg_type);
+            $queryMember->where('reg_type', $request->reg_type);
+        }
+
+        if ($request->filled('block')) {
+            $queryBene->where('block', 'like', '%' . $request->block . '%');
+            $queryMember->where('block', 'like', '%' . $request->block . '%');
+        }
+
+        if ($request->filled('state')) {
+            $queryBene->where('state', $request->state);
+            $queryMember->where('state', $request->state);
+        }
+
+        if ($request->filled('district')) {
+            $queryBene->where('district', $request->district);
+            $queryMember->where('district', $request->district);
+        }
+
         $approvebeneficiarie = $queryBene->orderBy('created_at', 'asc')->get();
         $approvemember = $queryMember->orderBy('created_at', 'asc')->get();
-
         $data = academic_session::all();
         $combined = $approvebeneficiarie->merge($approvemember)->sortBy('created_at');
-        return view('ngo.registration.apporve-reg-list', compact('data', 'approvebeneficiarie', 'approvemember', 'combined'));
+        $states = config('states');
+        return view('ngo.registration.apporve-reg-list', compact('data', 'approvebeneficiarie', 'approvemember', 'combined','states'));
     }
 
     public function approveStatus(Request $request, $type, $id)
