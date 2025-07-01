@@ -92,7 +92,7 @@
                             <div class="col-md-4 mb-3">
                                 {{-- <label for="session_filter" class="form-label">Select Session</label> --}}
                                 <select name="session_filter" id="session_filter" class="form-control"
-                                    onchange="this.form.submit()">
+                                    >
                                     <option value="">All Sessions</option> <!-- Default option to show all -->
                                     @foreach ($data as $session)
                                         <option value="{{ $session->session_date }}"
@@ -107,7 +107,7 @@
                             <div class="col-md-4 mb-3">
                                 <select id="category_filter" name="category_filter"
                                     class="form-control @error('category_filter') is-invalid @enderror"
-                                    onchange="this.form.submit()">
+                                    >
                                     <option value="">-- Select Facilities Category --</option>
                                     <option value="Education"
                                         {{ request('category_filter') == 'Education' ? 'selected' : '' }}>
@@ -171,7 +171,7 @@
                             <div class="col-md-4 col-sm-6 form-group mb-3">
                                 {{-- <label for="stateSelect" class="form-label">State: <span class="text-danger">*</span></label> --}}
                                 <select class="form-control @error('state') is-invalid @enderror" name="state"
-                                    id="stateSelect" onchange="this.form.submit()">
+                                    id="stateSelect" >
                                     <option value="">Select State</option>
                                     @foreach ($districtsByState as $state => $districts)
                                         <option value="{{ $state }}"
@@ -189,7 +189,7 @@
                                 {{-- <label for="districtSelect" class="form-label">District: <span
                                     class="text-danger">*</span></label> --}}
                                 <select class="form-control @error('district') is-invalid @enderror" name="district"
-                                    id="districtSelect" onchange="this.form.submit()">
+                                    id="districtSelect" >
                                     <option value="">Select District</option>
                                 </select>
                                 @error('district')

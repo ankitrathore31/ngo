@@ -135,36 +135,79 @@
     <div class="container">
         <div class="row">
             <form method="GET" action="{{ route('dontaion-report') }}" class="row g-3 mb-4">
-                <div class="col-md-3 col-sm-4">
-                    <select name="session_filter" id="session_filter" class="form-control" onchange="this.form.submit()">
-                        <option value="">All Sessions</option>
-                        @foreach ($data as $session)
-                            <option value="{{ $session->session_date }}"
-                                {{ request('session_filter') == $session->session_date ? 'selected' : '' }}>
-                                {{ $session->session_date }}
+                <div class="row mb-2">
+                    <div class="col-md-3 col-sm-4">
+                        <select name="session_filter" id="session_filter" class="form-control"
+                            onchange="this.form.submit()">
+                            <option value="">All Sessions</option>
+                            @foreach ($data as $session)
+                                <option value="{{ $session->session_date }}"
+                                    {{ request('session_filter') == $session->session_date ? 'selected' : '' }}>
+                                    {{ $session->session_date }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    {{-- In your form --}}
+                    <div class="col-md-3 col-sm-4">
+                        <input type="date" name="start_date" class="form-control"
+                            value="{{ request('start_date', now()->format('Y-m-d')) }}" placeholder="Start Date">
+                    </div>
+                    <div class="col-md-3 col-sm-4">
+                        <input type="date" name="end_date" class="form-control"
+                            value="{{ request('end_date', now()->format('Y-m-d')) }}" placeholder="End Date">
+                    </div>
+
+                    <div class="col-md-3 col-sm-4">
+                        <select name="donation_type" class="form-control">
+                            <option value="all" {{ request('donation_type') == 'all' ? 'selected' : '' }}>All</option>
+                            <option value="offline" {{ request('donation_type') == 'offline' ? 'selected' : '' }}>Offline
                             </option>
-                        @endforeach
-                    </select>
+                            <option value="online" {{ request('donation_type') == 'online' ? 'selected' : '' }}>Online
+                            </option>
+                        </select>
+                    </div>
                 </div>
-                {{-- In your form --}}
-                <div class="col-md-2 col-sm-4">
-                    <input type="date" name="start_date" class="form-control"
-                        value="{{ request('start_date', now()->format('Y-m-d')) }}" placeholder="Start Date">
+                <div class="row">
+                    @php
+                        $districtsByState = config('districts');
+                    @endphp
+                    <div class="col-md-4 col-sm-6 form-group mb-3">
+                        {{-- <label for="stateSelect" class="form-label">State: <span class="text-danger">*</span></label> --}}
+                        <select class="form-control @error('state') is-invalid @enderror" name="state" id="stateSelect"
+                            onchange="this.form.submit()">
+                            <option value="">Select State</option>
+                            @foreach ($districtsByState as $state => $districts)
+                                <option value="{{ $state }}" {{ old('state') == $state ? 'selected' : '' }}>
+                                    {{ $state }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('state')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="col-md-4 col-sm-6 form-group mb-3">
+                        {{-- <label for="districtSelect" class="form-label">District: <span
+                                    class="text-danger">*</span></label> --}}
+                        <select class="form-control @error('district') is-invalid @enderror" name="district"
+                            id="districtSelect" onchange="this.form.submit()">
+                            <option value="">Select District</option>
+                        </select>
+                        @error('district')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="col-md-4 col-sm-6 form-group mb-3">
+                        {{-- <label for="block" class="form-label">Block: <span class="text-danger">*</span></label> --}}
+                        <input type="text" name="block" id="block"
+                            class="form-control @error('block') is-invalid @enderror" value="{{ old('block') }}"
+                            placeholder="Search by Block">
+                        @error('block')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
                 </div>
-                <div class="col-md-2 col-sm-4">
-                    <input type="date" name="end_date" class="form-control"
-                        value="{{ request('end_date', now()->format('Y-m-d')) }}" placeholder="End Date">
-                </div>
-
-                <div class="col-md-2 col-sm-4">
-                    <select name="donation_type" class="form-control">
-                        <option value="all" {{ request('donation_type') == 'all' ? 'selected' : '' }}>All</option>
-                        <option value="offline" {{ request('donation_type') == 'offline' ? 'selected' : '' }}>Offline
-                        </option>
-                        <option value="online" {{ request('donation_type') == 'online' ? 'selected' : '' }}>Online</option>
-                    </select>
-                </div>
-
                 <div class="col-md-2">
                     <button type="submit" class="btn btn-primary me-1">Search</button>
                     <a href="{{ route('dontaion-report') }}" class="btn btn-info text-white me-1">Reset</a>
@@ -293,4 +336,9 @@
             </div>
         </div>
     </div>
+    <script>
+        function printTable() {
+            window.print();
+        }
+    </script>
 @endsection
