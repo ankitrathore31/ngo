@@ -1,9 +1,29 @@
 @extends('ngo.layout.master')
 @section('content')
     <style>
+        .print-red-bg {
+            background-color: red !important;
+            /* Bootstrap 'bg-danger' color */
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            color: white !important;
+        }
+
+        .print-h4 {
+            background-color: red !important;
+            color: white !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-size: 28px;
+            word-spacing: 8px;
+            text-align: center;
+        }
+
         @media print {
             body * {
                 visibility: hidden;
+                font-size: 12px;
+
             }
 
             .print-card,
@@ -18,12 +38,44 @@
                 width: 100%;
             }
 
+            .print-red-bg {
+                background-color: red !important;
+                /* Bootstrap 'bg-danger' color */
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                color: white !important;
+            }
+
+            .print-h4 {
+                background-color: red !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                font-size: 28px !important;
+                word-spacing: 8px;
+                text-align: center;
+            }
+
+            html,
+            body {
+                width: 210mm;
+                height: 297mm;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+
+            @page {
+                size: A4;
+                margin: 20mm;
+            }
+
             /* Optional: Hide buttons like Print/Download and Language Toggle */
             button,
             .btn,
-            .d-flex.justify-content-between {
-                display: none !important;
-            }
+            {
+            display: none !important;
+        }
         }
     </style>
 
@@ -42,7 +94,7 @@
                 {{ session('success') }}
             </div>
         @endif
-        <div class="container">
+        <div class="container-fluid">
             <!-- Language Toggle -->
             <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
                 <h5 class="mb-0">
@@ -67,8 +119,7 @@
                                 <span data-lang="hi"><b>सोसाइटीज रजिस्ट्रेशन एक्ट 1860 के अंतर्गत पंजीकृत</b></span>
                                 <span data-lang="en"><b>Registered under Societies Registration Act 1860</b></span>
                             </p>
-                            <h4
-                                style="background-color: red; color: white; font-size: 28px; word-spacing: 8px; text-align: center;">
+                            <h4 class="print-h4">
                                 <b>
                                     <span data-lang="hi">ज्ञान भारती संस्था</span>
                                     <span data-lang="en">GYAN BHARTI SANSTHA</span>
@@ -102,21 +153,20 @@
 
                 <!-- Donation Fields -->
                 <div class="row">
-                    <div class="col-sm-6 mb-2">
+                    <div class="col-sm-4 mb-2">
                         <p><strong>
                                 <span data-lang="hi">रसीद क्रमांक:</span>
                                 <span data-lang="en">Receipt No.:</span>
-                            </strong> {{ $donor->receipt_no ?? 'Donation with OnlineCashfree' }}</p>
+                            </strong> {{ $donor->receipt_no ?? 'Donation with OnlineCashfree' }}
+                        </p>
                     </div>
 
-                    {{-- <div class="col-sm-4 mb-2">
-                        <p><strong>
-                                <span data-lang="hi">सेशन: </span>
-                                <span data-lang="en">Session: </span>
-                            </strong> {{ $donor->academic_session }}</p>
-                    </div> --}}
+                    <div class="col-sm-5 text-center mb-2 print-red-bg">
+                        <span data-lang="hi">दान रसीद</span>
+                        <span data-lang="en">Donation Receipt</span>
+                    </div>
 
-                    <div class="col-sm-6 mb-2">
+                    <div class="col-sm-3 mb-2 text-end">
                         <p><strong>
                                 <span data-lang="hi">तारीख: </span>
                                 <span data-lang="en">Date: </span>
@@ -235,24 +285,46 @@
                 </div>
                 <hr>
                 <div class="row justify-content-between align-items-end mt-5">
-                    <div class="col-sm-6 text-center">
+                    <div class="col-sm-4 text-center">
+                        <p>{{ $donor->depositor_name ?? 'Donation with OnlineCashfree' }}</p>
                         <p><strong>
                                 <span data-lang="hi">जमाकर्ता का नाम:</span>
                                 <span data-lang="en">Depositor Name:</span>
                             </strong></p>
-                        <p>{{ $donor->depositor_name ?? 'Donation with OnlineCashfree' }}</p>
+
                         {{-- <hr style="width: 80%; margin: 10px auto 0;">
                         <small>Signature</small> --}}
                     </div>
 
-                    <div class="col-sm-6 text-center">
+                    <div class="col-sm-4 text-center">
+                        <p>{{ $donor->recipient_name ?? 'Donation with OnlineCashfree' }}</p>
                         <p><strong>
                                 <span data-lang="hi">प्राप्तकर्ता का नाम:</span>
                                 <span data-lang="en">Recipient Name:</span>
                             </strong></p>
-                        <p>{{ $donor->recipient_name ?? 'Donation with OnlineCashfree' }}</p>
+
                         {{-- <hr style="width: 80%; margin: 10px auto 0;">
                         <small>Signature</small> --}}
+                    </div>
+                    <div class="col-sm-4 text-center">
+                        @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
+                            <div id="directorSignatureBox" class="mt-2">
+                                <p class="text-success no-print">Attached</p>
+                                <img src="{{ asset($signatures['director']) }}" alt="Director Signature" class="img"
+                                    style="max-height: 100px;">
+                                <br>
+                                <button class="btn btn-danger btn-sm mt-2 no-print"
+                                    onclick="toggleDirector(false)">Remove</button>
+                            </div>
+
+                            <div id="directorShowBtnBox" class="mt-2 d-none no-print">
+                                <button class="btn btn-primary btn-sm" onclick="toggleDirector(true)">Attached
+                                    Signature</button>
+                            </div>
+                        @else
+                            <p class="text-muted mt-2 no-print">Not attached</p>
+                        @endif
+                        <strong>Director Signature with stamp</strong><br>
                     </div>
                 </div>
 

@@ -29,7 +29,6 @@ class StaffController extends Controller
 
     public function staffList(){
         $data = academic_session::all();
-
         return view('ngo.staff.staff-list', compact('data'));
     }
 }

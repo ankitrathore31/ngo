@@ -1,6 +1,25 @@
 @extends('ngo.layout.master')
 @section('content')
     <style>
+        .print-red-bg {
+            background-color: red !important;
+            /* Bootstrap 'bg-danger' color */
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            color: white !important;
+            font-size: 18px;
+        }
+
+        .print-h4 {
+            background-color: red !important;
+            color: white !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-size: 28px;
+            word-spacing: 8px;
+            text-align: center;
+        }
+
         @media print {
             body * {
                 visibility: hidden;
@@ -34,6 +53,25 @@
                 overflow: hidden;
             }
 
+            .print-red-bg {
+                background-color: red !important;
+                /* Bootstrap 'bg-danger' color */
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                color: white !important;
+                
+            }
+
+            .print-h4 {
+                background-color: red !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                font-size: 28px;
+                word-spacing: 8px;
+                text-align: center;
+            }
+
             @page {
                 size: A4;
                 margin: 20mm;
@@ -64,7 +102,7 @@
                 {{ session('success') }}
             </div>
         @endif
-        <div class="container">
+        <div class="container-fluid">
             <!-- Language Toggle -->
             <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
                 <h5 class="mb-0">
@@ -90,7 +128,7 @@
                                     &nbsp; &nbsp;<span>NGO NO. UP/00033062</span>&nbsp; &nbsp;
                                     &nbsp; &nbsp;<span>PAN: AAEAG7650B</span>&nbsp;
                                 </b></p>
-                            <h4 style="color: red;"><b>
+                            <h4 class="print-h4"><b>
                                     <span data-lang="hi">ज्ञान भारती संस्था</span>
                                     <span data-lang="en">GYAN BHARTI SANSTHA</span>
                                 </b></h4>
@@ -121,14 +159,13 @@
                     </div>
 
                     <div class="col-sm-6 mb-2">
-                        <p class="text-center"
-                            style="background-color: red; color: white; font-weight: bold; padding: 5px; border-radius: 10px;">
+                        <p class="text-center  print-red-bg">
                             <span data-lang="hi">सदस्य प्रमाणपत्र</span>
                             <span data-lang="en">Member Certificate </span>
                         </p>
                     </div>
 
-                    <div class="col-sm-3 mb-2">
+                    <div class="col-sm-3 mb-2 text-end">
                         <p><strong>
                                 <span data-lang="hi">तारीख: </span>
                                 <span data-lang="en">Date: </span>
@@ -251,8 +288,8 @@
                     कामना
                     करते हैं।
                 </span>
-                <div class="d-flex justify-content-between align-items-center mt-3">
-                    <div class="col-sm-5 text-center">
+                <div class="d-flex justify-content-end align-items-center mt-3">
+                    {{-- <div class="col-sm-5 text-center">
                         @if (!empty($signatures['program_manager']) && file_exists(public_path($signatures['program_manager'])))
                             <div id="pmSignatureBox" class="mt-2">
                                 <p class="text-success no-print">Attached</p> <!-- This line is hidden in print -->
@@ -266,11 +303,11 @@
                             <p class="text-muted mt-2 no-print">Not attached</p> <!-- Hidden only in print -->
                         @endif
                         <strong>Program Officer & Manager Signature with stamp</strong><br>
-                    </div>
-                    <div class="col-sm-2 text-center">
+                    </div> --}}
+                    {{-- <div class="col-sm-2 text-center">
                         <img src="{{ asset('images/iso.png') }}" alt="Logo" width="100" height="100">
-                    </div>
-                    <div class="col-sm-5 text-center">
+                    </div> --}}
+                    <div class="col-sm-5 text-end">
                         @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
                             <div id="directorSignatureBox" class="mt-2">
                                 <p class="text-success no-print">Attached</p>

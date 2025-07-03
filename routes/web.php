@@ -108,10 +108,7 @@ Route::get('/ngo', [NgoController::class, 'ngo'])
     ->middleware(['auth'])
     ->name('ngo');
 
-// Route::get('/ngo', [NgoController::class, 'allbene']);
-// Route::get('/test-stats', function () {
-//     dd(get_bene_stats());
-// });
+
 Route::controller(NgoController::class)->group(function () {
     Route::post('save-ngo', 'savengo')->middleware('auth')->name('save-ngo');
     Route::get('edit-ngo/{id}', 'editngo')->middleware('auth')->name('edit-ngo');
@@ -140,7 +137,6 @@ Route::controller(SocialActivityController::class)->group(function () {
     Route::get('ngo/edit-event/{id}', 'editEvent')->middleware('auth')->name('edit-event');
     Route::post('ngo/update-event/{id}', 'updateEvent')->middleware('auth')->name('update-event');
 });
-
 
 Route::middleware('auth')->group(function () {
     Route::get('ngo/registration', [RegistrationController::class, 'registration'])->name('registration');
@@ -225,6 +221,7 @@ Route::controller(NoticeController::class)->group(function () {
 Route::controller(StaffController::class)->group(function () {
     Route::get('ngo/add-staff', 'addstaff')->middleware('auth')->name('add-staff');
     Route::get('ngo/staff-list', 'staffList')->middleware('auth')->name('staff-list');
+    
 });
 
 Route::controller(MemberController::class)->group(function () {

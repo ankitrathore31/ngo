@@ -137,8 +137,7 @@
             <form method="GET" action="{{ route('dontaion-report') }}" class="row g-3 mb-4">
                 <div class="row mb-2">
                     <div class="col-md-3 col-sm-4">
-                        <select name="session_filter" id="session_filter" class="form-control"
-                            onchange="this.form.submit()">
+                        <select name="session_filter" id="session_filter" class="form-control">
                             <option value="">All Sessions</option>
                             @foreach ($data as $session)
                                 <option value="{{ $session->session_date }}"
@@ -174,8 +173,7 @@
                     @endphp
                     <div class="col-md-4 col-sm-6 form-group mb-3">
                         {{-- <label for="stateSelect" class="form-label">State: <span class="text-danger">*</span></label> --}}
-                        <select class="form-control @error('state') is-invalid @enderror" name="state" id="stateSelect"
-                            onchange="this.form.submit()">
+                        <select class="form-control @error('state') is-invalid @enderror" name="state" id="stateSelect">
                             <option value="">Select State</option>
                             @foreach ($districtsByState as $state => $districts)
                                 <option value="{{ $state }}" {{ old('state') == $state ? 'selected' : '' }}>
@@ -191,7 +189,7 @@
                         {{-- <label for="districtSelect" class="form-label">District: <span
                                     class="text-danger">*</span></label> --}}
                         <select class="form-control @error('district') is-invalid @enderror" name="district"
-                            id="districtSelect" onchange="this.form.submit()">
+                            id="districtSelect">
                             <option value="">Select District</option>
                         </select>
                         @error('district')
@@ -216,7 +214,6 @@
 
         </div>
     </div>
-
     <div class="container-fluid">
         <div class="card shadow">
             <div class="card-body">
@@ -285,6 +282,33 @@
 
         <div class="card shadow-sm printable">
             <div class="card-body table-responsive">
+
+                {{-- 🔍 Filter Summary (Shown Above Table) --}}
+                @if (
+                    !empty($filters['session']) ||
+                        !empty($filters['state']) ||
+                        !empty($filters['district']) ||
+                        !empty($filters['block']))
+                    <div class="mb-3 p-3 border rounded bg-light">
+                        <h5 class="mb-2 text-black">Traget Record:</h5>
+                        <div class="row">
+                            @if (!empty($filters['session']))
+                                <div class="col-md-3"><strong>Session:</strong> {{ $filters['session'] }}</div>
+                            @endif
+                            @if (!empty($filters['state']))
+                                <div class="col-md-3"><strong>State:</strong> {{ $filters['state'] }}</div>
+                            @endif
+                            @if (!empty($filters['district']))
+                                <div class="col-md-3"><strong>District:</strong> {{ $filters['district'] }}</div>
+                            @endif
+                            @if (!empty($filters['block']))
+                                <div class="col-md-3"><strong>Block:</strong> {{ $filters['block'] }}</div>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+
+                {{-- 📊 Main Table --}}
                 <table class="table table-bordered table-hover align-middle text-center" style="border: 1px solid #000;">
                     <thead class="table-primary" style="border: 1px solid #000;">
                         <tr>
@@ -297,18 +321,17 @@
                             <th>Donation Amount</th>
                             <th>Payment Mode</th>
                             <th>Session</th>
+                            <th>State</th>
+                            <th>District</th>
+                            <th>Block</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        @php
-                            $totalAmount = 0;
-                        @endphp
+                        @php $totalAmount = 0; @endphp
 
                         @foreach ($donations as $item)
-                            @php
-                                $totalAmount += $item->amount;
-                            @endphp
+                            @php $totalAmount += $item->amount; @endphp
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->receipt_no ?? '-' }}</td>
@@ -319,26 +342,56 @@
                                 <td>{{ $item->mobile ?? '-' }}</td>
                                 <td>₹{{ number_format($item->amount, 2) }}</td>
                                 <td>{{ $item->payment_method ?? 'Online cashfree' }}</td>
-                                <td>{{ $item->academic_session }}</td>
+                                <td>{{ $item->academic_session ?? '-' }}</td>
+                                <td>{{ $item->state ?? '-' }}</td>
+                                <td>{{ $item->district ?? '-' }}</td>
+                                <td>{{ $item->block ?? '-' }}</td>
                             </tr>
                         @endforeach
                     </tbody>
 
-                    <!-- Total Row -->
                     <tfoot>
                         <tr style="font-weight: bold; background-color: #f2f2f2;">
                             <td colspan="6" class="text-end">Total Records: {{ $donations->count() }}</td>
                             <td>₹{{ number_format($totalAmount, 2) }}</td>
-                            <td colspan="2">--</td>
+                            <td colspan="5">--</td>
                         </tr>
                     </tfoot>
                 </table>
             </div>
         </div>
     </div>
+
     <script>
         function printTable() {
             window.print();
         }
+    </script>
+    <script>
+        const allDistricts = @json($districtsByState);
+        const oldDistrict = "{{ old('district') }}";
+        const oldState = "{{ old('state') }}";
+
+        function populateDistricts(state) {
+            const districtSelect = document.getElementById('districtSelect');
+            districtSelect.innerHTML = '<option value="">Select District</option>';
+
+            if (allDistricts[state]) {
+                allDistricts[state].forEach(function(district) {
+                    const selected = (district === oldDistrict) ? 'selected' : '';
+                    districtSelect.innerHTML += `<option value="${district}" ${selected}>${district}</option>`;
+                });
+            }
+        }
+
+        // Initial load if editing or validation failed
+        if (oldState) {
+            populateDistricts(oldState);
+        }
+
+        // On state change
+        document.getElementById('stateSelect').addEventListener('change', function() {
+            populateDistricts(this.value);
+        });
     </script>
 @endsection

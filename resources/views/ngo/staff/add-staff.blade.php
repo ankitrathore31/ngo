@@ -1,6 +1,7 @@
 @extends('ngo.layout.master')
 @section('content')
     <style>
+        
         /* ::placeholder {
                 font-size: 8px;
             } */

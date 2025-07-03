@@ -220,7 +220,7 @@ class DonationController extends Controller
             return redirect()->back()->with('error', 'Donation not found.');
         }
         $signatures = Signature::pluck('file_path', 'role');
-        return view('ngo.donation.donation-certificate', compact('donor','signatures'));
+        return view('ngo.donation.donation-certificate', compact('donor', 'signatures'));
     }
 
 
@@ -358,6 +358,22 @@ class DonationController extends Controller
             // $onlineQuery->where('academic_session', $request->input('session_filter'));
         }
 
+        // Add state, district, block filters
+        if ($request->filled('state')) {
+            $offlineQuery->where('state', $request->input('state'));
+            $onlineQuery->where('state', $request->input('state'));
+        }
+
+        if ($request->filled('district')) {
+            $offlineQuery->where('district', $request->input('district'));
+            $onlineQuery->where('district', $request->input('district'));
+        }
+
+        if ($request->filled('block')) {
+            $offlineQuery->where('block', 'like', '%' . $request->input('block') . '%');
+            $onlineQuery->where('block', 'like', '%' . $request->input('block') . '%');
+        }
+
         $offlineQuery->whereBetween('date', [$startDate, $endDate]);
         $onlineQuery->whereBetween('date', [$startDate, $endDate]);
 
@@ -390,6 +406,13 @@ class DonationController extends Controller
             + donor_data::where('status', 'Successful')
             ->whereDate('date', now())->sum('amount');
 
+        // Prepare filter values for display
+        $filters = [
+            'session' => $request->input('session_filter'),
+            'state' => $request->input('state'),
+            'district' => $request->input('district'),
+            'block' => $request->input('block'),
+        ];
 
         return view('ngo.donation.donation-report', compact(
             'data',
@@ -398,7 +421,8 @@ class DonationController extends Controller
             'thisYear',
             'thisMonth',
             'today',
-            'rangeDonation'
+            'rangeDonation',
+            'filters'
         ));
     }
 }
