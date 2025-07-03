@@ -59,7 +59,7 @@
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
                 color: white !important;
-                
+
             }
 
             .print-h4 {
@@ -282,12 +282,14 @@
 
                 </div>
                 <span data-lang="en">We have full faith in you that you will cooperate with full honesty and dedication in
-                    the promotion, expansion and social work of the organization. We wish you a bright future.
-                    His working area is <strong>{{ $record->working_area}}</strong>.</span>
+                    the promotion, expansion and social work of the organization. His working area is
+                    <strong>{{ $record->working_area }}</strong>. We wish you a bright future.
+                </span>
                 <span data-lang="hi">के रूप में नामित हैं। हमें आप पर पूर्ण विश्वास है कि आप संस्था के प्रचार-प्रसार,
-                    विस्तार एवं सामाजिक कार्यों में पूर्ण ईमानदारी एवं निष्ठा से सहयोग करेंगे। हम आपके उज्ज्वल भविष्य की
+                    विस्तार एवं सामाजिक कार्यों में पूर्ण ईमानदारी एवं निष्ठा से सहयोग करेंगे। उनका कार्य क्षेत्र <strong>
+                        {{ $record->working_area }}</strong> है हम आपके उज्ज्वल भविष्य की
                     कामना
-                    करते हैं। उनका कार्य क्षेत्र <strong> {{ $record->working_area}}</strong> है
+                    करते हैं।
                 </span>
                 <div class="d-flex justify-content-end align-items-center mt-3">
                     {{-- <div class="col-sm-5 text-center">
@@ -326,7 +328,10 @@
                         @else
                             <p class="text-muted mt-2 no-print">Not attached</p>
                         @endif
-                        <strong>Director Signature with stamp</strong><br>
+                        <strong>Digitally Signed By
+                            MANOJ KUMAR RATHOR
+                            DIRECTOR
+                        </strong><br>
                     </div>
                 </div>
             </div>
