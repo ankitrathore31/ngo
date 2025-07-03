@@ -1,6 +1,24 @@
 @extends('ngo.layout.master')
 @section('content')
     <style>
+        .print-red-bg {
+            background-color: red !important;
+            /* Bootstrap 'bg-danger' color */
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            color: white !important;
+        }
+
+        .print-h4 {
+            background-color: red !important;
+            color: white !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-size: 28px;
+            word-spacing: 8px;
+            text-align: center;
+        }
+
         @media print {
             @page {
                 size: A4 portrait;
@@ -35,6 +53,24 @@
                 line-height: 1.1;
             }
 
+            .print-red-bg {
+                background-color: red !important;
+                /* Bootstrap 'bg-danger' color */
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                color: white !important;
+            }
+
+            .print-h4 {
+                background-color: red !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                font-size: 28px;
+                word-spacing: 8px;
+                text-align: center;
+            }
+
             .print-area strong {
                 font-weight: 300;
             }
@@ -67,7 +103,7 @@
             </div>
         @endif
         <!-- Language Toggle -->
-        <div class="container">
+        <div class="container-fluid">
             <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
                 <h5 class="mb-0">
                     {{-- <span data-lang="hi">दान रसीद</span> --}}
@@ -98,7 +134,7 @@
                                         &nbsp; &nbsp;<span>NGO NO. UP/00033062</span>&nbsp; &nbsp;
                                         &nbsp; &nbsp;<span>PAN: AAEAG7650B</span>&nbsp;
                                     </b></p>
-                                <h4 style="background-color: red; color:white;"><b>
+                                <h4 class="print-h4"><b>
                                         <span data-lang="hi">ज्ञान भारती संस्था</span>
                                         <span data-lang="en">GYAN BHARTI SANSTHA</span>
                                     </b></h4>
@@ -124,18 +160,18 @@
                     <div class=" p-4 lh-lg" style="font-size: 16px;">
                         <!-- Header Section -->
                         <div class="row justify-content-between mb-3">
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                                 <strong><span data-lang="hi">पत्र क्रमांक:</span> <span data-lang="en">Letter
                                         No.:</span></strong>
                                 {{ $record->registration_no }}
                             </div>
-                            <div class="col-sm-6 text-center">
-                        <div class="bg-danger text-white fw-bold py-2 rounded">
-                            <span >मनोनयन प्रमाण</span>
-                            {{-- <span data-lang="en">Nomination Certificate</span> --}}
-                        </div>
-                    </div>
-                            <div class="col-sm-6 text-end">
+                            <div class="col-sm-5 text-center">
+                                <div class="print-red-bg">
+                                    <span>मनोनयन प्रमाण</span>
+                                    {{-- <span data-lang="en">Nomination Certificate</span> --}}
+                                </div>
+                            </div>
+                            <div class="col-sm-3 text-end">
                                 <strong><span data-lang="hi">तारीख:</span> <span data-lang="en">Date:</span></strong>
                                 {{ \Carbon\Carbon::parse($record->registration_date)->format('d-m-Y') }}
                             </div>
@@ -163,26 +199,7 @@
                     </div>
 
                     <!-- Signature Section -->
-                    <div class="d-flex justify-content-between align-items-center mt-5">
-                        <div class="col-sm-5 text-center">
-                            @if (!empty($signatures['program_manager']) && file_exists(public_path($signatures['program_manager'])))
-                                <div id="pmSignatureBox" class="mt-2">
-                                    <p class="text-success no-print">Attached</p> <!-- This line is hidden in print -->
-                                    <img src="{{ asset($signatures['program_manager']) }}" alt="PM Signature"
-                                        class="img" style="max-height: 100px;"> <!-- This will print -->
-                                    <br>
-                                    <button class="btn btn-danger btn-sm mt-2 no-print"
-                                        onclick="togglePM(false)">Remove</button>
-                                </div>
-                            @else
-                                <p class="text-muted mt-2 no-print">Not attached</p> <!-- Hidden only in print -->
-                            @endif
-                            <strong>Program Officer & Manager Signature with stamp</strong><br>
-                        </div>
-                        {{-- <div class="col-sm-4">
-                            <strong><span data-lang="hi">आवेदक हस्ताक्षर</span><br><span data-lang="en">Applicant's
-                                    Signature</span></strong>
-                        </div> --}}
+                    <div class="d-flex justify-content-end align-items-end mt-5">
                         <div class="col-sm-5 text-center">
                             @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
                                 <div id="directorSignatureBox" class="mt-2">
