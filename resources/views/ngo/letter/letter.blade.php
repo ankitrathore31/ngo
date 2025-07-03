@@ -1,64 +1,102 @@
 @extends('ngo.layout.master')
 @section('content')
     <style>
+        .letter-container {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Optional: If you want a subtle border */
+        .letter-container.border {
+            border: 1px solid #ccc;
+        }
+
+        /* Force consistent font scaling on screen */
+        body {
+            background: #f2f2f2;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        /* PRINT STYLES */
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 15mm;
+                margin: 0;
             }
 
             body {
-                margin: 0;
-                padding: 0;
-                font-family: 'Noto Sans Devanagari', 'Arial', sans-serif;
-                font-size: 12pt;
-                color: #000000;
+                background: white !important;
             }
 
             body * {
                 visibility: hidden;
             }
 
-            .print-area,
-            .print-area * {
+            .letter-container,
+            .letter-container * {
                 visibility: visible;
             }
 
-            .print-area {
+            .letter-container {
+                margin: 0;
+                padding: 20mm;
+                width: 210mm;
+                min-height: 297mm;
+                box-shadow: none;
                 position: absolute;
                 left: 0;
                 top: 0;
-                width: 100%;
-                box-sizing: border-box;
             }
 
-            h4,
-            h5,
-            h6 {
-                font-size: 15pt !important;
-                font-weight: 600 !important;
-                margin: 4px 0;
+            .print-red-bg {
+                background-color: red !important;
+                /* Bootstrap 'bg-danger' color */
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                color: white !important;
             }
 
-            p,
-            span,
-            b,
-            strong {
-                font-weight: 500 !important;
-                font-size: 12pt !important;
-                line-height: 1.5 !important;
+            .print-h4 {
+                background-color: red !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                font-size: 28px;
+                word-spacing: 8px;
+                text-align: center;
             }
 
             .no-print {
                 display: none !important;
             }
+        }
 
-            img {
-                max-height: 100px;
-            }
+        .print-red-bg {
+            background-color: red !important;
+            /* Bootstrap 'bg-danger' color */
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            color: white !important;
+        }
+
+        .print-h4 {
+            background-color: red !important;
+            color: white !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-size: 28px;
+            word-spacing: 8px;
+            text-align: center;
         }
     </style>
-
     <div class="wrapper">
         <div class="d-flex justify-content-between align-item-centre mb-0 mt-4">
             <h5 class="mb-0"> Letter</h5>
@@ -85,8 +123,9 @@
                     <button class="btn btn-sm btn-outline-success" onclick="setLanguage('hi')">हिंदी</button>
                 </div>
             </div>
-            <div class="letterhead print-area">
-                <div class="card shadow rounded p-4 my-4 border border-dark">
+            <div class="letter-container border print-area">
+                <div class="p-4">
+
                     <div class="text-center mb-4 border-bottom pb-3 mb-2">
                         <!-- Header -->
                         <div class="row">
@@ -106,15 +145,14 @@
                                     <span>PAN: AAEAG7650B</span>
                                 </p>
 
-                                <h4 class="text-center w-100"
-                                    style=" margin: 0; background-color: red; color:white; font-size: 28px; font-weight: 700; word-spacing: 12px; display: flex; justify-content: center; flex-wrap: wrap; gap: 20px;">
+                                <h4 class="text-center print-h4" style="margin: 0;">
                                     <span data-lang="hi" style="font-size: inherit; font-weight: inherit;">ज्ञान भारती
                                         संस्था</span>
                                     <span data-lang="en" style="font-size: inherit; font-weight: inherit;">GYAN BHARTI
                                         SANSTHA</span>
                                 </h4>
 
-                                <h6 class="w-100" style="color: blue; font-weight: bold;">
+                                <h6 class="w-100" style="color: blue; font-weight: bold; margin: 0;">
                                     <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर प्रदेश -
                                         262121</span><br>
                                     <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit, UP -
