@@ -1,56 +1,59 @@
 @extends('ngo.layout.master')
 @section('content')
     <style>
-        .print-red-bg {
-            background-color: red !important;
-            /* Bootstrap 'bg-danger' color */
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-            color: white !important;
+        .letter-container {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
         }
 
-        .print-h4 {
-            background-color: red !important;
-            color: white !important;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-            font-size: 28px;
-            word-spacing: 8px;
-            text-align: center;
+        /* Optional: If you want a subtle border */
+        .letter-container.border {
+            border: 1px solid #ccc;
         }
 
+        /* Force consistent font scaling on screen */
+        body {
+            background: #f2f2f2;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        /* PRINT STYLES */
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 8mm;
+                margin: 0;
             }
 
             body {
-                margin: 0;
-                padding: 0;
-                /* font-family: 'Noto Sans Devanagari', 'Arial', sans-serif; */
+                background: white !important;
             }
 
             body * {
                 visibility: hidden;
             }
 
-            .print-area,
-            .print-area * {
+            .letter-container,
+            .letter-container * {
                 visibility: visible;
             }
 
-            .print-area {
+            .letter-container {
+                margin: 0;
+                padding: 20mm;
+                width: 210mm;
+                min-height: 297mm;
+                box-shadow: none;
                 position: absolute;
                 left: 0;
                 top: 0;
-                width: 100%;
-                max-width: 210mm;
-                padding: 5mm;
-                box-sizing: border-box;
-                color: #000;
-                font-size: 14px;
-                line-height: 1.1;
             }
 
             .print-red-bg {
@@ -71,18 +74,27 @@
                 text-align: center;
             }
 
-            .print-area strong {
-                font-weight: 300;
-            }
-
-            .bg-danger {
-                background-color: #d9534f !important;
-                color: #fff !important;
-            }
-
             .no-print {
                 display: none !important;
             }
+        }
+
+        .print-red-bg {
+            background-color: red !important;
+            /* Bootstrap 'bg-danger' color */
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            color: white !important;
+        }
+
+        .print-h4 {
+            background-color: red !important;
+            color: white !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-size: 28px;
+            word-spacing: 8px;
+            text-align: center;
         }
     </style>
 
@@ -103,7 +115,7 @@
             </div>
         @endif
         <!-- Language Toggle -->
-        <div class="container-fluid">
+        <div class="container">
             <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
                 <h5 class="mb-0">
                     {{-- <span data-lang="hi">दान रसीद</span> --}}
@@ -115,8 +127,9 @@
                     <button class="btn btn-sm btn-outline-success" onclick="setLanguage('hi')">हिंदी</button>
                 </div>
             </div>
-            <div class="letterhead print-area">
-                <div class="card shadow rounded p-4 my-4 border border-dark">
+            <div class="letter-container border print-area">
+                <div class="p-4">
+
                     <div class="text-center mb-4 border-bottom pb-3 mb-2">
                         <!-- Header -->
                         <div class="row">
@@ -162,7 +175,7 @@
                         <div class="row justify-content-between mb-3">
                             <div class="col-sm-4">
                                 <strong><span data-lang="hi">पत्र क्रमांक:</span> <span data-lang="en">Letter
-                                        No.:</span></strong>
+                                        No.:</span></strong><br>
                                 {{ $record->registration_no }}
                             </div>
                             <div class="col-sm-5 text-center">
@@ -172,7 +185,8 @@
                                 </div>
                             </div>
                             <div class="col-sm-3 text-end">
-                                <strong><span data-lang="hi">तारीख:</span> <span data-lang="en">Date:</span></strong>
+                                <strong><span data-lang="hi">जारी तिथि:</span> <span data-lang="en">Issue
+                                        Date:</span></strong><br>
                                 {{ \Carbon\Carbon::parse($record->registration_date)->format('d-m-Y') }}
                             </div>
                         </div>
@@ -184,7 +198,8 @@
                             देश <strong>{{ $record->country }}</strong> को <strong>{{ $record->position }}</strong>
                             के रूप में नामित किया गया है। हमें आप पर पूर्ण विश्वास है कि आप संस्था के प्रचार-प्रसार,
                             विस्तार एवं सामाजिक कार्यों में पूर्ण ईमानदारी एवं निष्ठा से सहयोग करेंगे।
-                            हम आपके उज्ज्वल भविष्य की कामना करते हैं।
+                            हम आपके उज्ज्वल भविष्य की कामना करते हैं। उनका कार्य क्षेत्र
+                            <strong>{{ $record->working_area }} </strong>है
                         </span>
 
                         <span data-lang="en">
@@ -195,6 +210,7 @@
                             has been nominated as <strong>{{ $record->position }}</strong> in Gyan Bharti Sanstha.
                             We have full faith in you that you will cooperate with full honesty and dedication in the
                             promotion, expansion and social work of the organization. We wish you a bright future.
+                            His working area is <strong>{{ $record->working_area }}</strong>.
                         </span>
                     </div>
 
