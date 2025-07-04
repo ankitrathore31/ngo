@@ -385,7 +385,10 @@
                         @else
                             <p class="text-muted mt-2 no-print">Not attached</p> <!-- Hidden only in print -->
                         @endif
-                        <strong>Program Officer & Program Manager Signature with stamp</strong><br>
+                        <strong>Digitally Signed By <br>
+                            DROPTI DEVI RATHOR <br>
+                            PROGRAM OFFICER
+                        </strong><br>
                     </div>
 
                     <div class="col-sm-4 text-center">
@@ -406,7 +409,10 @@
                         @else
                             <p class="text-muted mt-2 no-print">Not attached</p>
                         @endif
-                        <strong>Director Signature with stamp</strong><br>
+                        <strong>Digitally Signed By <br>
+                            MANOJ KUMAR RATHOR <br>
+                            DIRECTOR
+                        </strong><br>
                     </div>
                 </div>
 
