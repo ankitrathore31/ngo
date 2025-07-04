@@ -293,53 +293,6 @@ class DonationController extends Controller
         return view('ngo.donation.all-donation-list', compact('data', 'donations'));
     }
 
-
-    public function TTDonationReport(Request $request)
-    {
-        $request->validate([
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-        ]);
-
-        $data = academic_session::all(); // session list
-
-        $donationsQuery = Donation::query(); // base query
-
-        // Apply filters (session + date range)
-        if ($request->filled('session_filter')) {
-            $donationsQuery->where('session', $request->input('session_filter'));
-        }
-
-        if ($request->filled('start_date')) {
-            $donationsQuery->whereDate('date', '>=', $request->input('start_date'));
-        }
-
-        if ($request->filled('end_date')) {
-            $donationsQuery->whereDate('date', '<=', $request->input('end_date'));
-        }
-
-        $filteredDonations = $donationsQuery->get();
-
-        // 🟢 This is your "Range Donation"
-        $rangeDonation = $filteredDonations->sum('amount');
-
-        // Unfiltered general stats
-        $totalDonation = Donation::sum('amount');
-        $thisYear = Donation::whereYear('date', now()->year)->sum('amount');
-        $thisMonth = Donation::whereYear('date', now()->year)->whereMonth('date', now()->month)->sum('amount');
-        $today = Donation::whereDate('date', now())->sum('amount');
-
-        return view('ngo.donation.donation-report', compact(
-            'data',
-            'totalDonation',
-            'thisYear',
-            'thisMonth',
-            'today',
-            'rangeDonation'
-        ));
-    }
-
-
     public function DonationReport(Request $request)
     {
         $data = academic_session::all(); // For session dropdown
