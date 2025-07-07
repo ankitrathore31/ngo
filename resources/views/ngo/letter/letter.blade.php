@@ -227,7 +227,7 @@
                                 <strong>Program Officer & Program Manager Signature with stamp</strong><br>
                             </div> --}}
 
-                            <div class="col-sm-4 text-center">
+                            <div class="col-sm-5 text-center">
                                 @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
                                     <div id="directorSignatureBox" class="mt-2">
                                         <p class="text-success no-print">Attached</p>

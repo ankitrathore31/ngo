@@ -314,4 +314,10 @@ class HomeControlller extends Controller
 
         return response()->json($areaTypeCounts);
     }
+
+      public function eligibility()
+    {
+        return view('home.pages.eligibility');
+    }
+
 }
