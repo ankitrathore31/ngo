@@ -72,6 +72,7 @@ Route::controller(HomeControlller::class)->group(function () {
     Route::post('/Check-Facilities', 'showfacilities')->name('check-facilities');
     Route::get('/working-area/{text}', 'showarea')->name('show-area');
     Route::get('/filter-area-counts',  'filterAreaCounts');
+    Route::get('/eligibility', 'eligibility')->name('eligibility');
 });
 
 
@@ -187,7 +188,6 @@ Route::controller(BeneficiarieController::class)->group(function () {
     Route::get('ngo/show-beneficiarie-facilities/{beneficiarie_id}/survey/{survey_id}', 'showbeneficiariefacilities')->middleware('auth')->name('show-beneficiarie-facilities');
     Route::get('ngo/edit-facilities/{beneficiarie_id}/survey/{survey_id}', 'editFacilities')->middleware('auth')->name('edit-facilities');
     Route::post('ngo/update-facilities/{beneficiarie_id}/survey/{survey_id}', 'updateFacilities')->middleware('auth')->name('update-facilities');
-    // Route::get('ngo/delete-facilities/{beneficiarie_id}/survey/{survey_id}', 'deletefacilities')->middleware('auth')->name('delete-facilities');
     Route::get('ngo/distribute-beneficiarie-facilities/{beneficiarie_id}/survey/{survey_id}', 'distributebeneficiarieFacilities')->middleware('auth')->name('distribute-beneficiarie-facilities');
     Route::post('ngo/store-distribute-facilities/{beneficiarie_id}/survey/{survey_id}', 'storedistributefacilities')->middleware('auth')->name('store-distribute-facilities');
     Route::get('ngo/distributed-facilities', 'distributefacilities')->middleware('auth')->name('distributed-list');
