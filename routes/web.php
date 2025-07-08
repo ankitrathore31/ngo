@@ -295,6 +295,7 @@ Route::controller(SignatureController::class)->group(function () {
 Route::controller(IdcardController::class)->group(function(){
     Route::get('ngo/member-idcard', 'MemberIdcard')->middleware('auth')->name('member-idcard');
     Route::get('ngo/beneficiary-idcard', 'BeneficiaryIdcard')->name('beneficiary-idcard');
+    Route::get('ngo/donor-idcard', 'DonorIdcard')->name('donor-idcard');
 });
 
 

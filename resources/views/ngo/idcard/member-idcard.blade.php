@@ -133,28 +133,11 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3 col-sm-6 mb-3">
-                            <div class="form-group">
-                                {{-- <label for="reg_type" class="form-label">Registraition Type <span
-                                        class="text-danger">*</span></label> --}}
-                                <select class="form-control" id="reg_type" name="reg_type">
-                                    <option selected disabled>Select Registration Type</option>
-                                    <option value="Beneficiaries"
-                                        {{ old('reg_type') == 'Beneficiaries' ? 'selected' : '' }}>
-                                        Beneficiaries
-                                    </option>
-                                    <option value="Member" {{ old('reg_type') == 'Member' ? 'selected' : '' }}>Member
-                                    </option>
-                                </select>
-                                @error('reg_type')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
+                      
                         @php
                             $districtsByState = config('districts');
                         @endphp
-                        <div class="col-md-3 col-sm-6 form-group mb-3">
+                        <div class="col-md-4 col-sm-6 form-group mb-3">
                             {{-- <label for="stateSelect" class="form-label">State: <span class="text-danger">*</span></label> --}}
                             <select class="form-control @error('state') is-invalid @enderror" name="state"
                                 id="stateSelect">
@@ -170,7 +153,7 @@
                             @enderror
 
                         </div>
-                        <div class="col-md-3 col-sm-6 form-group mb-3">
+                        <div class="col-md-4 col-sm-6 form-group mb-3">
                             {{-- <label for="districtSelect" class="form-label">District: <span
                                     class="text-danger">*</span></label> --}}
                             <select class="form-control @error('district') is-invalid @enderror" name="district"
@@ -181,7 +164,7 @@
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
-                        <div class="col-md-3 col-sm-6 form-group mb-3">
+                        <div class="col-md-4 col-sm-6 form-group mb-3">
                             {{-- <label for="block" class="form-label">Block: <span class="text-danger">*</span></label> --}}
                             <input type="text" name="block" id="block"
                                 class="form-control @error('block') is-invalid @enderror" value="{{ old('block') }}"
@@ -224,7 +207,7 @@
                                 <p><strong>Father/Husband:</strong> {{ $record->gurdian_name }}</p>
                                 <p><strong>Mobile No:</strong> {{ $record->phone }}</p>
                                 {{-- <p><strong>Type:</strong> {{ $record->reg_type }}</p> --}}
-                                <p><strong>Session:</strong>{{$record->academic_session}}</p> 
+                                <p><strong>Session:</strong>{{ $record->academic_session }}</p>
                                 <p><strong>Position Name:</strong> {{ $record->position }}</p>
                                 <p><strong>Working Area:</strong> {{ $record->working_area }}</p>
                             </div>
@@ -248,13 +231,13 @@
 
                                     <div id="directorShowBtnBox" class="mt-2 d-none no-print">
                                         <button class="btn btn-primary btn-sm" onclick="toggleDirector(true)">Attached
-                                        Signature</button>
+                                            Signature</button>
                                     </div>
                                 @else
                                     <p class="text-muted mt-2 no-print">Not attached</p>
                                 @endif
                                 Director Signature
-                    
+
                             </div>
                         </div>
                     </div>
@@ -262,15 +245,42 @@
             </div>
         </div>
     </div>
-      <script>
-            function togglePM(show) {
-                document.getElementById('pmSignatureBox').classList.toggle('d-none', !show);
-                document.getElementById('pmShowBtnBox').classList.toggle('d-none', show);
-            }
+    <script>
+        function togglePM(show) {
+            document.getElementById('pmSignatureBox').classList.toggle('d-none', !show);
+            document.getElementById('pmShowBtnBox').classList.toggle('d-none', show);
+        }
 
-            function toggleDirector(show) {
-                document.getElementById('directorSignatureBox').classList.toggle('d-none', !show);
-                document.getElementById('directorShowBtnBox').classList.toggle('d-none', show);
+        function toggleDirector(show) {
+            document.getElementById('directorSignatureBox').classList.toggle('d-none', !show);
+            document.getElementById('directorShowBtnBox').classList.toggle('d-none', show);
+        }
+    </script>
+    <script>
+        const allDistricts = @json($districtsByState);
+        const oldDistrict = "{{ old('district') }}";
+        const oldState = "{{ old('state') }}";
+
+        function populateDistricts(state) {
+            const districtSelect = document.getElementById('districtSelect');
+            districtSelect.innerHTML = '<option value="">Select District</option>';
+
+            if (allDistricts[state]) {
+                allDistricts[state].forEach(function(district) {
+                    const selected = (district === oldDistrict) ? 'selected' : '';
+                    districtSelect.innerHTML += `<option value="${district}" ${selected}>${district}</option>`;
+                });
             }
-        </script>
+        }
+
+        // Initial load if editing or validation failed
+        if (oldState) {
+            populateDistricts(oldState);
+        }
+
+        // On state change
+        document.getElementById('stateSelect').addEventListener('change', function() {
+            populateDistricts(this.value);
+        });
+    </script>
 @endsection

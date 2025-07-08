@@ -159,7 +159,7 @@
                     </div>
                     <div class="row d-flex justify-content-between">
                         <div class="col-sm-4">
-                            <strong>Receipt No:</strong> {{ $donor->receipt_no }}
+                            <strong>Receipt No:</strong> {{ $donor->receipt_no ?? 'Donation with OnlineCashfree' }}
                         </div>
 
                         <div class="col-sm-4">
@@ -181,7 +181,7 @@
                         <strong>ज्ञान भारती संस्था</strong> को
                         <strong class="text-success">₹{{ $donor->amount }}</strong>
                         की राशि <strong>{{ $donor->name }}</strong>
-                        पुत्र/पत्नी <strong>{{ $donor->gurdian_name }}</strong>, निवासी
+                        पुत्र/पत्नी <strong>{{ $donor->gurdian_name ?? 'Donation with OnlineCashfree' }}</strong>, निवासी
                         <strong>{{ $donor->address }}</strong>
                         द्वारा दान स्वरूप प्राप्त हुई है। संस्था इस धनराशि का उपयोग
                         गरीब, असहाय एवं निराश्रित लोगों के कल्याण हेतु करेगी। संस्था
@@ -194,14 +194,14 @@
                         This is to certify that <strong>Gyan Bharti Sanstha</strong> has received a donation of
                         <strong class="text-success">₹{{ $donor->amount }}</strong> from
                         <strong>{{ $donor->name }}</strong>,
-                        S/O or W/O <strong>{{ $donor->gurdian_name }}</strong>, resident of
+                        S/O or W/O <strong>{{ $donor->gurdian_name ?? 'Donation with OnlineCashfree' }}</strong>, resident of
                         <strong>{{ $donor->address }}</strong>. The Sanstha will utilize this amount for the welfare
                         of the poor, helpless and destitute. We sincerely thank you and wish you a bright future.
                     </p>
 
                     <div class="d-flex justify-content-between align-items-center mt-4">
                         <div>
-                            <strong>Payment Method:</strong> {{ ucfirst($donor->payment_method) }}
+                            <strong>Payment Method:</strong> {{ ucfirst($donor->payment_method) ?? 'Donation with OnlineCashfree' }}
                         </div>
 
                         <div class="col-sm-5 text-center">

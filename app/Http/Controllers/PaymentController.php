@@ -43,7 +43,7 @@ class PaymentController extends Controller
         $donor->district    = $request->donor_district ?? null;
         $donor->block        = $request->block ?? null;
         $donor->donor_pincode     = $request->donor_pincode ?? null;
-        $donor->donor_village     = $request->donor_village ?? null;
+        $donor->address     = $request->donor_village ?? null;
         $donor->donor_idtype      = $request->donor_idtype ?? null;
         $donor->donor_aadhar      = $request->donor_aadhar ?? null;
         $donor->donor_pancard     = $request->donor_pancard ?? null;
