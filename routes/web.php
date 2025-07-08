@@ -11,6 +11,7 @@ use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\NgoController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\IdcardController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\SignatureController;
@@ -289,6 +290,11 @@ Route::controller(SignatureController::class)->group(function () {
     Route::get('ngo/signature', 'addSignature')->middleware('auth')->name('signature');
     Route::post('ngo/save-signature', 'saveSignature')->middleware('auth')->name('save-signature');
 
+});
+
+Route::controller(IdcardController::class)->group(function(){
+    Route::get('ngo/member-idcard', 'MemberIdcard')->middleware('auth')->name('member-idcard');
+    Route::get('ngo/beneficiary-idcard', 'BeneficiaryIdcard')->name('beneficiary-idcard');
 });
 
 

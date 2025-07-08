@@ -270,7 +270,7 @@
 
          <div class="col-md-2 mb-3">
             <a href="{{ route('eligibility') }}" class="btn btn-info w-100">
-                Eligibility
+                Beneficiary Eligibility
             </a>
         </div>
 
