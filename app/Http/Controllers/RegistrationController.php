@@ -126,7 +126,7 @@ class RegistrationController extends Controller
                 if ($request->hasFile('image')) {
                     $image = $request->file('image');
                     $imageName = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move(public_path('beneficiaries_images'), $imageName);
+                    $image->move(public_path('benefries_images'), $imageName);
                     $data['image'] = $imageName;
                 }
 
@@ -134,7 +134,7 @@ class RegistrationController extends Controller
                 if ($request->hasFile('id_document')) {
                     $idDoc = $request->file('id_document');
                     $idDocName = time() . '_iddoc.' . $idDoc->getClientOriginalExtension();
-                    $idDoc->move(public_path('beneficiaries_images'), $idDocName);
+                    $idDoc->move(public_path('benefries_images'), $idDocName);
                     $data['id_document'] = $idDocName;
                 }
 
@@ -812,7 +812,7 @@ class RegistrationController extends Controller
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('beneficiaries_images'), $imageName);
+                $image->move(public_path('benefries_images'), $imageName);
                 $data['image'] = $imageName;
             }
 
@@ -820,7 +820,7 @@ class RegistrationController extends Controller
             if ($request->hasFile('id_document')) {
                 $idDoc = $request->file('id_document');
                 $idDocName = time() . '_iddoc.' . $idDoc->getClientOriginalExtension();
-                $idDoc->move(public_path('beneficiaries_images'), $idDocName);
+                $idDoc->move(public_path('benefries_images'), $idDocName);
                 $data['id_document'] = $idDocName;
             }
 
