@@ -73,7 +73,6 @@
                                             <label for="village" class="form-label">Donor's Village/Locality:</label>
                                             <textarea name="donor_village" id="village" class="form-control"></textarea>
                                         </div>
-
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6 mb-3">

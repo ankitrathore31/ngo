@@ -80,12 +80,12 @@
     </style>
 
     <div class="wrapper">
-        <div class="d-flex justify-content-between align-item-centre mb-0 mt-3">
+        <div class="d-flex justify-content-between align-donor-centre mb-0 mt-3">
             <h5 class="mb-0">Donation</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
-                    <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">View Donation</li>
+                    <li class="breadcrumb-donor"><a href="{{ url('dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-donor active" aria-current="page">View Donation</li>
                 </ol>
             </nav>
         </div>
@@ -195,7 +195,10 @@
                         <p><strong>
                                 <span data-lang="hi">पता:</span>
                                 <span data-lang="en">Address:</span>
-                            </strong> {{ $donor->address ?? $donor->donor_village }}</p>
+                            </strong>{{ $donor->address }}
+                            {{ $donor->block }}
+                            {{ $donor->district }}
+                            {{ $donor->state }}</p>
                     </div>
                     <div class="col-sm-6">
                         <p>

@@ -262,13 +262,24 @@ class DonationController extends Controller
 
     public function allDonations(Request $request)
     {
-        $online = donor_data::where('status', 'Successful');
+         $online = donor_data::where('status', 'Successful');
 
         if ($request->filled('name')) {
             $online->where('name', 'like', '%' . $request->name . '%');
         }
         if ($request->filled('session_filter')) {
             $online->where('academic_session', $request->session_filter);
+        }
+        if ($request->filled('block')) {
+            $online->where('block', 'like', '%' . $request->block . '%');
+        }
+
+        if ($request->filled('state')) {
+            $online->where('state', $request->state);
+        }
+
+        if ($request->filled('district')) {
+            $online->where('district', $request->district);
         }
 
         // Apply filters to Donation (offline donations)
@@ -280,6 +291,17 @@ class DonationController extends Controller
         if ($request->filled('session_filter')) {
             $offline->where('academic_session', $request->session_filter);
         }
+        if ($request->filled('block')) {
+            $offline->where('block', 'like', '%' . $request->block . '%');
+        }
+
+        if ($request->filled('state')) {
+            $offline->where('state', $request->state);
+        }
+
+        if ($request->filled('district')) {
+            $offline->where('district', $request->district);
+        }
 
         // Get both collections and merge
         $donations = $online->get()->merge($offline->get());
@@ -289,8 +311,8 @@ class DonationController extends Controller
 
         // For academic session dropdown
         $data = academic_session::all();
-
-        return view('ngo.donation.all-donation-list', compact('data', 'donations'));
+        $states = config('states');
+        return view('ngo.donation.all-donation-list', compact('data', 'donations','states'));
     }
 
     public function DonationReport(Request $request)

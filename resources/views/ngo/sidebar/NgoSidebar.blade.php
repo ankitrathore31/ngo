@@ -266,6 +266,7 @@
                     <ul class="dropdown-menu bg-primary">
                         <li><a class="dropdown-item" href="{{route('beneficiary-idcard')}}">Beneficiary ID Card</a></li>
                         <li><a class="dropdown-item" href="{{route('member-idcard')}}">Member ID Card</a></li>
+                        <li><a class="dropdown-item" href="{{route('donor-idcard')}}">Donor ID Card</a></li>
                         <li><a class="dropdown-item" href="#">Beneficiary Admit Card</a></li>
                         <li><a class="dropdown-item" href="#">Beneficiary Desk Slip</a></li>
                         <li><a class="dropdown-item" href="#">Beneficiary CC & NOC</a></li>

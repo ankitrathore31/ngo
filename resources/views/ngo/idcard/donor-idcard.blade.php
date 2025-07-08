@@ -133,11 +133,11 @@
                         </div>
                     </div>
                     <div class="row">
-                        
+
                         @php
                             $districtsByState = config('districts');
                         @endphp
-                        <div class="col-md-4 col-sm-6 form-group mb-3">
+                        <div class="col-md-3 col-sm-6 form-group mb-3">
                             {{-- <label for="stateSelect" class="form-label">State: <span class="text-danger">*</span></label> --}}
                             <select class="form-control @error('state') is-invalid @enderror" name="state"
                                 id="stateSelect">
@@ -153,7 +153,7 @@
                             @enderror
 
                         </div>
-                        <div class="col-md-4 col-sm-6 form-group mb-3">
+                        <div class="col-md-3 col-sm-6 form-group mb-3">
                             {{-- <label for="districtSelect" class="form-label">District: <span
                                     class="text-danger">*</span></label> --}}
                             <select class="form-control @error('district') is-invalid @enderror" name="district"
@@ -164,7 +164,7 @@
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
-                        <div class="col-md-4 col-sm-6 form-group mb-3">
+                        <div class="col-md-3 col-sm-6 form-group mb-3">
                             {{-- <label for="block" class="form-label">Block: <span class="text-danger">*</span></label> --}}
                             <input type="text" name="block" id="block"
                                 class="form-control @error('block') is-invalid @enderror" value="{{ old('block') }}"
@@ -189,7 +189,7 @@
                 </div>
             </div>
             <div class="container d-flex flex-wrap justify-content-center">
-                @foreach ($beneficiary as $record)
+                @foreach ($donations as $record)
                     <div class="id-card">
                         <div class="id-header">
                             <img src="{{ asset('images/LOGO.png') }}" class="logo-img" alt="Logo">
@@ -199,23 +199,22 @@
 
                         <div class="id-body">
                             <div class="left">
-                                <img src="{{ asset('benefries_images/' . $record->image) }}" class="photo-img"
-                                    alt="Photo">
+                                <img src="" class="photo-img" alt="Photo">
                             </div>
                             <div class="right">
-                                <p><strong>Registration No:</strong> {{ $record->registration_no }}</p>
+                                {{-- <p><strong>Registration No:</strong> {{ $record->registration_no }}</p> --}}
                                 <p><strong>Name:</strong> {{ $record->name }}</p>
-                                <p><strong>Father/Husband:</strong> {{ $record->gurdian_name }}</p>
-                                <p><strong>Mobile No:</strong> {{ (string) $record->phone }}</p>
-                                <p><strong>Position Name:</strong> {{ $record->reg_type }}</p>
+                                <p><strong>Father/Husband:</strong> {{ $record->gurdian_name ?? 'OnlineCashfree' }}</p>
+                                <p><strong>Mobile No:</strong> {{ (string) $record->mobile }}</p>
+                                <p><strong>Position:</strong> Donor</p>
                                 <p><strong>Session:</strong>{{ $record->academic_session }}</p>
                             </div>
                         </div>
 
                         <div class="id-footer">
-                            <p><strong>Address:</strong> {{ $record->village }}, {{ $record->post }},
+                            <p><strong>Address:</strong> {{ $record->address }},
                                 {{ $record->block }},
-                                {{ $record->district }}, {{ $record->state }} - {{ $record->pincode }}
+                                {{ $record->district }}, {{ $record->state }}
                             </p>
                             <div class="text-end">
                                 @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))

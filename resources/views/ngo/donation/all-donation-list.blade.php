@@ -103,6 +103,45 @@
                         <div class="col-md-4 col-sm-4 mb-3">
                             <input type="text" class="form-control" name="name" placeholder="Search By Name">
                         </div>
+                        @php
+                            $districtsByState = config('districts');
+                        @endphp
+                        <div class="col-md-4 col-sm-6 form-group mb-3">
+                            {{-- <label for="stateSelect" class="form-label">State: <span class="text-danger">*</span></label> --}}
+                            <select class="form-control @error('state') is-invalid @enderror" name="state"
+                                id="stateSelect">
+                                <option value="">Select State</option>
+                                @foreach ($districtsByState as $state => $districts)
+                                    <option value="{{ $state }}" {{ old('state') == $state ? 'selected' : '' }}>
+                                        {{ $state }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('state')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+
+                        </div>
+                        <div class="col-md-4 col-sm-6 form-group mb-3">
+                            {{-- <label for="districtSelect" class="form-label">District: <span
+                                    class="text-danger">*</span></label> --}}
+                            <select class="form-control @error('district') is-invalid @enderror" name="district"
+                                id="districtSelect">
+                                <option value="">Select District</option>
+                            </select>
+                            @error('district')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 col-sm-6 form-group mb-3">
+                            {{-- <label for="block" class="form-label">Block: <span class="text-danger">*</span></label> --}}
+                            <input type="text" name="block" id="block"
+                                class="form-control @error('block') is-invalid @enderror" value="{{ old('block') }}"
+                                placeholder="Search by Block">
+                            @error('block')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
                         <div class="col-md-4">
                             <button type="submit" class="btn btn-primary me-2">Search</button>
                             <a href="{{ route('all-donor-list') }}" class="btn btn-info text-white me-2">Reset</a>
@@ -132,6 +171,7 @@
                                 <th>Payment Mode</th>
                                 <th>Session</th>
                                 <th class="no-print">Action</th>
+                                <th class="no-print">Certificate</th>
                             </tr>
                         </thead>
 
@@ -157,6 +197,15 @@
                                             </a>
                                         </div>
                                     </td>
+                                    <td class="no-print">
+                                        <div class="d-flex justify-content-center gap-2 flex-wrap">
+                                            <a href="{{ route('certi-donation', $item->id) }}"
+                                                class="btn btn-success btn-sm" title="View"
+                                                style="min-width: 38px; height: 38px;">
+                                                Certificate
+                                            </a>
+                                        </div>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -171,5 +220,32 @@
         function printTable() {
             window.print();
         }
+    </script>
+    <script>
+        const allDistricts = @json($districtsByState);
+        const oldDistrict = "{{ old('district') }}";
+        const oldState = "{{ old('state') }}";
+
+        function populateDistricts(state) {
+            const districtSelect = document.getElementById('districtSelect');
+            districtSelect.innerHTML = '<option value="">Select District</option>';
+
+            if (allDistricts[state]) {
+                allDistricts[state].forEach(function(district) {
+                    const selected = (district === oldDistrict) ? 'selected' : '';
+                    districtSelect.innerHTML += `<option value="${district}" ${selected}>${district}</option>`;
+                });
+            }
+        }
+
+        // Initial load if editing or validation failed
+        if (oldState) {
+            populateDistricts(oldState);
+        }
+
+        // On state change
+        document.getElementById('stateSelect').addEventListener('change', function() {
+            populateDistricts(this.value);
+        });
     </script>
 @endsection

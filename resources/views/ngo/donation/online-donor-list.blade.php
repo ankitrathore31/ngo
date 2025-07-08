@@ -140,10 +140,10 @@
                                         <td>{{ $loop->iteration }}</td>
                                         {{-- <td>{{ $item->order_id }}</td> --}}
                                         <td>{{ $item->name }}</td>
-                                        <td>{{ $item->donor_village }}
-                                            {{ $item->donor_post }}
-                                            {{ $item->donor_district }}
-                                            {{ $item->donor_state }} - {{ $item->donor_pincode }}
+                                        <td>{{ $item->address }}
+                                            {{ $item->block }}
+                                            {{ $item->district }}
+                                            {{ $item->state }} - {{ $item->donor_pincode }}
                                         </td>
                                         <td>{{ $item->donor_aadhar }} {{ $item->donor_pancard}}</td>
                                         <td>{{ $item->id_type }}</td>
@@ -159,11 +159,11 @@
                                         {{-- <td>{{ $survey->academic_session }}</td> --}}
                                         <td class="no-print">
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                                <a href=""
-                                                    class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                    title="View" style="min-width: 38px; height: 38px;">
-                                                    <i class="fa-regular fa-eye"></i>
-                                                </a>
+                                               <a href="{{ route('view-donation', $item->id) }}"
+                                                class="btn btn-success btn-sm "
+                                                title="View">
+                                                <i class="fa-regular fa-eye"></i>
+                                            </a>
                                             </div>
                                         </td>
                                     </tr>
