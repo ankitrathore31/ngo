@@ -1,5 +1,71 @@
 @extends('ngo.layout.master')
 @Section('content')
+    <style>
+        @page {
+            size: auto;
+            margin: 0;
+            /* Remove all margins including top */
+        }
+
+        @media print {
+
+            html,
+            body {
+                margin: 0 !important;
+                padding: 0 !important;
+                height: 100% !important;
+                width: 100% !important;
+            }
+
+            body * {
+                visibility: hidden;
+            }
+
+            .printable,
+            .printable * {
+                visibility: visible;
+            }
+
+            .table th,
+            .table td {
+                padding: 4px !important;
+                font-size: 9px !important;
+                border: 1px solid #000 !important;
+            }
+
+            .card,
+            .table-responsive {
+                box-shadow: none !important;
+                border: none !important;
+                overflow: visible !important;
+            }
+
+            .btn,
+            .navbar,
+            .footer,
+            .no-print {
+                display: none !important;
+            }
+
+            table {
+                page-break-inside: auto;
+            }
+
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+
+            thead {
+                display: table-header-group;
+            }
+
+            tfoot {
+                display: table-footer-group;
+            }
+        }
+    </style>
+
     <div class="wrapper">
         <div class="container-fluid mt-4">
 
@@ -25,7 +91,7 @@
                         <div class="col-md-4">
                             {{-- <label for="session_filter" class="form-label">Select Session</label> --}}
                             <select name="session_filter" id="session_filter" class="form-control"
-                                onchange="this.form.submit()">
+                                >
                                 <option value="">All Sessions</option> <!-- Default option to show all -->
                                 @foreach (Session::get('all_academic_session') as $session)
                                     <option value="{{ $session->session_date }}"
@@ -40,7 +106,8 @@
                         <div class="col-md-4">
                             {{-- <label for="category_filter" class="form-label">Search by Category</label> --}}
                             <select id="category_filter" name="category_filter"
-                                class="form-control @error('category_filter') is-invalid @enderror" onchange="this.form.submit()">
+                                class="form-control @error('category_filter') is-invalid @enderror"
+                                >
                                 <option value="">-- Select Category --</option>
                                 <option value="Public Program"
                                     {{ request('category_filter') == 'Public Program' ? 'selected' : '' }}>Public Program
@@ -111,23 +178,29 @@
                                     Activities</option>
                             </select>
                         </div>
-
+                        <div class="col-md-4 col-sm-6 form-group mb-3">
+                            <input type="text" name="address_filter" id="address"
+                                class="form-control @error('address') is-invalid @enderror" value="{{ old('address') }}"
+                                placeholder="Search by Address">
+                            @error('address')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
                         <div class="col-md-4 d-flex">
                             <button type="submit" class="btn btn-primary me-2">Search</button>
                             <a href="{{ route('activitylist') }}" class="btn btn-info text-white me-2">Reset</a>
                         </div>
                     </form>
+                    <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
                 </div>
             </div>
 
 
             <div class="card shadow-sm">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    {{-- <h5 class="mb-0">Activity List</h5> --}}
                     <a href="{{ route('addactivity') }}" class="btn btn-success btn-sm">+ Add Activity</a>
                 </div>
-
-                <div class="card-body table-responsive">
+                <div class="card-body table-responsive printable">
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-primary">
                             <tr>
@@ -139,14 +212,14 @@
                                 <th>Category</th>
                                 <th>Address</th>
                                 <th>Session</th>
-                                <th>Action</th>
+                                <th class="no-print">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($activity as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $item->academic_session}}</td>
+                                    <td>{{ $item->academic_session }}</td>
                                     <td>
                                         {{ \Carbon\Carbon::parse($item->program_date)->format('d-m-Y') }}<br>
                                         <small>{{ $item->program_time }}</small>
@@ -159,7 +232,7 @@
                                     <td>{{ $item->program_category }}</td>
                                     <td>{{ $item->program_address }}</td>
                                     <td>{{ $item->academic_session }}</td>
-                                    <td>
+                                    <td class="no-print">
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
                                             <a href="{{ route('viewactivity', $item->id) }}" class="btn btn-sm btn-success"
                                                 title="View">
@@ -173,7 +246,6 @@
                                                 class="btn btn-sm btn-danger" title="Delete">
                                                 <i class="fa-regular fa-trash-can"></i>
                                             </a>
-
                                         </div>
                                     </td>
                                 </tr>
@@ -183,6 +255,10 @@
                 </div>
             </div>
         </div>
-
     </div>
+    <script>
+        function printTable() {
+            window.print();
+        }
+    </script>
 @endsection
