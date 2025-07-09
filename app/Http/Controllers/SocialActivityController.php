@@ -24,6 +24,11 @@ class SocialActivityController extends Controller
             $query->where('program_category', $request->category_filter);
         }
 
+        if ($request->address_filter && strlen($request->address_filter) >= 4) {
+            $query->where('program_address', 'like', '%' . $request->address_filter . '%');
+        }
+
+
         $activity = $query->orderBy('program_date', 'asc')->get();
         return view('ngo.activity.activitylist', compact('activity'));
     }
@@ -251,14 +256,14 @@ class SocialActivityController extends Controller
         $event->event_time = $request->event_time;
         $event->event_address = $request->event_address;
         $event->event_report = $request->event_report;
-        
+
         if ($request->hasFile('event_image')) {
-            
+
             if ($event->event_image && file_exists(public_path('program_images/' . $event->event_image))) {
                 unlink(public_path('program_images/' . $event->event_image));
             }
 
-            
+
             $file = $request->file('event_image');
             $extension = $file->getClientOriginalExtension();
             $filename = time() . '.' . $extension;
