@@ -16,4 +16,9 @@ class Bill_Voucher extends Model
         'shop',
         'address',
     ];
+
+    public function items()
+    {
+        return $this->hasMany(Voucher_Item::class, 'bill_voucher_id');
+    }
 }

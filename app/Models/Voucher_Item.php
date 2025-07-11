@@ -9,10 +9,15 @@ class Voucher_Item extends Model
 {
     use HasFactory;
     protected $tabel = 'voucher__items';
-    protected $fillable =[
+    protected $fillable = [
         'bill_voucher_id',
         'product',
         'qty',
         'rate'
-    ];                                                     
+    ];
+
+    public function bill()
+    {
+        return $this->belongsTo(Bill_Voucher::class, 'bill_voucher_id');
+    }
 }
