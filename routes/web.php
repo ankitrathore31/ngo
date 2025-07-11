@@ -5,6 +5,7 @@ use App\Http\Controllers\SocialActivityController;
 use App\Http\Controllers\HomeControlller;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BeneficiarieController;
+use App\Http\Controllers\BillController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\RegistrationController;
@@ -296,6 +297,11 @@ Route::controller(IdcardController::class)->group(function(){
     Route::get('ngo/member-idcard', 'MemberIdcard')->middleware('auth')->name('member-idcard');
     Route::get('ngo/beneficiary-idcard', 'BeneficiaryIdcard')->name('beneficiary-idcard');
     Route::get('ngo/donor-idcard', 'DonorIdcard')->name('donor-idcard');
+});
+
+Route::controller(BillController::class)->group(function(){
+    Route::get('ngo/add-bill', 'AddBill')->middleware('auth')->name('add-bill');
+    Route::post('ngo/store-bill','StoreBill')->middleware('auth')->name('store-bill');
 });
 
 

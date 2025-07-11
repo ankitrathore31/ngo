@@ -309,7 +309,7 @@
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i
                             class="fas fa-file-invoice-dollar"></i> COST</a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="#">Add Bill Voucher</a></li>
+                        <li><a class="dropdown-item" href="{{route('add-bill')}}">Feed Bill/Voucher</a></li>
                         <li><a class="dropdown-item" href="#">Bill Voucher List</a></li>
                         <li><a class="dropdown-item" href="#">Pending Bill Vouchers</a></li>
                         <li><a class="dropdown-item" href="#">Edit/Delete Bill Vouchers</a></li>
