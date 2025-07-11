@@ -12,6 +12,11 @@
             </nav>
         </div>
 
+        @if (session('success'))
+            <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
         <div class="card m-1">
             <div class="card-body">
                 <form action="{{ route('save-event') }}" method="POST" enctype="multipart/form-data" class="m-3">
@@ -19,9 +24,8 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Event Name <span class="text-danger">*</span></label>
-                            <input type="text" name="event"
-                                class="form-control @error('event') is-invalid @enderror"
-                                placeholder="Enter Event Name" value="{{ old('event')}} " required>
+                            <input type="text" name="event" class="form-control @error('event') is-invalid @enderror"
+                                placeholder="Enter Event Name" value="{{ old('event') }} " required>
                             @error('event')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -29,8 +33,8 @@
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Event Category <span class="text-danger">*</span></label>
-                            <select name="event_category"
-                                class="form-control @error('event_category') is-invalid @enderror" required>
+                            <select name="event_category" class="form-control @error('event_category') is-invalid @enderror"
+                                required>
                                 <option value="">Select Category</option>
                                 <option value="Public Program">Public Program</option>
                                 <option value="Government Program">Government Program</option>
@@ -74,8 +78,8 @@
 
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Event Session <span class="text-danger">*</span></label>
-                            <select name="event_session"
-                                class="form-control @error('event_session') is-invalid @enderror" required>
+                            <select name="event_session" class="form-control @error('event_session') is-invalid @enderror"
+                                required>
                                 <option value="">Select Session</option>
                                 @foreach ($data as $session)
                                     <option value="{{ $session->session_date }}">{{ $session->session_date }}</option>
@@ -109,7 +113,7 @@
                         <div class="col-md-12 mb-3">
                             <label class="form-label">Event Report <span class="text-danger">*</span></label>
                             <textarea name="event_report" class="form-control @error('event_report') is-invalid @enderror" rows="3"
-                                placeholder="Enter Report" required> {{old('event_report')}}</textarea>
+                                placeholder="Enter Report" required> {{ old('event_report') }}</textarea>
                             @error('event_report')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
