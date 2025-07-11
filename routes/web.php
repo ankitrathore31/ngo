@@ -22,6 +22,7 @@ use App\Http\Controllers\WorkingAreaController;
 use App\Models\academic_session;
 use Illuminate\Support\Facades\Session;
 use App\Models\Working_Area;
+use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\DB;
 
 /*
@@ -302,6 +303,11 @@ Route::controller(IdcardController::class)->group(function(){
 Route::controller(BillController::class)->group(function(){
     Route::get('ngo/add-bill', 'AddBill')->middleware('auth')->name('add-bill');
     Route::post('ngo/store-bill','StoreBill')->middleware('auth')->name('store-bill');
+    Route::get('ngo/edit-bill/{id}', 'EditBill')->middleware('auth')->name('edit-bill');
+    Route::post('ngo/update-bill/{id}', 'UpdateBill')->middleware('auth')->name('update-bill');
+    Route::get('ngo/bill-list', 'BillList')->middleware('auth')->name('bill-list');
+    Route::get('ngo/view-bill/{id}', 'ViewBill')->Middleware('auth')->name('view-bill');
+    Route::get('ngo/delete-bill/{id}', 'DeleteBill')->middleware('auth')->name('delete-bill');
 });
 
 
