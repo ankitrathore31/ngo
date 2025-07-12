@@ -20,6 +20,8 @@ class BillController extends Controller
         $voucher = Bill_Voucher::create([
             'bill_no' => $request->bill_no,
             'name' => $request->name,
+            'mobile' => $request->mobile,
+            'email' => $request->email,
             'shop' => $request->shop,
             'date' => $request->date,
             'address' => $request->address,
@@ -116,5 +118,12 @@ class BillController extends Controller
         $bill->delete();
 
         return redirect()->back()->with('success', 'Voucher Deleted successfully!');
+    }
+
+    public function GenerateBill(){
+
+        $states = config('states');
+        return view('ngo.bill.generate-bill',compact('states'));
+
     }
 }

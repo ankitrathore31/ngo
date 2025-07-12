@@ -13,6 +13,8 @@ class Bill_Voucher extends Model
         'bill_no',
         'date',
         'name',
+        'mobile',
+        'email',
         'shop',
         'address',
     ];

@@ -47,6 +47,24 @@
                 </div>
 
                 <div class="mb-3">
+                    <label for="mobile">Mobile:</label>
+                    <input type="text" id="mobile" name="mobile" class="form-control" value="{{ old('mobile') }}"
+                        required>
+                    @error('mobile')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="email">Email:</label>
+                    <input type="text" id="email" name="email" class="form-control" value="{{ old('email') }}"
+                        required>
+                    @error('email')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
                     <label for="date">Date:</label>
                     <input type="date" id="date" name="date" class="form-control" value="{{ old('date') }}"
                         required>

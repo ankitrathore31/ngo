@@ -116,11 +116,11 @@
                     <div class="text-center mb-4 border-bottom pb-3 mb-2">
                         <!-- Header -->
                         <div class="row">
-                            <div class="col-sm-2 text-center text-md-start">
+                            {{-- <div class="col-sm-2 text-center text-md-start">
                                 <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="80" height="80">
-                            </div>
-                            <div class="col-sm-10">
-                                <p class="d-flex justify-content-between w-100" style="margin: 0; font-weight: bold;">
+                            </div> --}}
+                            <div class="col-sm-12">
+                                {{-- <p class="d-flex justify-content-between w-100" style="margin: 0; font-weight: bold;">
                                     <span>CSR NO. CSR00059991</span>
                                     <span>12A AAEAG7650BE20231</span>
                                     <span>80G AAEAG7650BF20231</span>
@@ -130,25 +130,21 @@
                                     <span>NEETI AYOG ID NO. UP/2023/0360430</span>
                                     <span>NGO NO. UP/00033062</span>
                                     <span>PAN: AAEAG7650B</span>
-                                </p>
+                                </p> --}}
 
                                 <h4 class="text-center print-h4" style="margin: 0;">
-                                    <span data-lang="hi" style="font-size: inherit; font-weight: inherit;">ज्ञान भारती
-                                        संस्था</span>
-                                    <span data-lang="en" style="font-size: inherit; font-weight: inherit;">GYAN BHARTI
-                                        SANSTHA</span>
+                                    {{-- <span data-lang="hi" style="font-size: inherit; font-weight: inherit;">ज्ञान भारती
+                                        संस्था</span> --}}
+                                    <span  style="font-size: inherit; font-weight: inherit;">{{$bill->shop}}</span>
                                 </h4>
 
                                 <h6 class="w-100" style="color: blue; font-weight: bold; margin: 0;">
-                                    <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर प्रदेश -
-                                        262121</span><br>
-                                    <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit, UP -
-                                        262121</span>
+                                    <span>{{$bill->address}}</span>
                                 </h6>
 
-                                <p class="w-100" style="font-size: 14px; margin: 0; font-weight: bold;">
+                                {{-- <p class="w-100" style="font-size: 14px; margin: 0; font-weight: bold;">
                                     Website: www.gyanbhartingo.org | Email: gyanbhartingo600@gmail.com | Mob: 9411484111
-                                </p>
+                                </p> --}}
                             </div>
 
                         </div>
@@ -174,6 +170,12 @@
                         <div class="row mb-2">
                             <div class="col-sm-12">
                                 <b>Name:</b> &nbsp; {{ $bill->name }}
+                            </div>
+                            <div class="col-sm-12">
+                                <b>Mobile:</b> &nbsp; {{ $bill->mobile }}
+                            </div>
+                            <div class="col-sm-12">
+                                <b>Email:</b> &nbsp; {{ $bill->email }}
                             </div>
                             <div class="col-sm-12">
                                 <b>Shop/Farm:</b> &nbsp; {{ $bill->shop }}
@@ -240,7 +242,7 @@
                                 </dl>
                             </div>
                             <div class="col-sm-5 text-center">
-                                @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
+                                {{-- @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
                                     <div id="directorSignatureBox" class="mt-2">
                                         <p class="text-success no-print">Attached</p>
                                         <img src="{{ asset($signatures['director']) }}" alt="Director Signature"
@@ -256,11 +258,10 @@
                                     </div>
                                 @else
                                     <p class="text-muted mt-2 no-print">Not attached</p>
-                                @endif
-                                <strong>Digitally Signed By <br>
-                                    MANOJ KUMAR RATHOR <br>
-                                    DIRECTOR
-                                </strong><br>
+                                @endif --}}
+                                {{$bill->name}}<br>
+                                <strong>Signature
+                                </strong>
                             </div>
                         </div>
                     </div>
