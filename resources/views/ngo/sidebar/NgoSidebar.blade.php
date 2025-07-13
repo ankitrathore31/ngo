@@ -335,7 +335,6 @@
                             class="fas fa-images"></i> GALLERY</a>
                     <ul class="dropdown-menu bg-primary">
                         <li><a class="dropdown-item" href="{{ route('add-photos') }}">Add Photos</a></li>
-                        {{-- <li><a class="dropdown-item" href="#">Add Newspaper</a></li> --}}
                         <li><a class="dropdown-item" href="{{ route('gallery-list') }}">Manage Gallery</a></li>
                     </ul>
                 </li>
@@ -352,8 +351,12 @@
                     </ul>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#"><i class="fas fa-tasks"></i> WORK PLAN</a>
+                 <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown"><i class="fas fa-tasks"></i>Work Plan</a>
+                    <ul class="dropdown-menu bg-primary">
+                        <li><a class="dropdown-item" href="{{route('add-workplan')}}">Add Work Plan</a></li>
+                        <li><a class="dropdown-item" href="{{route('workplan-list')}}">Work Plan List</a></li>
+                    </ul>
                 </li>
 
                 <li class="nav-item dropdown">
@@ -362,8 +365,6 @@
                     <ul class="dropdown-menu bg-primary">
                         <li><a class="dropdown-item" href="{{ route('add-notice') }}">Add Notice</a></li>
                         <li><a class="dropdown-item" href="{{ route('notice-list') }}">Notice List</a></li>
-                        {{-- <li><a class="dropdown-item" href="#">User Notice</a></li>
-                        <li><a class="dropdown-item" href="#">Member Notice</a></li> --}}
                     </ul>
                 </li>
 

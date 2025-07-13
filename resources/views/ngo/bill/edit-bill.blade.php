@@ -2,7 +2,7 @@
 @section('content')
     <div class="wrapper">
         <div class="d-flex justify-content-between align-items-center mb-1 mt-2">
-            <h5 class="mb-0">Add Bill/Voucher</h5>
+            <h5 class="mb-0">Edit Bill/Voucher</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-1 py-2 mb-0 rounded">
                     <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>

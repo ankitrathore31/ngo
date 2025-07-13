@@ -19,9 +19,11 @@ use App\Http\Controllers\SignatureController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\TrainingCenterController;
 use App\Http\Controllers\WorkingAreaController;
+use App\Http\Controllers\WorkPlanController;
 use App\Models\academic_session;
 use Illuminate\Support\Facades\Session;
 use App\Models\Working_Area;
+use App\Models\WorkPlan;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\DB;
 
@@ -309,6 +311,16 @@ Route::controller(BillController::class)->group(function(){
     Route::get('ngo/view-bill/{id}', 'ViewBill')->Middleware('auth')->name('view-bill');
     Route::get('ngo/delete-bill/{id}', 'DeleteBill')->middleware('auth')->name('delete-bill');
     Route::get('ngo/generate-bill','GenerateBill')->middleware('auth')->name('generate-bill');
+});
+
+Route::controller(WorkPlanController::class)->group(function () {
+    Route::get('ngo/add-workplan', 'AddWorkPlan')->middleware('auth')->name('add-workplan');
+    Route::post('ngo/store-workplan', 'StoreWorkPlan')->middleware('auth')->name('store-workplan');
+    Route::get('ngo/edit-workplan/{id}', 'EditWorkPlan')->middleware('auth')->name('edit-workplan');
+    Route::post('ngo/update-workplan/{id}', 'UpdateWorkPlan')->middleware('auth')->name('update-workplan');
+    Route::get('ngo/workplan-list', 'WorkPlanList')->middleware('auth')->name('workplan-list');
+    Route::get('ngo/view-workplan/{id}', 'ViewWorkPlan')->middleware('auth')->name('view-workplan');
+    Route::get('ngo/delete-workplan/{id}', 'DeleteWorkPlan')->middleware('auth')->name('delete-workplan');
 });
 
 

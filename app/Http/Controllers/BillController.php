@@ -12,7 +12,7 @@ class BillController extends Controller
 {
     public function AddBill()
     {
-        return view('ngo.bill.add-bill');
+        return view('ngo.bill.feed-bill');
     }
 
     public function StoreBill(Request $request)
