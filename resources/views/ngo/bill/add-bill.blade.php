@@ -19,67 +19,112 @@
         <div class="container mt-3">
             <form method="POST" action="{{ route('store-bill') }}">
                 @csrf
-                <div class="mb-3">
-                    <label for="bill_no">Bill/Voucher No:</label>
-                    <input type="text" id="bill_no" name="bill_no" class="form-control" value="{{ old('bill_no') }}"
-                        required>
-                    @error('bill_no')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
+                <div class="row">
+                    <div class="col-sm-6 mb-3">
+                        <label for="bill_no">Bill/Voucher No:</label>
+                        <input type="text" id="bill_no" name="bill_no" class="form-control"
+                            value="{{ old('bill_no') }}" required>
+                        @error('bill_no')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    <div class=" col-sm-6 mb-3">
+                        <label for="date">Date:</label>
+                        <input type="date" id="date" name="date" class="form-control" value="{{ old('date') }}"
+                            required>
+                        @error('date')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label for="shop">Shop:</label>
-                    <input type="text" id="shop" name="shop" class="form-control" value="{{ old('shop') }}"
-                        required>
-                    @error('shop')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h5 class="mb-2">- SELLER DEATILS</h5>
+                        <div class="mb-3">
+                            <label for="shop">Shop:</label>
+                            <input type="text" id="shop" name="shop" class="form-control"
+                                value="{{ old('shop') }}" required>
+                            @error('shop')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
 
-                <div class="mb-3">
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}"
-                        required>
-                    @error('name')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
+                        <div class="mb-3">
+                            <label for="name">Name:</label>
+                            <input type="text" id="name" name="name" class="form-control"
+                                value="{{ old('name') }}" required>
+                            @error('name')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
 
-                <div class="mb-3">
-                    <label for="mobile">Mobile:</label>
-                    <input type="text" id="mobile" name="mobile" class="form-control" value="{{ old('mobile') }}"
-                        required>
-                    @error('mobile')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
+                        <div class="mb-3">
+                            <label for="mobile">Mobile:</label>
+                            <input type="text" id="mobile" name="mobile" class="form-control"
+                                value="{{ old('mobile') }}" required>
+                            @error('mobile')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
 
-                <div class="mb-3">
-                    <label for="email">Email:</label>
-                    <input type="text" id="email" name="email" class="form-control" value="{{ old('email') }}"
-                        required>
-                    @error('email')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
+                        <div class="mb-3">
+                            <label for="email">Email:</label>
+                            <input type="text" id="email" name="email" class="form-control"
+                                value="{{ old('email') }}" required>
+                            @error('email')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
 
-                <div class="mb-3">
-                    <label for="date">Date:</label>
-                    <input type="date" id="date" name="date" class="form-control" value="{{ old('date') }}"
-                        required>
-                    @error('date')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
+                        <div class="mb-3">
+                            <label for="address">Address:</label>
+                            <input type="text" id="address" name="address" class="form-control"
+                                value="{{ old('address') }}" required>
+                            @error('address')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <h5 class="mb-2">- BUYER DETAILS</h5>
+                        <div class="mb-3">
+                            <label for="name">Name:</label>
+                            <input type="text" id="name" name="name" class="form-control"
+                                value="{{ old('name') }}" required>
+                            @error('name')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
 
-                <div class="mb-3">
-                    <label for="address">Address:</label>
-                    <input type="text" id="address" name="address" class="form-control" value="{{ old('address') }}"
-                        required>
-                    @error('address')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
+                        <div class="mb-3">
+                            <label for="mobile">Mobile:</label>
+                            <input type="text" id="mobile" name="mobile" class="form-control"
+                                value="{{ old('mobile') }}" required>
+                            @error('mobile')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email">Email:</label>
+                            <input type="text" id="email" name="email" class="form-control"
+                                value="{{ old('email') }}" required>
+                            @error('email')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="address">Address:</label>
+                            <input type="text" id="address" name="address" class="form-control"
+                                value="{{ old('address') }}" required>
+                            @error('address')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                    </div>
                 </div>
 
                 <table class="table table-bordered" id="items-table">
