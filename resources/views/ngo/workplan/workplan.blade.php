@@ -178,16 +178,17 @@
             const row = document.createElement("tr");
 
             row.innerHTML = `
-            <td class="sr-no">${index + 1}</td>
-            <td><input type="date" name="items[${index}][work_date]" class="form-control" required></td>
-            <td><input type="text" name="items[${index}][work_address]" class="form-control" required></td>
-            <td><input type="text" name="items[${index}][work_name]" class="form-control" required></td>
-            <td><input type="text" name="items[${index}][work_type]" class="form-control" required></td>
-            <td><input type="text" name="items[${index}][worker_name]" class="form-control" required></td>
-            <td><input type="text" name="items[${index}][work_with]" class="form-control" required></td>
-            <td><input type="text" name="items[${index}][benefits]" class="form-control" required></td>
-            <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">X</button></td>
-        `;
+    <td class="sr-no">${index + 1}</td>
+    <td><input type="date" name="items[${index}][work_date]" class="form-control" required></td>
+    <td><textarea name="items[${index}][work_address]" class="form-control" rows="2" required></textarea></td>
+    <td><input type="text" name="items[${index}][work_name]" class="form-control" required></td>
+    <td><input type="text" name="items[${index}][work_type]" class="form-control" required></td>
+    <td><input type="text" name="items[${index}][worker_name]" class="form-control" required></td>
+    <td><textarea name="items[${index}][work_with]" class="form-control" rows="2" required></textarea></td>
+    <td><textarea name="items[${index}][benefits]" class="form-control" rows="2" required></textarea></td>
+    <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">X</button></td>
+`;
+
 
             tbody.appendChild(row);
             index++;

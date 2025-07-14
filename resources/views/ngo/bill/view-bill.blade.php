@@ -135,11 +135,11 @@
                                 <h4 class="text-center print-h4" style="margin: 0;">
                                     {{-- <span data-lang="hi" style="font-size: inherit; font-weight: inherit;">ज्ञान भारती
                                         संस्था</span> --}}
-                                    <span  style="font-size: inherit; font-weight: inherit;">{{$bill->shop}}</span>
+                                    <span style="font-size: inherit; font-weight: inherit;">{{ $bill->shop }}</span>
                                 </h4>
 
                                 <h6 class="w-100" style="color: blue; font-weight: bold; margin: 0;">
-                                    <span>{{$bill->address}}</span>
+                                    <span>{{ $bill->s_address }}</span>
                                 </h6>
 
                                 {{-- <p class="w-100" style="font-size: 14px; margin: 0; font-weight: bold;">
@@ -166,24 +166,49 @@
                                 </strong>
                                 {{ \Carbon\Carbon::parse($bill->date)->format('d-m-Y') }}
                             </div>
+
+                            <div>
+                                <strong>
+                                    <span>Session:</span>
+                                </strong>
+                                {{ $bill->academic_session }}
+                            </div>
                         </div>
                         <div class="row mb-2">
+                            <h5><strong>- SELLER DETAILS</strong></h5>
                             <div class="col-sm-12">
-                                <b>Name:</b> &nbsp; {{ $bill->name }}
+                                <b>Name:</b> &nbsp; {{ $bill->s_name }}
                             </div>
                             <div class="col-sm-12">
-                                <b>Mobile:</b> &nbsp; {{ $bill->mobile }}
+                                <b>Mobile:</b> &nbsp; {{ $bill->s_mobile }}
                             </div>
                             <div class="col-sm-12">
-                                <b>Email:</b> &nbsp; {{ $bill->email }}
+                                <b>Email:</b> &nbsp; {{ $bill->s_email }}
                             </div>
                             <div class="col-sm-12">
                                 <b>Shop/Farm:</b> &nbsp; {{ $bill->shop }}
                             </div>
                             <div class="col-sm-12">
-                                <b>Address:</b> &nbsp; {{ $bill->address }}
+                                <b>Address:</b> &nbsp; {{ $bill->s_address }}
                             </div>
                         </div>
+
+                        <div class="row mb-2">
+                            <h5><strong>- BUYER DETAILS</strong></h5>
+                            <div class="col-sm-12">
+                                <b>Name:</b> &nbsp; {{ $bill->b_name }}
+                            </div>
+                            <div class="col-sm-12">
+                                <b>Mobile:</b> &nbsp; {{ $bill->b_mobile }}
+                            </div>
+                            <div class="col-sm-12">
+                                <b>Email:</b> &nbsp; {{ $bill->b_email }}
+                            </div>
+                            <div class="col-sm-12">
+                                <b>Address:</b> &nbsp; {{ $bill->b_address }}
+                            </div>
+                        </div>
+
                         <div class="row mt-3">
                             <div class="col-sm-12">
                                 <div class="">
@@ -202,6 +227,7 @@
                                                 @php
                                                     $totalAmount = 0;
                                                 @endphp
+
                                                 @foreach ($bill_items as $item)
                                                     @php
                                                         $amount = $item->qty * $item->rate;
@@ -215,10 +241,50 @@
                                                         <td>{{ number_format($amount, 2) }}</td>
                                                     </tr>
                                                 @endforeach
-                                                <tr class="tabel-secondry fw-bold">
+
+                                                @php
+                                                    $cgst = $bill->cgst ?? 0;
+                                                    $sgst = $bill->sgst ?? 0;
+                                                    $igst = $bill->igst ?? 0;
+
+                                                    $cgstAmount = ($totalAmount * $cgst) / 100;
+                                                    $sgstAmount = ($totalAmount * $sgst) / 100;
+                                                    $igstAmount = ($totalAmount * $igst) / 100;
+
+                                                    $grandTotal =
+                                                        $totalAmount + $cgstAmount + $sgstAmount + $igstAmount;
+                                                @endphp
+
+                                                <tr class="table-secondary fw-bold">
                                                     <td colspan="4" class="text-end">Total Amount</td>
                                                     <td>{{ number_format($totalAmount, 2) }}</td>
                                                 </tr>
+                                                @if ($cgst > 0)
+                                                    <tr>
+                                                        <td colspan="4" class="text-end">CGST ({{ $cgst }}%)
+                                                        </td>
+                                                        <td>{{ number_format($cgstAmount, 2) }}</td>
+                                                    </tr>
+                                                @endif
+                                                @if ($sgst > 0)
+                                                    <tr>
+                                                        <td colspan="4" class="text-end">SGST ({{ $sgst }}%)
+                                                        </td>
+                                                        <td>{{ number_format($sgstAmount, 2) }}</td>
+                                                    </tr>
+                                                @endif
+                                                @if ($igst > 0)
+                                                    <tr>
+                                                        <td colspan="4" class="text-end">IGST ({{ $igst }}%)
+                                                        </td>
+                                                        <td>{{ number_format($igstAmount, 2) }}</td>
+                                                    </tr>
+                                                @endif
+                                                <tr class="table-dark fw-bold">
+                                                    <td colspan="4" class="text-end">Grand Total</td>
+                                                    <td>{{ number_format($grandTotal, 2) }}</td>
+                                                </tr>
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -259,7 +325,7 @@
                                 @else
                                     <p class="text-muted mt-2 no-print">Not attached</p>
                                 @endif --}}
-                                {{$bill->name}}<br>
+                                {{ $bill->s_name }}<br>
                                 <strong>Signature
                                 </strong>
                             </div>

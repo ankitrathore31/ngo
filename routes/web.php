@@ -311,6 +311,7 @@ Route::controller(BillController::class)->group(function(){
     Route::get('ngo/view-bill/{id}', 'ViewBill')->Middleware('auth')->name('view-bill');
     Route::get('ngo/delete-bill/{id}', 'DeleteBill')->middleware('auth')->name('delete-bill');
     Route::get('ngo/generate-bill','GenerateBill')->middleware('auth')->name('generate-bill');
+    Route::post('ngo/store-gbs-bill','StoreGbsBill')->middleware('auth')->name('store-gbs-bill');
 });
 
 Route::controller(WorkPlanController::class)->group(function () {

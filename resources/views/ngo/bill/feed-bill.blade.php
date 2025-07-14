@@ -20,7 +20,7 @@
             <form method="POST" action="{{ route('store-bill') }}">
                 @csrf
                 <div class="row">
-                    <div class="col-sm-4 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label for="bill_no">Bill/Voucher No:</label>
                         <input type="text" id="bill_no" name="bill_no" class="form-control"
                             value="{{ old('bill_no') }}" required>
@@ -29,16 +29,7 @@
                         @enderror
                     </div>
 
-                    <div class="col-sm-4 mb-3">
-                        <label for="invoice">Invoice:</label>
-                        <input type="text" id="invoice" name="invoice" class="form-control"
-                            value="{{ old('invoice') }}" required>
-                        @error('invoice')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-
-                    <div class=" col-sm-4 mb-3">
+                    <div class=" col-md-4 mb-3">
                         <label for="date">Date:</label>
                         <input type="date" id="date" name="date" class="form-control" value="{{ old('date') }}"
                             required>
@@ -46,14 +37,32 @@
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="academic_session" class=" bold">Session <span class="login-danger">*</span></label>
+                        <select class="form-control @error('academic_session') is-invalid @enderror" name="academic_session"
+                            id="academic_session" required>
+                            <option value="">Select Session</option>
+                            @foreach ($data as $session)
+                                <option value="{{ $session->session_date }}"
+                                    {{ old('academic_session') == $session->session_date ? 'selected' : '' }}>
+                                    {{ $session->session_date }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('academic_session')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                 </div>
 
                 <div class="row">
                     <h5 class="mb-2">- SELLER DEATILS</h5>
                     <div class=" col-sm-4 mb-3">
                         <label for="shop">Shop:</label>
-                        <input type="text" id="shop" name="shop" class="form-control" value="{{ old('shop') }}"
-                            required>
+                        <input type="text" id="shop" name="shop" class="form-control"
+                            value="{{ old('shop') }}" required>
                         @error('shop')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -75,48 +84,54 @@
 
                     <div class=" col-sm-4 mb-3">
                         <label for="name">Name:</label>
-                        <input type="text" id="name" name="name" class="form-control"
-                            value="{{ old('name') }}" required>
-                        @error('name')
+                        <input type="text" id="s_name" name="s_name" class="form-control"
+                            value="{{ old('s_name') }}" required>
+                        @error('s_name')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
 
                     <div class=" col-sm-4 mb-3">
                         <label for="address">Address:</label>
-                        <input type="text" id="address" name="address" class="form-control"
-                            value="{{ old('address') }}" required>
-                        @error('address')
+                        <input type="text" id="s_address" name="s_address" class="form-control"
+                            value="{{ old('s_address') }}" required>
+                        @error('s_address')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
 
                     <div class=" col-sm-4 mb-3">
                         <label for="mobile">Mobile:</label>
-                        <input type="text" id="mobile" name="mobile" class="form-control"
-                            value="{{ old('mobile') }}" required>
-                        @error('mobile')
+                        <input type="text" id="s_mobile" name="s_mobile" class="form-control"
+                            value="{{ old('s_mobile') }}" required>
+                        @error('s_mobile')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
 
                     <div class=" col-sm-4 mb-3">
                         <label for="email">Email:</label>
-                        <input type="text" id="email" name="email" class="form-control"
-                            value="{{ old('email') }}" required>
-                        @error('email')
+                        <input type="text" id="s_email" name="s_email" class="form-control"
+                            value="{{ old('s_email') }}" required>
+                        @error('s_email')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
 
-                    <div class=" col-sm-4 mb-3">
-                        <label for="gst">Gst:</label>
-                        <select  id="gst" class="form-select @error('gst') is-invalid @enderror">
-                            <option value="">Select </option>
-                            <option value="Yes" {{ old('gst') == 'Yes' ? 'selected' : '' }}>Yes
-                            </option>
-                            <option value="Yes" {{ old('gst') == 'No' ? 'selected' : '' }}>No</option>
+                    <div class="col-sm-4 mb-3">
+                        <label for="gst_type">Gst:</label>
+                        <select id="gst_type" name="gst_type" class="form-select @error('gst_type') is-invalid @enderror"
+                            onchange="toggleSingleGstInput()">
+                            <option value="">Select</option>
+                            <option value="Yes" {{ old('gst_type') == 'Yes' ? 'selected' : '' }}>Yes</option>
+                            <option value="No" {{ old('gst_type') == 'No' ? 'selected' : '' }}>No</option>
                         </select>
+                    </div>
+
+                    <div id="gst_input_wrapper" class="col-sm-4 mb-3" style="display: none;">
+                        <label for="gst">GST</label>
+                        <input type="number" name="gst" id="gst" class="form-control"
+                            value="{{ old('gst', 0) }}">
                     </div>
 
                 </div>
@@ -124,37 +139,37 @@
                 <div class="row">
                     <h5 class="mb-2">- BUYER DETAILS</h5>
                     <div class=" col-sm-4 mb-3">
-                        <label for="name">Name:</label>
-                        <input type="text" id="name" name="name" class="form-control"
-                            value="{{ old('name') }}" required>
-                        @error('name')
+                        <label for="b_name">Name:</label>
+                        <input type="text" id="b_name" name="b_name" class="form-control"
+                            value="{{ old('b_name') }}" required>
+                        @error('b_name')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
 
                     <div class=" col-sm-4 mb-3">
-                        <label for="mobile">Mobile:</label>
-                        <input type="text" id="mobile" name="mobile" class="form-control"
-                            value="{{ old('mobile') }}" required>
-                        @error('mobile')
+                        <label for="b_mobile">Mobile:</label>
+                        <input type="text" id="b_mobile" name="b_mobile" class="form-control"
+                            value="{{ old('b_mobile') }}" required>
+                        @error('b_mobile')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
 
                     <div class=" col-sm-4 mb-3">
-                        <label for="email">Email:</label>
-                        <input type="text" id="email" name="email" class="form-control"
-                            value="{{ old('email') }}" required>
-                        @error('email')
+                        <label for="b_email">Email:</label>
+                        <input type="text" id="b_email" name="b_email" class="form-control"
+                            value="{{ old('b_email') }}" required>
+                        @error('b_email')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
 
                     <div class=" col-sm-4 mb-3">
                         <label for="address">Address:</label>
-                        <input type="text" id="address" name="address" class="form-control"
-                            value="{{ old('address') }}" required>
-                        @error('address')
+                        <input type="text" id="b_address" name="b_address" class="form-control"
+                            value="{{ old('b_address') }}" required>
+                        @error('b_address')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
@@ -178,8 +193,34 @@
                 </table>
 
                 <div class="text-end mb-3">
-                    <strong>Total: ₹<span id="total-amount">0.00</span></strong>
+                    <strong>Total Amount Before Tax: ₹<span id="total-amount">0.00</span></strong>
                 </div>
+                <div class="row mb-3">
+                    <div class="col-md-2">
+                        <label for="cgst">CGST (%)</label>
+                        <input type="number" id="cgst" name="cgst" class="form-control" value="0"
+                            onchange="updateTotal()">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="sgst">SGST (%)</label>
+                        <input type="number" id="sgst" name="sgst" class="form-control" value="0"
+                            onchange="updateTotal()">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="igst">IGST (%)</label>
+                        <input type="number" id="igst" name="igst" class="form-control" value="0"
+                            onchange="updateTotal()">
+                    </div>
+                </div>
+
+                <div class="text-end mb-2">
+                    <strong>CGST Amount: ₹<span id="cgst-amount">0.00</span></strong><br>
+                    <strong>SGST Amount: ₹<span id="sgst-amount">0.00</span></strong><br>
+                    <strong>IGST Amount: ₹<span id="igst-amount">0.00</span></strong><br>
+                    <hr>
+                    <strong>Grand Total (After Tax): ₹<span id="grand-total">0.00</span></strong>
+                </div>
+
 
                 <button type="submit" class="btn btn-primary">Save Voucher</button>
             </form>
@@ -229,8 +270,28 @@
             document.querySelectorAll('.amount').forEach(cell => {
                 total += parseFloat(cell.textContent);
             });
+
+            // Get GST percentage values
+            const cgstPercent = parseFloat(document.getElementById('cgst').value) || 0;
+            const sgstPercent = parseFloat(document.getElementById('sgst').value) || 0;
+            const igstPercent = parseFloat(document.getElementById('igst').value) || 0;
+
+            // Calculate GST amounts
+            const cgstAmount = (total * cgstPercent) / 100;
+            const sgstAmount = (total * sgstPercent) / 100;
+            const igstAmount = (total * igstPercent) / 100;
+
+            // Calculate grand total
+            const grandTotal = total + cgstAmount + sgstAmount + igstAmount;
+
+            // Update DOM
             document.getElementById('total-amount').textContent = total.toFixed(2);
+            document.getElementById('cgst-amount').textContent = cgstAmount.toFixed(2);
+            document.getElementById('sgst-amount').textContent = sgstAmount.toFixed(2);
+            document.getElementById('igst-amount').textContent = igstAmount.toFixed(2);
+            document.getElementById('grand-total').textContent = grandTotal.toFixed(2);
         }
+
 
         function removeRow(btn) {
             btn.closest('tr').remove();
@@ -239,9 +300,17 @@
         }
     </script>
     <script>
-        const gst = getElementById = 'gst';
-        if(gst){
+        function toggleSingleGstInput() {
+            const gstType = document.getElementById('gst_type').value;
+            const gstWrapper = document.getElementById('gst_input_wrapper');
+            const gstInput = document.getElementById('gst');
 
+            if (gstType === 'Yes') {
+                gstWrapper.style.display = 'block';
+            } else {
+                gstWrapper.style.display = 'none';
+                gstInput.value = 0;
+            }
         }
     </script>
 @endsection
