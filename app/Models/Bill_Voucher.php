@@ -12,11 +12,25 @@ class Bill_Voucher extends Model
     protected $fillable = [
         'bill_no',
         'date',
-        'name',
-        'mobile',
-        'email',
+        'academic_session',
+
+        // Seller details
         'shop',
-        'address',
+        'role',
+        's_name',
+        's_address',
+        's_mobile',
+        's_email',
+        'gst',
+
+        // Buyer details
+        'b_name',
+        'b_mobile',
+        'b_email',
+        'b_address',
+        'cgst',
+        'sgst',
+        'igst',
     ];
 
     public function items()

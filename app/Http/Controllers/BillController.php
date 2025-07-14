@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\academic_session;
 use App\Models\Bill_Voucher;
+use App\Models\GbsBill;
 use App\Models\Signature;
 use App\Models\Voucher_Item;
 use Illuminate\Http\Request;
@@ -12,19 +13,32 @@ class BillController extends Controller
 {
     public function AddBill()
     {
-        return view('ngo.bill.feed-bill');
+        $data = academic_session::all();
+        return view('ngo.bill.feed-bill', compact('data'));
     }
 
     public function StoreBill(Request $request)
     {
         $voucher = Bill_Voucher::create([
-            'bill_no' => $request->bill_no,
-            'name' => $request->name,
-            'mobile' => $request->mobile,
-            'email' => $request->email,
-            'shop' => $request->shop,
-            'date' => $request->date,
-            'address' => $request->address,
+            'bill_no'            => $request->bill_no,
+            'date'               => $request->date,
+            'academic_session'   => $request->academic_session,
+            // Seller details
+            'shop'               => $request->shop,
+            'role'               => $request->role,
+            's_name'             => $request->s_name,
+            's_address'          => $request->s_address,
+            's_mobile'           => $request->s_mobile,
+            's_email'            => $request->s_email,
+            'gst'                  => $request->gst,
+            // Buyer details
+            'b_name'             => $request->b_name,
+            'b_mobile'           => $request->b_mobile,
+            'b_email'            => $request->b_email,
+            'b_address'          => $request->b_address,
+            'cgst' => $request->cgst,
+            'sgst' => $request->sgst,
+            'igst' => $request->igst,
         ]);
 
         foreach ($request->items as $item) {
@@ -85,7 +99,23 @@ class BillController extends Controller
     public function UpdateBill(Request $request, $id)
     {
         $bill = Bill_Voucher::findOrFail($id);
-        $bill->update($request->only(['bill_no', 'shop', 'name', 'date', 'address']));
+        $bill->update([
+            'bill_no' => $request->bill_no,
+            'date' => $request->date,
+            'shop' => $request->shop,
+            'role' => $request->role,
+            's_name' => $request->s_name,
+            's_address' => $request->s_address,
+            's_mobile' => $request->s_mobile,
+            's_email' => $request->s_email,
+            'gst_type' => $request->gst_type,
+            'gst' => $request->gst_type == 'Yes' ? $request->gst : 0,
+            'b_name' => $request->b_name,
+            'b_mobile' => $request->b_mobile,
+            'b_email' => $request->b_email,
+            'b_address' => $request->b_address,
+        ]);
+
 
         // Delete old items
         $bill->items()->delete();
@@ -120,10 +150,91 @@ class BillController extends Controller
         return redirect()->back()->with('success', 'Voucher Deleted successfully!');
     }
 
-    public function GenerateBill(){
+    public function GenerateBill()
+    {
 
         $states = config('states');
-        return view('ngo.bill.generate-bill',compact('states'));
+        $data = academic_session::all();
+        return view('ngo.bill.generate-bill', compact('states', 'data'));
+    }
 
+    public function StoreGbsBill(Request $request)
+    {
+        $validated = $request->validate([
+            'academic_session' => 'nullable|string',
+            'bill_date' => 'required|date',
+            'name' => 'required|string',
+            'guardian_name' => 'required|string',
+            'village' => 'nullable|string',
+            'post' => 'required|string',
+            'block' => 'required|string',
+            'state' => 'required|string',
+            'district' => 'required|string',
+            'branch' => 'required|string',
+            'centre' => 'required|string',
+            'date' => 'required|date',
+            'work' => 'required|string',
+            'amount' => 'required|numeric',
+            'payment_method' => 'required',
+            'cheque_no' => 'nullable|string',
+            'tr_bank_name' => 'nullable|string',
+            'tr_bank_branch' => 'nullable|string',
+            'cheque_date' => 'nullable|date',
+            'transaction_no' => 'nullable|string',
+            'transaction_date' => 'nullable|date',
+            'account_number' => 'nullable|string',
+            'bank_name' => 'nullable|string',
+            'branch_name' => 'nullable|string',
+            'ifsc_code' => 'nullable|string',
+            'place' => 'required|string',
+        ]);
+
+        $bill = GbsBill::create($validated);
+
+        return response()->json([
+            'message' => 'Bill created successfully.',
+            'data' => $bill
+        ], 201);
+    }
+
+    public function UpdateGbsBill(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'academic_session' => 'nullable|string',
+            'ngo_id' => 'nullable|string',
+            'bill_date' => 'required|date',
+            'name' => 'required|string',
+            'guardian_name' => 'required|string',
+            'village' => 'nullable|string',
+            'post' => 'required|string',
+            'block' => 'required|string',
+            'state' => 'required|string',
+            'district' => 'required|string',
+            'branch' => 'required|string',
+            'centre' => 'required|string',
+            'date' => 'required|date',
+            'work' => 'required|string',
+            'amount' => 'required|numeric',
+            'payment_method' => 'required|string|in:cash,cheque,upi,bank',
+            'cheque_no' => 'nullable|string',
+            'tr_bank_name' => 'nullable|string',
+            'tr_bank_branch' => 'nullable|string',
+            'cheque_date' => 'nullable|date',
+            'transaction_no' => 'nullable|string',
+            'transaction_date' => 'nullable|date',
+            'account_number' => 'nullable|string',
+            'bank_name' => 'nullable|string',
+            'branch_name' => 'nullable|string',
+            'ifsc_code' => 'nullable|string',
+            'place' => 'required|string',
+        ]);
+
+        $bill = GbsBill::findOrFail($id);
+        $bill->update($validated);
+
+        return response()->json([
+            'message' => 'Bill updated successfully.',
+            'data' => $bill
+        ]);
     }
 }
