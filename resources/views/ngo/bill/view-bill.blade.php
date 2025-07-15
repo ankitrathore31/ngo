@@ -117,8 +117,9 @@
                         <!-- Header -->
                         <div class="row">
                             <div class="col-sm-12">
-                                <p class="d-flex justify-content-between w-100" style="margin: 0; font-weight: bold;">
+                                <p class="d-flex justify-content-between w-100 mb-1" style="margin: 0; font-weight: bold;">
                                     <span>GST NO. {{ $bill->gst }}</span>
+                                    <span>{{$bill->role}}: &nbsp; {{ $bill->s_name }}</span>
                                     <span>Phone: {{ $bill->s_mobile }}</span>
                                 </p>
 
@@ -165,24 +166,24 @@
                                 {{ $bill->academic_session }}
                             </div>
                         </div>
-                        {{-- <div class="row mb-2">
-                            <h5><strong>- SELLER DETAILS</strong></h5>
+                        <div class="row mb-2">
+                            {{-- <h5><strong>- SELLER DETAILS</strong></h5> --}}
                             <div class="col-sm-12">
-                                <b>Name:</b> &nbsp; {{ $bill->s_name }}
+                                <b>{{$bill->role}}</b>: &nbsp;{{ $bill->s_name }}
                             </div>
-                            <div class="col-sm-12">
+                            {{-- <div class="col-sm-12">
                                 <b>Mobile:</b> &nbsp; {{ $bill->s_mobile }}
                             </div>
                             <div class="col-sm-12">
                                 <b>Email:</b> &nbsp; {{ $bill->s_email }}
-                            </div>
+                            </div> --}}
                             <div class="col-sm-12">
                                 <b>Shop/Farm:</b> &nbsp; {{ $bill->shop }}
                             </div>
-                            <div class="col-sm-12">
+                            {{-- <div class="col-sm-12">
                                 <b>Address:</b> &nbsp; {{ $bill->s_address }}
-                            </div>
-                        </div> --}}
+                            </div> --}}
+                        </div>
 
                         <div class="row mb-2">
                             <h5><strong>- BUYER DETAILS</strong></h5>
