@@ -312,6 +312,11 @@ Route::controller(BillController::class)->group(function(){
     Route::get('ngo/delete-bill/{id}', 'DeleteBill')->middleware('auth')->name('delete-bill');
     Route::get('ngo/generate-bill','GenerateBill')->middleware('auth')->name('generate-bill');
     Route::post('ngo/store-gbs-bill','StoreGbsBill')->middleware('auth')->name('store-gbs-bill');
+    Route::get('ngo/edit-gbs=bill/{id}','EditGbsBill')->middleware('auth')->name('edit-gbs-bill');
+    Route::post('ngo/update-gbs-bill/{id}','UdateGbsBill')->middleware('auth')->name('update-gbs-bill');
+    Route::get('ngo/delete-gbs-bill/{id}', 'DeleteGbsBill')->middleware('auth')->name('delete-gbs-bill');
+    Route::get('ngo/gbs-bill-list', 'GbsBillList')->middleware('auth')->name('gbs-bill-list');
+    Route::get('ngo/view-gbs-bill/{id}', 'ViewGbsBill')->Middleware('auth')->name('view-gbs-bill');
 });
 
 Route::controller(WorkPlanController::class)->group(function () {
