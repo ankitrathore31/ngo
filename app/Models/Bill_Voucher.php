@@ -21,6 +21,7 @@ class Bill_Voucher extends Model
         's_address',
         's_mobile',
         's_email',
+        's_pan',
         'gst',
 
         // Buyer details

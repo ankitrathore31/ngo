@@ -30,7 +30,8 @@ class BillController extends Controller
             's_address'          => $request->s_address,
             's_mobile'           => $request->s_mobile,
             's_email'            => $request->s_email,
-            'gst'                  => $request->gst,
+            'gst'                => $request->gst,
+            's_pan'              => $request->s_pan,
             // Buyer details
             'b_name'             => $request->b_name,
             'b_mobile'           => $request->b_mobile,
@@ -108,6 +109,7 @@ class BillController extends Controller
             's_address' => $request->s_address,
             's_mobile' => $request->s_mobile,
             's_email' => $request->s_email,
+            's_pan' => $request->s_pan,
             'gst_type' => $request->gst_type,
             'gst' => $request->gst_type == 'Yes' ? $request->gst : 0,
             'b_name' => $request->b_name,
