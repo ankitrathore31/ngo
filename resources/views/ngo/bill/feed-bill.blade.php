@@ -21,7 +21,7 @@
                 @csrf
                 <div class="row">
                     <div class="col-md-4 mb-3">
-                        <label for="bill_no">Bill/Voucher No:</label>
+                        <label for="bill_no">Bill/Voucher/Invoice No:</label>
                         <input type="text" id="bill_no" name="bill_no" class="form-control"
                             value="{{ old('bill_no') }}" required>
                         @error('bill_no')
@@ -132,6 +132,22 @@
                         <label for="gst">GST</label>
                         <input type="number" name="gst" id="gst" class="form-control"
                             value="{{ old('gst', 0) }}">
+                    </div>
+
+                    <div class="col-sm-4 mb-3">
+                        <label for="pancard_type">PAN Card:</label>
+                        <select id="pancard_type" name="pancard_type"
+                            class="form-select @error('pancard_type') is-invalid @enderror" onchange="toggleGstInput()">
+                            <option value="">Select</option>
+                            <option value="Yes" {{ old('pancard_type') == 'Yes' ? 'selected' : '' }}>Yes</option>
+                            <option value="No" {{ old('pancard_type') == 'No' ? 'selected' : '' }}>No</option>
+                        </select>
+                    </div>
+
+                    <div id="pancard_input_wrapper" class="col-sm-4 mb-3" style="display: none;">
+                        <label for="pancard">PAN Card Number:</label>
+                        <input type="text" name="s_pan" id="pancard" class="form-control"
+                            value="{{ old('pancard') }}">
                     </div>
 
                 </div>
@@ -312,5 +328,21 @@
                 gstInput.value = 0;
             }
         }
+    </script>
+    <script>
+        function toggleGstInput() {
+            var selectBox = document.getElementById("pancard_type");
+            var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+            var gstInputWrapper = document.getElementById("pancard_input_wrapper");
+
+            if (selectedValue === "Yes") {
+                gstInputWrapper.style.display = "block";
+            } else {
+                gstInputWrapper.style.display = "none";
+            }
+        }
+
+        // Initial check on page load
+        toggleGstInput();
     </script>
 @endsection

@@ -21,7 +21,7 @@
                 @csrf
                 <!-- BILL INFO -->
                 <div class="mb-3">
-                    <label for="bill_no">Bill/Voucher No:</label>
+                    <label for="bill_no">Bill/Voucher/Invoice No:</label>
                     <input type="text" id="bill_no" name="bill_no" class="form-control"
                         value="{{ old('bill_no', $bill->bill_no) }}" required>
                 </div>
@@ -93,6 +93,12 @@
                     <input type="number" name="gst" id="gst" class="form-control"
                         value="{{ old('gst', $bill->gst ?? 0) }}">
                 </div>
+
+                <div id="pancard_input_wrapper" class=" mb-3">
+                        <label for="pancard">PAN Card Number:</label>
+                        <input type="text" name="s_pan" id="pancard" class="form-control"
+                            value="{{ old('pancard', $bill->s_pan ?? 0) }}">
+                    </div>
 
                 <!-- BUYER DETAILS -->
                 <h5 class="mt-4">- BUYER DETAILS</h5>
