@@ -42,6 +42,10 @@ class BillController extends Controller
             'igst' => $request->igst,
         ]);
 
+
+dd($request);
+
+
         foreach ($request->items as $item) {
             Voucher_Item::create([
                 'bill_voucher_id' => $voucher->id,
@@ -70,7 +74,7 @@ class BillController extends Controller
         $filtered = $record->filter(function ($record) use ($request) {
 
             $matchesApp = $request->filled('bill_no')
-                ? str_contains($person->letterNo ?? '', $request->letterNo)
+                ? str_contains($person->biil_no ?? '', $request->bill_no)
                 : true;
 
             $matchesName = $request->filled('name')
@@ -163,7 +167,7 @@ class BillController extends Controller
     public function StoreGbsBill(Request $request)
     {
         $validated = $request->validate([
-            'academic_session' => 'nullable|string',
+            'academic_session' => 'required',
             'bill_date' => 'required|date',
             'name' => 'required|string',
             'guardian_name' => 'required|string',
@@ -193,13 +197,19 @@ class BillController extends Controller
 
         $bill = GbsBill::create($validated);
 
-        return response()->json([
-            'message' => 'Bill created successfully.',
-            'data' => $bill
-        ], 201);
+        return redirect()->route('gbs-bill-list')->with('success', 'Bill created successfully.');
     }
 
-    public function UpdateGbsBill(Request $request, $id)
+public function EditGbsBill($id)
+    {
+
+        $states = config('states');
+        $data = academic_session::all();
+        $bill = GbsBill::find($id);
+        return view('ngo.bill.edit-gbs-bill', compact('states', 'data','bill'));
+    }
+
+    public function UdateGbsBill(Request $request, $id)
     {
         $validated = $request->validate([
             'academic_session' => 'nullable|string',
@@ -217,7 +227,7 @@ class BillController extends Controller
             'date' => 'required|date',
             'work' => 'required|string',
             'amount' => 'required|numeric',
-            'payment_method' => 'required|string|in:cash,cheque,upi,bank',
+            'payment_method' => 'required',
             'cheque_no' => 'nullable|string',
             'tr_bank_name' => 'nullable|string',
             'tr_bank_branch' => 'nullable|string',
@@ -234,9 +244,54 @@ class BillController extends Controller
         $bill = GbsBill::findOrFail($id);
         $bill->update($validated);
 
-        return response()->json([
-            'message' => 'Bill updated successfully.',
-            'data' => $bill
+        return redirect()->route('gbs-bill-list')->with('success', 'Bill update successfully.');
+    }
+
+    public function DeleteGbsBill($id)
+    {
+
+        $bill = GbsBill::find($id);
+        $bill->delete();
+
+        return redirect()->back()->with('success', 'Gbs Bill Deleted successfully!');
+    }
+
+     public function GbsBillList(Request $request)
+    {
+        $session = academic_session::all();
+
+        // Base certificate query
+        $query = GbsBill::query();
+
+        if ($request->filled('session_filter')) {
+            $query->where('academic_session', $request->session_filter);
+        }
+
+        $record = $query->orderBy('created_at', 'desc')->get();
+
+        $filtered = $record->filter(function ($record) use ($request) {
+
+            $matchesApp = $request->filled('centre')
+                ? str_contains($person->centre ?? '', $request->centre)
+                : true;
+
+            $matchesName = $request->filled('name')
+                ? str_contains(strtolower($person->name ?? ''), strtolower($request->name))
+                : true;
+
+            return $matchesApp && $matchesName;
+        });
+
+        return view('ngo.bill.gbs-bill-list', [
+            'session' => $session,
+            'record' => $filtered,
         ]);
+    }
+
+    public function ViewGbsBill($id)
+    {
+        $bill = GbsBill::find($id);
+        $signatures = Signature::pluck('file_path', 'role');
+        return view('ngo.bill.view-gbs-bill', compact('bill', 'signatures'));
     }
 }

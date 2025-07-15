@@ -298,9 +298,11 @@
 
                     <div class=" col-md-4 mb-3">
                         <label class="form-label">Amount (₹)</label>
-
-                        <input type="number" class="form-control" id="amountInput" oninput="updateAmountInWords()"
-                            placeholder="₹">
+                        <input type="number" class="form-control" name="amount" id="amountInput"
+                            oninput="updateAmountInWords()" placeholder="₹">
+                        @error('amount')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="col-md-4 mb-3">
@@ -326,6 +328,15 @@
                         </select>
                         @error('payment_method')
                             <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-4 form-group mb-3">
+                        <label class="form-label">Transaction Date</label>
+                        <input type="date" class="form-control" name="transaction_date"
+                            value="{{ old('transaction_date') }}">
+                        @error('transaction_date')
+                            <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
 
@@ -373,14 +384,6 @@
                                 <input type="text" class="form-control" name="transaction_no"
                                     value="{{ old('transaction_no') }}">
                                 @error('transaction_no')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-4 form-group mb-3">
-                                <label class="form-label">Transaction Date</label>
-                                <input type="date" class="form-control" name="transaction_date"
-                                    value="{{ old('transaction_date') }}">
-                                @error('transaction_date')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
