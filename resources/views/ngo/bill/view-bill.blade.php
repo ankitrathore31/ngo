@@ -102,7 +102,7 @@
         <div class="container">
             <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
                 <h5 class="mb-0">
-                    <span> Bill</span>
+                    <span>Bill</span>
                 </h5>
                 <div>
                     <button onclick="window.print()" class="btn btn-primary">Print Bill</button>
@@ -119,7 +119,7 @@
                             <div class="col-sm-12">
                                 <p class="d-flex justify-content-between w-100 mb-1" style="margin: 0; font-weight: bold;">
                                     <span>GST NO. {{ $bill->gst }}</span>
-                                    <span>{{$bill->role}}: &nbsp; {{ $bill->s_name }}</span>
+                                    <span>{{ $bill->role }}: &nbsp; {{ $bill->s_name }}</span>
                                     <span>Phone: {{ $bill->s_mobile }}</span>
                                 </p>
 
@@ -169,7 +169,7 @@
                         <div class="row mb-2">
                             {{-- <h5><strong>- SELLER DETAILS</strong></h5> --}}
                             <div class="col-sm-12">
-                                <b>{{$bill->role}}</b>: &nbsp;{{ $bill->s_name }}
+                                <b>{{ $bill->role }}</b>: &nbsp;{{ $bill->s_name }}
                             </div>
                             {{-- <div class="col-sm-12">
                                 <b>Mobile:</b> &nbsp; {{ $bill->s_mobile }}
@@ -241,10 +241,10 @@
 
                                                     $cgstAmount = ($totalAmount * $cgst) / 100;
                                                     $sgstAmount = ($totalAmount * $sgst) / 100;
-                                                    $igstAmount = ($totalAmount * $igst) / 100;
+                                                    $igstAmount = $cgstAmount + $sgstAmount;
 
                                                     $grandTotal =
-                                                        $totalAmount + $cgstAmount + $sgstAmount + $igstAmount;
+                                                        $totalAmount + $cgstAmount + $sgstAmount;
                                                 @endphp
 
                                                 <tr class="table-secondary fw-bold">
@@ -327,23 +327,24 @@
                 </div>
             </div>
         </div>
-        <script>
-            function setLanguage(lang) {
-                document.querySelectorAll('[data-lang]').forEach(el => {
-                    el.style.display = el.getAttribute('data-lang') === lang ? 'inline' : 'none';
-                });
-            }
-            window.onload = () => setLanguage('en'); // Set Eng as default
-        </script>
-        <script>
-            function togglePM(show) {
-                document.getElementById('pmSignatureBox').classList.toggle('d-none', !show);
-                document.getElementById('pmShowBtnBox').classList.toggle('d-none', show);
-            }
+    </div>
+    <script>
+        function setLanguage(lang) {
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                el.style.display = el.getAttribute('data-lang') === lang ? 'inline' : 'none';
+            });
+        }
+        window.onload = () => setLanguage('en'); // Set Eng as default
+    </script>
+    <script>
+        function togglePM(show) {
+            document.getElementById('pmSignatureBox').classList.toggle('d-none', !show);
+            document.getElementById('pmShowBtnBox').classList.toggle('d-none', show);
+        }
 
-            function toggleDirector(show) {
-                document.getElementById('directorSignatureBox').classList.toggle('d-none', !show);
-                document.getElementById('directorShowBtnBox').classList.toggle('d-none', show);
-            }
-        </script>
-    @endsection
+        function toggleDirector(show) {
+            document.getElementById('directorSignatureBox').classList.toggle('d-none', !show);
+            document.getElementById('directorShowBtnBox').classList.toggle('d-none', show);
+        }
+    </script>
+@endsection
