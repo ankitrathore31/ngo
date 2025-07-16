@@ -95,10 +95,10 @@
                 </div>
 
                 <div id="pancard_input_wrapper" class=" mb-3">
-                        <label for="pancard">PAN Card Number:</label>
-                        <input type="text" name="s_pan" id="pancard" class="form-control"
-                            value="{{ old('pancard', $bill->s_pan ?? 0) }}">
-                    </div>
+                    <label for="pancard">PAN Card Number:</label>
+                    <input type="text" name="s_pan" id="pancard" class="form-control"
+                        value="{{ old('pancard', $bill->s_pan ?? 0) }}">
+                </div>
 
                 <!-- BUYER DETAILS -->
                 <h5 class="mt-4">- BUYER DETAILS</h5>
@@ -181,7 +181,7 @@
                     <div class="col-md-2">
                         <label for="igst">IGST (%)</label>
                         <input type="number" id="igst" name="igst" class="form-control"
-                            value="{{ old('igst', $bill->igst ?? 0) }}" onchange="updateTotal()">
+                            value="{{ old('igst', $bill->igst ?? 0) }}" onchange="updateTotal()" readonly>
                     </div>
                 </div>
 
@@ -257,15 +257,18 @@
                 const sgstAmount = (baseAmount * sgstRate) / 100;
                 const igstAmount = (baseAmount * igstRate) / 100;
 
-                const grandTotal = baseAmount + cgstAmount + sgstAmount + igstAmount;
+                // Calculate grand total
+                const Totaligst = cgstPercent + sgstPercent;
+                const grandTotal = total + cgstAmount + sgstAmount;
+                const TotaligstAmount = cgstAmount + sgstAmount;
 
-                // Display tax amounts
-                document.getElementById('cgst-amount').innerText = cgstAmount.toFixed(2);
-                document.getElementById('sgst-amount').innerText = sgstAmount.toFixed(2);
-                document.getElementById('igst-amount').innerText = igstAmount.toFixed(2);
-
-                // Display final grand total
-                document.getElementById('grand-total').innerText = grandTotal.toFixed(2);
+                // Update DOM
+                document.getElementById('total-amount').textContent = total.toFixed(2);
+                document.getElementById('cgst-amount').textContent = cgstAmount.toFixed(2);
+                document.getElementById('sgst-amount').textContent = sgstAmount.toFixed(2);
+                document.getElementById('igst-amount').textContent = TotaligstAmount.toFixed(2);
+                document.getElementById('grand-total').textContent = grandTotal.toFixed(2);
+                document.getElementById('igst').value = Totaligst.toFixed(2);
             }
 
 

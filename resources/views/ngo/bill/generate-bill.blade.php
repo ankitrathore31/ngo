@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        <div id="personBillContainer" style="display: none;" class="card border p-3 container mt-5">
+        <div id="sansthaBillContainer" style="display: none;" class="card border p-3 container mt-5">
             <form method="POST" action="{{ route('store-bill') }}">
                 @csrf
                 <div class="row mt-3">
@@ -150,7 +150,7 @@
             </form>
         </div>
 
-        <div id="sansthaBillContainer" style="display: none;" class="card border p-3 container mt-5">
+        <div id="personBillContainer" style="display: none;" class="card border p-3 container mt-5">
             <form method="POST" action="{{ route('store-gbs-bill') }}">
                 @csrf
                 <div class="row">

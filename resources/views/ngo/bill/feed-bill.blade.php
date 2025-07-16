@@ -225,7 +225,7 @@
                     <div class="col-md-2">
                         <label for="igst">IGST (%)</label>
                         <input type="number" id="igst" name="igst" class="form-control" value="0"
-                            onchange="updateTotal()">
+                            onchange="updateTotal()" readonly>
                     </div>
                 </div>
 
@@ -298,14 +298,17 @@
             const igstAmount = (total * igstPercent) / 100;
 
             // Calculate grand total
-            const grandTotal = total + cgstAmount + sgstAmount + igstAmount;
+            const Totaligst = cgstPercent + sgstPercent;
+            const grandTotal = total + cgstAmount + sgstAmount;
+            const TotaligstAmount =  cgstAmount + sgstAmount;
 
             // Update DOM
             document.getElementById('total-amount').textContent = total.toFixed(2);
             document.getElementById('cgst-amount').textContent = cgstAmount.toFixed(2);
             document.getElementById('sgst-amount').textContent = sgstAmount.toFixed(2);
-            document.getElementById('igst-amount').textContent = igstAmount.toFixed(2);
+            document.getElementById('igst-amount').textContent = TotaligstAmount.toFixed(2);
             document.getElementById('grand-total').textContent = grandTotal.toFixed(2);
+            document.getElementById('igst').value = Totaligst.toFixed(2);
         }
 
 

@@ -86,7 +86,7 @@
     </style>
     <div class="wrapper">
         <div class="d-flex justify-content-between align-item-centre mb-0 mt-4">
-            <h5 class="mb-0">View GBS Bill</h5>
+            <h5 class="mb-0">View GBS Person Bill</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                     <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
@@ -102,7 +102,7 @@
         <div class="container">
             <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
                 <h5 class="mb-0">
-                    <span>GBS Bill</span>
+                    <span>GBS Person Bill</span>
                 </h5>
                 <div>
                     <button onclick="window.print()" class="btn btn-primary">Print Bill</button>
