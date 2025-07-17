@@ -7,6 +7,25 @@
             /* Remove all margins including top */
         }
 
+        .print-red-bg {
+            background-color: red !important;
+            /* Bootstrap 'bg-danger' color */
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            color: white !important;
+            font-size: 18px;
+        }
+
+        .print-h4 {
+            background-color: red !important;
+            color: white !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-size: 28px;
+            word-spacing: 8px;
+            text-align: center;
+        }
+
         @media print {
 
             html,
@@ -62,6 +81,25 @@
 
             tfoot {
                 display: table-footer-group;
+            }
+
+            .print-red-bg {
+                background-color: red !important;
+                /* Bootstrap 'bg-danger' color */
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                color: white !important;
+                font-size: 18px;
+            }
+
+            .print-h4 {
+                background-color: red !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                font-size: 28px;
+                word-spacing: 8px;
+                text-align: center;
             }
         }
     </style>
@@ -169,6 +207,40 @@
             </div>
             <div class="card shadow-sm printable">
                 <div class="card-body table-responsive">
+                    <div class="text-center mb-4 border-bottom pb-2">
+                        <!-- Header -->
+                        <div class="row">
+                            <div class="col-sm-2 text-center text-md-start">
+                                <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="80" height="80">
+                            </div>
+                            <div class="col-sm-10">
+                                <p style="margin: 0;" class="d-flex justify-content-around"><b>
+                                        <span>NEETI AYOG ID NO. UP/2023/0360430</span>&nbsp;
+                                        &nbsp; &nbsp;<span>NGO NO. UP/00033062</span>&nbsp; &nbsp;
+                                        &nbsp; &nbsp;<span>PAN: AAEAG7650B</span>&nbsp;
+                                    </b></p>
+                                <h4 class="print-h4"><b>
+                                        {{-- <span data-lang="hi">ज्ञान भारती संस्था</span> --}}
+                                        <span data-lang="en">GYAN BHARTI SANSTHA</span>
+                                    </b></h4>
+                                <h6 style="color: blue;"><b>
+                                        {{-- <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर
+                                            प्रदेश -
+                                            262121</span> --}}
+                                        <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit, UP
+                                            -
+                                            262121</span>
+                                    </b></h6>
+                                <p style="font-size: 14px; margin: 0;">
+                                    <b>
+                                        <span>Website: www.gyanbhartingo.org | Email: gyanbhartingo600@gmail.com
+                                            | Mob:
+                                            9411484111</span>
+                                    </b>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-primary">
                             <tr>
@@ -244,7 +316,7 @@
                                                     <i class="fa-regular fa-trash"></i> 
                                                 </a> --}}
 
-                                                 <a href="{{ route('edit-facilities', [$item->id, $survey->id]) }}"
+                                                <a href="{{ route('edit-facilities', [$item->id, $survey->id]) }}"
                                                     class="btn btn-primary btn-sm px-3 d-flex align-items-center justify-content-center"
                                                     title="View" style="min-width: 38px; height: auto;">
                                                     <i class="fa-regular fa-edit me-1"></i> Edit

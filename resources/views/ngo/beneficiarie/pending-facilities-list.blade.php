@@ -1,10 +1,29 @@
 @extends('ngo.layout.master')
 @Section('content')
-  <style>
+    <style>
         @page {
             size: auto;
             margin: 0;
             /* Remove all margins including top */
+        }
+
+        .print-red-bg {
+            background-color: red !important;
+            /* Bootstrap 'bg-danger' color */
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            color: white !important;
+            font-size: 18px;
+        }
+
+        .print-h4 {
+            background-color: red !important;
+            color: white !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-size: 28px;
+            word-spacing: 8px;
+            text-align: center;
         }
 
         @media print {
@@ -62,6 +81,25 @@
 
             tfoot {
                 display: table-footer-group;
+            }
+
+            .print-red-bg {
+                background-color: red !important;
+                /* Bootstrap 'bg-danger' color */
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                color: white !important;
+                font-size: 18px;
+            }
+
+            .print-h4 {
+                background-color: red !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                font-size: 28px;
+                word-spacing: 8px;
+                text-align: center;
             }
         }
     </style>
@@ -162,13 +200,47 @@
                             <button type="submit" class="btn btn-primary me-2">Search</button>
                             <a href="{{ route('pending-distribute-list') }}" class="btn btn-info text-white me-2">Reset</a>
                         </div>
-                       
+
                     </form>
-                     <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
+                    <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
                 </div>
             </div>
             <div class="card shadow-sm printable">
                 <div class="card-body table-responsive">
+                    <div class="text-center mb-4 border-bottom pb-2">
+                        <!-- Header -->
+                        <div class="row">
+                            <div class="col-sm-2 text-center text-md-start">
+                                <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="80" height="80">
+                            </div>
+                            <div class="col-sm-10">
+                                <p style="margin: 0;" class="d-flex justify-content-around"><b>
+                                        <span>NEETI AYOG ID NO. UP/2023/0360430</span>&nbsp;
+                                        &nbsp; &nbsp;<span>NGO NO. UP/00033062</span>&nbsp; &nbsp;
+                                        &nbsp; &nbsp;<span>PAN: AAEAG7650B</span>&nbsp;
+                                    </b></p>
+                                <h4 class="print-h4"><b>
+                                        {{-- <span data-lang="hi">ज्ञान भारती संस्था</span> --}}
+                                        <span data-lang="en">GYAN BHARTI SANSTHA</span>
+                                    </b></h4>
+                                <h6 style="color: blue;"><b>
+                                        {{-- <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर
+                                            प्रदेश -
+                                            262121</span> --}}
+                                        <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit, UP
+                                            -
+                                            262121</span>
+                                    </b></h6>
+                                <p style="font-size: 14px; margin: 0;">
+                                    <b>
+                                        <span>Website: www.gyanbhartingo.org | Email: gyanbhartingo600@gmail.com
+                                            | Mob:
+                                            9411484111</span>
+                                    </b>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-primary">
                             <tr>
@@ -210,12 +282,13 @@
                                             {{ $item->block }},
                                             {{ $item->district }},
                                             {{ $item->state }} - {{ $item->pincode }},
-                                        ({{ $item->area_type }})</td>
+                                            ({{ $item->area_type }})
+                                        </td>
                                         <td>{{ $item->identity_no }}</td>
                                         <td>{{ $item->identity_type }}</td>
                                         <td>{{ $item->phone }}</td>
-                                          <td>{{ $item->caste }}</td>
-                                          <td>{{ $item->religion_category }}</td>
+                                        <td>{{ $item->caste }}</td>
+                                        <td>{{ $item->religion_category }}</td>
                                         <td>{{ $item->religion }}</td>
                                         <td>
                                             {{ $item->dob ? \Carbon\Carbon::parse($item->dob)->age . ' years' : 'Not Found' }}
@@ -227,7 +300,7 @@
                                         <td>{{ $survey->facilities_category ?? 'No Found' }}</td>
                                         <td>{{ $survey->facilities ?? 'No Found' }}</td>
                                         <td>{{ $survey->status ?? 'No Found' }} </td>
-                                         <td>{{ $survey->pending_reason ?? 'No Found' }}</td>
+                                        <td>{{ $survey->pending_reason ?? 'No Found' }}</td>
                                         <td></td>
                                         <td>{{ $survey->academic_session }}</td>
                                         <td class="no-print">

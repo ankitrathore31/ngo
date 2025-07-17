@@ -7,6 +7,25 @@
             /* Remove all margins including top */
         }
 
+        .print-red-bg {
+            background-color: red !important;
+            /* Bootstrap 'bg-danger' color */
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            color: white !important;
+            font-size: 18px;
+        }
+
+        .print-h4 {
+            background-color: red !important;
+            color: white !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-size: 28px;
+            word-spacing: 8px;
+            text-align: center;
+        }
+
         @media print {
 
             html,
@@ -63,6 +82,25 @@
             tfoot {
                 display: table-footer-group;
             }
+
+            .print-red-bg {
+                background-color: red !important;
+                /* Bootstrap 'bg-danger' color */
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                color: white !important;
+                font-size: 18px;
+            }
+
+            .print-h4 {
+                background-color: red !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                font-size: 28px;
+                word-spacing: 8px;
+                text-align: center;
+            }
         }
     </style>
 
@@ -91,8 +129,7 @@
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 {{-- <label for="session_filter" class="form-label">Select Session</label> --}}
-                                <select name="session_filter" id="session_filter" class="form-control"
-                                    >
+                                <select name="session_filter" id="session_filter" class="form-control">
                                     <option value="">All Sessions</option> <!-- Default option to show all -->
                                     @foreach ($data as $session)
                                         <option value="{{ $session->session_date }}"
@@ -106,8 +143,7 @@
 
                             <div class="col-md-4 mb-3">
                                 <select id="category_filter" name="category_filter"
-                                    class="form-control @error('category_filter') is-invalid @enderror"
-                                    >
+                                    class="form-control @error('category_filter') is-invalid @enderror">
                                     <option value="">-- Select Facilities Category --</option>
                                     <option value="Education"
                                         {{ request('category_filter') == 'Education' ? 'selected' : '' }}>
@@ -171,7 +207,7 @@
                             <div class="col-md-4 col-sm-6 form-group mb-3">
                                 {{-- <label for="stateSelect" class="form-label">State: <span class="text-danger">*</span></label> --}}
                                 <select class="form-control @error('state') is-invalid @enderror" name="state"
-                                    id="stateSelect" >
+                                    id="stateSelect">
                                     <option value="">Select State</option>
                                     @foreach ($districtsByState as $state => $districts)
                                         <option value="{{ $state }}"
@@ -189,7 +225,7 @@
                                 {{-- <label for="districtSelect" class="form-label">District: <span
                                     class="text-danger">*</span></label> --}}
                                 <select class="form-control @error('district') is-invalid @enderror" name="district"
-                                    id="districtSelect" >
+                                    id="districtSelect">
                                     <option value="">Select District</option>
                                 </select>
                                 @error('district')
@@ -209,8 +245,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <button type="submit" class="btn btn-primary me-1">Search</button>
-                                <a href="{{ route('distributed-list') }}"
-                                    class="btn btn-info text-white me-1">Reset</a>
+                                <a href="{{ route('distributed-list') }}" class="btn btn-info text-white me-1">Reset</a>
                             </div>
                         </div>
                     </form>
@@ -219,6 +254,40 @@
             </div>
             <div class="card shadow-sm printable">
                 <div class="card-body table-responsive">
+                    <div class="text-center mb-4 border-bottom pb-2">
+                        <!-- Header -->
+                        <div class="row">
+                            <div class="col-sm-2 text-center text-md-start">
+                                <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="80" height="80">
+                            </div>
+                            <div class="col-sm-10">
+                                <p style="margin: 0;" class="d-flex justify-content-around"><b>
+                                        <span>NEETI AYOG ID NO. UP/2023/0360430</span>&nbsp;
+                                        &nbsp; &nbsp;<span>NGO NO. UP/00033062</span>&nbsp; &nbsp;
+                                        &nbsp; &nbsp;<span>PAN: AAEAG7650B</span>&nbsp;
+                                    </b></p>
+                                <h4 class="print-h4"><b>
+                                        {{-- <span data-lang="hi">ज्ञान भारती संस्था</span> --}}
+                                        <span data-lang="en">GYAN BHARTI SANSTHA</span>
+                                    </b></h4>
+                                <h6 style="color: blue;"><b>
+                                        {{-- <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर
+                                            प्रदेश -
+                                            262121</span> --}}
+                                        <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit, UP
+                                            -
+                                            262121</span>
+                                    </b></h6>
+                                <p style="font-size: 14px; margin: 0;">
+                                    <b>
+                                        <span>Website: www.gyanbhartingo.org | Email: gyanbhartingo600@gmail.com
+                                            | Mob:
+                                            9411484111</span>
+                                    </b>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-primary">
                             <tr>
@@ -304,7 +373,7 @@
             window.print();
         }
     </script>
-     <script>
+    <script>
         const allDistricts = @json($districtsByState);
         const oldDistrict = "{{ old('district') }}";
         const oldState = "{{ old('state') }}";
