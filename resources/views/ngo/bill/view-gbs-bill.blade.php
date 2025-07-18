@@ -312,20 +312,21 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-8 mb-2">
+                            <div class="col-sm-6 mb-2">
                                 <div style="display: flex; align-items: center; width: 100%;">
                                     <strong style="white-space: nowrap; margin-right: 5px;">
-                                        <span data-lang="hi">नकद/चेक संख्या/यूपीआई संख्या</span>
-                                        <span data-lang="en">Cash/Cheque/UPI No.</span>
+                                        <span data-lang="hi">भुगतान का तरीका</span>
+                                        <span data-lang="en">Payment Method</span>
+
                                     </strong>
                                     <div
                                         style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                        &nbsp;{{ $bill->transaction_no ?? $bill->cheque_no }}
+                                        &nbsp;{{ $bill->payment_method }}
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="col-sm-4 mb-2">
+                            <div class="col-sm-6 mb-2">
                                 <div style="display: flex; align-items: center; width: 100%;">
                                     <strong style="white-space: nowrap; margin-right: 5px;">
                                         <span data-lang="hi"></span>
@@ -338,55 +339,93 @@
                                 </div>
                             </div>
 
-                            <div class="col-sm-12 mb-2">
-                                <div style="display: flex; align-items: center; width: 100%;">
-                                    <strong style="white-space: nowrap; margin-right: 5px;">
-                                        <span data-lang="hi">खाता संख्या </span>
-                                        <span data-lang="en">Account no</span>
-                                    </strong>
-                                    <div
-                                        style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                        &nbsp;{{ $bill->account_number }}
+                            {{-- Show Account details --}}
+                            @if ($bill->payment_method === 'Account')
+                                <div class="col-sm-12 mb-2">
+                                    <div style="display: flex; align-items: center; width: 100%;">
+                                        <strong style="white-space: nowrap; margin-right: 5px;">
+                                            <span data-lang="hi">खाता संख्या</span>
+                                            <span data-lang="en">Account No</span>
+                                        </strong>
+                                        <div
+                                            style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
+                                            &nbsp;{{ $bill->account_number ?? 'N/A' }}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="col-sm-12 mb-2">
-                                <div style="display: flex; align-items: center; width: 100%;">
-                                    <strong style="white-space: nowrap; margin-right: 5px;">
-                                        <span data-lang="hi">बैंक का नाम</span>
-                                        <span data-lang="en">Bank Name</span>
-                                    </strong>
-                                    <div
-                                        style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                        &nbsp;{{ $bill->bank_name }}
+                                <div class="col-sm-12 mb-2">
+                                    <div style="display: flex; align-items: center; width: 100%;">
+                                        <strong style="white-space: nowrap; margin-right: 5px;">
+                                            <span data-lang="hi">बैंक का नाम</span>
+                                            <span data-lang="en">Bank Name</span>
+                                        </strong>
+                                        <div
+                                            style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
+                                            &nbsp;{{ $bill->bank_name ?? 'N/A' }}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-12 mb-2">
-                                <div style="display: flex; align-items: center; width: 100%;">
-                                    <strong style="white-space: nowrap; margin-right: 5px;">
-                                        <span data-lang="hi">बैंक शाखा</span>
-                                        <span data-lang="en">Bank Branch</span>
-                                    </strong>
-                                    <div
-                                        style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                        &nbsp;{{ $bill->bank_branch }}
+
+                                <div class="col-sm-12 mb-2">
+                                    <div style="display: flex; align-items: center; width: 100%;">
+                                        <strong style="white-space: nowrap; margin-right: 5px;">
+                                            <span data-lang="hi">बैंक शाखा</span>
+                                            <span data-lang="en">Bank Branch</span>
+                                        </strong>
+                                        <div
+                                            style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
+                                            &nbsp;{{ $bill->bank_branch ?? 'N/A' }}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-12 mb-2">
-                                <div style="display: flex; align-items: center; width: 100%;">
-                                    <strong style="white-space: nowrap; margin-right: 5px;">
-                                        <span data-lang="hi">आई.एफ.एफ.सी. कोड</span>
-                                        <span data-lang="en">I.F.F.C. Code</span>
-                                    </strong>
-                                    <div
-                                        style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                        &nbsp;{{ $bill->ifsc_code }}
+
+                                <div class="col-sm-12 mb-2">
+                                    <div style="display: flex; align-items: center; width: 100%;">
+                                        <strong style="white-space: nowrap; margin-right: 5px;">
+                                            <span data-lang="hi">आई.एफ.एस.सी. कोड</span>
+                                            <span data-lang="en">IFSC Code</span>
+                                        </strong>
+                                        <div
+                                            style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
+                                            &nbsp;{{ $bill->ifsc_code ?? 'N/A' }}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
+
+                            {{-- Show Cheque No --}}
+                            @if ($bill->payment_method === 'Cheque')
+                                <div class="col-sm-12 mb-2">
+                                    <div style="display: flex; align-items: center; width: 100%;">
+                                        <strong style="white-space: nowrap; margin-right: 5px;">
+                                            <span data-lang="hi">चेक संख्या</span>
+                                            <span data-lang="en">Cheque No</span>
+                                        </strong>
+                                        <div
+                                            style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
+                                            &nbsp;{{ $bill->cheque_no ?? 'N/A' }}
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
+                            {{-- Show Transaction No for UPI and Cashfree --}}
+                            @if ($bill->payment_method === 'UPI' || $bill->payment_method === 'Cashfree')
+                                <div class="col-sm-12 mb-2">
+                                    <div style="display: flex; align-items: center; width: 100%;">
+                                        <strong style="white-space: nowrap; margin-right: 5px;">
+                                            <span data-lang="hi">लेन-देन संख्या</span>
+                                            <span data-lang="en">Transaction No</span>
+                                        </strong>
+                                        <div
+                                            style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
+                                            &nbsp;{{ $bill->transaction_no ?? 'N/A' }}
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
                             <div class="col-sm-12 mb-2">
                                 <div style="display: flex; align-items: center; width: 100%;">
                                     <strong style="white-space: nowrap; margin-right: 5px;">

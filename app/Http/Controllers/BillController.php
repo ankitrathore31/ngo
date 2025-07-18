@@ -158,7 +158,6 @@ dd($request);
 
     public function GenerateBill()
     {
-
         $states = config('states');
         $data = academic_session::all();
         return view('ngo.bill.generate-bill', compact('states', 'data'));
@@ -183,9 +182,6 @@ dd($request);
             'amount' => 'required|numeric',
             'payment_method' => 'required',
             'cheque_no' => 'nullable|string',
-            'tr_bank_name' => 'nullable|string',
-            'tr_bank_branch' => 'nullable|string',
-            'cheque_date' => 'nullable|date',
             'transaction_no' => 'nullable|string',
             'transaction_date' => 'nullable|date',
             'account_number' => 'nullable|string',
@@ -229,9 +225,6 @@ public function EditGbsBill($id)
             'amount' => 'required|numeric',
             'payment_method' => 'required',
             'cheque_no' => 'nullable|string',
-            'tr_bank_name' => 'nullable|string',
-            'tr_bank_branch' => 'nullable|string',
-            'cheque_date' => 'nullable|date',
             'transaction_no' => 'nullable|string',
             'transaction_date' => 'nullable|date',
             'account_number' => 'nullable|string',

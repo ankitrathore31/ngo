@@ -195,6 +195,8 @@ Route::controller(BeneficiarieController::class)->group(function () {
     Route::post('ngo/update-facilities/{beneficiarie_id}/survey/{survey_id}', 'updateFacilities')->middleware('auth')->name('update-facilities');
     Route::get('ngo/distribute-beneficiarie-facilities/{beneficiarie_id}/survey/{survey_id}', 'distributebeneficiarieFacilities')->middleware('auth')->name('distribute-beneficiarie-facilities');
     Route::post('ngo/store-distribute-facilities/{beneficiarie_id}/survey/{survey_id}', 'storedistributefacilities')->middleware('auth')->name('store-distribute-facilities');
+    Route::get('ngo/edit-distribute-facilities/{beneficiarie_id}/survey/{survey_id}','EditDistributeFacilities')->middleware('auth')->name('edit-distribute-facilities');
+    Route::post('ngo/update-distribute-facilities/{beneficiarie_id}/survey/{survey_id}', 'Updatedistributefacilities')->middleware('auth')->name('update-distribute-facilities');
     Route::get('ngo/distributed-facilities', 'distributefacilities')->middleware('auth')->name('distributed-list');
     Route::get('ngo/all-beneficiarie-list', 'allbeneficiarielist')->middleware('auth')->name('all-beneficiarie-list');
     Route::get('ngo/Pending-facilities', 'pendingfacilities')->middleware('auth')->name('pending-distribute-list');
