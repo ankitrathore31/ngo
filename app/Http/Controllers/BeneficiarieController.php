@@ -299,6 +299,50 @@ class BeneficiarieController extends Controller
         }
     }
 
+    public function EditDistributeFacilities($beneficiarie_id, $survey_id)
+    {
+        $survey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+            ->where('id', $survey_id)
+            ->with('beneficiarie')
+            ->firstOrFail();
+        $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->find($beneficiarie_id);
+        return view('ngo.beneficiarie.edit-distribute-facilities', compact('survey', 'beneficiarie'));
+    }
+
+    public function updateDistributeFacilities(Request $request, $beneficiarie_id, $survey_id)
+    {
+        $request->validate([
+            'distribute_date' => 'required|date',
+            'status' => 'required',
+            'distribute_place' => 'required|string',
+            'pending_reason' => 'required_if:status,Pending',
+        ]);
+
+        try {
+            $distribute = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+                ->where('id', $survey_id)
+                ->firstOrFail();
+
+            $distribute->distribute_date = Carbon::parse($request->input('distribute_date'));
+            $distribute->distribute_place = $request->input('distribute_place');
+            $distribute->status = $request->input('status');
+            $distribute->pending_reason = $request->input('status') === 'Pending'
+                ? $request->input('pending_reason')
+                : null;
+
+            $distribute->save();
+
+            if ($distribute->status === 'Distributed') {
+                return redirect()->route('distributed-list')->with('success', 'Facilities successfully distributed.');
+            } else {
+                return redirect()->route('pending-distribute-list')->with('success', 'Facilities marked as pending.');
+            }
+        } catch (\Throwable $th) {
+            return back()->withInput()->withErrors(['error' => 'Failed to update distribution.']);
+        }
+    }
+
+
     public function distributefacilities(Request $request)
     {
         $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
@@ -310,6 +354,10 @@ class BeneficiarieController extends Controller
 
             if ($request->category_filter) {
                 $q->where('facilities_category', $request->category_filter);
+            }
+
+            if ($request->distribute_date) {
+                $q->where('distribute_date', $request->distribute_date);
             }
         }])->where('status', 1);
 
@@ -336,6 +384,10 @@ class BeneficiarieController extends Controller
 
             if ($request->category_filter) {
                 $q->where('facilities_category', $request->category_filter);
+            }
+
+            if ($request->distribute_date) {
+                $q->where('distribute_date', $request->distribute_date);
             }
         });
 

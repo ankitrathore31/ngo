@@ -198,6 +198,16 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
+
+                            <div class="col-md-4 form-group mb-3">
+                                <input type="date" id="distribute_date" name="distribute_date" class="form-control"
+                                    value="{{ old('distribute_date') }}" >
+                                <small class="form-text text-muted"><b>Select Distribute Date</b></small>
+                                @error('distribute_date')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
                         </div>
                         <div class="row">
 
@@ -274,7 +284,8 @@
                                         {{-- <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर
                                             प्रदेश -
                                             262121</span> --}}
-                                        <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit, UP
+                                        <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit,
+                                            UP
                                             -
                                             262121</span>
                                     </b></h6>
@@ -353,8 +364,15 @@
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">
                                                 <a href="{{ route('show-beneficiarie-report', [$item->id, $survey->id]) }}"
                                                     class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                    title="View" style="min-width: 38px; height: 38px;">
+                                                    title="View">
                                                     <i class="fa-regular fa-eye"></i>
+                                                </a>
+                                            </div>
+                                            <div class="d-flex justify-content-center gap-2 flex-wrap">
+                                                <a href="{{ route('edit-distribute-facilities', [$item->id, $survey->id]) }}"
+                                                    class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
+                                                    title="Edit">
+                                                    <i class="fa-regular fa-edit"></i>
                                                 </a>
                                             </div>
                                         </td>

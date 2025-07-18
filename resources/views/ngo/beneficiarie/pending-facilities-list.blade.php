@@ -305,10 +305,15 @@
                                         <td>{{ $survey->academic_session }}</td>
                                         <td class="no-print">
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                                <a href="{{-- route('show-beneficiarie-facilities', [$item->id, $survey->id]) --}}"
+                                                <a href="{{ route('show-beneficiarie-report', [$item->id, $survey->id]) }}"
                                                     class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                    title="View" style="min-width: 38px; height: 38px;">
+                                                    title="View" >
                                                     <i class="fa-regular fa-eye"></i>
+                                                </a>
+                                                <a href="{{ route('edit-distribute-facilities', [$item->id, $survey->id]) }}"
+                                                    class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
+                                                    title="Edit">
+                                                    <i class="fa-regular fa-edit"></i>
                                                 </a>
                                             </div>
                                         </td>

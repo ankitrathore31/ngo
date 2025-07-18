@@ -315,22 +315,27 @@
                         <label class="form-label">
                             <span>Payment Method</span>
                         </label>
-                        <select class="form-select @error('payment_method') is-invalid @enderror" name="payment_method">
+                        <select class="form-select @error('payment_method') is-invalid @enderror" name="payment_method"
+                            id="payment_method">
                             <option value="">Select...</option>
-                            <option value="Cash" {{ old('payment_method') == 'cash' ? 'selected' : '' }}>नकद / Cash
+                            <option value="Cash" {{ old('payment_method') == 'Cash' ? 'selected' : '' }}>नकद / Cash
                             </option>
-                            <option value="Cheque" {{ old('payment_method') == 'cheque' ? 'selected' : '' }}>चेक /
-                                Cheque</option>
-                            <option value="UPI" {{ old('payment_method') == 'upi' ? 'selected' : '' }}>यूपीआई / UPI
+                            <option value="Cheque" {{ old('payment_method') == 'Cheque' ? 'selected' : '' }}>चेक / Cheque
                             </option>
-                            <option value="Other" {{ old('payment_method') == 'other' ? 'selected' : '' }}>अन्य /
-                                Other</option>
+                            <option value="UPI" {{ old('payment_method') == 'UPI' ? 'selected' : '' }}>यूपीआई / UPI
+                            </option>
+                            <option value="Cashfree" {{ old('payment_method') == 'Cashfree' ? 'selected' : '' }}>कैशफ्री /
+                                Cashfree</option>
+                            <option value="Account" {{ old('payment_method') == 'Account' ? 'selected' : '' }}>खाता /
+                                Account</option>
                         </select>
+
                         @error('payment_method')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
+                    <!-- Transaction Date (always visible) -->
                     <div class="col-md-4 form-group mb-3">
                         <label class="form-label">Transaction Date</label>
                         <input type="date" class="form-control" name="transaction_date"
@@ -340,92 +345,73 @@
                         @enderror
                     </div>
 
+                    <!-- Cheque Fields (only Cheque No.) -->
                     <div id="chequeFields" style="display: none;">
+                        <div class="col-md-4 form-group mb-3">
+                            <label class="form-label">Cheque No.</label>
+                            <input type="text" class="form-control" name="cheque_no" value="{{ old('cheque_no') }}">
+                            @error('cheque_no')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- Account Fields -->
+                    <div id="accountFields" style="display: none;">
                         <div class="row">
-                            <div class="col-md-4 form-group mb-3">
-                                <label class="form-label">Cheque No.</label>
-                                <input type="text" class="form-control" name="cheque_no"
-                                    value="{{ old('cheque_no') }}">
-                                @error('cheque_no')
-                                    <div class="text-danger">{{ $message }}</div>
+                            <div class="col-md-4 form-group mb-3 mb-3">
+                                <label for="account_number" class="form-label">Account Number</label>
+                                <input type="text" class="form-control @error('account_number') is-invalid @enderror"
+                                    id="account_number" name="account_number" value="{{ old('account_number') }}"
+                                    placeholder="Enter Account Number">
+                                @error('account_number')
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="col-md-4 form-group mb-3">
-                                <label class="form-label">Bank Name</label>
-                                <input type="text" class="form-control" name="tr_bank_name"
-                                    value="{{ old('tr_bank_name') }}">
-                                @error('tr_bank_name')
-                                    <div class="text-danger">{{ $message }}</div>
+                            <div class="col-md-4 form-group mb-3 mb-3">
+                                <label for="bank_name" class="form-label">Bank Name</label>
+                                <input type="text" class="form-control @error('bank_name') is-invalid @enderror"
+                                    id="bank_name" name="bank_name" value="{{ old('bank_name') }}"
+                                    placeholder="Enter Bank Name">
+                                @error('bank_name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="col-md-4 form-group mb-3">
-                                <label class="form-label">Bank Branch</label>
-                                <input type="text" class="form-control" name="tr_bank_branch"
-                                    value="{{ old('tr_bank_branch') }}">
-                                @error('tr_bank_branch')
-                                    <div class="text-danger">{{ $message }}</div>
+
+                            <div class="col-md-4 form-group mb-3 mb-3">
+                                <label for="branch_name" class="form-label">Bank Branch</label>
+                                <input type="text" class="form-control @error('branch_name') is-invalid @enderror"
+                                    id="branch_name" name="branch_name" value="{{ old('branch_name') }}"
+                                    placeholder="Enter Branch Name">
+                                @error('branch_name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="col-md-4 form-group mb-3">
-                                <label class="form-label">Cheque Date</label>
-                                <input type="date" class="form-control" name="cheque_date"
-                                    value="{{ old('cheque_date') }}">
-                                @error('cheque_date')
-                                    <div class="text-danger">{{ $message }}</div>
+                            <div class="col-md-4 form-group mb-3 mb-3">
+                                <label for="ifsc_code" class="form-label">IFSC Code</label>
+                                <input type="text" class="form-control @error('ifsc_code') is-invalid @enderror"
+                                    id="ifsc_code" name="ifsc_code" value="{{ old('ifsc_code') }}"
+                                    placeholder="Enter IFSC Code">
+                                @error('ifsc_code')
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
                     </div>
 
-                    <div id="upiFields" style="display: none;">
-                        <div class="row">
-                            <div class="col-md-4 form-group mb-3">
-                                <label class="form-label">Transaction Number</label>
-                                <input type="text" class="form-control" name="transaction_no"
-                                    value="{{ old('transaction_no') }}">
-                                @error('transaction_no')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
+                    <!-- Transaction Number for UPI and Cashfree -->
+                    <div id="transactionNoField" style="display: none;">
+                        <div class="col-md-4 form-group mb-3">
+                            <label class="form-label">Transaction Number</label>
+                            <input type="text" class="form-control" name="transaction_no"
+                                value="{{ old('transaction_no') }}">
+                            @error('transaction_no')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
-                    <div class="col-md-4 form-group mb-3 mb-3">
-                        <label for="account_number" class="form-label">Account Number</label>
-                        <input type="text" class="form-control @error('account_number') is-invalid @enderror"
-                            id="account_number" name="account_number" value="{{ old('account_number') }}"
-                            placeholder="Enter Account Number">
-                        @error('account_number')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-4 form-group mb-3 mb-3">
-                        <label for="bank_name" class="form-label">Bank Name</label>
-                        <input type="text" class="form-control @error('bank_name') is-invalid @enderror"
-                            id="bank_name" name="bank_name" value="{{ old('bank_name') }}"
-                            placeholder="Enter Bank Name">
-                        @error('bank_name')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
 
-                    <div class="col-md-4 form-group mb-3 mb-3">
-                        <label for="branch_name" class="form-label">Bank Branch</label>
-                        <input type="text" class="form-control @error('branch_name') is-invalid @enderror"
-                            id="branch_name" name="branch_name" value="{{ old('branch_name') }}"
-                            placeholder="Enter Branch Name">
-                        @error('branch_name')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-4 form-group mb-3 mb-3">
-                        <label for="ifsc_code" class="form-label">IFSC Code</label>
-                        <input type="text" class="form-control @error('ifsc_code') is-invalid @enderror"
-                            id="ifsc_code" name="ifsc_code" value="{{ old('ifsc_code') }}"
-                            placeholder="Enter IFSC Code">
-                        @error('ifsc_code')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
+
                     <div class="col-md-4 form-group mb-3">
                         <label for="place" class="form-label">Place: <span class="text-danger">*</span></label>
                         <textarea name="place" id="place" class="form-control @error('place') is-invalid @enderror">{{ old('place') }}</textarea>
@@ -438,9 +424,7 @@
                 <button type="submit" class="btn btn-primary">Generate Voucher</button>
             </form>
         </div>
-
     </div>
-
     <script>
         function toggleContainers() {
             const selector = document.getElementById('billTypeSelector');
@@ -488,24 +472,37 @@
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const paymentMethod = document.querySelector('select[name="payment_method"]');
+            const paymentMethod = document.getElementById('payment_method');
             const chequeFields = document.getElementById('chequeFields');
-            const upiFields = document.getElementById('upiFields');
+            const accountFields = document.getElementById('accountFields');
+            const transactionNoField = document.getElementById('transactionNoField');
 
             function togglePaymentFields() {
                 const method = paymentMethod.value;
 
-                chequeFields.style.display = method === 'Cheque' ? 'block' : 'none';
-                upiFields.style.display = method === 'UPI' ? 'block' : 'none';
+                // Hide all by default
+                chequeFields.style.display = 'none';
+                accountFields.style.display = 'none';
+                transactionNoField.style.display = 'none';
+
+                if (method === 'Cheque') {
+                    chequeFields.style.display = 'block';
+                } else if (method === 'Account') {
+                    accountFields.style.display = 'block';
+                } else if (method === 'UPI' || method === 'Cashfree') {
+                    transactionNoField.style.display = 'block';
+                }
+                // Cash - everything stays hidden
             }
 
-            // Initial check (for old input value on validation error)
+            // Initial setup
             togglePaymentFields();
 
-            // On change
+            // On selection change
             paymentMethod.addEventListener('change', togglePaymentFields);
         });
     </script>
+
     <script>
         let index = 0;
 
