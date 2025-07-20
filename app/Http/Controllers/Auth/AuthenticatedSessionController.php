@@ -38,8 +38,8 @@ class AuthenticatedSessionController extends Controller
         elseif(auth()->user()->user_type == 'ngo'){
             return redirect()->route('ngo');
         }
-        else{
-           
+        elseif(auth()->user()->user_type == 'staff'){
+           return redirect()->route('ngo');
         }
         
     }
