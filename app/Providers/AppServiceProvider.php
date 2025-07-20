@@ -21,8 +21,14 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
+    // public function boot()
+    // {
+    //     require_once app_path('Helper/Helper.php');
+    // }
+
     public function boot()
     {
-        require_once app_path('Helper/Helper.php');
+        ini_set('upload_max_filesize', '20M');
+        ini_set('post_max_size', '25M');
     }
 }

@@ -227,7 +227,12 @@ Route::controller(NoticeController::class)->group(function () {
 
 Route::controller(StaffController::class)->group(function () {
     Route::get('ngo/add-staff', 'addstaff')->middleware('auth')->name('add-staff');
+    Route::post('ngo/store-staff', 'StoreStaff')->middleware('auth')->name('store.staff');
+    Route::get('ngo/edit-staff/{id}', 'EditStaff')->middleware('auth')->name('edit-staff');
+    Route::post('ngo/update-staff/{id}', 'UpdateStaff')->middleware('auth')->name('update.staff');
+    Route::get('ngo/delete-staff/{id}', 'DeleteStaff')->middleware('auth')->name('delete-staff');
     Route::get('ngo/staff-list', 'staffList')->middleware('auth')->name('staff-list');
+    Route::get('ngo/view-staff/{id}','ViewStaff')->middleware('auth')->name('view-staff');
     
 });
 

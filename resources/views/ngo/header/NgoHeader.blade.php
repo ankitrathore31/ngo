@@ -40,7 +40,11 @@
                         class="rounded-circle shadow-sm me-2">
                     <div class="text-start">
                         <div class="fw-semibold text-dark fs-6">GYAN BHARTI SANSTHA</div>
-                        <small class="text-muted fst-italic">Founder</small>
+                        @php $user = auth()->user(); @endphp
+                        <small class="text-muted fst-italic">@if($user->user_type == 'staff'){{$user->staff->position}} :  {{$user->staff->name}}@endif
+                         @if($user->user_type == 'ngo')Founder: {{$user->name}}
+                            @endif
+                        </small>
                     </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end mt-2 shadow-sm border-0" aria-labelledby="userDropdown">
