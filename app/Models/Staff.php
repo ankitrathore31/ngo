@@ -15,6 +15,15 @@ class Staff extends Model
 
     public function hasPermission($permission)
     {
-        return in_array($permission, $this->permissions ?? []);
+         // Decode manually if casting doesn't work
+        $permissions = $this->permissions;
+
+        if (is_string($permissions)) {
+            $decoded = json_decode($permissions, true);
+            $permissions = is_array($decoded) ? $decoded : [];
+        }
+
+        return in_array($permission, $permissions);
     }
+
 }
