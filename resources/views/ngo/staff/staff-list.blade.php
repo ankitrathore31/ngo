@@ -239,7 +239,6 @@
                                 <th>Address</th>
                                 <th>Application Date</th>
                                 <th>Joining Date</th>
-                                <th>Mobile</th>
                                 <th>Position</th>
                                 <th>Mobile no.</th>
                                 <th>Caste</th>
@@ -269,9 +268,8 @@
                                         {{ $item->state }} - {{ $item->pincode }},({{ $item->area_type }})</td>
                                     <td>{{ \Carbon\Carbon::parse($item->application_date)->format('d-m-Y') }}</td>
                                     <td>{{ \Carbon\Carbon::parse($item->joining_date)->format('d-m-Y') }}</td>
+                                    <td>{{ $item->position }}</td>
                                     <td>{{ $item->phone }}</td>
-                                    <td>{{ $item->position }}</td>
-                                    <td>{{ $item->position }}</td>
                                     <td>{{ $item->caste }}</td>
                                     <td>{{ $item->caste_category }}</td>
                                     <td>{{ $item->religion }}</td>
