@@ -209,25 +209,46 @@ class StaffController extends Controller
 
         $destination = public_path('images');
 
+        // IMAGE
         if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($staff->image && file_exists(public_path($staff->image))) {
+                unlink(public_path($staff->image));
+            }
+
             $imageName = time() . '_image.' . $request->file('image')->getClientOriginalExtension();
             $request->file('image')->move($destination, $imageName);
             $staff->image = 'images/' . $imageName;
         }
 
+        // ID DOCUMENT
         if ($request->hasFile('id_document')) {
+            if ($staff->id_document && file_exists(public_path($staff->id_document))) {
+                unlink(public_path($staff->id_document));
+            }
+
             $idName = time() . '_id.' . $request->file('id_document')->getClientOriginalExtension();
             $request->file('id_document')->move($destination, $idName);
             $staff->id_document = 'images/' . $idName;
         }
 
+        // EXPERIENCE DOCUMENT
         if ($request->hasFile('experience_document')) {
+            if ($staff->experience_document && file_exists(public_path($staff->experience_document))) {
+                unlink(public_path($staff->experience_document));
+            }
+
             $expName = time() . '_exp.' . $request->file('experience_document')->getClientOriginalExtension();
             $request->file('experience_document')->move($destination, $expName);
             $staff->experience_document = 'images/' . $expName;
         }
 
+        // MARKSHEET
         if ($request->hasFile('marksheet')) {
+            if ($staff->marksheet && file_exists(public_path($staff->marksheet))) {
+                unlink(public_path($staff->marksheet));
+            }
+
             $markName = time() . '_mark.' . $request->file('marksheet')->getClientOriginalExtension();
             $request->file('marksheet')->move($destination, $markName);
             $staff->marksheet = 'images/' . $markName;
