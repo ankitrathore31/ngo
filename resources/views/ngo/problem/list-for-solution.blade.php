@@ -3,7 +3,7 @@
     <div class="wrapper">
         <div class="container-fluid mt-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Social Problem List</h5>
+                <h5 class="mb-0">List For Solution</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
@@ -19,7 +19,7 @@
             @endif
 
             <div class="row">
-                <form method="GET" action="{{ route('problem.list') }}" class="row g-3 mb-4">
+                <form method="GET" action="{{ route('list.for.solution') }}" class="row g-3 mb-4">
                     <div class="col-md-3 col-sm-4">
                         <select name="session_filter" id="session_filter" class="form-control"
                             onchange="this.form.submit()">
@@ -69,8 +69,8 @@
                         @error('state')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
-                    </div>
 
+                    </div>
                     <div class="col-md-3 col-sm-6 form-group mb-3">
                         <select class="form-control @error('district') is-invalid @enderror" name="district"
                             id="districtSelect">
@@ -88,7 +88,7 @@
 
                     <div class="col-md-3">
                         <button type="submit" class="btn btn-primary">Search</button>
-                        <a href="{{ route('problem.list') }}" class="btn btn-info text-white">Reset</a>
+                        <a href="{{ route('list.for.solution') }}" class="btn btn-info text-white">Reset</a>
                     </div>
                 </form>
             </div>
@@ -115,8 +115,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ \Carbon\Carbon::parse($item->problem_date)->format('d-m-Y') }} </td>
                                     <td>{{ $item->problem_no }}</td>
-                                    <td>{{ $staffList[$item->problem_by]->name }}
-                                        ({{ $staffList[$item->problem_by]->position }})</td>
+                                    <td>{{ $staffList[$item->problem_by]->name }} ({{$staffList[$item->problem_by]->position}})</td>
                                     <td>{{ $item->block }}</td>
                                     <td>{{ $item->state }}</td>
                                     <td>{{ $item->district }}</td>
@@ -125,19 +124,14 @@
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
                                             <a href="{{ route('view.problem', $item->id) }}"
-                                                class="btn btn-success btn-sm px-3">
+                                                class="btn btn-success btn-sm">
                                                 <i class="fa-regular fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('edit.problem', $item->id) }}" class="btn btn-primary btn-sm"
-                                                title="Edit">
-                                                <i class="fa-regular fa-edit"></i>
+                                            <a href="{{ route('solution', $item->id) }}"
+                                                class="btn btn-primary btn-sm px-3">
+                                                Solution
                                             </a>
-                                            <a href="{{ route('delete.problem', $item->id) }}"
-                                                class="btn btn-danger btn-sm "
-                                                onclick="return confirm('Do you want to delete Socail Problem')"
-                                                title="Delete">
-                                                <i class="fa-regular fa-trash-can"></i>
-                                            </a>
+                                         
                                         </div>
                                     </td>
                                 </tr>
