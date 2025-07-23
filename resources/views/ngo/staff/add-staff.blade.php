@@ -2,8 +2,8 @@
 @section('content')
     <style>
         /* ::placeholder {
-                                        font-size: 8px;
-                                    } */
+                                                    font-size: 8px;
+                                                } */
 
         .upload-container {
             text-align: center;
@@ -317,7 +317,7 @@
                         <label for="phone" class="form-label">Phone: <span class="text-danger">*</span></label>
                         <input type="text" name="phone" id="phone"
                             class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone') }}"
-                           maxlength="10" required>
+                            maxlength="10" required>
                         @error('phone')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -531,6 +531,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+
                     <div class="col-md-4 mb-3">
                         <label for="experience" class="form-label">Experience</label>
                         <input type="text" name="experience"
@@ -540,6 +541,66 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+
+                    <div class="col-md-4 mb-3">
+                        <div class="form-group">
+                            <label for="staff_password" class="form-label"><strong>New Password</strong>
+                                <span class="text-danger">*</span></label>
+
+                            <div class="input-group">
+                                <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                    id="password" name="password" value="" placeholder="Enter Password">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
+                                        <i class="fa fa-eye" id="eyeIcon"></i> <!-- Eye Icon -->
+                                    </span>
+                                </div>
+                            </div>
+
+                            @error('password')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="id_document" class="form-label">Upload ID Document</label>
+                        <input type="file" name="id_document"
+                            class="form-control @error('id_document') is-invalid @enderror">
+                        @error('id_document')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="experience_document" class="form-label">Experience Document</label>
+                        <input type="file" name="experience_document"
+                            class="form-control @error('experience_document') is-invalid @enderror">
+                        @error('experience_document')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="marksheet" class="form-label">Marksheet Upload</label>
+                        <input type="file" name="marksheet"
+                            class="form-control @error('marksheet') is-invalid @enderror">
+                        @error('marksheet')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <hr>
+                <div class="row">
+                    <div class="mb-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="select-all-permissions">
+                            <label class="form-check-label fw-bold" for="select-all-permissions">
+                                Select All Permissions
+                            </label>
+                        </div>
+                    </div>
+
                     <div class="mb-3 col-md-6">
                         <label for="permissions" class="form-label fw-bold">Select Staff Permissions</label>
                         <select id="permissions" class="form-select" size="10">
@@ -711,53 +772,6 @@
 
                     <!-- Hidden inputs to send selected values -->
                     <div id="hidden-permissions"></div>
-
-                    <div class="col-md-4 mb-3">
-                        <div class="form-group">
-                            <label for="staff_password" class="form-label"><strong>New Password</strong>
-                                <span class="text-danger">*</span></label>
-
-                            <div class="input-group">
-                                <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                    id="password" name="password" value="" placeholder="Enter Password">
-                                <div class="input-group-append">
-                                    <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
-                                        <i class="fa fa-eye" id="eyeIcon"></i> <!-- Eye Icon -->
-                                    </span>
-                                </div>
-                            </div>
-
-                            @error('password')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <label for="id_document" class="form-label">Upload ID Document</label>
-                        <input type="file" name="id_document"
-                            class="form-control @error('id_document') is-invalid @enderror">
-                        @error('id_document')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="experience_document" class="form-label">Experience Document</label>
-                        <input type="file" name="experience_document"
-                            class="form-control @error('experience_document') is-invalid @enderror">
-                        @error('experience_document')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="marksheet" class="form-label">Marksheet Upload</label>
-                        <input type="file" name="marksheet"
-                            class="form-control @error('marksheet') is-invalid @enderror">
-                        @error('marksheet')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
                 </div>
 
                 <div class="text-center">
@@ -873,26 +887,7 @@
             inputField.setAttribute('title', subtitle); // shows hint on hover
         }
     </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const regTypeSelect = document.getElementById('reg_type');
-            const beneficiaryHelpDiv = document.getElementById('beneficiaryHelpDiv');
 
-            function toggleBeneficiaryHelp() {
-                if (regTypeSelect.value === 'Beneficiaries') {
-                    beneficiaryHelpDiv.style.display = 'block';
-                } else {
-                    beneficiaryHelpDiv.style.display = 'none';
-                }
-            }
-
-            // Initial check on page load
-            toggleBeneficiaryHelp();
-
-            // Listen for changes
-            regTypeSelect.addEventListener('change', toggleBeneficiaryHelp);
-        });
-    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const identityType = document.getElementById('identity_type');
@@ -950,11 +945,12 @@
         const permissionSelect = document.getElementById('permissions');
         const selectedContainer = document.getElementById('selected-permissions');
         const hiddenInputsContainer = document.getElementById('hidden-permissions');
+        const positionSelect = document.getElementById('position');
+        const selectAllCheckbox = document.getElementById('select-all-permissions');
 
         let selectedPermissions = new Set();
 
         function updateSelectedUI() {
-            // Clear display
             selectedContainer.innerHTML = '';
             hiddenInputsContainer.innerHTML = '';
 
@@ -978,11 +974,12 @@
                 badge.querySelector('button').addEventListener('click', () => {
                     selectedPermissions.delete(value);
                     updateSelectedUI();
+                    selectAllCheckbox.checked = false; // Uncheck Select All if any are removed manually
                 });
 
                 selectedContainer.appendChild(badge);
 
-                // Add hidden input for form submission
+                // Add hidden input
                 const input = document.createElement('input');
                 input.type = 'hidden';
                 input.name = 'staff_permissions[]';
@@ -996,7 +993,6 @@
             const value = selectedOption.value;
             const label = selectedOption.textContent.trim();
 
-            // Prevent adding duplicate values
             if (![...selectedPermissions].some(p => p.value === value)) {
                 selectedPermissions.add({
                     value,
@@ -1008,8 +1004,67 @@
             permissionSelect.selectedIndex = -1; // reset selection
         });
 
-        // Optional: populate on page load if editing (fill selectedPermissions Set here)
+        const allPermissionOptions = Array.from(permissionSelect.options).filter(opt => opt.value);
+
+        const getPermissionsByLabel = (label) => {
+            return allPermissionOptions.filter(opt => {
+                return opt.closest('optgroup')?.label === label;
+            });
+        };
+
+        const getAllPermissions = () => {
+            return allPermissionOptions;
+        };
+
+        function addPermissions(permissions) {
+            permissions.forEach(opt => {
+                const value = opt.value;
+                const label = opt.textContent.trim();
+                if (![...selectedPermissions].some(p => p.value === value)) {
+                    selectedPermissions.add({
+                        value,
+                        label
+                    });
+                }
+            });
+            updateSelectedUI();
+        }
+
+        // Auto-select based on position
+        positionSelect.addEventListener('change', function() {
+            const position = this.value;
+            selectedPermissions.clear(); // reset on position change
+            selectAllCheckbox.checked = false;
+
+            if (['Director', 'NGO Manager'].includes(position)) {
+                addPermissions(getAllPermissions());
+            } else if (['Trainer', 'Master Trainer'].includes(position)) {
+                addPermissions(getPermissionsByLabel('Training'));
+            }
+
+            updateSelectedUI();
+        });
+
+        // Manual Select All
+        selectAllCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                addPermissions(getAllPermissions());
+            } else {
+                selectedPermissions.clear();
+                updateSelectedUI();
+            }
+        });
+
+        // Auto-run if editing existing staff (position pre-selected)
+        window.addEventListener('DOMContentLoaded', () => {
+            if (positionSelect.value) {
+                const event = new Event('change');
+                positionSelect.dispatchEvent(event);
+            }
+        });
     </script>
+
+
     <script>
         // Toggle password visibility
         const togglePassword = document.getElementById('togglePassword');

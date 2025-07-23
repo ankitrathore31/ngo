@@ -339,7 +339,19 @@ Route::controller(WorkPlanController::class)->group(function () {
 
 Route::controller(ProblemController::class)->group(function(){
     Route::get('ngo/add-problem', 'problem')->middleware('auth')->name('problem.add');
+    Route::post('ngo/store-problem', 'StoreProblem')->middleware('auth')->name('store.problem');
+    Route::get('ngo/edit-problem/{id}', 'EditProblem')->middleware('auth')->name('edit.problem');
+    Route::post('ngo/update-problem{id}', 'UpdateProblem')->middleware('auth')->name('update.problem');
+    Route::get('ngo/delete-problem/{id}', 'DeleteProblem')->middleware('auth')->name('delete.problem');
     Route::get('ngo/problem-list', 'ProblemList')->middleware('auth')->name('problem.list');
+    Route::get('ngo/list-solution', 'ListForSolution')->middleware('auth')->name('list.for.solution');
+    Route::get('ngo/solution/{id}', 'Solution')->middleware('auth')->name('solution');
+    Route::post('ngo/store-solution/{id}', 'StoreSolution')->middleware('auth')->name('store.solution');
+    Route::get('ngo/edit-solution/{id}', 'EditSolution')->middleware('auth')->name('edit.solution');
+    Route::post('ngo/update-solution{id}', 'UpdateSolution')->middleware('auth')->name('update.solution');
+    Route::get('ngo/delete-solution/{id}', 'DeleteSolution')->middleware('auth')->name('delete.solution');
+    Route::get('ngo/solution-list', 'SolutionList')->middleware('auth')->name('solution.list');
+    Route::get('ngo/view-problem/{id}', 'ViewProblem')->middleware('auth')->name('view.problem');
 });
 
 

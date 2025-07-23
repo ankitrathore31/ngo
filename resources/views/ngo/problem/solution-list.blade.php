@@ -3,7 +3,7 @@
     <div class="wrapper">
         <div class="container-fluid mt-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Social Problem List</h5>
+                <h5 class="mb-0">Solution List</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
@@ -19,7 +19,7 @@
             @endif
 
             <div class="row">
-                <form method="GET" action="{{ route('problem.list') }}" class="row g-3 mb-4">
+                <form method="GET" action="{{ route('solution.list') }}" class="row g-3 mb-4">
                     <div class="col-md-3 col-sm-4">
                         <select name="session_filter" id="session_filter" class="form-control"
                             onchange="this.form.submit()">
@@ -44,8 +44,8 @@
                     </div>
 
                     <div class="col-md-3 mb-3">
-                        <select class="form-control @error('problem_by') is-invalid @enderror" name="problem_by">
-                            <option >Discover By</option>
+                        <select class="form-control @error('solution_by') is-invalid @enderror" name="solution_by">
+                            <option>Solution By</option>
                             @foreach ($staffList as $item)
                                 <option value="{{ $item->id }}">{{ $item->name }} ({{ $item->position }})
                                 </option>
@@ -69,8 +69,8 @@
                         @error('state')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
-                    </div>
 
+                    </div>
                     <div class="col-md-3 col-sm-6 form-group mb-3">
                         <select class="form-control @error('district') is-invalid @enderror" name="district"
                             id="districtSelect">
@@ -88,7 +88,7 @@
 
                     <div class="col-md-3">
                         <button type="submit" class="btn btn-primary">Search</button>
-                        <a href="{{ route('problem.list') }}" class="btn btn-info text-white">Reset</a>
+                        <a href="{{ route('solution.list') }}" class="btn btn-info text-white">Reset</a>
                     </div>
                 </form>
             </div>
@@ -104,6 +104,8 @@
                                 <th>Block</th>
                                 <th>State</th>
                                 <th>District</th>
+                                <th>Solution Date</th>
+                                <th>Solution By</th>
                                 <th>Status</th>
                                 <th>Session</th>
                                 <th>Action</th>
@@ -115,11 +117,13 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ \Carbon\Carbon::parse($item->problem_date)->format('d-m-Y') }} </td>
                                     <td>{{ $item->problem_no }}</td>
-                                    <td>{{ $staffList[$item->problem_by]->name }}
-                                        ({{ $staffList[$item->problem_by]->position }})</td>
+                                    <td>{{ $item->problem_by }}</td>
                                     <td>{{ $item->block }}</td>
                                     <td>{{ $item->state }}</td>
                                     <td>{{ $item->district }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($item->solution_date)->format('d-m-Y') }} </td>
+                                    <td>{{ $staffList[$item->solution_by]->name }}({{ $staffList[$item->solution_by]->position }})
+                                    </td>
                                     <td>{{ $item->status == 1 ? 'Solved' : 'Pending' }}</td>
                                     <td>{{ $item->academic_session ?? 'N/A' }}</td>
                                     <td>
@@ -128,13 +132,13 @@
                                                 class="btn btn-success btn-sm px-3">
                                                 <i class="fa-regular fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('edit.problem', $item->id) }}" class="btn btn-primary btn-sm"
-                                                title="Edit">
+                                            <a href="{{ route('edit.solution', $item->id) }}"
+                                                class="btn btn-primary btn-sm" title="Edit">
                                                 <i class="fa-regular fa-edit"></i>
                                             </a>
-                                            <a href="{{ route('delete.problem', $item->id) }}"
+                                            <a href="{{ route('delete.solution', $item->id) }}"
                                                 class="btn btn-danger btn-sm "
-                                                onclick="return confirm('Do you want to delete Socail Problem')"
+                                                onclick="return confirm('Do you want to delete problem solution')"
                                                 title="Delete">
                                                 <i class="fa-regular fa-trash-can"></i>
                                             </a>

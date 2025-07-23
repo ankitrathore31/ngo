@@ -708,10 +708,10 @@
                                 <li><a class="dropdown-item" href="{{route('problem.list')}}">Problem List</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('solutions'))
-                                <li><a class="dropdown-item" href="#">Solutions</a></li>
+                                <li><a class="dropdown-item" href="{{route('list.for.solution')}}">Solutions</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('solutions-list'))
-                                <li><a class="dropdown-item" href="#">Solutions List</a></li>
+                                <li><a class="dropdown-item" href="{{route('solution.list')}}">Solutions List</a></li>
                             @endif
                         </ul>
                     </li>
