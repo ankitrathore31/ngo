@@ -14,6 +14,7 @@ use App\Models\beneficiarie;
 use App\Models\Donation;
 use App\Models\donor_data;
 use App\Models\Member;
+use App\Models\Staff;
 use Illuminate\Support\Facades\Session;
 
 class NgoController extends Controller
@@ -213,6 +214,7 @@ class NgoController extends Controller
         $rebene = Beneficiarie::onlyTrashed()->count();
         $allacti = Activity::count();
         $todayacti = Activity::whereDate('created_at', Carbon::today())->count();
+        $totalStaff = Staff::count();
         $allmem = Member::count();
         $appmem = Member::where('status', 1)->count();
         $penmem = Member::where('status', 0)->count();
@@ -238,7 +240,8 @@ class NgoController extends Controller
             'succdonate',
             'todaydonate',
             'offlinedonate',
-            'totaldonation'
+            'totaldonation',
+            'totalStaff'
         ));
     }
 }
