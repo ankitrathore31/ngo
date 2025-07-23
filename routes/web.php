@@ -15,6 +15,7 @@ use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\IdcardController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\NoticeController;
+use App\Http\Controllers\ProblemController;
 use App\Http\Controllers\SignatureController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\TrainingCenterController;
@@ -334,6 +335,11 @@ Route::controller(WorkPlanController::class)->group(function () {
     Route::get('ngo/workplan-list', 'WorkPlanList')->middleware('auth')->name('workplan-list');
     Route::get('ngo/view-workplan/{id}', 'ViewWorkPlan')->middleware('auth')->name('view-workplan');
     Route::get('ngo/delete-workplan/{id}', 'DeleteWorkPlan')->middleware('auth')->name('delete-workplan');
+});
+
+Route::controller(ProblemController::class)->group(function(){
+    Route::get('ngo/add-problem', 'problem')->middleware('auth')->name('problem.add');
+    Route::get('ngo/problem-list', 'ProblemList')->middleware('auth')->name('problem.list');
 });
 
 
