@@ -147,6 +147,65 @@
                 @endif
                 @if (
                     !$isStaff ||
+                        ($user->hasPermission('add-project') ||
+                            $user->hasPermission('project-list') ||
+                            $user->hasPermission('report-list')))
+                    <div class="row ">
+                        <h5 class="fw-bold mb-2">- Projects</h5>
+                        @if (!$isStaff || $user->hasPermission('add-project'))
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="card text-white bg-info p-3 h-100 card-hover">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-running fa-2x me-3"></i>
+                                        <div>
+                                            <p class="mb-1">Today's Project</p>
+                                            <h5 class="mb-0">{{-- $todayacti --}}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="card text-white bg-warning p-3 h-100 card-hover">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-clipboard-list fa-2x me-3"></i>
+                                        <div>
+                                            <p class="mb-1">Total Project</p>
+                                            <h5 class="mb-0">{{-- $allacti --}}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        @if (!$isStaff || $user->hasPermission('report-list'))
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="card text-white bg-info p-3 h-100 card-hover">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-running fa-2x me-3"></i>
+                                        <div>
+                                            <p class="mb-1">Today's Project Report</p>
+                                            <h5 class="mb-0">{{-- $todayacti --}}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="card text-white bg-warning p-3 h-100 card-hover">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-clipboard-list fa-2x me-3"></i>
+                                        <div>
+                                            <p class="mb-1">Total Project Report</p>
+                                            <h5 class="mb-0">{{-- $allacti --}}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                @endif
+                @if (
+                    !$isStaff ||
                         $user->hasPermission('member-list') ||
                         $user->hasPermission('add-member-position') ||
                         $user->hasPermission('member-position-list') ||
@@ -210,7 +269,7 @@
                                     <i class="fas fa-user-tie fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Total Staff</p>
-                                        <h5 class="mb-0">{{$totalStaff}}</h5>
+                                        <h5 class="mb-0">{{ $totalStaff }}</h5>
                                     </div>
                                 </div>
                             </div>
