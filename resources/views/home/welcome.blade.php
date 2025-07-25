@@ -268,7 +268,7 @@
             </a>
         </div>
 
-         <div class="col-md-2 mb-3">
+        <div class="col-md-2 mb-3">
             <a href="{{ route('eligibility') }}" class="btn btn-info w-100">
                 Beneficiary Eligibility
             </a>
@@ -283,8 +283,7 @@
     <div class="owl-carousel owl-theme slider">
         <div class="item ">
             <div class="background-image">
-                <img src="images/ach1.jpeg"
-                    alt="slider image">
+                <img src="images/ach1.jpeg" alt="slider image">
                 <div class="carousel-caption d-none d-md-block">
                     <h1 class="text-white"></h1>
                     <h2 class="text-white"></h2>
@@ -295,98 +294,117 @@
     </div>
     <!-- end slider -->
 
-    <!--info section start-->
-    <section id="about" class="py-5 shadow m-3">
-        <div class="container-fluid">
-            <div class="row d-flex justify-content-between hide-sm">
-                <div class="col-md-3 col-sm-6">
-                    <img src="{{ asset('images/logo.png') }}" class="img-fluid custom-img" alt="">
+    <!-- About Section Start -->
+    <section id="about" class="py-5 bg-light shadow-sm">
+        <div class="container">
+
+            <!-- Logo Row -->
+            <div class="row text-center mb-4">
+                <div class="col-6 col-md-3 mb-3">
+                    <img src="{{ asset('images/logo.png') }}" class="img-fluid"
+                        style="width: 120px; height: 120px; object-fit: contain;" alt="Gyan Bharti Logo">
                 </div>
-                <div class="col-md-3 col-sm-6">
-                    <img src="{{ asset('images/meri-mati.png') }}" class="img-fluid custom-img" alt="">
+                <div class="col-6 col-md-3 mb-3">
+                    <img src="{{ asset('images/meri-mati.png') }}" class="img-fluid"
+                        style="width: 120px; height: 120px; object-fit: contain;" alt="Meri Mati">
                 </div>
-                <div class="col-md-3 col-sm-6">
-                    <img src="{{ asset('images/beti-bachao.png') }}" class="img-fluid custom-img" alt="">
+                <div class="col-6 col-md-3 mb-3">
+                    <img src="{{ asset('images/beti-bachao.png') }}" class="img-fluid"
+                        style="width: 120px; height: 120px; object-fit: contain;" alt="Beti Bachao">
                 </div>
-                <div class="col-md-3 col-sm-6">
-                    <img src="{{ asset('images/gandhi.png') }}" class="img-fluid custom-img" alt="">
+                <div class="col-6 col-md-3 mb-3">
+                    <img src="{{ asset('images/gandhi.png') }}" class="img-fluid"
+                        style="width: 120px; height: 120px; object-fit: contain;" alt="Gandhi">
                 </div>
             </div>
-            <div class="row m-4">
-                <div class="col-sm-12 col-md-12 col-xxl-12 col-lg-12">
-                    <h3 class="fw-bold mb-3 text-center">Welcome To <span class="text-primary">GYAN BHARTI SANSTHA
-                        </span></h3>
-                    <p class="text-muted fst-italic fs-5">Empowering communities since <strong>30th June 2009</strong></p>
-                    <p class="about_ngo"><em>Gyan Bharti Sanstha </em>is working since 2009
-                        Donations play a crucial role in supporting NGOs like Gyan Bharti Sanstha in their mission to serve
-                        the community.
-                        By contributing, donors enable the organization to provide essential services to those in need, such
-                        as food aid,
-                        healthcare, education, and livelihood support. Every donation, no matter how small, makes a
-                        meaningful impact and
-                        helps improve the lives of vulnerable individuals and families. Your support can help ensure that
-                        Gyan Bharti Sanstha continues its valuable work and reaches more people in need
+
+
+            <!-- Heading -->
+            <div class="text-center mb-4">
+                <h2 class="fw-bold">Welcome To <span class="text-primary">Gyan Bharti Sanstha</span></h2>
+                <p class="text-muted fst-italic fs-5">
+                    Empowering communities since <strong>30th June 2009</strong>
+                </p>
+            </div>
+
+            <!-- About Description -->
+            <div class="row">
+                <div class="col-md-12">
+                    <p class="">
+                        <em>Gyan Bharti Sanstha</em> has been working tirelessly since 2009.
+                        Donations play a crucial role in supporting our mission to serve
+                        the community by providing essential services such as food aid, healthcare, education,
+                        and livelihood support. Every contribution, no matter how small, makes a meaningful
+                        impact on improving the lives of vulnerable individuals and families.
                     </p>
-                    <div class="row mt-4">
-                        <div class="col-md-6">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <i class="fa-solid fa-circle-check text-success me-2"></i> Dedicated to serving the
-                                    poor, hungry, and helpless, ensuring necessary support and care.
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="fa-solid fa-circle-check text-success me-2"></i> Providing free education to
-                                    underprivileged children for a brighter future.
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="fa-solid fa-circle-check text-success me-2"></i> Offering skill development
-                                    programs like sewing training to empower women and unemployed individuals.
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <i class="fa-solid fa-circle-check text-success me-2"></i> Running free food
-                                    distribution programs to ensure no one sleeps hungry.
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="fa-solid fa-circle-check text-success me-2"></i> Promoting women’s empowerment
-                                    through beauty parlour training and professional skills.
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="fa-solid fa-circle-check text-success me-2"></i> Conducting awareness camps on
-                                    health, hygiene, education, and self-sustainability.
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <p class="mt-2">
-                        <marquee behavior="alternate" direction=""><strong>Note:</strong> Donate money, books, clothes,
-                            and other
-                            essential items to support our mission. We provide a certificate of appreciation for your
-                            generous donations.
-                        </marquee>
-                    </p>
-                    <div class="row d-flex justify-content-between mt-2">
-                        <div class="col-md-4 mb-3">
-                            <a href="{{ route('about') }}" class="btn btn-info"><i class="fas fa-info-circle"></i> More
-                                Info</a>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <a href="{{ route('donate-page') }}" class="btn btn-success"><i
-                                    class="fas fa-donate"></i>Donate
-                                Now</a>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <a href="tel:9411484111" class="btn btn-primary"><i class="fas fa-phone-alt"></i>+91
-                                9411484111</a>
-                        </div>
-                    </div>
+                </div>
+            </div>
+
+            <!-- Key Points -->
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <i class="fa-solid fa-circle-check text-success me-2"></i>
+                            Dedicated to serving the poor, hungry, and helpless.
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fa-solid fa-circle-check text-success me-2"></i>
+                            Free education for underprivileged children.
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fa-solid fa-circle-check text-success me-2"></i>
+                            Skill development programs for women and youth.
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <i class="fa-solid fa-circle-check text-success me-2"></i>
+                            Free food distribution programs.
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fa-solid fa-circle-check text-success me-2"></i>
+                            Women empowerment through professional skills.
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fa-solid fa-circle-check text-success me-2"></i>
+                            Health, hygiene, and education awareness camps.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Donate Info -->
+            <div class="alert alert-info mt-4 text-center fw-bold">
+                <i class="fas fa-hand-holding-heart"></i>
+                Donate money, books, clothes, and other essential items to support our mission.
+                <span class="d-block mt-2">We provide a certificate of appreciation for your generous donations.</span>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="row text-center mt-3">
+                <div class="col-md-4 mb-2">
+                    <a href="{{ route('about') }}" class="btn btn-outline-primary w-100">
+                        <i class="fas fa-info-circle"></i> More Info
+                    </a>
+                </div>
+                <div class="col-md-4 mb-2">
+                    <a href="{{ route('donate-page') }}" class="btn btn-success w-100">
+                        <i class="fas fa-donate"></i> Donate Now
+                    </a>
+                </div>
+                <div class="col-md-4 mb-2">
+                    <a href="tel:9411484111" class="btn btn-primary w-100">
+                        <i class="fas fa-phone-alt"></i> +91 9411484111
+                    </a>
                 </div>
             </div>
         </div>
     </section>
+    <!-- About Section End -->
+
 
     <!-- =========== Donation Section Start ============ -->
     <section class="community mt-5 py-4">
@@ -439,7 +457,49 @@
         </div>
     </section>
 
-    <!-- ======================== working Area show ========================================== -->
+    <section>
+        <div class="container-fluid mt-5">
+            <div class="row justify-content-center d-flex">
+                <div class="col-md-10 justify-content-center d-flex" style="gap: 15px;">
+                    <h2 class="section-title mb-4"><b>संगठन</b></h2>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-4 mb-2">
+                    <div class="card text-center shadow-sm bg-success text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">किशोरी संगठन</h5>
+                            <p class="card-text fs-4">25</p>
+                            {{-- <span>यहाँ क्लिक करें</span> --}}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-2">
+                    <div class="card text-center shadow-sm bg-warning text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">महिला संगठन</h5>
+                            <p class="card-text fs-4">18</p>
+                            {{-- <span>यहाँ क्लिक करें</span> --}}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-2">
+                    <div class="card text-center shadow-sm bg-danger text-white">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">किसान क्लब</h5>
+                            <p class="card-text fs-4">32</p>
+                            {{-- <span>यहाँ क्लिक करें</span> --}}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
     <section>
         <div class="container-fluid mt-5">
             <div class="row justify-content-center d-flex">
@@ -597,7 +657,7 @@
                 <div class="col-md-3 mb-3">
                     <div class="ccategory-card bg-primary p-3 rounded text-white">
                         <div class="card-body">
-                            <a href="{{route('activity')}}" class="text-white " style="text-decoration: none;">
+                            <a href="{{ route('activity') }}" class="text-white " style="text-decoration: none;">
                                 <h5 class="card-title fw-bold">Total Activity</h5>
                                 <p class="card-text fs-4 counter" data-count="10">{{ $allacti }}</p>
                             </a>
@@ -748,7 +808,8 @@
                 <div class="col-md-4 mb-4">
                     <div class="card shadow-lg bg-white rounded p-3 mb-5">
                         <div class="card-body text-center">
-                            <img src="{{ asset('public/images/education2.jpg') }}" class="img-fluid mb-3" width="200">
+                            <img src="{{ asset('public/images/education2.jpg') }}" class="img-fluid mb-3"
+                                width="200">
                             <div class="card-body">
                                 <h5 class="card-title">Help For Education</h5>
                                 <p class="card-text">Providing Free Education by our NGO</p>

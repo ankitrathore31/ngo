@@ -16,6 +16,7 @@ use App\Http\Controllers\IdcardController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\ProblemController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SignatureController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\TrainingCenterController;
@@ -352,6 +353,23 @@ Route::controller(ProblemController::class)->group(function(){
     Route::get('ngo/delete-solution/{id}', 'DeleteSolution')->middleware('auth')->name('delete.solution');
     Route::get('ngo/solution-list', 'SolutionList')->middleware('auth')->name('solution.list');
     Route::get('ngo/view-problem/{id}', 'ViewProblem')->middleware('auth')->name('view.problem');
+});
+
+Route::controller(ProjectController::class)->group(function(){
+    Route::get('ngo/add-project', 'AddProject')->middleware('auth')->name('add.project');
+    Route::post('ngo/store-project', 'StoreProject')->middleware('auth')->name('store.project');
+    Route::get('ngo/edit-project/{id}', 'EditProject')->middleware('auth')->name('edit.project');
+    Route::post('ngo/update-project/{id}', 'UpdateProject')->middleware('auth')->name('update.project');
+    Route::get('ngo/delete-project/{id}', 'DeleteProject')->middleware('auth')->name('delete.project');
+    Route::get('ngo/view-project/{id}', 'ViewProject')->middleware('auth')->name('view.project');
+    Route::get('ngo/project-list', 'ProjectList')->middleware('auth')->name('list.project');
+    Route::get('ngo/add-project-report/{id}', 'AddProjectReport')->middleware('auth')->name('add.project.report');
+    Route::post('ngo/store-project-report', 'StoreProjectReport')->middleware('auth')->name('store.project.report');
+    Route::get('ngo/edit-project-report/{id}', 'EditProjectReport')->middleware('auth')->name('edit.project.report');
+    Route::post('ngo/update-project-report/{id}', 'UpdateProjectReport')->middleware('auth')->name('update.project.report');
+    Route::get('ngo/delete-project-report/{id}', 'DeleteProjectReport')->middleware('auth')->name('delete.project.report');
+    Route::get('ngo/view-project-report/{id}', 'ViewProjectReport')->middleware('auth')->name('view.project.report');
+    Route::get('ngo/project-list-report', 'ProjectReportList')->middleware('auth')->name('list.project.report');
 });
 
 

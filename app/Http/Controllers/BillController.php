@@ -41,11 +41,6 @@ class BillController extends Controller
             'sgst' => $request->sgst,
             'igst' => $request->igst,
         ]);
-
-
-dd($request);
-
-
         foreach ($request->items as $item) {
             Voucher_Item::create([
                 'bill_voucher_id' => $voucher->id,

@@ -616,6 +616,12 @@
                                 <option value="event-list" data-label="Event List">Event List</option>
                             </optgroup>
 
+                            <optgroup label="Activity">
+                                <option value="add-project" data-label="Add Project">Add Project</option>
+                                <option value="project-list" data-label="Project List">Project List</option>
+                                <option value="report-list" data-label="Report List">Project Report</option>
+                            </optgroup>
+
                             <optgroup label="Setting">
                                 <option value="add-working-area" data-label="Add Working Area">Add Working Area</option>
                                 <option value="working-area-list" data-label="Working Area List">Working Area List
