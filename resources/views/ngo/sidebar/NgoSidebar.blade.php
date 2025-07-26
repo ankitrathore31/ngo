@@ -288,7 +288,8 @@
                                 </li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('group-member-list'))
-                                <li><a class="dropdown-item" href="{{ route('list.organization.member') }}">Group Member
+                                <li><a class="dropdown-item" href="{{ route('list.organization.member') }}">Group
+                                        Member
                                         List</a></li>
                             @endif
                         </ul>

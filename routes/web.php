@@ -377,8 +377,6 @@ Route::controller(ProjectController::class)->group(function(){
 Route::controller(OrganizationController::class)->group(function(){
     Route::get('ngo/add-organization', 'AddOrg')->middleware('auth')->name('add.organization');
     Route::post('ngo/store-organization', 'StoreOrg')->middleware('auth')->name('store.organization');
-    Route::get('ngo/edit-organization/{id}', 'EditOrg')->middleware('auth')->name('edit.organization');
-    Route::post('ngo/update-organization/{id}', 'UpdateOrg')->middleware('auth')->name('update.organization');
     Route::get('ngo/delete-organization/{id}', 'DeleteOrg')->middleware('auth')->name('delete.organization');
     Route::get('ngo/view-organization/{id}', 'ViewOrg')->middleware('auth')->name('view.organization');
     Route::get('ngo/organization-list', 'OrgList')->middleware('auth')->name('list.organization');
