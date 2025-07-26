@@ -231,7 +231,7 @@
                                         <td>{{ $item->category }}</td>
                                         <td>{{ $item->sub_category }}</td>
                                         @php 
-                                        $budgetItem = \App\Models\budgetItem::where('report_id', $report->id);
+                                        $budgetItem = \App\Models\BudgetItem::where('report_id', $report->id);
                                         $totalExpense = $budgetItem->sum('expense'); @endphp
                                         <td>{{$totalExpense}}</td>
                                         <td>{{ $report->academic_session }}</td>
