@@ -95,7 +95,7 @@
                                                 class="form-control" value="{{ $item->category }}" required></td>
                                         <td><input type="number" name="items[{{ $i }}][expense]"
                                                 class="form-control text-end expense" step="0.01"
-                                                value="{{ number_format($item->expense, 2) }}" onchange="updateTotal()">
+                                                value="{{ $item->expense }}" onchange="updateTotal()">
                                         </td>
                                         <td><input type="text" name="items[{{ $i }}][details]"
                                                 class="form-control" value="{{ $item->details }}"></td>

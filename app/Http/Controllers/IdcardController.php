@@ -8,6 +8,7 @@ use App\Models\Donation;
 use App\Models\donor_data;
 use App\Models\Member;
 use App\Models\Signature;
+use App\Models\Staff;
 use Illuminate\Http\Request;
 
 class IdcardController extends Controller
@@ -44,10 +45,10 @@ class IdcardController extends Controller
         $data = academic_session::all();
         $states = config('states');
         $signatures = Signature::pluck('file_path', 'role');
-        return view('ngo.idcard.member-idcard', compact('data', 'member','states','signatures'));
+        return view('ngo.idcard.member-idcard', compact('data', 'member', 'states', 'signatures'));
     }
 
-     public function BeneficiaryIdcard(Request $request)
+    public function BeneficiaryIdcard(Request $request)
     {
         $queryMember = beneficiarie::where('status', 1);
 
@@ -79,7 +80,7 @@ class IdcardController extends Controller
         $data = academic_session::all();
         $states = config('states');
         $signatures = Signature::pluck('file_path', 'role');
-        return view('ngo.idcard.beneficiary-idcard', compact('data', 'beneficiary','states','signatures'));
+        return view('ngo.idcard.beneficiary-idcard', compact('data', 'beneficiary', 'states', 'signatures'));
     }
 
     public function DonorIdcard(Request $request)
@@ -135,6 +136,41 @@ class IdcardController extends Controller
         $data = academic_session::all();
         $states = config('states');
         $signatures = Signature::pluck('file_path', 'role');
-        return view('ngo.idcard.donor-idcard', compact('data', 'donations','states','signatures'));
+        return view('ngo.idcard.donor-idcard', compact('data', 'donations', 'states', 'signatures'));
+    }
+
+    public function StaffIdcard(Request $request)
+    {
+        $query = Staff::query();
+
+        if ($request->filled('session_filter')) {
+            $query->where('academic_session', $request->session_filter);
+        }
+
+        if ($request->filled('staff_code')) {
+            $query->where('staff_code', $request->staff_code);
+        }
+
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        if ($request->filled('block')) {
+            $query->where('block', 'like', '%' . $request->block . '%');
+        }
+
+        if ($request->filled('state')) {
+            $query->where('state', $request->state);
+        }
+
+        if ($request->filled('district')) {
+            $query->where('district', $request->district);
+        }
+
+        $staff = $query->orderBy('created_at', 'asc')->get();
+        $data = academic_session::all();
+        $states = config('states');
+        $signatures = Signature::pluck('file_path', 'role');
+        return view('ngo.idcard.staff-idcard', compact('data', 'staff', 'states', 'signatures'));
     }
 }

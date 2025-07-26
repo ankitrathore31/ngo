@@ -235,7 +235,7 @@
                                 @else
                                     <p class="text-muted mt-2 no-print">Not attached</p>
                                 @endif
-                                Digitally Signed By<br>
+                                Digital Signed By<br>
                                 DIRECTOR  
                             </div>
                         </div>

@@ -204,7 +204,6 @@ class ProjectController extends Controller
     public function ProjectReportList(Request $request)
     {
         $query = Project::query();
-
         if ($request->session_filter) {
             $query->where('academic_session', $request->session_filter);
         }
@@ -214,11 +213,9 @@ class ProjectController extends Controller
         if ($request->name) {
             $query->where('name', 'like', '%' . $request->name . '%');
         }
-
         $query->whereHas('reports');
-
         $project = $query->with('reports')->get();
-        // $report = ProjectReport::where('report_id',$project->id)->get();
+        // $budgetItems = BudgetItem::where()
         $data = academic_session::all();
         return view('ngo.project.report-list', compact('data', 'project'));
     }
