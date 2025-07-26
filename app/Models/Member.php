@@ -49,4 +49,9 @@ class Member extends Model
         'deleted_reason',
         'deleted_date',
     ];
+
+    public function organizations()
+    {
+        return $this->hasMany(OrganizationMember::class, 'member_id');
+    }
 }

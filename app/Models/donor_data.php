@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class donor_data extends Model
 {
     use HasFactory;
+
+    public function organizations()
+    {
+        return $this->morphMany(OrganizationMember::class, 'member');
+    }
 }

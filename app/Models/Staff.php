@@ -26,4 +26,8 @@ class Staff extends Model
         return in_array($permission, $permissions);
     }
 
+    public function organizations()
+    {
+        return $this->hasMany(OrganizationMember::class, 'member_id');
+    }
 }

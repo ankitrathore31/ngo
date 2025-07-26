@@ -2,8 +2,8 @@
 @section('content')
     <style>
         /* ::placeholder {
-                                                    font-size: 8px;
-                                                } */
+                                                        font-size: 8px;
+                                                    } */
 
         .upload-container {
             text-align: center;
@@ -674,6 +674,12 @@
                                 <option value="member-activity">Member Activity</option>
                                 <option value="active-members">Active Members</option>
                                 <option value="inactive-members">Unactive Members</option>
+                            </optgroup>
+
+                            <optgroup label="Group">
+                                <option value="add-group">Add Group</option>
+                                <option value="group-list">Group List</option>
+                                <option value="group-member-list">Group Member List</option>
                             </optgroup>
 
                             <optgroup label="Promote">

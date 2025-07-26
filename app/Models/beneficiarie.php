@@ -65,13 +65,20 @@ class beneficiarie extends Model
             ->orderBy('id', 'asc');
     }
 
-    public function centers(){
+    public function centers()
+    {
         return $this->hasMany(Training_Beneficiarie::class, 'beneficiarie_id')
-        ->orderBy('id', 'asc');
+            ->orderBy('id', 'asc');
     }
 
-    public function experience(){
-        return $this->hasMAny(ExperienceCertificate:: class. 'beneficiarie_id')
-        ->orderBy('id', 'asc');
+    public function experience()
+    {
+        return $this->hasMAny(ExperienceCertificate::class . 'beneficiarie_id')
+            ->orderBy('id', 'asc');
+    }
+
+    public function organizations()
+    {
+        return $this->hasMany(OrganizationMember::class, 'member_id');
     }
 }

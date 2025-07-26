@@ -15,6 +15,7 @@ use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\IdcardController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\NoticeController;
+use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\ProblemController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SignatureController;
@@ -373,6 +374,18 @@ Route::controller(ProjectController::class)->group(function(){
     Route::get('ngo/project-list-report', 'ProjectReportList')->middleware('auth')->name('list.project.report');
 });
 
+Route::controller(OrganizationController::class)->group(function(){
+    Route::get('ngo/add-organization', 'AddOrg')->middleware('auth')->name('add.organization');
+    Route::post('ngo/store-organization', 'StoreOrg')->middleware('auth')->name('store.organization');
+    Route::get('ngo/delete-organization/{id}', 'DeleteOrg')->middleware('auth')->name('delete.organization');
+    Route::get('ngo/view-organization/{id}', 'ViewOrg')->middleware('auth')->name('view.organization');
+    Route::get('ngo/organization-list', 'OrgList')->middleware('auth')->name('list.organization');
+    Route::get('ngo/add-organization-member/{id}', 'AddOrgMember')->middleware('auth')->name('add.organization.member');
+    Route::post('ngo/store-organization-member/{id}', 'StoreOrgMember')->middleware('auth')->name('store.organization.member');
+    Route::get('ngo/organization-member-list', 'OrgMemberList')->middleware('auth')->name('list.organization.member');
+    Route::get('ngo/view-organization-member/{id}', 'ViewOrgMember')->middleware('auth')->name('view.organization.member');
+    Route::get('ngo/delete-organization-member/{id}', 'DeleteOrgMember')->middleware('auth')->name('delete.organization.member');
+});
 
 
 require __DIR__ . '/auth.php';
