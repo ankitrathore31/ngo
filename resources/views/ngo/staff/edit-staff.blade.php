@@ -694,6 +694,12 @@
                                 <option value="inactive-members" data-label="Unactive Members">Unactive Members</option>
                             </optgroup>
 
+                            <optgroup label="Group">
+                                <option value="add-group"data-label="Add Group">Add Group</option>
+                                <option value="group-list"data-label="Group List">Group List</option>
+                                <option value="group-member-list" data-label="Group Member List">Group Member List</option>
+                            </optgroup>
+
                             <optgroup label="Promote">
                                 <option value="promote-membership" data-label="Promote Membership">Promote Membership
                                 </option>

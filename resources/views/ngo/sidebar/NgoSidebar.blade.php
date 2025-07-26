@@ -269,14 +269,27 @@
                     </li>
                 @endif
 
-                @if (!$isStaff || $user->hasPermission('add-group'))
+                @if (
+                    !$isStaff ||
+                        $user->hasPermission('add-group') ||
+                        $user->hasPermission('group-list') ||
+                        $user->hasPermission('group-member-list'))
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
                             <i class="fas fa-users"></i> Group
                         </a>
                         <ul class="dropdown-menu bg-primary">
                             @if (!$isStaff || $user->hasPermission('add-group'))
-                                <li><a class="dropdown-item" href="{{-- route('add-staff') --}}">Add Group</a></li>
+                                <li><a class="dropdown-item" href="{{ route('add.organization') }}">Add Group</a>
+                                </li>
+                            @endif
+                            @if (!$isStaff || $user->hasPermission('group-list'))
+                                <li><a class="dropdown-item" href="{{ route('list.organization') }}">Group List</a>
+                                </li>
+                            @endif
+                            @if (!$isStaff || $user->hasPermission('group-member-list'))
+                                <li><a class="dropdown-item" href="{{ route('list.organization.member') }}">Group Member
+                                        List</a></li>
                             @endif
                         </ul>
                     </li>

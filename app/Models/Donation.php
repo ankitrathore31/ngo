@@ -9,4 +9,8 @@ class Donation extends Model
 {
     use HasFactory;
 
+    public function organizations()
+    {
+        return $this->hasMany(OrganizationMember::class, 'member_id');
+    }
 }
