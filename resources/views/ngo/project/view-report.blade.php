@@ -249,26 +249,36 @@
 
         <div class="container-fluid my-4" id="printable-area">
             <div class="page-break project-container mb-2">
-                <div class="text-center mb-4 pb-3 border-bottom ngo-header">
-                    <div class="row align-items-center">
-                        <div class="col-sm-2 text-center">
-                            <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="90" height="90">
+                <div class="text-center mb-4 border-bottom pb-2">
+                    <!-- Header -->
+                    <div class="row">
+                        <div class="col-sm-2 text-center text-md-start">
+                            <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="80" height="80">
                         </div>
-                        <div class="col-sm-10 text-center">
-                            <h2 class="print-h4 mb-1">
-                                <span class="lang-en">GYAN BHARTI SANSTHA</span>
-                                <span class="lang-hi">ज्ञान भारती संस्था</span>
-                            </h2>
-                            <h5 class="text-primary mb-1 sub-title">
-                                <span class="lang-en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit, UP -
-                                    262121</span>
-                                <span class="lang-hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर प्रदेश -
-                                    262121</span>
-                            </h5>
-                            <p class="mb-0 small">
-                                <b>Website:</b> www.gyanbhartingo.org &nbsp; | &nbsp;
-                                <b>Email:</b> gyanbhartingo600@gmail.com &nbsp; | &nbsp;
-                                <b>Mob:</b> 9411484111
+                        <div class="col-sm-10">
+                            <p style="margin: 0;" class="d-flex justify-content-around"><b>
+                                    <span>NEETI AYOG ID NO. UP/2023/0360430</span>&nbsp;
+                                    &nbsp; &nbsp;<span>NGO NO. UP/00033062</span>&nbsp; &nbsp;
+                                    &nbsp; &nbsp;<span>PAN: AAEAG7650B</span>&nbsp;
+                                </b></p>
+                            <h4 class="print-h4"><b>
+                                    {{-- <span data-lang="hi">ज्ञान भारती संस्था</span> --}}
+                                    <span data-lang="en">GYAN BHARTI SANSTHA</span>
+                                </b></h4>
+                            <h6 style="color: blue;"><b>
+                                    {{-- <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर
+                                            प्रदेश -
+                                            262121</span> --}}
+                                    <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit, UP
+                                        -
+                                        262121</span>
+                                </b></h6>
+                            <p style="font-size: 14px; margin: 0;">
+                                <b>
+                                    <span>Website: www.gyanbhartingo.org | Email: gyanbhartingo600@gmail.com
+                                        | Mob:
+                                        9411484111</span>
+                                </b>
                             </p>
                         </div>
                     </div>
@@ -385,7 +395,7 @@
                                     Project Code: {{ $project->code }} &nbsp; | &nbsp;
                                     Project Name: {{ $project->name }} &nbsp; | &nbsp;
                                     Project Category: {{ $project->category }} &nbsp; | &nbsp;
-                                    Project Sub-Category: {{ $project->sub_category }}
+                                    {{-- Project Sub-Category: {{ $project->sub_category }} --}}
                                 </span>
                             </h5>
                             <p class="project-info">
@@ -467,7 +477,7 @@
                                     Project Code: {{ $project->code }} &nbsp; | &nbsp;
                                     Project Name: {{ $project->name }} &nbsp; | &nbsp;
                                     Project Category: {{ $project->category }} &nbsp; | &nbsp;
-                                    Project Sub-Category: {{ $project->sub_category }}
+                                    {{-- Project Sub-Category: {{ $project->sub_category }} --}}
                                 </span>
                             </h5>
                             <p class="project-info">
@@ -512,7 +522,7 @@
                                     Project Code: {{ $project->code }} &nbsp; | &nbsp;
                                     Project Name: {{ $project->name }} &nbsp; | &nbsp;
                                     Project Category: {{ $project->category }} &nbsp; | &nbsp;
-                                    Project Sub-Category: {{ $project->sub_category }}
+                                    {{-- Project Sub-Category: {{ $project->sub_category }} --}}
                                 </span>
                             </h5>
                             <p class="project-info">
@@ -575,7 +585,7 @@
                                     Project Code: {{ $project->code }} &nbsp; | &nbsp;
                                     Project Name: {{ $project->name }} &nbsp; | &nbsp;
                                     Project Category: {{ $project->category }} &nbsp; | &nbsp;
-                                    Project Sub-Category: {{ $project->sub_category }}
+                                    {{-- Project Sub-Category: {{ $project->sub_category }} --}}
                                 </span>
                             </h5>
                             <p class="project-info">

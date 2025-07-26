@@ -208,49 +208,57 @@
                                 <th>project Name</th>
                                 <th>Category</th>
                                 <th>Sub Category</th>
+                                <th>Project Cost</th>
                                 <th>Session</th>
                                 <th class="no-print">Report</th>
                                 <th class="no-print">Action</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @php $serial =1; @endphp
                             @foreach ($project as $item)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>
-                                        <img src="{{ asset($item->image) }}" alt="image" class="img-thumbnail"
-                                            width="100">
-                                    </td>
-                                    <td>{{ $item->name }}</td>
-                                    <td>
-                                        {{ $item->code }}</small>
-                                    </td>
-                                    <td>{{ $item->category }}</td>
-                                    <td>{{ $item->sub_category }}</td>
-                                    <td>{{ $item->academic_session }}</td>
-                                    <td class="no-print">
-                                        <a href="{{ route('view.project.report', $item->id) }}"
-                                            class="btn btn-sm btn-success" title="View">
-                                            View Report
-                                        </a>
-                                    </td>
-                                    <td class="no-print">
-                                        <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            @foreach ($item->reports as $report)
+                                @foreach ($item->reports as $report)
+                                    <tr>
+                                        <td>{{ $serial++ }}</td>
+                                        <td>
+                                            <img src="{{ asset($item->image) }}" alt="image" class="img-thumbnail"
+                                                width="100">
+                                        </td>
+                                        <td>{{ $item->name }}</td>
+                                        <td>
+                                            {{ $item->code }}</small>
+                                        </td>
+                                        <td>{{ $item->category }}</td>
+                                        <td>{{ $item->sub_category }}</td>
+                                        @php 
+                                        $budgetItem = \App\Models\budgetItem::where('report_id', $report->id);
+                                        $totalExpense = $budgetItem->sum('expense'); @endphp
+                                        <td>{{$totalExpense}}</td>
+                                        <td>{{ $report->academic_session }}</td>
+                                        <td class="no-print">
+                                            <a href="{{ route('view.project.report', $item->id) }}"
+                                                class="btn btn-sm btn-success" title="View">
+                                                View Report
+                                            </a>
+                                        </td>
+                                        <td class="no-print">
+                                            <div class="d-flex justify-content-center gap-2 flex-wrap">
+
                                                 <a href="{{ route('edit.project.report', $report->id) }}"
                                                     class="btn btn-sm btn-primary" title="Edit Report">
                                                     <i class="fa-regular fa-pen-to-square"></i>
                                                 </a>
-                                            
-                                            <a href="{{ route('delete.project.report', $report->id) }}"
-                                                class="btn btn-sm btn-danger" title="Delete"
-                                                onclick="return confirm('Do you want to delete report')">
-                                                <i class="fa-regular fa-trash-can"></i>
-                                            </a>
-                                            @endforeach
-                                        </div>
-                                    </td>
-                                </tr>
+
+                                                <a href="{{ route('delete.project.report', $report->id) }}"
+                                                    class="btn btn-sm btn-danger" title="Delete"
+                                                    onclick="return confirm('Do you want to delete report')">
+                                                    <i class="fa-regular fa-trash-can"></i>
+                                                </a>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             @endforeach
                         </tbody>
                     </table>

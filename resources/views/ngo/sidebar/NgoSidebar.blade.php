@@ -109,9 +109,11 @@
                 @endif
 
                 <!-- ACTIVITY -->
-                @if (!$isStaff || $user->hasPermission('add-project') || 
-                    $user->hasPermission('project-list') ||
-                    $user->hasPermission('report-list'))
+                @if (
+                    !$isStaff ||
+                        $user->hasPermission('add-project') ||
+                        $user->hasPermission('project-list') ||
+                        $user->hasPermission('report-list'))
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
                             <i class="fas fa-tasks"></i> Project
@@ -124,7 +126,8 @@
                                 <li><a class="dropdown-item" href="{{ route('list.project') }}">Project List</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('report-list'))
-                                <li><a class="dropdown-item" href="{{ route('list.project.report') }}">Project Report</a></li>
+                                <li><a class="dropdown-item" href="{{ route('list.project.report') }}">Project
+                                        Report</a></li>
                             @endif
                         </ul>
                     </li>
@@ -352,7 +355,8 @@
                                 <li><a class="dropdown-item" href="#">Staff Salary</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('staff-idcard'))
-                                <li><a class="dropdown-item" href="#">Staff ID Card</a></li>
+                                <li><a class="dropdown-item" href="{{ route('staff-idcard') }}">Staff ID Card</a>
+                                </li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('staff-passbook'))
                                 <li><a class="dropdown-item" href="#">Staff Passbook</a></li>
@@ -534,7 +538,8 @@
                         $user->hasPermission('donor-idcard') ||
                         $user->hasPermission('beneficiary-admit') ||
                         $user->hasPermission('beneficiary-desk-slip') ||
-                        $user->hasPermission('beneficiary-cc-noc'))
+                        $user->hasPermission('beneficiary-cc-noc') ||
+                        $user->hasPermission('staff-idcard'))
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
                             <i class="fas fa-download"></i> DOWNLOAD
@@ -550,6 +555,10 @@
                             @endif
                             @if (!$isStaff || $user->hasPermission('donor-idcard'))
                                 <li><a class="dropdown-item" href="{{ route('donor-idcard') }}">Donor ID Card</a>
+                                </li>
+                            @endif
+                            @if (!$isStaff || $user->hasPermission('staff-idcard'))
+                                <li><a class="dropdown-item" href="{{ route('staff-idcard') }}">Staff ID Card</a>
                                 </li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('beneficiary-admit'))

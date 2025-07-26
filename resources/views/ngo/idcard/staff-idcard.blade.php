@@ -96,11 +96,11 @@
         <div class="container-fluid mt-4">
 
             <div class="d-flex justify-content-between align-items-center mb-1">
-                <h5 class="mb-0">Beneficiary Id Card List</h5>
+                <h5 class="mb-0">Staff Id Card List</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-1 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Beneficiary</li>
+                        <li class="breadcrumb-item active" aria-current="page">Staff</li>
                     </ol>
                 </nav>
             </div>
@@ -111,7 +111,7 @@
                 </div>
             @endif
             <div class="row">
-                <form method="GET" action="{{ route('beneficiary-idcard') }}" class="row g-3 mb-4">
+                <form method="GET" action="{{ route('staff-idcard') }}" class="row g-3 mb-4">
                     <div class="row">
                         <div class="col-md-4 col-sm-4">
                             <select name="session_filter" id="session_filter" class="form-control">
@@ -125,8 +125,8 @@
                             </select>
                         </div>
                         <div class="col-md-4 col-sm-4 mb-3">
-                            <input type="number" class="form-control" name="application_no"
-                                placeholder="Search By Application No.">
+                            <input type="number" class="form-control" name="staff_code"
+                                placeholder="Search By Staff Code.">
                         </div>
                         <div class="col-md-4 col-sm-4 mb-3">
                             <input type="text" class="form-control" name="name" placeholder="Search By Name">
@@ -137,7 +137,7 @@
                         @php
                             $districtsByState = config('districts');
                         @endphp
-                        <div class="col-md-3 col-sm-6 form-group mb-3">
+                        <div class="col-md-4 col-sm-6 form-group mb-3">
                             {{-- <label for="stateSelect" class="form-label">State: <span class="text-danger">*</span></label> --}}
                             <select class="form-control @error('state') is-invalid @enderror" name="state"
                                 id="stateSelect">
@@ -153,7 +153,7 @@
                             @enderror
 
                         </div>
-                        <div class="col-md-3 col-sm-6 form-group mb-3">
+                        <div class="col-md-4 col-sm-6 form-group mb-3">
                             {{-- <label for="districtSelect" class="form-label">District: <span
                                     class="text-danger">*</span></label> --}}
                             <select class="form-control @error('district') is-invalid @enderror" name="district"
@@ -164,7 +164,7 @@
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
-                        <div class="col-md-3 col-sm-6 form-group mb-3">
+                        <div class="col-md-4 col-sm-6 form-group mb-3">
                             {{-- <label for="block" class="form-label">Block: <span class="text-danger">*</span></label> --}}
                             <input type="text" name="block" id="block"
                                 class="form-control @error('block') is-invalid @enderror" value="{{ old('block') }}"
@@ -177,7 +177,7 @@
                     <div class="row">
                         <div class="col-md-4">
                             <button type="submit" class="btn btn-primary me-1">Search</button>
-                            <a href="{{ route('beneficiary-idcard') }}" class="btn btn-info text-white me-1">Reset</a>
+                            <a href="{{ route('staff-idcard') }}" class="btn btn-info text-white me-1">Reset</a>
                         </div>
                     </div>
                 </form>
@@ -189,7 +189,7 @@
                 </div>
             </div>
             <div class="container d-flex flex-wrap justify-content-center">
-                @foreach ($donations as $record)
+                @foreach ($staff as $record)
                     <div class="id-card">
                         <div class="id-header">
                             <img src="{{ asset('images/LOGO.png') }}" class="logo-img" alt="Logo">
@@ -199,22 +199,26 @@
 
                         <div class="id-body">
                             <div class="left">
-                                <img src="" class="photo-img" alt="Photo">
+                                <img src="{{ asset($record->image) }}" alt="Photo"
+                                    style="max-width:100px; max-height:120px; width:auto; height:auto; object-fit:cover; border-radius:5px;">
                             </div>
+
                             <div class="right">
-                                {{-- <p><strong>Registration No:</strong> {{ $record->registration_no }}</p> --}}
+                                <p><strong>Staff Code:</strong> {{ $record->staff_code }}</p>
                                 <p><strong>Name:</strong> {{ $record->name }}</p>
-                                <p><strong>Father/Husband:</strong> {{ $record->gurdian_name ?? 'OnlineCashfree' }}</p>
-                                <p><strong>Mobile No:</strong> {{ (string) $record->mobile }}</p>
-                                <p><strong>Position:</strong> Donor</p>
+                                <p><strong>Father/Husband:</strong> {{ $record->gurdian_name }}</p>
+                                <p><strong>Mobile No:</strong> {{ $record->phone }}</p>
+                                {{-- <p><strong>Type:</strong> {{ $record->reg_type }}</p> --}}
                                 <p><strong>Session:</strong>{{ $record->academic_session }}</p>
+                                <p><strong>Position Name:</strong> {{ $record->position }}</p>
+                                {{-- <p><strong>Working Area:</strong> {{ $record->working_area }}</p> --}}
                             </div>
                         </div>
 
                         <div class="id-footer">
-                            <p><strong>Address:</strong> {{ $record->address }},
+                            <p><strong>Address:</strong> {{ $record->village }}, {{ $record->post }},
                                 {{ $record->block }},
-                                {{ $record->district }}, {{ $record->state }}
+                                {{ $record->district }}, {{ $record->state }} - {{ $record->pincode }}
                             </p>
                             <div class="text-end">
                                 @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
@@ -235,7 +239,7 @@
                                     <p class="text-muted mt-2 no-print">Not attached</p>
                                 @endif
                                 Digital Signed By<br>
-                                DIRECTOR    
+                                DIRECTOR
                             </div>
                         </div>
                     </div>
