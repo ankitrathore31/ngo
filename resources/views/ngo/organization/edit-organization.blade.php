@@ -2,18 +2,18 @@
 @Section('content')
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-address mb-3">
-            <h5 class="mb-0">Add Organization</h5>
+            <h5 class="mb-0">Edit Organization</h5>
             <!-- Breadcrumb aligned to right -->
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                     <li class="breadcrumb-item"><a href="{{ route('list.organization') }}">Organization List</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Add Organization</li>
+                    <li class="breadcrumb-item active" aria-current="page">Organization</li>
                 </ol>
             </nav>
         </div>
         <div class="card m-1">
             <div class="card-body">
-                <form action="{{ route('store.organization') }}" method="POST" enctype="multipart/form-data"
+                <form action="{{ route('update.organization',$org->id) }}" method="POST" enctype="multipart/form-data"
                     class="m-3">
                     @csrf
                     <div class="row">
@@ -24,49 +24,60 @@
                                 name="academic_session" required>
                                 <option value="">Select Session</option>
                                 @foreach ($data as $session)
-                                    <option value="{{ $session->session_date }}">{{ $session->session_date }}</option>
+                                    <option value="{{ $session->session_date }}"
+                                        {{ old('academic_session', $org->academic_session) == $session->session_date ? 'selected' : '' }}>
+                                        {{ $session->session_date }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
+
                         <div class="col-md-6 mb-3">
                             <label for="formation_date">Date of formation:</label>
                             <input type="date" id="formation_date" name="formation_date" class="form-control"
-                                value="{{ old('formation_date') }}" required>
+                                value="{{ old('formation_date', $org->formation_date) }}" required>
                             @error('formation_date')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
+
                         <div class="col-md-6 mb-3 form-group local-from">
                             <label class="form-label">Organization name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror" name="name"
-                                placeholder="Enter Organization Name" required>
+                                value="{{ old('name', $org->name) }}" placeholder="Enter Organization Name" required>
                         </div>
+
                         <div class="col-md-6 mb-3">
                             <label for="address">Address:</label>
                             <input type="text" id="address" name="address" class="form-control"
-                                value="{{ old('address') }}" placeholder="Enter Organization Address" required>
+                                value="{{ old('address', $org->address) }}" placeholder="Enter Organization Address"
+                                required>
                             @error('address')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
-                         <div class="col-md-6 mb-3">
-                            <label for="address">Block:</label>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="block">Block:</label>
                             <input type="text" id="block" name="block" class="form-control"
-                                value="{{ old('block') }}" placeholder="Enter Organization Block" required>
+                                value="{{ old('block', $org->block) }}" placeholder="Enter Organization Block" required>
                             @error('block')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
+
                         @php
                             $districtsByState = config('districts');
                         @endphp
+
                         <div class="col-md-6 form-group mb-3">
                             <label for="stateSelect" class="form-label">State: <span class="text-danger">*</span></label>
                             <select class="form-control @error('state') is-invalid @enderror" name="state"
                                 id="stateSelect" required>
                                 <option value="">Select State</option>
                                 @foreach ($districtsByState as $state => $districts)
-                                    <option value="{{ $state }}" {{ old('state') == $state ? 'selected' : '' }}>
+                                    <option value="{{ $state }}"
+                                        {{ old('state', $org->state) == $state ? 'selected' : '' }}>
                                         {{ $state }}
                                     </option>
                                 @endforeach
@@ -74,7 +85,6 @@
                             @error('state')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
-
                         </div>
 
                         <div class="col-md-6 form-group mb-3">
@@ -83,23 +93,35 @@
                             <select class="form-control @error('district') is-invalid @enderror" name="district"
                                 id="districtSelect" required>
                                 <option value="">Select District</option>
+                                @if (old('state', $org->state))
+                                    @foreach ($districtsByState[old('state', $org->state)] as $district)
+                                        <option value="{{ $district }}"
+                                            {{ old('district', $org->district) == $district ? 'selected' : '' }}>
+                                            {{ $district }}
+                                        </option>
+                                    @endforeach
+                                @endif
                             </select>
                             @error('district')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
+
                     <div class="form-group text-address">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>
     <script>
         const allDistricts = @json($districtsByState);
-        const oldDistrict = "{{ old('district') }}";
-        const oldState = "{{ old('state') }}";
+
+        // Use old values if they exist, otherwise fallback to $beneficiarie
+        const oldState = "{{ old('state', $org->state) }}";
+        const oldDistrict = "{{ old('district', $org->district) }}";
 
         function populateDistricts(state) {
             const districtSelect = document.getElementById('districtSelect');
@@ -113,7 +135,7 @@
             }
         }
 
-        // Initial load if editing or validation failed
+        // Initial load
         if (oldState) {
             populateDistricts(oldState);
         }

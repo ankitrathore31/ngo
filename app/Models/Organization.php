@@ -11,6 +11,7 @@ class Organization extends Model
     protected $fillable = [
         'academic_session',
         'name',
+        'formation_date',
         'address',
         'block',
         'state',

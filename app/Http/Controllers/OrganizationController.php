@@ -26,6 +26,7 @@ class OrganizationController extends Controller
         $validate = $request->validate([
             'academic_session' => 'required',
             'name'    =>  'required|string',
+            'formation_date' => 'required',
             'address' =>  'required|string',
             'block'    =>  'required|string',
             'state'   =>  'required|string',
@@ -37,6 +38,33 @@ class OrganizationController extends Controller
 
         return redirect()->route('list.organization')->with('success', 'Organization Added Successfully');
     }
+
+    public function EditOrg($id)
+    {
+        $org = Organization::findorFail($id);
+        $data = academic_session::all();
+        $states = config('states');
+        return view('ngo.organization.edit-organization', compact('data', 'states', 'org'));
+    }
+
+    public function Updateorg(Request $request, $id)
+    {
+        $validate = $request->validate([
+            'academic_session' => 'required',
+            'name'    =>  'required|string',
+            'formation_date' => 'required|date',
+            'address' =>  'required|string',
+            'block'    =>  'required|string',
+            'state'   =>  'required|string',
+            'district' =>  'required|string',
+        ]);
+
+        $org = Organization::findOrFail($id);
+        $org->update($validate);
+
+        return redirect()->route('list.organization')->with('success', 'Organization Updated Successfully');
+    }
+
 
     public function DeleteOrg($id)
     {
@@ -142,7 +170,7 @@ class OrganizationController extends Controller
 
         $member->person = $person;
         $signatures = Signature::pluck('file_path', 'role');
-        return view('ngo.organization.view-org-member', compact('member','signatures'));
+        return view('ngo.organization.view-org-member', compact('member', 'signatures'));
     }
 
 

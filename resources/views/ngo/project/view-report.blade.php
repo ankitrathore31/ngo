@@ -284,9 +284,26 @@
                     </div>
                 </div>
                 <!-- Sub Header -->
-                <h5 class="text-center mb-3 text-uppercase text-primary fw-semibold">
-                    <span>Legal Status of Organization</span>
-                </h5>
+                <div class="text-center mb-4 pb-3 border-bottom project-header">
+                    @php
+                        $total = $budgetItems->sum('expense');
+                    @endphp
+                    <div class="row align-items-center">
+                        {{-- <div class="col-sm-2 text-center">
+                            <img src="{{ asset($project->image) }}" alt="image" class="project-image">
+                        </div> --}}
+                        <div class="col-sm-12 text-center">
+                            <!-- Main Header -->
+                            <h4 class="project-title">
+                                <span>Legal Status of Organization</span>
+                            </h4>
+                            <p class="project-info">
+                                <b>Session:</b> {{ $report->academic_session ?? 'N\A' }} &nbsp; | &nbsp;
+                                <b>Project Cost:</b> ₹{{ number_format($total, 2) }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
                 <table class="table table-bordered table-sm">
                     <tbody>
                         <tr>
