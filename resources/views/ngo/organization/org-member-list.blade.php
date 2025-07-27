@@ -166,6 +166,7 @@
                             <tr>
                                 <th>Sr. No</th>
                                 <th>Organization Name</th>
+                                 <th>Formation Date</th>
                                 <th>Organization Address</th>
                                 <th>Member Name</th>
                                 <th>Address</th>
@@ -184,6 +185,7 @@
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $member->organization->name ?? 'N/A' }}</td>
+                                    <td>{{\carbon\carbon::parse($member->organization->formation_date)->format('d-m-Y')}}</td>
                                     <td>{{ $member->organization->address ?? 'N/A' }},
                                         {{ $member->organization->block ?? 'N/A' }},
                                         {{ $member->organization->district ?? 'N/A' }},

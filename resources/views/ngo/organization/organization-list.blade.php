@@ -223,6 +223,7 @@
                             <tr>
                                 <th>Sr. No.</th>
                                 <th>Name</th>
+                                <th>Formation Date</th>
                                 <th>State</th>
                                 <th>District</th>
                                 <th>Session</th>
@@ -235,15 +236,12 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->name }}</td>
+                                    <td>{{\carbon\carbon::parse($item->formation_date)->format('d-m-Y')}}</td>
                                     <td>{{ $item->state }}</td>
                                     <td>{{ $item->district }}</td>
                                     <td>{{ $item->academic_session ?? 'N/A' }}</td>
                                     <td class="no-print">
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            {{-- <a href="{{ route('view.organization', $item->id) }}"
-                                                class="btn btn-success btn-sm px-3">
-                                                <i class="fa-regular fa-eye"></i>
-                                            </a> --}}
                                             <a href="{{ route('edit.organization', $item->id) }}"
                                                 class="btn btn-primary btn-sm" title="Edit">
                                                 <i class="fa-regular fa-edit"></i>
