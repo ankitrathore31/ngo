@@ -25,10 +25,11 @@
             <div class="card p-2 bg-info">
                 <div class="row">
                     <div class="col-sm-4 mb-2"><b>Session:</b> {{ $organization->academic_session }}</div>
-                    <div class="col-sm-4 mb-2"><b>Name:</b> {{ $organization->name }}</div>
-                    <div class="col-sm-4 mb-2"><b>Address:</b> {{ $organization->address }}</div>
-                    <div class="col-sm-4 mb-2"><b>District:</b> {{ $organization->district }}</div>
-                    <div class="col-sm-4 mb-2"><b>State:</b> {{ $organization->state }}</div>
+                    <div class="col-sm-4 mb-2"><b>Organization Name:</b> {{ $headOrganization->name }}</div>
+                    <div class="col-sm-4 mb-2"><b>Group Name:</b> {{ $organization->name }}</div>
+                    <div class="col-sm-4 mb-2"><b>Group Address:</b> {{ $organization->address }}</div>
+                    <div class="col-sm-4 mb-2"><b>Group District:</b> {{ $organization->district }}</div>
+                    <div class="col-sm-4 mb-2"><b>Group State:</b> {{ $organization->state }}</div>
                 </div>
             </div>
         </div>
@@ -75,7 +76,6 @@
             <div class="card p-2">
                 <form action="{{ route('store.organization.member', $organization->id) }}" method="POST" id="selectedForm">
                     @csrf
-
                     <div class="row">
                         <div class="col-md-12 mb-3">
                             <label for="academic_session" class="form-label">Organization Member Session <span

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\academic_session;
 use App\Models\beneficiarie;
 use App\Models\Donation;
+use App\Models\HeadOrganization;
 use App\Models\Member;
 use App\Models\Organization;
 use App\Models\OrganizationMember;
@@ -14,17 +15,107 @@ use Illuminate\Http\Request;
 
 class OrganizationController extends Controller
 {
+    public function AddHeadOrg()
+    {
+        $data = academic_session::all();
+        $states = config('states');
+        return view('ngo.organization.add-headorg', compact('data', 'states'));
+    }
+
+    public function StoreHeadorg(Request $request)
+    {
+        $validate = $request->validate([
+            'academic_session' => 'required',
+            'name'    =>  'required|string',
+        ]);
+        $org = HeadOrganization::create($validate);
+        $org->save();
+        return redirect()->route('list.head.organization')
+            ->with('success', 'Organization Added Successfully');
+    }
+
+
+    public function EditHeadOrg($id)
+    {
+        $org = HeadOrganization::findorFail($id);
+        $data = academic_session::all();
+        $states = config('states');
+        return view('ngo.organization.edit-headorg', compact('data', 'states', 'org'));
+    }
+
+    public function UpdateHeadorg(Request $request, $id)
+    {
+        $validate = $request->validate([
+            'academic_session' => 'required',
+            'name'    =>  'required|string',
+        ]);
+
+        $org = HeadOrganization::findOrFail($id);
+        $org->update($validate);
+
+        return redirect()->route('list.head.organization')->with('success', 'Organization Updated Successfully');
+    }
+
+
+    public function DeleteHeadOrg($id)
+    {
+        $headOrg = HeadOrganization::findOrFail($id);
+
+        // Delete all organizations and their members related to this HeadOrg
+        foreach ($headOrg->organizations as $organization) {
+            // If organizations also have members, delete them here
+            $organization->organizationMembers()->delete();
+            $organization->delete();
+        }
+
+        // If HeadOrganization has its own members directly
+        $headOrg->organizationMembers()->delete();
+
+        // Finally delete HeadOrganization itself
+        $headOrg->delete();
+
+        return redirect()->back()->with('success', 'Head Organization and all related data deleted successfully');
+    }
+
+
+    public function OrgHeadList(Request $request)
+    {
+
+        $query = HeadOrganization::query();
+
+        if ($request->session) {
+            $query->where('academic_session', $request->session);
+        }
+        if ($request->session) {
+            $query->where('name', '%' . $request->name . '%');
+        }
+        $org = $query->get();
+        $states = config('states');
+        $data = academic_session::all();
+
+        return view('ngo.organization.head-org-list', compact('data', 'states', 'org'));
+    }
     public function AddOrg()
     {
         $data = academic_session::all();
         $states = config('states');
-        return view('ngo.organization.add-organization', compact('data', 'states'));
+        $headorg = HeadOrganization::get();
+        $lastOrg = Organization::orderBy('id', 'desc')->first();
+        if ($lastOrg && $lastOrg->organization_no) {
+            $lastNumber = intval(substr($lastOrg->organization_no, 5));
+            $nextNumber = $lastNumber + 1;
+            $nextOrganizationNo = '3126G' . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
+        } else {
+            $nextOrganizationNo = '3126G00001';
+        }
+        return view('ngo.organization.add-organization', compact('data', 'states', 'headorg', 'nextOrganizationNo'));
     }
 
     public function Storeorg(Request $request)
     {
         $validate = $request->validate([
             'academic_session' => 'required',
+            'headorg_id'       => 'required',
             'name'    =>  'required|string',
             'formation_date' => 'required',
             'address' =>  'required|string',
@@ -86,17 +177,16 @@ class OrganizationController extends Controller
 
     public function OrgList(Request $request)
     {
-
-        $query = Organization::query();
+        $query = Organization::with('headOrganization'); // eager load relation
 
         if ($request->session) {
             $query->where('academic_session', $request->session);
         }
-        if ($request->session) {
-            $query->where('name', '%' . $request->name . '%');
+        if ($request->name) {
+            $query->where('name', 'like', '%' . $request->name . '%');
         }
         if ($request->block) {
-            $query->where('block', '%' . $request->block . '%');
+            $query->where('block', 'like', '%' . $request->block . '%');
         }
         if ($request->state) {
             $query->where('state', $request->state);
@@ -112,16 +202,19 @@ class OrganizationController extends Controller
         return view('ngo.organization.organization-list', compact('data', 'states', 'org'));
     }
 
+
     public function AddOrgMember($id)
     {
         $data = academic_session::all();
         $organization = Organization::findOrFail($id);
+        $headOrgId = $organization->headorg_id;
         $staff = Staff::all();
         $donations = Donation::all();
         $members = Member::all();
         $beneficiaries = beneficiarie::all();
         $allMembers = $staff->merge($members)->merge($beneficiaries)->merge($donations);
-        return view('ngo.organization.add-organization-member', compact('data', 'allMembers', 'organization'));
+        $headOrganization = HeadOrganization::where('id', $organization->headorg_id)->first();
+        return view('ngo.organization.add-organization-member', compact('data', 'allMembers', 'organization', 'headOrgId','headOrganization'));
     }
 
     public function StoreOrgMember(Request $request, $organizationId)
@@ -136,7 +229,8 @@ class OrganizationController extends Controller
         foreach ($request->members as $memberId => $data) {
             OrganizationMember::create([
                 'organization_id'   => $organization->id,
-                'member_id'         => $data['id'],        // direct access now
+                'headorg_id'        => $organization->headorg_id,
+                'member_id'         => $data['id'],
                 'member_position'          => $data['position'],
                 'academic_session'  => $request->academic_session,
             ]);
@@ -154,9 +248,8 @@ class OrganizationController extends Controller
         $sessionFilter = $request->session;
         $organizationFilter = $request->org;
         $memberNameFilter = $request->member_name;
-
-        // Base query with relationships
-        $query = OrganizationMember::with('organization')->orderBy('created_at', 'desc');
+        
+        $query = OrganizationMember::with('organization.headOrganization')->orderBy('created_at', 'desc');
 
         // Apply filters
         if (!empty($sessionFilter)) {
@@ -193,15 +286,16 @@ class OrganizationController extends Controller
         });
 
         // Fetch data for dropdowns
-        $organizations = Organization::all();
+        $organizations = Organization::with('headOrganization')->get();
         $sessions = OrganizationMember::select('academic_session')
             ->distinct()
             ->orderBy('academic_session', 'desc')
             ->get();
 
         $data = academic_session::all();
+        // $headorg = Organization::with('headOrganization');
 
-        return view('ngo.organization.org-member-list', compact('data','organizationMembers', 'organizations', 'sessions'));
+        return view('ngo.organization.org-member-list', compact('data', 'organizationMembers', 'organizations', 'sessions'));
     }
 
 

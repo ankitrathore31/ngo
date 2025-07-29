@@ -481,7 +481,7 @@
                             style="{{ $gradients[$index % count($gradients)] }}">
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">{{ $item->name }}</h5>
-                                <p class="card-text fs-4">{{ totalOrgMember($item->id) }}</p>
+                                <p class="card-text fs-4">{{ organizationGroup($item->id) }}</p>
                             </div>
                         </div>
                     </div>

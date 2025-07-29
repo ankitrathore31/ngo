@@ -1,5 +1,5 @@
 @extends('ngo.layout.master')
-@section('content')
+@Section('content')
     <style>
         @page {
             size: auto;
@@ -106,70 +106,47 @@
     <div class="wrapper">
         <div class="container-fluid mt-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Organization Members List</h5>
+                <h5 class="mb-0">Organization List</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Organization Members</li>
+                        <li class="breadcrumb-item active" aria-current="page">Organization</li>
                     </ol>
                 </nav>
             </div>
+
             @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success') }}
                 </div>
             @endif
+
             <div class="row">
-                <form method="GET" action="{{ route('list.organization.member') }}" class="row g-3 mb-4">
-                    <!-- Session Filter -->
+                <form method="GET" action="{{ route('list.head.organization') }}" class="row g-3 mb-4">
                     <div class="col-md-3 col-sm-4">
                         <select name="session" id="session" class="form-control">
                             <option value="">All Sessions</option>
-                            @foreach ($sessions as $s)
-                                <option value="{{ $s->academic_session }}"
-                                    {{ request('session') == $s->academic_session ? 'selected' : '' }}>
-                                    {{ $s->academic_session }}
+                            @foreach ($data as $s)
+                                <option value="{{ $s->session_date }}"
+                                    {{ request('session_filter') == $s->session_date ? 'selected' : '' }}>
+                                    {{ $s->session_date }}
                                 </option>
                             @endforeach
                         </select>
                     </div>
-
-                    <!-- Organization Filter -->
-                    <div class="col-md-3 col-sm-4">
-                        <select name="org" id="org" class="form-control">
-                            <option value="">All Group Organizations</option>
-                            @foreach ($organizations as $org)
-                                <option value="{{ $org->name }}" {{ request('org') == $org->name ? 'selected' : '' }}>
-                                    {{ $org->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <!-- Member Name Filter -->
                     <div class="col-md-3">
-                        <input type="text" name="member_name" class="form-control" value="{{ request('member_name') }}"
-                            placeholder="Search by Member Name">
+                        <input type="text" name="name" class="form-control" value="{{ request('name') }}"
+                            placeholder="Search by Organization Name">
                     </div>
-
-                    <!-- Buttons -->
                     <div class="col-md-3">
                         <button type="submit" class="btn btn-primary">Search</button>
-                        <a href="{{ route('list.organization.member') }}" class="btn btn-info text-white">Reset</a>
+                        <a href="{{ route('list.head.organization') }}" class="btn btn-info text-white">Reset</a>
                     </div>
-
-                    <button type="button" onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
-                </form>
-            </div>
-
-            <div class="row">
-                <div class="col">
                     <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
-                </div>
+                </form>
             </div>
             <div class="card shadow-sm printable">
                 <div class="card-body table-responsive">
-
                     <div class="text-center mb-4 border-bottom pb-2">
                         <!-- Header -->
                         <div class="row">
@@ -183,13 +160,9 @@
                                         &nbsp; &nbsp;<span>PAN: AAEAG7650B</span>&nbsp;
                                     </b></p>
                                 <h4 class="print-h4"><b>
-                                        {{-- <span data-lang="hi">ज्ञान भारती संस्था</span> --}}
                                         <span data-lang="en">GYAN BHARTI SANSTHA</span>
                                     </b></h4>
                                 <h6 style="color: blue;"><b>
-                                        {{-- <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर
-                                            प्रदेश -
-                                            262121</span> --}}
                                         <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit, UP
                                             -
                                             262121</span>
@@ -207,70 +180,34 @@
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-primary">
                             <tr>
-                            <tr>
-                                <th>Sr. No</th>
+                                <th>Sr. No.</th>
                                 <th>Organization Name</th>
-                                <th>Group ID.</th>
-                                <th>Group Name</th>
-                                <th>Formation Date</th>
-                                <th>Group Address</th>
-                                <th>Member Name</th>
-                                <th>Address</th>
-                                <th>Mobile No.</th>
-                                <th>Caste</th>
-                                <th>Caste Category</th>
-                                <th>Religion</th>
-                                <th>Age</th>
-                                <th>Position</th>
-                                <th>session</th>
+                                <th>Session</th>
                                 <th class="no-print">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($organizationMembers as $index => $member)
+                            @foreach ($org as $item)
                                 <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{ $member->organization->headOrganization->name ?? 'N/A' }}</td>
-                                    <td>{{ $member->organization->organization_no ?? 'N/A' }}</td>
-                                    <td>{{ $member->organization->name ?? 'N/A' }}</td>
-                                    <td>{{ \carbon\carbon::parse($member->organization->formation_date)->format('d-m-Y') }}
-                                    </td>
-                                    <td>{{ $member->organization->address ?? 'N/A' }},
-                                        {{ $member->organization->block ?? 'N/A' }},
-                                        {{ $member->organization->district ?? 'N/A' }},
-                                        {{ $member->organization->state ?? 'N/A' }}
-                                    </td>
-                                    <td>{{ $member->person->name ?? 'N/A' }}</td>
-                                    <td>{{ $member->person->address ?? $member->person->village }}
-                                        , {{ $member->person->block }}, {{ $member->person->district }},
-                                        {{ $member->person->state }}
-                                    </td>
-                                    <td>{{ $member->person->phone }}</td>
-                                    <td>{{ $member->person->caste }}</td>
-                                    <td>{{ $member->person->religion_category ?? $member->person->caste_category }}</td>
-                                    <td>{{ $member->person->religion }}</td>
-                                    <td>
-                                        {{ $member->person->dob ? \Carbon\Carbon::parse($member->person->dob)->age . ' years' : 'Not Found' }}
-                                    </td>
-                                    <td>{{ $member->member_position ?? 'N/A' }}</td>
-                                    <td>{{ $member->academic_session ?? 'N/A' }}</td>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->academic_session ?? 'N/A' }}</td>
                                     <td class="no-print">
-                                        <a href="{{ route('view.organization.member', $member->id) }}"
-                                            class="btn btn-success btn-sm me-2">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                        <a href="{{ route('delete.organization.member', $member->id) }}"
-                                            class="btn btn-danger btn-sm me-2"
-                                            onclick="return confirm('Do you want to delete member')">
-                                            <i class="fa fa-trash"></i>
-                                        </a>
+                                        <div class="d-flex justify-content-center gap-2 flex-wrap">
+                                            <a href="{{ route('edit.head.organization', $item->id) }}"
+                                                class="btn btn-primary btn-sm" title="Edit">
+                                                <i class="fa-regular fa-edit"></i>
+                                            </a>
+                                            <a href="{{ route('delete.head.organization', $item->id) }}"
+                                                class="btn btn-danger btn-sm "
+                                                onclick="return confirm('Do you want to delete Organization')"
+                                                title="Delete">
+                                                <i class="fa-regular fa-trash-can"></i>
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="6" class="text-center">No Members Found</td>
-                                </tr>
-                            @endforelse
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

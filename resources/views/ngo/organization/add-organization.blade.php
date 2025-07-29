@@ -2,12 +2,12 @@
 @Section('content')
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-address mb-3">
-            <h5 class="mb-0">Add Organization</h5>
+            <h5 class="mb-0">Add Organization Group</h5>
             <!-- Breadcrumb aligned to right -->
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                     <li class="breadcrumb-item"><a href="{{ route('list.organization') }}">Organization List</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Add Organization</li>
+                    <li class="breadcrumb-item active" aria-current="page">Organization</li>
                 </ol>
             </nav>
         </div>
@@ -18,7 +18,25 @@
                     @csrf
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="academic_session" class="form-label ">Organization Session <span
+                            <label for="" class="form-label">Organization</label>
+                            <select name="headorg_id" id="headorg_id" class="form-control @error('org_id') is-invalid @enderror">
+                            <option value="">select organization</option>
+                            @foreach ($headorg as $item)
+                                <option value="{{$item->id}}">{{$item->name}}</option>
+                            @endforeach
+                            </select>
+                            @error('headorg_id')
+                                <span class="text-danger">{{$message}}</span>
+                            @enderror
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="" class="form-label">Group ID.</label>
+                            <input type="text" class="form-control" value="{{$nextOrganizationNo}}" readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="academic_session" class="form-label ">Group Session <span
                                     class="text-danger">*</span></label>
                             <select class="form-control @error('academic_session') is-invalid @enderror"
                                 name="academic_session" required>
@@ -37,12 +55,12 @@
                             @enderror
                         </div>
                         <div class="col-md-6 mb-3 form-group local-from">
-                            <label class="form-label">Organization name <span class="text-danger">*</span></label>
+                            <label class="form-label">Group name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror" name="name"
                                 placeholder="Enter Organization Name" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="address">Address:</label>
+                            <label for="address">Group Address:</label>
                             <input type="text" id="address" name="address" class="form-control"
                                 value="{{ old('address') }}" placeholder="Enter Organization Address" required>
                             @error('address')
