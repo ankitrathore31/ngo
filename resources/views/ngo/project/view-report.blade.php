@@ -289,11 +289,7 @@
                         $total = $budgetItems->sum('expense');
                     @endphp
                     <div class="row align-items-center">
-                        {{-- <div class="col-sm-2 text-center">
-                            <img src="{{ asset($project->image) }}" alt="image" class="project-image">
-                        </div> --}}
                         <div class="col-sm-12 text-center">
-                            <!-- Main Header -->
                             <h4 class="project-title">
                                 <span>Legal Status of Organization</span>
                             </h4>
@@ -393,7 +389,6 @@
                 </table>
             </div>
 
-            <!-- PROJECT REPORT -->
             <div class="page-break project-container mt-2 mb-2">
                 <div class="text-center mb-4 pb-3 border-bottom project-header">
                     @php

@@ -465,37 +465,27 @@
                 </div>
             </div>
             <div class="row">
-
-                <div class="col-md-4 mb-2">
-                    <div class="card text-center shadow-sm bg-success text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">किशोरी संगठन</h5>
-                            <p class="card-text fs-4">25</p>
-                            {{-- <span>यहाँ क्लिक करें</span> --}}
+                @php
+                    $gradients = [
+                        'background: linear-gradient(45deg, #ff6a00, #ffcc00);', // orange to yellow
+                        'background: linear-gradient(45deg, #ff416c, #ff4b2b);', // pink to red
+                        'background: linear-gradient(45deg, #36d1dc, #5b86e5);', // cyan to blue
+                        'background: linear-gradient(45deg, #43e97b, #38f9d7);', // green to teal
+                        'background: linear-gradient(45deg, #f7971e, #ffd200);', // orange to gold
+                        'background: linear-gradient(45deg, #7f00ff, #e100ff);', // purple to magenta
+                    ];
+                @endphp
+                @foreach (organization() as $index => $item)
+                    <div class="col-md-4 mb-2">
+                        <div class="card text-center shadow-sm text-white"
+                            style="{{ $gradients[$index % count($gradients)] }}">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">{{ $item->name }}</h5>
+                                <p class="card-text fs-4">{{ totalOrgMember($item->id) }}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-md-4 mb-2">
-                    <div class="card text-center shadow-sm bg-warning text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">महिला संगठन</h5>
-                            <p class="card-text fs-4">18</p>
-                            {{-- <span>यहाँ क्लिक करें</span> --}}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4 mb-2">
-                    <div class="card text-center shadow-sm bg-danger text-white">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">किसान क्लब</h5>
-                            <p class="card-text fs-4">32</p>
-                            {{-- <span>यहाँ क्लिक करें</span> --}}
-                        </div>
-                    </div>
-                </div>
-
+                @endforeach
             </div>
         </div>
     </section>
