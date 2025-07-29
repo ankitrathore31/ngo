@@ -124,7 +124,7 @@
             <div class="row">
                 <form method="GET" action="{{ route('list.organization') }}" class="row g-3 mb-4">
                     <div class="col-md-3 col-sm-4">
-                        <select name="session" id="session" class="form-control" onchange="this.form.submit()">
+                        <select name="session" id="session" class="form-control">
                             <option value="">All Sessions</option>
                             @foreach ($data as $s)
                                 <option value="{{ $s->session_date }}"
@@ -222,6 +222,7 @@
                         <thead class="table-primary">
                             <tr>
                                 <th>Sr. No.</th>
+                                <th>Organization ID.</th>
                                 <th>Name</th>
                                 <th>Formation Date</th>
                                 <th>State</th>
@@ -235,6 +236,7 @@
                             @foreach ($org as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
+                                    <td>{{$item->organization_no}}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{\carbon\carbon::parse($item->formation_date)->format('d-m-Y')}}</td>
                                     <td>{{ $item->state }}</td>

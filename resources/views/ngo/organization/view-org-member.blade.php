@@ -121,7 +121,10 @@
                     </div>
                     <div class="row mb-3">
                         <h5 class="mb-3"><b>- Organization Details</b></h5>
-                        <div class="col-sm-8 mb-3">
+                        <div class="col-sm-3 mb-3">
+                            <strong>Organization ID:</strong> {{ $member->organization->organization_no ?? 'N/A' }}
+                        </div>
+                        <div class="col-sm-5 mb-3">
                             <strong>Organization Name:</strong> {{ $member->organization->name ?? 'N/A' }}
                         </div>
                         <div class="col-sm-4 mb-3">

@@ -224,16 +224,16 @@
                                             <img src="{{ asset($item->image) }}" alt="image" class="img-thumbnail"
                                                 width="100">
                                         </td>
-                                        <td>{{ $item->name }}</td>
                                         <td>
                                             {{ $item->code }}</small>
                                         </td>
+                                        <td>{{ $item->name }}</td>
                                         <td>{{ $item->category }}</td>
                                         <td>{{ $item->sub_category }}</td>
-                                        @php 
-                                        $budgetItem = \App\Models\BudgetItem::where('report_id', $report->id);
+                                        @php
+                                            $budgetItem = \App\Models\BudgetItem::where('report_id', $report->id);
                                         $totalExpense = $budgetItem->sum('expense'); @endphp
-                                        <td>{{$totalExpense}}</td>
+                                        <td>{{ $totalExpense }}</td>
                                         <td>{{ $report->academic_session }}</td>
                                         <td class="no-print">
                                             <a href="{{ route('view.project.report', $item->id) }}"

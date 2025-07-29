@@ -33,11 +33,20 @@ class OrganizationController extends Controller
             'district' =>  'required|string',
         ]);
 
+        $lastOrg = Organization::orderBy('id', 'desc')->first();
+        if ($lastOrg && $lastOrg->organization_no) {
+            $lastNumber = intval(substr($lastOrg->organization_no, 5)); // remove 3126G
+            $newNumber = $lastNumber + 1;
+            $organizationNo = '3126G' . str_pad($newNumber, 5, '0', STR_PAD_LEFT);
+        } else {
+            $organizationNo = '3126G00001';
+        }
+        $validate['organization_no'] = $organizationNo;
         $org = Organization::create($validate);
-        $org->save();
-
-        return redirect()->route('list.organization')->with('success', 'Organization Added Successfully');
+        return redirect()->route('list.organization')
+            ->with('success', 'Organization Added Successfully');
     }
+
 
     public function EditOrg($id)
     {
@@ -139,26 +148,62 @@ class OrganizationController extends Controller
     }
 
 
-    public function OrgMemberList()
+    public function OrgMemberList(Request $request)
     {
-        $organizationMembers = OrganizationMember::with('organization')
-            ->orderBy('created_at', 'desc')
-            ->get()
-            ->map(function ($member) {
-                // try to find the member from multiple tables
-                $person = Beneficiarie::find($member->member_id)
-                    ?? Staff::find($member->member_id)
-                    ?? Member::find($member->member_id)
-                    ?? Donation::find($member->member_id);
+        // Get filter values
+        $sessionFilter = $request->session;
+        $organizationFilter = $request->org;
+        $memberNameFilter = $request->member_name;
 
-                // attach found member object
-                $member->person = $person;
+        // Base query with relationships
+        $query = OrganizationMember::with('organization')->orderBy('created_at', 'desc');
 
-                return $member;
+        // Apply filters
+        if (!empty($sessionFilter)) {
+            $query->where('academic_session', $sessionFilter);
+        }
+
+        if (!empty($organizationFilter)) {
+            $query->whereHas('organization', function ($q) use ($organizationFilter) {
+                $q->where('name', 'like', '%' . $organizationFilter . '%');
             });
-        // dd($organizationMembers);
-        return view('ngo.organization.org-member-list', compact('organizationMembers'));
+        }
+
+        if (!empty($memberNameFilter)) {
+            $query->where(function ($q) use ($memberNameFilter) {
+                // Match member name from multiple tables
+                $memberIds = array_merge(
+                    Beneficiarie::where('name', 'like', "%{$memberNameFilter}%")->pluck('id')->toArray(),
+                    Staff::where('name', 'like', "%{$memberNameFilter}%")->pluck('id')->toArray(),
+                    Member::where('name', 'like', "%{$memberNameFilter}%")->pluck('id')->toArray(),
+                    Donation::where('name', 'like', "%{$memberNameFilter}%")->pluck('id')->toArray()
+                );
+                $q->whereIn('member_id', $memberIds);
+            });
+        }
+
+        // Get filtered results
+        $organizationMembers = $query->get()->map(function ($member) {
+            $person = Beneficiarie::find($member->member_id)
+                ?? Staff::find($member->member_id)
+                ?? Member::find($member->member_id)
+                ?? Donation::find($member->member_id);
+            $member->person = $person;
+            return $member;
+        });
+
+        // Fetch data for dropdowns
+        $organizations = Organization::all();
+        $sessions = OrganizationMember::select('academic_session')
+            ->distinct()
+            ->orderBy('academic_session', 'desc')
+            ->get();
+
+        $data = academic_session::all();
+
+        return view('ngo.organization.org-member-list', compact('data','organizationMembers', 'organizations', 'sessions'));
     }
+
 
     public function ViewOrgMember($id)
     {
