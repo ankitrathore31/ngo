@@ -279,6 +279,14 @@
                             <i class="fas fa-users"></i> Group
                         </a>
                         <ul class="dropdown-menu bg-primary">
+                            @if (!$isStaff || $user->hasPermission('add-head-group'))
+                                <li><a class="dropdown-item" href="{{ route('add.head.organization') }}">Add Organization</a>
+                                </li>
+                            @endif
+                            @if (!$isStaff || $user->hasPermission('group-head-list'))
+                                <li><a class="dropdown-item" href="{{ route('list.head.organization') }}">Organization List</a>
+                                </li>
+                            @endif
                             @if (!$isStaff || $user->hasPermission('add-group'))
                                 <li><a class="dropdown-item" href="{{ route('add.organization') }}">Add Group</a>
                                 </li>

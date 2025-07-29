@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\HeadOrganization;
 use App\Models\Organization;
 use App\Models\OrganizationMember;
 
@@ -12,7 +13,14 @@ if(!function_exists('print_hello')){
 
 if(!function_exists('organization')){
     function organization(){
-        $data = Organization::get();
+        $data = HeadOrganization::get();
+        return $data;
+    }
+}
+
+if(!function_exists('organizationGroup')){
+    function organizationGroup($headorg_id){
+        $data = Organization::where('headorg_id',$headorg_id)->count();
         return $data;
     }
 }

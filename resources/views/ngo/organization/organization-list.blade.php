@@ -106,7 +106,7 @@
     <div class="wrapper">
         <div class="container-fluid mt-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Organization List</h5>
+                <h5 class="mb-0">Organization Group List</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
@@ -137,7 +137,7 @@
 
                     <div class="col-md-3">
                         <input type="text" name="name" class="form-control" value="{{ request('name') }}"
-                            placeholder="Search by Organization Name">
+                            placeholder="Search by Group Name">
                     </div>
 
                     <div class="col-md-3">
@@ -222,11 +222,14 @@
                         <thead class="table-primary">
                             <tr>
                                 <th>Sr. No.</th>
-                                <th>Organization ID.</th>
-                                <th>Name</th>
+                                <th>Organization Name</th>
+                                <th>Group ID.</th>
+                                <th>Group Name</th>
                                 <th>Formation Date</th>
-                                <th>State</th>
+                                <th>Address</th>
+                                <th>Block</th>
                                 <th>District</th>
+                                <th>State</th>
                                 <th>Session</th>
                                 <th class="no-print">Action</th>
                                 <th class="no-print">Add</th>
@@ -236,11 +239,14 @@
                             @foreach ($org as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
+                                    <td>{{$item->headOrganization ? $item->headOrganization->name : '-' }}</td>
                                     <td>{{$item->organization_no}}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{\carbon\carbon::parse($item->formation_date)->format('d-m-Y')}}</td>
-                                    <td>{{ $item->state }}</td>
+                                    <td>{{ $item->address }}</td>
+                                    <td>{{ $item->block }}</td>
                                     <td>{{ $item->district }}</td>
+                                    <td>{{ $item->state }}</td>
                                     <td>{{ $item->academic_session ?? 'N/A' }}</td>
                                     <td class="no-print">
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">

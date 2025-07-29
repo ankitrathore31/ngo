@@ -375,6 +375,12 @@ Route::controller(ProjectController::class)->group(function(){
 });
 
 Route::controller(OrganizationController::class)->group(function(){
+    Route::get('ngo/add-head-organization', 'AddHeadOrg')->middleware('auth')->name('add.head.organization');
+    Route::post('ngo/store-head-organization', 'StoreHeadOrg')->middleware('auth')->name('store.head.organization');
+    Route::get('ngo/edit-head-organization/{id}', 'EditHeadOrg')->middleware('auth')->name('edit.head.organization');
+    Route::post('ngo/update-head-organization/{id}', 'UpdateHeadOrg')->middleware('auth')->name('update.head.organization');
+    Route::get('ngo/delete-head-organization/{id}', 'DeleteHeadOrg')->middleware('auth')->name('delete.head.organization');
+    Route::get('ngo/organization-head-list', 'OrgHeadList')->middleware('auth')->name('list.head.organization');
     Route::get('ngo/add-organization', 'AddOrg')->middleware('auth')->name('add.organization');
     Route::post('ngo/store-organization', 'StoreOrg')->middleware('auth')->name('store.organization');
     Route::get('ngo/edit-organization/{id}', 'EditOrg')->middleware('auth')->name('edit.organization');

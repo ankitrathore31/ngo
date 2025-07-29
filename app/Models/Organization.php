@@ -10,6 +10,8 @@ class Organization extends Model
     use HasFactory;
     protected $fillable = [
         'academic_session',
+        'headorg_id',
+        'organization_no',
         'name',
         'formation_date',
         'address',
@@ -18,7 +20,14 @@ class Organization extends Model
         'district',
     ];
 
-    public function organizationMembers(){
+    public function headOrganization()
+    {
+        return $this->belongsTo(HeadOrganization::class, 'headorg_id');
+    }
+
+    public function organizationMembers()
+    {
         return $this->hasMany(OrganizationMember::class);
     }
+    
 }
