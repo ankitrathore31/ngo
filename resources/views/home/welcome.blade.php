@@ -459,9 +459,15 @@
 
     <section>
         <div class="container-fluid mt-5">
-            <div class="row justify-content-center d-flex">
+             <div class="row justify-content-center d-flex">
                 <div class="col-md-10 justify-content-center d-flex" style="gap: 15px;">
                     <h2 class="section-title mb-4"><b>संगठन</b></h2>
+                    <select class="form-control w-25" id="session">
+                        <option value="">All Session</option>
+                        @foreach ($data as $session)
+                            <option value="{{ $session->session_date }}">{{ $session->session_date }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
             <div class="row">
@@ -481,7 +487,8 @@
                             style="{{ $gradients[$index % count($gradients)] }}">
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">{{ $item->name }}</h5>
-                                <p class="card-text fs-4">{{ organizationGroup($item->id) }}</p>
+                                <p class="card-text fs-4">{{ TotalorganizationGroup($item->id) }}</p>
+                                <small><a href="{{route('organization.groups',$item->id)}}" class="btn border-primary">Click Here</a></small>
                             </div>
                         </div>
                     </div>

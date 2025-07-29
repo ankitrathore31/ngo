@@ -108,7 +108,7 @@
                     </li>
                 @endif
 
-                <!-- ACTIVITY -->
+                <!-- Project -->
                 @if (
                     !$isStaff ||
                         $user->hasPermission('add-project') ||
@@ -116,7 +116,7 @@
                         $user->hasPermission('report-list'))
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-tasks"></i> Project
+                            <i class="fas fa-tasks"></i> PROJECT
                         </a>
                         <ul class="dropdown-menu bg-primary">
                             @if (!$isStaff || $user->hasPermission('add-project'))
@@ -276,7 +276,7 @@
                         $user->hasPermission('group-member-list'))
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-users"></i> Group
+                            <i class="fas fa-users"></i> GROUP
                         </a>
                         <ul class="dropdown-menu bg-primary">
                             @if (!$isStaff || $user->hasPermission('add-head-group'))
@@ -373,7 +373,7 @@
                                 <li><a class="dropdown-item" href="#">Staff Resign Letter</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('staff-salary'))
-                                <li><a class="dropdown-item" href="#">Staff Salary</a></li>
+                                <li><a class="dropdown-item" href="{{route('manage.sallary.staff')}}">Staff Salary</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('staff-idcard'))
                                 <li><a class="dropdown-item" href="{{ route('staff-idcard') }}">Staff ID Card</a>

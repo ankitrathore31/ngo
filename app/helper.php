@@ -18,8 +18,8 @@ if(!function_exists('organization')){
     }
 }
 
-if(!function_exists('organizationGroup')){
-    function organizationGroup($headorg_id){
+if(!function_exists('TotalorganizationGroup')){
+    function TotalorganizationGroup($headorg_id){
         $data = Organization::where('headorg_id',$headorg_id)->count();
         return $data;
     }
@@ -28,6 +28,13 @@ if(!function_exists('organizationGroup')){
 if(!function_exists('totalOrgMember')){
     function totalOrgMember($org_id){
         $data = OrganizationMember::where('organization_id',$org_id)->count();
+        return $data;
+    }
+}
+
+if(!function_exists('organizationGroup')){
+    function organizationGroup($headorg_id){
+        $data = Organization::where('headorg_id',$headorg_id)->get();
         return $data;
     }
 }

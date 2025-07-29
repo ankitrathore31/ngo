@@ -8,9 +8,13 @@ use App\Models\Gallery;
 use App\Models\beneficiarie;
 use App\Models\Member;
 use App\Models\academic_session;
+use App\Models\Donation;
 use App\Models\Notice;
 use App\Models\Working_Area;
 use App\Models\Event;
+use App\Models\Organization;
+use App\Models\OrganizationMember;
+use App\Models\Staff;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -279,7 +283,7 @@ class HomeControlller extends Controller
         $beneficiarie = \App\Models\beneficiarie::with([
             'surveys' => function ($query) {
                 $query->whereNotNull('facilities');
-                    // ->where('facilities', 1);
+                // ->where('facilities', 1);
             }
         ])
             ->withTrashed()
@@ -315,9 +319,36 @@ class HomeControlller extends Controller
         return response()->json($areaTypeCounts);
     }
 
-      public function eligibility()
+    public function eligibility()
     {
         return view('home.pages.eligibility');
     }
 
+    public function groups($id)
+    {
+        $group = Organization::where('headorg_id', $id)->get();
+        return view('home.organization.show-group', compact('group'));
+    }
+
+    public function OrgMemberListByOrganization($organization_id)
+    {
+        
+        $organizationMembers = OrganizationMember::with('organization.headOrganization')
+            ->where('organization_id', $organization_id)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($member) {
+                // Find member details from the possible tables
+                $member->person = Beneficiarie::find($member->member_id)
+                    ?? Staff::find($member->member_id)
+                    ?? Member::find($member->member_id)
+                    ?? Donation::find($member->member_id);
+                return $member;
+            });
+
+        // Get organization details (optional)
+        $organization = Organization::with('headOrganization')->findOrFail($organization_id);
+
+        return view('home.organization.group-member-list', compact('organization', 'organizationMembers'));
+    }
 }
