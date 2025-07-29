@@ -81,6 +81,8 @@ Route::controller(HomeControlller::class)->group(function () {
     Route::get('/working-area/{text}', 'showarea')->name('show-area');
     Route::get('/filter-area-counts',  'filterAreaCounts');
     Route::get('/eligibility', 'eligibility')->name('eligibility');
+    Route::get('/organization-groups/{id}', 'groups')->name('organization.groups');
+    Route::get('/organization-groups-member/{id}', 'OrgMemberListByOrganization')->name('show.group.member');
 });
 
 
@@ -236,6 +238,8 @@ Route::controller(StaffController::class)->group(function () {
     Route::get('ngo/delete-staff/{id}', 'DeleteStaff')->middleware('auth')->name('delete-staff');
     Route::get('ngo/staff-list', 'staffList')->middleware('auth')->name('staff-list');
     Route::get('ngo/view-staff/{id}','ViewStaff')->middleware('auth')->name('view-staff');
+    Route::get('ngo/add-sallary-staff', 'AddSallarystaff')->middleware('auth')->name('manage.sallary.staff');
+    Route::post('ngo/store-sallary-staff', 'StoreSallaryStaff')->middleware('auth')->name('store.staff.sallary');
     
 });
 
@@ -393,6 +397,7 @@ Route::controller(OrganizationController::class)->group(function(){
     Route::get('ngo/organization-member-list', 'OrgMemberList')->middleware('auth')->name('list.organization.member');
     Route::get('ngo/view-organization-member/{id}', 'ViewOrgMember')->middleware('auth')->name('view.organization.member');
     Route::get('ngo/delete-organization-member/{id}', 'DeleteOrgMember')->middleware('auth')->name('delete.organization.member');
+    Route::get('ngo/group-member-list/{id}', 'GroupMemberList')->middleware('auth')->name('list.group.member');
 });
 
 

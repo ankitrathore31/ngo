@@ -1,4 +1,4 @@
-@extends('ngo.layout.master')
+@extends('home.layout.MasterLayout')
 @Section('content')
     <style>
         @page {
@@ -109,7 +109,7 @@
                 <h5 class="mb-0">Organization Group List</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
-                        <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Dashboard</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Organization</li>
                     </ol>
                 </nav>
@@ -122,65 +122,7 @@
             @endif
 
             <div class="row">
-                <form method="GET" action="{{ route('list.organization') }}" class="row g-3 mb-4">
-                    <div class="col-md-3 col-sm-4">
-                        <select name="session" id="session" class="form-control">
-                            <option value="">All Sessions</option>
-                            @foreach ($data as $s)
-                                <option value="{{ $s->session_date }}"
-                                    {{ request('session_filter') == $s->session_date ? 'selected' : '' }}>
-                                    {{ $s->session_date }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="col-md-3">
-                        <input type="text" name="name" class="form-control" value="{{ request('name') }}"
-                            placeholder="Search by Group Name">
-                    </div>
-
-                    <div class="col-md-3">
-                        <input type="text" name="block" class="form-control" value="{{ request('block') }}"
-                            placeholder="Search by Block">
-                    </div>
-
-                    @php
-                        $districtsByState = config('districts');
-                    @endphp
-                    <div class="col-md-3 col-sm-6 form-group mb-3">
-                        {{-- <label for="stateSelect" class="form-label">State: <span class="text-danger">*</span></label> --}}
-                        <select class="form-control @error('state') is-invalid @enderror" name="state" id="stateSelect">
-                            <option value="">Select State</option>
-                            @foreach ($districtsByState as $state => $districts)
-                                <option value="{{ $state }}" {{ old('state') == $state ? 'selected' : '' }}>
-                                    {{ $state }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('state')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-
-                    </div>
-                    <div class="col-md-3 col-sm-6 form-group mb-3">
-                        <select class="form-control @error('district') is-invalid @enderror" name="district"
-                            id="districtSelect">
-                            <option value="">Select District</option>
-                        </select>
-                        @error('district')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="col-md-3">
-                        <button type="submit" class="btn btn-primary">Search</button>
-                        <a href="{{ route('list.organization') }}" class="btn btn-info text-white">Reset</a>
-
-                    </div>
-                    <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
-
-                </form>
+                <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
             </div>
             <div class="card shadow-sm printable">
                 <div class="card-body table-responsive">
@@ -231,13 +173,11 @@
                                 <th>District</th>
                                 <th>State</th>
                                 <th>Session</th>
-                                <th class="no-print">Action</th>
-                                <th class="no-print">Add</th>
-                                <th class="no-print">Member List</th>
+                                <th>Member List</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($org as $item)
+                            @foreach ($group as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->headOrganization ? $item->headOrganization->name : '-' }}</td>
@@ -250,27 +190,7 @@
                                     <td>{{ $item->state }}</td>
                                     <td>{{ $item->academic_session ?? 'N/A' }}</td>
                                     <td class="no-print">
-                                        <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            <a href="{{ route('edit.organization', $item->id) }}"
-                                                class="btn btn-primary btn-sm" title="Edit">
-                                                <i class="fa-regular fa-edit"></i>
-                                            </a>
-                                            <a href="{{ route('delete.organization', $item->id) }}"
-                                                class="btn btn-danger btn-sm "
-                                                onclick="return confirm('Do you want to delete Organization')"
-                                                title="Delete">
-                                                <i class="fa-regular fa-trash-can"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                    <td class="no-print">
-                                        <a href="{{ route('add.organization.member', $item->id) }}"
-                                            class="btn btn-success btn-sm px-3">
-                                            Add Member
-                                        </a>
-                                    </td>
-                                    <td class="no-print">
-                                        <a href="{{ route('list.group.member', $item->id) }}"
+                                        <a href="{{ route('show.group.member', $item->id) }}"
                                             class="btn btn-success btn-sm px-3">
                                             Member List
                                         </a>
@@ -285,33 +205,7 @@
 
         </div>
     </div>
-    <script>
-        const allDistricts = @json($districtsByState);
-        const oldDistrict = "{{ old('district') }}";
-        const oldState = "{{ old('state') }}";
 
-        function populateDistricts(state) {
-            const districtSelect = document.getElementById('districtSelect');
-            districtSelect.innerHTML = '<option value="">Select District</option>';
-
-            if (allDistricts[state]) {
-                allDistricts[state].forEach(function(district) {
-                    const selected = (district === oldDistrict) ? 'selected' : '';
-                    districtSelect.innerHTML += `<option value="${district}" ${selected}>${district}</option>`;
-                });
-            }
-        }
-
-        // Initial load if editing or validation failed
-        if (oldState) {
-            populateDistricts(oldState);
-        }
-
-        // On state change
-        document.getElementById('stateSelect').addEventListener('change', function() {
-            populateDistricts(this.value);
-        });
-    </script>
     <script>
         function printTable() {
             window.print();

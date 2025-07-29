@@ -214,7 +214,7 @@ class OrganizationController extends Controller
         $beneficiaries = beneficiarie::all();
         $allMembers = $staff->merge($members)->merge($beneficiaries)->merge($donations);
         $headOrganization = HeadOrganization::where('id', $organization->headorg_id)->first();
-        return view('ngo.organization.add-organization-member', compact('data', 'allMembers', 'organization', 'headOrgId','headOrganization'));
+        return view('ngo.organization.add-organization-member', compact('data', 'allMembers', 'organization', 'headOrgId', 'headOrganization'));
     }
 
     public function StoreOrgMember(Request $request, $organizationId)
@@ -248,7 +248,7 @@ class OrganizationController extends Controller
         $sessionFilter = $request->session;
         $organizationFilter = $request->org;
         $memberNameFilter = $request->member_name;
-        
+
         $query = OrganizationMember::with('organization.headOrganization')->orderBy('created_at', 'desc');
 
         // Apply filters
@@ -319,5 +319,59 @@ class OrganizationController extends Controller
         $orgMember->delete();
 
         return redirect()->back()->with('success', 'Organization Member Deleted Successfully. ');
+    }
+
+    public function GroupMemberList(Request $request, $id)
+    {
+        // Get filter values
+        $sessionFilter = $request->session;
+        $organizationFilter = $request->org;
+        $memberNameFilter = $request->member_name;
+
+        // Base query: only members of the selected organization_id
+        $query = OrganizationMember::with('organization.headOrganization')
+            ->where('organization_id', $id)
+            ->orderBy('created_at', 'desc');
+
+        // Apply filters
+        if (!empty($sessionFilter)) {
+            $query->where('academic_session', $sessionFilter);
+        }
+
+        if (!empty($memberNameFilter)) {
+            $query->where(function ($q) use ($memberNameFilter) {
+                // Match member name from multiple tables
+                $memberIds = array_merge(
+                    Beneficiarie::where('name', 'like', "%{$memberNameFilter}%")->pluck('id')->toArray(),
+                    Staff::where('name', 'like', "%{$memberNameFilter}%")->pluck('id')->toArray(),
+                    Member::where('name', 'like', "%{$memberNameFilter}%")->pluck('id')->toArray(),
+                    Donation::where('name', 'like', "%{$memberNameFilter}%")->pluck('id')->toArray()
+                );
+                $q->whereIn('member_id', $memberIds);
+            });
+        }
+
+        // Get results with member details
+        $organizationMembers = $query->get()->map(function ($member) {
+            $member->person = Beneficiarie::find($member->member_id)
+                ?? Staff::find($member->member_id)
+                ?? Member::find($member->member_id)
+                ?? Donation::find($member->member_id);
+            return $member;
+        });
+
+        // Fetch data for dropdowns
+        $organizations = Organization::with('headOrganization')->get();
+        $sessions = OrganizationMember::select('academic_session')
+            ->distinct()
+            ->orderBy('academic_session', 'desc')
+            ->get();
+
+        $data = academic_session::all();
+
+        // Also pass the selected organization (for header)
+        $organization = Organization::findOrFail($id);
+
+        return view('ngo.organization.group-member-list', compact('data', 'organizationMembers', 'organizations', 'sessions', 'organization'));
     }
 }

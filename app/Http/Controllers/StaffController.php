@@ -341,4 +341,10 @@ class StaffController extends Controller
         $signatures = Signature::pluck('file_path', 'role');
         return view('ngo.staff.view-staff', compact('record', 'signatures'));
     }
+
+    public function AddSallarystaff()
+    {
+        return view('ngo.staff.manage-sallary');
+    }
+
 }
