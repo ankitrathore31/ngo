@@ -214,7 +214,9 @@
                                 <th>Group Name</th>
                                 <th>Formation Date</th>
                                 <th>Group Address</th>
+                                <th>Member Registration no.</th>
                                 <th>Member Name</th>
+                                <th>Father/Husband</th>
                                 <th>Address</th>
                                 <th>Mobile No.</th>
                                 <th>Caste</th>
@@ -240,7 +242,9 @@
                                         {{ $member->organization->district ?? 'N/A' }},
                                         {{ $member->organization->state ?? 'N/A' }}
                                     </td>
+                                    <td>{{ $member->person->registration_no ?? 'N/A' }}</td>
                                     <td>{{ $member->person->name ?? 'N/A' }}</td>
+                                    <td>{{ $member->person->gurdian_name ?? 'N/A' }}</td>
                                     <td>{{ $member->person->address ?? $member->person->village }}
                                         , {{ $member->person->block }}, {{ $member->person->district }},
                                         {{ $member->person->state }}

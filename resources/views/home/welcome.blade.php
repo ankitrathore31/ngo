@@ -277,8 +277,6 @@
 
     </div>
 
-
-
     <!-- slider -->
     <div class="owl-carousel owl-theme slider">
         <div class="item ">
@@ -405,7 +403,6 @@
     </section>
     <!-- About Section End -->
 
-
     <!-- =========== Donation Section Start ============ -->
     <section class="community mt-5 py-4">
         <div class="container">
@@ -488,7 +485,7 @@
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">{{ $item->name }}</h5>
                                 <p class="card-text fs-4">{{ TotalorganizationGroup($item->id) }}</p>
-                                <small><a href="{{route('organization.groups',$item->id)}}" class="btn border-primary">Click Here</a></small>
+                                <small><a href="{{route('organization.groups',$item->id)}}" class="btn btn-primary">Click Here</a></small>
                             </div>
                         </div>
                     </div>
