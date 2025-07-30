@@ -335,7 +335,7 @@ class HomeControlller extends Controller
         
         $organizationMembers = OrganizationMember::with('organization.headOrganization')
             ->where('organization_id', $organization_id)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->get()
             ->map(function ($member) {
                 // Find member details from the possible tables

@@ -210,8 +210,8 @@ class OrganizationController extends Controller
         $headOrgId = $organization->headorg_id;
         $staff = Staff::all();
         $donations = Donation::all();
-        $members = Member::all();
-        $beneficiaries = beneficiarie::all();
+        $members = Member::where('status', 1)->get();
+        $beneficiaries = beneficiarie::where('status', 1)->get();
         $allMembers = $staff->merge($members)->merge($beneficiaries)->merge($donations);
         $headOrganization = HeadOrganization::where('id', $organization->headorg_id)->first();
         return view('ngo.organization.add-organization-member', compact('data', 'allMembers', 'organization', 'headOrgId', 'headOrganization'));
@@ -249,7 +249,7 @@ class OrganizationController extends Controller
         $organizationFilter = $request->org;
         $memberNameFilter = $request->member_name;
 
-        $query = OrganizationMember::with('organization.headOrganization')->orderBy('created_at', 'desc');
+        $query = OrganizationMember::with('organization.headOrganization')->orderBy('created_at', 'asc');
 
         // Apply filters
         if (!empty($sessionFilter)) {
@@ -331,7 +331,7 @@ class OrganizationController extends Controller
         // Base query: only members of the selected organization_id
         $query = OrganizationMember::with('organization.headOrganization')
             ->where('organization_id', $id)
-            ->orderBy('created_at', 'desc');
+            ->orderBy('created_at', 'asc');
 
         // Apply filters
         if (!empty($sessionFilter)) {
@@ -351,7 +351,6 @@ class OrganizationController extends Controller
             });
         }
 
-        // Get results with member details
         $organizationMembers = $query->get()->map(function ($member) {
             $member->person = Beneficiarie::find($member->member_id)
                 ?? Staff::find($member->member_id)
@@ -360,16 +359,15 @@ class OrganizationController extends Controller
             return $member;
         });
 
-        // Fetch data for dropdowns
+
         $organizations = Organization::with('headOrganization')->get();
         $sessions = OrganizationMember::select('academic_session')
             ->distinct()
-            ->orderBy('academic_session', 'desc')
+            ->orderBy('academic_session', 'asc')
             ->get();
 
         $data = academic_session::all();
 
-        // Also pass the selected organization (for header)
         $organization = Organization::findOrFail($id);
 
         return view('ngo.organization.group-member-list', compact('data', 'organizationMembers', 'organizations', 'sessions', 'organization'));
