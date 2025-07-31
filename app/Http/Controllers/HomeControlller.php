@@ -351,4 +351,9 @@ class HomeControlller extends Controller
 
         return view('home.organization.group-member-list', compact('organization', 'organizationMembers'));
     }
+
+    public function demand()
+    {
+        return view('home.pages.demand');
+    }
 }

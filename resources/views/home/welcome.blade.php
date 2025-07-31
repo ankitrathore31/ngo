@@ -274,10 +274,14 @@
             </a>
         </div>
 
+        <div class="col-md-2 mb-3">
+            <a href="{{ route('demand') }}" class="btn btn-success w-100">
+                Demand
+            </a>
+        </div>
 
     </div>
 
-    <!-- slider -->
     <div class="owl-carousel owl-theme slider">
         <div class="item ">
             <div class="background-image">
@@ -290,9 +294,7 @@
             </div>
         </div>
     </div>
-    <!-- end slider -->
-
-    <!-- About Section Start -->
+    
     <section id="about" class="py-5 bg-light shadow-sm">
         <div class="container">
 
@@ -401,8 +403,7 @@
             </div>
         </div>
     </section>
-    <!-- About Section End -->
-
+    
     <!-- =========== Donation Section Start ============ -->
     <section class="community mt-5 py-4">
         <div class="container">

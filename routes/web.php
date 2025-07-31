@@ -83,6 +83,7 @@ Route::controller(HomeControlller::class)->group(function () {
     Route::get('/eligibility', 'eligibility')->name('eligibility');
     Route::get('/organization-groups/{id}', 'groups')->name('organization.groups');
     Route::get('/organization-groups-member/{id}', 'OrgMemberListByOrganization')->name('show.group.member');
+    Route::get('/demand', 'demand')->name('demand');
 });
 
 
