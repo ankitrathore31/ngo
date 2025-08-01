@@ -120,7 +120,65 @@
                     {{ session('success') }}
                 </div>
             @endif
+            <div class="row">
+                <form method="GET" action="{{ route('organization.groups',$id) }}" class="row g-3 mb-4">
+                    <div class="col-md-3 col-sm-4">
+                        <select name="session" id="session" class="form-control">
+                            <option value="">All Sessions</option>
+                            @foreach ($data as $s)
+                                <option value="{{ $s->session_date }}"
+                                    {{ request('session_filter') == $s->session_date ? 'selected' : '' }}>
+                                    {{ $s->session_date }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
 
+                    <div class="col-md-3">
+                        <input type="text" name="name" class="form-control" value="{{ request('name') }}"
+                            placeholder="Search by Group Name">
+                    </div>
+
+                    <div class="col-md-3">
+                        <input type="text" name="block" class="form-control" value="{{ request('block') }}"
+                            placeholder="Search by Block">
+                    </div>
+
+                    @php
+                        $districtsByState = config('districts');
+                    @endphp
+                    <div class="col-md-3 col-sm-6 form-group mb-3">
+                        {{-- <label for="stateSelect" class="form-label">State: <span class="text-danger">*</span></label> --}}
+                        <select class="form-control @error('state') is-invalid @enderror" name="state" id="stateSelect">
+                            <option value="">Select State</option>
+                            @foreach ($districtsByState as $state => $districts)
+                                <option value="{{ $state }}" {{ old('state') == $state ? 'selected' : '' }}>
+                                    {{ $state }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('state')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+
+                    </div>
+                    <div class="col-md-3 col-sm-6 form-group mb-3">
+                        <select class="form-control @error('district') is-invalid @enderror" name="district"
+                            id="districtSelect">
+                            <option value="">Select District</option>
+                        </select>
+                        @error('district')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                        <a href="{{ route('organization.groups',$id) }}" class="btn btn-info text-white">Reset</a>
+
+                    </div>
+                </form>
+            </div>
             <div class="row">
                 <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
             </div>
@@ -210,5 +268,32 @@
         function printTable() {
             window.print();
         }
+    </script>
+    <script>
+        const allDistricts = @json($districtsByState);
+        const oldDistrict = "{{ old('district') }}";
+        const oldState = "{{ old('state') }}";
+
+        function populateDistricts(state) {
+            const districtSelect = document.getElementById('districtSelect');
+            districtSelect.innerHTML = '<option value="">Select District</option>';
+
+            if (allDistricts[state]) {
+                allDistricts[state].forEach(function(district) {
+                    const selected = (district === oldDistrict) ? 'selected' : '';
+                    districtSelect.innerHTML += `<option value="${district}" ${selected}>${district}</option>`;
+                });
+            }
+        }
+
+        // Initial load if editing or validation failed
+        if (oldState) {
+            populateDistricts(oldState);
+        }
+
+        // On state change
+        document.getElementById('stateSelect').addEventListener('change', function() {
+            populateDistricts(this.value);
+        });
     </script>
 @endsection
