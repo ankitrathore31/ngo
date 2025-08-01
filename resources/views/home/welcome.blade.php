@@ -229,7 +229,7 @@
         }
     </style>
 
-    <div class="row d-flex justify-content-between m-3">
+    <div class="row d-flex  m-3">
 
         <div class="col-md-2 mb-3">
             <a href="{{ route('photo') }}" class="btn btn-warning text-white w-100">
@@ -294,12 +294,11 @@
             </div>
         </div>
     </div>
-    
+
     <section id="about" class="py-5 bg-light shadow-sm">
         <div class="container">
-
             <!-- Logo Row -->
-            <div class="row text-center mb-4">
+            <div class="row text-center mb-4 d-none d-md-flex">
                 <div class="col-6 col-md-3 mb-3">
                     <img src="{{ asset('images/logo.png') }}" class="img-fluid"
                         style="width: 120px; height: 120px; object-fit: contain;" alt="Gyan Bharti Logo">
@@ -318,10 +317,9 @@
                 </div>
             </div>
 
-
             <!-- Heading -->
             <div class="text-center mb-4">
-                <h2 class="fw-bold">Welcome To <span class="text-primary">Gyan Bharti Sanstha</span></h2>
+                <h2 class="fw-bold">Welcome To <span class="text-danger">GYAN BHARTI SANSTHA</span></h2>
                 <p class="text-muted fst-italic fs-5">
                     Empowering communities since <strong>30th June 2009</strong>
                 </p>
@@ -403,7 +401,7 @@
             </div>
         </div>
     </section>
-    
+
     <!-- =========== Donation Section Start ============ -->
     <section class="community mt-5 py-4">
         <div class="container">
@@ -457,7 +455,87 @@
 
     <section>
         <div class="container-fluid mt-5">
-             <div class="row justify-content-center d-flex">
+            <div class="row justify-content-center d-flex">
+                <div class="col-md-12 justify-content-center d-flex" style="gap: 15px;">
+                    <h4 class="section-title mb-4"><b>Registration/Demand/Distribute Facilities</b></h4>
+                    <select class="form-control w-25" id="session">
+                        <option value="">All Session</option>
+                        @foreach ($data as $session)
+                            <option value="{{ $session->session_date }}">{{ $session->session_date }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row text-center g-2">
+                <div class="col-6 col-md-3 mb-3">
+                    <div class="p-2 bg-light shadow-sm rounded">
+                        <span class="fw-bold d-block">Total Registration</span>
+                        <span class="fs-5">{{ totalReg() }}</span>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 mb-3">
+                    <div class="p-2 bg-light shadow-sm rounded">
+                        <span class="fw-bold d-block">Pending Registration</span>
+                        <span class="fs-5">{{ totalPendingReg() }}</span>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 mb-3">
+                    <div class="p-2 bg-light shadow-sm rounded">
+                        <span class="fw-bold d-block">Approved Registration</span>
+                        <span class="fs-5">{{ totalApprovedReg() }}</span>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 mb-3">
+                    <div class="p-2 bg-light shadow-sm rounded">
+                        <span class="fw-bold d-block">Rejected Registration</span>
+                        <span class="fs-5">{{ totalRejectedReg() }}</span>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-3 mb-3">
+                    <div class="p-2 bg-light shadow-sm rounded">
+                        <span class="fw-bold d-block">Total Demand</span>
+                        <span class="fs-5">{{ totalDemand() }}</span>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 mb-3">
+                    <div class="p-2 bg-light shadow-sm rounded">
+                        <span class="fw-bold d-block">Pending Demand</span>
+                        <span class="fs-5">{{ totalPendingDemand() }}</span>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 mb-3">
+                    <div class="p-2 bg-light shadow-sm rounded">
+                        <span class="fw-bold d-block">Approved Demand</span>
+                        <span class="fs-5">{{ totalApprovedDemand() }}</span>
+                    </div>
+                </div>
+                {{-- <div class="col-3 col-md-3">
+                    <div class="p-2 bg-light shadow-sm rounded">
+                        <span class="fw-bold d-block">Rejected Demand</span>
+                        <span class="fs-5">{{ totalRejectedDemand() }}</span>
+                    </div>
+                </div> --}}
+                <div class="col-6 col-md-3 mb-3">
+                    <div class="p-2 bg-light shadow-sm rounded">
+                        <span class="fw-bold d-block">Total Distributed</span>
+                        <span class="fs-5">{{ totalDistributed() }}</span>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 mb-3">
+                    <div class="p-2 bg-light shadow-sm rounded">
+                        <span class="fw-bold d-block">Rejected Distribution</span>
+                        <span class="fs-5">{{ totalRejectedDistributed() }}</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section>
+        <div class="container-fluid mt-5">
+            <div class="row justify-content-center d-flex">
                 <div class="col-md-10 justify-content-center d-flex" style="gap: 15px;">
                     <h2 class="section-title mb-4"><b>संगठन</b></h2>
                     <select class="form-control w-25" id="session">
@@ -486,7 +564,8 @@
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">{{ $item->name }}</h5>
                                 <p class="card-text fs-4">{{ TotalorganizationGroup($item->id) }}</p>
-                                <small><a href="{{route('organization.groups',$item->id)}}" class="btn btn-primary">Click Here</a></small>
+                                <small><a href="{{ route('organization.groups', $item->id) }}"
+                                        class="btn btn-primary">Click Here</a></small>
                             </div>
                         </div>
                     </div>

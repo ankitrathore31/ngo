@@ -12,6 +12,7 @@ use App\Models\Donation;
 use App\Models\Notice;
 use App\Models\Working_Area;
 use App\Models\Event;
+use App\Models\HeadOrganization;
 use App\Models\Organization;
 use App\Models\OrganizationMember;
 use App\Models\Staff;
@@ -324,15 +325,43 @@ class HomeControlller extends Controller
         return view('home.pages.eligibility');
     }
 
-    public function groups($id)
+    public function groups($id, Request $request)
     {
-        $group = Organization::where('headorg_id', $id)->get();
-        return view('home.organization.show-group', compact('group'));
+        // Fetch the organization first if needed
+        $organization = HeadOrganization::findOrFail($id);
+
+        $query = Organization::where('headorg_id', $id);
+
+        if ($request->filled('session')) {
+            $query->where('session_date', $request->session);
+        }
+
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        if ($request->filled('block')) {
+            $query->where('block', 'like', '%' . $request->block . '%');
+        }
+
+        if ($request->filled('state')) {
+            $query->where('state', $request->state);
+        }
+
+        if ($request->filled('district')) {
+            $query->where('district', $request->district);
+        }
+
+        $group = $query->paginate(10);
+        $data = academic_session::all();
+
+        return view('home.organization.show-group', compact('organization', 'group', 'data','id'));
     }
+
 
     public function OrgMemberListByOrganization($organization_id)
     {
-        
+
         $organizationMembers = OrganizationMember::with('organization.headOrganization')
             ->where('organization_id', $organization_id)
             ->orderBy('created_at', 'asc')
