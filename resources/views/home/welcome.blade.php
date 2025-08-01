@@ -469,67 +469,60 @@
             <div class="row text-center g-2">
                 <div class="col-6 col-md-3 mb-3">
                     <div class="p-2 bg-light shadow-sm rounded">
-                        <span class="fw-bold d-block">Total Registration</span>
-                        <span class="fs-5">{{ totalReg() }}</span>
+                        <span class="fw-bold text-danger d-block">Total Registration</span>
+                        <span class="fs-5 fw-bold text-primary">{{ totalReg() }}</span>
                     </div>
                 </div>
                 <div class="col-6 col-md-3 mb-3">
                     <div class="p-2 bg-light shadow-sm rounded">
-                        <span class="fw-bold d-block">Pending Registration</span>
-                        <span class="fs-5">{{ totalPendingReg() }}</span>
+                        <span class="fw-bold text-warning d-block">Pending Registration</span>
+                        <span class="fs-5 fw-bold text-warning">{{ totalPendingReg() }}</span>
                     </div>
                 </div>
                 <div class="col-6 col-md-3 mb-3">
                     <div class="p-2 bg-light shadow-sm rounded">
-                        <span class="fw-bold d-block">Approved Registration</span>
-                        <span class="fs-5">{{ totalApprovedReg() }}</span>
+                        <span class="fw-bold text-success d-block">Approved Registration</span>
+                        <span class="fs-5 fw-bold text-success">{{ totalApprovedReg() }}</span>
                     </div>
                 </div>
                 <div class="col-6 col-md-3 mb-3">
                     <div class="p-2 bg-light shadow-sm rounded">
-                        <span class="fw-bold d-block">Rejected Registration</span>
-                        <span class="fs-5">{{ totalRejectedReg() }}</span>
+                        <span class="fw-bold text-danger d-block">Rejected Registration</span>
+                        <span class="fs-5 fw-bold text-danger">{{ totalRejectedReg() }}</span>
                     </div>
                 </div>
 
                 <div class="col-6 col-md-3 mb-3">
                     <div class="p-2 bg-light shadow-sm rounded">
-                        <span class="fw-bold d-block">Total Demand</span>
-                        <span class="fs-5">{{ totalDemand() }}</span>
+                        <span class="fw-bold text-info d-block">Total Demand</span>
+                        <span class="fs-5 fw-bold text-info">{{ totalDemand() }}</span>
                     </div>
                 </div>
                 <div class="col-6 col-md-3 mb-3">
                     <div class="p-2 bg-light shadow-sm rounded">
-                        <span class="fw-bold d-block">Pending Demand</span>
-                        <span class="fs-5">{{ totalPendingDemand() }}</span>
+                        <span class="fw-bold text-warning d-block">Pending Demand</span>
+                        <span class="fs-5 fw-bold text-warning">{{ totalPendingDemand() }}</span>
                     </div>
                 </div>
                 <div class="col-6 col-md-3 mb-3">
                     <div class="p-2 bg-light shadow-sm rounded">
-                        <span class="fw-bold d-block">Approved Demand</span>
-                        <span class="fs-5">{{ totalApprovedDemand() }}</span>
-                    </div>
-                </div>
-                {{-- <div class="col-3 col-md-3">
-                    <div class="p-2 bg-light shadow-sm rounded">
-                        <span class="fw-bold d-block">Rejected Demand</span>
-                        <span class="fs-5">{{ totalRejectedDemand() }}</span>
-                    </div>
-                </div> --}}
-                <div class="col-6 col-md-3 mb-3">
-                    <div class="p-2 bg-light shadow-sm rounded">
-                        <span class="fw-bold d-block">Total Distributed</span>
-                        <span class="fs-5">{{ totalDistributed() }}</span>
+                        <span class="fw-bold text-success d-block">Approved Demand</span>
+                        <span class="fs-5 fw-bold text-success">{{ totalApprovedDemand() }}</span>
                     </div>
                 </div>
                 <div class="col-6 col-md-3 mb-3">
                     <div class="p-2 bg-light shadow-sm rounded">
-                        <span class="fw-bold d-block">Rejected Distribution</span>
-                        <span class="fs-5">{{ totalRejectedDistributed() }}</span>
+                        <span class="fw-bold text-primary d-block">Total Distributed</span>
+                        <span class="fs-5 fw-bold text-primary">{{ totalDistributed() }}</span>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 mb-3">
+                    <div class="p-2 bg-light shadow-sm rounded">
+                        <span class="fw-bold text-danger d-block">Rejected Distribution</span>
+                        <span class="fs-5 fw-bold text-danger">{{ totalRejectedDistributed() }}</span>
                     </div>
                 </div>
             </div>
-
         </div>
     </section>
 

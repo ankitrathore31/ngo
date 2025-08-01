@@ -1,6 +1,5 @@
 @extends('ngo.layout.master')
 @section('content')
-    <!-- Custom CSS for Hover Animation -->
     <style>
         .card-hover {
             border-radius: 10px;
@@ -33,6 +32,58 @@
         @endphp
         <div class=" mt-4">
             <div class="container my-4">
+                @if (!$isStaff || $user->hasPermission('new-registration') || $user->hasPermission('pending-registration'))
+                    <h5 class=" fw-bold mb-2">- Registration </h5>
+
+                    <div class="row g-3">
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="card text-white bg-primary p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-user-plus fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Total Registration</p>
+                                        <h5 class="mb-0">{{ totalReg() }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="card text-white bg-warning p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-clock fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Pending Registration</p>
+                                        <h5 class="mb-0">{{ totalPendingReg() }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="card text-white bg-success p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-check-circle fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Approved Registration</p>
+                                        <h5 class="mb-0">{{ totalApprovedReg() }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="card text-white bg-danger p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-times-circle fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Rejected Registration</p>
+                                        <h5 class="mb-0">{{ totalRejectedReg() }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
                 @if (!$isStaff || $user->hasPermission('beneficiarie-add') || $user->hasPermission('all-beneficiarie-list'))
                     <h5 class=" fw-bold mb-2">- Beneficiaries </h5>
 
@@ -383,11 +434,12 @@
                                     style="{{ $gradients[$index % count($gradients)] }}">
                                     <div class="card-body">
                                         <p class="mb-1">{{ $item->name }}</p>
-                                        <h5 class="mb-0">{{ organizationGroup($item->id) }}</h5>
+                                        <h5 class="mb-0">{{ TotalorganizationGroup($item->id) }}</h5>
                                     </div>
                                 </div>
                             </div>
                         @endforeach
+
                     </div>
                 @endif
                 @if (

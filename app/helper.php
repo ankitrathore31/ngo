@@ -67,7 +67,7 @@ if (!function_exists('totalApprovedDemand')) {
 }
 if (!function_exists('totalDistributed')) {
     function totalDistributed() {
-        $data = Beneficiarie_Survey::where('status', 'Disributed')->count();
+        $data = Beneficiarie_Survey::where('status', 'Distributed')->count();
         return $data;
     }
 }
@@ -85,8 +85,8 @@ if(!function_exists('organization')){
 }
 
 if(!function_exists('TotalorganizationGroup')){
-    function TotalorganizationGroup($headorg_id){
-        $data = Organization::where('headorg_id',$headorg_id)->count();
+    function TotalorganizationGroup($id){
+        $data = Organization::where('headorg_id',$id)->count();
         return $data;
     }
 }
