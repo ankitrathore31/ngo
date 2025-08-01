@@ -9,7 +9,32 @@
             background-color: #007bff;
             color: white;
         }
+        /* Ensure all cards and card-body have the same height */
+        .cause .card {
+            height: 100%;
+            min-height: 350px;
+            /* Adjust as needed */
+        }
+
+        .cause .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .cause .card img {
+            object-fit: cover;
+            height: 180px;
+            /* Fixed image height */
+            width: 100%;
+        }
+
+        .cause .btn {
+            margin-top: auto;
+        }
     </style>
+
     <!-- ==== Community Section Start ==== -->
     <section class="community mt-5 py-4">
         <div class="container">
@@ -556,94 +581,91 @@
     </div>
 
     <!-- ==== Donate Section Start ==== -->
+
     <section class="cause mt-4 py-5 bg-light">
         <div class="container">
             <div class="row align-items-center mb-4">
                 <div class="col-md-8">
-                    <h2 class="text-dark">Help & donate them when they're in need</h2>
+                    <h3 class="text-dark"> - Help & donate them when they're in need</h3>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="images/education2.jpg" class="card-img-top" alt="Education" width="200">
+
+            <!-- Cards Grid -->
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                <div class="col mb-3">
+                    <div class="card shadow-sm">
+                        <img src="images/education2.jpg" class="card-img-top" alt="Education">
                         <div class="card-body">
                             <h5 class="card-title">Help For Education</h5>
                             <p class="card-text">Providing Free Education by our NGO</p>
-                            <a href="{{ route('help-education') }}" class="btn btn-secondary">Donate Now</a>
+                            <a href="{{ route('help-education') }}" class="btn btn-success">Donate Now</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="images/food.jpg" class="card-img-top" alt="Food" width="200">
+                <div class="col mb-3">
+                    <div class="card shadow-sm">
+                        <img src="images/food.jpg" class="card-img-top" alt="Food">
                         <div class="card-body">
                             <h5 class="card-title">Help For Food</h5>
                             <p class="card-text">Free Food feeding by our NGO</p>
-                            <a href="{{ route('help-food') }}" class="btn btn-secondary">Donate Now</a>
+                            <a href="{{ route('help-food') }}" class="btn btn-success">Donate Now</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="images/clothe.jpg" class="card-img-top" alt="Clothes" width="200">
+                <div class="col mb-3">
+                    <div class="card shadow-sm">
+                        <img src="images/clothe.jpg" class="card-img-top" alt="Clothes">
                         <div class="card-body">
                             <h5 class="card-title">Help For Clothes</h5>
                             <p class="card-text">Donate for clothes, NGO distributes them</p>
-                            <a href="{{ route('help-clothe') }}" class="btn btn-secondary">Donate Now</a>
+                            <a href="{{ route('help-clothe') }}" class="btn btn-success">Donate Now</a>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="images/enviroment.jpeg" class="card-img-top" alt="Education" width="200">
+                <div class="col mb-3">
+                    <div class="card shadow-sm">
+                        <img src="images/enviroment.jpeg" class="card-img-top" alt="Environment">
                         <div class="card-body">
                             <h5 class="card-title">Help For Environment Protection</h5>
                             <p class="card-text">Environment protection by our NGO</p>
-                            <a href="{{ route('help-environment') }}" class="btn btn-secondary">Donate Now</a>
+                            <a href="{{ route('help-environment') }}" class="btn btn-success">Donate Now</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="images/peace.jpeg" class="card-img-top" alt="Education" width="200">
+                <div class="col mb-3">
+                    <div class="card shadow-sm">
+                        <img src="images/peace.jpeg" class="card-img-top" alt="Skill Development">
                         <div class="card-body">
-                            <h5 class="card-title">Help For Skill Development & Trainning Centre</h5>
-                            <p class="card-text">Skill Deplopment by our NGO</p>
-                            <a href="pay.php" class="btn btn-secondary">Donate Now</a>
+                            <h5 class="card-title">Help For Skill Development & Training Centre</h5>
+                            <p class="card-text">Skill Development by our NGO</p>
+                            <a href="#" target="_blank" class="btn btn-success">Donate Now</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="images/logo.png" class="card-img-top" alt="Education" width="200">
+                <div class="col mb-3">
+                    <div class="card shadow-sm">
+                        <img src="images/logo.png" class="card-img-top" alt="Watershed">
                         <div class="card-body">
                             <h5 class="card-title">Help For Watershed</h5>
                             <p class="card-text">Watershed service by our NGO</p>
-                            <a href="pay.php" class="btn btn-secondary">Donate Now</a>
+                            <a href="#" target="_blank" class="btn btn-success">Donate Now</a>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="images/logo.png" class="card-img-top" alt="Education" width="200">
+                <div class="col mb-3">
+                    <div class="card shadow-sm">
+                        <img src="images/logo.png" class="card-img-top" alt="Wild Life">
                         <div class="card-body">
                             <h5 class="card-title">Help For Wild Life</h5>
                             <p class="card-text">Wild Life Protection by our NGO</p>
-                            <a href="pay.php" class="btn btn-secondary">Donate Now</a>
+                            <a href="#" target="_blank" class="btn btn-success">Donate Now</a>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
-
     </section>
+
     <!-- ==== Donate Section End ==== -->
 
 

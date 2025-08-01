@@ -10,7 +10,7 @@
         <div class="container-fluid py-5 shadow m-3">
             <div class="row m-4 ">
                 <div class="col-sm-12 col-md-8 col-xxl-12 col-lg-12">
-                    <h3 class="fw-bold mb-3 text-center">WELCOME TO <span class="text-primary">GYAN BHARTI SANSTHA</span></h3>
+                    <h3 class="mb-3 text-center">WELCOME TO <span class="text-danger"><em><b>GYAN BHARTI SANSTHA</b></em></span></h3>
                     <p class="text-muted fst-italic fs-5">Empowering communities since <strong>30th June 2009</strong></p>
                     <p class="about_ngo"><em>Gyan Bharti Sanstha (NGO) </em>is working since 30.06.2009
                         Donations play a crucial role in supporting NGOs like Gyan Bharti Sanstha in their mission to serve
@@ -65,7 +65,7 @@
                     </p>
                     <div class="row d-flex justify-content-between mt-2">
                         <div class="col-4 mb-3">
-                            <a href="donate.php" class="btn btn-success"><i class="fas fa-donate"></i>Donate Now</a>
+                            <a href="{{route('donate-page')}}" class="btn btn-success"><i class="fas fa-donate"></i>Donate Now</a>
                         </div>
                         <div class="col-4 mb-3">
                             <a href="tel:9411484111" class="btn btn-primary"><i class="fas fa-phone-alt"></i>+91
@@ -151,7 +151,7 @@
                 <div class="col-md-4">
                     <div class="card shadow-lg bg-white p-3 mb-5">
                         <div class="card-body text-center">
-                            <img src="assets/images/founder.jpeg" alt="img-fluid mb-3" width="200">
+                            <img src="{{asset('images/founder.jpeg')}}" alt="img-fluid mb-3" width="200">
                             <div class="card-title">
                                 MR. MANOJ KUMAR
                             </div>
@@ -164,7 +164,7 @@
                 <div class="col-md-4">
                     <div class="card shadow-lg bg-white p-3 mb-5">
                         <div class="card-body text-center">
-                            <img src="assets/images/officer.jpeg" alt="img-fluid mb-3" width="200">
+                            <img src="{{asset('images/officer.jpeg')}}" alt="img-fluid mb-3" width="200">
                             <div class="card-title">
                                 MISS. D.D. RATHORE
                             </div>
