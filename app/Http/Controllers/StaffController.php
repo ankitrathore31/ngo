@@ -113,16 +113,17 @@ class StaffController extends Controller
             $request->file('marksheet')->move($destination, $markName);
             $staff->marksheet = 'images/' . $markName;
         }
-
-
         $staff->save();
+
+        // fees save 
+        
 
         $user = new User();
         $user->name = $staff->name;
         $user->email = $staff->email;
-        $user->phone_number = $staff->phone; // Only if your User model has a phone field
+        $user->phone_number = $staff->phone;
         $user->password = Hash::make($request->password);
-        $user->user_type = 'staff'; // Optional: set user type/role
+        $user->user_type = 'staff';
         $user->save();
 
         return redirect()->route('staff-list')->with('success', 'Staff added successfully!');
@@ -342,9 +343,5 @@ class StaffController extends Controller
         return view('ngo.staff.view-staff', compact('record', 'signatures'));
     }
 
-    public function AddSallarystaff()
-    {
-        return view('ngo.staff.manage-sallary');
-    }
 
 }

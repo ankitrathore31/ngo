@@ -121,7 +121,7 @@
                 </div>
             @endif
             <div class="row">
-                <form method="GET" action="{{ route('organization.groups',$id) }}" class="row g-3 mb-4">
+                <form method="GET" action="{{ route('organization.groups', $id) }}" class="row g-3 mb-4">
                     <div class="col-md-3 col-sm-4">
                         <select name="session" id="session" class="form-control">
                             <option value="">All Sessions</option>
@@ -139,16 +139,10 @@
                             placeholder="Search by Group Name">
                     </div>
 
-                    <div class="col-md-3">
-                        <input type="text" name="block" class="form-control" value="{{ request('block') }}"
-                            placeholder="Search by Block">
-                    </div>
-
                     @php
                         $districtsByState = config('districts');
                     @endphp
                     <div class="col-md-3 col-sm-6 form-group mb-3">
-                        {{-- <label for="stateSelect" class="form-label">State: <span class="text-danger">*</span></label> --}}
                         <select class="form-control @error('state') is-invalid @enderror" name="state" id="stateSelect">
                             <option value="">Select State</option>
                             @foreach ($districtsByState as $state => $districts)
@@ -173,9 +167,18 @@
                     </div>
 
                     <div class="col-md-3">
-                        <button type="submit" class="btn btn-primary">Search</button>
-                        <a href="{{ route('organization.groups',$id) }}" class="btn btn-info text-white">Reset</a>
+                        <input type="text" name="block" class="form-control" value="{{ request('block') }}"
+                            placeholder="Search by Block">
+                    </div>
 
+                     <div class="col-md-3">
+                        <input type="text" name="address" class="form-control" value="{{ request('address') }}"
+                            placeholder="Search by Address">
+                    </div>
+
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                        <a href="{{ route('organization.groups', $id) }}" class="btn btn-info text-white">Reset</a>
                     </div>
                 </form>
             </div>

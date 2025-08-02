@@ -24,149 +24,94 @@ class RegistrationController extends Controller
 
     public function StoreRegistration(Request $request)
     {
-        // Validation
+        // Validate request
         $validator = Validator::make($request->all(), [
-            'academic_session' => 'required',
-            'application_date' => 'required|date',
-            'reg_type' => 'required|in:Member,Beneficiaries',
-            'name' => 'required|string|max:255',
-            'dob' => 'required|date',
-            'gender' => 'required|string|in:Male,Female,Other',
-            'phone' => 'required|string|max:20',
-            'gurdian_name' => 'required|string|max:255',
-            'mother_name' => 'required|string|max:255',
-            'village' => 'nullable|string|max:255',
-            'post' => 'required|string|max:255',
-            'block' => 'required|string|max:255',
-            'state' => 'required|string|max:255',
-            'district' => 'required|string|max:255',
-            'pincode' => 'nullable|string|max:10',
-            'country' => 'required|string|max:100',
-            'email' => 'nullable|email|max:255',
-            'religion' => 'required|string|max:100',
-            'religion_category' => 'required|string|max:100',
-            'caste' => 'required|string|max:100',
-            'image' => 'nullable|image|max:2048',
-            'identity_type' => 'required|string|max:255',
-            'identity_no' => 'required|string|max:255',
-            'id_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'occupation' => 'required|string|max:255',
-            'eligibility' => 'nullable|string|max:100',
-            'marital_status' => 'required|string|in:Married,Unmarried',
-            'area_type' => 'required|string|in:Rular,Urban',
-            'help_needed' => 'nullable|string|max:255',
+            'academic_session'   => 'required',
+            'application_date'   => 'required|date',
+            'reg_type'           => 'required|in:Member,Beneficiaries',
+            'name'               => 'required|string|max:255',
+            'dob'                => 'required|date',
+            'gender'             => 'required|string|in:Male,Female,Other',
+            'phone'              => 'required|string|max:20',
+            'gurdian_name'       => 'required|string|max:255',
+            'mother_name'        => 'required|string|max:255',
+            'village'            => 'nullable|string|max:255',
+            'post'               => 'required|string|max:255',
+            'block'              => 'required|string|max:255',
+            'state'              => 'required|string|max:255',
+            'district'           => 'required|string|max:255',
+            'pincode'            => 'nullable|string|max:10',
+            'country'            => 'required|string|max:100',
+            'email'              => 'nullable|email|max:255',
+            'religion'           => 'required|string|max:100',
+            'religion_category'  => 'required|string|max:100',
+            'caste'              => 'required|string|max:100',
+            'image'              => 'nullable|image|max:2048',
+            'identity_type'      => 'required|string|max:255',
+            'identity_no'        => 'required|string|max:255',
+            'id_document'        => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'occupation'         => 'required|string|max:255',
+            'eligibility'        => 'nullable|string|max:100',
+            'marital_status'     => 'required|string|in:Married,Unmarried',
+            'area_type'          => 'required|string|in:Rular,Urban',
+            'help_needed'        => 'nullable|string|max:255',
         ]);
 
-        // Conditional validation
+        // Conditional validation for Beneficiaries
         $validator->sometimes('help_needed', 'required|string|max:255', function ($input) {
             return $input->reg_type === 'Beneficiaries';
         });
 
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return back()->withErrors($validator)->withInput();
         }
 
-        // Collecting validated data
-        $data = $request->only([
-            'academic_session',
-            'application_date',
-            'reg_type',
-            'name',
-            'dob',
-            'gender',
-            'phone',
-            'gurdian_name',
-            'mother_name',
-            'village',
-            'post',
-            'block',
-            'state',
-            'district',
-            'pincode',
-            'country',
-            'email',
-            'religion',
-            'religion_category',
-            'caste',
-            'identity_type',
-            'identity_no',
-            'occupation',
-            'eligibility',
-            'marital_status',
-            'area_type',
-            'help_needed',
-        ]);
-
+        // Prepare data
+        $data = $request->except(['image', 'id_document']);
         $data['status'] = 0;
+
+        // Generate application_no
         $prefix = '2191000';
+        $latestMember = Member::where('application_no', 'LIKE', $prefix . '%')->latest('application_no')->first();
+        $latestBeneficiary = beneficiarie::where('application_no', 'LIKE', $prefix . '%')->latest('application_no')->first();
 
-        $latestMember = Member::where('application_no', 'LIKE', $prefix . '%')
-            ->orderBy('application_no', 'desc')
-            ->first();
+        $lastSequence = max(
+            $latestMember ? intval(substr($latestMember->application_no, strlen($prefix))) : 0,
+            $latestBeneficiary ? intval(substr($latestBeneficiary->application_no, strlen($prefix))) : 0
+        );
 
-        $latestBeneficiary = beneficiarie::where('application_no', 'LIKE', $prefix . '%')
-            ->orderBy('application_no', 'desc')
-            ->first();
+        $data['application_no'] = $prefix . str_pad($lastSequence + 1, 3, '0', STR_PAD_LEFT);
 
-        $lastSequenceMember = $latestMember
-            ? (int)substr($latestMember->application_no, strlen($prefix))
-            : 0;
+        // Set folder based on reg_type
+        $folder = $request->reg_type === 'Member' ? 'member_images' : 'benefries_images';
 
-        $lastSequenceBeneficiary = $latestBeneficiary
-            ? (int)substr($latestBeneficiary->application_no, strlen($prefix))
-            : 0;
+        // Upload image if exists
+        if ($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->image->getClientOriginalExtension();
+            $request->image->move(public_path($folder), $imageName);
+            $data['image'] = $imageName;
+        }
 
-        $lastSequence = max($lastSequenceMember, $lastSequenceBeneficiary);
-        $sequenceNumber = $lastSequence + 1;
-        $data['application_no'] = $prefix . str_pad($sequenceNumber, 3, '0', STR_PAD_LEFT);
+        // Upload ID document if exists
+        if ($request->hasFile('id_document')) {
+            $idDocName = time() . '_id.' . $request->id_document->getClientOriginalExtension();
+            $request->id_document->move(public_path($folder), $idDocName);
+            $data['id_document'] = $idDocName;
+        }
 
+        // Save data to respective table
         try {
-            if ($request->reg_type === 'Beneficiaries') {
-                // Upload image
-                if ($request->hasFile('image')) {
-                    $image = $request->file('image');
-                    $imageName = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move(public_path('benefries_images'), $imageName);
-                    $data['image'] = $imageName;
-                }
-
-                // Upload ID document
-                if ($request->hasFile('id_document')) {
-                    $idDoc = $request->file('id_document');
-                    $idDocName = time() . '_iddoc.' . $idDoc->getClientOriginalExtension();
-                    $idDoc->move(public_path('benefries_images'), $idDocName);
-                    $data['id_document'] = $idDocName;
-                }
-
-                beneficiarie::create($data);
-            } elseif ($request->reg_type === 'Member') {
-                // Upload image
-                if ($request->hasFile('image')) {
-                    $image = $request->file('image');
-                    $imageName = time() . '.' . $image->getClientOriginalExtension();
-                    $image->move(public_path('member_images'), $imageName);
-                    $data['image'] = $imageName;
-                }
-
-                // Upload ID document
-                if ($request->hasFile('id_document')) {
-                    $idDoc = $request->file('id_document');
-                    $idDocName = time() . '_iddoc.' . $idDoc->getClientOriginalExtension();
-                    $idDoc->move(public_path('member_images'), $idDocName);
-                    $data['id_document'] = $idDocName;
-                }
-
+            if ($request->reg_type === 'Member') {
                 Member::create($data);
+            } else {
+                beneficiarie::create($data);
             }
 
             return redirect()->route('pending-registration')->with('success', 'Registration saved successfully.');
         } catch (\Exception $e) {
-            // Log error and return with error message
-            // \Log::error('Registration Error: ' . $e->getMessage());
-            return redirect()->back()->withInput()->with('error', 'Something went wrong. Please try again.');
+            return back()->withInput()->with('error', 'Something went wrong: ' . $e->getMessage());
         }
     }
-
 
     public function editRegistration($id, $type)
     {
@@ -184,7 +129,7 @@ class RegistrationController extends Controller
 
     public function UpdateRegistration(Request $request, $id)
     {
-
+        // Extract data from request
         $data = $request->only([
             'academic_session',
             'application_date',
@@ -215,12 +160,11 @@ class RegistrationController extends Controller
             'help_needed',
         ]);
 
-
+        // Handle date formatting with validation
         try {
             if (!empty($data['application_date'])) {
                 $data['application_date'] = Carbon::parse($data['application_date'])->format('Y-m-d');
             }
-
             if (!empty($data['dob'])) {
                 $data['dob'] = Carbon::parse($data['dob'])->format('Y-m-d');
             }
@@ -228,37 +172,39 @@ class RegistrationController extends Controller
             return back()->withErrors(['date_error' => 'Invalid date format for Application Date or Date of Birth.']);
         }
 
-        // Update the existing record based on reg_type
-        if ($request->reg_type === 'Beneficiaries') {
-            // Handle new profile image upload (if any)
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $imageName = time() . '_image'; // Add extension if needed
-                $image->move(public_path('benefries_images'), $imageName);
-                $data['image'] = $imageName;
+        // Determine the model and folder
+        $isBeneficiary = $request->reg_type === 'Beneficiaries';
+        $model = $isBeneficiary ? beneficiarie::findOrFail($id) : Member::findOrFail($id);
+        $folder = $isBeneficiary ? 'benefries_images' : 'member_images';
 
-                // Optional: delete old image
-                // if ($imageName->image && file_exists(public_path('benefries_images/' . $data->image))) {
-                //     unlink(public_path('benefries_images/' . $data->image));
-                // }
+        // Handle profile image upload
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_image.' . $image->getClientOriginalExtension();
+            $image->move(public_path($folder), $imageName);
+            $data['image'] = $imageName;
+
+            // Delete old image if exists
+            if (!empty($model->image) && file_exists(public_path($folder . '/' . $model->image))) {
+                unlink(public_path($folder . '/' . $model->image));
             }
-
-            // Handle new ID document upload (if any)
-            if ($request->hasFile('id_document')) {
-                $idDoc = $request->file('id_document');
-                $idDocName = time() . '_iddoc'; // Add extension if needed
-                $idDoc->move(public_path('benefries_images'), $idDocName);
-                $data['id_document'] = $idDocName;
-
-                // Optional: delete old ID document
-                // if ($record->id_document && file_exists(public_path('benefries_images/' . $record->id_document))) {
-                //     unlink(public_path('benefries_images/' . $record->id_document));
-                // }
-            }
-            beneficiarie::where('id', $id)->update($data);
-        } else if ($request->reg_type === 'Member') {
-            Member::where('id', $id)->update($data);
         }
+
+        // Handle ID document upload
+        if ($request->hasFile('id_document')) {
+            $idDoc = $request->file('id_document');
+            $idDocName = time() . '_iddoc.' . $idDoc->getClientOriginalExtension();
+            $idDoc->move(public_path($folder), $idDocName);
+            $data['id_document'] = $idDocName;
+
+            // Delete old document if exists
+            if (!empty($model->id_document) && file_exists(public_path($folder . '/' . $model->id_document))) {
+                unlink(public_path($folder . '/' . $model->id_document));
+            }
+        }
+
+        // Update the record
+        $model->update($data);
 
         return redirect()->route('pending-registration')->with('success', 'Registration updated successfully.');
     }
@@ -275,7 +221,7 @@ class RegistrationController extends Controller
 
     public function pendingRegistration(Request $request)
     {
-        $queryBene = beneficiarie::where('status', 0);
+        $queryBene = Beneficiarie::where('status', 0);
         $queryMember = Member::where('status', 0);
 
         if ($request->filled('session_filter')) {
@@ -293,7 +239,7 @@ class RegistrationController extends Controller
             $queryMember->where('name', 'like', '%' . $request->name . '%');
         }
 
-        if($request->filled('reg_type')){
+        if ($request->filled('reg_type')) {
             $queryBene->where('reg_type', $request->reg_type);
             $queryMember->where('reg_type', $request->reg_type);
         }
@@ -313,13 +259,15 @@ class RegistrationController extends Controller
             $queryMember->where('district', $request->district);
         }
 
-        $pendingbene = $queryBene->orderBy('created_at', 'asc')->get();
-        $pendingmemeber = $queryMember->orderBy('created_at', 'asc')->get();
-        $combined = $pendingbene->merge($pendingmemeber)->sortBy('created_at');
+        $pendingBene = $queryBene->orderBy('created_at', 'asc')->get();
+        $pendingMember = $queryMember->orderBy('created_at', 'asc')->get();
+        $combined = $pendingBene->merge($pendingMember)->sortBy('created_at');
         $data = academic_session::all();
         $states = config('states');
-        return view('ngo.registration.pending-reg-list', compact('data', 'pendingbene', 'pendingmemeber', 'combined', 'states'));
+
+        return view('ngo.registration.pending-reg-list', compact('data', 'combined', 'states'));
     }
+
 
     public function approveRegistration(Request $request)
     {
@@ -341,7 +289,7 @@ class RegistrationController extends Controller
             $queryMember->where('name', 'like', '%' . $request->name . '%');
         }
 
-           if($request->filled('reg_type')){
+        if ($request->filled('reg_type')) {
             $queryBene->where('reg_type', $request->reg_type);
             $queryMember->where('reg_type', $request->reg_type);
         }
@@ -366,7 +314,7 @@ class RegistrationController extends Controller
         $data = academic_session::all();
         $combined = $approvebeneficiarie->merge($approvemember)->sortBy('created_at');
         $states = config('states');
-        return view('ngo.registration.apporve-reg-list', compact('data', 'approvebeneficiarie', 'approvemember', 'combined','states'));
+        return view('ngo.registration.apporve-reg-list', compact('data', 'approvebeneficiarie', 'approvemember', 'combined', 'states'));
     }
 
     public function approveStatus(Request $request, $type, $id)
@@ -432,8 +380,6 @@ class RegistrationController extends Controller
         return redirect()->back()->with('error', 'Unknown registration type.');
     }
 
-
-
     public function showApporveReg($id, $type)
     {
         if ($type === 'Beneficiaries') {
@@ -461,6 +407,13 @@ class RegistrationController extends Controller
 
     public function UpdateApporveRegistration(Request $request, $id)
     {
+        // Validate incoming request (optional: add more validation as needed)
+        $request->validate([
+            'application_date' => 'nullable|date',
+            'dob' => 'nullable|date',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
+            'id_document' => 'nullable|mimes:jpeg,png,jpg,pdf',
+        ]);
 
         $data = $request->only([
             'academic_session',
@@ -492,13 +445,11 @@ class RegistrationController extends Controller
             'help_needed',
         ]);
 
-
-
+        // Format dates safely
         try {
             if (!empty($data['application_date'])) {
                 $data['application_date'] = Carbon::parse($data['application_date'])->format('Y-m-d');
             }
-
             if (!empty($data['dob'])) {
                 $data['dob'] = Carbon::parse($data['dob'])->format('Y-m-d');
             }
@@ -506,62 +457,41 @@ class RegistrationController extends Controller
             return back()->withErrors(['date_error' => 'Invalid date format for Application Date or Date of Birth.']);
         }
 
-        // Update the existing record based on reg_type
-        if ($request->reg_type === 'Beneficiaries') {
-            // Handle new profile image upload (if any)
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $imageName = time() . '_image'; // Add extension if needed
-                $image->move(public_path('benefries_images'), $imageName);
-                $data['image'] = $imageName;
+        // Determine type and directory
+        $directory = $request->reg_type === 'Beneficiaries' ? 'benefries_images' : 'member_images';
+        $model = $request->reg_type === 'Beneficiaries' ? beneficiarie::class : Member::class;
 
-                // Optional: delete old image
-                // if ($record->image && file_exists(public_path('benefries_images/' . $record->image))) {
-                //     unlink(public_path('benefries_images/' . $record->image));
-                // }
+        // Fetch the record
+        $record = $model::findOrFail($id);
+
+        // Handle profile image upload
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_image.' . $image->getClientOriginalExtension();
+            $image->move(public_path($directory), $imageName);
+            $data['image'] = $imageName;
+
+            // Optional: Delete old image
+            if ($record->image && file_exists(public_path($directory . '/' . $record->image))) {
+                unlink(public_path($directory . '/' . $record->image));
             }
-
-            // Handle new ID document upload (if any)
-            if ($request->hasFile('id_document')) {
-                $idDoc = $request->file('id_document');
-                $idDocName = time() . '_iddoc'; // Add extension if needed
-                $idDoc->move(public_path('benefries_images'), $idDocName);
-                $data['id_document'] = $idDocName;
-
-                // Optional: delete old ID document
-                // if ($record->id_document && file_exists(public_path('benefries_images/' . $record->id_document))) {
-                //     unlink(public_path('benefries_images/' . $record->id_document));
-                // }
-            }
-            beneficiarie::where('id', $id)->update($data);
-        } else if ($request->reg_type === 'Member') {
-            // Handle new profile image upload (if any)
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $imageName = time() . '_image'; // Add extension if needed
-                $image->move(public_path('member_images'), $imageName);
-                $data['image'] = $imageName;
-
-                // Optional: delete old image
-                // if ($record->image && file_exists(public_path('benefries_images/' . $record->image))) {
-                //     unlink(public_path('benefries_images/' . $record->image));
-                // }
-            }
-
-            // Handle new ID document upload (if any)
-            if ($request->hasFile('id_document')) {
-                $idDoc = $request->file('id_document');
-                $idDocName = time() . '_iddoc'; // Add extension if needed
-                $idDoc->move(public_path('member_images'), $idDocName);
-                $data['id_document'] = $idDocName;
-
-                // Optional: delete old ID document
-                // if ($record->id_document && file_exists(public_path('benefries_images/' . $record->id_document))) {
-                //     unlink(public_path('benefries_images/' . $record->id_document));
-                // }
-            }
-            Member::where('id', $id)->update($data);
         }
+
+        // Handle ID document upload
+        if ($request->hasFile('id_document')) {
+            $idDoc = $request->file('id_document');
+            $idDocName = time() . '_iddoc.' . $idDoc->getClientOriginalExtension();
+            $idDoc->move(public_path($directory), $idDocName);
+            $data['id_document'] = $idDocName;
+
+            // Optional: Delete old ID document
+            if ($record->id_document && file_exists(public_path($directory . '/' . $record->id_document))) {
+                unlink(public_path($directory . '/' . $record->id_document));
+            }
+        }
+
+        // Update record
+        $record->update($data);
 
         return redirect()->route('approve-registration')->with('success', 'Registration updated successfully.');
     }
@@ -692,7 +622,7 @@ class RegistrationController extends Controller
 
         if ($enabled !== '1') {
             // Return error view with message
-            $error = 'Online registration facility is not available, please contact your concerned institution';
+            $error = 'Online registration facility is not available, please contact Sanstha';
             return view('home.registration.error', compact('error'));
         }
 
@@ -705,40 +635,40 @@ class RegistrationController extends Controller
 
     public function onlineStoreRegistration(Request $request)
     {
-        // die($request);
-        // exit();
-        // Validation
-        $validator = Validator::make($request->all(), [
-            'academic_session' => 'required',
-            'application_date' => 'required|date',
-            'reg_type' => 'required|in:Member,Beneficiaries',
-            'name' => 'required|string|max:255',
-            'dob' => 'required|date',
-            'gender' => 'required|string|in:Male,Female,Other',
-            'phone' => 'required|string|max:20',
-            'gurdian_name' => 'required|string|max:255',
-            'mother_name' => 'required|string|max:255',
-            'village' => 'nullable|string|max:255',
-            'post' => 'required|string|max:255',
-            'block' => 'required|string|max:255',
-            'state' => 'required|string|max:255',
-            'district' => 'required|string|max:255',
-            'pincode' => 'nullable|string|max:10',
-            'country' => 'required|string|max:100',
-            'email' => 'nullable|email|max:255',
-            'religion' => 'required|string|max:100',
-            'religion_category' => 'required|string|max:100',
-            'caste' => 'required|string|max:100',
-            'image' => 'nullable|image|max:2048',
-            'identity_type' => 'required|string|max:255',
-            'identity_no' => 'required|string|max:255',
-            'id_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'occupation' => 'required|string|max:255',
-            'eligibility' => 'nullable|string|max:100',
-            'marital_status' => 'required|string|in:Married,Unmarried',
-            'area_type' => 'required|string|in:Rular,Urban',
-            'help_needed' => 'nullable|string|max:255',
-        ]);
+        // Validation rules
+        $rules = [
+            'academic_session'   => 'required',
+            'application_date'   => 'required|date',
+            'reg_type'           => 'required|in:Member,Beneficiaries',
+            'name'               => 'required|string|max:255',
+            'dob'                => 'required|date',
+            'gender'             => 'required|string|in:Male,Female,Other',
+            'phone'              => 'required|string|max:20',
+            'gurdian_name'       => 'required|string|max:255',
+            'mother_name'        => 'required|string|max:255',
+            'village'            => 'nullable|string|max:255',
+            'post'               => 'required|string|max:255',
+            'block'              => 'required|string|max:255',
+            'state'              => 'required|string|max:255',
+            'district'           => 'required|string|max:255',
+            'pincode'            => 'nullable|string|max:10',
+            'country'            => 'required|string|max:100',
+            'email'              => 'nullable|email|max:255',
+            'religion'           => 'required|string|max:100',
+            'religion_category'  => 'required|string|max:100',
+            'caste'              => 'required|string|max:100',
+            'image'              => 'nullable|image|max:2048',
+            'identity_type'      => 'required|string|max:255',
+            'identity_no'        => 'required|string|max:255',
+            'id_document'        => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'occupation'         => 'required|string|max:255',
+            'eligibility'        => 'nullable|string|max:100',
+            'marital_status'     => 'required|string|in:Married,Unmarried',
+            'area_type'          => 'required|string|in:Rular,Urban',
+            'help_needed'        => 'nullable|string|max:255',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
 
         // Conditional validation
         $validator->sometimes('help_needed', 'required|string|max:255', function ($input) {
@@ -746,108 +676,45 @@ class RegistrationController extends Controller
         });
 
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return back()->withErrors($validator)->withInput();
         }
 
-        $data = $request->only([
-            'academic_session',
-            'application_date',
-            'reg_type',
-            'name',
-            'dob',
-            'gender',
-            'phone',
-            'gurdian_name',
-            'mother_name',
-            'village',
-            'post',
-            'block',
-            'state',
-            'district',
-            'pincode',
-            'country',
-            'email',
-            'religion',
-            'religion_category',
-            'caste',
-            'identity_type',
-            'identity_no',
-            'occupation',
-            'eligibility',
-            'marital_status',
-            'area_type',
-            'help_needed',
-
-        ]);
-
+        // Collect data
+        $data = $request->only(array_keys($rules));
         $data['status'] = 0;
+
+        // Generate unique application number
         $prefix = '2191000';
+        $latestMember = Member::where('application_no', 'LIKE', $prefix . '%')->orderByDesc('application_no')->first();
+        $latestBeneficiary = beneficiarie::where('application_no', 'LIKE', $prefix . '%')->orderByDesc('application_no')->first();
 
-        $latestMember = Member::where('application_no', 'LIKE', $prefix . '%')
-            ->orderBy('application_no', 'desc')
-            ->first();
+        $lastSequence = max(
+            $latestMember ? (int)substr($latestMember->application_no, strlen($prefix)) : 0,
+            $latestBeneficiary ? (int)substr($latestBeneficiary->application_no, strlen($prefix)) : 0
+        );
 
-        $latestBeneficiary = beneficiarie::where('application_no', 'LIKE', $prefix . '%')
-            ->orderBy('application_no', 'desc')
-            ->first();
+        $data['application_no'] = $prefix . str_pad($lastSequence + 1, 3, '0', STR_PAD_LEFT);
 
-        $lastSequenceMember = $latestMember
-            ? (int)substr($latestMember->application_no, strlen($prefix))
-            : 0;
+        // Handle file uploads
+        $folder = $request->reg_type === 'Beneficiaries' ? 'benefries_images' : 'member_images';
 
-        $lastSequenceBeneficiary = $latestBeneficiary
-            ? (int)substr($latestBeneficiary->application_no, strlen($prefix))
-            : 0;
-
-        $lastSequence = max($lastSequenceMember, $lastSequenceBeneficiary);
-
-        $sequenceNumber = $lastSequence + 1;
-
-        $data['application_no'] = $prefix . str_pad($sequenceNumber, 3, '0', STR_PAD_LEFT);
-
-        if ($request->reg_type === 'Beneficiaries') {
-
-
-            // Handle profile image upload
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('benefries_images'), $imageName);
-                $data['image'] = $imageName;
-            }
-
-            // Handle ID document upload
-            if ($request->hasFile('id_document')) {
-                $idDoc = $request->file('id_document');
-                $idDocName = time() . '_iddoc.' . $idDoc->getClientOriginalExtension();
-                $idDoc->move(public_path('benefries_images'), $idDocName);
-                $data['id_document'] = $idDocName;
-            }
-
-            $record =  beneficiarie::create($data);
-        } else if ($request->reg_type === 'Member') {
-
-            // Handle profile image upload
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('member_images'), $imageName);
-                $data['image'] = $imageName;
-            }
-
-            // Handle ID document upload
-            if ($request->hasFile('id_document')) {
-                $idDoc = $request->file('id_document');
-                $idDocName = time() . '_iddoc.' . $idDoc->getClientOriginalExtension();
-                $idDoc->move(public_path('member_images'), $idDocName);
-                $data['id_document'] = $idDocName;
-            }
-
-            $record = Member::create($data);
+        if ($request->hasFile('image')) {
+            $data['image'] = time() . '.' . $request->image->getClientOriginalExtension();
+            $request->image->move(public_path($folder), $data['image']);
         }
 
+        if ($request->hasFile('id_document')) {
+            $data['id_document'] = time() . '_iddoc.' . $request->id_document->getClientOriginalExtension();
+            $request->id_document->move(public_path($folder), $data['id_document']);
+        }
 
-        return view('home.registration.success-registration', compact('record'))->with('success', 'Registration saved successfully.');
+        // Create record based on type
+        $record = $request->reg_type === 'Beneficiaries'
+            ? beneficiarie::create($data)
+            : Member::create($data);
+
+        return view('home.registration.success-registration', compact('record'))
+            ->with('success', 'Registration saved successfully.');
     }
 
     public function onlineregistrationSetting()
@@ -863,4 +730,5 @@ class RegistrationController extends Controller
 
         return redirect()->back()->with('success', 'Registration setting updated.');
     }
+
 }

@@ -523,6 +523,46 @@
                     </div>
                 </div>
             </div>
+               <div class="row justify-content-center d-flex">
+                <div class="col-md-12 justify-content-center d-flex" style="gap: 15px;">
+                    <h4 class="section-title mb-4"><b>Social Problems</b></h4>
+                    <select class="form-control w-25" id="session">
+                        <option value="">All Session</option>
+                        @foreach ($data as $session)
+                            <option value="{{ $session->session_date }}">{{ $session->session_date }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="text-white bg-danger p-3 h-100">
+                        <div>
+                            <p class="mb-1">Discover Problems</p>
+                            <h5 class="mb-0">0</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="text-dark bg-warning p-3 h-100">
+                        <div>
+                            <p class="mb-1">Pending Problems</p>
+                            <h5 class="mb-0">0</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="text-white bg-success p-3 h-100">
+                        <div>
+                            <p class="mb-1">Solutions</p>
+                            <h5 class="mb-0">0</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 

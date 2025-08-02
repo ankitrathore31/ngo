@@ -344,6 +344,10 @@ class HomeControlller extends Controller
             $query->where('block', 'like', '%' . $request->block . '%');
         }
 
+        if ($request->filled('address')) {
+            $query->where('address', 'like', '%' . $request->address . '%');
+        }
+
         if ($request->filled('state')) {
             $query->where('state', $request->state);
         }
