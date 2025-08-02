@@ -191,7 +191,7 @@
                     </div>
                     <div class="col-sm-4">
                         @php
-                            $imagePath = $record->reg_type === 'Member' ? 'member_images/' : 'beneficiaries_images/';
+                            $imagePath = $record->reg_type === 'Member' ? 'member_images/' : 'benefries_images/';
                         @endphp
                         <div class="mb-3">
                             <img src="{{ asset($imagePath . $record->image) }}" alt="Image" class="img-thumbnail"
@@ -248,7 +248,7 @@
                         <strong>Identity Number:</strong> {{ $record->identity_no }}
                     </div>
                     @php
-                        $imagePath = $record->reg_type === 'Member' ? 'member_images/' : 'beneficiaries_images/';
+                        $imagePath = $record->reg_type === 'Member' ? 'member_images/' : 'benefries_images/';
                     @endphp
 
                     <div class="col-sm-4 mb-3">

@@ -13,13 +13,38 @@ use Carbon\Carbon;
 
 class BeneficiarieController extends Controller
 {
-    public function AddbeneficiarieList()
+    public function AddbeneficiarieList(Request $request)
     {
         $beneficiarie = beneficiarie::where('status', 1)
             ->where('survey_status', 0)
+            ->when($request->session_filter, function ($query, $session_filter) {
+                return $query->where('session_date', $session_filter);
+            })
+            ->when($request->application_no, function ($query, $application_no) {
+                return $query->where('application_no', $application_no);
+            })
+            ->when($request->name, function ($query, $name) {
+                return $query->where('name', 'like', '%' . $name . '%');
+            })
+            ->when($request->state, function ($query, $state) {
+                return $query->where('state', $state);
+            })
+            ->when($request->district, function ($query, $district) {
+                return $query->where('district', $district);
+            })
+            ->when($request->block, function ($query, $block) {
+                return $query->where('block', 'like', '%' . $block . '%');
+            })
+            ->when($request->village, function ($query, $village) {
+                return $query->where('village', 'like', '%' . $village . '%');
+            })
             ->get();
-        return view('ngo.beneficiarie.add-beneficiarie-list', compact('beneficiarie'));
+
+        $data = academic_session::all();
+        $states = config('states');
+        return view('ngo.beneficiarie.add-beneficiarie-list', compact('beneficiarie', 'data', 'states'));
     }
+
 
     public function viewbeneficiarie($id)
     {
@@ -73,8 +98,9 @@ class BeneficiarieController extends Controller
         return redirect()->route('beneficiarie-list')->with('success', 'Beneficiare added successfully.');
     }
 
-    public function beneficiarieFacilities()
+    public function beneficiarieFacilities(Request $request)
     {
+        // Step 1: Get first survey IDs for each beneficiary
         $firstSurveyIds = DB::table('beneficiarie__surveys')
             ->selectRaw('MIN(id) as id')
             ->groupBy('beneficiarie_id')
@@ -83,11 +109,59 @@ class BeneficiarieController extends Controller
         // Step 2: Load the surveys with related beneficiary data
         $surveys = Beneficiarie_Survey::with('beneficiarie')
             ->whereIn('id', $firstSurveyIds)
-            ->orderBy('id', 'asc')
-            ->get();
+            ->orderBy('id', 'asc');
 
-        return view('ngo.beneficiarie.beneficiarie-facilities', compact('surveys'));
+        // Step 3: Apply filters from the form
+        if ($request->filled('session_filter')) {
+            $surveys->where('session_date', $request->session_filter);
+        }
+
+        if ($request->filled('application_no')) {
+            $surveys->whereHas('beneficiarie', function ($query) use ($request) {
+                $query->where('application_no', $request->application_no);
+            });
+        }
+
+        if ($request->filled('name')) {
+            $surveys->whereHas('beneficiarie', function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->name . '%');
+            });
+        }
+
+        if ($request->filled('state')) {
+            $surveys->whereHas('beneficiarie', function ($query) use ($request) {
+                $query->where('state', $request->state);
+            });
+        }
+
+        if ($request->filled('district')) {
+            $surveys->whereHas('beneficiarie', function ($query) use ($request) {
+                $query->where('district', $request->district);
+            });
+        }
+
+        if ($request->filled('block')) {
+            $surveys->whereHas('beneficiarie', function ($query) use ($request) {
+                $query->where('block', 'like', '%' . $request->block . '%');
+            });
+        }
+
+        if ($request->filled('village')) {
+            $surveys->whereHas('beneficiarie', function ($query) use ($request) {
+                $query->where('village', 'like', '%' . $request->village . '%');
+            });
+        }
+
+        // Fetch the filtered results
+        $surveys = $surveys->get();
+
+        // Pass sessions data to the view for filter dropdown
+        $data = academic_session::all();
+        $states = config('states');
+
+        return view('ngo.beneficiarie.beneficiarie-facilities', compact('surveys', 'data','states'));
     }
+
 
 
 

@@ -125,10 +125,6 @@
                                 <p><b>Website : www.gyanbhartingo.org Email : gyanbhartingo600@gmail.com Mob- 9411484111</b>
                                 </p>
                             </div>
-                            {{-- <div class="col-sm-4 text-center">
-                            <h4 style=" font-size:20px; color:brown;"><b>Session: {{ $activity->academic_session }}</b></h4>
-                            <p style=""><b>Activity Report</b></p>
-                        </div> --}}
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -191,7 +187,7 @@
                         </div>
                         <div class="col-sm-4">
                             @php
-                                $imagePath = $record->reg_type === 'Member' ? 'member_images/' : 'beneficiaries_images/';
+                                $imagePath = $record->reg_type === 'Member' ? 'member_images/' : 'benefries_images/';
                             @endphp
 
                             {{-- @if ($record->image) --}}
@@ -253,7 +249,7 @@
                             <strong>Identity Number:</strong> {{ $record->identity_no }}
                         </div>
                         @php
-                            $imagePath = $record->reg_type === 'Member' ? 'member_images/' : 'beneficiaries_images/';
+                            $imagePath = $record->reg_type === 'Member' ? 'member_images/' : 'benefries_images/';
                         @endphp
 
                         <div class="col-sm-4 mb-3">
@@ -276,13 +272,51 @@
                         <div class="col-sm-4 mb-5">
                             <label for="" class="from-label"><b>{{ $record->reg_type }} Signature</b></label>
                         </div>
-                        <div class="col-sm-4 mb-5">
-                            <label for="" class="from-label"><b>Signature</b></label>
+                        <div class="col-sm-5 text-end">
+                            @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
+                                <div id="directorSignatureBox" class="mt-2">
+                                    <p class="text-success no-print">Attached</p>
+                                    <img src="{{ asset($signatures['director']) }}" alt="Director Signature" class="img"
+                                        style="max-height: 100px;">
+                                    <br>
+                                    <button class="btn btn-danger btn-sm mt-2 no-print"
+                                        onclick="toggleDirector(false)">Remove</button>
+                                </div>
+
+                                <div id="directorShowBtnBox" class="mt-2 d-none no-print">
+                                    <button class="btn btn-primary btn-sm" onclick="toggleDirector(true)">Attached
+                                        Signature</button>
+                                </div>
+                            @else
+                                <p class="text-muted mt-2 no-print">Not attached</p>
+                            @endif
+                            <strong>Digitally Signed By <br>
+                                MANOJ KUMAR RATHOR <br>
+                                DIRECTOR
+                            </strong><br>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
+    <script>
+        function setLanguage(lang) {
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                el.style.display = el.getAttribute('data-lang') === lang ? 'inline' : 'none';
+            });
+        }
+        window.onload = () => setLanguage('en'); // Set Eng as default
+    </script>
+    <script>
+        function togglePM(show) {
+            document.getElementById('pmSignatureBox').classList.toggle('d-none', !show);
+            document.getElementById('pmShowBtnBox').classList.toggle('d-none', show);
+        }
+
+        function toggleDirector(show) {
+            document.getElementById('directorSignatureBox').classList.toggle('d-none', !show);
+            document.getElementById('directorShowBtnBox').classList.toggle('d-none', show);
+        }
+    </script>
 @endsection

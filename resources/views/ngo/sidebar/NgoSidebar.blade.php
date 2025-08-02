@@ -373,7 +373,7 @@
                                 <li><a class="dropdown-item" href="#">Staff Resign Letter</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('staff-salary'))
-                                <li><a class="dropdown-item" href="{{route('manage.sallary.staff')}}">Staff Salary</a></li>
+                                <li><a class="dropdown-item" href="{{route('list.salary')}}">Staff Salary</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('staff-idcard'))
                                 <li><a class="dropdown-item" href="{{ route('staff-idcard') }}">Staff ID Card</a>

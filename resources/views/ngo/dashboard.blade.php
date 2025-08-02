@@ -488,6 +488,50 @@
                         </div>
                     </div>
                 @endif
+                @if (
+                    !$isStaff ||
+                        $user->hasPermission('discover-problems') ||
+                        $user->hasPermission('problem-list') ||
+                        $user->hasPermission('solutions'))
+                    <div class="row">
+                        <h5 class="fw-bold mb-2">- Social Problem</h5>
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="card text-white bg-danger p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-coins fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Discover Problems</p>
+                                        <h5 class="mb-0">0</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="card text-dark bg-warning p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-file-invoice-dollar fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Pending Problems</p>
+                                        <h5 class="mb-0">0</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="card text-white bg-secondary p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-wallet fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Solutions</p>
+                                        <h5 class="mb-0">0</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
 

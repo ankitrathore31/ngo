@@ -53,7 +53,7 @@
     </style>
     <div class="wrapper">
         <div class="d-flex justify-content-between aligin-item-center mb-3 mt-2">
-            <h5 class="mb-0">Manage Staff Sallary</h5>
+            <h5 class="mb-0">Edit Staff Sallary</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                     <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
@@ -67,7 +67,7 @@
             </div>
         @endif
         <div class="container mt-5">
-            <form action="{{ route('store.staff.sallary') }}" method="POST" enctype="multipart/form-data"
+            <form action="{{ route('update.salary',$salary->id) }}" method="POST" enctype="multipart/form-data"
                 class="border p-4 bg-light rounded">
                 @csrf
                 <div class="row">
@@ -80,7 +80,7 @@
                                     <option value="">Select Position</option>
                                     @foreach (['Director', 'Consultant/Adviser', 'NGO Manager', 'Finance Manager', 'Project Coordinator', 'Master Trainer', 'Trainer', 'Program Officer', 'Project Manager', 'Area Manager', 'Human Resource Management', 'Supervisor', 'Coordinator', 'Computer Operator', 'Head Clerk', 'Assistant Clerk', 'Surveyor', 'Peon', 'Guard', 'Driver', 'Gardener', 'सुबिधा दाता', 'कृषि सखी', 'समूह सखी', 'विकास सखी', 'पशु सखी', 'सवास्थ्य सखी', 'सहयोगी सखी', 'Animator', 'Volunteer'] as $role)
                                         <option value="{{ $role }}"
-                                            {{ old('position') == $role ? 'selected' : '' }}>
+                                            {{ old('position',$salary->position) == $role ? 'selected' : '' }}>
                                             {{ $role }}</option>
                                     @endforeach
                                 </select>
@@ -90,17 +90,17 @@
                             </div>
                             <div class="col-md-12 mb-3">
                                 <label for="" class="form-label">Sallary</label>
-                                <input type="number" name="sallary"
-                                    class="form-control @error('sallary') is in-valid @enderror" placeholder="Enter Sallary"
-                                    required>
-                                @error('sallary')
+                                <input type="number" name="salary"
+                                    class="form-control @error('salary') is in-valid @enderror" placeholder="Enter Salary"
+                                    value="{{ old('salary',$salary->salary) }}" required>
+                                @error('salary')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                         </div>
                         <div class="row mt-2">
                             <div class="col-sm-12">
-                                <input type="submit" class="btn btn-success" value="Add Sallary">
+                                <input type="submit" class="btn btn-success" value="Update Sallary">
                             </div>
                         </div>
                     </div>

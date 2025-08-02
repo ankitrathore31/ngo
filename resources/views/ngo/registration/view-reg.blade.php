@@ -64,10 +64,6 @@
                                 <p><b>Website : www.gyanbhartingo.org Email : gyanbhartingo600@gmail.com Mob- 9411484111</b>
                                 </p>
                             </div>
-                            {{-- <div class="col-sm-4 text-center">
-                            <h4 style=" font-size:20px; color:brown;"><b>Session: {{ $activity->academic_session }}</b></h4>
-                            <p style=""><b>Activity Report</b></p>
-                        </div> --}}
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -130,7 +126,7 @@
                         <div class="col-sm-4">
                             @php
                                 $imagePath =
-                                    $record->reg_type === 'Member' ? 'member_images/' : 'beneficiaries_images/';
+                                    $record->reg_type === 'Member' ? 'member_images/' : 'benefries_images/';
                             @endphp
                             <div class="mb-3">
                                 <img src="{{ asset($imagePath . $record->image) }}" alt="Image" class="img-thumbnail"
@@ -187,7 +183,7 @@
                             <strong>Identity Number:</strong> {{ $record->identity_no }}
                         </div>
                         @php
-                            $imagePath = $record->reg_type === 'Member' ? 'member_images/' : 'beneficiaries_images/';
+                            $imagePath = $record->reg_type === 'Member' ? 'member_images/' : 'benefries_images/';
                         @endphp
 
                         <div class="col-sm-4 mb-3">

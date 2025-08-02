@@ -18,6 +18,7 @@ use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\ProblemController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\SallaryController;
 use App\Http\Controllers\SignatureController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\TrainingCenterController;
@@ -201,7 +202,7 @@ Route::controller(BeneficiarieController::class)->group(function () {
     Route::post('ngo/update-facilities/{beneficiarie_id}/survey/{survey_id}', 'updateFacilities')->middleware('auth')->name('update-facilities');
     Route::get('ngo/distribute-beneficiarie-facilities/{beneficiarie_id}/survey/{survey_id}', 'distributebeneficiarieFacilities')->middleware('auth')->name('distribute-beneficiarie-facilities');
     Route::post('ngo/store-distribute-facilities/{beneficiarie_id}/survey/{survey_id}', 'storedistributefacilities')->middleware('auth')->name('store-distribute-facilities');
-    Route::get('ngo/edit-distribute-facilities/{beneficiarie_id}/survey/{survey_id}','EditDistributeFacilities')->middleware('auth')->name('edit-distribute-facilities');
+    Route::get('ngo/edit-distribute-facilities/{beneficiarie_id}/survey/{survey_id}', 'EditDistributeFacilities')->middleware('auth')->name('edit-distribute-facilities');
     Route::post('ngo/update-distribute-facilities/{beneficiarie_id}/survey/{survey_id}', 'Updatedistributefacilities')->middleware('auth')->name('update-distribute-facilities');
     Route::get('ngo/distributed-facilities', 'distributefacilities')->middleware('auth')->name('distributed-list');
     Route::get('ngo/all-beneficiarie-list', 'allbeneficiarielist')->middleware('auth')->name('all-beneficiarie-list');
@@ -238,10 +239,16 @@ Route::controller(StaffController::class)->group(function () {
     Route::post('ngo/update-staff/{id}', 'UpdateStaff')->middleware('auth')->name('update.staff');
     Route::get('ngo/delete-staff/{id}', 'DeleteStaff')->middleware('auth')->name('delete-staff');
     Route::get('ngo/staff-list', 'staffList')->middleware('auth')->name('staff-list');
-    Route::get('ngo/view-staff/{id}','ViewStaff')->middleware('auth')->name('view-staff');
-    Route::get('ngo/add-sallary-staff', 'AddSallarystaff')->middleware('auth')->name('manage.sallary.staff');
-    Route::post('ngo/store-sallary-staff', 'StoreSallaryStaff')->middleware('auth')->name('store.staff.sallary');
-    
+    Route::get('ngo/view-staff/{id}', 'ViewStaff')->middleware('auth')->name('view-staff');
+});
+
+Route::controller(SallaryController::class)->middleware('auth')->group(function () {
+    Route::get('ngo/salary-list', 'SalaryList')->name('list.salary');
+    Route::get('ngo/add-salary', 'ManageSalary')->name('manage.salary');
+    Route::post('ngo/store-salary', 'StoreSalary')->name('store.salary');
+    Route::get('ngo/edit-salary/{id}', 'EditSalary')->name('edit.salary');
+    Route::post('ngo/update-salary/{id}', 'UpdateSalary')->name('update.salary');
+    Route::get('ngo/delete-salary/{id}', 'DeleteSalary')->name('delete.salary');
 });
 
 Route::controller(MemberController::class)->group(function () {
@@ -265,7 +272,7 @@ Route::controller(DonationController::class)->group(function () {
     Route::get('ngo/donation', 'donation')->middleware('auth')->name('donation');
     Route::post('ngo/save-donation', 'saveDonation')->middleware('auth')->name('save-donation');
     Route::get('ngo/edit-donation/{id}', 'EditDonation')->middleware('auth')->name('edit-donation');
-    Route::post('ngo/update-donation/{id}','updateDonation')->middleware('auth')->name('update-donation');
+    Route::post('ngo/update-donation/{id}', 'updateDonation')->middleware('auth')->name('update-donation');
     Route::get('ngo/delete-donation/{id}', 'deleteDonation')->middleware('auth')->name('delete-donation');
     Route::get('ngo/view-donation/{id}', 'viewDonation')->middleware('auth')->name('view-donation');
     Route::get('ngo/donation-card/{id}', 'viewDonationCard')->middleware('auth')->name('view-donation-card');
@@ -302,34 +309,32 @@ Route::controller(ExperienceController::class)->group(function () {
     Route::get('ngo/delete-letter/{id}', 'deleteLetter')->middleware('auth')->name('delete-letter');
     Route::get('ngo/letter-list', 'LetterCerti')->middleware('auth')->name('letter-list');
     Route::get('ngo/letter-certificate/{id}', 'LetterCertificate')->middleware('auth')->name('letter');
-
 });
 
 Route::controller(SignatureController::class)->group(function () {
     Route::get('ngo/signature', 'addSignature')->middleware('auth')->name('signature');
     Route::post('ngo/save-signature', 'saveSignature')->middleware('auth')->name('save-signature');
-
 });
 
-Route::controller(IdcardController::class)->group(function(){
+Route::controller(IdcardController::class)->group(function () {
     Route::get('ngo/member-idcard', 'MemberIdcard')->middleware('auth')->name('member-idcard');
     Route::get('ngo/beneficiary-idcard', 'BeneficiaryIdcard')->name('beneficiary-idcard');
     Route::get('ngo/donor-idcard', 'DonorIdcard')->middleware('auth')->name('donor-idcard');
     Route::get('ngo/staff-idcard', 'StaffIdcard')->middleware('auth')->name('staff-idcard');
 });
 
-Route::controller(BillController::class)->group(function(){
+Route::controller(BillController::class)->group(function () {
     Route::get('ngo/add-bill', 'AddBill')->middleware('auth')->name('add-bill');
-    Route::post('ngo/store-bill','StoreBill')->middleware('auth')->name('store-bill');
+    Route::post('ngo/store-bill', 'StoreBill')->middleware('auth')->name('store-bill');
     Route::get('ngo/edit-bill/{id}', 'EditBill')->middleware('auth')->name('edit-bill');
     Route::post('ngo/update-bill/{id}', 'UpdateBill')->middleware('auth')->name('update-bill');
     Route::get('ngo/bill-list', 'BillList')->middleware('auth')->name('bill-list');
     Route::get('ngo/view-bill/{id}', 'ViewBill')->Middleware('auth')->name('view-bill');
     Route::get('ngo/delete-bill/{id}', 'DeleteBill')->middleware('auth')->name('delete-bill');
-    Route::get('ngo/generate-bill','GenerateBill')->middleware('auth')->name('generate-bill');
-    Route::post('ngo/store-gbs-bill','StoreGbsBill')->middleware('auth')->name('store-gbs-bill');
-    Route::get('ngo/edit-gbs=bill/{id}','EditGbsBill')->middleware('auth')->name('edit-gbs-bill');
-    Route::post('ngo/update-gbs-bill/{id}','UdateGbsBill')->middleware('auth')->name('update-gbs-bill');
+    Route::get('ngo/generate-bill', 'GenerateBill')->middleware('auth')->name('generate-bill');
+    Route::post('ngo/store-gbs-bill', 'StoreGbsBill')->middleware('auth')->name('store-gbs-bill');
+    Route::get('ngo/edit-gbs=bill/{id}', 'EditGbsBill')->middleware('auth')->name('edit-gbs-bill');
+    Route::post('ngo/update-gbs-bill/{id}', 'UdateGbsBill')->middleware('auth')->name('update-gbs-bill');
     Route::get('ngo/delete-gbs-bill/{id}', 'DeleteGbsBill')->middleware('auth')->name('delete-gbs-bill');
     Route::get('ngo/gbs-bill-list', 'GbsBillList')->middleware('auth')->name('gbs-bill-list');
     Route::get('ngo/view-gbs-bill/{id}', 'ViewGbsBill')->Middleware('auth')->name('view-gbs-bill');
@@ -345,7 +350,7 @@ Route::controller(WorkPlanController::class)->group(function () {
     Route::get('ngo/delete-workplan/{id}', 'DeleteWorkPlan')->middleware('auth')->name('delete-workplan');
 });
 
-Route::controller(ProblemController::class)->group(function(){
+Route::controller(ProblemController::class)->group(function () {
     Route::get('ngo/add-problem', 'problem')->middleware('auth')->name('problem.add');
     Route::post('ngo/store-problem', 'StoreProblem')->middleware('auth')->name('store.problem');
     Route::get('ngo/edit-problem/{id}', 'EditProblem')->middleware('auth')->name('edit.problem');
@@ -362,7 +367,7 @@ Route::controller(ProblemController::class)->group(function(){
     Route::get('ngo/view-problem/{id}', 'ViewProblem')->middleware('auth')->name('view.problem');
 });
 
-Route::controller(ProjectController::class)->group(function(){
+Route::controller(ProjectController::class)->group(function () {
     Route::get('ngo/add-project', 'AddProject')->middleware('auth')->name('add.project');
     Route::post('ngo/store-project', 'StoreProject')->middleware('auth')->name('store.project');
     Route::get('ngo/edit-project/{id}', 'EditProject')->middleware('auth')->name('edit.project');
@@ -379,7 +384,7 @@ Route::controller(ProjectController::class)->group(function(){
     Route::get('ngo/project-list-report', 'ProjectReportList')->middleware('auth')->name('list.project.report');
 });
 
-Route::controller(OrganizationController::class)->group(function(){
+Route::controller(OrganizationController::class)->group(function () {
     Route::get('ngo/add-head-organization', 'AddHeadOrg')->middleware('auth')->name('add.head.organization');
     Route::post('ngo/store-head-organization', 'StoreHeadOrg')->middleware('auth')->name('store.head.organization');
     Route::get('ngo/edit-head-organization/{id}', 'EditHeadOrg')->middleware('auth')->name('edit.head.organization');
