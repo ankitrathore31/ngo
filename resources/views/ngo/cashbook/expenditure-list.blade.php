@@ -222,7 +222,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item['bill_no'] }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($item['bill_date'])->format('d-m-Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($item['date'])->format('d-m-Y') }}</td>
                                     <td>{{ $item['shop'] ?? $item['name'] }}</td>
                                     <td>{{ $item['name'] }}</td>
                                     <td>{{ $item['address'] }}</td>

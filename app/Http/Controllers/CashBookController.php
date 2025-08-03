@@ -78,8 +78,7 @@ class CashBookController extends Controller
             ->when($request->filled('today'), fn($q) => $q->whereDate('date', now()->toDateString()))
             ->when(
                 $request->filled('start_date') && $request->filled('end_date'),
-                fn($q) =>
-                $q->whereBetween('date', [$request->start_date, $request->end_date])
+                fn($q) => $q->whereBetween('date', [$request->start_date, $request->end_date])
             );
 
         // Bill
@@ -87,14 +86,17 @@ class CashBookController extends Controller
             ->when($request->filled('session_filter'), fn($q) => $q->where('academic_session', $request->session_filter))
             ->when($request->filled('bill_no'), fn($q) => $q->where('bill_no', $request->bill_no))
             ->when($request->filled('name'), fn($q) => $q->where('name', 'like', '%' . $request->name . '%'))
-            ->when($request->filled('address') || $request->filled('block') || $request->filled('district') || $request->filled('state'), function ($q) use ($request) {
-                $q->where(function ($query) use ($request) {
-                    $query->where('address', 'like', '%' . $request->input('address') . '%')
-                        ->orWhere('address', 'like', '%' . $request->input('block') . '%')
-                        ->orWhere('address', 'like', '%' . $request->input('district') . '%')
-                        ->orWhere('address', 'like', '%' . $request->input('state') . '%');
-                });
-            })
+            ->when(
+                $request->filled('address') || $request->filled('block') || $request->filled('district') || $request->filled('state'),
+                function ($q) use ($request) {
+                    $q->where(function ($query) use ($request) {
+                        $query->where('address', 'like', '%' . $request->input('address') . '%')
+                            ->orWhere('address', 'like', '%' . $request->input('block') . '%')
+                            ->orWhere('address', 'like', '%' . $request->input('district') . '%')
+                            ->orWhere('address', 'like', '%' . $request->input('state') . '%');
+                    });
+                }
+            )
             ->when($request->filled('email'), fn($q) => $q->where('email', 'like', '%' . $request->email . '%'))
             ->when($request->filled('mobile'), fn($q) => $q->where('mobile', 'like', '%' . $request->mobile . '%'))
             ->when($request->filled('today'), fn($q) => $q->whereDate('date', now()->toDateString()))
@@ -103,7 +105,6 @@ class CashBookController extends Controller
                 fn($q) => $q->whereBetween('date', [$request->start_date, $request->end_date])
             )
             ->get();
-
 
         // GbsBill
         $g = GbsBill::when($request->filled('session_filter'), fn($q) => $q->where('academic_session', $request->session_filter))
@@ -123,11 +124,10 @@ class CashBookController extends Controller
             ->when($request->filled('today'), fn($q) => $q->whereDate('bill_date', now()->toDateString()))
             ->when(
                 $request->filled('start_date') && $request->filled('end_date'),
-                fn($q) =>
-                $q->whereBetween('bill_date', [$request->start_date, $request->end_date])
+                fn($q) => $q->whereBetween('bill_date', [$request->start_date, $request->end_date])
             );
 
-        // Mapping
+        // Mapping - Standardize date field as 'date'
         $bvList = $bv->get()->map(function ($x) {
             return [
                 'type' => 'voucher',
@@ -165,10 +165,10 @@ class CashBookController extends Controller
                 'type' => 'gbs',
                 'id' => $x->id,
                 'bill_no' => $x->invoice_no,
-                'bill_date' => $x->bill_date,
+                'date' => $x->bill_date, // Standardized to 'date'
                 'name' => $x->name,
                 'address' => collect([$x->village, $x->post, $x->block, $x->district, $x->state])
-                    ->filter() // remove null/empty values
+                    ->filter()
                     ->implode(', '),
                 'email' => $x->email,
                 'mobile' => $x->mobile,
@@ -177,13 +177,12 @@ class CashBookController extends Controller
             ];
         });
 
-
-        // Merge and sort
+        // Merge and sort by 'date'
         $records = collect()
             ->merge($bvList)
             ->merge($bList)
             ->merge($gList)
-            ->sortByDesc('bill_date');
+            ->sortByDesc('date');
 
         // Total Amount
         $totalAmount = $records->sum('amount');
