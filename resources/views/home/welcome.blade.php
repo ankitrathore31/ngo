@@ -538,8 +538,8 @@
                 <div class="col-md-4 col-sm-6 mb-3">
                     <div class="text-white bg-danger p-3 h-100">
                         <div>
-                            <p class="mb-1">Discover Problems</p>
-                            <h5 class="mb-0">0</h5>
+                            <p class="mb-1">Discover Social Problems</p>
+                            <h5 class="mb-0">{{ totalProblem() }}</h5>
                         </div>
                     </div>
                 </div>
@@ -547,8 +547,8 @@
                 <div class="col-md-4 col-sm-6 mb-3">
                     <div class="text-dark bg-warning p-3 h-100">
                         <div>
-                            <p class="mb-1">Pending Problems</p>
-                            <h5 class="mb-0">0</h5>
+                            <p class="mb-1">Pending Social Problems</p>
+                            <h5 class="mb-0">{{ totalProblem() }}</h5>
                         </div>
                     </div>
                 </div>
@@ -556,8 +556,8 @@
                 <div class="col-md-4 col-sm-6 mb-3">
                     <div class="text-white bg-success p-3 h-100">
                         <div>
-                            <p class="mb-1">Solutions</p>
-                            <h5 class="mb-0">0</h5>
+                            <p class="mb-1">Solutions Social Problems</p>
+                            <h5 class="mb-0">{{ totalSolution() }}</h5>
                         </div>
                     </div>
                 </div>

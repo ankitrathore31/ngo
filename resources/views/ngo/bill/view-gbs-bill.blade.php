@@ -86,11 +86,11 @@
     </style>
     <div class="wrapper">
         <div class="d-flex justify-content-between align-item-centre mb-0 mt-4">
-            <h5 class="mb-0">View GBS Person Bill</h5>
+            <h5 class="mb-0">Sanstha View Bill</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                     <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">GBS Bill/Voucher</li>
+                    <li class="breadcrumb-item active" aria-current="page">Bill/Voucher</li>
                 </ol>
             </nav>
         </div>
@@ -102,7 +102,7 @@
         <div class="container">
             <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
                 <h5 class="mb-0">
-                    <span>GBS Person Bill</span>
+                    <span>Sanstha Bill</span>
                 </h5>
                 <div>
                     <button onclick="window.print()" class="btn btn-primary">Print Bill</button>
@@ -112,7 +112,6 @@
             </div>
             <div class="bill-container border print-area">
                 <div class="p-4">
-
                     <div class="text-center mb-4 border-bottom pb-3 mb-2">
                         <!-- Header -->
                         <div class="row">
@@ -154,367 +153,183 @@
                         </div>
                     </div>
                     <div class="container-fluid py-4" style="font-size: 16px; line-height: 1.8;">
-                        <div class="row">
-                            <div class="col-sm-6 mb-2">
-                                <div style="display: flex; align-items: center; width: 100%;">
-                                    <strong style="white-space: nowrap; margin-right: 5px;">
-                                        <span data-lang="hi">मैं</span>
-                                        <span data-lang="en">I</span>
-                                    </strong>
-                                    <div
-                                        style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                        &nbsp; {{ $bill->name }}
-                                    </div>
-                                </div>
+                        <div class=" d-flex justify-content-between mb-3">
+                            <div>
+                                <strong>
+                                    <span>Bill/Voucher/Invoice No.:</span>
+                                </strong>
+                                {{ $bill->bill_no }}
                             </div>
 
-                            <div class="col-sm-6 mb-2">
-                                <div style="display: flex; align-items: center; width: 100%;">
-                                    <strong style="white-space: nowrap; margin-right: 5px;">
-                                        <span data-lang="hi">पिता/पति का नाम</span>
-                                        <span data-lang="en">Father/Husband's Name</span>
-                                    </strong>
-                                    <div
-                                        style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                        &nbsp;{{ $bill->guardian_name }}
-                                    </div>
-                                </div>
+                            <div>
+                                <strong>
+                                    <span>Date:</span>
+                                </strong>
+                                {{ \Carbon\Carbon::parse($bill->date)->format('d-m-Y') }}
                             </div>
 
+                            <div>
+                                <strong>
+                                    <span>Session:</span>
+                                </strong>
+                                {{ $bill->academic_session }}
+                            </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-4 mb-2">
-                                <div style="display: flex; align-items: center; width: 100%;">
-                                    <strong style="white-space: nowrap; margin-right: 5px;">
-                                        <span data-lang="hi">गांव/मोहल्ला</span>
-                                        <span data-lang="en">Village/Locality</span>
-                                    </strong>
-                                    <div
-                                        style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                        &nbsp;{{ $bill->village }}
+                        <div class="row mb-2">
+                            <div class="col-sm-12">
+                                <b>Name</b>: &nbsp;{{ $bill->name }}
+                            </div>
+                            <div class="col-sm-12">
+                                <b>Mobile:</b> &nbsp; {{ $bill->mobile }}
+                            </div>
+                            <div class="col-sm-12">
+                                <b>Email:</b> &nbsp; {{ $bill->email }}
+                            </div>
+                            <div class="col-sm-12">
+                                <b>Shop/Farm:</b> &nbsp; {{ $bill->shop }}
+                            </div>
+                            <div class="col-sm-12">
+                                <b>Address:</b> &nbsp; {{ $bill->address }}
+                            </div>
+                            <div class="col-sm-6">
+                                <b>Block:</b> &nbsp; {{ $bill->block }}
+                            </div>
+                            <div class="col-sm-6">
+                                <b>District:</b> &nbsp; {{ $bill->district }}
+                            </div>
+                            <div class="col-sm-6">
+                                <b>State:</b> &nbsp; {{ $bill->state }}
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-sm-12">
+                                <div class="">
+                                    <div class="card-body table-responsive">
+                                        <table class="table table-bordered table-hover align-middle text-center">
+                                            <thead class="table-primary">
+                                                <tr>
+                                                    <th>Sr. No.</th>
+                                                    <th>Product</th>
+                                                    <th>Quntity</th>
+                                                    <th>Rate</th>
+                                                    <th>Amount</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @php
+                                                    $totalAmount = 0;
+                                                @endphp
+
+                                                @foreach ($bill_items as $item)
+                                                    @php
+                                                        $amount = $item->qty * $item->rate;
+                                                        $totalAmount += $amount;
+                                                    @endphp
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $item->product }}</td>
+                                                        <td>{{ $item->qty }}</td>
+                                                        <td>{{ number_format($item->rate, 2) }}</td>
+                                                        <td>{{ number_format($amount, 2) }}</td>
+                                                    </tr>
+                                                @endforeach
+
+                                                @php
+                                                    $cgst = $bill->cgst ?? 0;
+                                                    $sgst = $bill->sgst ?? 0;
+                                                    $igst = $bill->igst ?? 0;
+
+                                                    $cgstAmount = ($totalAmount * $cgst) / 100;
+                                                    $sgstAmount = ($totalAmount * $sgst) / 100;
+                                                    $igstAmount = $cgstAmount + $sgstAmount;
+
+                                                    $grandTotal =
+                                                        $totalAmount + $cgstAmount + $sgstAmount;
+                                                @endphp
+
+                                                <tr class="table-secondary fw-bold">
+                                                    <td colspan="4" class="text-end">Total Amount</td>
+                                                    <td>{{ number_format($totalAmount, 2) }}</td>
+                                                </tr>
+                                                @if ($cgst > 0)
+                                                    <tr>
+                                                        <td colspan="4" class="text-end">CGST ({{ $cgst }}%)
+                                                        </td>
+                                                        <td>{{ number_format($cgstAmount, 2) }}</td>
+                                                    </tr>
+                                                @endif
+                                                @if ($sgst > 0)
+                                                    <tr>
+                                                        <td colspan="4" class="text-end">SGST ({{ $sgst }}%)
+                                                        </td>
+                                                        <td>{{ number_format($sgstAmount, 2) }}</td>
+                                                    </tr>
+                                                @endif
+                                                @if ($igst > 0)
+                                                    <tr>
+                                                        <td colspan="4" class="text-end">IGST ({{ $igst }}%)
+                                                        </td>
+                                                        <td>{{ number_format($igstAmount, 2) }}</td>
+                                                    </tr>
+                                                @endif
+                                                <tr class="table-dark fw-bold">
+                                                    <td colspan="4" class="text-end">Grand Total</td>
+                                                    <td>{{ number_format($grandTotal, 2) }}</td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="col-sm-4 mb-2">
-                                <div style="display: flex; align-items: center; width: 100%;">
-                                    <strong style="white-space: nowrap; margin-right: 5px;">
-                                        <span data-lang="hi">पोस्ट/कस्बा</span>
-                                        <span data-lang="en">Post/Town</span>
-                                    </strong>
-                                    <div
-                                        style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                        &nbsp;{{ $bill->post }}
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="row d-flex justify-content-between mt-5">
+                            <div class="col-sm-5 text-start">
+                              {{-- <strong>Signature</strong> --}}
                             </div>
-
-                            <div class="col-sm-4 mb-2">
-                                <div style="display: flex; align-items: center; width: 100%;">
-                                    <strong style="white-space: nowrap; margin-right: 5px;">
-                                        <span data-lang="hi">जिला</span>
-                                        <span data-lang="en">District</span>
-                                    </strong>
-                                    <div
-                                        style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                        &nbsp;{{ $bill->district }}
+                            <div class="col-sm-5 text-center">
+                                @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
+                                    <div id="directorSignatureBox" class="mt-2">
+                                        <p class="text-success no-print">Attached</p>
+                                        <img src="{{ asset($signatures['director']) }}" alt="Director Signature"
+                                            class="img" style="max-height: 100px;">
+                                        <br>
+                                        <button class="btn btn-danger btn-sm mt-2 no-print"
+                                            onclick="toggleDirector(false)">Remove</button>
                                     </div>
-                                </div>
-                            </div>
 
-                            <div class="col-sm-6 mb-2">
-                                <div style="display: flex; align-items: center; width: 100%;">
-                                    <strong style="white-space: nowrap; margin-right: 5px;">
-                                        <span data-lang="hi">राज्य</span>
-                                        <span data-lang="en">State</span>
-                                    </strong>
-                                    <div
-                                        style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                        &nbsp;{{ $bill->state }}
+                                    <div id="directorShowBtnBox" class="mt-2 d-none no-print">
+                                        <button class="btn btn-primary btn-sm" onclick="toggleDirector(true)">Attached
+                                            Signature</button>
                                     </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-6 mb-2">
-                                <div style="display: flex; align-items: center; width: 100%;">
-                                    <strong style="white-space: nowrap; margin-right: 5px;">
-                                        <span data-lang="hi">रुपये</span>
-                                        <span data-lang="en">Amount</span>
-                                    </strong>
-                                    <div
-                                        style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                        &nbsp;{{ $bill->amount }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-7 mb-2">
-                                <div style="display: flex; align-items: center; width: 100%;">
-                                    <strong style="white-space: nowrap; margin-right: 5px;">
-                                        <span data-lang="hi">ज्ञान भारती
-                                            संस्था कैंचू टांडा, अमरिया, पीलीभीत, उत्तर प्रदेश -
-                                        </span>
-                                        <span data-lang="en">Gyan Bharti Sanstha Kainchu Tanda, Amaria,
-                                            Pilibhit, Uttar Pradesh
-                                        </span>
-                                    </strong>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-5 mb-2">
-                                <div style="display: flex; align-items: center; width: 100%;">
-                                    <strong style="white-space: nowrap; margin-right: 5px;">
-                                        <span data-lang="hi">शाखा</span>
-                                        <span data-lang="en">Branch</span>
-                                    </strong>
-                                    <div
-                                        style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                        &nbsp;{{ $bill->branch }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-8 mb-2">
-                                <div style="display: flex; align-items: center; width: 100%;">
-                                    <strong style="white-space: nowrap; margin-right: 5px;">
-                                        <span data-lang="hi">केंद्र</span>
-                                        <span data-lang="en">Center</span>
-                                    </strong>
-                                    <div
-                                        style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                        &nbsp;{{ $bill->centre }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-4 mb-2">
-                                <div style="display: flex; align-items: center; width: 100%;">
-                                    <strong style="white-space: nowrap; margin-right: 5px;">
-                                        <span data-lang="hi">की तिथि से</span>
-                                        <span data-lang="en">from date</span>
-                                    </strong>
-                                    <div
-                                        style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                        &nbsp;{{ $bill->date }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-12 mb-2">
-                                <div style="display: flex; align-items: center; width: 100%;">
-                                    <strong style="white-space: nowrap; margin-right: 5px;">
-                                        <span data-lang="hi"> को कार्य </span>
-                                        <span data-lang="en">work to</span>
-                                    </strong>
-                                    <div
-                                        style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                        &nbsp;{{ $bill->work }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 mb-2">
-                                <div style="display: flex; align-items: center; width: 100%;">
-                                    <strong style="white-space: nowrap; margin-right: 5px;">
-                                        <span data-lang="hi">भुगतान का तरीका</span>
-                                        <span data-lang="en">Payment Method</span>
-
-                                    </strong>
-                                    <div
-                                        style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                        &nbsp;{{ $bill->payment_method }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-6 mb-2">
-                                <div style="display: flex; align-items: center; width: 100%;">
-                                    <strong style="white-space: nowrap; margin-right: 5px;">
-                                        <span data-lang="hi"></span>
-                                        <span data-lang="en">date</span>
-                                    </strong>
-                                    <div
-                                        style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                        &nbsp;{{ $bill->transaction_date }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- Show Account details --}}
-                            @if ($bill->payment_method === 'Account')
-                                <div class="col-sm-12 mb-2">
-                                    <div style="display: flex; align-items: center; width: 100%;">
-                                        <strong style="white-space: nowrap; margin-right: 5px;">
-                                            <span data-lang="hi">खाता संख्या</span>
-                                            <span data-lang="en">Account No</span>
-                                        </strong>
-                                        <div
-                                            style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                            &nbsp;{{ $bill->account_number ?? 'N/A' }}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-12 mb-2">
-                                    <div style="display: flex; align-items: center; width: 100%;">
-                                        <strong style="white-space: nowrap; margin-right: 5px;">
-                                            <span data-lang="hi">बैंक का नाम</span>
-                                            <span data-lang="en">Bank Name</span>
-                                        </strong>
-                                        <div
-                                            style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                            &nbsp;{{ $bill->bank_name ?? 'N/A' }}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-12 mb-2">
-                                    <div style="display: flex; align-items: center; width: 100%;">
-                                        <strong style="white-space: nowrap; margin-right: 5px;">
-                                            <span data-lang="hi">बैंक शाखा</span>
-                                            <span data-lang="en">Bank Branch</span>
-                                        </strong>
-                                        <div
-                                            style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                            &nbsp;{{ $bill->bank_branch ?? 'N/A' }}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-12 mb-2">
-                                    <div style="display: flex; align-items: center; width: 100%;">
-                                        <strong style="white-space: nowrap; margin-right: 5px;">
-                                            <span data-lang="hi">आई.एफ.एस.सी. कोड</span>
-                                            <span data-lang="en">IFSC Code</span>
-                                        </strong>
-                                        <div
-                                            style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                            &nbsp;{{ $bill->ifsc_code ?? 'N/A' }}
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-
-                            {{-- Show Cheque No --}}
-                            @if ($bill->payment_method === 'Cheque')
-                                <div class="col-sm-12 mb-2">
-                                    <div style="display: flex; align-items: center; width: 100%;">
-                                        <strong style="white-space: nowrap; margin-right: 5px;">
-                                            <span data-lang="hi">चेक संख्या</span>
-                                            <span data-lang="en">Cheque No</span>
-                                        </strong>
-                                        <div
-                                            style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                            &nbsp;{{ $bill->cheque_no ?? 'N/A' }}
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-
-                            {{-- Show Transaction No for UPI and Cashfree --}}
-                            @if ($bill->payment_method === 'UPI' || $bill->payment_method === 'Cashfree')
-                                <div class="col-sm-12 mb-2">
-                                    <div style="display: flex; align-items: center; width: 100%;">
-                                        <strong style="white-space: nowrap; margin-right: 5px;">
-                                            <span data-lang="hi">लेन-देन संख्या</span>
-                                            <span data-lang="en">Transaction No</span>
-                                        </strong>
-                                        <div
-                                            style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                            &nbsp;{{ $bill->transaction_no ?? 'N/A' }}
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-
-                            <div class="col-sm-12 mb-2">
-                                <div style="display: flex; align-items: center; width: 100%;">
-                                    <strong style="white-space: nowrap; margin-right: 5px;">
-                                        <span data-lang="hi">के द्वारा प्राप्त किये</span>
-                                        <span data-lang="en">received by the.</span>
-                                    </strong>
-
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12 mb-2 text-center">
-                                    <strong>
-                                        <span data-lang="hi">रसीद लिख दी ताकि समय पे काम आवे</span>
-                                        <span data-lang="en">Write a receipt so that it can be used on time</span>
-                                    </strong>
-                                </div>
-                            </div>
-
-                            <div class="row d-flex justify-content-between mt-5 mb-3">
-                                <div class="col-sm-6 text-start">
-                                    <div class="row">
-                                        <div class="col-sm-12 mb-2">
-                                            <div style="display: flex; align-items: center; width: 100%;">
-                                                <strong style="white-space: nowrap; margin-right: 5px;">
-                                                    <span data-lang="hi">दिनांक</span>
-                                                    <span data-lang="en">Date</span>
-                                                </strong>
-                                                <div
-                                                    style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                                    &nbsp;{{ $bill->bill_date }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 mb-2">
-                                            <div style="display: flex; align-items: center; width: 100%;">
-                                                <strong style="white-space: nowrap; margin-right: 5px;">
-                                                    <span data-lang="hi">स्थान</span>
-                                                    <span data-lang="en">Place</span>
-                                                </strong>
-                                                <div
-                                                    style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
-                                                    &nbsp;{{ $bill->place }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 text-center">
-                                    <strong>
-                                        <span data-lang="hi">प्राप्तकर्ता के हस्ताक्षर</span>
-                                        <span data-lang="en">Recipient's signature</span>
-                                    </strong>
-                                </div>
-                            </div>
-                            <div class="row mt-5 mb-2">
-                                <div class="col-sm-6 text-center">
-                                    <strong>
-                                        <span data-lang="hi">केशियर</span>
-                                        <span data-lang="en">Cashier</span>
-                                    </strong>
-                                </div>
-                                <div class="col-sm-6 text-center">
-                                    <strong>
-                                        <span data-lang="hi">डाइरेक्टर/सचिव</span>
-                                        <span data-lang="en">Director/Sachiv</span>
-                                    </strong>
-                                </div>
+                                @else
+                                    <p class="text-muted mt-2 no-print">Not attached</p>
+                                @endif
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
-            <script>
-                function setLanguage(lang) {
-                    document.querySelectorAll('[data-lang]').forEach(el => {
-                        el.style.display = el.getAttribute('data-lang') === lang ? 'inline' : 'none';
-                    });
-                }
-                window.onload = () => setLanguage('en'); // Set Eng as default
-            </script>
-            <script>
-                function togglePM(show) {
-                    document.getElementById('pmSignatureBox').classList.toggle('d-none', !show);
-                    document.getElementById('pmShowBtnBox').classList.toggle('d-none', show);
-                }
+        </div>
+    </div>
+    <script>
+        function setLanguage(lang) {
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                el.style.display = el.getAttribute('data-lang') === lang ? 'inline' : 'none';
+            });
+        }
+        window.onload = () => setLanguage('en'); // Set Eng as default
+    </script>
+    <script>
+        function togglePM(show) {
+            document.getElementById('pmSignatureBox').classList.toggle('d-none', !show);
+            document.getElementById('pmShowBtnBox').classList.toggle('d-none', show);
+        }
 
-                function toggleDirector(show) {
-                    document.getElementById('directorSignatureBox').classList.toggle('d-none', !show);
-                    document.getElementById('directorShowBtnBox').classList.toggle('d-none', show);
-                }
-            </script>
-        @endsection
+        function toggleDirector(show) {
+            document.getElementById('directorSignatureBox').classList.toggle('d-none', !show);
+            document.getElementById('directorShowBtnBox').classList.toggle('d-none', show);
+        }
+    </script>
+@endsection

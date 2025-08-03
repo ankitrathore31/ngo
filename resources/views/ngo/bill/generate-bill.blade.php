@@ -29,10 +29,10 @@
         </div>
 
         <div id="sansthaBillContainer" style="display: none;" class="card border p-3 container mt-5">
-            <form method="POST" action="{{ route('store-bill') }}">
+            <form method="POST" action="{{ route('store-gbs-bill') }}">
                 @csrf
                 <div class="row mt-3">
-                    <div class="col-sm-6 mb-3">
+                    <div class="col-sm-4 mb-3">
                         <label for="bill_no">Bill/Voucher No:</label>
                         <input type="text" id="bill_no" name="bill_no" class="form-control"
                             value="{{ old('bill_no') }}" required>
@@ -41,7 +41,24 @@
                         @enderror
                     </div>
 
-                    <div class=" col-sm-6 mb-3">
+                    <div class="col-md-4 mb-3">
+                        <label for="academic_session" class=" bold">Session <span class="login-danger">*</span></label>
+                        <select class="form-control @error('academic_session') is-invalid @enderror" name="academic_session"
+                            id="academic_session" required>
+                            <option value="">Select Session</option>
+                            @foreach ($data as $session)
+                                <option value="{{ $session->session_date }}"
+                                    {{ old('academic_session') == $session->session_date ? 'selected' : '' }}>
+                                    {{ $session->session_date }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('academic_session')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class=" col-sm-4 mb-3">
                         <label for="date">Date:</label>
                         <input type="date" id="date" name="date" class="form-control" value="{{ old('date') }}"
                             required>
@@ -53,7 +70,6 @@
 
                 <div class="row">
                     <div class="col-sm-12">
-                        {{-- <h5 class="mb-2">- SELLER DEATILS</h5> --}}
                         <div class="mb-3">
                             <label for="shop">Shop:</label>
                             <input type="text" id="shop" name="shop" class="form-control"
@@ -98,6 +114,47 @@
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
+
+                        <div class=" form-group mb-3">
+                            <label for="block" class="form-label">Block: <span class="text-danger">*</span></label>
+                            <input type="text" name="block" id="block"
+                                class="form-control @error('block') is-invalid @enderror" value="{{ old('block') }}"
+                                required>
+                            @error('block')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        @php
+                            $districtsByState = config('districts');
+                        @endphp
+                        <div class=" form-group mb-3">
+                            <label for="stateSelect" class="form-label">State: <span class="text-danger">*</span></label>
+                            <select class="form-control @error('state') is-invalid @enderror" name="state"
+                                id="stateSelect" required>
+                                <option value="">Select State</option>
+                                @foreach ($districtsByState as $state => $districts)
+                                    <option value="{{ $state }}" {{ old('state') == $state ? 'selected' : '' }}>
+                                        {{ $state }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('state')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+
+                        </div>
+
+                        <div class=" form-group mb-3">
+                            <label for="districtSelect" class="form-label">District: <span
+                                    class="text-danger">*</span></label>
+                            <select class="form-control @error('district') is-invalid @enderror" name="district"
+                                id="districtSelect" required>
+                                <option value="">Select District</option>
+                            </select>
+                            @error('district')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
                     </div>
                 </div>
 
@@ -133,9 +190,9 @@
                     </div>
                     <div class="col-md-2">
                         <label for="igst">IGST (%)</label>
-                        <input type="number" id="igst" name="igst" class="form-control" value="0"
-                            onchange="updateTotal()">
+                        <input type="number" id="igst" class="form-control" value="0" readonly>
                     </div>
+
                 </div>
 
                 <div class="text-end mb-2">
@@ -151,7 +208,7 @@
         </div>
 
         <div id="personBillContainer" style="display: none;" class="card border p-3 container mt-5">
-            <form method="POST" action="{{ route('store-gbs-bill') }}">
+            <form method="POST" action="{{ route('store-person-bill') }}">
                 @csrf
                 <div class="row">
                     <div class="col-md-4 mb-3">
@@ -547,18 +604,21 @@
                 total += parseFloat(cell.textContent);
             });
 
-            // Get GST percentage values
+            // Get CGST and SGST percentage values
             const cgstPercent = parseFloat(document.getElementById('cgst').value) || 0;
             const sgstPercent = parseFloat(document.getElementById('sgst').value) || 0;
-            const igstPercent = parseFloat(document.getElementById('igst').value) || 0;
+
+            // IGST is the sum of CGST and SGST
+            const igstPercent = cgstPercent + sgstPercent;
+            document.getElementById('igst').value = igstPercent.toFixed(2);
 
             // Calculate GST amounts
             const cgstAmount = (total * cgstPercent) / 100;
             const sgstAmount = (total * sgstPercent) / 100;
-            const igstAmount = (total * igstPercent) / 100;
+            const igstAmount = cgstAmount + sgstAmount;
 
             // Calculate grand total
-            const grandTotal = total + cgstAmount + sgstAmount + igstAmount;
+            const grandTotal = total + igstAmount;
 
             // Update DOM
             document.getElementById('total-amount').textContent = total.toFixed(2);
@@ -567,6 +627,7 @@
             document.getElementById('igst-amount').textContent = igstAmount.toFixed(2);
             document.getElementById('grand-total').textContent = grandTotal.toFixed(2);
         }
+
 
 
         function removeRow(btn) {

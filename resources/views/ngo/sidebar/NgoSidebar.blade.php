@@ -683,13 +683,15 @@
                                         Bill/Voucher</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('gbs-bill-list'))
-                                <li><a class="dropdown-item" href="{{ route('gbs-bill-list') }}">GBS Person
+                                <li><a class="dropdown-item" href="{{ route('person-bill-list') }}">GBS Person
                                         Bill/Voucher List</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('sanstha-bill-list'))
-                                <li><a class="dropdown-item" href="{{-- route('sanstha-bill-list') --}}">GBS Sanstha
+                                <li><a class="dropdown-item" href="{{ route('gbs-bill-list') }}">GBS Sanstha
                                         Bill/Voucher List</a></li>
                             @endif
+                            <li><a class="dropdown-item" href="{{-- route('gbs-bill-list') --}}">
+                                    Vaindar Registration /Account No</a></li>
                         </ul>
                     </li>
                 @endif
@@ -701,24 +703,35 @@
                         $user->hasPermission('daily-report') ||
                         $user->hasPermission('date-wise-report') ||
                         $user->hasPermission('remaining-amount') ||
-                        $user->hasPermission('year-wise-report'))
+                        $user->hasPermission('daily-work') ||
+                        $user->hasPermission('income-list') ||
+                        $user->hasPermission('expenditure-list'))
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
                             <i class="fas fa-book"></i> CASH BOOK
                         </a>
                         <ul class="dropdown-menu bg-primary">
-                            @if (!$isStaff || $user->hasPermission('daily-report'))
+                            @if (!$isStaff || $user->hasPermission('daily-work'))
+                                <li><a class="dropdown-item" href="#">Daily Work Lsit</a></li>
+                            @endif
+                            @if (!$isStaff || $user->hasPermission('income-list'))
+                                <li><a class="dropdown-item" href="{{route('list.income')}}">Income List</a></li>
+                            @endif
+                            @if (!$isStaff || $user->hasPermission('expenditure-list'))
+                                <li><a class="dropdown-item" href="{{route('expenditure.list')}}">Expenditure List</a></li>
+                            @endif
+                            {{-- @if (!$isStaff || $user->hasPermission('daily-report'))
                                 <li><a class="dropdown-item" href="#">Daily Report (Graph)</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('date-wise-report'))
                                 <li><a class="dropdown-item" href="#">Date-wise Report</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('remaining-amount'))
+                            @endif --}}
+                            {{-- @if (!$isStaff || $user->hasPermission('remaining-amount'))
                                 <li><a class="dropdown-item" href="#">Remaining Amount</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('year-wise-report'))
                                 <li><a class="dropdown-item" href="#">Year-wise Report</a></li>
-                            @endif
+                            @endif --}}
                         </ul>
                     </li>
                 @endif

@@ -6,6 +6,7 @@ use App\Models\HeadOrganization;
 use App\Models\Member;
 use App\Models\Organization;
 use App\Models\OrganizationMember;
+use App\Models\Problem;
 
 if(!function_exists('print_hello')){
     function print_hello(){
@@ -104,3 +105,18 @@ if(!function_exists('organizationGroup')){
         return $data;
     }
 }
+
+if(!function_exists('totalProblem')){
+    function totalProblem(){
+        $data = Problem::where('status', 0)->count();
+        return $data;
+    }
+}
+
+if(!function_exists('totalSolution')){
+    function totalSolution(){
+        $data = Problem::where('status', 1)->count();
+        return $data;
+    }
+}
+
