@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeControlller;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BeneficiarieController;
 use App\Http\Controllers\BillController;
+use App\Http\Controllers\CashBookController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\RegistrationController;
@@ -332,12 +333,18 @@ Route::controller(BillController::class)->group(function () {
     Route::get('ngo/view-bill/{id}', 'ViewBill')->Middleware('auth')->name('view-bill');
     Route::get('ngo/delete-bill/{id}', 'DeleteBill')->middleware('auth')->name('delete-bill');
     Route::get('ngo/generate-bill', 'GenerateBill')->middleware('auth')->name('generate-bill');
+    Route::post('ngo/store-person-bill', 'StorePersonBill')->middleware('auth')->name('store-person-bill');
+    Route::get('ngo/edit-person=bill/{id}', 'EditPersonBill')->middleware('auth')->name('edit-person-bill');
+    Route::post('ngo/update-person-bill/{id}', 'UdatePersonBill')->middleware('auth')->name('update-person-bill');
+    Route::get('ngo/delete-person-bill/{id}', 'DeletePersonBill')->middleware('auth')->name('delete-person-bill');
+    Route::get('ngo/person-bill-list', 'PersonBillList')->middleware('auth')->name('person-bill-list');
+    Route::get('ngo/view-person-bill/{id}', 'ViewPersonBill')->Middleware('auth')->name('view-person-bill');
     Route::post('ngo/store-gbs-bill', 'StoreGbsBill')->middleware('auth')->name('store-gbs-bill');
-    Route::get('ngo/edit-gbs=bill/{id}', 'EditGbsBill')->middleware('auth')->name('edit-gbs-bill');
-    Route::post('ngo/update-gbs-bill/{id}', 'UdateGbsBill')->middleware('auth')->name('update-gbs-bill');
+    Route::get('ngo/edit-gbs-bill/{id}', 'EditGbsBill')->middleware('auth')->name('edit-gbs-bill');
+    Route::post('ngo/update-gbs-bill/{id}', 'UpdateGbsBill')->middleware('auth')->name('update-gbs-bill');
     Route::get('ngo/delete-gbs-bill/{id}', 'DeleteGbsBill')->middleware('auth')->name('delete-gbs-bill');
     Route::get('ngo/gbs-bill-list', 'GbsBillList')->middleware('auth')->name('gbs-bill-list');
-    Route::get('ngo/view-gbs-bill/{id}', 'ViewGbsBill')->Middleware('auth')->name('view-gbs-bill');
+    Route::get('ngo/view-gbs-bill/{id}', 'ViewGbsBill')->middleware('auth')->name('view-gbs-bill');
 });
 
 Route::controller(WorkPlanController::class)->group(function () {
@@ -406,5 +413,9 @@ Route::controller(OrganizationController::class)->group(function () {
     Route::get('ngo/group-member-list/{id}', 'GroupMemberList')->middleware('auth')->name('list.group.member');
 });
 
+Route::controller(CashBookController::class)->middleware('auth')->group(function(){
+    Route::get('ngo/income-list', 'IncomeList')->name('list.income');
+    Route::get('ngo/expenditure-list', 'ExpenditureList')->name('expenditure.list');
+});
 
 require __DIR__ . '/auth.php';

@@ -11,8 +11,11 @@ use App\Models\User;
 use App\Models\academic_session;
 use App\Models\Activity;
 use App\Models\beneficiarie;
+use App\Models\Bill;
+use App\Models\Bill_Voucher;
 use App\Models\Donation;
 use App\Models\donor_data;
+use App\Models\GbsBill;
 use App\Models\Member;
 use App\Models\Staff;
 use Illuminate\Support\Facades\Session;
@@ -207,17 +210,19 @@ class NgoController extends Controller
 
     public function ngo()
     {
-        // $stats = get_bene_stats();
+        // regsitration data
         $allbene = beneficiarie::count();
         $penbene = beneficiarie::where('status', 0)->count();
         $apbene = beneficiarie::where('status', 1)->count();
         $rebene = Beneficiarie::onlyTrashed()->count();
+        // acativity data 
         $allacti = Activity::count();
         $todayacti = Activity::whereDate('created_at', Carbon::today())->count();
         $totalStaff = Staff::count();
         $allmem = Member::count();
         $appmem = Member::where('status', 1)->count();
         $penmem = Member::where('status', 0)->count();
+        // donation data 
         $offlinedonate = Donation::sum('amount');
         $succdonate = donor_data::where('status', 'Successful')->sum('amount');
         $totaldonation = $offlinedonate + $succdonate;
@@ -227,6 +232,49 @@ class NgoController extends Controller
             ->sum('amount');
 
         $todaydonate = $todayOffline + $todayOnline;
+
+        // cost data 
+        // Total sum of all amounts
+        $billTotal = Bill::with('items')->get()
+            ->sum(fn($bill) => $bill->items->sum(fn($item) => $item->qty * $item->rate));
+
+        $voucherTotal = Bill_Voucher::with('items')->get()
+            ->sum(fn($voucher) => $voucher->items->sum(fn($item) => $item->qty * $item->rate));
+
+        $gbsTotal = GbsBill::sum('amount');
+
+        $totalCostAmount = $billTotal + $voucherTotal + $gbsTotal;
+
+        // Today's total sum amount
+        $billToday = Bill::with('items')->whereDate('date', now())->get()
+            ->sum(fn($bill) => $bill->items->sum(fn($item) => $item->qty * $item->rate));
+
+        $voucherToday = Bill_Voucher::with('items')->whereDate('date', now())->get()
+            ->sum(fn($voucher) => $voucher->items->sum(fn($item) => $item->qty * $item->rate));
+
+        $gbsToday = GbsBill::whereDate('bill_date', now())->sum('amount');
+
+        $todayCostAmount = $billToday + $voucherToday + $gbsToday;
+
+        // Income Data 
+        // Total income amount
+        $onlineTotal = donor_data::where('status', 'Successful')->sum('amount');
+        $offlineTotal = Donation::sum('amount');
+        $totalIncome = $onlineTotal + $offlineTotal;
+
+        // Today's income amount
+        $today = now()->toDateString();
+        $onlineToday = donor_data::where('status', 'Successful')
+            ->whereDate('created_at', $today)
+            ->sum('amount');
+        $offlineToday = Donation::whereDate('created_at', $today)->sum('amount');
+
+        $todayIncome = $onlineToday + $offlineToday;
+
+        // Remaing Balance 
+        // Remaining balance (income - cost)
+        $remainingBalance = $totalIncome - $totalCostAmount;
+
         return view('ngo.dashboard', compact(
             'allbene',
             'penbene',
@@ -241,7 +289,12 @@ class NgoController extends Controller
             'todaydonate',
             'offlinedonate',
             'totaldonation',
-            'totalStaff'
+            'totalStaff',
+            'totalCostAmount',
+            'todayCostAmount',
+            'totalIncome',
+            'todayIncome',
+            'remainingBalance'
         ));
     }
 }

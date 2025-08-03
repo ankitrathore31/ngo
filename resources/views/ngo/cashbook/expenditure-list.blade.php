@@ -1,4 +1,4 @@
-@extends('home.layout.MasterLayout')
+@extends('ngo.layout.master')
 @Section('content')
     <style>
         @page {
@@ -77,10 +77,12 @@
 
             thead {
                 display: table-header-group;
+                /* Keeps header on each page */
             }
 
             tfoot {
-                display: table-footer-group;
+                display: table-row-group;
+                /* Shows only at the end, not on every page */
             }
 
             .print-red-bg {
@@ -106,11 +108,11 @@
     <div class="wrapper">
         <div class="container-fluid mt-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Organization Group List</h5>
+                <h5 class="mb-0">Expenditure List</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
-                        <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Organization</li>
+                        <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Expenditure</li>
                     </ol>
                 </nav>
             </div>
@@ -120,71 +122,50 @@
                     {{ session('success') }}
                 </div>
             @endif
-            <div class="row">
-                <form method="GET" action="{{ route('organization.groups', $id) }}" class="row g-3 mb-4">
-                    <div class="col-md-3 col-sm-4">
-                        <select name="session" id="session" class="form-control">
+
+            <div class="row mb-3">
+                <form method="GET" action="{{ route('expenditure.list') }}" class="row g-3 align-items-end">
+                    <div class="col-md-3">
+                        <label>Session</label>
+                        <select name="session_filter" class="form-control">
                             <option value="">All Sessions</option>
-                            @foreach ($data as $s)
-                                <option value="{{ $s->session_date }}"
-                                    {{ request('session_filter') == $s->session_date ? 'selected' : '' }}>
-                                    {{ $s->session_date }}
-                                </option>
+                            @foreach ($session as $s)
+                                <option value="{{ $s }}" {{ request('session_filter') == $s ? 'selected' : '' }}>
+                                    {{ $s }}</option>
                             @endforeach
                         </select>
                     </div>
-
                     <div class="col-md-3">
-                        <input type="text" name="name" class="form-control" value="{{ request('name') }}"
-                            placeholder="Search by Group Name">
+                        <label>Bill/Voucher/Invoice No.</label>
+                        <input type="number" name="bill_no" class="form-control" value="{{ request('bill_no') }}">
                     </div>
-
-                    @php
-                        $districtsByState = config('districts');
-                    @endphp
-                    <div class="col-md-3 col-sm-6 form-group mb-3">
-                        <select class="form-control @error('state') is-invalid @enderror" name="state" id="stateSelect">
-                            <option value="">Select State</option>
-                            @foreach ($districtsByState as $state => $districts)
-                                <option value="{{ $state }}" {{ old('state') == $state ? 'selected' : '' }}>
-                                    {{ $state }}
-                                </option>
-                            @endforeach
+                    <div class="col-md-3">
+                        <label>Shop/Farm / Name</label>
+                        <input type="text" name="name" class="form-control" value="{{ request('name') }}">
+                    </div>
+                    <div class="col-md-3">
+                        <label>Today Filter</label>
+                        <select name="today" class="form-control" onchange="this.form.submit()">
+                            <option value="">-- Select --</option>
+                            <option value="1" {{ request('today') ? 'selected' : '' }}>Today</option>
                         </select>
-                        @error('state')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-
                     </div>
-                    <div class="col-md-3 col-sm-6 form-group mb-3">
-                        <select class="form-control @error('district') is-invalid @enderror" name="district"
-                            id="districtSelect">
-                            <option value="">Select District</option>
-                        </select>
-                        @error('district')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-
                     <div class="col-md-3">
-                        <input type="text" name="block" class="form-control" value="{{ request('block') }}"
-                            placeholder="Search by Block">
+                        <label>Start Date</label>
+                        <input type="date" name="start_date" class="form-control" value="{{ request('start_date') }}">
                     </div>
-
-                     <div class="col-md-3">
-                        <input type="text" name="address" class="form-control" value="{{ request('address') }}"
-                            placeholder="Search by Village">
-                    </div>
-
                     <div class="col-md-3">
-                        <button type="submit" class="btn btn-primary">Search</button>
-                        <a href="{{ route('organization.groups', $id) }}" class="btn btn-info text-white">Reset</a>
+                        <label>End Date</label>
+                        <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}">
+                    </div>
+                    <div class="col-md-12 text-end mt-2">
+                        <button type="submit" class="btn btn-primary me-2">Search</button>
+                        <a href="{{ route('expenditure.list') }}" class="btn btn-info text-white me-2">Reset</a>
+                        <button type="button" onclick="printTable()" class="btn btn-secondary">Print Table</button>
                     </div>
                 </form>
             </div>
-            <div class="row">
-                <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
-            </div>
+
             <div class="card shadow-sm printable">
                 <div class="card-body table-responsive">
                     <div class="text-center mb-4 border-bottom pb-2">
@@ -207,7 +188,8 @@
                                         {{-- <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर
                                             प्रदेश -
                                             262121</span> --}}
-                                        <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit, UP
+                                        <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit,
+                                            UP
                                             -
                                             262121</span>
                                     </b></h6>
@@ -225,78 +207,45 @@
                         <thead class="table-primary">
                             <tr>
                                 <th>Sr. No.</th>
-                                <th>Organization Name</th>
-                                <th>Group ID.</th>
-                                <th>Group Name</th>
-                                <th>Formation Date</th>
-                                <th>Address</th>
-                                <th>Block</th>
-                                <th>District</th>
-                                <th>State</th>
+                                <th>Bill/Voucher/Invoice No.</th>
+                                <th>Bill/Voucher/Invoice Date</th>
+                                <th>Shop/Farm / Name</th>
+                                <th>Father/Husband Name</th>
+                                <th>Shop/Farm / Name/Address</th>
+                                <th>Shop/Farm / Name/Mobile No.</th>
                                 <th>Session</th>
-                                <th>Member List</th>
+                                <th>Amount</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($group as $item)
+                            @foreach ($records as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $item->headOrganization ? $item->headOrganization->name : '-' }}</td>
-                                    <td>{{ $item->organization_no }}</td>
-                                    <td>{{ $item->name }}</td>
-                                    <td>{{ \carbon\carbon::parse($item->formation_date)->format('d-m-Y') }}</td>
-                                    <td>{{ $item->address }}</td>
-                                    <td>{{ $item->block }}</td>
-                                    <td>{{ $item->district }}</td>
-                                    <td>{{ $item->state }}</td>
-                                    <td>{{ $item->academic_session ?? 'N/A' }}</td>
-                                    <td class="no-print">
-                                        <a href="{{ route('show.group.member', $item->id) }}"
-                                            class="btn btn-success btn-sm px-3">
-                                            Member List
-                                        </a>
-                                    </td>
+                                    <td>{{ $item['bill_no'] }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($item['bill_date'])->format('d-m-Y') }}</td>
+                                    <td>{{ $item['shop'] ?? $item['name'] }}</td>
+                                    <td>{{ $item['name'] }}</td>
+                                    <td>{{ $item['address'] }}</td>
+                                    <td>{{ $item['mobile'] ?? '-' }}</td>
+                                    <td>{{ $item['session'] ?? '-' }}</td>
+                                    <td>{{ number_format($item['amount'], 2) }}</td>
                                 </tr>
                             @endforeach
-
                         </tbody>
+                        <tfoot class="table-light">
+                            <tr>
+                                <th colspan="8" class="text-end">Total Amount:</th>
+                                <th>{{ number_format($totalAmount, 2) }}</th>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
-
         </div>
     </div>
-
     <script>
         function printTable() {
             window.print();
         }
-    </script>
-    <script>
-        const allDistricts = @json($districtsByState);
-        const oldDistrict = "{{ old('district') }}";
-        const oldState = "{{ old('state') }}";
-
-        function populateDistricts(state) {
-            const districtSelect = document.getElementById('districtSelect');
-            districtSelect.innerHTML = '<option value="">Select District</option>';
-
-            if (allDistricts[state]) {
-                allDistricts[state].forEach(function(district) {
-                    const selected = (district === oldDistrict) ? 'selected' : '';
-                    districtSelect.innerHTML += `<option value="${district}" ${selected}>${district}</option>`;
-                });
-            }
-        }
-
-        // Initial load if editing or validation failed
-        if (oldState) {
-            populateDistricts(oldState);
-        }
-
-        // On state change
-        document.getElementById('stateSelect').addEventListener('change', function() {
-            populateDistricts(this.value);
-        });
     </script>
 @endsection

@@ -275,8 +275,6 @@ class StaffController extends Controller
         return redirect()->route('staff-list')->with('success', 'Staff updated successfully!');
     }
 
-
-
     public function staffList(Request $request)
     {
         $data = academic_session::all();
@@ -342,6 +340,7 @@ class StaffController extends Controller
         $signatures = Signature::pluck('file_path', 'role');
         return view('ngo.staff.view-staff', compact('record', 'signatures'));
     }
+
 
 
 }
