@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\academic_session;
+use App\Models\Sallary;
 use App\Models\Signature;
 use App\Models\Staff;
 use App\Models\User;
@@ -339,6 +340,48 @@ class StaffController extends Controller
         $record = Staff::findorFail($id);
         $signatures = Signature::pluck('file_path', 'role');
         return view('ngo.staff.view-staff', compact('record', 'signatures'));
+    }
+
+    public function staffListLetter(Request $request)
+    {
+        $data = academic_session::all();
+        $staffquery = Staff::query();
+
+        if ($request->filled('session_filter')) {
+            $staffquery->where('academic_session', $request->session_filter);
+        }
+
+        if ($request->filled('application_no')) {
+            $staffquery->where('application_no', $request->application_no);
+        }
+
+        if ($request->filled('name')) {
+            $staffquery->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        if ($request->filled('block')) {
+            $staffquery->where('block', 'like', '%' . $request->block . '%');
+        }
+
+        if ($request->filled('state')) {
+            $staffquery->where('state', $request->state);
+        }
+
+        if ($request->filled('district')) {
+            $staffquery->where('district', $request->district);
+        }
+
+        $staff = $staffquery->orderBy('created_at', 'asc')->get();
+        $states = config('states');
+        return view('ngo.staff.staff-list-letter', compact('states', 'data', 'staff'));
+    }
+
+    public function ViewAppointment($id)
+    {
+        $staff = Staff::findorFail($id);
+        $salary = Sallary::where('position', $staff->position)->first();
+        $signatures = Signature::pluck('file_path', 'role');
+        return view('ngo.staff.appointment-letter', compact('staff', 'signatures','salary'));
     }
 
 

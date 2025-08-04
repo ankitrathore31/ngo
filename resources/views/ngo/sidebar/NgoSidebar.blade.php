@@ -371,7 +371,7 @@
                                 <li><a class="dropdown-item" href="{{ route('staff-list') }}">Staff List</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('appointment-letter'))
-                                <li><a class="dropdown-item" href="#">Staff Appointment Letter</a></li>
+                                <li><a class="dropdown-item" href="{{route('staff.list.letter')}}">Staff Appointment Letter</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('resign-letter'))
                                 <li><a class="dropdown-item" href="#">Staff Resign Letter</a></li>

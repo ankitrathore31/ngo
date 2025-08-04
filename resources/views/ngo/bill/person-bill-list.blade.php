@@ -52,7 +52,7 @@
                             <tr>
                                 <th>Sr. No.</th>
                                 <th>Date</th>
-                                <th>Work Category</th>
+                                <th>Project / Work Category</th>
                                 <th>Name</th>
                                 <th>Father/Husband Name</th>
                                 <th>Address</th>

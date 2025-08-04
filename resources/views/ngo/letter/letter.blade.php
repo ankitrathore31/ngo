@@ -256,80 +256,81 @@
                 </div>
             </div>
         </div>
-        <script>
-            function setLanguage(lang) {
-                document.querySelectorAll('[data-lang]').forEach(el => {
-                    el.style.display = el.getAttribute('data-lang') === lang ? 'inline' : 'none';
-                });
+    </div>
+    <script>
+        function setLanguage(lang) {
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                el.style.display = el.getAttribute('data-lang') === lang ? 'inline' : 'none';
+            });
+        }
+        window.onload = () => setLanguage('en'); // Set Eng as default
+    </script>
+    <script>
+        // --- PM Logic ---
+        const pmInput = document.getElementById('pmInput');
+        const pmAttachBtn = document.getElementById('pmAttachBtn');
+        const pmPreview = document.getElementById('pmPreview');
+        const pmContainer = document.getElementById('pmPreviewContainer');
+        const pmRemoveBtn = document.getElementById('pmRemoveBtn');
+
+        pmAttachBtn.onclick = () => pmInput.click();
+
+        pmInput.onchange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    pmPreview.src = e.target.result;
+                    pmContainer.style.display = 'block';
+                    pmRemoveBtn.classList.remove('d-none');
+                };
+                reader.readAsDataURL(file);
             }
-            window.onload = () => setLanguage('en'); // Set Eng as default
-        </script>
-        <script>
-            // --- PM Logic ---
-            const pmInput = document.getElementById('pmInput');
-            const pmAttachBtn = document.getElementById('pmAttachBtn');
-            const pmPreview = document.getElementById('pmPreview');
-            const pmContainer = document.getElementById('pmPreviewContainer');
-            const pmRemoveBtn = document.getElementById('pmRemoveBtn');
+        };
 
-            pmAttachBtn.onclick = () => pmInput.click();
+        pmRemoveBtn.onclick = () => {
+            pmInput.value = '';
+            pmContainer.style.display = 'none';
+            pmRemoveBtn.classList.add('d-none');
+        };
 
-            pmInput.onchange = (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        pmPreview.src = e.target.result;
-                        pmContainer.style.display = 'block';
-                        pmRemoveBtn.classList.remove('d-none');
-                    };
-                    reader.readAsDataURL(file);
-                }
-            };
+        // --- Director Logic ---
+        const directorInput = document.getElementById('directorInput');
+        const directorAttachBtn = document.getElementById('directorAttachBtn');
+        const directorPreview = document.getElementById('directorPreview');
+        const directorContainer = document.getElementById('directorPreviewContainer');
+        const directorRemoveBtn = document.getElementById('directorRemoveBtn');
 
-            pmRemoveBtn.onclick = () => {
-                pmInput.value = '';
-                pmContainer.style.display = 'none';
-                pmRemoveBtn.classList.add('d-none');
-            };
+        directorAttachBtn.onclick = () => directorInput.click();
 
-            // --- Director Logic ---
-            const directorInput = document.getElementById('directorInput');
-            const directorAttachBtn = document.getElementById('directorAttachBtn');
-            const directorPreview = document.getElementById('directorPreview');
-            const directorContainer = document.getElementById('directorPreviewContainer');
-            const directorRemoveBtn = document.getElementById('directorRemoveBtn');
-
-            directorAttachBtn.onclick = () => directorInput.click();
-
-            directorInput.onchange = (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        directorPreview.src = e.target.result;
-                        directorContainer.style.display = 'block';
-                        directorRemoveBtn.classList.remove('d-none');
-                    };
-                    reader.readAsDataURL(file);
-                }
-            };
-
-            directorRemoveBtn.onclick = () => {
-                directorInput.value = '';
-                directorContainer.style.display = 'none';
-                directorRemoveBtn.classList.add('d-none');
-            };
-        </script>
-        <script>
-            function togglePM(show) {
-                document.getElementById('pmSignatureBox').classList.toggle('d-none', !show);
-                document.getElementById('pmShowBtnBox').classList.toggle('d-none', show);
+        directorInput.onchange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    directorPreview.src = e.target.result;
+                    directorContainer.style.display = 'block';
+                    directorRemoveBtn.classList.remove('d-none');
+                };
+                reader.readAsDataURL(file);
             }
+        };
 
-            function toggleDirector(show) {
-                document.getElementById('directorSignatureBox').classList.toggle('d-none', !show);
-                document.getElementById('directorShowBtnBox').classList.toggle('d-none', show);
-            }
-        </script>
-    @endsection
+        directorRemoveBtn.onclick = () => {
+            directorInput.value = '';
+            directorContainer.style.display = 'none';
+            directorRemoveBtn.classList.add('d-none');
+        };
+    </script>
+    <script>
+        function togglePM(show) {
+            document.getElementById('pmSignatureBox').classList.toggle('d-none', !show);
+            document.getElementById('pmShowBtnBox').classList.toggle('d-none', show);
+        }
+
+        function toggleDirector(show) {
+            document.getElementById('directorSignatureBox').classList.toggle('d-none', !show);
+            document.getElementById('directorShowBtnBox').classList.toggle('d-none', show);
+        }
+    </script>
+@endsection

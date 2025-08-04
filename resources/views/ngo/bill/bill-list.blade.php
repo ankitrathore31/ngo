@@ -53,7 +53,7 @@
                                 <th>Sr. No.</th>
                                 <th>Bill No.</th>
                                 <th>Bill Date</th>
-                                <th>Work Category</th>
+                                <th>Project / Work Category</th>
                                 <th>Name</th>
                                 <th>Shop/Farm</th>
                                 <th>Address</th>
