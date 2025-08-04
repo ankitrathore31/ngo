@@ -50,21 +50,21 @@
 
                 <div class="col-sm-6 mb-2">
                     <div class="bg-light p-3 rounded border h-100">
-                        <small class="text-muted">Project Name</small>
+                        <small class="text-muted">Project/Work Name</small>
                         <div class="fw-bold text-dark"><strong>{{ $project->name }}</strong></div>
                     </div>
                 </div>
 
                 <div class="col-sm-6 mb-2">
                     <div class="bg-light p-3 rounded border h-100">
-                        <small class="text-muted">Project Category</small>
+                        <small class="text-muted">Project/Work Category</small>
                         <div class="fw-bold text-dark"><strong>{{ $project->category }}</strong></div>
                     </div>
                 </div>
 
                 <div class="col-sm-6 mb-2">
                     <div class="bg-light p-3 rounded border h-100">
-                        <small class="text-muted">Project Sub Category</small>
+                        <small class="text-muted">Project Description</small>
                         <div class="fw-bold text-dark"><strong>{{ $project->sub_category }}</strong></div>
                     </div>
                 </div>

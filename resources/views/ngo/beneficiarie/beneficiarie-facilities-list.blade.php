@@ -137,58 +137,16 @@
                             </select>
                         </div>
 
-
-                        <div class="col-md-4">
+                        <div class="col-md-4 mb-3">
                             <select id="category_filter" name="category_filter"
-                                class="form-control @error('category_filter') is-invalid @enderror"
-                                onchange="this.form.submit()">
+                                class="form-control @error('category_filter') is-invalid @enderror">
                                 <option value="">-- Select Facilities Category --</option>
-                                <option value="Education" {{ request('category_filter') == 'Education' ? 'selected' : '' }}>
-                                    Education</option>
-                                <option value="Peace Talk"
-                                    {{ request('category_filter') == 'Peace Talk' ? 'selected' : '' }}>Peace Talk
-                                </option>
-                                <option value="Environment"
-                                    {{ request('category_filter') == 'Environment' ? 'selected' : '' }}>Environment
-                                </option>
-                                <option value="Food" {{ request('facilities_category') == 'Food' ? 'selected' : '' }}>Food
-                                </option>
-                                <option value="Skill Development"
-                                    {{ request('category_filter') == 'Skill Development' ? 'selected' : '' }}>Skill
-                                    Development</option>
-                                <option value="Women Empowerment"
-                                    {{ request('category_filter') == 'Women Empowerment' ? 'selected' : '' }}>Women
-                                    Empowerment</option>
-                                <option value="Awareness"
-                                    {{ request('category_filter') == 'Awareness' ? 'selected' : '' }}>Awareness
-                                </option>
-                                <option value="Cultural Program"
-                                    {{ request('category_filter') == 'Cultural Program' ? 'selected' : '' }}>Cultural
-                                    Program</option>
-                                <option value="Clean Campaign"
-                                    {{ request('category_filter') == 'Clean Campaign' ? 'selected' : '' }}>Clean
-                                    Campaign</option>
-                                <option value="Health Mission"
-                                    {{ request('category_filter') == 'Health Mission' ? 'selected' : '' }}>Health
-                                    Mission</option>
-                                <option value="Poor Alleviation"
-                                    {{ request('category_filter') == 'Poor Alleviation' ? 'selected' : '' }}>Poor
-                                    Alleviation</option>
-                                <option value="Religious Program"
-                                    {{ request('category_filter') == 'Religious Program' ? 'selected' : '' }}>Religious
-                                    Program</option>
-                                <option value="Agriculture Program"
-                                    {{ request('category_filter') == 'Agriculture Program' ? 'selected' : '' }}>
-                                    Agriculture Program</option>
-                                <option value="Drinking Water"
-                                    {{ request('category_filter') == 'Drinking Water' ? 'selected' : '' }}>Drinking
-                                    Water</option>
-                                <option value="Natural Disaster"
-                                    {{ request('category_filter') == 'Natural Disaster' ? 'selected' : '' }}>Natural
-                                    Disaster</option>
-                                <option value="Animal Service"
-                                    {{ request('category_filter') == 'Animal Service' ? 'selected' : '' }}>Animal
-                                    Service</option>
+                                @foreach ($category as $cat)
+                                    <option value="{{ $cat->category }}"
+                                        {{ request('category_filter') == $cat->category ? 'selected' : '' }}>
+                                        {{ $cat->category }}
+                                    </option>
+                                @endforeach
                             </select>
                             @error('category_filter')
                                 <span class="text-danger">{{ $message }}</span>

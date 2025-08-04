@@ -214,7 +214,7 @@
                                 <th>Shop/Farm / Name/Address</th>
                                 <th>Shop/Farm / Name/Mobile No.</th>
                                 <th>Session</th>
-                                <th>Amount</th>
+                                <th>Expenditure Amount</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -234,7 +234,7 @@
                         </tbody>
                         <tfoot class="table-light">
                             <tr>
-                                <th colspan="8" class="text-end">Total Amount:</th>
+                                <th colspan="8" class="text-end">Total Expenditure Amount:</th>
                                 <th>{{ number_format($totalAmount, 2) }}</th>
                             </tr>
                         </tfoot>

@@ -205,9 +205,9 @@
                                 <th>Sr. No.</th>
                                 <th>Project Image</th>
                                 <th>Project Code</th>
-                                <th>project Name</th>
-                                <th>Category</th>
-                                <th>Sub Category</th>
+                                <th>project/Work Name</th>
+                                <th>Project/Work Category</th>
+                                <th>Project Description</th>
                                 <th>Project Cost</th>
                                 <th>Session</th>
                                 <th class="no-print">Report</th>

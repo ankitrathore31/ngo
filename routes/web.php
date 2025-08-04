@@ -150,6 +150,10 @@ Route::controller(SocialActivityController::class)->group(function () {
     Route::get('ngo/view-event/{id}', 'viewEvent')->middleware('auth')->name('view-event');
     Route::get('ngo/edit-event/{id}', 'editEvent')->middleware('auth')->name('edit-event');
     Route::post('ngo/update-event/{id}', 'updateEvent')->middleware('auth')->name('update-event');
+    Route::get('ngo/category-list', 'CategoryList')->middleware('auth')->name('category.list');
+    Route::get('ngo/add-category', 'AddCategory')->middleware('auth')->name('add.category');
+    Route::post('ngo/store-category', 'StoreCategory')->middleware('auth')->name('store.category');
+    Route::get('ngo/category-delete/{id}', 'DeleteCategory')->middleware('auth')->name('remove.category');
 });
 
 Route::middleware('auth')->group(function () {

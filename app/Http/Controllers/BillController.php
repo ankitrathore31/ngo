@@ -6,6 +6,7 @@ use App\Models\academic_session;
 use App\Models\Bill;
 use App\Models\Bill_Item;
 use App\Models\Bill_Voucher;
+use App\Models\Category;
 use App\Models\GbsBill;
 use App\Models\Signature;
 use App\Models\Voucher_Item;
@@ -17,7 +18,8 @@ class BillController extends Controller
     {
         $person = Bill_Voucher::get();
         $data = academic_session::all();
-        return view('ngo.bill.feed-bill', compact('data','person'));
+        $category = Category::orderBy('category', 'asc')->get();
+        return view('ngo.bill.feed-bill', compact('data','person','category'));
     }
 
     public function StoreBill(Request $request)
@@ -26,6 +28,7 @@ class BillController extends Controller
             'bill_no'            => $request->bill_no,
             'date'               => $request->date,
             'academic_session'   => $request->academic_session,
+            'work_category'      => $request->work_category,
             // Seller details
             'shop'               => $request->shop,
             'role'               => $request->role,
@@ -96,7 +99,8 @@ class BillController extends Controller
 
         $bill_items = Voucher_Item::where('bill_voucher_id', $bill_id)->get();
         $signatures = Signature::pluck('file_path', 'role');
-        return view('ngo.bill.edit-bill', compact('bill', 'bill_items', 'signatures'));
+        $category = Category::orderBy('category', 'asc')->get();
+        return view('ngo.bill.edit-bill', compact('bill', 'bill_items', 'signatures','category'));
     }
 
     public function UpdateBill(Request $request, $id)
@@ -108,6 +112,7 @@ class BillController extends Controller
             'shop' => $request->shop,
             'role' => $request->role,
             'name' => $request->s_name,
+            'work_category' => $request->work_category,
             'address' => $request->s_address,
             'mobile' => $request->s_mobile,
             'email' => $request->s_email,
@@ -158,7 +163,8 @@ class BillController extends Controller
     {
         $states = config('states');
         $data = academic_session::all();
-        return view('ngo.bill.generate-bill', compact('states', 'data'));
+        $category = Category::orderBy('category', 'asc')->get();
+        return view('ngo.bill.generate-bill', compact('states', 'data','category'));
     }
 
     public function StorePersonBill(Request $request)
@@ -187,6 +193,7 @@ class BillController extends Controller
             'branch_name' => 'nullable|string',
             'ifsc_code' => 'nullable|string',
             'place' => 'required|string',
+            'work_category' => 'required',
         ]);
 
         $bill = GbsBill::create($validated);
@@ -200,7 +207,8 @@ class BillController extends Controller
         $states = config('states');
         $data = academic_session::all();
         $bill = GbsBill::find($id);
-        return view('ngo.bill.edit-person-bill', compact('states', 'data', 'bill'));
+        $category = Category::orderBy('category', 'asc')->get();
+        return view('ngo.bill.edit-person-bill', compact('states', 'data', 'bill','category'));
     }
 
     public function UdatePersonBill(Request $request, $id)
@@ -230,6 +238,7 @@ class BillController extends Controller
             'branch_name' => 'nullable|string',
             'ifsc_code' => 'nullable|string',
             'place' => 'required|string',
+            'work_category' => 'required',
         ]);
 
         $bill = GbsBill::findOrFail($id);
@@ -293,6 +302,7 @@ class BillController extends Controller
             'bill_no'            => $request->bill_no,
             'date'               => $request->date,
             'academic_session'   => $request->academic_session,
+            'work_category'      => $request->work_category,
             'shop'               => $request->shop,
             'name'             => $request->name,
             'email'          => $request->email,
@@ -364,7 +374,8 @@ class BillController extends Controller
         $bill_items = Bill_Item::where('bill_id', $bill_id)->get();
         $data = academic_session::all();
         $states = config('states');
-        return view('ngo.bill.edit-gbs-bill', compact('gbsBill', 'bill_items', 'data', 'states'));
+        $category = Category::orderBy('category', 'asc')->get();
+        return view('ngo.bill.edit-gbs-bill', compact('gbsBill', 'bill_items', 'data', 'states','category'));
     }
 
     public function UpdateGbsBill(Request $request, $id)
@@ -374,6 +385,7 @@ class BillController extends Controller
             'bill_no'            => $request->bill_no,
             'date'               => $request->date,
             'academic_session'   => $request->academic_session,
+            'work_category'      => $request->work_category,
             'shop'               => $request->shop,
             'name'             => $request->name,
             'email'          => $request->email,

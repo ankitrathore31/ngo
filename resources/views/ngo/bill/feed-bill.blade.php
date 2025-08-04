@@ -54,6 +54,16 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+                       <div class="col-md-4 mb-3">
+                            <label for="" class="form-label">Work Category <span class="text-danger">*</span></label>
+                            <select class="form-control select @error('work_category') is-invalid @enderror"
+                                name="work_category" required>
+                                <option value="" selected>Select Category</option>
+                                @foreach ($category as $item)
+                                    <option value="{{ old('work_category',$item->category ) }}">{{$item->category}}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
                 </div>
 

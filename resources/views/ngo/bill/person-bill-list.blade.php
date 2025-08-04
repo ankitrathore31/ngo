@@ -52,6 +52,7 @@
                             <tr>
                                 <th>Sr. No.</th>
                                 <th>Date</th>
+                                <th>Work Category</th>
                                 <th>Name</th>
                                 <th>Father/Husband Name</th>
                                 <th>Address</th>
@@ -70,6 +71,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ \Carbon\Carbon::parse($item->date)->format('d-m-Y') }} </td>
+                                    <td>{{ $item->work_category }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->guardian_name }}</td>
                                     <td>{{ $item->village }},

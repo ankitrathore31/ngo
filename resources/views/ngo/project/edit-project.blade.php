@@ -43,46 +43,19 @@
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Project Name <span class="text-danger">*</span></label>
+                            <label class="form-label">Project/Work Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror" name="name"
                                 value="{{ old('name', $project->name) }}" required>
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Project Category <span class="text-danger">*</span></label>
+                            <label class="form-label">Project/Work Category <span class="text-danger">*</span></label>
                             <select class="form-control @error('category') is-invalid @enderror" name="category" required>
                                 <option value="">Select Category</option>
-                                @php
-                                    $categories = [
-                                        'Public Project',
-                                        'Government Project',
-                                        'Education',
-                                        'Environment',
-                                        'Social Awareness Project',
-                                        'Cultural Project',
-                                        'Sanitation Project',
-                                        'Health Project',
-                                        'Poor Alleviation',
-                                        'Women Empowerment',
-                                        'Social Problem',
-                                        'Peace Talks Project',
-                                        'Skill Development',
-                                        'Religious Project',
-                                        'Agriculture Project',
-                                        'Labour Tools Distribution',
-                                        'Drinking Water',
-                                        'Ration Distribution',
-                                        'Disaster Management',
-                                        'Economic Help',
-                                        'Cow Service',
-                                        'Animal Food',
-                                        'Other Activities',
-                                    ];
-                                @endphp
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category }}"
-                                        {{ $project->category == $category ? 'selected' : '' }}>
-                                        {{ $category }}
+                                @foreach ($category as $cat)
+                                    <option value="{{ $cat->category }}"
+                                        {{ $project->category == $cat->category ? 'selected' : '' }}>
+                                        {{ $cat->category }}
                                     </option>
                                 @endforeach
                             </select>

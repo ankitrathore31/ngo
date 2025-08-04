@@ -314,7 +314,7 @@
                             <tr>
                                 <th colspan="2" class="text-end">Total Records:</th>
                                 <th colspan="3" class="text-center">{{ $donations->count() }}</th>
-                                <th colspan="2" class="text-center">Total Amount:</th>
+                                <th colspan="2" class="text-center">Total Donation Amount:</th>
                                 <th colspan="3" class="text-center">
                                     <strong>{{ number_format($totalAmount, 2) }}</strong>
                                 </th>

@@ -29,38 +29,18 @@
                     </div> --}}
                     <div class="row">
                         <div class="col-md-6 mb-3 form-group local-from">
-                            <label class="form-label">Program name <span class="text-danger">*</span></label>
+                            <label class="form-label">Program/Work name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control @error('program_name') is-invalid @enderror"
                                 name="program_name" placeholder="Program Name" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="" class="form-label">Program Category <span class="text-danger">*</span></label>
+                            <label for="" class="form-label">Program/Work Category <span class="text-danger">*</span></label>
                             <select class="form-control select @error('program_category') is-invalid @enderror"
                                 name="program_category" required>
                                 <option value="" selected>Select Category</option>
-                                <option value="Public Program">Public Program</option>
-                                <option value="Government Program">Government Program</option>
-                                <option value="Education">Education</option>
-                                <option value="Environment">Environment</option>
-                                <option value="Social Awareness Program">Social Awareness Program</option>
-                                <option value="Cultural Program">Cultural Program</option>
-                                <option value="Sanitation Program">Sanitation Program</option>
-                                <option value="Health Program">Health Program</option>
-                                <option value="Poor Alleviation">Poor Alleviation</option>
-                                <option value="Women Empowerment">Women Empowerment</option>
-                                <option value="Social Problem">Social Problem</option>
-                                <option value="Peace Talks Program">Peace Talks Program</option>
-                                <option value="Skill Development">Skill Development</option>
-                                <option value="Religious Program">Religious Program</option>
-                                <option value="Agriculture Program">Agriculture Program</option>
-                                <option value="Labour Tools Distribution">Labour Tools Distribution</option>
-                                <option value="Drinking Water">Drinking Water</option>
-                                <option value="Ration Distribution">Ration Distribution</option>
-                                <option value="Disaster Management">Disaster Management</option>
-                                <option value="Economic Help">Economic Help</option>
-                                <option value="Cow Service">Cow Service</option>
-                                <option value="Animal Food">Animal Food</option>
-                                <option value="Other Activities">Other Activities</option>
+                                @foreach ($category as $item)
+                                    <option value="{{ old('category',$item->category ) }}">{{$item->category}}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>

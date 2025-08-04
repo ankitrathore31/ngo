@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\academic_session;
 use App\Models\BudgetItem;
+use App\Models\Category;
 use App\Models\Project;
 use App\Models\ProjectReport;
 use App\Models\Signature;
@@ -15,7 +16,8 @@ class ProjectController extends Controller
     public function AddProject()
     {
         $data = academic_session::all();
-        return view('ngo.project.add-project', compact('data'));
+        $category = Category::orderBy('category', 'asc')->get();
+        return view('ngo.project.add-project', compact('data','category'));
     }
 
     public function StoreProject(Request $request)
@@ -53,7 +55,8 @@ class ProjectController extends Controller
     {
         $project = Project::findorFail($id);
         $data = academic_session::all();
-        return view('ngo.project.edit-project', compact('data', 'project'));
+        $category = Category::orderBy('category', 'asc')->get();
+        return view('ngo.project.edit-project', compact('data', 'project','category'));
     }
 
     public function UpdateProject(Request $request, $id)
@@ -134,7 +137,8 @@ class ProjectController extends Controller
 
         $project = $query->get();
         $data = academic_session::all();
-        return view('ngo.project.project-list', compact('data', 'project'));
+        $category = Category::orderBy('category', 'asc')->get();
+        return view('ngo.project.project-list', compact('data', 'project','category'));
     }
 
     public function AddProjectReport($id)

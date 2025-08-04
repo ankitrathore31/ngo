@@ -225,8 +225,7 @@
                     @csrf
                     <div class="col-md-6 mb-3">
                         <label for="session" class="form-label">Session <span class="text-danger">*</span></label>
-                        <select class="form-control @error('session') is-invalid @enderror" name="session"
-                            required>
+                        <select class="form-control @error('session') is-invalid @enderror" name="session" required>
                             <option value="">Select Session</option>
                             @foreach ($session as $session)
                                 <option value="{{ $session->session_date }}"
@@ -246,31 +245,10 @@
                         <select name="facilities_category" id="facilities_category"
                             class="form-select @error('facilities_category') is-invalid @enderror" required>
                             <option value="">-- Select Category --</option>
-                            @php
-                                $categories = [
-                                    'Education',
-                                    'Peace Talk',
-                                    'Environment',
-                                    'Food',
-                                    'Skill Development',
-                                    'Women Empowerment',
-                                    'Awareness',
-                                    'Cultural Program',
-                                    'Clean Campaign',
-                                    'Health Mission',
-                                    'Poor Alleviation',
-                                    'Religious Program',
-                                    'Agriculture Program',
-                                    'Drinking Water',
-                                    'Natural Disaster',
-                                    'Animal Service',
-                                ];
-                            @endphp
-
-                            @foreach ($categories as $category)
-                                <option value="{{ $category }}"
-                                    {{ old('facilities_category', $survey->facilities_category) == $category ? 'selected' : '' }}>
-                                    {{ $category }}
+                            @foreach ($category as $cat)
+                                <option value="{{ $cat->category }}"
+                                    {{ old('facilities_category', $survey->facilities_category) == $cat->category ? 'selected' : '' }}>
+                                    {{ $cat->category }}
                                 </option>
                             @endforeach
                         </select>
@@ -286,7 +264,7 @@
                     </div>
 
                     <button type="submit" class="btn btn-success">Update Beneficiarie Facilities</button>
-                    
+
                 </form>
 
             </div>

@@ -32,6 +32,21 @@
                         value="{{ old('date', $bill->date) }}" required>
                 </div>
 
+
+                <div class=" mb-3">
+                    <label for="" class="form-label">Work Category <span class="text-danger">*</span></label>
+                    <select class="form-control select @error('work_category') is-invalid @enderror" name="work_category"
+                        required>
+                        <option value="">Select Category</option>
+                        @foreach ($category as $item)
+                            <option value="{{ $item->category }}"
+                                {{ old('work_category', $bill->work_category ?? '') == $item->category ? 'selected' : '' }}>
+                                {{ $item->category }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <!-- SELLER DETAILS -->
                 <h5 class="mt-4">- SELLER DETAILS</h5>
 
