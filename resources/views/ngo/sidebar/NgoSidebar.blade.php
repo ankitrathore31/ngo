@@ -174,6 +174,7 @@
                             @if (!$isStaff || $user->hasPermission('signature'))
                                 <li><a class="dropdown-item" href="{{ route('signature') }}">Signature</a></li>
                             @endif
+                            <li><a class="dropdown-item" href="{{ route('category.list') }}">Work Category</a></li>
                             @if (!$isStaff || $user->hasPermission('course-list'))
                                 <li><a class="dropdown-item" href="#">Course List</a></li>
                             @endif
@@ -280,11 +281,13 @@
                         </a>
                         <ul class="dropdown-menu bg-primary">
                             @if (!$isStaff || $user->hasPermission('add-head-group'))
-                                <li><a class="dropdown-item" href="{{ route('add.head.organization') }}">Add Organization</a>
+                                <li><a class="dropdown-item" href="{{ route('add.head.organization') }}">Add
+                                        Organization</a>
                                 </li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('group-head-list'))
-                                <li><a class="dropdown-item" href="{{ route('list.head.organization') }}">Organization List</a>
+                                <li><a class="dropdown-item"
+                                        href="{{ route('list.head.organization') }}">Organization List</a>
                                 </li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('add-group'))
@@ -374,7 +377,7 @@
                                 <li><a class="dropdown-item" href="#">Staff Resign Letter</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('staff-salary'))
-                                <li><a class="dropdown-item" href="{{route('list.salary')}}">Staff Salary</a></li>
+                                <li><a class="dropdown-item" href="{{ route('list.salary') }}">Staff Salary</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('staff-idcard'))
                                 <li><a class="dropdown-item" href="{{ route('staff-idcard') }}">Staff ID Card</a>
@@ -716,10 +719,11 @@
                                 <li><a class="dropdown-item" href="#">Daily Work Lsit</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('income-list'))
-                                <li><a class="dropdown-item" href="{{route('list.income')}}">Income List</a></li>
+                                <li><a class="dropdown-item" href="{{ route('list.income') }}">Income List</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('expenditure-list'))
-                                <li><a class="dropdown-item" href="{{route('expenditure.list')}}">Expenditure List</a></li>
+                                <li><a class="dropdown-item" href="{{ route('expenditure.list') }}">Expenditure
+                                        List</a></li>
                             @endif
                             {{-- @if (!$isStaff || $user->hasPermission('daily-report'))
                                 <li><a class="dropdown-item" href="#">Daily Report (Graph)</a></li>

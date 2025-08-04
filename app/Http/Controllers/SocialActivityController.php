@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Activity;
 use Illuminate\Http\Request;
 use App\Models\academic_session;
+use App\Models\Category;
 use App\Models\Event;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
@@ -38,7 +39,8 @@ class SocialActivityController extends Controller
     {
         $data = academic_session::all()->sortByDesc('session_date');
         Session::put('all_academic_session', $data);
-        return view('ngo.activity.addactivity', compact('data'));
+        $category = Category::orderBy('category', 'asc')->get();
+        return view('ngo.activity.addactivity', compact('data','category'));
     }
 
     public function saveactivity(Request $request)
@@ -274,5 +276,46 @@ class SocialActivityController extends Controller
         $event->save();
 
         return redirect()->route('event-list')->with('success', 'Event Update successfully!');
+    }
+
+    public function CategoryList(Request $request)
+    {
+        $query = Category::query();
+
+        if ($request->name) {
+            $query->where('category', 'like', '%' . $request->name . '%');
+        }
+
+
+        $category = $query->orderBy('created_at', 'asc')->get();
+        return view('ngo.activity.category-list', compact('category'));
+    }
+
+
+    public function AddCategory()
+    {
+        return view('ngo.activity.work-category');
+    }
+
+    public function StoreCategory(Request $request)
+    {
+        $request->validate([
+            'category' => 'required|string|max:255',
+        ]); 
+
+        $category = new Category;
+        $category->category = $request->category;
+        $category->save();
+
+        return redirect()->route('category.list')->with('success', 'Category Added Successfully! ');
+    }
+
+     public function DeleteCategory($id)
+    {
+ 
+        $category = Category::findorFail($id);
+        $category->delete();
+
+        return redirect()->back()->with('success', 'Category Deleted Successfully! ');
     }
 }

@@ -29,44 +29,14 @@
                             <select class="form-control select @error('program_category') is-invalid @enderror"
                                 name="program_category" required>
                                 <option value="" selected>Select Category</option>
-
-                                @php
-                                    $categories = [
-                                        'Public Program',
-                                        'Government Program',
-                                        'Education',
-                                        'Environment',
-                                        'Social Awareness Program',
-                                        'Cultural Program',
-                                        'Sanitation Program',
-                                        'Health Program',
-                                        'Poor Alleviation',
-                                        'Women Empowerment',
-                                        'Social Problem',
-                                        'Peace Talks Program',
-                                        'Skill Development',
-                                        'Religious Program',
-                                        'Agriculture Program',
-                                        'Labour Tools Distribution',
-                                        'Drinking Water',
-                                        'Ration Distribution',
-                                        'Disaster Management',
-                                        'Economic Help',
-                                        'Cow Service',
-                                        'Animal Food',
-                                        'Other Activities',
-                                    ];
-                                @endphp
-
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category }}"
-                                        {{ isset($activity) && $activity->program_category == $category ? 'selected' : '' }}>
-                                        {{ $category }}
+                                @foreach ($category as $cat)
+                                    <option value="{{ $cat->category }}"
+                                        {{ isset($activity) && $activity->program_category == $cat->category ? 'selected' : '' }}>
+                                        {{ $cat->category }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
-
                     </div>
                     <div class="row">
                         <div class="col-md-4 mb-3">

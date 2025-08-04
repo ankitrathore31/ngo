@@ -110,7 +110,7 @@
                                 {{ \Carbon\Carbon::parse($beneficiarie->registraition_date)->format('d-m-Y') }}
                             </div>
                             <div class="col-sm-4 mb-3">
-                                <strong>Registration No:</strong> {{ $beneficiarie->registration_no}}
+                                <strong>Registration No:</strong> {{ $beneficiarie->registration_no }}
                             </div>
                             <div class="col-sm-4 mb-3">
                                 <strong>Session:</strong> {{ $beneficiarie->academic_session }}
@@ -345,14 +345,21 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="survey_officer" class="form-label">Survey Officer:</label>
-                            <input type="text" name="survey_officer"
-                                class="form-control @error('survey_officer') is-invalid @enderror"
-                                value="{{ old('survey_officer') }} ">
+                            <select name="survey_officer"
+                                class="form-control @error('survey_officer') is-invalid @enderror">
+                                <option value="">Select Survey Officer</option>
+                                @foreach ($staff as $person)
+                                    <option value="{{ $person->id }}"
+                                        {{ old('survey_officer') == $person->id ? 'selected' : '' }}>
+                                        {{ $person->name }}
+                                    </option>
+                                @endforeach
+                            </select>
                             @error('survey_officer')
                                 <span class="text-danger">{{ $message }}</span>
                             </div>
-                            @enderror
-                        </div>
+                        @enderror
+                    </div>
 
                     <div class="d-flex justify-content-between">
                         <button type="submit" class="btn btn-success">Add Beneficiarie Survey</button>

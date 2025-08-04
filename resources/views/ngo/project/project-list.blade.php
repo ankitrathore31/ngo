@@ -90,8 +90,7 @@
                     <form method="GET" action="{{ route('list.project') }}" class="row g-3 mb-4">
                         <div class="col-md-4">
                             {{-- <label for="session_filter" class="form-label">Select Session</label> --}}
-                            <select name="session_filter" id="session_filter" class="form-control"
-                                >
+                            <select name="session_filter" id="session_filter" class="form-control">
                                 <option value="">All Sessions</option> <!-- Default option to show all -->
                                 @foreach ($data as $session)
                                     <option value="{{ $session->session_date }}"
@@ -103,81 +102,22 @@
                         </div>
 
 
-                        <div class="col-md-4">
-                            {{-- <label for="category_filter" class="form-label">Search by Category</label> --}}
+                        <div class="col-md-4 mb-3">
                             <select id="category_filter" name="category_filter"
-                                class="form-control @error('category_filter') is-invalid @enderror"
-                                >
-                                <option value="">-- Select Category --</option>
-                                <option value="Public Program"
-                                    {{ request('category_filter') == 'Public Program' ? 'selected' : '' }}>Public Program
-                                </option>
-                                <option value="Government Program"
-                                    {{ request('category_filter') == 'Government Program' ? 'selected' : '' }}>Government
-                                    Program</option>
-                                <option value="Education" {{ request('category_filter') == 'Education' ? 'selected' : '' }}>
-                                    Education</option>
-                                <option value="Environment"
-                                    {{ request('category_filter') == 'Environment' ? 'selected' : '' }}>Environment</option>
-                                <option value="Social Awareness Program"
-                                    {{ request('category_filter') == 'Social Awareness Program' ? 'selected' : '' }}>Social
-                                    Awareness Program</option>
-                                <option value="Cultural Program"
-                                    {{ request('category_filter') == 'Cultural Program' ? 'selected' : '' }}>Cultural
-                                    Program</option>
-                                <option value="Sanitation Program"
-                                    {{ request('category_filter') == 'Sanitation Program' ? 'selected' : '' }}>Sanitation
-                                    Program</option>
-                                <option value="Health Program"
-                                    {{ request('category_filter') == 'Health Program' ? 'selected' : '' }}>Health Program
-                                </option>
-                                <option value="Poor Alleviation"
-                                    {{ request('category_filter') == 'Poor Alleviation' ? 'selected' : '' }}>Poor
-                                    Alleviation</option>
-                                <option value="Women Empowerment"
-                                    {{ request('category_filter') == 'Women Empowerment' ? 'selected' : '' }}>Women
-                                    Empowerment</option>
-                                <option value="Social Problem"
-                                    {{ request('category_filter') == 'Social Problem' ? 'selected' : '' }}>Social Problem
-                                </option>
-                                <option value="Peace Talks Program"
-                                    {{ request('category_filter') == 'Peace Talks Program' ? 'selected' : '' }}>Peace Talks
-                                    Program</option>
-                                <option value="Skill Development"
-                                    {{ request('category_filter') == 'Skill Development' ? 'selected' : '' }}>Skill
-                                    Development</option>
-                                <option value="Religious Program"
-                                    {{ request('category_filter') == 'Religious Program' ? 'selected' : '' }}>Religious
-                                    Program</option>
-                                <option value="Agriculture Program"
-                                    {{ request('category_filter') == 'Agriculture Program' ? 'selected' : '' }}>Agriculture
-                                    Program</option>
-                                <option value="Labour Tools Distribution"
-                                    {{ request('category_filter') == 'Labour Tools Distribution' ? 'selected' : '' }}>
-                                    Labour Tools Distribution</option>
-                                <option value="Drinking Water"
-                                    {{ request('category_filter') == 'Drinking Water' ? 'selected' : '' }}>Drinking Water
-                                </option>
-                                <option value="Ration Distribution"
-                                    {{ request('category_filter') == 'Ration Distribution' ? 'selected' : '' }}>Ration
-                                    Distribution</option>
-                                <option value="Disaster Management"
-                                    {{ request('category_filter') == 'Disaster Management' ? 'selected' : '' }}>Disaster
-                                    Management</option>
-                                <option value="Economic Help"
-                                    {{ request('category_filter') == 'Economic Help' ? 'selected' : '' }}>Economic Help
-                                </option>
-                                <option value="Cow Service"
-                                    {{ request('category_filter') == 'Cow Service' ? 'selected' : '' }}>Cow Service
-                                </option>
-                                <option value="Animal Food"
-                                    {{ request('category_filter') == 'Animal Food' ? 'selected' : '' }}>Animal Food
-                                </option>
-                                <option value="Other Activities"
-                                    {{ request('category_filter') == 'Other Activities' ? 'selected' : '' }}>Other
-                                    Activities</option>
+                                class="form-control @error('category_filter') is-invalid @enderror">
+                                <option value="">-- Select Facilities Category --</option>
+                                @foreach ($category as $cat)
+                                    <option value="{{ $cat->category }}"
+                                        {{ request('category_filter') == $cat->category ? 'selected' : '' }}>
+                                        {{ $cat->category }}
+                                    </option>
+                                @endforeach
                             </select>
+                            @error('category_filter')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
+
                         <div class="col-md-4 col-sm-6 form-group mb-3">
                             <input type="text" name="name" id="name"
                                 class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}"
@@ -208,8 +148,8 @@
                                 <th>Session</th>
                                 <th>Project Image</th>
                                 <th>Project Code</th>
-                                <th>project Name</th>
-                                <th>Category</th>
+                                <th>project/Work Name</th>
+                                <th>Project/Work Category</th>
                                 <th>Sub Category</th>
                                 <th>Session</th>
                                 <th class="no-print">Action</th>
@@ -222,12 +162,12 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->academic_session }}</td>
                                     <td>
-                                        <img src="{{ asset($item->image) }}" alt="image"
-                                            class="img-thumbnail" width="100">
+                                        <img src="{{ asset($item->image) }}" alt="image" class="img-thumbnail"
+                                            width="100">
                                     </td>
-                                    <td>{{ $item->name }}</td>
-                                     <td>
-                                    {{ $item->code }}</small>
+                                    <td>{{ $item->code }}</td>
+                                    <td>
+                                        {{ $item->name }}</small>
                                     </td>
                                     <td>{{ $item->category }}</td>
                                     <td>{{ $item->sub_category }}</td>
@@ -250,9 +190,9 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a href="{{ route('add.project.report', $item->id) }}" class="btn btn-sm btn-success"
-                                                title="View">
-                                                Add Report
+                                        <a href="{{ route('add.project.report', $item->id) }}"
+                                            class="btn btn-sm btn-success" title="View">
+                                            Add Report
                                         </a>
                                     </td>
                                 </tr>

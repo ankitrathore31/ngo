@@ -208,8 +208,8 @@
                                 <th>Session</th>
                                 <th>Date / Time</th>
                                 <th>Program Image</th>
-                                <th>Program Name</th>
-                                <th>Category</th>
+                                <th>Program/Work Name</th>
+                                <th>Work Category</th>
                                 <th>Address</th>
                                 <th>Session</th>
                                 <th class="no-print">Action</th>

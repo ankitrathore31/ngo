@@ -37,53 +37,33 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3 form-group local-from">
-                            <label class="form-label">Project name <span class="text-danger">*</span></label>
+                            <label class="form-label">Project/Work name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror" name="name"
                                 placeholder="Enter Project Name" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="" class="form-label">Project Category <span
+                            <label for="" class="form-label">Project/Work Category <span
                                     class="text-danger">*</span></label>
                             <select class="form-control select @error('category') is-invalid @enderror" name="category"
                                 required>
                                 <option value="" selected>Select Category</option>
-                                <option value="Public Project">Public Project</option>
-                                <option value="Government Project">Government Project</option>
-                                <option value="Education">Education</option>
-                                <option value="Environment">Environment</option>
-                                <option value="Social Awareness Project">Social Awareness Project</option>
-                                <option value="Cultural Project">Cultural Project</option>
-                                <option value="Sanitation Project">Sanitation Project</option>
-                                <option value="Health Project">Health Project</option>
-                                <option value="Poor Alleviation">Poor Alleviation</option>
-                                <option value="Women Empowerment">Women Empowerment</option>
-                                <option value="Social Problem">Social Problem</option>
-                                <option value="Peace Talks Project">Peace Talks Project</option>
-                                <option value="Skill Development">Skill Development</option>
-                                <option value="Religious Project">Religious Project</option>
-                                <option value="Agriculture Project">Agriculture Project</option>
-                                <option value="Labour Tools Distribution">Labour Tools Distribution</option>
-                                <option value="Drinking Water">Drinking Water</option>
-                                <option value="Ration Distribution">Ration Distribution</option>
-                                <option value="Disaster Management">Disaster Management</option>
-                                <option value="Economic Help">Economic Help</option>
-                                <option value="Cow Service">Cow Service</option>
-                                <option value="Animal Food">Animal Food</option>
-                                <option value="Other Activities">Other Activities</option>
+                                @foreach ($category as $item)
+                                    <option value="{{ old('category', $item->category) }}">{{ $item->category }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-md-12 mb-3">
-                            <label for="" class="form-label">Project Sub Category <span
+                            <label for="" class="form-label">Project Description <span
                                     class="text-danger">*</span></label>
-                            <input class="form-control @error('sub_category') is-invalid @enderror" name="sub_category"
-                                placeholder="Project Sub Category" value="{{ old('sub_category') }}" required>
+                            <textarea class="form-control @error('sub_category') is-invalid @enderror" name="sub_category"
+                                placeholder="Project Description" required>{{ old('sub_category') }}</textarea>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <!-- Custom File Input (hidden default) -->
-                            <input type="file" class="form-control @error('image') is-invalid @enderror"
-                                name="image" id="image" required accept="image/*" style="display: none;"
+                            <input type="file" class="form-control @error('image') is-invalid @enderror" name="image"
+                                id="image" required accept="image/*" style="display: none;"
                                 onchange="previewImage(); validateFile()">
 
                             <!-- Custom Button to Trigger File Input -->

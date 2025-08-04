@@ -165,6 +165,13 @@
                                 </strong>
                                 {{ $bill->academic_session }}
                             </div>
+
+                            <div>
+                                <strong>
+                                    <span>Work Category:</span>
+                                </strong>
+                                {{ $bill->work_category }}
+                            </div>
                         </div>
                         <div class="row mb-2">
                             {{-- <h5><strong>- SELLER DETAILS</strong></h5> --}}
