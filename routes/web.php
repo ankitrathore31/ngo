@@ -245,6 +245,9 @@ Route::controller(StaffController::class)->group(function () {
     Route::get('ngo/delete-staff/{id}', 'DeleteStaff')->middleware('auth')->name('delete-staff');
     Route::get('ngo/staff-list', 'staffList')->middleware('auth')->name('staff-list');
     Route::get('ngo/view-staff/{id}', 'ViewStaff')->middleware('auth')->name('view-staff');
+    Route::get('ngo/staff-letter-list', 'staffListLetter')->middleware('auth')->name('staff.list.letter');
+    Route::get('ngo/view-appointment/{id}', 'ViewAppointment')->middleware('auth')->name('view.appointment.letter');
+    Route::get('ngo/view-resign/{id}', 'ViewResign')->middleware('auth')->name('view.resign.letter');
 });
 
 Route::controller(SallaryController::class)->middleware('auth')->group(function () {

@@ -8,6 +8,7 @@ use App\Models\Gallery;
 use App\Models\beneficiarie;
 use App\Models\Member;
 use App\Models\academic_session;
+use App\Models\Category;
 use App\Models\Donation;
 use App\Models\Notice;
 use App\Models\Working_Area;
@@ -15,6 +16,7 @@ use App\Models\Event;
 use App\Models\HeadOrganization;
 use App\Models\Organization;
 use App\Models\OrganizationMember;
+use App\Models\Project;
 use App\Models\Staff;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
@@ -174,9 +176,20 @@ class HomeControlller extends Controller
         return view('home.event.show-event', compact('event'));
     }
 
-    public function projectpage()
+    public function projectpage(Request $request)
     {
-        return view('home.pages.project');
+        $query = Project::query();
+
+        if ($request->session_filter) {
+            $query->where('academic_session', $request->session_filter);
+        }
+        if ($request->name) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+        $project = $query->get();
+        $data = academic_session::all();
+        $category = Category::orderBy('category', 'asc')->get();
+        return view('home.pages.project', compact('data', 'project','category'));
     }
 
     public function newspage()

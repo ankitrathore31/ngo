@@ -105,7 +105,7 @@
                         <div class="col-md-4 mb-3">
                             <select id="category_filter" name="category_filter"
                                 class="form-control @error('category_filter') is-invalid @enderror">
-                                <option value="">-- Select Facilities Category --</option>
+                                <option value="">-- Select Category --</option>
                                 @foreach ($category as $cat)
                                     <option value="{{ $cat->category }}"
                                         {{ request('category_filter') == $cat->category ? 'selected' : '' }}>
@@ -148,9 +148,9 @@
                                 <th>Session</th>
                                 <th>Project Image</th>
                                 <th>Project Code</th>
-                                <th>project/Work Name</th>
-                                <th>Project/Work Category</th>
-                                <th>Sub Category</th>
+                                <th>project / Work Name</th>
+                                <th>Project / Work Category</th>
+                                <th>Project Detail</th>
                                 <th>Session</th>
                                 <th class="no-print">Action</th>
                                 <th class="no-print">Report</th>

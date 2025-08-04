@@ -168,7 +168,7 @@
 
                             <div>
                                 <strong>
-                                    <span>Work Category:</span>
+                                    <span>Project / Work Category:</span>
                                 </strong>
                                 {{ $bill->work_category }}
                             </div>

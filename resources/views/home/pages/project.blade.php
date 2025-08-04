@@ -2,216 +2,89 @@
 @Section('content')
     <div class="wrapper">
         <div class="container-fluid">
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead class="bg-info text-white">
-                        <tr>
-                            <th>Sr. No.</th>
-                            <th>Project Image</th>
-                            <th>Project Name</th>
-                            <th>Project Category</th>
-                            <th>About Us</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- <tr>
-                            <td>1</td>
-                            <td><img src="assets/images/sewing.jpg" alt="Service Image" class="img-fluid" style="max-width: 130px;"></td>
-                            <td>Sewing</td>
-                            <td>Skill Development</td>
-                            <td class="text-wrap">Empowering individuals through hands-on skill training for self-sufficiency.</td>
-                        </tr> -->
-                        <tr>
-                            <td>1</td>
-                            <td><img src="images/education.jpg" alt="Service Image" class="img-fluid"
-                                    style="max-width: 130px;"></td>
-                            <td>Free Education</td>
-                            <td>Education</td>
-                            <td>Providing free education to underprivileged children for a brighter future.</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td><img src="images/peace-talk.jpeg" alt=" Image" class="img-fluid"
-                                    style="max-width: 150px;"></td>
-                            <td>Peace Talk Meeting</td>
-                            <td>Peace Talk</td>
-                            <td>
-                                A peace talk meeting fosters dialogue and understanding to resolve conflicts and promote
-                                harmony.</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <!-- <td>16</td> -->
-                            <td><img src="images/enviroment.jpeg" alt=" Image" class="img-fluid"
-                                    style="max-width: 130px;"></td>
-                            <td>Environment Protection</td>
-                            <td>Environment</td>
-                            <td>Protecting the environment is essential for a sustainable and healthy future.</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td><img src="images/food.jpg" alt="Service Image" class="img-fluid"
-                                    style="max-width: 130px;"></td>
-                            <td>Free Food</td>
-                            <td>Food</td>
-                            <td>Providing nutritious meals to those in need, ensuring no one goes hungry </td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <!-- <td>16</td> -->
-                            <td><img src="images/silai.jpeg" alt=" Image" class="img-fluid"
-                                    style="max-width: 130px;"></td>
-                            <td>Skill Development & Training Centre</td>
-                            <td>Skill Development</td>
-                            <td>Skill development enhances abilities and knowledge, empowering individuals for better
-                                opportunities and growth.</td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td><img src="images/woman.jpg" alt=" Image" class="img-fluid"
-                                    style="max-width: 130px;"></td>
-                            <td>Save The Women</td>
-                            <td>Women Empowerment</td>
-                            <td>Empowering and protecting women through support, education, and safety initiatives. </td>
-                        </tr>
-                        <tr>
-                            <td>7</td>
-                            <td><img src="images/peace-talk.jpeg" alt=" Image" class="img-fluid"
-                                    style="max-width: 130px;"></td>
-                            <td>Social Awareness Program</td>
-                            <td>Awareness</td>
-                            <td>A Social Awareness Project on the environment can focus on educating and encouraging people
-                                to
-                                adopt eco-friendly habits. Here’s a simple project idea:</td>
-                        </tr>
-                        <tr>
-                            <td>8</td>
-                            <td><img src="images/ind.jpeg" alt=" Image" class="img-fluid"
-                                    style="max-width: 130px;"></td>
-                            <td>Cultural Project</td>
-                            <td>Cultural Program</td>
-                            <td>To promote awareness, appreciation, and preservation of diverse cultural traditions and
-                                heritage</td>
-                        </tr>
-                        <tr>
-                            <td>9</td>
-                            <td><img src="images/sanitation.PNG" alt=" Image" class="img-fluid"
-                                    style="max-width: 130px;"></td>
-                            <td>Sanitation Project</td>
-                            <td>Clean Campaign</td>
-                            <td>A sanitation project promotes hygiene, waste management, and clean environments for
-                                healthier communities.</td>
-                        </tr>
-                        <tr>
-                            <td>10</td>
-                            <td><img src="images/health.PNG" alt=" Image" class="img-fluid"
-                                    style="max-width: 130px;"></td>
-                            <td>Health Program</td>
-                            <td>Health Mission</td>
-                            <td>A health program promotes awareness, prevention, and access to healthcare for a healthier
-                                community.</td>
-                        </tr>
-                        <tr>
-                            <td>11</td>
-                            <td><img src="images/blanket.jpeg" alt=" Image" class="img-fluid"
-                                    style="max-width: 130px;"></td>
-                            <td>Help The Poor</td>
-                            <td>Poor Alleviation</td>
-                            <td>Helping the poor means providing support, resources, and opportunities for a better quality
-                                of life.</td>
-                        </tr>
-                        <tr>
-                            <td>12</td>
-                            <td><img src="images/peace-talk.jpeg" alt=" Image" class="img-fluid"
-                                    style="max-width: 130px;"></td>
-                            <td>Social Problem</td>
-                            <td>Peace Talk</td>
-                            <td>A social problem is an issue that affects society, such as poverty, unemployment, or
-                                discrimination, requiring collective solutions.</td>
-                        </tr>
-                        <tr>
-                            <td>13</td>
-                            <td><img src="images/hari-naam.PNG" alt=" Image" class="img-fluid"
-                                    style="max-width: 130px;"></td>
-                            <td>Hari Naam Mission & Mukesh</td>
-                            <td>Religious Program</td>
-                            <td>A religious program fosters spiritual growth, community bonding, and faith-based learning
-                                through prayers, teachings, and rituals.</td>
-                        </tr>
-                        <tr>
-                            <td>14</td>
-                            <td><img src="images/farmer.jpeg" alt=" Image" class="img-fluid"
-                                    style="max-width: 130px;"></td>
-                            <td>Farmer Club</td>
-                            <td>Agriculture Program</td>
-                            <td>An agriculture program promotes sustainable farming practices, innovation,
-                                and farmer empowerment for better productivity and food security.</td>
-                        </tr>
-                        <tr>
-                            <td>15</td>
-                            <td><img src="images/labour.jpeg" alt=" Image" class="img-fluid"
-                                    style="max-width: 130px;"></td>
-                            <td>Labour Tools Distribution</td>
-                            <td>Poor Alleviation</td>
-                            <td>Helping the poor means providing support, resources, and opportunities for a better quality
-                                of life.</td>
-                        </tr>
-                        <tr>
-                            <td>16</td>
-                            <td><img src="images/drink.jpeg" alt=" Image" class="img-fluid"
-                                    style="max-width: 130px;"></td>
-                            <td>Drinking Water</td>
-                            <td>Drinking Water</td>
-                            <td>Access to clean drinking water is essential for health and well-being in every community.
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>17</td>
-                            <td><img src="images/ration.PNG" alt=" Image" class="img-fluid"
-                                    style="max-width: 130px;"></td>
-                            <td>Ration Distribution</td>
-                            <td>Poor Alleviation</td>
-                            <td>Helping the poor means providing support, resources, and opportunities for a better quality
-                                of life.</td>
-                        </tr>
-                        <tr>
-                            <td>18</td>
-                            <td><img src="images/diaster.PNG" alt=" Image" class="img-fluid"
-                                    style="max-width: 130px;"></td>
-                            <td>Disaster Management</td>
-                            <td>Natural Disaster</td>
-                            <td>Helping the poor means providing support, resources, and opportunities for a better quality
-                                of life.</td>
-                        </tr>
-                        <tr>
-                            <td>19</td>
-                            <td><img src="images/economic.jpeg" alt=" Image" class="img-fluid"
-                                    style="max-width: 130px;"></td>
-                            <td>Economic Help</td>
-                            <td>Poor Alleviation</td>
-                            <td>Helping the poor means providing support, resources, and opportunities for a better quality
-                                of life.</td>
-                        </tr>
-                        <tr>
-                            <td>20</td>
-                            <td><img src="images/cow.PNG" alt=" Image" class="img-fluid" style="max-width: 130px;">
-                            </td>
-                            <td>Cow Service</td>
-                            <td>Animal Service</td>
-                            <td>Cow service promotes care, protection, and well-being of cows for a sustainable environment.
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>21</td>
-                            <td><img src="images/animal-food.PNG" alt=" Image" class="img-fluid"
-                                    style="max-width: 130px;"></td>
-                            <td>Animal Food</td>
-                            <td>Animal Service</td>
-                            <td>
-                                Animal food provides essential nutrients for the health and well-being of animals.</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="row d-flex justify-content-end">
+                <div class="col-auto  mb-3">
+                    <nav aria-label="breadcrumb  bg-white">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Project</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show">
+                    {{ session('success') }}
+                </div>
+            @endif
+            <div class="row">
+                <div class="col-md-12">
+                    <form method="GET" action="{{ route('project') }}" class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            {{-- <label for="session_filter" class="form-label">Select Session</label> --}}
+                            <select name="session_filter" id="session_filter" class="form-control">
+                                <option value="">All Sessions</option> <!-- Default option to show all -->
+                                @foreach ($data as $session)
+                                    <option value="{{ $session->session_date }}"
+                                        {{ request('session_filter') == $session->session_date ? 'selected' : '' }}>
+                                        {{ $session->session_date }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 col-sm-6 form-group mb-3">
+                            <input type="text" name="name" id="name"
+                                class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}"
+                                placeholder="Search by Project Name">
+                            @error('name')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-primary me-2">Search</button>
+                            <a href="{{ route('project') }}" class="btn btn-info text-white me-2">Reset</a>
+                        </div>
+                    </form>
+                    {{-- <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button> --}}
+                </div>
+            </div>
+            <div class="card shadow-sm">
+                <div class="card-body table-responsive printable">
+                    <table class="table table-bordered table-hover align-middle text-center">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>Session</th>
+                                <th>Project Image</th>
+                                <th>Project Code</th>
+                                <th>project / Work Name</th>
+                                <th>Project / Work Category</th>
+                                <th>Project Detail</th>
+                                <th>Session</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($project as $item)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $item->academic_session }}</td>
+                                    <td>
+                                        <img src="{{ asset($item->image) }}" alt="image" class="img-thumbnail"
+                                            width="100">
+                                    </td>
+                                    <td>{{ $item->code }}</td>
+                                    <td>
+                                        {{ $item->name }}</small>
+                                    </td>
+                                    <td>{{ $item->category }}</td>
+                                    <td>{{ $item->sub_category }}</td>
+                                    <td>{{ $item->academic_session }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

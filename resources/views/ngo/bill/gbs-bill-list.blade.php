@@ -91,7 +91,7 @@
                                 <th>Sr. No.</th>
                                 <th>Bill No.</th>
                                 <th>Bill Date</th>
-                                <th>Work Cateory</th>
+                                <th>Project / Work Cateory</th>
                                 <th>Name</th>
                                 <th>Shop/Farm</th>
                                 <th>Address</th>
