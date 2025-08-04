@@ -66,8 +66,8 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->bill_no }}</td>
-                                    <td>{{ $item->work_category }}</td>
                                     <td>{{ \Carbon\Carbon::parse($item->date)->format('d-m-Y') }} </td>
+                                    <td>{{ $item->work_category }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->shop }}</td>
                                     <td>{{ $item->address }}</td>
