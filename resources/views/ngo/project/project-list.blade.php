@@ -148,7 +148,7 @@
                                 <th>Session</th>
                                 <th>Project Image</th>
                                 <th>Project Code</th>
-                                <th>project / Work Name</th>
+                                <th>Project / Work Name</th>
                                 <th>Project / Work Category</th>
                                 <th>Project Detail</th>
                                 <th>Session</th>

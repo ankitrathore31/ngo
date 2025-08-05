@@ -42,14 +42,54 @@
         .card-wrapper {
             transition: all 0.3s ease;
         }
-    </style>
 
+        .card-hover:hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            transform: scale(1.02);
+        }
+    </style>
     <div class="wrapper">
+        <div class="container mt-5">
+            <div class="row">
+                <!-- Total Visitors Card -->
+                <div class="col-md-6 mb-4">
+                           <h5><b> - Website Traffic</b></h5>
+                    <!-- Today's Visitors Card -->
+                    <div class="card card-hover" style="background-color: rgb(240, 248, 255); transition: 0.3s;">
+                        <div class="card-body">
+                            <h5 class="card-title" style="color: rgb(25, 42, 86);">Visitors Today</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Tracked for the Current Day</h6>
+                            <p class="card-text display-4" style="color: rgb(0, 123, 255); font-weight: bold;">
+                                {{ todayVisitor() }}</p>
+                        </div>
+                    </div>
+                    <br>
+                    <!-- Total Visitors Card -->
+                    <div class="card card-hover" style="background-color: rgb(245, 245, 245); transition: 0.3s;">
+                        <div class="card-body">
+                            <h5 class="card-title" style="color: rgb(39, 174, 96);">Total Visitors</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Cumulative Count</h6>
+                            <p class="card-text display-4" style="color: rgb(22, 160, 133); font-weight: bold;">
+                                {{ totalVisitor() }}</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Visitor Pie Chart -->
+                <div class="col-md-6 mb-4">
+                    <div class="card card-hover">
+                        <div class="card-body">
+                            <h5 class="card-title">Visitors by Month</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">This Year</h6>
+                            <div class="chart-container" style="position: relative; height: 300px;">
+                                <canvas id="visitorChart"></canvas>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="container-fluid mt-5">
-            {{-- <div class="row">
-                <h1>Welcome, {{ Auth::user()->name }}</h1>
-                <p>User Type: {{ Auth::user()->user_type }}</p>
-            </div> --}}
             <div class="row g-4">
                 <!-- Total Users -->
                 <div class="col-md-4 col-sm-6">
@@ -75,22 +115,20 @@
 
                 <!-- Inactive Users -->
                 <div class="col-md-4 col-sm-6">
-                    {{-- <a href="{{ route('deactivengo-list') }}" class="card-wrapper"> --}}
-                        <div class="dashboard-card bg-warning card-wrapper">
+                    <div class="dashboard-card bg-warning card-wrapper">
                         <i class="fas fa-user-times icon"></i>
                         <div>
                             <p class="info-text">Inactive Ngo</p>
                             <h5>{{ $inactiveNgo }}</h5>
                         </div>
-                    {{-- </div> --}}
-                    </a>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-
         <div class="container-fluid mt-5">
             <div class="card m-2 shadow">
-               <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                     <h4 class="mb-0">Ngo List</h4>
                     <span class="fw-bold">Total: {{ $ngo->count() }}</span>
                 </div>
@@ -134,7 +172,8 @@
                                         </td>
                                         <td style="white-space: nowrap; width: 250px;">
                                             <div class="btn-group" role="group" style="gap: 5px;">
-                                                <a href="{{ route('view-ngo', $item->id) }}" class="btn btn-sm btn-outline-success"
+                                                <a href="{{ route('view-ngo', $item->id) }}"
+                                                    class="btn btn-sm btn-outline-success"
                                                     style="min-width: 70px; height: 35px;">View</a>
 
                                                 <a href="{{ route('edit-ngo', $item->id) }}"
@@ -160,8 +199,8 @@
                 </div>
             </div>
         </div>
-
     </div>
+
     <script>
         $(document).ready(function() {
             $('#userTable').DataTable({
@@ -173,6 +212,70 @@
                     "targets": 4
                 }]
             });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const monthlyData = @json(monthlyVisitorData());
+        const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+        ];
+
+        const ctx = document.getElementById('visitorChart').getContext('2d');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: monthLabels,
+                datasets: [{
+                    label: 'Monthly Visitors',
+                    data: monthlyData,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.8)',
+                        'rgba(54, 162, 235, 0.8)',
+                        'rgba(255, 206, 86, 0.8)',
+                        'rgba(75, 192, 192, 0.8)',
+                        'rgba(153, 102, 255, 0.8)',
+                        'rgba(255, 159, 64, 0.8)',
+                        'rgba(201, 203, 207, 0.8)',
+                        'rgba(102, 187, 106, 0.8)',
+                        'rgba(239, 83, 80, 0.8)',
+                        'rgba(123, 31, 162, 0.8)',
+                        'rgba(66, 133, 244, 0.8)',
+                        'rgba(233, 30, 99, 0.8)',
+                    ],
+                    borderRadius: 6,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'rgb(100, 100, 100)'
+                        },
+                        grid: {
+                            color: 'rgba(200,200,200,0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'rgb(100, 100, 100)'
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
         });
     </script>
 @endsection

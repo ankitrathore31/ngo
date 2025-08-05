@@ -8,6 +8,7 @@ use App\Http\Controllers\BeneficiarieController;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\CashBookController;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\NgoController;
@@ -43,11 +44,7 @@ use Illuminate\Support\Facades\DB;
 |
 */
 
-
-
-
 // *=========================== Home Controllers ======================================= *//
-
 
 
 
@@ -94,6 +91,13 @@ Route::controller(PaymentController::class)->group(function () {
     Route::get('/payment-success/{id}', 'success')->name('payment.success');
     Route::get('/checkout',  'checkout')->name('checkout');
 });
+
+Route::controller(EmailController::class)->group(function () {
+    Route::post('/email',  'StoreEmail')->name('store.email');
+    Route::get('ngo/email-list',  'EmailList')->middleware('auth')->name('email.list');
+    Route::get('ngo/email-view/{id}',  'ViewEmail')->middleware('auth')->name('view.email');
+});
+
 
 
 // *=========================== Admin Controllers ======================================= *//

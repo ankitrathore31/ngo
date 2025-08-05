@@ -996,7 +996,8 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col-md-12">
-                    <form action="mailto:gyanbhartingo600@gmail.com" method="post" enctype="text/plain">
+                    <form action="{{route('store.email')}}" method="POST" >
+                        @csrf
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
                             <input type="text" class="form-control" id="name" name="name" required>
@@ -1004,6 +1005,10 @@
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">Subject</label>
+                            <input type="text" class="form-control" id="subject" name="subject" required>
                         </div>
                         <div class="mb-3">
                             <label for="message" class="form-label">Message</label>
