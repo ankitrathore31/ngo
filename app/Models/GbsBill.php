@@ -10,6 +10,8 @@ class GbsBill extends Model
     use HasFactory;
     protected $fillable = [
         'academic_session',
+        'work_category',
+        'work_name',
         'bill_date',
         'name',
         'guardian_name',

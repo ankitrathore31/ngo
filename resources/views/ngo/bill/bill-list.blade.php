@@ -32,6 +32,21 @@
                             @endforeach
                         </select>
                     </div>
+                    <div class="col-md-4 mb-3">
+                        <select id="category_filter" name="category_filter"
+                            class="form-control @error('category_filter') is-invalid @enderror">
+                            <option value="">-- Select Category --</option>
+                            @foreach ($category as $cat)
+                                <option value="{{ $cat->category }}"
+                                    {{ request('category_filter') == $cat->category ? 'selected' : '' }}>
+                                    {{ $cat->category }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('category_filter')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
                     <div class="col-md-3 col-sm-4 mb-3">
                         <input type="number" class="form-control" name="bill_no" placeholder="Search By Bill No.">
                     </div>
@@ -51,9 +66,10 @@
                         <thead class="table-primary">
                             <tr>
                                 <th>Sr. No.</th>
+                                <th>Project / Work Category</th>
+                                <th>Project / Work Name</th>
                                 <th>Bill No.</th>
                                 <th>Bill Date</th>
-                                <th>Project / Work Category</th>
                                 <th>Name</th>
                                 <th>Shop/Farm</th>
                                 <th>Address</th>
@@ -65,27 +81,26 @@
                             @foreach ($record as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $item->work_category }}</td>
+                                    <td>{{ $item->work_name }}</td>
                                     <td>{{ $item->bill_no }}</td>
                                     <td>{{ \Carbon\Carbon::parse($item->date)->format('d-m-Y') }} </td>
-                                    <td>{{ $item->work_category }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->shop }}</td>
                                     <td>{{ $item->address }}</td>
                                     <td>{{ $item->academic_session ?? 'N/A' }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            <a href="{{ route('view-bill', $item->id) }}" class="btn btn-success btn-sm px-3">
+                                            <a href="{{ route('view-bill', $item->id) }}"
+                                                class="btn btn-success btn-sm px-3">
                                                 <i class="fa-regular fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('edit-bill', $item->id) }}"
-                                                class="btn btn-primary btn-sm"
-                                                title="Edit" >
+                                            <a href="{{ route('edit-bill', $item->id) }}" class="btn btn-primary btn-sm"
+                                                title="Edit">
                                                 <i class="fa-regular fa-edit"></i>
                                             </a>
-                                            <a href="{{ route('delete-bill', $item->id) }}"
-                                                class="btn btn-danger btn-sm "
-                                                onclick="return confirm('Do you want to delete Bill')"
-                                                title="Delete" >
+                                            <a href="{{ route('delete-bill', $item->id) }}" class="btn btn-danger btn-sm "
+                                                onclick="return confirm('Do you want to delete Bill')" title="Delete">
                                                 <i class="fa-regular fa-trash-can"></i>
                                             </a>
                                         </div>

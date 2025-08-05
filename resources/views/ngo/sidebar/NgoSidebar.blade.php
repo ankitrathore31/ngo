@@ -694,8 +694,8 @@
                                 <li><a class="dropdown-item" href="{{ route('gbs-bill-list') }}">GBS Sanstha
                                         Bill/Voucher List</a></li>
                             @endif
-                            <li><a class="dropdown-item" href="{{-- route('gbs-bill-list') --}}">
-                                    Vaindar Registration /Account No</a></li>
+                            {{-- <li><a class="dropdown-item" href="">
+                                    Vaindar Registration /Account No</a></li> --}}
                         </ul>
                     </li>
                 @endif

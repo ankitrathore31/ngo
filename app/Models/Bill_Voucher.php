@@ -13,14 +13,16 @@ class Bill_Voucher extends Model
         'bill_no',
         'date',
         'academic_session',
+        'work_category',
+        'work_name',
 
         // Seller details
         'shop',
         'role',
-        's_name',
-        's_address',
-        's_mobile',
-        's_email',
+        'name',
+        'address',
+        'mobile',
+        'email',
         's_pan',
         'gst',
 

@@ -8,18 +8,30 @@ use App\Models\Bill_Item;
 use App\Models\Bill_Voucher;
 use App\Models\Category;
 use App\Models\GbsBill;
+use App\Models\Project;
 use App\Models\Signature;
 use App\Models\Voucher_Item;
 use Illuminate\Http\Request;
 
 class BillController extends Controller
 {
-    public function AddBill()
+    public function AddBill(Request $request)
     {
         $person = Bill_Voucher::get();
         $data = academic_session::all();
-        $category = Category::orderBy('category', 'asc')->get();
-        return view('ngo.bill.feed-bill', compact('data','person','category'));
+        $categories = Category::pluck('category');
+        $allProjects = Project::select('name', 'category')->get();
+        $searchResults = [];
+
+        // Handle search if query is provided (from input box)
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $searchResults = Bill_Voucher::where('shop', 'like', "%$search%")
+                ->orWhere('name', 'like', "%$search%")
+                ->orWhere('b_name', 'like', "%$search%")
+                ->get();
+        }
+        return view('ngo.bill.feed-bill', compact('data', 'person', 'categories', 'allProjects', 'searchResults'));
     }
 
     public function StoreBill(Request $request)
@@ -29,6 +41,7 @@ class BillController extends Controller
             'date'               => $request->date,
             'academic_session'   => $request->academic_session,
             'work_category'      => $request->work_category,
+            'work_name'          => $request->work_name,
             // Seller details
             'shop'               => $request->shop,
             'role'               => $request->role,
@@ -62,34 +75,40 @@ class BillController extends Controller
     public function BillList(Request $request)
     {
         $session = academic_session::all();
+        $category = Category::orderBy('category', 'asc')->get();
 
-        // Base certificate query
+        // Start the query
         $query = Bill_Voucher::query();
 
+        // Filter by session
         if ($request->filled('session_filter')) {
             $query->where('academic_session', $request->session_filter);
         }
 
+        // Filter by category
+        if ($request->filled('category_filter')) {
+            $query->where('work_category', $request->category_filter); // Assuming 'work_category' is the column name
+        }
+
+        // Apply additional filters (bill_no, name)
+        if ($request->filled('bill_no')) {
+            $query->where('biil_no', 'like', '%' . $request->bill_no . '%'); // Check spelling: biil_no vs bill_no
+        }
+
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        // Get final filtered result
         $record = $query->orderBy('created_at', 'desc')->get();
-
-        $filtered = $record->filter(function ($record) use ($request) {
-
-            $matchesApp = $request->filled('bill_no')
-                ? str_contains($person->biil_no ?? '', $request->bill_no)
-                : true;
-
-            $matchesName = $request->filled('name')
-                ? str_contains(strtolower($person->name ?? ''), strtolower($request->name))
-                : true;
-
-            return $matchesApp && $matchesName;
-        });
 
         return view('ngo.bill.bill-list', [
             'session' => $session,
-            'record' => $filtered,
+            'record' => $record,
+            'category' => $category,
         ]);
     }
+
 
     public function EditBill($id)
     {
@@ -99,8 +118,9 @@ class BillController extends Controller
 
         $bill_items = Voucher_Item::where('bill_voucher_id', $bill_id)->get();
         $signatures = Signature::pluck('file_path', 'role');
-        $category = Category::orderBy('category', 'asc')->get();
-        return view('ngo.bill.edit-bill', compact('bill', 'bill_items', 'signatures','category'));
+        $categories = Category::pluck('category');
+        $allProjects = Project::select('name', 'category')->get();
+        return view('ngo.bill.edit-bill', compact('bill', 'bill_items', 'signatures', 'categories', 'allProjects'));
     }
 
     public function UpdateBill(Request $request, $id)
@@ -113,6 +133,7 @@ class BillController extends Controller
             'role' => $request->role,
             'name' => $request->s_name,
             'work_category' => $request->work_category,
+            'work_name'          => $request->work_name,
             'address' => $request->s_address,
             'mobile' => $request->s_mobile,
             'email' => $request->s_email,
@@ -136,7 +157,6 @@ class BillController extends Controller
 
         return redirect()->route('bill-list')->with('success', 'Bill updated successfully!');
     }
-
 
     public function ViewBill($id)
     {
@@ -163,8 +183,9 @@ class BillController extends Controller
     {
         $states = config('states');
         $data = academic_session::all();
-        $category = Category::orderBy('category', 'asc')->get();
-        return view('ngo.bill.generate-bill', compact('states', 'data','category'));
+        $categories = Category::pluck('category');
+        $allProjects = Project::select('name', 'category')->get();
+        return view('ngo.bill.generate-bill', compact('states', 'data', 'categories', 'allProjects'));
     }
 
     public function StorePersonBill(Request $request)
@@ -194,6 +215,7 @@ class BillController extends Controller
             'ifsc_code' => 'nullable|string',
             'place' => 'required|string',
             'work_category' => 'required',
+            'work_name'     => 'required',
         ]);
 
         $bill = GbsBill::create($validated);
@@ -208,7 +230,7 @@ class BillController extends Controller
         $data = academic_session::all();
         $bill = GbsBill::find($id);
         $category = Category::orderBy('category', 'asc')->get();
-        return view('ngo.bill.edit-person-bill', compact('states', 'data', 'bill','category'));
+        return view('ngo.bill.edit-person-bill', compact('states', 'data', 'bill', 'category'));
     }
 
     public function UdatePersonBill(Request $request, $id)
@@ -239,6 +261,7 @@ class BillController extends Controller
             'ifsc_code' => 'nullable|string',
             'place' => 'required|string',
             'work_category' => 'required',
+            'work_name'     => 'required',
         ]);
 
         $bill = GbsBill::findOrFail($id);
@@ -257,36 +280,47 @@ class BillController extends Controller
     }
 
     public function PersonBillList(Request $request)
-    {
-        $session = academic_session::all();
+{
+    $session = academic_session::all();
 
-        // Base certificate query
-        $query = GbsBill::query();
+    $query = GbsBill::query();
 
-        if ($request->filled('session_filter')) {
-            $query->where('academic_session', $request->session_filter);
-        }
-
-        $record = $query->orderBy('created_at', 'desc')->get();
-
-        $filtered = $record->filter(function ($record) use ($request) {
-
-            $matchesApp = $request->filled('centre')
-                ? str_contains($person->centre ?? '', $request->centre)
-                : true;
-
-            $matchesName = $request->filled('name')
-                ? str_contains(strtolower($person->name ?? ''), strtolower($request->name))
-                : true;
-
-            return $matchesApp && $matchesName;
-        });
-
-        return view('ngo.bill.person-bill-list', [
-            'session' => $session,
-            'record' => $filtered,
-        ]);
+    // Filter by session
+    if ($request->filled('session_filter')) {
+        $query->where('academic_session', $request->session_filter);
     }
+
+    // Filter by category
+    if ($request->filled('category_filter')) {
+        $query->where('category', $request->category_filter);
+    }
+
+    // Fetch all filtered data
+    $records = $query->orderBy('created_at', 'desc')->get();
+
+    // In-memory filter for centre and name
+    $filtered = $records->filter(function ($item) use ($request) {
+        $matchesCentre = $request->filled('centre')
+            ? str_contains(strtolower($item->centre ?? ''), strtolower($request->centre))
+            : true;
+
+        $matchesName = $request->filled('name')
+            ? str_contains(strtolower($item->name ?? ''), strtolower($request->name))
+            : true;
+
+        return $matchesCentre && $matchesName;
+    });
+
+    // Fetch categories for filter dropdown
+    $category = Category::orderBy('category', 'asc')->get();
+
+    return view('ngo.bill.person-bill-list', [
+        'session' => $session,
+        'record' => $filtered,
+        'category' => $category,
+    ]);
+}
+
 
     public function ViewPersonBill($id)
     {
@@ -303,6 +337,7 @@ class BillController extends Controller
             'date'               => $request->date,
             'academic_session'   => $request->academic_session,
             'work_category'      => $request->work_category,
+            'work_name'          => $request->work_name,
             'shop'               => $request->shop,
             'name'             => $request->name,
             'email'          => $request->email,
@@ -328,43 +363,51 @@ class BillController extends Controller
     }
 
     public function GbsBillList(Request $request)
-    {
-        $session = academic_session::all();
+{
+    $session = academic_session::all();
 
-        // Build query with filters
-        $query = Bill::query();
+    // Build query with filters
+    $query = Bill::query();
 
-        if ($request->filled('session_filter')) {
-            $query->where('academic_session', $request->session_filter);
-        }
-
-        if ($request->filled('bill_no')) {
-            $query->where('bill_no', 'like', '%' . $request->bill_no . '%');
-        }
-
-        if ($request->filled('name')) {
-            $query->where('name', 'like', '%' . $request->name . '%');
-        }
-
-        if ($request->filled('state')) {
-            $query->where('state', $request->state);
-        }
-
-        if ($request->filled('district')) {
-            $query->where('district', $request->district);
-        }
-
-        if ($request->filled('block')) {
-            $query->where('block', 'like', '%' . $request->block . '%');
-        }
-
-        $record = $query->orderBy('created_at', 'desc')->get();
-
-        return view('ngo.bill.gbs-bill-list', [
-            'session' => $session,
-            'record' => $record,
-        ]);
+    if ($request->filled('session_filter')) {
+        $query->where('academic_session', $request->session_filter);
     }
+
+    if ($request->filled('bill_no')) {
+        $query->where('bill_no', 'like', '%' . $request->bill_no . '%');
+    }
+
+    if ($request->filled('name')) {
+        $query->where('name', 'like', '%' . $request->name . '%');
+    }
+
+    if ($request->filled('state')) {
+        $query->where('state', $request->state);
+    }
+
+    if ($request->filled('district')) {
+        $query->where('district', $request->district);
+    }
+
+    if ($request->filled('block')) {
+        $query->where('block', 'like', '%' . $request->block . '%');
+    }
+
+    if ($request->filled('category_filter')) {
+        $query->where('category', $request->category_filter);
+    }
+
+    $record = $query->orderBy('created_at', 'desc')->get();
+
+    // Get all categories for the filter dropdown
+    $category = Category::orderBy('category', 'asc')->get();
+
+    return view('ngo.bill.gbs-bill-list', [
+        'session' => $session,
+        'record' => $record,
+        'category' => $category,
+    ]);
+}
 
 
     public function EditGbsBill($id)
@@ -375,7 +418,7 @@ class BillController extends Controller
         $data = academic_session::all();
         $states = config('states');
         $category = Category::orderBy('category', 'asc')->get();
-        return view('ngo.bill.edit-gbs-bill', compact('gbsBill', 'bill_items', 'data', 'states','category'));
+        return view('ngo.bill.edit-gbs-bill', compact('gbsBill', 'bill_items', 'data', 'states', 'category'));
     }
 
     public function UpdateGbsBill(Request $request, $id)
@@ -386,6 +429,7 @@ class BillController extends Controller
             'date'               => $request->date,
             'academic_session'   => $request->academic_session,
             'work_category'      => $request->work_category,
+            'work_name'          => $request->work_name,
             'shop'               => $request->shop,
             'name'             => $request->name,
             'email'          => $request->email,

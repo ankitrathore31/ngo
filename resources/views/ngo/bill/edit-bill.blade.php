@@ -19,6 +19,25 @@
         <div class="container mt-3">
             <form method="POST" action="{{ route('update-bill', $bill->id) }}">
                 @csrf
+                <!-- Category Dropdown -->
+                <div class="mb-3">
+                    <label class="form-label">Project / Work Category <span class="text-danger">*</span></label>
+                    <select name="work_category" id="work_category" class="form-control" required>
+                        <option value="">Select Category</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category }}" {{ $bill->work_category === $category ? 'selected' : '' }}>
+                                {{ $category }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <!-- Work Name Dropdown -->
+                <div class=" mb-3">
+                    <label class="form-label">Project / Work Name <span class="text-danger">*</span></label>
+                    <select name="work_name" id="work_name" class="form-control" required>
+                        <option value="">Select Work Name</option>
+                    </select>
+                </div>
                 <!-- BILL INFO -->
                 <div class="mb-3">
                     <label for="bill_no">Bill/Voucher/Invoice No:</label>
@@ -30,21 +49,6 @@
                     <label for="date">Date:</label>
                     <input type="date" id="date" name="date" class="form-control"
                         value="{{ old('date', $bill->date) }}" required>
-                </div>
-
-
-                <div class=" mb-3">
-                    <label for="" class="form-label">Work Category <span class="text-danger">*</span></label>
-                    <select class="form-control select @error('work_category') is-invalid @enderror" name="work_category"
-                        required>
-                        <option value="">Select Category</option>
-                        @foreach ($category as $item)
-                            <option value="{{ $item->category }}"
-                                {{ old('work_category', $bill->work_category ?? '') == $item->category ? 'selected' : '' }}>
-                                {{ $item->category }}
-                            </option>
-                        @endforeach
-                    </select>
                 </div>
 
                 <!-- SELLER DETAILS -->
@@ -71,25 +75,25 @@
                 <div class="mb-3">
                     <label for="s_name">Name:</label>
                     <input type="text" id="s_name" name="s_name" class="form-control"
-                        value="{{ old('s_name', $bill->s_name) }}" required>
+                        value="{{ old('s_name', $bill->name) }}" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="s_address">Address:</label>
                     <input type="text" id="s_address" name="s_address" class="form-control"
-                        value="{{ old('s_address', $bill->s_address) }}" required>
+                        value="{{ old('s_address', $bill->address) }}" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="s_mobile">Mobile:</label>
                     <input type="text" id="s_mobile" name="s_mobile" class="form-control"
-                        value="{{ old('s_mobile', $bill->s_mobile) }}" required>
+                        value="{{ old('s_mobile', $bill->mobile) }}" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="s_email">Email:</label>
                     <input type="text" id="s_email" name="s_email" class="form-control"
-                        value="{{ old('s_email', $bill->s_email) }}" required>
+                        value="{{ old('s_email', $bill->email) }}" required>
                 </div>
 
                 <!-- GST -->
@@ -298,5 +302,40 @@
 
             // Initial total calculation
             updateTotal();
+        </script>
+        <script>
+            const allProjects = @json($allProjects);
+            const selectedCategory = @json($bill->work_category);
+            const selectedProject = @json($bill->work_name);
+
+            const workCategorySelect = document.getElementById('work_category');
+            const workNameSelect = document.getElementById('work_name');
+
+            function populateWorkNames(category, selectedName = null) {
+                // Clear current options
+                workNameSelect.innerHTML = '<option value="">Select Work Name</option>';
+
+                // Filter and populate
+                const filtered = allProjects.filter(p => p.category === category);
+                filtered.forEach(project => {
+                    const option = document.createElement('option');
+                    option.value = project.name;
+                    option.text = project.name;
+                    if (project.name === selectedName) {
+                        option.selected = true;
+                    }
+                    workNameSelect.appendChild(option);
+                });
+            }
+
+            // Initial load
+            if (selectedCategory) {
+                populateWorkNames(selectedCategory, selectedProject);
+            }
+
+            // On change
+            workCategorySelect.addEventListener('change', function() {
+                populateWorkNames(this.value);
+            });
         </script>
     @endsection

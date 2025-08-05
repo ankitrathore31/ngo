@@ -144,6 +144,20 @@
                         </div>
                     </div>
                     <div class="container-fluid py-4" style="font-size: 16px; line-height: 1.8;">
+                        <div class="d-flex justify-content-between mb-3">
+                            <div>
+                                <strong>
+                                    <span>Project / Work Category:</span>
+                                </strong>
+                                {{ $bill->work_category }}
+                            </div>
+                            <div>
+                                <strong>
+                                    <span>Project / Work Name:</span>
+                                </strong>
+                                {{ $bill->work_name }}
+                            </div>
+                        </div>
                         <div class=" d-flex justify-content-between mb-3">
                             <div>
                                 <strong>
@@ -164,13 +178,6 @@
                                     <span>Session:</span>
                                 </strong>
                                 {{ $bill->academic_session }}
-                            </div>
-
-                            <div>
-                                <strong>
-                                    <span>Project / Work Category:</span>
-                                </strong>
-                                {{ $bill->work_category }}
                             </div>
                         </div>
                         <div class="row mb-2">
@@ -250,8 +257,7 @@
                                                     $sgstAmount = ($totalAmount * $sgst) / 100;
                                                     $igstAmount = $cgstAmount + $sgstAmount;
 
-                                                    $grandTotal =
-                                                        $totalAmount + $cgstAmount + $sgstAmount;
+                                                    $grandTotal = $totalAmount + $cgstAmount + $sgstAmount;
                                                 @endphp
 
                                                 <tr class="table-secondary fw-bold">
@@ -324,7 +330,7 @@
                                 @else
                                     <p class="text-muted mt-2 no-print">Not attached</p>
                                 @endif --}}
-                                {{ $bill->s_name }}<br>
+                                {{ $bill->name }}<br>
                                 <strong>Signature
                                 </strong>
                             </div>

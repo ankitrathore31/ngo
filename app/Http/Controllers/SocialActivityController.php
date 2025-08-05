@@ -29,11 +29,10 @@ class SocialActivityController extends Controller
             $query->where('program_address', 'like', '%' . $request->address_filter . '%');
         }
 
-
         $activity = $query->orderBy('program_date', 'asc')->get();
-        return view('ngo.activity.activitylist', compact('activity'));
+        $category = Category::orderBy('category', 'asc')->get();
+        return view('ngo.activity.activitylist', compact('activity','category'));
     }
-
 
     public function addactivity()
     {
