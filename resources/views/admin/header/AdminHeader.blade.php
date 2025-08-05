@@ -34,7 +34,7 @@
                     class="rounded-circle me-2">
                 <div class="text-start">
                     <div class="fw-bold text-dark">Admin Dashboard</div>
-                    <small class="text-primary">Administrator</small>
+                    <small class="text-primary">{{ Auth::user()->name }}: {{ Auth::user()->user_type }}</small>
                 </div>
             </a>
             <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="userDropdown">

@@ -8,8 +8,18 @@
     <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
     <link rel="icon" href="{{ asset('images/LOGO.png') }}" type="image/x-icon">
     <title>GYAN BHARTI SANSTHA (NGO)</title>
-    <meta name="keywords" content="charity, nonprofit, fundraising, donation, html, bootstrap, scss">
-    <meta name="description" content="Nonprofit NGO Fundraising HTML5 Template">
+    <title>{{ $title ?? 'Gyan Bharti Sanstha | NGO in India' }}</title>
+    <meta name="description"
+        content="{{ $description ?? 'Gyan Bharti Sanstha is a non-profit organization working across multiple Indian states to support education, women empowerment, healthcare, help poor person.' }}">
+    <meta name="keywords"
+        content="{{ $keywords ?? 'NGO, Non-profit, Charity, Gyan Bharti Sanstha, Education NGO, Women Empowerment NGO, NGO in India, NGO in Uttar Pradesh' }}">
+    <meta name="author" content="Gyan Bharti Sanstha">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Optional social meta -->
+    <meta property="og:title" content="{{ $title ?? 'Gyan Bharti Sanstha' }}">
+    <meta property="og:description" content="{{ $description ?? 'Non-profit working across India' }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:type" content="website">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <!-- Bootstrap Icons CDN -->
@@ -143,6 +153,16 @@
             });
         });
     </script>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "NGO",
+            "name": "Gyan Bharti Sanstha",
+            "url": "https://gyanbhartingo.org",
+            "description": "Gyan Bharti Sanstha is a non-profit organization working across India to support education, healthcare, and community development."
+}
+</script>
+
 </body>
 
 </html>

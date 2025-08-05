@@ -514,7 +514,7 @@
                                 <div class="d-flex align-items-center">
                                     <i class="fas fa-wallet fa-2x me-3"></i>
                                     <div>
-                                        <p class="mb-1">Remaining Amount</p>
+                                        <p class="mb-1">Total Cost Remaining Amount</p>
                                         <h5 class="mb-0"><span
                                                 style="color: {{ $remainingBalance >= 0 ? 'green' : 'red' }};">
                                                 {{ $remainingBalance >= 0 ? '+' : '-' }}₹{{ number_format(abs($remainingBalance), 2) }}
