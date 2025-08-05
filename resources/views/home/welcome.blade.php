@@ -915,7 +915,7 @@
                 <div class="col-md-4 mb-4">
                     <div class="card shadow-lg bg-white rounded p-3 mb-5">
                         <div class="card-body text-center">
-                            <img src="{{ asset('public/images/education2.jpg') }}" class="img-fluid mb-3"
+                            <img src="{{ asset('images/education2.jpg') }}" class="img-fluid mb-3"
                                 width="200">
                             <div class="card-body">
                                 <h5 class="card-title">Help For Education</h5>

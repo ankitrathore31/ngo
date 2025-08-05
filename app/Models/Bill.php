@@ -12,6 +12,8 @@ class Bill extends Model
         'bill_no',
         'date',
         'academic_session',
+        'work_category',
+        'work_name',
         'shop',
         'name',
         'email',

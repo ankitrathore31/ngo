@@ -9,7 +9,7 @@ class Project extends Model
 {
     use HasFactory;
 
-    protected $fillable =[
+    protected $fillable = [
         'academic_session',
         'name',
         'code',
@@ -18,7 +18,14 @@ class Project extends Model
         'image',
     ];
 
-    public function reports(){
+    public function reports()
+    {
         return $this->hasMany(ProjectReport::class, 'project_id', 'id');
+    }
+
+    public static function getNamesFromValidCategories()
+    {
+        $categories = \App\Models\Category::pluck('category');
+        return self::whereIn('category', $categories)->get();
     }
 }

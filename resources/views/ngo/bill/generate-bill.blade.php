@@ -29,9 +29,28 @@
         </div>
 
         <div id="sansthaBillContainer" style="display: none;" class="card border p-3 container mt-5">
+            
             <form method="POST" action="{{ route('store-gbs-bill') }}">
                 @csrf
                 <div class="row mt-3">
+                    <!-- Category Dropdown -->
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Project / Work Category <span class="text-danger">*</span></label>
+                        <select name="work_category" id="work_category" class="form-control" required>
+                            <option value="">Select Category</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category }}">{{ $category }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Work Name Dropdown -->
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Project / Work Name <span class="text-danger">*</span></label>
+                        <select name="work_name" id="work_name" class="form-control" required>
+                            <option value="">Select Work Name</option>
+                        </select>
+                    </div>
                     <div class="col-sm-4 mb-3">
                         <label for="bill_no">Bill/Voucher No:</label>
                         <input type="text" id="bill_no" name="bill_no" class="form-control"
@@ -60,21 +79,11 @@
 
                     <div class=" col-sm-4 mb-3">
                         <label for="date">Date:</label>
-                        <input type="date" id="date" name="date" class="form-control" value="{{ old('date') }}"
-                            required>
+                        <input type="date" id="date" name="date" class="form-control"
+                            value="{{ old('date') }}" required>
                         @error('date')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="" class="form-label">Work Category <span class="text-danger">*</span></label>
-                        <select class="form-control select @error('work_category') is-invalid @enderror"
-                            name="work_category" required>
-                            <option value="" selected>Select Category</option>
-                            @foreach ($category as $item)
-                                <option value="{{ old('work_category', $item->category) }}">{{ $item->category }}</option>
-                            @endforeach
-                        </select>
                     </div>
                 </div>
 
@@ -221,6 +230,24 @@
             <form method="POST" action="{{ route('store-person-bill') }}">
                 @csrf
                 <div class="row">
+                    <!-- Category Dropdown -->
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Project / Work Category <span class="text-danger">*</span></label>
+                        <select name="work_category" id="work_category" class="form-control" required>
+                            <option value="">Select Category</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category }}">{{ $category }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Work Name Dropdown -->
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Project / Work Name <span class="text-danger">*</span></label>
+                        <select name="work_name" id="work_name" class="form-control" required>
+                            <option value="">Select Work Name</option>
+                        </select>
+                    </div>
                     <div class="col-md-4 mb-3">
                         <label for="academic_session" class=" bold">Session <span class="login-danger">*</span></label>
                         <select class="form-control @error('academic_session') is-invalid @enderror"
@@ -353,18 +380,6 @@
                         @error('date')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
-                    </div>
-
-                    <div class="col-md-4 mb-3">
-                        <label for="" class="form-label">Work Category <span class="text-danger">*</span></label>
-                        <select class="form-control select @error('work_category') is-invalid @enderror"
-                            name="work_category" required>
-                            <option value="" selected>Select Category</option>
-                            @foreach ($category as $item)
-                                <option value="{{ old('work_category', $item->category) }}">{{ $item->category }}
-                                </option>
-                            @endforeach
-                        </select>
                     </div>
 
                     <div class="col-md-4 form-group mb-3">
@@ -694,5 +709,27 @@
 
             document.getElementById('amountWords').value = words;
         }
+    </script>
+    <script>
+        const allProjects = @json($allProjects);
+
+        document.getElementById('work_category').addEventListener('change', function() {
+            const selectedCategory = this.value;
+            const workNameSelect = document.getElementById('work_name');
+
+            // Clear current options
+            workNameSelect.innerHTML = '<option value="">Select Work Name</option>';
+
+            // Filter projects by selected category
+            const filteredProjects = allProjects.filter(p => p.category === selectedCategory);
+
+            // Add options to Work Name dropdown
+            filteredProjects.forEach(project => {
+                const option = document.createElement('option');
+                option.value = project.name;
+                option.text = project.name;
+                workNameSelect.appendChild(option);
+            });
+        });
     </script>
 @endsection

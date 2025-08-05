@@ -300,15 +300,26 @@
                                 </div>
                             </div>
 
-                            <div class="col-sm-12 mb-2">
+                            <div class="col-sm-6 mb-2">
                                 <div style="display: flex; align-items: center; width: 100%;">
                                     <strong style="white-space: nowrap; margin-right: 5px;">
-                                        {{-- <span data-lang="hi"> को कार्य </span> --}}
                                         <span>Project / work category</span>
                                     </strong>
                                     <div
                                         style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
                                         &nbsp;{{ $bill->work_category }}
+                                    </div>
+                                </div>
+                            </div>
+
+                              <div class="col-sm-6 mb-2">
+                                <div style="display: flex; align-items: center; width: 100%;">
+                                    <strong style="white-space: nowrap; margin-right: 5px;">
+                                        <span>Project / work Name</span>
+                                    </strong>
+                                    <div
+                                        style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap; overflow: hidden;">
+                                        &nbsp;{{ $bill->work_name }}
                                     </div>
                                 </div>
                             </div>

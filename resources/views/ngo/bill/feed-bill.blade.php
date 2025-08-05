@@ -16,242 +16,279 @@
                 {{ session('success') }}
             </div>
         @endif
-        <div class="container mt-3">
-            <form method="POST" action="{{ route('store-bill') }}">
-                @csrf
+        <div class="container mt-5 mb-5">
+            <form method="GET" action="{{ route('add-bill') }}">
                 <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <label for="bill_no">Bill/Voucher/Invoice No:</label>
-                        <input type="text" id="bill_no" name="bill_no" class="form-control"
-                            value="{{ old('bill_no') }}" required>
-                        @error('bill_no')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
+                    <div class="col-md-12">
+                        <label class="form-label">Search Person/Farm</label>
+                        <input type="text" class="form-control" name="search" id="searchInput"
+                            placeholder="Search By Shop/Farm/Seller Name" value="{{ request('search') }}">
                     </div>
+                </div>
+            </form>
 
-                    <div class=" col-md-4 mb-3">
-                        <label for="date">Date:</label>
-                        <input type="date" id="date" name="date" class="form-control" value="{{ old('date') }}"
-                            required>
-                        @error('date')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
+            <!-- Show matched results if any -->
+            @if (!empty($searchResults))
+                <div id="searchBox">
+                    <ul class="list-group mt-2">
+                        @foreach ($searchResults as $item)
+                            <li class="list-group-item" style="cursor: pointer;"
+                                onclick="fillData({{ json_encode($item) }})">
+                                {{ $item->s_name ?? $item->b_name }} ({{ $item->shop }})
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
-                    <div class="col-md-4 mb-3">
-                        <label for="academic_session" class=" bold">Session <span class="login-danger">*</span></label>
-                        <select class="form-control @error('academic_session') is-invalid @enderror" name="academic_session"
-                            id="academic_session" required>
-                            <option value="">Select Session</option>
-                            @foreach ($data as $session)
-                                <option value="{{ $session->session_date }}"
-                                    {{ old('academic_session') == $session->session_date ? 'selected' : '' }}>
-                                    {{ $session->session_date }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('academic_session')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                       <div class="col-md-4 mb-3">
-                            <label for="" class="form-label">Work Category <span class="text-danger">*</span></label>
-                            <select class="form-control select @error('work_category') is-invalid @enderror"
-                                name="work_category" required>
-                                <option value="" selected>Select Category</option>
-                                @foreach ($category as $item)
-                                    <option value="{{ old('work_category',$item->category ) }}">{{$item->category}}</option>
+        </div>
+
+        <div class="container-fluid mt-5 mb-5">
+            <div class="card-body shadow-lg p-4">
+                <form method="POST" action="{{ route('store-bill') }}">
+                    @csrf
+                    <div class="row">
+                        <!-- Category Dropdown -->
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Project / Work Category <span class="text-danger">*</span></label>
+                            <select name="work_category" id="work_category" class="form-control" required>
+                                <option value="">Select Category</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category }}">{{ $category }}</option>
                                 @endforeach
                             </select>
                         </div>
 
-                </div>
+                        <!-- Work Name Dropdown -->
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Project / Work Name <span class="text-danger">*</span></label>
+                            <select name="work_name" id="work_name" class="form-control" required>
+                                <option value="">Select Work Name</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="bill_no">Bill/Voucher/Invoice No:</label>
+                            <input type="text" id="bill_no" name="bill_no" class="form-control"
+                                value="{{ old('bill_no') }}" required>
+                            @error('bill_no')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
 
-                <div class="row">
-                    <h5 class="mb-2">- SELLER DEATILS</h5>
-                    <div class=" col-sm-4 mb-3">
-                        <label for="shop">Shop:</label>
-                        <input type="text" id="shop" name="shop" class="form-control"
-                            value="{{ old('shop') }}" required>
-                        @error('shop')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
+                        <div class=" col-md-4 mb-3">
+                            <label for="date">Date:</label>
+                            <input type="date" id="date" name="date" class="form-control"
+                                value="{{ old('date') }}" required>
+                            @error('date')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label for="academic_session" class=" bold">Session <span class="login-danger">*</span></label>
+                            <select class="form-control @error('academic_session') is-invalid @enderror"
+                                name="academic_session" id="academic_session" required>
+                                <option value="">Select Session</option>
+                                @foreach ($data as $session)
+                                    <option value="{{ $session->session_date }}"
+                                        {{ old('academic_session') == $session->session_date ? 'selected' : '' }}>
+                                        {{ $session->session_date }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('academic_session')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
 
-                    <div class=" col-sm-4 mb-3">
-                        <label for="role" class="label">Seller Type</label>
-                        <select name="role" id="role" class="form-select @error('role') is-invalid @enderror">
-                            <option value="">Select Role</option>
-                            <option value="Proprietor" {{ old('role') == 'Proprietor' ? 'selected' : '' }}>Proprietor
-                            </option>
-                            <option value="Owner" {{ old('role') == 'Owner' ? 'selected' : '' }}>Owner</option>
-                            <option value="Partner" {{ old('role') == 'Partner' ? 'selected' : '' }}>Partner</option>
-                        </select>
-                        @error('role')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                    <div class="row">
+                        <h5 class="mb-2">- SELLER DEATILS</h5>
+                        <div class=" col-sm-4 mb-3">
+                            <label for="shop">Shop:</label>
+                            <input type="text" id="shop" name="shop" class="form-control"
+                                value="{{ old('shop') }}" required>
+                            @error('shop')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class=" col-sm-4 mb-3">
+                            <label for="role" class="label">Seller Type</label>
+                            <select name="role" id="role" class="form-select @error('role') is-invalid @enderror">
+                                <option value="">Select Role</option>
+                                <option value="Proprietor" {{ old('role') == 'Proprietor' ? 'selected' : '' }}>Proprietor
+                                </option>
+                                <option value="Owner" {{ old('role') == 'Owner' ? 'selected' : '' }}>Owner</option>
+                                <option value="Partner" {{ old('role') == 'Partner' ? 'selected' : '' }}>Partner</option>
+                            </select>
+                            @error('role')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class=" col-sm-4 mb-3">
+                            <label for="name">Name:</label>
+                            <input type="text" id="s_name" name="s_name" class="form-control"
+                                value="{{ old('s_name') }}" required>
+                            @error('s_name')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class=" col-sm-4 mb-3">
+                            <label for="address">Address:</label>
+                            <input type="text" id="s_address" name="s_address" class="form-control"
+                                value="{{ old('s_address') }}" required>
+                            @error('s_address')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class=" col-sm-4 mb-3">
+                            <label for="mobile">Mobile:</label>
+                            <input type="text" id="s_mobile" name="s_mobile" class="form-control"
+                                value="{{ old('s_mobile') }}" required>
+                            @error('s_mobile')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class=" col-sm-4 mb-3">
+                            <label for="email">Email:</label>
+                            <input type="text" id="s_email" name="s_email" class="form-control"
+                                value="{{ old('s_email') }}" required>
+                            @error('s_email')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class="col-sm-4 mb-3">
+                            <label for="gst_type">Gst:</label>
+                            <select id="gst_type" name="gst_type"
+                                class="form-select @error('gst_type') is-invalid @enderror"
+                                onchange="toggleSingleGstInput()">
+                                <option value="">Select</option>
+                                <option value="Yes" {{ old('gst_type') == 'Yes' ? 'selected' : '' }}>Yes</option>
+                                <option value="No" {{ old('gst_type') == 'No' ? 'selected' : '' }}>No</option>
+                            </select>
+                        </div>
+
+                        <div id="gst_input_wrapper" class="col-sm-4 mb-3" style="display: none;">
+                            <label for="gst">GST</label>
+                            <input type="number" name="gst" id="gst" class="form-control"
+                                value="{{ old('gst', 0) }}">
+                        </div>
+
+                        <div class="col-sm-4 mb-3">
+                            <label for="pancard_type">PAN Card:</label>
+                            <select id="pancard_type" name="pancard_type"
+                                class="form-select @error('pancard_type') is-invalid @enderror"
+                                onchange="toggleGstInput()">
+                                <option value="">Select</option>
+                                <option value="Yes" {{ old('pancard_type') == 'Yes' ? 'selected' : '' }}>Yes</option>
+                                <option value="No" {{ old('pancard_type') == 'No' ? 'selected' : '' }}>No</option>
+                            </select>
+                        </div>
+
+                        <div id="pancard_input_wrapper" class="col-sm-4 mb-3" style="display: none;">
+                            <label for="pancard">PAN Card Number:</label>
+                            <input type="text" name="s_pan" id="pancard" class="form-control"
+                                value="{{ old('pancard') }}">
+                        </div>
+
                     </div>
 
-                    <div class=" col-sm-4 mb-3">
-                        <label for="name">Name:</label>
-                        <input type="text" id="s_name" name="s_name" class="form-control"
-                            value="{{ old('s_name') }}" required>
-                        @error('s_name')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
+                    <div class="row">
+                        <h5 class="mb-2">- BUYER DETAILS</h5>
+                        <div class=" col-sm-4 mb-3">
+                            <label for="b_name">Name:</label>
+                            <input type="text" id="b_name" name="b_name" class="form-control"
+                                value="{{ old('b_name') }}" required>
+                            @error('b_name')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class=" col-sm-4 mb-3">
+                            <label for="b_mobile">Mobile:</label>
+                            <input type="text" id="b_mobile" name="b_mobile" class="form-control"
+                                value="{{ old('b_mobile') }}" required>
+                            @error('b_mobile')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class=" col-sm-4 mb-3">
+                            <label for="b_email">Email:</label>
+                            <input type="text" id="b_email" name="b_email" class="form-control"
+                                value="{{ old('b_email') }}" required>
+                            @error('b_email')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class=" col-sm-4 mb-3">
+                            <label for="address">Address:</label>
+                            <input type="text" id="b_address" name="b_address" class="form-control"
+                                value="{{ old('b_address') }}" required>
+                            @error('b_address')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
                     </div>
 
-                    <div class=" col-sm-4 mb-3">
-                        <label for="address">Address:</label>
-                        <input type="text" id="s_address" name="s_address" class="form-control"
-                            value="{{ old('s_address') }}" required>
-                        @error('s_address')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
+
+                    <table class="table table-bordered" id="items-table">
+                        <thead>
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>Product</th>
+                                <th class="text-end">Qty</th>
+                                <th class="text-end">Rate</th>
+                                <th class="text-end">Amount</th>
+                                <th>
+                                    <button type="button" class="btn btn-success btn-sm" onclick="addRow()">Add</button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
+                    <div class="text-end mb-3">
+                        <strong>Total Amount Before Tax: ₹<span id="total-amount">0.00</span></strong>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label for="cgst">CGST (%)</label>
+                            <input type="number" id="cgst" name="cgst" class="form-control" value="0"
+                                onchange="updateTotal()">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="sgst">SGST (%)</label>
+                            <input type="number" id="sgst" name="sgst" class="form-control" value="0"
+                                onchange="updateTotal()">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="igst">IGST (%)</label>
+                            <input type="number" id="igst" name="igst" class="form-control" value="0"
+                                onchange="updateTotal()" readonly>
+                        </div>
                     </div>
 
-                    <div class=" col-sm-4 mb-3">
-                        <label for="mobile">Mobile:</label>
-                        <input type="text" id="s_mobile" name="s_mobile" class="form-control"
-                            value="{{ old('s_mobile') }}" required>
-                        @error('s_mobile')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
+                    <div class="text-end mb-2">
+                        <strong>CGST Amount: ₹<span id="cgst-amount">0.00</span></strong><br>
+                        <strong>SGST Amount: ₹<span id="sgst-amount">0.00</span></strong><br>
+                        <strong>IGST Amount: ₹<span id="igst-amount">0.00</span></strong><br>
+                        <hr>
+                        <strong>Grand Total (After Tax): ₹<span id="grand-total">0.00</span></strong>
                     </div>
 
-                    <div class=" col-sm-4 mb-3">
-                        <label for="email">Email:</label>
-                        <input type="text" id="s_email" name="s_email" class="form-control"
-                            value="{{ old('s_email') }}" required>
-                        @error('s_email')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
 
-                    <div class="col-sm-4 mb-3">
-                        <label for="gst_type">Gst:</label>
-                        <select id="gst_type" name="gst_type" class="form-select @error('gst_type') is-invalid @enderror"
-                            onchange="toggleSingleGstInput()">
-                            <option value="">Select</option>
-                            <option value="Yes" {{ old('gst_type') == 'Yes' ? 'selected' : '' }}>Yes</option>
-                            <option value="No" {{ old('gst_type') == 'No' ? 'selected' : '' }}>No</option>
-                        </select>
-                    </div>
-
-                    <div id="gst_input_wrapper" class="col-sm-4 mb-3" style="display: none;">
-                        <label for="gst">GST</label>
-                        <input type="number" name="gst" id="gst" class="form-control"
-                            value="{{ old('gst', 0) }}">
-                    </div>
-
-                    <div class="col-sm-4 mb-3">
-                        <label for="pancard_type">PAN Card:</label>
-                        <select id="pancard_type" name="pancard_type"
-                            class="form-select @error('pancard_type') is-invalid @enderror" onchange="toggleGstInput()">
-                            <option value="">Select</option>
-                            <option value="Yes" {{ old('pancard_type') == 'Yes' ? 'selected' : '' }}>Yes</option>
-                            <option value="No" {{ old('pancard_type') == 'No' ? 'selected' : '' }}>No</option>
-                        </select>
-                    </div>
-
-                    <div id="pancard_input_wrapper" class="col-sm-4 mb-3" style="display: none;">
-                        <label for="pancard">PAN Card Number:</label>
-                        <input type="text" name="s_pan" id="pancard" class="form-control"
-                            value="{{ old('pancard') }}">
-                    </div>
-
-                </div>
-
-                <div class="row">
-                    <h5 class="mb-2">- BUYER DETAILS</h5>
-                    <div class=" col-sm-4 mb-3">
-                        <label for="b_name">Name:</label>
-                        <input type="text" id="b_name" name="b_name" class="form-control"
-                            value="{{ old('b_name') }}" required>
-                        @error('b_name')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-
-                    <div class=" col-sm-4 mb-3">
-                        <label for="b_mobile">Mobile:</label>
-                        <input type="text" id="b_mobile" name="b_mobile" class="form-control"
-                            value="{{ old('b_mobile') }}" required>
-                        @error('b_mobile')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-
-                    <div class=" col-sm-4 mb-3">
-                        <label for="b_email">Email:</label>
-                        <input type="text" id="b_email" name="b_email" class="form-control"
-                            value="{{ old('b_email') }}" required>
-                        @error('b_email')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-
-                    <div class=" col-sm-4 mb-3">
-                        <label for="address">Address:</label>
-                        <input type="text" id="b_address" name="b_address" class="form-control"
-                            value="{{ old('b_address') }}" required>
-                        @error('b_address')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-                </div>
-
-
-                <table class="table table-bordered" id="items-table">
-                    <thead>
-                        <tr>
-                            <th>Sr. No.</th>
-                            <th>Product</th>
-                            <th class="text-end">Qty</th>
-                            <th class="text-end">Rate</th>
-                            <th class="text-end">Amount</th>
-                            <th>
-                                <button type="button" class="btn btn-success btn-sm" onclick="addRow()">Add</button>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-
-                <div class="text-end mb-3">
-                    <strong>Total Amount Before Tax: ₹<span id="total-amount">0.00</span></strong>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-2">
-                        <label for="cgst">CGST (%)</label>
-                        <input type="number" id="cgst" name="cgst" class="form-control" value="0"
-                            onchange="updateTotal()">
-                    </div>
-                    <div class="col-md-2">
-                        <label for="sgst">SGST (%)</label>
-                        <input type="number" id="sgst" name="sgst" class="form-control" value="0"
-                            onchange="updateTotal()">
-                    </div>
-                    <div class="col-md-2">
-                        <label for="igst">IGST (%)</label>
-                        <input type="number" id="igst" name="igst" class="form-control" value="0"
-                            onchange="updateTotal()" readonly>
-                    </div>
-                </div>
-
-                <div class="text-end mb-2">
-                    <strong>CGST Amount: ₹<span id="cgst-amount">0.00</span></strong><br>
-                    <strong>SGST Amount: ₹<span id="sgst-amount">0.00</span></strong><br>
-                    <strong>IGST Amount: ₹<span id="igst-amount">0.00</span></strong><br>
-                    <hr>
-                    <strong>Grand Total (After Tax): ₹<span id="grand-total">0.00</span></strong>
-                </div>
-
-
-                <button type="submit" class="btn btn-primary">Save Voucher</button>
-            </form>
+                    <button type="submit" class="btn btn-primary">Save Voucher</button>
+                </form>
+            </div>
         </div>
-
     </div>
     <script>
         let index = 0;
@@ -310,7 +347,7 @@
             // Calculate grand total
             const Totaligst = cgstPercent + sgstPercent;
             const grandTotal = total + cgstAmount + sgstAmount;
-            const TotaligstAmount =  cgstAmount + sgstAmount;
+            const TotaligstAmount = cgstAmount + sgstAmount;
 
             // Update DOM
             document.getElementById('total-amount').textContent = total.toFixed(2);
@@ -357,5 +394,68 @@
 
         // Initial check on page load
         toggleGstInput();
+    </script>
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const searchBox = document.getElementById('searchBox');
+
+        // Hide result list when input is cleared
+        searchInput.addEventListener('input', function() {
+            if (this.value.trim() === '' && searchBox) {
+                searchBox.style.display = 'none';
+            } else if (searchBox) {
+                searchBox.style.display = 'block';
+            }
+        });
+
+        // Hide result list after selecting an item
+        function fillData(data) {
+            // Fill inputs (same as before)
+            document.getElementById('shop').value = data.shop || '';
+            document.getElementById('s_name').value = data.name || '';
+            document.getElementById('s_address').value = data.address || '';
+            document.getElementById('s_mobile').value = data.mobile || '';
+            document.getElementById('s_email').value = data.email || '';
+            document.getElementById('gst').value = data.gst || '';
+            document.getElementById('role').value = data.role || '';
+            document.getElementById('gst_type').value = data.gst_type || '';
+            document.getElementById('pancard_type').value = data.pancard_type || '';
+            document.getElementById('pancard').value = data.s_pan || '';
+
+            document.getElementById('b_name').value = data.b_name || '';
+            document.getElementById('b_mobile').value = data.b_mobile || '';
+            document.getElementById('b_email').value = data.b_email || '';
+            document.getElementById('b_address').value = data.b_address || '';
+
+            // Hide the results after selecting
+            if (searchBox) {
+                searchBox.style.display = 'none';
+            }
+
+            // Clear the input (optional)
+            searchInput.value = '';
+        }
+    </script>
+    <script>
+        const allProjects = @json($allProjects);
+
+        document.getElementById('work_category').addEventListener('change', function() {
+            const selectedCategory = this.value;
+            const workNameSelect = document.getElementById('work_name');
+
+            // Clear current options
+            workNameSelect.innerHTML = '<option value="">Select Work Name</option>';
+
+            // Filter projects by selected category
+            const filteredProjects = allProjects.filter(p => p.category === selectedCategory);
+
+            // Add options to Work Name dropdown
+            filteredProjects.forEach(project => {
+                const option = document.createElement('option');
+                option.value = project.name;
+                option.text = project.name;
+                workNameSelect.appendChild(option);
+            });
+        });
     </script>
 @endsection
