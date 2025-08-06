@@ -136,6 +136,58 @@
                         </div>
                     </div>
                 @endif
+                @if (!$isStaff || $user->hasPermission('beneficiarie-add') || $user->hasPermission('all-beneficiarie-list'))
+                    <h5 class=" fw-bold mb-2">- Beneficiaries Facilities </h5>
+
+                    <div class="row g-3">
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="card text-white bg-primary p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-user-plus fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Approve Demand Facilities</p>
+                                        <h5 class="mb-0">{{ totalApprovedDemand() }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="card text-white bg-warning p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-clock fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Pending Demand Facilities</p>
+                                        <h5 class="mb-0">{{ totalPendingDemand() }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="card text-white bg-success p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-check-circle fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Distributed Facilities</p>
+                                        <h5 class="mb-0">{{ totalDistributed() }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="card text-white bg-danger p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-times-circle fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Rejected Facilities</p>
+                                        <h5 class="mb-0">{{ totalRejectedDistributed() }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
                 @if (
                     !$isStaff ||
                         ($user->hasPermission('add-activity') ||
@@ -204,50 +256,38 @@
                     <div class="row ">
                         <h5 class="fw-bold mb-2">- Projects</h5>
                         @if (!$isStaff || $user->hasPermission('add-project'))
-                            <div class="col-md-3 col-sm-6 mb-3">
-                                <div class="card text-white bg-info p-3 h-100 card-hover">
-                                    <div class="d-flex align-items-center">
-                                        <i class="fas fa-running fa-2x me-3"></i>
-                                        <div>
-                                            <p class="mb-1">Today's Project</p>
-                                            <h5 class="mb-0">{{-- $todayacti --}}</h5>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="col-md-4 col-sm-6 mb-3">
                                 <div class="card text-white bg-warning p-3 h-100 card-hover">
                                     <div class="d-flex align-items-center">
                                         <i class="fas fa-clipboard-list fa-2x me-3"></i>
                                         <div>
                                             <p class="mb-1">Total Project</p>
-                                            <h5 class="mb-0">{{-- $allacti --}}</h5>
+                                            <h5 class="mb-0">{{totalProject()}}</h5>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         @endif
                         @if (!$isStaff || $user->hasPermission('report-list'))
-                            <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="col-md-4 col-sm-6 mb-3">
                                 <div class="card text-white bg-info p-3 h-100 card-hover">
                                     <div class="d-flex align-items-center">
                                         <i class="fas fa-running fa-2x me-3"></i>
                                         <div>
-                                            <p class="mb-1">Today's Project Report</p>
-                                            <h5 class="mb-0">{{-- $todayacti --}}</h5>
+                                            <p class="mb-1">Total Project Report</p>
+                                            <h5 class="mb-0">{{totalProjectReport()}}</h5>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="col-md-4 col-sm-6 mb-3">
                                 <div class="card text-white bg-warning p-3 h-100 card-hover">
                                     <div class="d-flex align-items-center">
                                         <i class="fas fa-clipboard-list fa-2x me-3"></i>
                                         <div>
-                                            <p class="mb-1">Total Project Report</p>
-                                            <h5 class="mb-0">{{-- $allacti --}}</h5>
+                                            <p class="mb-1">Total Project Category</p>
+                                            <h5 class="mb-0">{{totalProjectCategory()}}</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -457,7 +497,7 @@
                                     <i class="fas fa-coins fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Today's Cost</p>
-                                        <h5 class="mb-0">{{ $todayCostAmount }}</h5>
+                                        <h5 class="mb-0">₹{{ $todayCostAmount }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -469,7 +509,7 @@
                                     <i class="fas fa-file-invoice-dollar fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Total Cost</p>
-                                        <h5 class="mb-0">{{ $totalCostAmount }}</h5>
+                                        <h5 class="mb-0">₹{{ $totalCostAmount }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -485,17 +525,6 @@
                         $user->hasPermission('sanstha-bill-list'))
                     <div class="row">
                         <h5 class="fw-bold mb-2">- Balance Sheet</h5>
-                        <div class="col-md-4 col-sm-6 mb-3">
-                            <div class="card text-white bg-primary p-3 h-100 card-hover">
-                                <div class="d-flex align-items-center">
-                                    <i class="fas fa-coins fa-2x me-3"></i>
-                                    <div>
-                                        <p class="mb-1">Today's Income</p>
-                                        <h5 class="mb-0">{{ $todayIncome }}</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
                         <div class="col-md-4 col-sm-6 mb-3">
                             <div class="card text-white bg-success p-3 h-100 card-hover">
@@ -503,7 +532,19 @@
                                     <i class="fas fa-file-invoice-dollar fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Total Income</p>
-                                        <h5 class="mb-0">{{ $totalIncome }}</h5>
+                                        <h5 class="mb-0">₹{{ $totalIncome }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="card text-dark bg-info p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-file-invoice-dollar fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Total Cost</p>
+                                        <h5 class="mb-0">₹{{ $totalCostAmount }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -514,7 +555,7 @@
                                 <div class="d-flex align-items-center">
                                     <i class="fas fa-wallet fa-2x me-3"></i>
                                     <div>
-                                        <p class="mb-1">Total Cost Remaining Amount</p>
+                                        <p class="mb-1">Total Remaining Amount</p>
                                         <h5 class="mb-0"><span
                                                 style="color: {{ $remainingBalance >= 0 ? 'green' : 'red' }};">
                                                 {{ $remainingBalance >= 0 ? '+' : '-' }}₹{{ number_format(abs($remainingBalance), 2) }}
