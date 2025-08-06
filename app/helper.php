@@ -2,11 +2,14 @@
 
 use App\Models\beneficiarie;
 use App\Models\Beneficiarie_Survey;
+use App\Models\Category;
 use App\Models\HeadOrganization;
 use App\Models\Member;
 use App\Models\Organization;
 use App\Models\OrganizationMember;
 use App\Models\Problem;
+use App\Models\Project;
+use App\Models\ProjectReport;
 use App\Models\Visitor;
 
 if (!function_exists('print_hello')) {
@@ -152,6 +155,7 @@ if (!function_exists('todayVisitor')) {
         return \App\Models\Visitor::whereDate('visit_date', now()->toDateString())->count();
     }
 }
+
 if (!function_exists('monthlyVisitorData')) {
     function monthlyVisitorData()
     {
@@ -159,6 +163,24 @@ if (!function_exists('monthlyVisitorData')) {
         for ($i = 1; $i <= 12; $i++) {
             $data[] = Visitor::whereMonth('created_at', $i)->count();
         }
+        return $data;
+    }
+}
+if(!function_exists('totalProject')){
+    function totalProject(){
+        $data = Project::count();
+        return $data;
+    }
+}
+if(!function_exists('totalProjectReport')){
+    function totalProjectReport(){
+        $data = ProjectReport::count();
+        return $data;
+    }
+}
+if(!function_exists('totalProjectCategory')){
+    function totalProjectCategory(){
+        $data = Category::count();
         return $data;
     }
 }
