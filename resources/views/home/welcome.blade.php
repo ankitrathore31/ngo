@@ -257,7 +257,7 @@
 
 
         <div class="col-md-2 mb-3">
-            <a href="{{ route('certiStatus') }}" class="btn btn-info w-100">
+            <a href="{{ route('search.certi') }}" class="btn btn-info w-100">
                 Certificate Download
             </a>
         </div>

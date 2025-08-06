@@ -20,7 +20,7 @@
                         <div class="col-md-4 mb-3 form-group local-from">
                             <label class="form-label">Problem No <span class="text-danger">*</span></label>
                             <input type="text" class="form-control @error('problem_no') is-invalid @enderror"
-                                name="problem_no" placeholder="Problem Name" required>
+                                name="problem_no" value="{{ old('problem_no', $nextProblemNo) }}" readonly>
                             @error('problem_no')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -94,7 +94,7 @@
                                 <label for="" class="form-label">Problem Description <span
                                         class="text-danger">*</span></label>
                                 <textarea class="form-control @error('description') is-invalid @enderror" name="description" rows="3"
-                                    placeholder="Problem Description" required>{{old('description')}}</textarea>
+                                    placeholder="Problem Description" required>{{ old('description') }}</textarea>
                             </div>
                             <div class="col-md-12 mb-3">
                                 <label for="problem_by" class="form-label ">Problem Discover By <span

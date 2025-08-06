@@ -21,7 +21,7 @@
                         <div class="col-md-4 mb-3 form-group local-from">
                             <label class="form-label">Problem No <span class="text-danger">*</span></label>
                             <input type="text" class="form-control @error('problem_no') is-invalid @enderror"
-                                name="problem_no" placeholder="Problem Name" value="{{ $problem->problem_no }}" required>
+                                name="problem_no" placeholder="Problem Name" value="{{ $problem->problem_no }}" readonly required>
                             @error('problem_no')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror

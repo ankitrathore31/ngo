@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BeneficiarieController;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\CashBookController;
+use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\ExperienceController;
@@ -83,6 +84,13 @@ Route::controller(HomeControlller::class)->group(function () {
     Route::get('/organization-groups/{id}', 'groups')->name('organization.groups');
     Route::get('/organization-groups-member/{id}', 'OrgMemberListByOrganization')->name('show.group.member');
     Route::get('/demand', 'demand')->name('demand');
+});
+
+Route::controller(CertificateController::class)->group(function () {
+    Route::get('/search-certificate',  'SearchCerti')->name('search.certi');
+    Route::post('/certificate/member', 'memberSearch')->name('certi.member');
+    Route::post('/certificate/bene', 'beneficiarySearch')->name('certi.bene');
+    Route::post('/certificate/donor', 'donorSearch')->name('certi.donor');
 });
 
 
@@ -424,7 +432,7 @@ Route::controller(OrganizationController::class)->group(function () {
     Route::get('ngo/group-member-list/{id}', 'GroupMemberList')->middleware('auth')->name('list.group.member');
 });
 
-Route::controller(CashBookController::class)->middleware('auth')->group(function(){
+Route::controller(CashBookController::class)->middleware('auth')->group(function () {
     Route::get('ngo/income-list', 'IncomeList')->name('list.income');
     Route::get('ngo/expenditure-list', 'ExpenditureList')->name('expenditure.list');
 });

@@ -361,7 +361,7 @@ class BeneficiarieController extends Controller
             $distribute->pending_reason = $request->input('pending_reason');
             $distribute->save();
 
-            if ($request->input('status') === 'Disributed') {
+            if ($request->input('status') === 'Distributed') {
                 return redirect()->route('distributed-list')->with('success', 'Distributed successfully');
             } else {
                 return redirect()->route('pending-distribute-list')->with('success', 'Facilities Now Pending');

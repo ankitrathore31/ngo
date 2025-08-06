@@ -15,14 +15,27 @@ class ProblemController extends Controller
         $data = academic_session::all();
         $states = config('states');
         $staff = Staff::get();
-        return view('ngo.problem.add-problem', compact('data', 'states', 'staff'));
+
+        // ✅ Auto-generate next problem number
+        $prefix = '3126SP';
+        $lastProblem = Problem::orderBy('id', 'desc')->first();
+
+        if ($lastProblem) {
+            // Extract numeric part and increment
+            $lastNumber = (int)substr($lastProblem->problem_no, strlen($prefix));
+            $nextNumber = str_pad($lastNumber + 1, 6, '0', STR_PAD_LEFT);
+        } else {
+            $nextNumber = '000001';
+        }
+
+        $nextProblemNo = $prefix . $nextNumber;
+
+        return view('ngo.problem.add-problem', compact('data', 'states', 'staff', 'nextProblemNo'));
     }
 
     public function StoreProblem(Request $request)
     {
-        // Validate incoming request
         $validate = $request->validate([
-            'problem_no' => 'required|string|unique:problems',
             'problem_date' => 'required|date',
             'session' => 'required|string',
             'address' => 'required|string',
@@ -33,9 +46,21 @@ class ProblemController extends Controller
             'problem_by' => 'required|string',
         ]);
 
+        $prefix = '3126SP';
+        $lastProblem = Problem::orderBy('id', 'desc')->first();
 
+        if ($lastProblem) {
+            $lastNumber = (int)substr($lastProblem->problem_no, strlen($prefix));
+            $nextNumber = str_pad($lastNumber + 1, 6, '0', STR_PAD_LEFT);
+        } else {
+            $nextNumber = '000001';
+        }
+
+        $nextProblemNo = $prefix . $nextNumber;
+
+        // ✅ Create and Save Problem
         $problem = new Problem();
-        $problem->problem_no = $validate['problem_no'];
+        $problem->problem_no = $nextProblemNo;
         $problem->problem_date = $validate['problem_date'];
         $problem->academic_session = $validate['session'];
         $problem->address = $validate['address'];
@@ -48,7 +73,7 @@ class ProblemController extends Controller
 
         $problem->save();
 
-        return redirect()->route('problem.list')->with('success', 'Social Problem Discovred. ');
+        return redirect()->route('problem.list')->with('success', 'Social Problem Discovered.');
     }
 
     public function EditProblem($id)
@@ -57,14 +82,14 @@ class ProblemController extends Controller
         $states = config('states');
         $staff = Staff::get();
         $problem = Problem::findorFail($id);
-        return view('ngo.problem.edit-problem', compact('data', 'states', 'staff','problem'));
+        return view('ngo.problem.edit-problem', compact('data', 'states', 'staff', 'problem'));
     }
 
-    public function UpdateProblem(Request $request,$id)
+    public function UpdateProblem(Request $request, $id)
     {
         // Validate incoming request
         $validate = $request->validate([
-            'problem_no' => 'required|string|unique:problems,problem_no,'. $id,
+            'problem_no' => 'required|string|unique:problems,problem_no,' . $id,
             'problem_date' => 'required|date',
             'session' => 'required|string',
             'address' => 'required|string',
@@ -93,7 +118,7 @@ class ProblemController extends Controller
         return redirect()->route('problem.list')->with('success', 'Social Problem Updated. ');
     }
 
-     public function DeleteProblem(Request $request,$id)
+    public function DeleteProblem(Request $request, $id)
     {
         $problem = Problem::findorFail($id);
         $problem->delete();
@@ -168,7 +193,7 @@ class ProblemController extends Controller
         return redirect()->route('solution.list')->with('success', 'Social Problem Solved. ');
     }
 
-     public function EditSolution($id)
+    public function EditSolution($id)
     {
         $data = academic_session::all();
         $states = config('states');
@@ -234,11 +259,12 @@ class ProblemController extends Controller
         return view('ngo.problem.solution-list', compact('session', 'records', 'staffList'));
     }
 
-    public function ViewProblem($id){
+    public function ViewProblem($id)
+    {
         $staffList = Staff::all()->keyBy('id'); // [id => Staff instance]
         $record = Problem::findorFail($id);
         $signatures = Signature::pluck('file_path', 'role');
 
-        return view('ngo.problem.view-problem',compact('signatures','staffList','record'));
+        return view('ngo.problem.view-problem', compact('signatures', 'staffList', 'record'));
     }
 }
