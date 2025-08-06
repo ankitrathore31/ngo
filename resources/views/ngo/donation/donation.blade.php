@@ -241,6 +241,7 @@
                             @php
                                 $districtsByState = config('districts');
                             @endphp
+
                             <div class="col-md-3 form-group mb-3">
                                 <label for="stateSelect" class="form-label">State: <span
                                         class="text-danger">*</span></label>
@@ -257,7 +258,6 @@
                                 @error('state')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
-
                             </div>
 
                             <div class="col-md-3 form-group mb-3">
@@ -271,6 +271,7 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
+
                         </div>
 
                         <!-- Amount -->
@@ -600,28 +601,30 @@
     </script>
     <script>
         const allDistricts = @json($districtsByState);
+        const oldDistrict = "{{ old('district') }}";
+        const oldState = "{{ old('state') }}";
 
+        // ✅ Updated to accept selectedDistrict
         function populateDistricts(state, selectedDistrict = '') {
             const districtSelect = document.getElementById('districtSelect');
             districtSelect.innerHTML = '<option value="">Select District</option>';
 
             if (allDistricts[state]) {
                 allDistricts[state].forEach(function(district) {
-                    const isSelected = (district === selectedDistrict) ? 'selected' : '';
-                    districtSelect.innerHTML += `<option value="${district}" ${isSelected}>${district}</option>`;
+                    const selected = (district === selectedDistrict) ? 'selected' : '';
+                    districtSelect.innerHTML += `<option value="${district}" ${selected}>${district}</option>`;
                 });
             }
         }
 
-        function setStateAndDistrictFromButton(element) {
-            const state = element.dataset.state;
-            const district = element.dataset.district;
-
-            const stateSelect = document.getElementById('stateSelect');
-            stateSelect.value = state;
-
-            // Populate districts after setting state
-            populateDistricts(state, district);
+        // ✅ Initial load if editing or validation failed
+        if (oldState) {
+            populateDistricts(oldState, oldDistrict);
         }
+
+        // ✅ On manual state change
+        document.getElementById('stateSelect').addEventListener('change', function() {
+            populateDistricts(this.value);
+        });
     </script>
 @endsection
