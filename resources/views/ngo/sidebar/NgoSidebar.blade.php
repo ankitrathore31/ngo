@@ -685,8 +685,12 @@
                                         Bill/Voucher/Invoice List</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('generate-bill'))
-                                <li><a class="dropdown-item" href="{{ route('generate-bill') }}">Generate
-                                        Bill/Voucher</a></li>
+                                <li><a class="dropdown-item" href="{{ route('generate-sanstha-bill') }}">Generate
+                                    Sanstha  Bill/Voucher</a></li>
+                            @endif
+                             @if (!$isStaff || $user->hasPermission('generate-bill'))
+                                <li><a class="dropdown-item" href="{{ route('generate-person-bill') }}">Generate
+                                    Person   Bill/Voucher</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('gbs-bill-list'))
                                 <li><a class="dropdown-item" href="{{ route('person-bill-list') }}">GBS Person
@@ -735,10 +739,10 @@
                             @endif --}}
                             {{-- @if (!$isStaff || $user->hasPermission('remaining-amount'))
                                 <li><a class="dropdown-item" href="#">Remaining Amount</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('year-wise-report'))
-                                <li><a class="dropdown-item" href="#">Year-wise Report</a></li>
                             @endif --}}
+                            @if (!$isStaff || $user->hasPermission('year-wise-report'))
+                                <li><a class="dropdown-item" href="{{route('balance.report.view')}}">Year/Month-wise Report</a></li>
+                            @endif
                         </ul>
                     </li>
                 @endif

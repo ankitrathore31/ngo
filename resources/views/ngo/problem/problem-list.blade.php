@@ -101,6 +101,7 @@
                                 <th>Problem Date</th>
                                 <th>Problem No.</th>
                                 <th>Discover By</th>
+                                <th>Address</th>
                                 <th>Block</th>
                                 <th>State</th>
                                 <th>District</th>
@@ -117,6 +118,7 @@
                                     <td>{{ $item->problem_no }}</td>
                                     <td>{{ $staffList[$item->problem_by]->name }}
                                         ({{ $staffList[$item->problem_by]->position }})</td>
+                                    <td>{{ $item->address }}</td>
                                     <td>{{ $item->block }}</td>
                                     <td>{{ $item->state }}</td>
                                     <td>{{ $item->district }}</td>

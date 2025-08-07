@@ -21,6 +21,29 @@
                 @csrf
                 @method('POST') {{-- or PUT if you change your route to use PUT --}}
                 <div class="row mt-3">
+                    <!-- Category Dropdown -->
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Project / Work Category <span class="text-danger">*</span></label>
+                        <select name="work_category" id="work_category" class="form-control" required>
+                            <option value="">Select Category</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category }}"
+                                    {{ isset($gbsBill) && $gbsBill->work_category === $category ? 'selected' : '' }}>
+                                    {{ $category }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Work Name Dropdown -->
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Project / Work Name <span class="text-danger">*</span></label>
+                        <select name="work_name" id="work_name" class="form-control" required>
+                            <option value="">Select Work Name</option>
+                            <!-- Options will be populated by JS based on selected category -->
+                        </select>
+                    </div>
+
                     <div class="col-sm-4 mb-3">
                         <label for="bill_no">Bill/Voucher No:</label>
                         <input type="text" id="bill_no" name="bill_no" class="form-control"
@@ -54,21 +77,6 @@
                         @error('date')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
-                    </div>
-
-                    
-                    <div class="col-md-4 mb-3">
-                        <label for="" class="form-label">Work Category <span class="text-danger">*</span></label>
-                        <select class="form-control select @error('work_category') is-invalid @enderror"
-                            name="work_category" required>
-                            <option value="">Select Category</option>
-                            @foreach ($category as $item)
-                                <option value="{{ $item->category }}"
-                                    {{ old('work_category', $gbsBill->work_category ?? '') == $item->category ? 'selected' : '' }}>
-                                    {{ $item->category }}
-                                </option>
-                            @endforeach
-                        </select>
                     </div>
                 </div>
 
@@ -325,6 +333,46 @@
             // On state change
             document.getElementById('stateSelect').addEventListener('change', function() {
                 populateDistricts(this.value);
+            });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const allProjects = @json($allProjects);
+                const selectedCategory = @json($gbsBill->work_category ?? '');
+                const selectedWorkName = @json($gbsBill->work_name ?? '');
+
+                const categorySelect = document.getElementById('work_category');
+                const workNameSelect = document.getElementById('work_name');
+
+                function populateWorkNames(category) {
+                    // Clear existing options
+                    workNameSelect.innerHTML = '<option value="">Select Work Name</option>';
+
+                    // Filter by category
+                    const filteredProjects = allProjects.filter(project => project.category === category);
+
+                    filteredProjects.forEach(project => {
+                        const option = document.createElement('option');
+                        option.value = project.name;
+                        option.text = project.name;
+
+                        if (project.name === selectedWorkName) {
+                            option.selected = true;
+                        }
+
+                        workNameSelect.appendChild(option);
+                    });
+                }
+
+                // If editing, pre-populate work name dropdown
+                if (selectedCategory) {
+                    populateWorkNames(selectedCategory);
+                }
+
+                // When user changes category
+                categorySelect.addEventListener('change', function() {
+                    populateWorkNames(this.value);
+                });
             });
         </script>
     @endsection

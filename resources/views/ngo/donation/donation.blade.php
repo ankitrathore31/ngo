@@ -43,8 +43,8 @@
         <div class="container mt-2">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="mb-0">
-                    <span data-lang="hi">दान पंजीकरण फॉर्म</span>
-                    <span data-lang="en">Donation Registration Form</span>
+                    <span data-lang="hi">दान</span>
+                    <span data-lang="en">Donation</span>
                 </h5>
                 <div>
                     <button class="btn btn-sm btn-outline-primary" onclick="setLanguage('en')">English</button>
@@ -171,7 +171,6 @@
                             </div>
                         </div>
 
-                        <!-- Full Name -->
                         <div class="mb-3">
                             <div class="row">
                                 <div class="col-md-6">
@@ -201,7 +200,6 @@
                             </div>
                         </div>
 
-                        <!-- Father/Husband Name -->
                         <div class="mb-3">
                             <label class="form-label">
                                 <span data-lang="hi">पिता/पति का नाम</span>
@@ -274,7 +272,6 @@
 
                         </div>
 
-                        <!-- Amount -->
                         <div class="mb-3">
                             <label class="form-label">
                                 <span data-lang="hi">राशि (₹)</span>
@@ -282,7 +279,7 @@
                             </label>
                             <div class="row g-2">
                                 <div class="col-md-6">
-                                    <input type="number" class="form-control @error('amount') is-invalid @enderror"
+                                    <input type="text" class="form-control @error('amount') is-invalid @enderror"
                                         name="amount" id="amountInput" value="{{ old('amount') }}"
                                         oninput="updateAmountInWords()" placeholder="₹">
                                     @error('amount')
@@ -296,7 +293,40 @@
                             </div>
                         </div>
 
-                        <!-- Payment Method -->
+                        <div class="mb-3 form-group">
+                            <label for="showSelect">Do you want to select a donation category?</label>
+                            <select class="form-control" id="showSelect" name="showSelect"
+                                onchange="toggleCategorySelect(this)">
+                                <option value="" selected>Select Yes/NO</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3 form-group" id="categorySelect" style="display: none;">
+                            <label for="category">Donation Category:</label>
+                            <select class="form-control" id="category" name="category">
+                                <option value="">Select...</option>
+                                @foreach ($category as $item)
+                                    <option value="{{ $item->category }}">{{ $item->category }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class=" mb-3
+                         form-group">
+                            <label for="amountType">Amount Type:</label>
+                            <select class="form-control" id="amountType" name="amountType">
+                                <option value="">Select...</option>
+                                <option value="donation">Donation</option>
+                                <option value="membership">Membership</option>
+                                <option value="income">Income from other sources</option>
+                                <option value="balance">Year wise balance amount</option>
+                                <option value="trainingFees">Training fees</option>
+                                <option value="tuitionFees">Tuition fees</option>
+                            </select>
+                        </div>
+
                         <div class="mb-3">
                             <label class="form-label">
                                 <span data-lang="hi">भुगतान का प्रकार</span>
@@ -318,8 +348,7 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        <!-- Conditional Fields for Cheque -->
-                        <!-- Cheque Fields -->
+
                         <div id="chequeFields" style="display: none;">
                             <div class="mb-3">
                                 <label class="form-label">Cheque No.</label>
@@ -355,7 +384,6 @@
                             </div>
                         </div>
 
-                        <!-- UPI Fields -->
                         <div id="upiFields" style="display: none;">
                             <div class="mb-3">
                                 <label class="form-label">Transaction Number</label>
@@ -416,13 +444,10 @@
                             </div>
                         </div>
 
-                        <!-- Submit -->
-                        <button type="submit" class="btn btn-primary">
-                            {{-- <span data-lang="hi">सहेजें</span> --}}
+                        <button type="submit" class="btn btn-success">
                             <span>Deposite</span>
                         </button>
                     </form>
-
                 </div>
             </div>
         </div>
@@ -626,5 +651,15 @@
         document.getElementById('stateSelect').addEventListener('change', function() {
             populateDistricts(this.value);
         });
+    </script>
+    <script>
+        function toggleCategorySelect(selectElement) {
+            var categorySelectDiv = document.getElementById('categorySelect');
+            if (selectElement.value === 'yes') {
+                categorySelectDiv.style.display = 'block';
+            } else {
+                categorySelectDiv.style.display = 'none';
+            }
+        }
     </script>
 @endsection

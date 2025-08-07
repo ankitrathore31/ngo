@@ -235,8 +235,8 @@
                                 {{-- <th>Identity No.</th>
                                 <th>Identity Type</th> --}}
                                 <th>Mobile no.</th>
-                                {{-- <th>Email</th> --}}
-                                {{-- <th>Donation Category</th> --}}
+                                <th>Donation Type</th>
+                                <th>Donation Category</th>
                                 <th>Donation Amount</th>
                                 <th>Donate Date</th>
                                 {{-- <th>Status</th> --}}
@@ -255,6 +255,8 @@
                                     <td>{{ $item->gurdian_name ?? 'Donation with Online cashfree' }}</td>
                                     <td>{{ $item->address ?? $item->donor_village }}</td>
                                     <td>{{ $item->mobile ?? '-' }}</td>
+                                    <td>{{ $item->amountType ?? 'Donation with Online cashfree' }}</td>
+                                    <td>{{ $item->category ?? 'Donation with Online cashfree' }}</td>
                                     <td>{{ $item->amount }}</td>
                                     <td>{{ $item->date ? \Carbon\Carbon::parse($item->date)->format('d-m-Y') : 'Not Found' }}
                                     </td>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\academic_session;
+use App\Models\BalanceReport;
 use App\Models\Bill;
 use App\Models\Bill_Item;
 use App\Models\Bill_Voucher;
@@ -10,6 +11,7 @@ use App\Models\Donation;
 use App\Models\donor_data;
 use App\Models\GbsBill;
 use App\Models\Voucher_Item;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CashBookController extends Controller
@@ -195,5 +197,60 @@ class CashBookController extends Controller
             'totalAmount' => $totalAmount,
             'session' => $session
         ]);
+    }
+
+    public function generateMonthlyReport(Request $request)
+    {
+        $year = $request->input('year', now()->year);
+
+        for ($month = 1; $month <= 12; $month++) {
+            $startDate = Carbon::createFromDate($year, $month, 1)->startOfMonth();
+            $endDate = $startDate->copy()->endOfMonth();
+
+            // Total income
+            $online = donor_data::where('status', 'Successful')
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->sum('amount');
+
+            $offline = Donation::whereBetween('created_at', [$startDate, $endDate])
+                ->sum('amount');
+
+            $totalIncome = $online + $offline;
+
+            // Total expenditure
+            $bvExpense = Bill_Voucher::with('items')
+                ->whereBetween('date', [$startDate, $endDate])
+                ->get()
+                ->sum(fn($x) => $x->items->sum(fn($i) => $i->qty * $i->rate));
+
+            $bExpense = Bill::with('items')
+                ->whereBetween('date', [$startDate, $endDate])
+                ->get()
+                ->sum(fn($x) => $x->items->sum(fn($i) => $i->qty * $i->rate));
+
+            $gbsExpense = GbsBill::whereBetween('bill_date', [$startDate, $endDate])->sum('amount');
+
+            $totalExpenditure = $bvExpense + $bExpense + $gbsExpense;
+            $remaining = $totalIncome - $totalExpenditure;
+
+            BalanceReport::updateOrCreate(
+                ['year' => $year, 'month' => $month],
+                [
+                    'total_income' => $totalIncome,
+                    'total_expenditure' => $totalExpenditure,
+                    'remaining_amount' => $remaining,
+                ]
+            );
+        }
+
+        return redirect()->back()->with('success', 'Monthly financial reports generated for year ' . $year);
+    }
+
+    public function BalanceReportView(Request $request)
+    {
+        $year = $request->input('year', now()->year);
+        $reports = BalanceReport::where('year', $year)->orderBy('month')->get();
+
+        return view('ngo.cashbook.report', compact('reports', 'year'));
     }
 }

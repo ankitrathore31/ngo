@@ -213,6 +213,38 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="mb-3 form-group" id="categorySelect">
+                            <label for="category">Donation Category:</label>
+                            <select class="form-control" id="category" name="category">
+                                <option value="">Select...</option>
+                                @foreach ($category as $item)
+                                    <option value="{{ $item->category }}"
+                                        {{ $donation->category == $item->category ? 'selected' : '' }}>
+                                        {{ $item->category }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mb-3 form-group">
+                            <label for="amountType">Amount Type:</label>
+                            <select class="form-control" id="amountType" name="amountType">
+                                <option value="">Select...</option>
+                                <option value="donation" {{ $donation->amountType == 'donation' ? 'selected' : '' }}>
+                                    Donation</option>
+                                <option value="membership" {{ $donation->amountType == 'membership' ? 'selected' : '' }}>
+                                    Membership</option>
+                                <option value="income" {{ $donation->amountType == 'income' ? 'selected' : '' }}>Income
+                                    from other sources</option>
+                                <option value="balance" {{ $donation->amountType == 'balance' ? 'selected' : '' }}>Year
+                                    wise balance amount</option>
+                                <option value="trainingFees"
+                                    {{ $donation->amountType == 'trainingFees' ? 'selected' : '' }}>Training fees</option>
+                                <option value="tuitionFees"
+                                    {{ $donation->amountType == 'tuitionFees' ? 'selected' : '' }}>Tuition fees</option>
+                            </select>
+                        </div>
+
                         <!-- Amount -->
                         <div class="mb-3">
                             <label class="form-label">
@@ -221,7 +253,7 @@
                             </label>
                             <div class="row g-2">
                                 <div class="col-md-6">
-                                    <input type="number" class="form-control @error('amount') is-invalid @enderror"
+                                    <input type="text" class="form-control @error('amount') is-invalid @enderror"
                                         name="amount" id="amountInput" value="{{ $donation->amount }}"
                                         oninput="updateAmountInWords()" placeholder="₹">
                                     @error('amount')
@@ -356,7 +388,7 @@
                         </div>
 
                         <!-- Submit -->
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-success">
                             {{-- <span data-lang="hi">सहेजें</span> --}}
                             <span>Update Deposite</span>
                         </button>

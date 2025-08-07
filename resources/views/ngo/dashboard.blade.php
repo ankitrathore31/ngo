@@ -408,7 +408,7 @@
                                         <i class="fas fa-hand-holding-usd fa-2x me-3"></i>
                                         <div>
                                             <p class="mb-1">Today's Donation</p>
-                                            <h5 class="mb-0">₹ {{ $todaydonate }}</h5>
+                                            <h5 class="mb-0">₹ {{ number_format($todaydonate, 2) }}</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -421,7 +421,7 @@
                                         <i class="fas fa-donate fa-2x me-3"></i>
                                         <div>
                                             <p class="mb-1">Total Online Donation</p>
-                                            <h5 class="mb-0">₹ {{ $succdonate }}</h5>
+                                            <h5 class="mb-0">₹ {{ number_format($succdonate, 2) }}</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -434,7 +434,7 @@
                                         <i class="fas fa-donate fa-2x me-3"></i>
                                         <div>
                                             <p class="mb-1">Total Offline Donation</p>
-                                            <h5 class="mb-0">₹ {{ $offlinedonate }}</h5>
+                                            <h5 class="mb-0">₹ {{ number_format($offlinedonate,2) }}</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -447,7 +447,7 @@
                                         <i class="fas fa-hand-holding-usd fa-2x me-3"></i>
                                         <div>
                                             <p class="mb-1">Total Donation</p>
-                                            <h5 class="mb-0">₹ {{ $totaldonation }}</h5>
+                                            <h5 class="mb-0">₹ {{ number_format($totaldonation, 2) }}</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -497,7 +497,7 @@
                                     <i class="fas fa-coins fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Today's Cost</p>
-                                        <h5 class="mb-0">₹{{ $todayCostAmount }}</h5>
+                                        <h5 class="mb-0">₹{{ number_format($todayCostAmount, 2) }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -509,7 +509,7 @@
                                     <i class="fas fa-file-invoice-dollar fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Total Cost</p>
-                                        <h5 class="mb-0">₹{{ $totalCostAmount }}</h5>
+                                        <h5 class="mb-0">₹{{ number_format($totalCostAmount, 2) }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -532,7 +532,7 @@
                                     <i class="fas fa-file-invoice-dollar fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Total Income</p>
-                                        <h5 class="mb-0">₹{{ $totalIncome }}</h5>
+                                        <h5 class="mb-0">₹{{ number_format($totalIncome, 2) }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -544,7 +544,7 @@
                                     <i class="fas fa-file-invoice-dollar fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Total Cost</p>
-                                        <h5 class="mb-0">₹{{ $totalCostAmount }}</h5>
+                                        <h5 class="mb-0">₹{{ number_format($totalCostAmount, 2) }}</h5>
                                     </div>
                                 </div>
                             </div>

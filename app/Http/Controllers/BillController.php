@@ -178,7 +178,31 @@ class BillController extends Controller
         return redirect()->back()->with('success', 'Voucher Deleted successfully!');
     }
 
-    public function GenerateBill(Request $request)
+    public function GeneratePersonBill(Request $request)
+    {
+        $states = config('states');
+        $data = academic_session::all();
+        $categories = Category::pluck('category');
+        $allProjects = Project::select('name', 'category')->get();
+
+        $searchResults = collect();
+
+        // Perform search across both models
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            // Search in Bill model
+            $searchResultsBill = GbsBill::where('shop', 'like', "%$search%")
+                ->orWhere('name', 'like', "%$search%")
+                ->get();
+
+            // Merge results into a single collection
+            $searchResults = $$searchResultsBill;
+        }
+
+        return view('ngo.bill.generate-person-bill', compact('states', 'data', 'categories', 'allProjects', 'searchResults'));
+    }
+
+      public function GenerateSansthaBill(Request $request)
     {
         $states = config('states');
         $data = academic_session::all();
@@ -209,7 +233,7 @@ class BillController extends Controller
             $searchResults = Bill_Voucher::all();
         }
 
-        return view('ngo.bill.generate-bill', compact('states', 'data', 'categories', 'allProjects', 'searchResults'));
+        return view('ngo.bill.generate-sanstha-bill', compact('states', 'data', 'categories', 'allProjects', 'searchResults'));
     }
 
 
@@ -254,8 +278,9 @@ class BillController extends Controller
         $states = config('states');
         $data = academic_session::all();
         $bill = GbsBill::find($id);
-        $category = Category::orderBy('category', 'asc')->get();
-        return view('ngo.bill.edit-person-bill', compact('states', 'data', 'bill', 'category'));
+        $categories = Category::pluck('category');
+        $allProjects = Project::select('name', 'category')->get();        
+        return view('ngo.bill.edit-person-bill', compact('states', 'data', 'bill', 'categories','allProjects'));
     }
 
     public function UdatePersonBill(Request $request, $id)
@@ -440,8 +465,9 @@ class BillController extends Controller
         $bill_items = Bill_Item::where('bill_id', $bill_id)->get();
         $data = academic_session::all();
         $states = config('states');
-        $category = Category::orderBy('category', 'asc')->get();
-        return view('ngo.bill.edit-gbs-bill', compact('gbsBill', 'bill_items', 'data', 'states', 'category'));
+        $categories = Category::pluck('category');
+        $allProjects = Project::select('name', 'category')->get();
+        return view('ngo.bill.edit-gbs-bill', compact('gbsBill', 'bill_items', 'data', 'states', 'categories','allProjects'));
     }
 
     public function UpdateGbsBill(Request $request, $id)

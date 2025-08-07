@@ -7,6 +7,7 @@ use App\Models\Donation;
 use Illuminate\Http\Request;
 use App\Models\donor_data;
 use App\Models\beneficiarie;
+use App\Models\Category;
 use App\Models\Member;
 use App\Models\Signature;
 use Illuminate\Support\Facades\DB;
@@ -46,7 +47,8 @@ class DonationController extends Controller
         $lastReceiptNo = Donation::max('receipt_no');
         $newReceiptNo = is_numeric($lastReceiptNo) ? ((int) $lastReceiptNo + 1) : 1;
         $states = config('states');
-        return view('ngo.donation.donation', compact('data', 'record', 'newReceiptNo'));
+        $category = Category::get();
+        return view('ngo.donation.donation', compact('data', 'record', 'newReceiptNo','category'));
     }
 
     public function saveDonation(Request $request)
@@ -61,7 +63,7 @@ class DonationController extends Controller
             'block' => 'required',
             'state' => 'required',
             'district' => 'required',
-            'amount' => 'required',
+            'amount' => 'required|numeric',
             'payment_method' => 'required',
         ]);
 
@@ -85,6 +87,8 @@ class DonationController extends Controller
         $donation->block = $request->block;
         $donation->state = $request->state;
         $donation->district = $request->district;
+        $donation->amountType = $request->amountType;
+        $donation->category   = $request->category;
         $donation->amount = $request->amount;
         $donation->depositor_name = $request->depositor_name;
         $donation->relationship = $request->relationship;
@@ -115,7 +119,8 @@ class DonationController extends Controller
     {
         $data = academic_session::all();
         $donation = Donation::find($id);
-        return view('ngo.donation.edit-donation', compact('data', 'donation'));
+        $category = Category::get();
+        return view('ngo.donation.edit-donation', compact('data', 'donation','category'));
     }
 
     public function updateDonation(Request $request, $id)
@@ -145,6 +150,8 @@ class DonationController extends Controller
         $donation->block = $request->block;
         $donation->state = $request->state;
         $donation->district = $request->district;
+        $donation->amountType = $request->amountType;
+        $donation->category   = $request->category;
         $donation->amount = $request->amount;
         $donation->depositor_name = $request->depositor_name;
         $donation->relationship = $request->relationship;

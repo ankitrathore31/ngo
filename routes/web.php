@@ -351,7 +351,8 @@ Route::controller(BillController::class)->group(function () {
     Route::get('ngo/bill-list', 'BillList')->middleware('auth')->name('bill-list');
     Route::get('ngo/view-bill/{id}', 'ViewBill')->Middleware('auth')->name('view-bill');
     Route::get('ngo/delete-bill/{id}', 'DeleteBill')->middleware('auth')->name('delete-bill');
-    Route::get('ngo/generate-bill', 'GenerateBill')->middleware('auth')->name('generate-bill');
+    Route::get('ngo/generate-person-bill', 'GeneratePersonBill')->middleware('auth')->name('generate-person-bill');
+    Route::get('ngo/generate-bill', 'GenerateSansthaBill')->middleware('auth')->name('generate-sanstha-bill');
     Route::post('ngo/store-person-bill', 'StorePersonBill')->middleware('auth')->name('store-person-bill');
     Route::get('ngo/edit-person=bill/{id}', 'EditPersonBill')->middleware('auth')->name('edit-person-bill');
     Route::post('ngo/update-person-bill/{id}', 'UdatePersonBill')->middleware('auth')->name('update-person-bill');
@@ -435,6 +436,8 @@ Route::controller(OrganizationController::class)->group(function () {
 Route::controller(CashBookController::class)->middleware('auth')->group(function () {
     Route::get('ngo/income-list', 'IncomeList')->name('list.income');
     Route::get('ngo/expenditure-list', 'ExpenditureList')->name('expenditure.list');
+    Route::get('ngo/balance-report', 'BalanceReportView')->name('balance.report.view');
+    Route::get('ngo/generate-balance-report','generateMonthlyReport')->name('balance.report.generate');
 });
 
 require __DIR__ . '/auth.php';
