@@ -126,8 +126,8 @@
                                 {{-- <th>Identity No.</th>
                                 <th>Identity Type</th> --}}
                                 <th>Mobile no.</th>
-                                {{-- <th>Email</th> --}}
-                                {{-- <th>Donation Category</th> --}}
+                                <th>Donation Type</th>
+                                <th>Donation Category</th>
                                 <th>Donation Amount</th>
                                 <th>Donate Date</th>
                                 {{-- <th>Status</th> --}}
@@ -147,6 +147,8 @@
                                     <td>{{ $item->address }}
                                     </td>
                                     <td>{{ $item->mobile }}</td>
+                                    <td>{{ $item->amountType }}</td>
+                                    <td>{{ $item->category }}</td>
                                     <td>{{ $item->amount }}</td>
                                     <td>
                                         {{ $item->date ? \Carbon\Carbon::parse($item->date)->format('d-m-Y') : 'No Found' }}
