@@ -125,21 +125,10 @@
             <div class="row">
                 <div class="col-md-12">
                     <form method="GET" action="{{ route('online-donor-list') }}" class="row g-3 mb-4">
-                        <div class="col-md-4">
-                            {{-- <label for="session_filter" class="form-label">Select Session</label> --}}
-                            <select name="session_filter" id="session_filter" class="form-control"
-                                onchange="this.form.submit()">
-                                <option value="">All Sessions</option> <!-- Default option to show all -->
-                                @foreach ($data as $session)
-                                    <option value="{{ $session->session_date }}"
-                                        {{ request('session_filter') == $session->session_date ? 'selected' : '' }}>
-                                        {{ $session->session_date }}
-                                    </option>
-                                @endforeach
-                            </select>
+                        <div class="col-md-4 col-sm-4 mb-3">
+                            <input type="text" class="form-control" name="name" placeholder="Search By Name">
                         </div>
-
-                        <div class="col-md-4 d-flex">
+                        <div class="col-md-4">
                             <button type="submit" class="btn btn-primary me-2">Search</button>
                             <a href="{{ route('online-donor-list') }}" class="btn btn-info text-white me-2">Reset</a>
                         </div>
@@ -163,13 +152,9 @@
                                         &nbsp; &nbsp;<span>PAN: AAEAG7650B</span>&nbsp;
                                     </b></p>
                                 <h4 class="print-h4"><b>
-                                        {{-- <span data-lang="hi">ज्ञान भारती संस्था</span> --}}
                                         <span data-lang="en">GYAN BHARTI SANSTHA</span>
                                     </b></h4>
                                 <h6 style="color: blue;"><b>
-                                        {{-- <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर
-                                            प्रदेश -
-                                            262121</span> --}}
                                         <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit,
                                             UP
                                             -
@@ -240,6 +225,13 @@
                                 </tr>
                             @endforeach
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="8" class="text-end"><strong>Total Donation Amount:</strong></td>
+                                <td><strong>{{ $donor->sum('amount') }}</strong></td>
+                                <td colspan="5"></td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>

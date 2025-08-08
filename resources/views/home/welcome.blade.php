@@ -491,39 +491,68 @@
                         <span class="fs-5 fw-bold text-danger">{{ totalRejectedReg() }}</span>
                     </div>
                 </div>
-
-                <div class="col-6 col-md-3 mb-3">
+            </div>
+            <div class="row text-center g-2">
+                <div class="col-6 col-md-4 mb-3">
+                    <div class="p-2 bg-light shadow-sm rounded">
+                        <span class="fw-bold text-info d-block">Total Survey</span>
+                        <span class="fs-5 fw-bold text-info">{{ TotalSurvey() }}</span>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 mb-3">
+                    <div class="p-2 bg-light shadow-sm rounded">
+                        <span class="fw-bold text-warning d-block">Pending Survey</span>
+                        <span class="fs-5 fw-bold text-warning">{{ PendingSurvey() }}</span>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 mb-3">
+                    <div class="p-2 bg-light shadow-sm rounded">
+                        <span class="fw-bold text-success d-block">Completed Survey</span>
+                        <span class="fs-5 fw-bold text-success">{{ ApproveSurvey() }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row text-center g-2">
+                <div class="col-6 col-md-4 mb-3">
                     <div class="p-2 bg-light shadow-sm rounded">
                         <span class="fw-bold text-info d-block">Total Demand</span>
                         <span class="fs-5 fw-bold text-info">{{ totalDemand() }}</span>
                     </div>
                 </div>
-                <div class="col-6 col-md-3 mb-3">
+                <div class="col-6 col-md-4 mb-3">
                     <div class="p-2 bg-light shadow-sm rounded">
                         <span class="fw-bold text-warning d-block">Pending Demand</span>
                         <span class="fs-5 fw-bold text-warning">{{ totalPendingDemand() }}</span>
                     </div>
                 </div>
-                <div class="col-6 col-md-3 mb-3">
+                <div class="col-6 col-md-4 mb-3">
                     <div class="p-2 bg-light shadow-sm rounded">
                         <span class="fw-bold text-success d-block">Approved Demand</span>
                         <span class="fs-5 fw-bold text-success">{{ totalApprovedDemand() }}</span>
                     </div>
                 </div>
-                <div class="col-6 col-md-3 mb-3">
+            </div>
+            <div class="row text-center g-2">
+                <div class="col-6 col-md-4 mb-3">
+                    <div class="p-2 bg-light shadow-sm rounded">
+                        <span class="fw-bold text-warning d-block">Total Demand Distribution</span>
+                        <span class="fs-5 fw-bold text-warning">{{ totalDemandDistributed() }}</span>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 mb-3">
                     <div class="p-2 bg-light shadow-sm rounded">
                         <span class="fw-bold text-primary d-block">Total Distributed</span>
                         <span class="fs-5 fw-bold text-primary">{{ totalDistributed() }}</span>
                     </div>
                 </div>
-                <div class="col-6 col-md-3 mb-3">
+                <div class="col-6 col-md-4 mb-3">
                     <div class="p-2 bg-light shadow-sm rounded">
                         <span class="fw-bold text-danger d-block">Rejected Distribution</span>
                         <span class="fs-5 fw-bold text-danger">{{ totalRejectedDistributed() }}</span>
                     </div>
                 </div>
             </div>
-               <div class="row justify-content-center d-flex">
+            <div class="row justify-content-center d-flex">
                 <div class="col-md-12 justify-content-center d-flex" style="gap: 15px;">
                     <h4 class="section-title mb-4"><b>Social Problems</b></h4>
                     <select class="form-control w-25" id="session">
@@ -915,8 +944,7 @@
                 <div class="col-md-4 mb-4">
                     <div class="card shadow-lg bg-white rounded p-3 mb-5">
                         <div class="card-body text-center">
-                            <img src="{{ asset('images/education2.jpg') }}" class="img-fluid mb-3"
-                                width="200">
+                            <img src="{{ asset('images/education2.jpg') }}" class="img-fluid mb-3" width="200">
                             <div class="card-body">
                                 <h5 class="card-title">Help For Education</h5>
                                 <p class="card-text">Providing Free Education by our NGO</p>
@@ -996,7 +1024,7 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col-md-12">
-                    <form action="{{route('store.email')}}" method="POST" >
+                    <form action="{{ route('store.email') }}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>

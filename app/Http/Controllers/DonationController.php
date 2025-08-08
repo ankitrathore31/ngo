@@ -9,16 +9,21 @@ use App\Models\donor_data;
 use App\Models\beneficiarie;
 use App\Models\Category;
 use App\Models\Member;
+use App\Models\Project;
 use App\Models\Signature;
 use Illuminate\Support\Facades\DB;
 
 
 class DonationController extends Controller
 {
-    public function onlineDonor()
+    public function onlineDonor(Request $request)
     {
         $data = academic_session::all();
-        $donor = donor_data::where('status', 'Successful')->get();
+        $query = donor_data::query();
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+        $donor = $query->where('status', 'Successful')->get();
         return view('ngo.donation.online-donor-list', compact('data', 'donor'));
     }
 
@@ -32,10 +37,18 @@ class DonationController extends Controller
         if ($request->filled('name')) {
             $query->where('name', 'like', '%' . $request->name . '%');
         }
+        if($request->filled('category')){
+            $query->where('category', $request->category);
+        }
+        if($request->filled('amountType')){
+            $query->where('amountType', $request->amountType);
+        }
         $data = academic_session::all();
+        $categories = Category::pluck('category');
+        $allProjects = Project::select('name', 'category')->get();
         $donor = $query->get();
 
-        return view('ngo.donation.donation-list', compact('data', 'donor'));
+        return view('ngo.donation.donation-list', compact('data', 'donor','categories','allProjects'));
     }
 
     public function donation(Request $request)
@@ -288,6 +301,9 @@ class DonationController extends Controller
         if ($request->filled('district')) {
             $online->where('district', $request->district);
         }
+         if($request->filled('category')){
+            $online->where('donation_category', $request->category);
+        }
 
         // Apply filters to Donation (offline donations)
         $offline = Donation::query();
@@ -309,6 +325,12 @@ class DonationController extends Controller
         if ($request->filled('district')) {
             $offline->where('district', $request->district);
         }
+         if($request->filled('category')){
+            $offline->where('category', $request->category);
+        }
+        if($request->filled('amountType')){
+            $offline->where('amountType', $request->amountType);
+        }
 
         // Get both collections and merge
         $donations = $online->get()->merge($offline->get());
@@ -319,7 +341,8 @@ class DonationController extends Controller
         // For academic session dropdown
         $data = academic_session::all();
         $states = config('states');
-        return view('ngo.donation.all-donation-list', compact('data', 'donations','states'));
+        $categories = Category::pluck('category');
+        return view('ngo.donation.all-donation-list', compact('data', 'donations','states','categories'));
     }
 
     public function DonationReport(Request $request)

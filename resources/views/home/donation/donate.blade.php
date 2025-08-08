@@ -9,6 +9,7 @@
             background-color: #007bff;
             color: white;
         }
+
         /* Ensure all cards and card-body have the same height */
         .cause .card {
             height: 100%;
@@ -360,34 +361,9 @@
                                     <label for="category" class="form-label">Donation Category:</label>
                                     <select name="donation_category" id="category" class="form-control">
                                         <option value="" selected>Select Category</option>
-                                        <option value="Poor Service Donation">Poor Service Donation</option>
-                                        <option value="Free Education Donation">Free Education Donation</option>
-                                        <option value="Health Care Donation">Health Care Donation</option>
-                                        <option value="Food Donation">Food Donation</option>
-                                        <option value="Environment">Environment</option>
-                                        <option value="Disaster Donation">Disaster Donation</option>
-                                        <option value="Skill Development">Skill Development</option>
-                                        <option value="Social Service Donation">Social Service Donation</option>
-                                        <option value="Training Centre">Training Centre</option>
-                                        <option value="School Fees Donation">School Fees Donation</option>
-                                        <option value="Book Donation">Book Donation</option>
-                                        <option value="Stationary Kit Donation">Stationary Kit Donation</option>
-                                        <option value="Tuition Fees Donation">Tuition Fees Donation</option>
-                                        <option value="Holi Kit Donation">Holi Kit Donation</option>
-                                        <option value="Diwali Kit Donation">Diwali Kit Donation</option>
-                                        <option value="Eid Kit Donation">Eid Kit Donation</option>
-                                        <option value="Ration Kit Donation">Ration Kit Donation</option>
-                                        <option value="Nutrition Kit Donation">Nutrition Kit Donation</option>
-                                        <option value="Cow Service Donation">Cow Service Donation</option>
-                                        <option value="Free Coaching Donation">Free Coaching Donation</option>
-                                        <option value="Plantation Donation">Plantation Donation</option>
-                                        <option value="Women Empowerment">Women Empowerment</option>
-                                        <option value="Deaddiction">Deaddiction</option>
-                                        <option value="Membership Training Fees Donation">Membership Fees Donation</option>
-                                        <option value="Training Fees Donation">Training Fees Donation</option>
-                                        <option value="Cultural Donation">Cultural Donation</option>
-                                        <option value="Economic Help">Economic Help</option>
-                                        <option value="Other Donation">Other Donation</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category }}">{{ $category }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="row">
@@ -400,14 +376,14 @@
                                     <div class="col-md-6 mb-3">
                                         <label for="amount" class="form-label">Donation Amount:</label>
                                         <input type="number" class="form-control" name="donation_amount" id="amount"
-                                            value="" required>
+                                         required>
                                     </div>
                                 </div>
                                 <div class="col-md-6 row">
                                     <div class="text-center">
                                         <!-- <input type="submit" class="btn btn-success mt-1" value="Pay Now" name="submit"> -->
-                                        <button type="submit" name="submit" class="btn btn-success mt-2">Pay
-                                            Now</button>
+                                        <button type="submit" name="submit" class="btn btn-success mt-2">Donate
+                                        Now</button>
                                     </div>
                                 </div>
                             </form>

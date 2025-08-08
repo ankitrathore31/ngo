@@ -1,6 +1,6 @@
 @extends('ngo.layout.master')
 @Section('content')
-<style>
+    <style>
         @page {
             size: auto;
             margin: 0;
@@ -126,8 +126,7 @@
                     <form method="GET" action="{{ route('all-donor-list') }}" class="row g-3 mb-4">
                         <div class="col-md-4">
                             {{-- <label for="session_filter" class="form-label">Select Session</label> --}}
-                            <select name="session_filter" id="session_filter" class="form-control"
-                            >
+                            <select name="session_filter" id="session_filter" class="form-control">
                                 <option value="">All Sessions</option> <!-- Default option to show all -->
                                 @foreach ($data as $session)
                                     <option value="{{ $session->session_date }}"
@@ -135,6 +134,26 @@
                                         {{ $session->session_date }}
                                     </option>
                                 @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <select name="category" id="category" class="form-control" required>
+                                <option value="">Select Category</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category }}">{{ $category }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3
+                         form-group">
+                            <select class="form-control" id="amountType" name="amountType">
+                                <option value="">Select Amount Type</option>
+                                <option value="donation">Donation</option>
+                                <option value="membership">Membership</option>
+                                <option value="income">Income from other sources</option>
+                                <option value="balance">Year wise balance amount</option>
+                                <option value="trainingFees">Training fees</option>
+                                <option value="tuitionFees">Tuition fees</option>
                             </select>
                         </div>
                         <div class="col-md-4 col-sm-4 mb-3">
@@ -256,7 +275,7 @@
                                     <td>{{ $item->address ?? $item->donor_village }}</td>
                                     <td>{{ $item->mobile ?? '-' }}</td>
                                     <td>{{ $item->amountType ?? 'Donation with Online cashfree' }}</td>
-                                    <td>{{ $item->category ?? 'Donation with Online cashfree' }}</td>
+                                    <td>{{ $item->category ?? $item->donation_category }}</td>
                                     <td>{{ $item->amount }}</td>
                                     <td>{{ $item->date ? \Carbon\Carbon::parse($item->date)->format('d-m-Y') : 'Not Found' }}
                                     </td>
@@ -283,8 +302,13 @@
                                 </tr>
                             @endforeach
                         </tbody>
-
-
+                        <tfoot>
+                            <tr>
+                                <td colspan="7" class="text-end"><strong>Total Donation Amount:</strong></td>
+                                <td><strong>{{ $donations->sum('amount') }}</strong></td>
+                                <td colspan="5"></td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>

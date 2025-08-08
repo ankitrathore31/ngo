@@ -8,6 +8,7 @@ use App\Models\Gallery;
 use App\Models\beneficiarie;
 use App\Models\Member;
 use App\Models\academic_session;
+use App\Models\Beneficiarie_Survey;
 use App\Models\Category;
 use App\Models\Donation;
 use App\Models\Notice;
@@ -189,7 +190,7 @@ class HomeControlller extends Controller
         $project = $query->get();
         $data = academic_session::all();
         $category = Category::orderBy('category', 'asc')->get();
-        return view('home.pages.project', compact('data', 'project','category'));
+        return view('home.pages.project', compact('data', 'project', 'category'));
     }
 
     public function newspage()
@@ -216,7 +217,8 @@ class HomeControlller extends Controller
 
     public function donatepage()
     {
-        return view('home.donation.donate');
+        $categories = Category::pluck('category');
+        return view('home.donation.donate', compact('categories'));
     }
 
     public function contactpage()
@@ -294,13 +296,13 @@ class HomeControlller extends Controller
 
         $identityNo = str_replace(' ', '', $request->identity_no);
 
-        $beneficiarie = \App\Models\beneficiarie::with([
-            'surveys' => function ($query) {
-                $query->whereNotNull('facilities');
-                // ->where('facilities', 1);
-            }
-        ])
-            ->withTrashed()
+        $beneficiarie = Beneficiarie::withTrashed()
+            ->with(['surveys' => function ($query) {
+                $query->where(function ($q) {
+                    $q->whereNotNull('survey_date')
+                        ->orWhereNotNull('facilities');
+                });
+            }])
             ->where('identity_no', $identityNo)
             ->first();
 
@@ -308,7 +310,15 @@ class HomeControlller extends Controller
             return back()->with('error', 'Facilities not found.')->withInput();
         }
 
-        return view('home.status.show_facilities', compact('beneficiarie'))->with('success', 'Facilities found.');
+        $firstSurvey = $beneficiarie->surveys->first();
+
+        $surveys = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie->id)
+            ->where('facilities_status', 1)
+            ->where('status', 'Distributed')
+            ->get();
+
+        return view('home.status.show_facilities', compact('beneficiarie', 'firstSurvey', 'surveys'))
+            ->with('success', 'Facilities found.');
     }
 
     public function showarea($text)
@@ -372,7 +382,7 @@ class HomeControlller extends Controller
         $group = $query->paginate(10);
         $data = academic_session::all();
 
-        return view('home.organization.show-group', compact('organization', 'group', 'data','id'));
+        return view('home.organization.show-group', compact('organization', 'group', 'data', 'id'));
     }
 
 
