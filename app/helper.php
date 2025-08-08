@@ -57,6 +57,24 @@ if (!function_exists('totalApprovedReg')) {
         return $data;
     }
 }
+if(!function_exists('TotalSurvey')){
+    function TotalSurvey(){
+        $data = beneficiarie::where('status', 1)->count();
+        return $data;
+    }
+}
+if(!function_exists('PendingSurvey')){
+    function PendingSurvey(){
+        $data = beneficiarie::where('survey_status', 0)->count();
+        return $data;
+    }
+}
+if(!function_exists('ApproveSurvey')){
+    function ApproveSurvey(){
+        $data = beneficiarie::where('survey_status', 1)->count();
+        return $data;
+    }
+}
 if (!function_exists('totalDemand')) {
     function totalDemand()
     {
@@ -73,6 +91,13 @@ if (!function_exists('totalPendingDemand')) {
 }
 if (!function_exists('totalApprovedDemand')) {
     function totalApprovedDemand()
+    {
+        $data = Beneficiarie_Survey::where('facilities_status', 1)->count();
+        return $data;
+    }
+}
+if (!function_exists('totalDemandDistributed')) {
+    function totalDemandDistributed()
     {
         $data = Beneficiarie_Survey::where('facilities_status', 1)->count();
         return $data;

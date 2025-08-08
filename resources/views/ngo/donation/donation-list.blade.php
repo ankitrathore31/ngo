@@ -127,8 +127,7 @@
                     <form method="GET" action="{{ route('donation-list') }}" class="row g-3 mb-4">
                         <div class="col-md-4">
                             {{-- <label for="session_filter" class="form-label">Select Session</label> --}}
-                            <select name="session_filter" id="session_filter" class="form-control"
-                                onchange="this.form.submit()">
+                            <select name="session_filter" id="session_filter" class="form-control">
                                 <option value="">All Sessions</option> <!-- Default option to show all -->
                                 @foreach ($data as $session)
                                     <option value="{{ $session->session_date }}"
@@ -136,6 +135,27 @@
                                         {{ $session->session_date }}
                                     </option>
                                 @endforeach
+                            </select>
+                        </div>
+                        <!-- Category Dropdown -->
+                        <div class="col-md-4 mb-3">
+                            <select name="category" id="category" class="form-control" required>
+                                <option value="">Select Category</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category }}">{{ $category }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3
+                         form-group">
+                            <select class="form-control" id="amountType" name="amountType">
+                                <option value="">Select Amount Type</option>
+                                <option value="donation">Donation</option>
+                                <option value="membership">Membership</option>
+                                <option value="income">Income from other sources</option>
+                                <option value="balance">Year wise balance amount</option>
+                                <option value="trainingFees">Training fees</option>
+                                <option value="tuitionFees">Tuition fees</option>
                             </select>
                         </div>
                         <div class="col-md-4 col-sm-4 mb-3">
@@ -261,6 +281,13 @@
                                 </tr>
                             @endforeach
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="9" class="text-end"><strong>Total Donation Amount:</strong></td>
+                                <td><strong>{{ $donor->sum('amount') }}</strong></td>
+                                <td colspan="5"></td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
@@ -270,5 +297,27 @@
         function printTable() {
             window.print();
         }
+    </script>
+    <script>
+        const allProjects = @json($allProjects);
+
+        document.getElementById('work_category').addEventListener('change', function() {
+            const selectedCategory = this.value;
+            const workNameSelect = document.getElementById('work_name');
+
+            // Clear current options
+            workNameSelect.innerHTML = '<option value="">Select Work Name</option>';
+
+            // Filter projects by selected category
+            const filteredProjects = allProjects.filter(p => p.category === selectedCategory);
+
+            // Add options to Work Name dropdown
+            filteredProjects.forEach(project => {
+                const option = document.createElement('option');
+                option.value = project.name;
+                option.text = project.name;
+                workNameSelect.appendChild(option);
+            });
+        });
     </script>
 @endsection

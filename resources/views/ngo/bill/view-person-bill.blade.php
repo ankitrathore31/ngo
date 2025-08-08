@@ -248,7 +248,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-sm-7 mb-2">
+                            <div class="col-sm-8 mb-2">
                                 <div style="display: flex; align-items: center; width: 100%;">
                                     <strong style="white-space: nowrap; margin-right: 5px;">
                                         <span data-lang="hi">ज्ञान भारती
@@ -261,7 +261,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-sm-5 mb-2">
+                            <div class="col-sm-4 mb-2">
                                 <div style="display: flex; align-items: center; width: 100%;">
                                     <strong style="white-space: nowrap; margin-right: 5px;">
                                         <span data-lang="hi">शाखा</span>

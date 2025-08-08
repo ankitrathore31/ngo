@@ -127,88 +127,74 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {{-- Application Details --}}
                                     <tr>
                                         <td>1</td>
                                         <td>
-                                            {{ $beneficiarie->application_date ? \Carbon\Carbon::parse($beneficiarie->application_date)->format('d-m-Y') : 'No Found' }}
+                                            {{ $beneficiarie->application_date ? \Carbon\Carbon::parse($beneficiarie->application_date)->format('d-m-Y') : 'Not Found' }}
                                         </td>
                                         <td>Application No.</td>
                                         <td>{{ $beneficiarie->application_no ?? 'Pending' }}</td>
                                         <td>{{ $beneficiarie->status == 1 ? 'Approved' : 'Pending' }}</td>
                                         <td></td>
                                     </tr>
+
+                                    {{-- Registration Details --}}
                                     <tr>
                                         <td>2</td>
                                         <td>
-                                            {{ $beneficiarie->registration_date ? \Carbon\Carbon::parse($beneficiarie->registration_date)->format('d-m-Y') : 'No Found' }}
+                                            {{ $beneficiarie->registration_date ? \Carbon\Carbon::parse($beneficiarie->registration_date)->format('d-m-Y') : 'Not Found' }}
                                         </td>
                                         <td>Registration No.</td>
                                         <td>{{ $beneficiarie->registration_no ?? 'Pending' }}</td>
                                         <td>{{ $beneficiarie->status == 1 ? 'Approved' : 'Pending' }}</td>
                                         <td></td>
                                     </tr>
+
+                                    {{-- First Survey Info --}}
                                     <tr>
                                         <td>3</td>
                                         <td>
-                                            {{ optional($beneficiarie->surveys->first())->survey_date
-                                                ? \Carbon\Carbon::parse($beneficiarie->surveys->first()->survey_date)->format('d-m-Y')
-                                                : 'No survey Date' }}
+                                            @if ($firstSurvey && $firstSurvey->survey_date)
+                                                {{ \Carbon\Carbon::parse($firstSurvey->survey_date)->format('d-m-Y') }}
+                                            @else
+                                                No Survey Date
+                                            @endif
                                         </td>
-                                        
+
                                         <td>Survey</td>
                                         <td></td>
-                                        <td> </td>
+                                        <td></td>
                                         <td>
-                                            {{ optional($beneficiarie->surveys->first())->survey_details ?? 'No survey details' }}
+                                            {{ isset($firstSurvey) && $firstSurvey->survey_details ? $firstSurvey->survey_details : 'No Survey Details' }}
                                         </td>
+
                                     </tr>
-                                    {{-- @if ($beneficiarie->surveys->isEmpty())
-                                    <div class="alert alert-warning">No Facilities records found.</div> --}}
-                                    {{-- @else --}}
-                                    @php $serial =4; @endphp
-                                    @foreach ($beneficiarie->surveys as $survey)
+                                    {{-- All Distributed Facilities --}}
+                                    @php $serial = 4; @endphp
+                                    @foreach ($surveys as $survey)
                                         <tr>
                                             <td>{{ $serial++ }}</td>
                                             <td>
-                                                {{ $survey->distribute_date ? \Carbon\Carbon::parse($survey->distribute_date)->format('d-m-Y') : 'No Found' }}
+                                                {{ $survey->distribute_date ? \Carbon\Carbon::parse($survey->distribute_date)->format('d-m-Y') : 'Not Found' }}
                                             </td>
                                             <td>{{ $survey->facilities_category ?? 'Pending' }}</td>
                                             <td>{{ $survey->facilities ?? 'Pending' }}</td>
-                                            <td>{{ $survey->status ?? 'Pending' }}
-                                                <br>@if($survey->status != 'Distribute'){
-                                                    Pending reason: {{ $survey->pending_reason }}
-                                                }
+                                            <td>
+                                                {{ $survey->status ?? 'Pending' }}
+                                                @if ($survey->status !== 'Distributed' && $survey->pending_reason)
+                                                    <br><small>Pending reason: {{ $survey->pending_reason }}</small>
                                                 @endif
                                             </td>
-                                            <td> Distribute Place: {{ $survey->distribute_place ?? 'Pending' }}</td>
+                                            <td>
+                                                Distribute Place: {{ $survey->distribute_place ?? 'Pending' }}
+                                            </td>
                                         </tr>
                                     @endforeach
-                                    {{-- @endif --}}
                                 </tbody>
+
                             </table>
                         </div>
-
-                        {{-- <div class="row g-2 mt-3 border rounded p-2 bg-light">
-                            <div class="col-md-4">
-                                <p><strong>Facilities Category:</strong>
-                                    </p>
-                            </div>
-                            <div class="col-8">
-                                <p><strong>Facilities:</strong> </p>
-                            </div>
-                            <div class="col-md-4">
-                                <p><strong>Distribute Date:</strong>
-                                    {{ \Carbon\Carbon::parse($survey->distribute_date)->format('d M Y') ?? 'Pending' }}
-                                </p>
-                            </div>
-                            <div class="col-8">
-                                <p><strong>Distribute Place:</strong> {{ $survey->distribute_place ?? 'Pending' }}
-                                </p>
-                            </div>
-                            <div class="col-8">
-                                <p><strong>Distribute Status:</strong> </p>
-                            </div>
-                        </div> --}}
 
                     </div>
 

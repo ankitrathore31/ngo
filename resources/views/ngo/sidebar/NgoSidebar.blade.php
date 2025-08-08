@@ -83,13 +83,40 @@
         <!-- Navbar content -->
         <div class="collapse navbar-collapse" id="mainNavbar">
             <ul class="navbar-nav flex-wrap w-100 justify-content-center overflow-auto">
-                <!-- Dashboard -->
 
                 <li class="nav-item">
                     <a href="{{ route('ngo') }}" class="nav-link text-white"><i class="fas fa-tachometer-alt"></i>
                         DASHBOARD</a>
                 </li>
 
+                <!-- Inbox -->
+                @if (!$isStaff || ($user->hasPermission('add-inbox') || $user->hasPermission('inbox-list')))
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-tasks"></i> INBOX
+                        </a>
+                        <ul class="dropdown-menu bg-primary">
+                            @if (!$isStaff || $user->hasPermission('add-inbox'))
+                                <li><a class="dropdown-item" href="{{-- route('addactivity') --}}">Add Inbox</a></li>
+                            @endif
+                            @if (!$isStaff || $user->hasPermission('inbox-list'))
+                                <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Inbox List</a></li>
+                            @endif
+                            @if (!$isStaff || $user->hasPermission('inbox-list'))
+                                <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Work List</a></li>
+                            @endif
+                            @if (!$isStaff || $user->hasPermission('inbox-list'))
+                                <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Pending Work List</a></li>
+                            @endif
+                            @if (!$isStaff || $user->hasPermission('inbox-list'))
+                                <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Complete Work Send</a></li>
+                            @endif
+                            @if (!$isStaff || $user->hasPermission('inbox-list'))
+                                <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Complete Work Send List</a></li>
+                            @endif
+                        </ul>
+                    </li>
+                @endif
 
                 <!-- ACTIVITY -->
                 @if (!$isStaff || ($user->hasPermission('add-activity') || $user->hasPermission('activity-list')))
@@ -686,11 +713,11 @@
                             @endif
                             @if (!$isStaff || $user->hasPermission('generate-bill'))
                                 <li><a class="dropdown-item" href="{{ route('generate-sanstha-bill') }}">Generate
-                                    Sanstha  Bill/Voucher</a></li>
+                                        Sanstha Bill/Voucher</a></li>
                             @endif
-                             @if (!$isStaff || $user->hasPermission('generate-bill'))
+                            @if (!$isStaff || $user->hasPermission('generate-bill'))
                                 <li><a class="dropdown-item" href="{{ route('generate-person-bill') }}">Generate
-                                    Person   Bill/Voucher</a></li>
+                                        Person Bill/Voucher</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('gbs-bill-list'))
                                 <li><a class="dropdown-item" href="{{ route('person-bill-list') }}">GBS Person
@@ -741,7 +768,8 @@
                                 <li><a class="dropdown-item" href="#">Remaining Amount</a></li>
                             @endif --}}
                             @if (!$isStaff || $user->hasPermission('year-wise-report'))
-                                <li><a class="dropdown-item" href="{{route('balance.report.view')}}">Year/Month-wise Report</a></li>
+                                <li><a class="dropdown-item"
+                                        href="{{ route('balance.report.view') }}">Year/Month-wise Report</a></li>
                             @endif
                         </ul>
                     </li>

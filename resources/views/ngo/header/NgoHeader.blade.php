@@ -39,11 +39,11 @@
                     <img src="{{ asset('images/LOGO.png') }}" alt="User" width="48" height="48"
                         class="rounded-circle shadow-sm me-2">
                     <div class="text-start">
-                        <div class="fw-semibold text-dark fs-6">GYAN BHARTI SANSTHA</div>
+                        <div class="fw-semibold text-dark fs-6">{{auth()->user()->name}}</div>
                         @php $user = auth()->user(); @endphp
-                        <small class="text-muted fst-italic">@if($user->user_type == 'staff'){{$user->staff->position}} :  {{$user->staff->name}}@endif
-                         @if($user->user_type == 'ngo')Founder: {{$user->name}}
-                            @endif
+                        <small class="text-muted fst-italic">@if($user->user_type == 'staff'){{$user->staff->position}}@endif
+                        @if($user->user_type == 'ngo')Founder
+                        @endif
                         </small>
                     </div>
                 </a>

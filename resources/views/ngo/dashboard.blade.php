@@ -137,6 +137,47 @@
                     </div>
                 @endif
                 @if (!$isStaff || $user->hasPermission('beneficiarie-add') || $user->hasPermission('all-beneficiarie-list'))
+                    <h5 class=" fw-bold mb-2">- Beneficiaries Survey</h5>
+
+                    <div class="row g-3">
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="card text-white bg-primary p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-user-plus fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Total Beneficiaries Survey</p>
+                                        <h5 class="mb-0">{{TotalSurvey() }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="card text-white bg-warning p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-clock fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Pending Beneficiaries Survey</p>
+                                        <h5 class="mb-0">{{PendingSurvey() }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="card text-white bg-success p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-check-circle fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Approved Beneficiaries Survey</p>
+                                        <h5 class="mb-0">{{ ApproveSurvey()}}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                @endif
+                @if (!$isStaff || $user->hasPermission('beneficiarie-add') || $user->hasPermission('all-beneficiarie-list'))
                     <h5 class=" fw-bold mb-2">- Beneficiaries Facilities </h5>
 
                     <div class="row g-3">
