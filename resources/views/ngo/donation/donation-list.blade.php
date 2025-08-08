@@ -219,7 +219,7 @@
                                 {{-- <th>Identity No.</th>
                                 <th>Identity Type</th> --}}
                                 <th>Mobile no.</th>
-                                <th>Donation Type</th>
+                                <th>Amount Type</th>
                                 <th>Donation Category</th>
                                 <th>Donation Amount</th>
                                 {{-- <th>Status</th> --}}

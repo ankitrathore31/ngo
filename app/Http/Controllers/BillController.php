@@ -19,7 +19,7 @@ class BillController extends Controller
     {
         $person = Bill_Voucher::get();
         $data = academic_session::all();
-        $categories = Category::pluck('category');
+        $categories = Category::orderBy('category', 'asc')->pluck('category');
         $allProjects = Project::select('name', 'category')->get();
         $searchResults = [];
 
@@ -117,7 +117,7 @@ class BillController extends Controller
 
         $bill_items = Voucher_Item::where('bill_voucher_id', $bill_id)->get();
         $signatures = Signature::pluck('file_path', 'role');
-        $categories = Category::pluck('category');
+        $categories = Category::orderBy('category', 'asc')->pluck('category');
         $allProjects = Project::select('name', 'category')->get();
         return view('ngo.bill.edit-bill', compact('bill', 'bill_items', 'signatures', 'categories', 'allProjects'));
     }
@@ -182,7 +182,7 @@ class BillController extends Controller
     {
         $states = config('states');
         $data = academic_session::all();
-        $categories = Category::pluck('category');
+        $categories = Category::orderBy('category', 'asc')->pluck('category');
         $allProjects = Project::select('name', 'category')->get();
 
         $searchResults = collect();
@@ -206,7 +206,7 @@ class BillController extends Controller
     {
         $states = config('states');
         $data = academic_session::all();
-        $categories = Category::pluck('category');
+        $$categories = Category::orderBy('category', 'asc')->pluck('category');
         $allProjects = Project::select('name', 'category')->get();
 
         $searchResults = collect();
@@ -278,7 +278,7 @@ class BillController extends Controller
         $states = config('states');
         $data = academic_session::all();
         $bill = GbsBill::find($id);
-        $categories = Category::pluck('category');
+        $categories = Category::orderBy('category', 'asc')->pluck('category');
         $allProjects = Project::select('name', 'category')->get();        
         return view('ngo.bill.edit-person-bill', compact('states', 'data', 'bill', 'categories','allProjects'));
     }
@@ -465,7 +465,7 @@ class BillController extends Controller
         $bill_items = Bill_Item::where('bill_id', $bill_id)->get();
         $data = academic_session::all();
         $states = config('states');
-        $categories = Category::pluck('category');
+        $categories = Category::orderBy('category', 'asc')->pluck('category');
         $allProjects = Project::select('name', 'category')->get();
         return view('ngo.bill.edit-gbs-bill', compact('gbsBill', 'bill_items', 'data', 'states', 'categories','allProjects'));
     }

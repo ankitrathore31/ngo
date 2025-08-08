@@ -44,7 +44,7 @@ class DonationController extends Controller
             $query->where('amountType', $request->amountType);
         }
         $data = academic_session::all();
-        $categories = Category::pluck('category');
+        $categories = Category::orderBy('category', 'asc')->pluck('category');
         $allProjects = Project::select('name', 'category')->get();
         $donor = $query->get();
 
@@ -60,7 +60,7 @@ class DonationController extends Controller
         $lastReceiptNo = Donation::max('receipt_no');
         $newReceiptNo = is_numeric($lastReceiptNo) ? ((int) $lastReceiptNo + 1) : 1;
         $states = config('states');
-        $category = Category::get();
+        $category = Category::orderBy('category', 'asc')->get();
         return view('ngo.donation.donation', compact('data', 'record', 'newReceiptNo','category'));
     }
 
@@ -341,7 +341,7 @@ class DonationController extends Controller
         // For academic session dropdown
         $data = academic_session::all();
         $states = config('states');
-        $categories = Category::pluck('category');
+        $categories = Category::orderBy('category', 'asc')->pluck('category');
         return view('ngo.donation.all-donation-list', compact('data', 'donations','states','categories'));
     }
 

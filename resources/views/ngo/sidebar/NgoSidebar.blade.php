@@ -770,6 +770,10 @@
                                 <li><a class="dropdown-item"
                                         href="{{ route('balance.report.view') }}">Year/Month-wise Report</a></li>
                             @endif
+                            @if (!$isStaff || $user->hasPermission('year-wise-report'))
+                                <li><a class="dropdown-item"
+                                        href="{{-- route('balance.report.view') --}}">Work Category Laser Acoount</a></li>
+                            @endif
                         </ul>
                     </li>
                 @endif
