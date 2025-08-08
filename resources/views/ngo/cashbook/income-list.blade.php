@@ -269,6 +269,7 @@
                                 <th>Address</th>
                                 <th>Mobile no.</th>
                                 <th>Donation Amount</th>
+                                <th>Amount Type</th>
                                 <th>Payment Mode</th>
                                 <th>Session</th>
                                 <th class="no-print">Action</th>
@@ -296,6 +297,7 @@
                                     </td>
                                     <td>{{ $item->mobile ?? '-' }}</td>
                                     <td>{{ number_format($item->amount, 2) }}</td>
+                                    <td>{{ $item->amountType ?? 'Donation' }}</td>
                                     <td>{{ $item->payment_method ?? 'Online cashfree' }}</td>
                                     <td>{{ $item->academic_session }}</td>
                                     <td class="no-print">

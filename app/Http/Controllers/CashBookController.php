@@ -7,6 +7,7 @@ use App\Models\BalanceReport;
 use App\Models\Bill;
 use App\Models\Bill_Item;
 use App\Models\Bill_Voucher;
+use App\Models\Category;
 use App\Models\Donation;
 use App\Models\donor_data;
 use App\Models\GbsBill;
@@ -73,6 +74,7 @@ class CashBookController extends Controller
         $bv = Bill_Voucher::with('items')
             ->when($request->filled('session_filter'), fn($q) => $q->where('academic_session', $request->session_filter))
             ->when($request->filled('bill_no'), fn($q) => $q->where('bill_no', $request->bill_no))
+            ->when($request->filled('work_category'), fn($q) => $q->where('work_category', $request->work_category))
             ->when($request->filled('name'), fn($q) => $q->where('name', 'like', '%' . $request->name . '%'))
             ->when($request->filled('address'), fn($q) => $q->where('address', 'like', '%' . $request->address . '%'))
             ->when($request->filled('email'), fn($q) => $q->where('email', 'like', '%' . $request->email . '%'))
@@ -87,6 +89,7 @@ class CashBookController extends Controller
         $b = Bill::with('items')
             ->when($request->filled('session_filter'), fn($q) => $q->where('academic_session', $request->session_filter))
             ->when($request->filled('bill_no'), fn($q) => $q->where('bill_no', $request->bill_no))
+            ->when($request->filled('work_category'), fn($q) => $q->where('work_category', $request->work_category))
             ->when($request->filled('name'), fn($q) => $q->where('name', 'like', '%' . $request->name . '%'))
             ->when(
                 $request->filled('address') || $request->filled('block') || $request->filled('district') || $request->filled('state'),
@@ -111,6 +114,7 @@ class CashBookController extends Controller
         // GbsBill
         $g = GbsBill::when($request->filled('session_filter'), fn($q) => $q->where('academic_session', $request->session_filter))
             ->when($request->filled('bill_no'), fn($q) => $q->where('invoice_no', $request->bill_no))
+            ->when($request->filled('work_category'), fn($q) => $q->where('work_category', $request->work_category))
             ->when($request->filled('name'), fn($q) => $q->where('name', 'like', '%' . $request->name . '%'))
             ->when($request->filled('address'), function ($q) use ($request) {
                 $q->where(function ($sub) use ($request) {
@@ -135,6 +139,7 @@ class CashBookController extends Controller
                 'type' => 'voucher',
                 'id' => $x->id,
                 'bill_no' => $x->bill_no,
+                'work_category' => $x->work_category,
                 'date' => $x->date,
                 'name' => $x->name,
                 'address' => $x->address,
@@ -150,6 +155,7 @@ class CashBookController extends Controller
                 'type' => 'bill',
                 'id' => $x->id,
                 'bill_no' => $x->bill_no,
+                'work_category' => $x->work_category,
                 'date' => $x->date,
                 'name' => $x->name,
                 'address' => collect([$x->address, $x->block, $x->district, $x->state])
@@ -167,6 +173,7 @@ class CashBookController extends Controller
                 'type' => 'gbs',
                 'id' => $x->id,
                 'bill_no' => $x->invoice_no,
+                'work_category' => $x->work_category,
                 'date' => $x->bill_date, // Standardized to 'date'
                 'name' => $x->name,
                 'address' => collect([$x->village, $x->post, $x->block, $x->district, $x->state])
@@ -191,11 +198,12 @@ class CashBookController extends Controller
 
         // Session list
         $session = academic_session::all();
-
+        $categories = Category::orderBy('category', 'asc')->get();
         return view('ngo.cashbook.expenditure-list', [
             'records' => $records,
             'totalAmount' => $totalAmount,
-            'session' => $session
+            'session' => $session,
+            'categories' => $categories
         ]);
     }
 
@@ -207,17 +215,15 @@ class CashBookController extends Controller
             $startDate = Carbon::createFromDate($year, $month, 1)->startOfMonth();
             $endDate = $startDate->copy()->endOfMonth();
 
-            // Total income
             $online = donor_data::where('status', 'Successful')
-                ->whereBetween('created_at', [$startDate, $endDate])
+                ->whereBetween('date', [$startDate, $endDate])
                 ->sum('amount');
 
-            $offline = Donation::whereBetween('created_at', [$startDate, $endDate])
+            $offline = Donation::whereBetween('date', [$startDate, $endDate])
                 ->sum('amount');
 
             $totalIncome = $online + $offline;
 
-            // Total expenditure
             $bvExpense = Bill_Voucher::with('items')
                 ->whereBetween('date', [$startDate, $endDate])
                 ->get()

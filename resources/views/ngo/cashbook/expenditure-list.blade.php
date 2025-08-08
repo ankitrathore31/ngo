@@ -135,6 +135,16 @@
                             @endforeach
                         </select>
                     </div>
+                    <!-- Category Dropdown -->
+                    <div class="col-md-3">
+                        <label>Work category</label>
+                        <select name="work_category" id="work_category" class="form-control">
+                            <option value="">Select Category</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->category }}">{{ $category->category }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="col-md-3">
                         <label>Bill/Voucher/Invoice No.</label>
                         <input type="number" name="bill_no" class="form-control" value="{{ request('bill_no') }}">
@@ -213,8 +223,10 @@
                                 <th>Father/Husband Name</th>
                                 <th>Shop/Farm / Name/Address</th>
                                 <th>Shop/Farm / Name/Mobile No.</th>
-                                <th>Session</th>
                                 <th>Expenditure Amount</th>
+                                <th>Work Category</th>
+                                <th>Session</th>
+                                <th>Total Expenditure Amount</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -227,6 +239,8 @@
                                     <td>{{ $item['name'] }}</td>
                                     <td>{{ $item['address'] }}</td>
                                     <td>{{ $item['mobile'] ?? '-' }}</td>
+                                    <td>{{ number_format($item['amount'], 2) }}</td>
+                                    <td>{{ $item['work_category'] ?? '-' }}</td>
                                     <td>{{ $item['session'] ?? '-' }}</td>
                                     <td>{{ number_format($item['amount'], 2) }}</td>
                                 </tr>
@@ -234,7 +248,7 @@
                         </tbody>
                         <tfoot class="table-light">
                             <tr>
-                                <th colspan="8" class="text-end">Total Expenditure Amount:</th>
+                                <th colspan="10" class="text-end">Total Expenditure Amount:</th>
                                 <th>{{ number_format($totalAmount, 2) }}</th>
                             </tr>
                         </tfoot>
