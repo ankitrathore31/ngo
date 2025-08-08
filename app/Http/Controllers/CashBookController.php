@@ -209,10 +209,10 @@ class CashBookController extends Controller
 
             // Total income
             $online = donor_data::where('status', 'Successful')
-                ->whereBetween('created_at', [$startDate, $endDate])
+                ->whereBetween('date', [$startDate, $endDate])
                 ->sum('amount');
 
-            $offline = Donation::whereBetween('created_at', [$startDate, $endDate])
+            $offline = Donation::whereBetween('date', [$startDate, $endDate])
                 ->sum('amount');
 
             $totalIncome = $online + $offline;
