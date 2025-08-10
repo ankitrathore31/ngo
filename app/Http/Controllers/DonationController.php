@@ -49,7 +49,7 @@ class DonationController extends Controller
         $data = academic_session::all();
         $categories = Category::orderBy('category', 'asc')->pluck('category');
         $allProjects = Project::select('name', 'category')->get();
-        $donor = $query->get();
+        $donors = $query->get()->sortByDesc('date');
 
         return view('ngo.donation.donation-list', compact('data', 'donor', 'categories', 'allProjects'));
     }
@@ -385,6 +385,10 @@ class DonationController extends Controller
         // Apply filters
         if ($request->filled('session_filter')) {
             $offlineQuery->where('academic_session', $request->input('session_filter'));
+            // $onlineQuery->where('academic_session', $request->input('session_filter'));
+        }
+        if ($request->filled('amountType')) {
+            $offlineQuery->where('amountType', $request->input('amountType'));
             // $onlineQuery->where('academic_session', $request->input('session_filter'));
         }
 

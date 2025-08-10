@@ -166,12 +166,12 @@ class BeneficiarieController extends Controller
 
         // Fetch the filtered results
         $surveys = $surveys->get();
-
+        $staff = Staff::get();
         // Pass sessions data to the view for filter dropdown
         $data = academic_session::all();
         $states = config('states');
         $category = Category::orderBy('category', 'asc')->get();
-        return view('ngo.beneficiarie.beneficiarie-facilities', compact('surveys', 'data', 'states', 'category'));
+        return view('ngo.beneficiarie.beneficiarie-facilities', compact('surveys', 'data', 'states', 'category','staff'));
     }
 
     public function showbeneficiariesurvey($beneficiarie_id, $survey_id)
@@ -317,8 +317,9 @@ class BeneficiarieController extends Controller
         $data = academic_session::all();
         $category = Category::orderBy('category', 'asc')->get();
         $categories = Beneficiarie_Survey::select('facilities_category')->distinct()->pluck('facilities_category');
+        $staff = Staff::get();
 
-        return view('ngo.beneficiarie.beneficiarie-facilities-list', compact('data', 'categories', 'beneficiarie', 'category'));
+        return view('ngo.beneficiarie.beneficiarie-facilities-list', compact('data', 'categories', 'beneficiarie', 'category','staff'));
     }
 
     public function showbeneficiariefacilities($beneficiarie_id, $survey_id)

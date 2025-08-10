@@ -28,29 +28,34 @@
                         </div>
                     </div> --}}
                     <div class="row">
-                        <div class="col-md-6 mb-3 form-group local-from">
-                            <label class="form-label">Program/Work name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control @error('program_name') is-invalid @enderror"
-                                name="program_name" placeholder="Program Name" required>
-                        </div>
                         <div class="col-md-6 mb-3">
-                            <label for="" class="form-label">Program/Work Category <span class="text-danger">*</span></label>
-                            <select class="form-control select @error('program_category') is-invalid @enderror"
+                            <label for="program_category" class="form-label">Program/Work Category <span
+                                    class="text-danger">*</span></label>
+                            <select id="program_category"
+                                class="form-control select @error('program_category') is-invalid @enderror"
                                 name="program_category" required>
                                 <option value="" selected>Select Category</option>
-                                @foreach ($category as $item)
-                                    <option value="{{ old('category',$item->category ) }}">{{$item->category}}</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category }}">{{ $category }}</option>
                                 @endforeach
                             </select>
                         </div>
+
+                        <div class="col-md-6 mb-3 form-group local-from">
+                            <label for="program_name" class="form-label">Program/Work Name <span
+                                    class="text-danger">*</span></label>
+                            <select name="program_name" id="program_name" class="form-control" required>
+                                <option value="">Select Work Name</option>
+                            </select>
+                        </div>
                     </div>
+
                     <div class="row">
                         <div class="col-md-4 mb-3">
-                            <label for="" class="form-label">Program Date <span
-                                    class="text-danger">*</span></label>
+                            <label for="" class="form-label">Program Date <span class="text-danger">*</span></label>
                             <input type="date" id="datepicker"
-                                class=" form-control @error('program_date') is-invalid @enderror"
-                                name="program_date" placeholder="Select Date" required>
+                                class=" form-control @error('program_date') is-invalid @enderror" name="program_date"
+                                placeholder="Select Date" required>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="program_session" class="form-label ">Program Session <span
@@ -71,15 +76,17 @@
                                 class="form-control @error('program_time') is-invalid @enderror" placeholder="Select Time"
                                 required>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <label for="" class="form-label">Program Address <span class="text-danger">*</span></label>
+                                <label for="" class="form-label">Program Address <span
+                                        class="text-danger">*</span></label>
                                 <textarea class="form-control @error('program_address') is-invalid @enderror" name="program_address" rows="3"
                                     placeholder="Address" required></textarea>
                             </div>
                             <div class="col-md-12 mb-3">
-                                <label for="" class="form-label">Program Report <span class="text-danger">*</span></label>
+                                <label for="" class="form-label">Program Report <span
+                                        class="text-danger">*</span></label>
                                 <textarea class="form-control @error('program_report') is-invalid @enderror" name="program_report" rows="3"
                                     placeholder="Program Report" required></textarea>
                             </div>
@@ -106,7 +113,10 @@
                                 </div>
 
                                 <!-- Error Message for Validation -->
-                                <div id="fileError" class="text-danger" style="display: none;"></div>
+                                <div id="fileError" class="text-danger"></div>
+                                @error('program_image')
+                                    <span class="text-center">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                         <div class="form-group text-center">
@@ -152,7 +162,7 @@
             const fileError = document.getElementById('fileError');
 
             if (file) {
-                const fileSize = file.size / 1024 / 1024; 
+                const fileSize = file.size / 1024 / 1024;
                 const fileType = file.type.split('/')[0];
 
                 if (fileSize > 40) {
@@ -175,5 +185,32 @@
 
             return true;
         }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const allProjects = @json($allProjects);
+            const categorySelect = document.getElementById('program_category');
+            const workNameSelect = document.getElementById('program_name');
+
+            categorySelect.addEventListener('change', function() {
+                const selectedCategory = this.value;
+
+                // Clear existing options
+                workNameSelect.innerHTML = '<option value="">Select Work Name</option>';
+
+                // Filter projects by selected category
+                const filteredProjects = allProjects.filter(
+                    project => project.category === selectedCategory
+                );
+
+                // Populate new options
+                filteredProjects.forEach(project => {
+                    const option = document.createElement('option');
+                    option.value = project.name;
+                    option.text = project.name;
+                    workNameSelect.appendChild(option);
+                });
+            });
+        });
     </script>
 @endsection

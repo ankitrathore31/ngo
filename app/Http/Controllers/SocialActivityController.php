@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\academic_session;
 use App\Models\Category;
 use App\Models\Event;
+use App\Models\Project;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 
@@ -20,9 +21,12 @@ class SocialActivityController extends Controller
             $query->where('academic_session', $request->session_filter);
         }
 
+        if ($request->program_category) {
+            $query->where('program_category', $request->program_category);
+        }
 
-        if ($request->category_filter) {
-            $query->where('program_category', $request->category_filter);
+        if ($request->program_name) {
+            $query->where('program_name', $request->program_name);
         }
 
         if ($request->address_filter && strlen($request->address_filter) >= 4) {
@@ -30,22 +34,23 @@ class SocialActivityController extends Controller
         }
 
         $activity = $query->orderBy('program_date', 'asc')->get();
-        $category = Category::orderBy('category', 'asc')->get();
-        return view('ngo.activity.activitylist', compact('activity','category'));
+        $categories = Category::orderBy('category', 'asc')->pluck('category');
+        $allProjects = Project::select('name', 'category')->get();
+        return view('ngo.activity.activitylist', compact('activity','categories','allProjects'));
     }
 
     public function addactivity()
     {
         $data = academic_session::all()->sortByDesc('session_date');
         Session::put('all_academic_session', $data);
-        $category = Category::orderBy('category', 'asc')->get();
-        return view('ngo.activity.addactivity', compact('data','category'));
+        $categories = Category::orderBy('category', 'asc')->pluck('category');
+        $allProjects = Project::select('name', 'category')->get();
+        return view('ngo.activity.addactivity', compact('data','categories','allProjects'));
     }
 
     public function saveactivity(Request $request)
     {
         $request->validate([
-            // 'activity_no' => 'required',
             'program_name' => 'required|string|max:255',
             'program_category' => 'required|string|max:255',
             'program_date' => 'required|date',
@@ -53,7 +58,7 @@ class SocialActivityController extends Controller
             'program_time' => 'required|date_format:H:i',
             'program_address' => 'required|string',
             'program_report' => 'required|string',
-            'program_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:25600',
+            'program_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
         ], [
             'program_image.image' => 'The uploaded file must be an image.',
             'program_image.mimes' => 'Only jpeg, png, jpg, gif, and svg formats are allowed.',
@@ -94,7 +99,9 @@ class SocialActivityController extends Controller
         $activity = Activity::find($id);
         $data = academic_session::all();
         Session::put('all_academic_session', $data);
-        return view('ngo.activity.editactivity', compact('activity', 'data'));
+        $categories = Category::orderBy('category', 'asc')->pluck('category');
+        $allProjects = Project::select('name', 'category')->get();
+        return view('ngo.activity.editactivity', compact('activity', 'data','categories','allProjects'));
     }
 
     public function updateactivity(Request $request, $id)

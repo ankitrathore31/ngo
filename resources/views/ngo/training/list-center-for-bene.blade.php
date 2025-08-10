@@ -4,11 +4,11 @@
         <div class="container-fluid mt-4">
 
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Approve Training Beneficiarie List</h5>
+                <h5 class="mb-0">Training Demand Center By Beneficiary List</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Approve Beneficiaries </li>
+                        <li class="breadcrumb-item active" aria-current="page">Training Center  </li>
                     </ol>
                 </nav>
             </div>
@@ -37,10 +37,10 @@
                             placeholder="Search By Application No.">
                     </div>
                     <div class="col-md-3 col-sm-4 mb-3">
-                        <select name="center" id="">
-                            <option value="">Select Cenetr</option>
+                        <select name="center" class="form-control" id="">
+                            <option value="">Select Center</option>
                             @foreach ($center as $item)
-                                <option value="{{$item->cenetr}}">{{$item->center}}</option>
+                                <option value="{{$item->center_name}}">{{$item->center_name}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -64,7 +64,7 @@
                                 <th>Training Center Name</th>
                                 <th>Training Center Address</th>
                                 <th>Session</th>
-                                <th>Action</th>
+                                {{-- <th>Action</th> --}}
                                 <th>Training Beneficiarie List</th>
                                 <th>Training Beneficiarie Activity & Course List</th>
                                 <th>Training Beneficiarie Present List</th>
@@ -74,21 +74,26 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($record as $item)
+                            @foreach ($center as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->center_code}}</td>
                                     <td>{{ $item->center_name}}</td>
                                     <td>{{ $item->center_address}}</td>
+                                    <td>{{$item->academic_session}}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            <a href="{{ route('show-approve-bene-training','center_code' => $item->center_code) }}"
+                                            <a href="{{-- route('show-approve-bene-training',$item->center_code) --}}"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="View" style="min-width: 38px; height: 38px;">
                                                 Beneficiarie List
                                             </a>
                                         </div>
                                     </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                 </tr>
                             @endforeach
                         </tbody>

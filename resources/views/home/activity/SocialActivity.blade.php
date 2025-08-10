@@ -41,28 +41,26 @@
                     </div>
 
                     <div class="col-md-4 mb-3">
-                        <select id="category_filter" name="category_filter"
-                            class="form-control @error('category_filter') is-invalid @enderror">
-                            <option value="">-- Select Project/Work Category --</option>
-                            @foreach ($category as $cat)
-                                <option value="{{ $cat->category }}"
-                                    {{ request('category_filter') == $cat->category ? 'selected' : '' }}>
-                                    {{ $cat->category }}
-                                </option>
+                        {{-- <label for="program_category" class="form-label">Program/Work Category <span
+                                    class="text-danger">*</span></label> --}}
+                        <select id="program_category"
+                            class="form-control select @error('program_category') is-invalid @enderror"
+                            name="program_category">
+                            <option value="" selected>All project/Work Category</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category }}">{{ $category }}</option>
                             @endforeach
                         </select>
-                        @error('category_filter')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
                     </div>
-                    <div class="col-md-4 col-sm-6 form-group mb-3">
-                        <input type="text" name="name" id="name"
-                            class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}"
-                            placeholder="Search by Project / Work Name">
-                        @error('name')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
+
+                    <div class="col-md-4 mb-3 form-group local-from">
+                        {{-- <label for="program_name" class="form-label">Program/Work Name <span
+                                    class="text-danger">*</span></label> --}}
+                        <select name="program_name" id="program_name" class="form-control" required>
+                            <option value="">Select Work Name</option>
+                        </select>
                     </div>
+
                     <div class="col-md-4 col-sm-6 form-group mb-3">
                         <input type="text" name="address_filter" id="address"
                             class="form-control @error('address') is-invalid @enderror" value="{{ old('address') }}"
@@ -71,10 +69,10 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-                    
-                    <div class="col-md-4">
-                        <button type="submit" class="btn btn-primary me-2">Search</button>
-                        <a href="{{ route('activity') }}" class="btn btn-info text-white me-2">Reset</a>
+
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                        <a href="{{ route('activity') }}" class="btn btn-info text-white">Reset</a>
                     </div>
                 </form>
             </div>
@@ -123,4 +121,31 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const allProjects = @json($allProjects);
+            const categorySelect = document.getElementById('program_category');
+            const workNameSelect = document.getElementById('program_name');
+
+            categorySelect.addEventListener('change', function() {
+                const selectedCategory = this.value;
+
+                // Clear existing options
+                workNameSelect.innerHTML = '<option value="">Select Work Name</option>';
+
+                // Filter projects by selected category
+                const filteredProjects = allProjects.filter(
+                    project => project.category === selectedCategory
+                );
+
+                // Populate new options
+                filteredProjects.forEach(project => {
+                    const option = document.createElement('option');
+                    option.value = project.name;
+                    option.text = project.name;
+                    workNameSelect.appendChild(option);
+                });
+            });
+        });
+    </script>
 @endsection

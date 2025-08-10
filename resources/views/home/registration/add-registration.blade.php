@@ -149,19 +149,25 @@
                                             <input type="text" class="form-control" id="identity_no" name="identity_no"
                                                 placeholder="Enter Identity Card No" required>
                                             <small id="identity_no_hint" class="form-text text-muted"></small>
+                                            <small id="check_identity" class="form-text"></small>
                                             @error('identity_no')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
                                     </div>
 
-
-                                    <!-- Identity File Upload -->
                                     <div class="col-md-4 mb-3">
                                         <label for="id_document" class="form-label">ID Document Upload</label>
                                         <input type="file" class="form-control" name="id_document" id="id_document">
                                         <small id="id_document_hint" class="form-text text-muted"></small>
                                     </div>
+                                </div>
+                                <div id="identity_info" class="text-center"
+                                    style="margin-top:1px; margin-bottom:4px; color:red; display:none;">
+                                    Reg No: <span id="identity_reg"></span> &nbsp; &nbsp;
+                                    Name: <span id="identity_name"></span> &nbsp; &nbsp;
+                                    Father/Husband: <span id="identity_guardian"></span> &nbsp; &nbsp;
+                                    Mother: <span id="identity_mother"></span>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-8">
@@ -198,7 +204,8 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="academic_session" class="form-label bold">Session <span
                                                         class="login-danger">*</span></label>
-                                                <select class="form-control @error('academic_session') is-invalid @enderror"
+                                                <select
+                                                    class="form-control @error('academic_session') is-invalid @enderror"
                                                     name="academic_session" id="academic_session" required>
                                                     <option value="">Select Session</option>
                                                     @foreach ($data as $session)
@@ -734,5 +741,42 @@
             });
         });
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.getElementById('identity_no').addEventListener('input', function() {
+            let value = this.value.trim();
+            let hint = document.getElementById('check_identity');
+            let infoLine = document.getElementById('identity_info');
+
+            if (value.length === 0) {
+                hint.textContent = '';
+                infoLine.style.display = 'none';
+                return;
+            }
+
+            fetch(`/check-identity?identity_no=${encodeURIComponent(value)}`)
+                .then(res => res.json())
+                .then(data => {
+                    hint.textContent = data.message;
+                    hint.style.color = data.exists ? 'red' : 'green';
+
+                    if (data.exists) {
+                        document.getElementById('identity_name').textContent = data.name || '';
+                        document.getElementById('identity_reg').textContent = data.registration_no || '';
+                        document.getElementById('identity_guardian').textContent = data.guardian_name || '';
+                        document.getElementById('identity_mother').textContent = data.mother_name || '';
+                        infoLine.style.display = 'block';
+                    } else {
+                        infoLine.style.display = 'none';
+                    }
+                })
+                .catch(() => {
+                    hint.textContent = 'Error checking identity.';
+                    hint.style.color = 'orange';
+                    infoLine.style.display = 'none';
+                });
+        });
+    </script>
+
 
 @endsection

@@ -81,9 +81,6 @@
             {{-- Selected members --}}
             <div class="container">
                 <h6><b>- Selected Members</b></h6>
-                @error('members.' . $loop->index)
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
                 <div class="card p-2">
                     <form action="{{ route('store.organization.member', $organization->id) }}" method="POST"
                         id="selectedForm">
@@ -124,7 +121,44 @@
                     </form>
                 </div>
             </div>
-
+            <div class="container mt-4">
+                <h6><b>- Group Members List</b></h6>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover align-middle text-center">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>Registraition No./Staff Code</th>
+                                <th>Name</th>
+                                <th>Father/Husband Name</th>
+                                <th>Mother Name</th>
+                                <th>Address</th>
+                                <th>Caste</th>
+                                <th>Caste Category</th>
+                                <th>Religion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($allMembers as $member)
+                                <tr>
+                                    <td>{{ $member->registration_no ?? ($member->staff_code ?? 'N/A') }}</td>
+                                    <td>{{ $member->name }}</td>
+                                    <td>{{ $member->gurdian_name ?? 'N/A' }}</td>
+                                    <td>{{ $member->mother_name ?? 'N/A' }}</td>
+                                    <td>{{ $member->village ?? 'N/A' }},{{ $member->post ?? 'N/A' }},{{ $member->town ?? 'N/A' }}
+                                        ,{{ $member->district ?? 'N/A' }},{{ $member->state ?? 'N/A' }}
+                                    </td>
+                                    <td>{{ $member->caste }}</td>
+                                    <td>{{ $member->religion_category }}</td>
+                                    <td>{{ $member->religion }}</td>
+                                </tr>
+                                @error('members.' . $loop->index)
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 

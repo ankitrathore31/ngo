@@ -135,28 +135,28 @@ class HomeControlller extends Controller
         // Start query
         $query = Activity::orderBy('program_date', 'asc');
 
-        // Apply filters if provided
         if ($request->filled('session_filter')) {
             $query->where('session_date', $request->session_filter);
         }
 
-        if ($request->filled('category_filter')) {
-            $query->where('category', $request->category_filter);
+        if ($request->program_category) {
+            $query->where('program_category', $request->program_category);
+        }
+
+        if ($request->program_name) {
+            $query->where('program_name', $request->program_name);
         }
 
         if ($request->filled('address_filter')) {
             $query->where('address', 'LIKE', '%' . $request->address_filter . '%');
         }
-        if ($request->filled('name')) {
-            $query->where('name', 'LIKE', '%' . $request->name . '%');
-        }
-        // Get the filtered activities
+
         $activity = $query->get();
 
-        // Categories for dropdown
-        $category = Category::orderBy('category', 'asc')->get();
+        $categories = Category::orderBy('category', 'asc')->pluck('category');
+        $allProjects = Project::select('name', 'category')->get();
 
-        return view('home.activity.SocialActivity', compact('activity', 'category'));
+        return view('home.activity.SocialActivity', compact('activity', 'categories', 'allProjects'));
     }
 
 

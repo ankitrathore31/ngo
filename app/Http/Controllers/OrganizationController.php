@@ -238,7 +238,7 @@ class OrganizationController extends Controller
 
             if ($exists) {
                 return back()
-                    ->withErrors(['members.' . $memberId => 'Member already exists in this organization'])
+                    ->withErrors(['allMembers.' . $memberId => 'Member already exists in this organization'])
                     ->withInput();
             }
 
