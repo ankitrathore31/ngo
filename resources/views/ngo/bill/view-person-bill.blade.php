@@ -112,45 +112,24 @@
             </div>
             <div class="bill-container border print-area">
                 <div class="p-4">
-
                     <div class="text-center mb-4 border-bottom pb-3 mb-2">
                         <!-- Header -->
                         <div class="row">
-                            <div class="col-sm-2 text-center text-md-start">
-                                <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="80" height="80">
-                            </div>
-                            <div class="col-sm-10">
-                                <p class="d-flex justify-content-between w-100" style="margin: 0; font-weight: bold;">
-                                    <span>CSR NO. CSR00059991</span>
-                                    <span>12A AAEAG7650BE20231</span>
-                                    <span>80G AAEAG7650BF20231</span>
-                                </p>
-
-                                <p class="d-flex justify-content-between w-100" style="margin: 0; font-weight: bold;">
-                                    <span>NEETI AYOG ID NO. UP/2023/0360430</span>
-                                    <span>NGO NO. UP/00033062</span>
-                                    <span>PAN: AAEAG7650B</span>
-                                </p>
-
+                            <div class="col-sm-12">
                                 <h4 class="text-center print-h4" style="margin: 0;">
-                                    <span data-lang="hi" style="font-size: inherit; font-weight: inherit;">ज्ञान भारती
-                                        संस्था</span>
-                                    <span data-lang="en" style="font-size: inherit; font-weight: inherit;">GYAN BHARTI
-                                        SANSTHA</span>
+                                    <span style="font-size: inherit; font-weight: inherit;">{{$bill->name}}</span>
                                 </h4>
 
                                 <h6 class="w-100" style="color: blue; font-weight: bold; margin: 0;">
-                                    <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर प्रदेश -
-                                        262121</span><br>
-                                    <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit, UP -
-                                        262121</span>
+                                    <span>Address - {{$bill->village}} {{$bill->post}} {{$bill->town}} {{$bill->district}} 
+                                        {{$bill->state}}
+                                    </span><span> (Mobile: {{$bill->mobile}})</span>
                                 </h6>
 
-                                <p class="w-100" style="font-size: 14px; margin: 0; font-weight: bold;">
-                                    Website: www.gyanbhartingo.org | Email: gyanbhartingo600@gmail.com | Mob: 9411484111
-                                </p>
+                                <div class=" d-flex justify-content-between" style="margin: 0;">
+                                   <span>Bill/Voocher No: {{$bill->bill_no}}</span> <span><b>Bill Voucher</b></span> <span>Bill Date: {{$bill->bill_date}}</span>
+                                </div>
                             </div>
-
                         </div>
                     </div>
                     <div class="container-fluid py-4" style="font-size: 16px; line-height: 1.8;">

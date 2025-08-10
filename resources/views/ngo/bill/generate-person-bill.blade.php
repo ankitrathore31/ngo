@@ -66,6 +66,14 @@
                     </div>
 
                     <div class="col-md-4 form-group mb-3">
+                        <label for="">Bill/Voucher/Invoice No.</label>
+                        <input type="text" name="bill_no" class="form-control @error('bill_no') is in-valid @enderror" required>
+                        @error('bill_no')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-4 form-group mb-3">
                         <label for="name">Name:</label>
                         <input type="text" id="name" name="name" class="form-control"
                             value="{{ old('name') }}" required>
@@ -80,6 +88,14 @@
                             value="{{ old('guardian_name') }}" required>
                         @error('guardian_name')
                             <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-4 form-group mb-3">
+                        <label for="">Mobile No.</label>
+                        <input type="number" maxlength="10" name="mobile" class="form-control @error('mobile') is in-valid @enderror" required>
+                        @error('mobile')
+                            <span>{{ $message}}</span>
                         @enderror
                     </div>
 

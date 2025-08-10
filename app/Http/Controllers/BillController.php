@@ -242,6 +242,8 @@ class BillController extends Controller
         $validated = $request->validate([
             'academic_session' => 'required',
             'bill_date' => 'required|date',
+            'bill_no'   =>  'required|string',
+            'mobile'    =>   'required',
             'name' => 'required|string',
             'guardian_name' => 'required|string',
             'village' => 'nullable|string',
@@ -289,6 +291,8 @@ class BillController extends Controller
             'academic_session' => 'nullable|string',
             'ngo_id' => 'nullable|string',
             'bill_date' => 'required|date',
+            'bill_no'   =>  'required|string',
+            'mobile'    =>   'required',
             'name' => 'required|string',
             'guardian_name' => 'required|string',
             'village' => 'nullable|string',
@@ -376,7 +380,6 @@ class BillController extends Controller
         $signatures = Signature::pluck('file_path', 'role');
         return view('ngo.bill.view-person-bill', compact('bill', 'signatures'));
     }
-
 
     public function StoreGbsBill(Request $request)
     {
@@ -523,4 +526,5 @@ class BillController extends Controller
 
         return redirect()->back()->with('success', 'GBS Bill Deleted successfully!');
     }
+
 }

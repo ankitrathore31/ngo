@@ -139,6 +139,20 @@
                             </select>
                         </div>
 
+                        <div class="col-md-3
+                        ">
+                         <label for="" class="form-label">Amount Type</label>
+                            <select class="form-control" id="amountType" name="amountType">
+                                <option value="">Select Amount Type</option>
+                                <option value="donation">Donation</option>
+                                <option value="membership">Membership</option>
+                                <option value="income">Income from other sources</option>
+                                <option value="balance">Year wise balance amount</option>
+                                <option value="trainingFees">Training fees</option>
+                                <option value="tuitionFees">Tuition fees</option>
+                            </select>
+                        </div>
+
                         <!-- Name Filter -->
                         <div class="col-md-3">
                             <label for="name" class="form-label">Name</label>
@@ -272,6 +286,7 @@
                                 <th>Amount Type</th>
                                 <th>Payment Mode</th>
                                 <th>Session</th>
+                                <th>Total Donation Amount</th>
                                 <th class="no-print">Action</th>
                             </tr>
                         </thead>
@@ -300,6 +315,7 @@
                                     <td>{{ $item->amountType ?? 'Donation' }}</td>
                                     <td>{{ $item->payment_method ?? 'Online cashfree' }}</td>
                                     <td>{{ $item->academic_session }}</td>
+                                    <td>{{ number_format($item->amount, 2) }}</td>
                                     <td class="no-print">
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
                                             <a href="{{ route('view-donation', $item->id) }}"
@@ -316,8 +332,8 @@
                             <tr>
                                 <th colspan="2" class="text-end">Total Records:</th>
                                 <th colspan="3" class="text-center">{{ $donations->count() }}</th>
-                                <th colspan="2" class="text-center">Total Donation Amount:</th>
-                                <th colspan="3" class="text-center">
+                                <th colspan="6" class="text-center">Total Donation Amount:</th>
+                                <th colspan="1" class="text-center">
                                     <strong>{{ number_format($totalAmount, 2) }}</strong>
                                 </th>
                             </tr>
