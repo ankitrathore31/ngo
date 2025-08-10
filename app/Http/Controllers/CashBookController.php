@@ -22,7 +22,6 @@ class CashBookController extends Controller
         $online = donor_data::where('status', 'Successful');
         $offline = Donation::query();
 
-        // Apply filters (online)
         if ($request->filled('name')) {
             $online->where('name', 'like', '%' . $request->name . '%');
             $offline->where('name', 'like', '%' . $request->name . '%');
@@ -34,6 +33,10 @@ class CashBookController extends Controller
         if ($request->filled('block')) {
             $online->where('block', 'like', '%' . $request->block . '%');
             $offline->where('block', 'like', '%' . $request->block . '%');
+        }
+        if ($request->filled('amountType')) {
+            // $online->where('block', 'like', '%' . $request->block . '%');
+            $offline->where('amountType', 'like', '%' . $request->amountType . '%');
         }
         if ($request->filled('state')) {
             $online->where('state', $request->state);

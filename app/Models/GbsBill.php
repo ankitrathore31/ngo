@@ -13,6 +13,8 @@ class GbsBill extends Model
         'work_category',
         'work_name',
         'bill_date',
+        'bill_no',
+        'mobile',
         'name',
         'guardian_name',
         'village',
