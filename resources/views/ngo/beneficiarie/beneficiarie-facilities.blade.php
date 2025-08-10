@@ -134,6 +134,7 @@
                                 <th>Age</th>
                                 <th>Survey Date</th>
                                 <th>Survey Details</th>
+                                <th>Survey Officer</th>
                                 <th>Beneficiarie Eligibility category</th>
                                 <th>Session</th>
                                 <th>Action</th>
@@ -163,6 +164,7 @@
                                     <td>{{ $survey->survey_date ? \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') : 'Not Found' }}
                                     </td>
                                     <td>{{ $survey->survey_details }}</td>
+                                    <td>{{ $survey->survey_officer }}</td>
                                     <td>{{ $survey->bene_category ?? 'No Found' }}</td>
                                     <td>{{ $item->academic_session }}</td>
                                     <td>

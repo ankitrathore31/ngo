@@ -131,8 +131,9 @@
                             <p><strong>
                                     <span data-lang="hi">प्रमाण-पत्र क्रमांक:</span>
                                     <span data-lang="en">Certificate No.: </span>
-                                </strong> &nbsp; <input type="number" name="certificate_no"
-                                    value="{{ old('certificate_no', $record->certificate_no ?? '') }}" required></p>
+                                </strong> &nbsp; <input type="text" name="certificate_no"
+                                    value="{{ old('certificate_no', $record->certificate_no ?? ($nextCertificateNo ?? '')) }}"
+                                    required></p>
                         </div>
 
                         <div class="col-sm-3 mb-2">
@@ -158,8 +159,7 @@
                                     <span data-lang="hi">प्रमाणित किया जाता है कि श्री/कुमारी/श्रीमती</span>
                                     <span data-lang="en">It is Certified that Shri/Km./Smt:</span>
                                 </strong>
-                                <div
-                                    style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: rap;">
+                                <div style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: rap;">
                                     &nbsp; {{ $record->beneficiare->name }}
                                 </div>
                             </div>
@@ -171,8 +171,7 @@
                                     <span data-lang="hi">पिता/पति का नाम</span>
                                     <span data-lang="en">Father/Husband's Name:</span>
                                 </strong>
-                                <div
-                                    style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap;">
+                                <div style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: nowrap;">
                                     &nbsp;{{ $record->beneficiare->gurdian_name }}
                                 </div>
                             </div>
@@ -269,7 +268,8 @@
                                 </div> --}}
                                 <div
                                     style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: normal; overflow-wrap: break-word;">
-                                    &nbsp;{{ $center->center_code }}, {{ $center->center_name }}, {{ $center->center_address }}
+                                    &nbsp;{{ $center->center_code }}, {{ $center->center_name }},
+                                    {{ $center->center_address }}
                                 </div>
                             </div>
                         </div>
@@ -280,8 +280,7 @@
                                     <span data-lang="hi">प्रशिक्षण प्रारंभ तिथि</span>
                                     <span data-lang="en">Training start date </span>
                                 </strong>
-                                <div
-                                    style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: normal;">
+                                <div style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: normal;">
                                     &nbsp;{{ \Carbon\Carbon::parse($record->start_date)->format('d-m-Y') }}
                                 </div>
                             </div>
@@ -292,8 +291,7 @@
                                     <span data-lang="hi">प्रशिक्षण समाप्ति तिथि</span>
                                     <span data-lang="en">Training end date </span>
                                 </strong>
-                                <div
-                                    style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: normal;">
+                                <div style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: normal;">
                                     &nbsp;{{ \Carbon\Carbon::parse($record->end_date)->format('d-m-Y') }}
                                 </div>
                             </div>

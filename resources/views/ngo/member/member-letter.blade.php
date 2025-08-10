@@ -2,7 +2,7 @@
 @section('content')
     <style>
         .letter-container {
-            width: 210mm;
+            width: 310mm;
             min-height: 297mm;
             padding: 20mm;
             margin: 0 auto;
@@ -48,7 +48,7 @@
             .letter-container {
                 margin: 0;
                 padding: 20mm;
-                width: 210mm;
+                width: 280mm;
                 min-height: 297mm;
                 box-shadow: none;
                 position: absolute;
@@ -134,7 +134,7 @@
                         <!-- Header -->
                         <div class="row">
                             <div class="col-sm-2 text-center text-md-start">
-                                <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="80" height="80">
+                                <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="120" height="120">
                             </div>
                             <div class="col-sm-10">
                                 <p style="margin: 0;" class="d-flex justify-content-around"><b>
@@ -178,13 +178,13 @@
                                         No.:</span></strong><br>
                                 {{ $record->registration_no }}
                             </div>
-                            <div class="col-sm-5 text-center">
+                            <div class="col-sm-4 text-center">
                                 <div class="print-red-bg">
                                     <span>मनोनयन प्रमाण</span>
                                     {{-- <span data-lang="en">Nomination Certificate</span> --}}
                                 </div>
                             </div>
-                            <div class="col-sm-3 text-end">
+                            <div class="col-sm-4 text-end">
                                 <strong><span data-lang="hi">जारी तिथि:</span> <span data-lang="en">Issue
                                         Date:</span></strong><br>
                                 {{ \Carbon\Carbon::parse($record->registration_date)->format('d-m-Y') }}

@@ -39,7 +39,6 @@
         }
     }
 </style>
-
 <div class="wrapper">
     <div class="container-fluid">
         <div class="row justify-content-center d-flex mb-5">
@@ -134,7 +133,16 @@
             </div>
 
         </div>
+          <div class="row g-3 d-flex">
+
+            <div class="col-md-6 col-sm-6 col-12 mb-3">
+                <div class="certificate-card">
+                    <h5 class="certificate-title">LEI Certificate</h5>
+                    <img src="{{ asset('images/GBSLEI.jpg')}}" class="img-fluid" alt="Certificate 2">
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>
-
 @endsection
