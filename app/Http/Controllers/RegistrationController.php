@@ -24,8 +24,21 @@ class RegistrationController extends Controller
 
     public function StoreRegistration(Request $request)
     {
-        // Validate request
+
         $validator = Validator::make($request->all(), [
+            'identity_no' => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) {
+                    if (
+                        \App\Models\beneficiarie::where('identity_no', $value)->exists() ||
+                        \App\Models\Member::where('identity_no', $value)->exists()
+                    ) {
+                        $fail('This identity card number is already registered.');
+                    }
+                }
+            ],
             'academic_session'   => 'required',
             'application_date'   => 'required|date',
             'reg_type'           => 'required|in:Member,Beneficiaries',
@@ -46,10 +59,9 @@ class RegistrationController extends Controller
             'religion'           => 'required|string|max:100',
             'religion_category'  => 'required|string|max:100',
             'caste'              => 'required|string|max:100',
-            'image'              => 'nullable|image|max:2048',
+            'image'              => 'nullable|image',
             'identity_type'      => 'required|string|max:255',
-            'identity_no'        => 'required|string|max:255',
-            'id_document'        => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'id_document'        => 'nullable|file|mimes:jpg,jpeg,png,pdf',
             'occupation'         => 'required|string|max:255',
             'eligibility'        => 'nullable|string|max:100',
             'marital_status'     => 'required|string|in:Married,Unmarried',
@@ -637,6 +649,19 @@ class RegistrationController extends Controller
     {
         // Validation rules
         $rules = [
+            'identity_no' => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) {
+                    if (
+                        \App\Models\beneficiarie::where('identity_no', $value)->exists() ||
+                        \App\Models\Member::where('identity_no', $value)->exists()
+                    ) {
+                        $fail('This identity card number is already registered.');
+                    }
+                }
+            ],
             'academic_session'   => 'required',
             'application_date'   => 'required|date',
             'reg_type'           => 'required|in:Member,Beneficiaries',
@@ -657,10 +682,9 @@ class RegistrationController extends Controller
             'religion'           => 'required|string|max:100',
             'religion_category'  => 'required|string|max:100',
             'caste'              => 'required|string|max:100',
-            'image'              => 'nullable|image|max:2048',
+            'image'              => 'nullable|image',
             'identity_type'      => 'required|string|max:255',
-            'identity_no'        => 'required|string|max:255',
-            'id_document'        => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'id_document'        => 'nullable|file|mimes:jpg,jpeg,png,pdf',
             'occupation'         => 'required|string|max:255',
             'eligibility'        => 'nullable|string|max:100',
             'marital_status'     => 'required|string|in:Married,Unmarried',
@@ -730,5 +754,4 @@ class RegistrationController extends Controller
 
         return redirect()->back()->with('success', 'Registration setting updated.');
     }
-
 }

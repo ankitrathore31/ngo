@@ -313,7 +313,8 @@
                     <thead class="table-primary" style="border: 1px solid #000;">
                         <tr>
                             <th>Sr. No.</th>
-                            <th>Receipt No.</th>
+                            <th>Online Donation Receipt No.</th>
+                            <th>Offline Donation Receipt No.</th>
                             <th>Donation Date</th>
                             <th>Name</th>
                             <th>Address</th>
@@ -334,7 +335,8 @@
                             @php $totalAmount += $item->amount; @endphp
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $item->receipt_no ?? '-' }}</td>
+                                <td>{{$item->Onlinereceipt_no ?? 'Online cashfree'}}</td>
+                                <td>{{ $item->receipt_no ?? 'Online cashfree'}}</td>
                                 <td>{{ $item->date ? \Carbon\Carbon::parse($item->date)->format('d-m-Y') : 'Not Found' }}
                                 </td>
                                 <td>{{ $item->name ?? '-' }}</td>

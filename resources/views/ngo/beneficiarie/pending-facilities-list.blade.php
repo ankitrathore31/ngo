@@ -153,6 +153,29 @@
                             @enderror
                         </div>
 
+                        <div class=" col-md-4">
+                            {{-- <label for="bene_category">Beneficiarie Eligibility Category</label> --}}
+                            <select id="bene_category" name="bene_category" class="form-control" required>
+                                <option value="">-- Select Beneficiarie Eligibility Category --</option>
+                                <option value="Homeless Families">1. Homeless Families</option>
+                                <option value="People living in kutcha or one-room houses">2. People living in kutcha or
+                                    one-room houses</option>
+                                <option value="Widows">3. Widows</option>
+                                <option value="Elderly Women">4. Elderly Women</option>
+                                <option value="Persons with Disabilities">5. Persons with Disabilities</option>
+                                <option value="Landless">6. Landless</option>
+                                <option value="Economically Weaker Section">7. Economically Weaker Section</option>
+                                <option value="Laborers">8. Laborers</option>
+                                <option value="Scheduled Tribes">9. Scheduled Tribes</option>
+                                <option value="Scheduled Castes">10. Scheduled Castes</option>
+                                <option value="Based on Low Income">11. Based on Low Income</option>
+                                <option value="Affected People">12. Affected People</option>
+                                <option value="Marginal Farmers">13. Marginal Farmers</option>
+                                <option value="Small Farmers">14. Small Farmers</option>
+                                <option value="Large Farmers">15. Large Farmers</option>
+                            </select>
+                        </div>
+
                         <div class="col-md-4 d-flex">
                             <button type="submit" class="btn btn-primary me-2">Search</button>
                             <a href="{{ route('pending-distribute-list') }}" class="btn btn-info text-white me-2">Reset</a>
@@ -221,6 +244,7 @@
                                 <th>Pending Reason</th>
                                 <th>Signature/
                                     Thumb Impression of the Recipient</th>
+                                <th>Beneficiarie Eligibility category</th>
                                 <th>Session</th>
                                 <th class="no-print">Action</th>
                             </tr>
@@ -259,6 +283,7 @@
                                         <td>{{ $survey->status ?? 'No Found' }} </td>
                                         <td>{{ $survey->pending_reason ?? 'No Found' }}</td>
                                         <td></td>
+                                        <td>{{ $survey->bene_category ?? 'No Found' }}</td>
                                         <td>{{ $survey->academic_session }}</td>
                                         <td class="no-print">
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">

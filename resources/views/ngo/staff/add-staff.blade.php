@@ -110,7 +110,7 @@
                                         class="text-danger">*</span></label>
                                 <input type="text" id="staff_code" name="staff_code"
                                     class="form-control @error('staff_code') is-invalid @enderror"
-                                    value="{{ old('staff_code') }}" required>
+                                    value="{{ old('staff_code',$nextStaffCode) }}" readonly required>
                                 @error('staff_code')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

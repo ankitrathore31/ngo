@@ -118,6 +118,7 @@ class OrganizationController extends Controller
             'headorg_id'       => 'required',
             'name'    =>  'required|string',
             'formation_date' => 'required',
+            'area_type'      =>  'required',
             'address' =>  'required|string',
             'block'    =>  'required|string',
             'state'   =>  'required|string',
@@ -153,6 +154,7 @@ class OrganizationController extends Controller
             'academic_session' => 'required',
             'name'    =>  'required|string',
             'formation_date' => 'required|date',
+            'area_type'      =>  'required',
             'address' =>  'required|string',
             'block'    =>  'required|string',
             'state'   =>  'required|string',
@@ -191,6 +193,9 @@ class OrganizationController extends Controller
         if ($request->state) {
             $query->where('state', $request->state);
         }
+        if ($request->area_type) {
+            $query->where('area_type', $request->area_type);
+        }
         if ($request->district) {
             $query->where('district', $request->district);
         }
@@ -227,11 +232,21 @@ class OrganizationController extends Controller
         ]);
 
         foreach ($request->members as $memberId => $data) {
+            $exists = OrganizationMember::where('organization_id', $organization->id)
+                ->where('member_id', $data['id'])
+                ->exists();
+
+            if ($exists) {
+                return back()
+                    ->withErrors(['members.' . $memberId => 'Member already exists in this organization'])
+                    ->withInput();
+            }
+
             OrganizationMember::create([
                 'organization_id'   => $organization->id,
                 'headorg_id'        => $organization->headorg_id,
                 'member_id'         => $data['id'],
-                'member_position'          => $data['position'],
+                'member_position'   => $data['position'],
                 'academic_session'  => $request->academic_session,
             ]);
         }
@@ -240,6 +255,7 @@ class OrganizationController extends Controller
             ->route('list.organization.member')
             ->with('success', 'Members added successfully!');
     }
+
 
 
     public function OrgMemberList(Request $request)

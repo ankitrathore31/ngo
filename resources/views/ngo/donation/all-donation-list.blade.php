@@ -248,6 +248,8 @@
                         <thead class="table-primary">
                             <tr>
                                 <th>Sr. No.</th>
+                                <th>Online Donation Receipt No.</th>
+                                <th>Offline Donation Receipt No.</th>
                                 <th>Name</th>
                                 <th>Father/Husband Name</th>
                                 <th>Address</th>
@@ -257,7 +259,7 @@
                                 <th>Amount Type</th>
                                 <th>Donation Category</th>
                                 <th>Donation Amount</th>
-                                <th>Donate Date</th>
+                                <th>Donation Date</th>
                                 {{-- <th>Status</th> --}}
                                 <th>Payment Mode</th>
                                 <th>Session</th>
@@ -270,6 +272,8 @@
                             @foreach ($donations as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
+                                    <td>{{$item->Onlinereceipt_no ?? 'Online Cashfree'}}</td>
+                                    <td>{{ $item->receipt_no ?? 'Online Cashfree'}}</td>
                                     <td>{{ $item->name ?? '-' }}</td>
                                     <td>{{ $item->gurdian_name ?? 'Donation with Online cashfree' }}</td>
                                     <td>{{ $item->address ?? $item->donor_village }}</td>

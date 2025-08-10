@@ -109,11 +109,11 @@
         <div class="container-fluid mt-4">
 
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Online Donation List</h5>
+                <h5 class="mb-0">Online Cashfree Paymnet Gateway Donation List</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Donor List</li>
+                        <li class="breadcrumb-item active" aria-current="page">Donation</li>
                     </ol>
                 </nav>
             </div>
@@ -176,6 +176,7 @@
                                 <th>Sr. No.</th>
                                 {{-- <th>Order ID</th> --}}
                                 <th>Name</th>
+                                <th>Father/Husband</th>
                                 <th>Address</th>
                                 <th>Identity No.</th>
                                 <th>Identity Type</th>
@@ -197,6 +198,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     {{-- <td>{{ $item->order_id }}</td> --}}
                                     <td>{{ $item->name }}</td>
+                                    <td>{{ $item->gurdian_name ?? 'Cashfree Payment' }}</td>
                                     <td>{{ $item->address }}
                                         {{ $item->block }}
                                         {{ $item->district }}

@@ -119,7 +119,8 @@
                         <thead class="table-primary">
                             <tr>
                                 <th>Sr. No.</th>
-                                <th>Receipt No.</th>
+                                <th>Online Donation Receipt No.</th>
+                                <th>Offline Donation Receipt No.</th>
                                 <th>Name</th>
                                 <th>Father/Husband Name</th>
                                 <th>Address</th>
@@ -141,7 +142,8 @@
                             @foreach ($donor as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <th>{{$item->receipt_no}}</th>
+                                    <td>{{$item->Onlinereceipt_no}}</td>
+                                    <td>{{ $item->receipt_no }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->gurdian_name}}</td>
                                     <td>{{ $item->address }}

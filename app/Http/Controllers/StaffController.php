@@ -15,7 +15,19 @@ class StaffController extends Controller
     public function addstaff()
     {
         $data = academic_session::all();
-        return view('ngo.staff.add-staff', compact('data'));
+        $lastStaff = \App\Models\Staff::orderBy('id', 'desc')->first();
+
+    if ($lastStaff && preg_match('/(\d+SC)(\d+)/', $lastStaff->staff_code, $matches)) {
+        $prefix = $matches[1]; // e.g. "3126SC"
+        $lastNumber = (int) $matches[2]; // e.g. "0043" → 43
+        $newNumber = $lastNumber + 1;
+    } else {
+        $prefix = '3126SC';
+        $newNumber = 43; // starting number if no staff exists
+    }
+
+    $nextStaffCode = $prefix . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+        return view('ngo.staff.add-staff', compact('data','nextStaffCode'));
     }
 
     public function StoreStaff(Request $request)
@@ -55,11 +67,23 @@ class StaffController extends Controller
             'marksheet' => 'nullable|file',
         ]);
 
+        // Find the last staff record
+        $lastStaff = \App\Models\Staff::orderBy('id', 'desc')->first();
+
+        if ($lastStaff && preg_match('/(\d+SC)(\d+)/', $lastStaff->staff_code, $matches)) {
+            $prefix = $matches[1]; // e.g. "3126SC"
+            $lastNumber = (int) $matches[2]; // e.g. "0043" → 43
+            $newNumber = $lastNumber + 1;
+        } else {
+            $prefix = '3126SC';
+            $newNumber = 43; 
+        }
+
         $staff = new Staff();
         $staff->application_date = $request->application_date;
         $staff->joining_date = $request->joining_date;
         $staff->academic_session = $request->session;
-        $staff->staff_code = $request->staff_code;
+        $staff->staff_code = $prefix . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
         $staff->position = $request->position;
         $staff->name = $request->name;
         $staff->dob = $request->dob;
@@ -117,7 +141,7 @@ class StaffController extends Controller
         $staff->save();
 
         // fees save 
-        
+
 
         $user = new User();
         $user->name = $staff->name;
@@ -381,9 +405,6 @@ class StaffController extends Controller
         $staff = Staff::findorFail($id);
         $salary = Sallary::where('position', $staff->position)->first();
         $signatures = Signature::pluck('file_path', 'role');
-        return view('ngo.staff.appointment-letter', compact('staff', 'signatures','salary'));
+        return view('ngo.staff.appointment-letter', compact('staff', 'signatures', 'salary'));
     }
-
-
-
 }

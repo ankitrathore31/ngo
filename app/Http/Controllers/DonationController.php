@@ -37,18 +37,21 @@ class DonationController extends Controller
         if ($request->filled('name')) {
             $query->where('name', 'like', '%' . $request->name . '%');
         }
-        if($request->filled('category')){
+        if ($request->filled('category')) {
             $query->where('category', $request->category);
         }
-        if($request->filled('amountType')){
+        if ($request->filled('amountType')) {
             $query->where('amountType', $request->amountType);
+        }
+        if ($request->filled('payment_method')) {
+            $query->where('payment_method', $request->payment_method);
         }
         $data = academic_session::all();
         $categories = Category::orderBy('category', 'asc')->pluck('category');
         $allProjects = Project::select('name', 'category')->get();
         $donor = $query->get();
 
-        return view('ngo.donation.donation-list', compact('data', 'donor','categories','allProjects'));
+        return view('ngo.donation.donation-list', compact('data', 'donor', 'categories', 'allProjects'));
     }
 
     public function donation(Request $request)
@@ -61,7 +64,14 @@ class DonationController extends Controller
         $newReceiptNo = is_numeric($lastReceiptNo) ? ((int) $lastReceiptNo + 1) : 1;
         $states = config('states');
         $category = Category::orderBy('category', 'asc')->get();
-        return view('ngo.donation.donation', compact('data', 'record', 'newReceiptNo','category'));
+        $lastOnlineReceipt = Donation::selectRaw(
+            "MAX(CAST(SUBSTRING(Onlinereceipt_no, 6) AS UNSIGNED)) as max_no"
+        )->value('max_no');
+        $newOnlineReceiptNo = $lastOnlineReceipt ? ($lastOnlineReceipt + 1) : 360;
+        $formattedOnlineReceiptNo = '219DR' . str_pad($newOnlineReceiptNo, 7, '0', STR_PAD_LEFT);
+        $signatures = Signature::pluck('file_path', 'role');
+
+        return view('ngo.donation.donation', compact('data', 'record', 'newReceiptNo', 'category', 'formattedOnlineReceiptNo', 'signatures'));
     }
 
     public function saveDonation(Request $request)
@@ -88,8 +98,23 @@ class DonationController extends Controller
         }
         $formattedReceiptNo = str_pad($newReceiptNo, 3, '0', STR_PAD_LEFT);
 
+        $lastOnlineReceipt = \App\Models\Donation::orderBy('id', 'desc')->first();
+
+        if ($lastOnlineReceipt && preg_match('/(\d+DR)(\d+)/', $lastOnlineReceipt->Onlinereceipt_no, $matches)) {
+            $prefix = $matches[1]; 
+            $lastNumber = (int)$matches[2]; // e.g. 360
+            $newNumber = $lastNumber + 1;
+        } else {
+            $prefix = '219DR';
+            $newNumber = 360;
+        }
+
+        $formattedOnlineReceiptNo = $prefix . str_pad($newNumber, 7, '0', STR_PAD_LEFT);
+
+
         $donation = new Donation;
         $donation->receipt_no = $formattedReceiptNo;
+        $donation->Onlinereceipt_no = $formattedOnlineReceiptNo;
         $donation->academic_session = $request->session;
         $donation->date = $request->date;
         $donation->name = $request->name;
@@ -133,7 +158,7 @@ class DonationController extends Controller
         $data = academic_session::all();
         $donation = Donation::find($id);
         $category = Category::get();
-        return view('ngo.donation.edit-donation', compact('data', 'donation','category'));
+        return view('ngo.donation.edit-donation', compact('data', 'donation', 'category'));
     }
 
     public function updateDonation(Request $request, $id)
@@ -282,7 +307,7 @@ class DonationController extends Controller
 
     public function allDonations(Request $request)
     {
-         $online = donor_data::where('status', 'Successful');
+        $online = donor_data::where('status', 'Successful');
 
         if ($request->filled('name')) {
             $online->where('name', 'like', '%' . $request->name . '%');
@@ -301,7 +326,7 @@ class DonationController extends Controller
         if ($request->filled('district')) {
             $online->where('district', $request->district);
         }
-         if($request->filled('category')){
+        if ($request->filled('category')) {
             $online->where('donation_category', $request->category);
         }
 
@@ -325,10 +350,10 @@ class DonationController extends Controller
         if ($request->filled('district')) {
             $offline->where('district', $request->district);
         }
-         if($request->filled('category')){
+        if ($request->filled('category')) {
             $offline->where('category', $request->category);
         }
-        if($request->filled('amountType')){
+        if ($request->filled('amountType')) {
             $offline->where('amountType', $request->amountType);
         }
 
@@ -342,7 +367,7 @@ class DonationController extends Controller
         $data = academic_session::all();
         $states = config('states');
         $categories = Category::orderBy('category', 'asc')->pluck('category');
-        return view('ngo.donation.all-donation-list', compact('data', 'donations','states','categories'));
+        return view('ngo.donation.all-donation-list', compact('data', 'donations', 'states', 'categories'));
     }
 
     public function DonationReport(Request $request)
