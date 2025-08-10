@@ -104,7 +104,8 @@
                                             <a href="javascript:void(0);" class="btn btn-success btn-sm px-3 demand-btn"
                                                 data-bs-toggle="modal" data-bs-target="#Modal"
                                                 data-id="{{ $item->id }}" data-name="{{ $item->name }}"
-                                                data-gurdian="{{ $item->gurdian_name }}" data-address="{{ $item->village }}, 
+                                                data-gurdian="{{ $item->gurdian_name }}"
+                                                data-address="{{ $item->village }}, 
                                                 {{ $item->post }}, {{ $item->town }}, {{ $item->district }}, 
                                                  {{ $item->state }}">
                                                 Demand Beneficiarie In Training Center
@@ -133,8 +134,8 @@
                         <h6 class="modal-title" id="positionModalLabel">
                             &nbsp; &nbsp; Name: <span id="beneName"></span> &nbsp;&nbsp; Father/Husband Name: <span
                                 id="guardianName"></span>
-                                <br>
-                                &nbsp;&nbsp; Address: <span id="addressBene"></span>
+                            <br>
+                            &nbsp;&nbsp; Address: <span id="addressBene"></span>
                         </h6>
                         <form action="{{ route('store-demand') }}" method="POST">
                             @csrf
@@ -162,72 +163,18 @@
                                         readonly>
                                 </div>
 
-                                <div class=" col-md-6 mb-3">
+                                <div class="mb-3">
                                     <label for="facilities_category" class="form-label">
                                         Facilities Category<span class="text-danger">*</span>
                                     </label>
                                     <select name="facilities_category" id="facilities_category"
                                         class="form-control @error('facilities_category') is-invalid @enderror" required>
                                         <option value="">-- Select Category --</option>
-                                        <option value="Education"
-                                            {{ old('facilities_category') == 'Education' ? 'selected' : '' }}>
-                                            Education</option>
-                                        <option value="Peace Talk"
-                                            {{ old('facilities_category') == 'Peace Talk' ? 'selected' : '' }}>
-                                            Peace Talk</option>
-                                        <option value="Environment"
-                                            {{ old('facilities_category') == 'Environment' ? 'selected' : '' }}>Environment
-                                        </option>
-                                        <option value="Food"
-                                            {{ old('facilities_category') == 'Food' ? 'selected' : '' }}>Food
-                                        </option>
-                                        <option value="Skill Development"
-                                            {{ old('facilities_category') == 'Skill Development' ? 'selected' : '' }}>Skill
-                                            Development
-                                        </option>
-                                        <option value="Women Empowerment"
-                                            {{ old('facilities_category') == 'Women Empowerment' ? 'selected' : '' }}>Women
-                                            Empowerment
-                                        </option>
-                                        <option value="Awareness"
-                                            {{ old('facilities_category') == 'Awareness' ? 'selected' : '' }}>
-                                            Awareness</option>
-                                        <option value="Cultural Program"
-                                            {{ old('facilities_category') == 'Cultural Program' ? 'selected' : '' }}>
-                                            Cultural Program
-                                        </option>
-                                        <option value="Clean Campaign"
-                                            {{ old('facilities_category') == 'Clean Campaign' ? 'selected' : '' }}>Clean
-                                            Campaign
-                                        </option>
-                                        <option value="Health Mission"
-                                            {{ old('facilities_category') == 'Health Mission' ? 'selected' : '' }}>Health
-                                            Mission
-                                        </option>
-                                        <option value="Poor Alleviation"
-                                            {{ old('facilities_category') == 'Poor Alleviation' ? 'selected' : '' }}>Poor
-                                            Alleviation
-                                        </option>
-                                        <option value="Religious Program"
-                                            {{ old('facilities_category') == 'Religious Program' ? 'selected' : '' }}>
-                                            Religious Program
-                                        </option>
-                                        <option value="Agriculture Program"
-                                            {{ old('facilities_category') == 'Agriculture Program' ? 'selected' : '' }}>
-                                            Agriculture
-                                            Program</option>
-                                        <option value="Drinking Water"
-                                            {{ old('facilities_category') == 'Drinking Water' ? 'selected' : '' }}>Drinking
-                                            Water
-                                        </option>
-                                        <option value="Natural Disaster"
-                                            {{ old('facilities_category') == 'Natural Disaster' ? 'selected' : '' }}>
-                                            Natural Disaster
-                                        </option>
-                                        <option value="Animal Service"
-                                            {{ old('facilities_category') == 'Animal Service' ? 'selected' : '' }}>Animal
-                                            Service
-                                        </option>
+                                        @foreach ($category as $item)
+                                            <option value="{{ $item->category }}"
+                                                {{ old('facilities_category') == $item->category ? 'selected' : '' }}>
+                                                {{$item->category}}</option>
+                                        @endforeach
                                     </select>
                                     @error('facilities_category')
                                         <span class="text-danger">{{ $message }}</span>

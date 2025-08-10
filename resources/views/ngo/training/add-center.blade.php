@@ -49,7 +49,7 @@
                                                 class="text-danger">*</span></label>
                                         <input type="text" name="center_code" id="center_code"
                                             class="form-control @error('center_code') is-invalid @enderror"
-                                            value="{{ old('center_code') }}">
+                                            value="{{ old('center_code',$nextCenterCode) }}" readonly>
                                         @error('center_code')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror

@@ -594,7 +594,29 @@
 
         </div>
     </section>
-
+    {{-- <section>
+        <div class="container-fluid mt-5">
+            <div class="row justify-content-center d-flex">
+                <div class="col-md-12 justify-content-center d-flex" style="gap: 15px;">
+                    <h4 class="section-title mb-4"><b>Beneficiary Category By</b></h4>
+                    <select class="form-control w-25" id="session">
+                        <option value="">All Session</option>
+                        @foreach ($data as $session)
+                            <option value="{{ $session->session_date }}">{{ $session->session_date }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row text-center g-2">
+                <div class="col-6 bg-primary col-md-3 mb-3">
+                    <div class="p-2 shadow-sm rounded">
+                        <span class="fw-bold d-block">ST</span>
+                        <span class="fs-5 fw-bold"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> --}}
     <section>
         <div class="container-fluid mt-5">
             <div class="row justify-content-center d-flex">

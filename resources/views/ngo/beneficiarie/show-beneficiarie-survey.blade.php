@@ -213,14 +213,6 @@
                     <hr>
                     <b class="mb-3 text-center"><U>About Beneficiarie Survey</U></b>
                     <div class="row mb-3">
-
-                        <div class="col-sm-4 mb-3 p-4">
-                            <strong>Survey Date:</strong>
-                            {{ \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') }}
-                        </div>
-                        <div class="col-sm-8 mb-3 p-4">
-                            <strong>Survey Details.</strong> {{ $survey->survey_details }}
-                        </div>
                     </div>
                     @php
                         $facilities = [
@@ -300,31 +292,30 @@
                             </div>
                         @endforeach
                     </div>
-
-
-                    {{-- <div class="row">
-                    @if ($beneficiarie->image)
-                        <div class="row mb-3">
-                            <div class="col-sm-4 mb-3">
-                                <strong>Profile Image:</strong><br>
-                                <img src="{{ asset('benefries_images/' . $beneficiarie->image) }}" alt="Profile Image"
-                                    class="img-thumbnail" width="150">
-                            </div>
+                    <div class="row mt-2">
+                        <div class="col-sm-6 col-md-6 mb-3">
+                            <strong>Survey Date:</strong>
+                            {{ \Carbon\Carbon::parse($survey->survey_date)->format('d-m-Y') }}
                         </div>
-                    @endif
-                    <div class="col-sm-3 mb-3">
-                        @if ($beneficiarie->id_document)
-                            <strong>ID Document:</strong>
-                            <a href="{{ asset('benefries_images/' . $beneficiarie->id_document) }}" target="_blank">View
-                                Document</a>
-                        @endif
+
+                        <div class="col-sm-6 col-dm-6 mb-3">
+                            <strong>Beneficiarie Eligibility Category:</strong>
+                            {{ $survey->bene_category }}
+                        </div>
+
+                        <div class="col-sm-12 mb-3">
+                            <strong>Survey Details.</strong> {{ $survey->survey_details }}
+                        </div>
+                        <div class="col-sm-6 col-dm-6 mb-3">
+                            <strong>Survey Officer:</strong>
+                            {{ $survey->survey_officer }}
+                        </div>
                     </div>
-                </div> --}}
                     <hr>
                     <div class="row d-flex justify-content-between mt-2">
                         <div class="col-sm-4 mb-5">
                             <label for="" class="from-label"><b>{{ $beneficiarie->reg_type }}Signature/
-                            Thumb Impression of the Recipient</b></label>
+                                    Thumb Impression of the Recipient</b></label>
                         </div>
                         <div class="col-sm-4 mb-5">
                             <label for="" class="from-label"><b>Signature</b></label>

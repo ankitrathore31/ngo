@@ -130,11 +130,35 @@ class HomeControlller extends Controller
         return view('home.welcome', compact('data', 'areaTypeCounts', 'allacti', 'todayacti', 'categoryCounts'));
     }
 
-    public function activitypage()
+    public function activitypage(Request $request)
     {
-        $activity = Activity::orderBy('program_date', 'asc')->get();
-        return view('home.activity.SocialActivity', compact('activity'));
+        // Start query
+        $query = Activity::orderBy('program_date', 'asc');
+
+        // Apply filters if provided
+        if ($request->filled('session_filter')) {
+            $query->where('session_date', $request->session_filter);
+        }
+
+        if ($request->filled('category_filter')) {
+            $query->where('category', $request->category_filter);
+        }
+
+        if ($request->filled('address_filter')) {
+            $query->where('address', 'LIKE', '%' . $request->address_filter . '%');
+        }
+        if ($request->filled('name')) {
+            $query->where('name', 'LIKE', '%' . $request->name . '%');
+        }
+        // Get the filtered activities
+        $activity = $query->get();
+
+        // Categories for dropdown
+        $category = Category::orderBy('category', 'asc')->get();
+
+        return view('home.activity.SocialActivity', compact('activity', 'category'));
     }
+
 
     public function viewreport($id)
     {

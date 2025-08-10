@@ -16,7 +16,7 @@
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
             font-size: 28px;
-            word-spacing: 8px;
+            word-spacing: 20px;
             text-align: center;
         }
 
@@ -68,7 +68,7 @@
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
                 font-size: 28px;
-                word-spacing: 8px;
+                word-spacing: 20px;
                 text-align: center;
             }
 
@@ -115,12 +115,12 @@
                     <button class="btn btn-sm btn-outline-success" onclick="setLanguage('hi')">हिंदी</button>
                 </div>
             </div>
-            <div class="card shadow rounded p-4 my-4 border border-dark print-card">
+            <div class="card shadow rounded p-4 my-4 print-card" style="border: 6px solid red;">
                 <div class="text-center mb-4 border-bottom pb-2">
                     <!-- Header -->
                     <div class="row">
                         <div class="col-sm-2 text-center text-md-start">
-                            <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="80" height="80">
+                            <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="120" height="120">
                         </div>
                         <div class="col-sm-10">
                             <p style="margin: 0;" class="d-flex justify-content-around"><b>
@@ -128,7 +128,7 @@
                                     &nbsp; &nbsp;<span>NGO NO. UP/00033062</span>&nbsp; &nbsp;
                                     &nbsp; &nbsp;<span>PAN: AAEAG7650B</span>&nbsp;
                                 </b></p>
-                            <h4 class="print-h4"><b>
+                            <h4 class="print-h4 p-1"><b>
                                     <span data-lang="hi">ज्ञान भारती संस्था</span>
                                     <span data-lang="en">GYAN BHARTI SANSTHA</span>
                                 </b></h4>
@@ -151,21 +151,21 @@
 
                 <!-- Donation Fields -->
                 <div class="row d-flex justify-content-between">
-                    <div class="col-sm-3 mb-2">
+                    <div class="col-sm-4 mb-2">
                         <p><strong>
                                 <span data-lang="hi">प्रमाण-पत्र क्रमांक:</span>
                                 <span data-lang="en">Certificate No.:</span>
                             </strong> &nbsp;{{ $record->registration_no }}</p>
                     </div>
 
-                    <div class="col-sm-6 mb-2">
-                        <p class="text-center  print-red-bg">
+                    <div class="col-sm-4 mb-2">
+                        <p class="text-center fw-bold  print-red-bg p-2">
                             <span data-lang="hi">सदस्य प्रमाणपत्र</span>
                             <span data-lang="en">Member Certificate </span>
                         </p>
                     </div>
 
-                    <div class="col-sm-3 mb-2 text-end">
+                    <div class="col-sm-4 mb-2 text-end">
                         <p><strong>
                                 <span data-lang="hi">तारीख: </span>
                                 <span data-lang="en">Date: </span>
@@ -310,7 +310,7 @@
                     {{-- <div class="col-sm-2 text-center">
                         <img src="{{ asset('images/iso.png') }}" alt="Logo" width="100" height="100">
                     </div> --}}
-                    <div class="col-sm-5 text-end">
+                    <div class="col-sm-5 text-start">
                         @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
                             <div id="directorSignatureBox" class="mt-2">
                                 <p class="text-success no-print">Attached</p>

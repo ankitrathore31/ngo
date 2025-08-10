@@ -107,7 +107,7 @@
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
                                             <a href="{{ route('genrate-training-certificate',['id' => $item->id, 'center_code' => $item->center_code]) }}" class="btn btn-success btn-sm px-3"
                                             >
-                                            Genrate Certificate
+                                            Genrate Training Certificate
                                             </a>
                                             <a href="{{ route('show-approve-bene-training',['id' => $item->id, 'center_code' => $item->center_code]) }}"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"

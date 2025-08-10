@@ -36,14 +36,14 @@
                         <input type="number" class="form-control" name="application_no"
                             placeholder="Search By Application No.">
                     </div>
-                    {{-- <div class="col-md-3 col-sm-4 mb-3">
+                    <div class="col-md-3 col-sm-4 mb-3">
                         <select name="center" id="">
                             <option value="">Select Cenetr</option>
                             @foreach ($center as $item)
                                 <option value="{{$item->cenetr}}">{{$item->center}}</option>
                             @endforeach
                         </select>
-                    </div> --}}
+                    </div>
                     <div class="col-md-3 col-sm-4 mb-3">
                         <input type="text" class="form-control" name="name" placeholder="Search By Name">
                     </div>
@@ -63,65 +63,30 @@
                                 <th>Training Center Code</th>
                                 <th>Training Center Name</th>
                                 <th>Training Center Address</th>
-                                <th>Registration No.</th>
-                                <th>Name</th>
-                                <th>Father/Husband Name</th>
-                                <th>Address</th>
-                                <th>Mobile No.</th>
-                                <th>Caste</th>
-                                <th>Caste Category</th>
-                                <th>Religion</th>
-                                <th>Age</th>
-                                <th>Center Code</th>
-                                <th>Facilities Category</th>
-                                <th>Training Course</th> 
-                                <th>Start Date & End Date</th>
-                                <th>Course Duration</th>
                                 <th>Session</th>
                                 <th>Action</th>
+                                <th>Training Beneficiarie List</th>
+                                <th>Training Beneficiarie Activity & Course List</th>
+                                <th>Training Beneficiarie Present List</th>
+                                <th>Training Beneficiarie Fees List</th>
+                                <th>Training Beneficiarie Progress Report</th>
+
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($record as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    {{-- <td>{{ $item->beneficiare->application_no ?? 'N/A' }}</td> --}}
-                                    <td>{{ $item->beneficiare->registration_no ?? 'N/A' }}</td>
-                                    <td>{{ $item->beneficiare->name ?? 'N/A' }}</td>
-                                    <td>{{ $item->beneficiare->gurdian_name ?? 'N/A' }}</td>
-                                    <td>{{ $item->beneficiare->village ?? '' }},
-                                        {{ $item->beneficiare->post ?? '' }},
-                                        {{ $item->beneficiare->block ?? '' }},
-                                        {{ $item->beneficiare->district ?? '' }},
-                                        {{ $item->beneficiare->state ?? '' }} - {{ $item->beneficiare->pincode ?? '' }}
-                                    </td>
-                                    {{-- <td>{{ $item->beneficiare->identity_no ?? 'N/A' }}</td>
-                                    <td>{{ $item->beneficiare->identity_type ?? 'N/A' }}</td> --}}
-                                    <td>{{ $item->beneficiare->phone ?? 'N/A' }}</td>
-                                    <td>{{ $item->beneficiare->caste ?? 'N/A' }}</td>
-                                    <td>{{ $item->beneficiare->religion_category ?? 'N/A' }}</td>
-                                    <td>{{ $item->beneficiare->religion ?? 'N/A' }}</td>
-                                    <td>{{ $item->beneficiare->dob ? \Carbon\Carbon::parse($item->beneficiare->dob)->age . ' years' : 'Not Found' }}
-                                    </td>
                                     <td>{{ $item->center_code}}</td>
-                                    <td>{{ $item->facilities_category ?? 'N/A' }}</td>
-                                    <td>{{ $item->training_course ?? 'N/A' }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($item->start_date)->format('d-m-Y')}} To {{ \Carbon\Carbon::parse($item->end_date)->format('d-m-Y')}}
-                                    </td> 
-                                    <td>{{$item->duration}}</td>
-                                    <td>{{ $item->beneficiare->academic_session ?? 'N/A' }}</td>
+                                    <td>{{ $item->center_name}}</td>
+                                    <td>{{ $item->center_address}}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            {{-- <a href="javascript:void(0);" class="btn btn-success btn-sm px-3"
-                                                data-bs-toggle="modal" data-bs-target="#Modal">
-                                                Add Beneficiarie In Center
-                                            </a> --}}
-                                            <a href="{{ route('show-approve-bene-training', ['id' => $item->id, 'center_code' => $item->center_code]) }}"
+                                            <a href="{{ route('show-approve-bene-training','center_code' => $item->center_code) }}"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="View" style="min-width: 38px; height: 38px;">
-                                                <i class="fa-regular fa-eye"></i>
+                                                Beneficiarie List
                                             </a>
-
                                         </div>
                                     </td>
                                 </tr>
