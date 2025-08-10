@@ -15,25 +15,25 @@ use Illuminate\Http\Request;
 
 class TrainingCenterController extends Controller
 {
-   public function Addcenter()
-{
-    $session = academic_session::all();
+    public function Addcenter()
+    {
+        $session = academic_session::all();
 
-    // Get last center_code from database
-    $lastCenter = Training_Center::orderBy('id', 'desc')->first();
+        // Get last center_code from database
+        $lastCenter = Training_Center::orderBy('id', 'desc')->first();
 
-    if ($lastCenter && preg_match('/\d{4}TC(\d+)/', $lastCenter->center_code, $matches)) {
-        $lastNumber = intval($matches[1]);
-    } else {
-        $lastNumber = 1; // Will make first generated = 2
+        if ($lastCenter && preg_match('/\d{4}TC(\d+)/', $lastCenter->center_code, $matches)) {
+            $lastNumber = intval($matches[1]);
+        } else {
+            $lastNumber = 1; // Will make first generated = 2
+        }
+
+        // Increment and format
+        $newNumber = $lastNumber + 1;
+        $nextCenterCode = '3126TC' . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+
+        return view('ngo.training.add-center', compact('session', 'nextCenterCode'));
     }
-
-    // Increment and format
-    $newNumber = $lastNumber + 1;
-    $nextCenterCode = '3126TC' . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
-
-    return view('ngo.training.add-center', compact('session', 'nextCenterCode'));
-}
 
     public function storeCenter(Request $request)
     {
@@ -66,7 +66,6 @@ class TrainingCenterController extends Controller
         return redirect()->route('center-list')->with('success', 'Training center details saved successfully.');
     }
 
-
     public function CenterList(Request $request)
     {
         $query = Training_Center::query();
@@ -84,11 +83,31 @@ class TrainingCenterController extends Controller
         }
 
         $data = academic_session::all();
-
-        // Get filtered list
-        $center = $query->orderBy('id', 'desc')->paginate(10); // with pagination
+        $center = $query->orderBy('id', 'desc')->get(); // with pagination
 
         return view('ngo.training.center-list', compact('center', 'data'));
+    }
+
+    public function CenterListForbene(Request $request)
+    {
+        $query = Training_Center::query();
+
+        if ($request->filled('session_filter')) {
+            $query->where('session_date', $request->session_filter);
+        }
+
+        if ($request->filled('center_code')) {
+            $query->where('center_code', $request->center_code);
+        }
+
+        if ($request->filled('center_name')) {
+            $query->where('center_name', 'like', '%' . $request->center_name . '%');
+        }
+
+        $session = academic_session::all();
+        $center = $query->orderBy('id', 'desc')->get();
+
+        return view('ngo.training.list-center-for-bene', compact('center', 'session'));
     }
 
     public function Editcenter($id)
@@ -240,21 +259,7 @@ class TrainingCenterController extends Controller
         $session = academic_session::all();
         $record = Training_Beneficiarie::with(['center', 'beneficiare'])->find($id);
         $center = Training_Center::where('center_code', $center_code)->first();
-        return view('ngo.training.genrate-training-certificate', compact('session', 'record', 'center'));
-    }
-
-    public function SaveGenrateTrainingCertificate(Request $request)
-    {
-        // Validate input
-        $validated = $request->validate([
-            'roll_no'       => 'required|numeric',
-            'certificate_no'  => 'nullable|string',
-            'grade'         => 'nullable|string|max:100',
-            'talent'        => 'nullable|string|max:255',
-            'issue_date'    => 'required|date',
-        ]);
-
-        $lastCertificate = Training_Beneficiarie::orderBy('id', 'desc')->value('certificate_no');
+             $lastCertificate = Training_Beneficiarie::orderBy('id', 'desc')->value('certificate_no');
 
         $prefix = '219TC';
         $startNumber = 355;
@@ -268,8 +273,30 @@ class TrainingCenterController extends Controller
 
         // Format the next certificate number with leading zeros (0000XXX)
         $nextCertificateNo = $prefix . str_pad($nextNumber, 7, '0', STR_PAD_LEFT);
+        return view('ngo.training.genrate-training-certificate', compact('session', 'record', 'center','nextCertificateNo'));
+    }
 
-        // Check if record exists for update
+    public function SaveGenrateTrainingCertificate(Request $request)
+    {
+        $validated = $request->validate([
+            'roll_no'       => 'required|numeric',
+            'certificate_no'  => 'nullable|string',
+            'grade'         => 'nullable|string|max:100',
+            'talent'        => 'nullable|string|max:255',
+            'issue_date'    => 'required|date',
+        ]);
+
+        $lastCertificate = Training_Beneficiarie::orderBy('id', 'desc')->value('certificate_no');
+        $prefix = '219TC';
+        $startNumber = 355;
+        if ($lastCertificate) {
+            $lastNumber = (int)substr($lastCertificate, strlen($prefix));
+            $nextNumber = $lastNumber + 1;
+        } else {
+            $nextNumber = $startNumber;
+        }
+        $nextCertificateNo = $prefix . str_pad($nextNumber, 7, '0', STR_PAD_LEFT);
+
         $certificate = Training_Beneficiarie::where('beneficiarie_id', $request->beneficiarie_id)
             ->where('id', $request->id)
             ->first();
@@ -280,22 +307,18 @@ class TrainingCenterController extends Controller
             $certificate->record_id = $request->id;
         }
 
-        // Assign fields from form
         $certificate->roll_no = $request->roll_no;
-        $certificate->certificate_no = $nextCertificateNo; // Auto-generated
+        $certificate->certificate_no = $nextCertificateNo;
         $certificate->grade = $request->grade;
         $certificate->talent = $request->talent;
         $certificate->issue_date = $request->issue_date;
 
         $certificate->save();
-
-        // Show success message with the NEXT available number
         return redirect()->back()->with([
             'success' => 'Training Certificate saved successfully.',
             'next_certificate' => $nextCertificateNo
         ]);
     }
-
 
     public function TrainingCerti(Request $request)
     {
@@ -333,4 +356,5 @@ class TrainingCenterController extends Controller
         $signatures = Signature::pluck('file_path', 'role');
         return view('ngo.training.training-bene-certificate', compact('session', 'record', 'center', 'signatures'));
     }
+
 }

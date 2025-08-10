@@ -22,6 +22,35 @@ class RegistrationController extends Controller
         return view('ngo.registration.registration', compact('states', 'data'));
     }
 
+    public function checkIdentity(Request $request)
+    {
+        $identity = $request->identity_no;
+        $beneficiary = beneficiarie::where('identity_no', $identity)->first();
+        $member = $beneficiary ? null : Member::where('identity_no', $identity)->first();
+
+        if ($beneficiary || $member) {
+            $person = $beneficiary ?? $member;
+            return response()->json([
+                'exists' => true,
+                'message' => '❌ Identity Number already registered.',
+                'name' => $person->name ?? '',
+                'registration_no' => $person->registration_no ?? '',
+                'gurdian_name' => $person->gurdian_name ?? '',
+                'mother_name' => $person->mother_name ?? ''
+            ]);
+        }
+
+        return response()->json([
+            'exists' => false,
+            'message' => '✅ Identity Number available.',
+            'name' => null,
+            'registration_no' => null,
+            'guardian_name' => null,
+            'mother_name' => null
+        ]);
+    }
+
+
     public function StoreRegistration(Request $request)
     {
 

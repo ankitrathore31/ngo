@@ -299,7 +299,7 @@
                                     <td class="no-print">
                                         <a href="{{-- route('list.group.member', $item->id) --}}"
                                             class="btn btn-success btn-sm px-3">
-                                            certificate List
+                                            Group Certificate
                                         </a>
                                     </td>
                                     <td>

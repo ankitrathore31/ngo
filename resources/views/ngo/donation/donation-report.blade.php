@@ -147,6 +147,18 @@
                             @endforeach
                         </select>
                     </div>
+                    <div class="col-md-3 mb-3
+                         form-group">
+                            <select class="form-control" id="amountType" name="amountType">
+                                <option value="">Select Amount Type</option>
+                                <option value="donation">Donation</option>
+                                <option value="membership">Membership</option>
+                                <option value="income">Income from other sources</option>
+                                <option value="balance">Year wise balance amount</option>
+                                <option value="trainingFees">Training fees</option>
+                                <option value="tuitionFees">Tuition fees</option>
+                            </select>
+                        </div>
                     {{-- In your form --}}
                     <div class="col-md-3 col-sm-4">
                         <input type="date" name="start_date" class="form-control"
@@ -320,11 +332,12 @@
                             <th>Address</th>
                             <th>Mobile No.</th>
                             <th>Donation Amount</th>
+                            <th>Amount Type</th>
                             <th>Payment Mode</th>
-                            <th>Session</th>
                             <th>State</th>
                             <th>District</th>
                             <th>Block</th>
+                            <th>Session</th>
                         </tr>
                     </thead>
 
@@ -335,19 +348,20 @@
                             @php $totalAmount += $item->amount; @endphp
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{$item->Onlinereceipt_no ?? 'Online cashfree'}}</td>
-                                <td>{{ $item->receipt_no ?? 'Online cashfree'}}</td>
+                                <td>{{ $item->Onlinereceipt_no}}</td>
+                                <td>{{ $item->receipt_no}}</td>
                                 <td>{{ $item->date ? \Carbon\Carbon::parse($item->date)->format('d-m-Y') : 'Not Found' }}
                                 </td>
                                 <td>{{ $item->name ?? '-' }}</td>
                                 <td>{{ $item->address ?? $item->donor_village }}</td>
                                 <td>{{ $item->mobile ?? '-' }}</td>
                                 <td>₹{{ number_format($item->amount, 2) }}</td>
+                                <td>{{ $item->amountType}}</td>
                                 <td>{{ $item->payment_method ?? 'Online cashfree' }}</td>
-                                <td>{{ $item->academic_session ?? '-' }}</td>
                                 <td>{{ $item->state ?? '-' }}</td>
                                 <td>{{ $item->district ?? '-' }}</td>
                                 <td>{{ $item->block ?? '-' }}</td>
+                                <td>{{ $item->academic_session ?? '-' }}</td>
                             </tr>
                         @endforeach
                     </tbody>

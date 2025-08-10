@@ -564,7 +564,7 @@
                             @endif
                             @if (!$isStaff || $user->hasPermission('approve-training-demand'))
                                 <li><a class="dropdown-item"
-                                        href="{{ route('approve-taining-demand-bene') }}">Training Demand Center By Beneficiary
+                                        href="{{ route('taining-center-bene') }}">Training Demand Center By Beneficiary
                                         List</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('generate-training-certi'))

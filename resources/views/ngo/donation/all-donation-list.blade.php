@@ -137,8 +137,8 @@
                             </select>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <select name="category" id="category" class="form-control" required>
-                                <option value="">Select Category</option>
+                            <select name="category" id="category" class="form-control" >
+                                <option value="">Select Donation Category</option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category }}">{{ $category }}</option>
                                 @endforeach
@@ -272,8 +272,8 @@
                             @foreach ($donations as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{$item->Onlinereceipt_no ?? 'Online Cashfree'}}</td>
-                                    <td>{{ $item->receipt_no ?? 'Online Cashfree'}}</td>
+                                    <td>{{$item->Onlinereceipt_no}}</td>
+                                    <td>{{ $item->receipt_no}}</td>
                                     <td>{{ $item->name ?? '-' }}</td>
                                     <td>{{ $item->gurdian_name ?? 'Donation with Online cashfree' }}</td>
                                     <td>{{ $item->address ?? $item->donor_village }}</td>

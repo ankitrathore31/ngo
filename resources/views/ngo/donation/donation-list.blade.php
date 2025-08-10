@@ -139,7 +139,7 @@
                         </div>
                         <!-- Category Dropdown -->
                         <div class="col-md-4 mb-3">
-                            <select name="category" id="category" class="form-control" required>
+                            <select name="category" id="category" class="form-control">
                                 <option value="">Select Donation Category</option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category }}">{{ $category }}</option>

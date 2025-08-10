@@ -206,7 +206,7 @@ class BillController extends Controller
     {
         $states = config('states');
         $data = academic_session::all();
-        $$categories = Category::orderBy('category', 'asc')->pluck('category');
+        $categories = Category::orderBy('category', 'asc')->pluck('category');
         $allProjects = Project::select('name', 'category')->get();
 
         $searchResults = collect();

@@ -229,7 +229,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="8" class="text-end"><strong>Total Donation Amount:</strong></td>
+                                <td colspan="9" class="text-end"><strong>Total Donation Amount:</strong></td>
                                 <td><strong>{{ $donor->sum('amount') }}</strong></td>
                                 <td colspan="5"></td>
                             </tr>

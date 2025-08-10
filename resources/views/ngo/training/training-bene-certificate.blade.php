@@ -2,11 +2,22 @@
 @section('content')
     <style>
         .print-red-bg {
-            background-color: #dc3545 !important;
+            background-color: red !important;
             /* Bootstrap 'bg-danger' color */
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
             color: white !important;
+
+        }
+
+        .print-h4 {
+            background-color: red !important;
+            color: white !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-size: 28px;
+            word-spacing: 20px;
+            text-align: center;
         }
 
         @media print {
@@ -43,11 +54,22 @@
             }
 
             .print-red-bg {
-                background-color: #dc3545 !important;
+                background-color: red !important;
                 /* Bootstrap 'bg-danger' color */
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
                 color: white !important;
+
+            }
+
+            .print-h4 {
+                background-color: red !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                font-size: 28px;
+                word-spacing: 20px;
+                text-align: center;
             }
 
 
@@ -99,7 +121,7 @@
                     <!-- Header -->
                     <div class="row">
                         <div class="col-sm-2 text-center text-md-start">
-                            <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="80" height="80">
+                            <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="120" height="120">
                         </div>
                         <div class="col-sm-10">
                             <p style="margin: 0;" class="d-flex justify-content-around"><b>
@@ -107,12 +129,10 @@
                                     &nbsp; &nbsp;<span>NGO NO. UP/00033062</span>&nbsp; &nbsp;
                                     &nbsp; &nbsp;<span>PAN: AAEAG7650B</span>&nbsp;
                                 </b></p>
-                            <h2 class="fw-bold text-uppercase"
-                                style="letter-spacing: 2px; word-spacing: 5px; margin:0; color:red;">
-                                <span data-lang="hi">ज्ञान भारती संस्था</span>
-                                {{-- <br> --}}
-                                <span data-lang="en">GYAN BHARTI SANSTHA</span>
-                            </h2>
+                            <h4 class="print-h4 p-1"><b>
+                                    <span data-lang="hi">ज्ञान भारती संस्था</span>
+                                    <span data-lang="en">GYAN BHARTI SANSTHA</span>
+                                </b></h4>
                             <h6 style="color: blue;"><b>
                                     <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर प्रदेश -
                                         262121</span>
@@ -287,7 +307,7 @@
                                 <span data-lang="en">Training start date </span>
                             </strong>
                             <div class="flex-grow-1 border-bottom border-dark text-break">
-                                &nbsp;{{\Carbon\Carbon::parse($record->start_date)->format('d-m-Y') }}
+                                &nbsp;{{ \Carbon\Carbon::parse($record->start_date)->format('d-m-Y') }}
                             </div>
                         </div>
                     </div>
@@ -376,8 +396,8 @@
                         @if (!empty($signatures['program_manager']) && file_exists(public_path($signatures['program_manager'])))
                             <div id="pmSignatureBox" class="mt-2">
                                 <p class="text-success no-print">Attached</p> <!-- This line is hidden in print -->
-                                <img src="{{ asset($signatures['program_manager']) }}" alt="PM Signature"
-                                    class="img" style="max-height: 100px;"> <!-- This will print -->
+                                <img src="{{ asset($signatures['program_manager']) }}" alt="PM Signature" class="img"
+                                    style="max-height: 100px;"> <!-- This will print -->
                                 <br>
                                 <button class="btn btn-danger btn-sm mt-2 no-print"
                                     onclick="togglePM(false)">Remove</button>
@@ -395,8 +415,8 @@
                         @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
                             <div id="directorSignatureBox" class="mt-2">
                                 <p class="text-success no-print">Attached</p>
-                                <img src="{{ asset($signatures['director']) }}" alt="Director Signature"
-                                    class="img" style="max-height: 100px;">
+                                <img src="{{ asset($signatures['director']) }}" alt="Director Signature" class="img"
+                                    style="max-height: 100px;">
                                 <br>
                                 <button class="btn btn-danger btn-sm mt-2 no-print"
                                     onclick="toggleDirector(false)">Remove</button>

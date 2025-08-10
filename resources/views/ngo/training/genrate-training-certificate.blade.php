@@ -127,7 +127,7 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-4 mb-2">
+                        <div class="col-sm-6 mb-2">
                             <p><strong>
                                     <span data-lang="hi">प्रमाण-पत्र क्रमांक:</span>
                                     <span data-lang="en">Certificate No.: </span>
@@ -136,7 +136,7 @@
                                     required></p>
                         </div>
 
-                        <div class="col-sm-3 mb-2">
+                        <div class="col-sm-6 mb-2">
                             <p><strong>
                                     <span data-lang="hi">पंजीकरण क्रमांक:</span>
                                     <span data-lang="en">Registration No.:</span>
