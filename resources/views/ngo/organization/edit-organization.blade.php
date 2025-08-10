@@ -13,7 +13,7 @@
         </div>
         <div class="card m-1">
             <div class="card-body">
-                <form action="{{ route('update.organization',$org->id) }}" method="POST" enctype="multipart/form-data"
+                <form action="{{ route('update.organization', $org->id) }}" method="POST" enctype="multipart/form-data"
                     class="m-3">
                     @csrf
                     <div class="row">
@@ -46,6 +46,30 @@
                             <input type="text" class="form-control @error('name') is-invalid @enderror" name="name"
                                 value="{{ old('name', $org->name) }}" placeholder="Enter Organization Name" required>
                         </div>
+
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="area_type" class="form-label">
+                                Area Type: <span class="text-danger">*</span>
+                            </label>
+                            <select name="area_type" class="form-control" id="area_type" required>
+                                <option value="" disabled
+                                    {{ old('area_type', $org->area_type ?? '') == '' ? 'selected' : '' }}>
+                                    Select Area
+                                </option>
+                                <option value="Rular"
+                                    {{ old('area_type', $org->area_type ?? '') == 'Rular' ? 'selected' : '' }}>
+                                    Rular
+                                </option>
+                                <option value="Urban"
+                                    {{ old('area_type', $org->area_type ?? '') == 'Urban' ? 'selected' : '' }}>
+                                    Urban
+                                </option>
+                            </select>
+                            @error('area_type')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
 
                         <div class="col-md-6 mb-3">
                             <label for="address">Address:</label>

@@ -59,7 +59,7 @@ class BeneficiarieController extends Controller
 
         $beneficiarie = beneficiarie::find($id);
         $staff = Staff::get();
-        return view('ngo.beneficiarie.add-beneficiarie', compact('beneficiarie','staff'));
+        return view('ngo.beneficiarie.add-beneficiarie', compact('beneficiarie', 'staff'));
     }
 
     public function storeBeneficiarie(Request $request, $id)
@@ -68,12 +68,14 @@ class BeneficiarieController extends Controller
             'beneficiarie_id' => 'required',
             'survey_details' => 'required|string',
             'survey_date' => 'required',
+            'bene_category' => 'required',
         ]);
 
         $survey = new Beneficiarie_Survey;
         $survey->beneficiarie_id = $request->input('beneficiarie_id');
         $survey->survey_details = $request->input('survey_details');
         $survey->survey_officer = $request->input('survey_officer');
+        $survey->bene_category  = $request->input('bene_category');
         $survey->survey_date = Carbon::parse($request->input('survey_date'));
         $survey->surveyfacility_status = $request->input('surveyfacility_status', []);
         $survey->save();
@@ -86,7 +88,8 @@ class BeneficiarieController extends Controller
     public function editbeneficiarie($id)
     {
         $beneficiarie = Beneficiarie::find($id);
-        return view('ngo.beneficiarie.edit-beneficiarie', compact('beneficiarie'));
+        $staff = Staff::get();
+        return view('ngo.beneficiarie.edit-beneficiarie', compact('beneficiarie', 'staff'));
     }
 
     public function updateBeneficiarie(Request $request, $id)
@@ -94,10 +97,11 @@ class BeneficiarieController extends Controller
         $beneficiarie = beneficiarie::find($id);
         $beneficiarie->survey_details = $request->input('survey_details');
         $beneficiarie->help_by_ngo = $request->input('help_by_ngo');
+        $beneficiarie->bene_category  = $request->input('bene_category');
         $beneficiarie->survey_date = Carbon::parse($request->input('survey_date'));
         $beneficiarie->update();
 
-        return redirect()->route('beneficiarie-list')->with('success', 'Beneficiare added successfully.');
+        return redirect()->route('beneficiarie-list')->with('success', 'Beneficiare update successfully.');
     }
 
     public function beneficiarieFacilities(Request $request)
@@ -148,6 +152,12 @@ class BeneficiarieController extends Controller
             });
         }
 
+        if ($request->filled('bene_category')) {
+            $surveys->whereHas('beneficiarie', function ($query) use ($request) {
+                $query->where('bene_category', $request->bene_category);
+            });
+        }
+
         if ($request->filled('village')) {
             $surveys->whereHas('beneficiarie', function ($query) use ($request) {
                 $query->where('village', 'like', '%' . $request->village . '%');
@@ -161,7 +171,7 @@ class BeneficiarieController extends Controller
         $data = academic_session::all();
         $states = config('states');
         $category = Category::orderBy('category', 'asc')->get();
-        return view('ngo.beneficiarie.beneficiarie-facilities', compact('surveys', 'data','states','category'));
+        return view('ngo.beneficiarie.beneficiarie-facilities', compact('surveys', 'data', 'states', 'category'));
     }
 
     public function showbeneficiariesurvey($beneficiarie_id, $survey_id)
@@ -199,7 +209,7 @@ class BeneficiarieController extends Controller
         $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->find($beneficiarie_id);
         $session = academic_session::all();
         $category = Category::orderBy('category', 'asc')->get();
-        return view('ngo.beneficiarie.add-beneficiarie-facilities', compact('session', 'beneficiarie', 'survey','category'));
+        return view('ngo.beneficiarie.add-beneficiarie-facilities', compact('session', 'beneficiarie', 'survey', 'category'));
     }
 
     public function storebeneficiariefacilities(Request $request, $beneficiarie_id, $survey_id)
@@ -244,7 +254,7 @@ class BeneficiarieController extends Controller
         $beneficiarie = beneficiarie::with('surveys')->find($beneficiarie_id);
         $session = academic_session::all();
         $category = Category::orderBy('category', 'asc')->get();
-        return view('ngo.beneficiarie.edit-facilities', compact('session', 'beneficiarie', 'survey','category'));
+        return view('ngo.beneficiarie.edit-facilities', compact('session', 'beneficiarie', 'survey', 'category'));
     }
 
     public function updateFacilities(Request $request, $beneficiarie_id, $survey_id)
@@ -295,6 +305,9 @@ class BeneficiarieController extends Controller
                 if ($request->category_filter) {
                     $q->where('facilities_category', $request->category_filter);
                 }
+                if ($request->bene_category) {
+                    $q->where('bene_category', $request->bene_category);
+                }
             })
             ->where('status', 1)
             ->orderBy('id', 'desc');
@@ -305,7 +318,7 @@ class BeneficiarieController extends Controller
         $category = Category::orderBy('category', 'asc')->get();
         $categories = Beneficiarie_Survey::select('facilities_category')->distinct()->pluck('facilities_category');
 
-        return view('ngo.beneficiarie.beneficiarie-facilities-list', compact('data', 'categories', 'beneficiarie','category'));
+        return view('ngo.beneficiarie.beneficiarie-facilities-list', compact('data', 'categories', 'beneficiarie', 'category'));
     }
 
     public function showbeneficiariefacilities($beneficiarie_id, $survey_id)
@@ -460,6 +473,9 @@ class BeneficiarieController extends Controller
             if ($request->distribute_date) {
                 $q->where('distribute_date', $request->distribute_date);
             }
+            if ($request->bene_category) {
+                $q->where('bene_category', $request->bene_category);
+            }
         });
 
         $beneficiarie = $query->orderBy('id', 'desc')->get();
@@ -469,7 +485,7 @@ class BeneficiarieController extends Controller
         $category = Category::orderBy('category', 'asc')->get();
         $categories = Beneficiarie_Survey::select('facilities_category')->distinct()->pluck('facilities_category');
 
-        return view('ngo.beneficiarie.distributed-facilities-list', compact('beneficiarie', 'data', 'categories','category'));
+        return view('ngo.beneficiarie.distributed-facilities-list', compact('beneficiarie', 'data', 'categories', 'category'));
     }
 
     public function pendingfacilities(Request $request)
@@ -499,13 +515,16 @@ class BeneficiarieController extends Controller
             if ($request->category_filter) {
                 $q->where('facilities_category', $request->category_filter);
             }
+            if ($request->bene_category) {
+                $q->where('bene_category', $request->bene_category);
+            }
         })->orderBy('id', 'desc')->get();
 
         // For dropdowns/filters
         $data = academic_session::all();
         $categories = Beneficiarie_Survey::select('facilities_category')->distinct()->pluck('facilities_category');
         $category = Category::orderBy('category', 'asc')->get();
-        return view('ngo.beneficiarie.pending-facilities-list', compact('beneficiarie', 'data', 'categories','category'));
+        return view('ngo.beneficiarie.pending-facilities-list', compact('beneficiarie', 'data', 'categories', 'category'));
     }
 
     public function allbeneficiarielist(Request $request)
@@ -546,6 +565,9 @@ class BeneficiarieController extends Controller
             if ($request->category_filter) {
                 $q->where('facilities_category', $request->category_filter);
             }
+            if ($request->bene_category) {
+                $q->where('bene_category', $request->bene_category);
+            }
         });
 
         $beneficiarie = $query->orderBy('id', 'desc')->get();
@@ -573,5 +595,4 @@ class BeneficiarieController extends Controller
 
         return view('ngo.beneficiarie.survey-received-list', compact('beneficiarie'));
     }
-
 }

@@ -62,10 +62,10 @@
             </div>
         </div>
         @if (session('success'))
-                <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                </div>
-            @endif
+            <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
         <div class="container-fluide m-3">
             <div class="card bg-white p-2 shadow rounded">
                 <div class="text-black text-center border-bottom pb-3">
@@ -128,8 +128,9 @@
                             <div class="col-md-4 col-sm-4">
                                 <div class="upload-container">
                                     @if (!empty($beneficiarie->image))
-                                        <img id="previewImage" src="{{ asset('benefries_images/' . $beneficiarie->image) }}"
-                                            alt="Preview" width="160">
+                                        <img id="previewImage"
+                                            src="{{ asset('benefries_images/' . $beneficiarie->image) }}" alt="Preview"
+                                            width="160">
                                     @endif
                                 </div>
                             </div>
@@ -325,6 +326,74 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
+                    <div class="col-md-4 form-group mb-3">
+                        <label for="bene_category">Beneficiarie Eligibility Category</label>
+                        <select id="bene_category" name="bene_category" class="form-control" required>
+                            <option value="">-- Select Category --</option>
+                            <option value="Homeless Families"
+                                {{ old('bene_category', $beneficiarie->bene_category ?? '') == 'Homeless Families' ? 'selected' : '' }}>
+                                1. Homeless Families</option>
+                            <option value="People living in kutcha or one-room houses"
+                                {{ old('bene_category', $beneficiarie->bene_category ?? '') == 'People living in kutcha or one-room houses' ? 'selected' : '' }}>
+                                2. People living in kutcha or one-room houses</option>
+                            <option value="Widows"
+                                {{ old('bene_category', $beneficiarie->bene_category ?? '') == 'Widows' ? 'selected' : '' }}>
+                                3. Widows</option>
+                            <option value="Elderly Women"
+                                {{ old('bene_category', $beneficiarie->bene_category ?? '') == 'Elderly Women' ? 'selected' : '' }}>
+                                4. Elderly Women</option>
+                            <option value="Persons with Disabilities"
+                                {{ old('bene_category', $beneficiarie->bene_category ?? '') == 'Persons with Disabilities' ? 'selected' : '' }}>
+                                5. Persons with Disabilities</option>
+                            <option value="Landless"
+                                {{ old('bene_category', $beneficiarie->bene_category ?? '') == 'Landless' ? 'selected' : '' }}>
+                                6. Landless</option>
+                            <option value="Economically Weaker Section"
+                                {{ old('bene_category', $beneficiarie->bene_category ?? '') == 'Economically Weaker Section' ? 'selected' : '' }}>
+                                7. Economically Weaker Section</option>
+                            <option value="Laborers"
+                                {{ old('bene_category', $beneficiarie->bene_category ?? '') == 'Laborers' ? 'selected' : '' }}>
+                                8. Laborers</option>
+                            <option value="Scheduled Tribes"
+                                {{ old('bene_category', $beneficiarie->bene_category ?? '') == 'Scheduled Tribes' ? 'selected' : '' }}>
+                                9. Scheduled Tribes</option>
+                            <option value="Scheduled Castes"
+                                {{ old('bene_category', $beneficiarie->bene_category ?? '') == 'Scheduled Castes' ? 'selected' : '' }}>
+                                10. Scheduled Castes</option>
+                            <option value="Based on Low Income"
+                                {{ old('bene_category', $beneficiarie->bene_category ?? '') == 'Based on Low Income' ? 'selected' : '' }}>
+                                11. Based on Low Income</option>
+                            <option value="Affected People"
+                                {{ old('bene_category', $beneficiarie->bene_category ?? '') == 'Affected People' ? 'selected' : '' }}>
+                                12. Affected People</option>
+                            <option value="Marginal Farmers"
+                                {{ old('bene_category', $beneficiarie->bene_category ?? '') == 'Marginal Farmers' ? 'selected' : '' }}>
+                                13. Marginal Farmers</option>
+                            <option value="Small Farmers"
+                                {{ old('bene_category', $beneficiarie->bene_category ?? '') == 'Small Farmers' ? 'selected' : '' }}>
+                                14. Small Farmers</option>
+                            <option value="Large Farmers"
+                                {{ old('bene_category', $beneficiarie->bene_category ?? '') == 'Large Farmers' ? 'selected' : '' }}>
+                                15. Large Farmers</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="survey_officer" class="form-label">Survey Officer:</label>
+                        <select name="survey_officer" class="form-control @error('survey_officer') is-invalid @enderror">
+                            <option value="">Select Survey Officer</option>
+                            @foreach ($staff as $person)
+                                <option value="{{ $person->id }}"
+                                    {{ old('survey_officer', $beneficiarie->survey_officer ?? '') == $person->id ? 'selected' : '' }}>
+                                    {{ $person->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('survey_officer')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
 
                     <div class="d-flex justify-content-between">
                         <button type="submit" class="btn btn-success">Update Beneficiarie</button>

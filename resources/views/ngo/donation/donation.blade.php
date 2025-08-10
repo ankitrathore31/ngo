@@ -27,11 +27,11 @@
 
     <div class="wrapper">
         <div class="d-flex justify-content-between align-record-centre mb-2 mt-3">
-            <h5 class="mb-0">Donation</h5>
+            <h5 class="mb-0">Donation Deposite</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                     <li class="breadcrumb-record"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-record active" aria-current="page">Donation</li>
+                    <li class="breadcrumb-record active" aria-current="page">Donation Deposite</li>
                 </ol>
             </nav>
         </div>
@@ -44,7 +44,7 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="mb-0">
                     <span data-lang="hi">दान</span>
-                    <span data-lang="en">Donation</span>
+                    <span data-lang="en">Donation Deposite</span>
                 </h5>
                 <div>
                     <button class="btn btn-sm btn-outline-primary" onclick="setLanguage('en')">English</button>
@@ -75,6 +75,8 @@
                                     <th>Registration No</th>
                                     <th>Name</th>
                                     <th>Father/Husband</th>
+                                    <th>Mother</th>
+                                    <th>Address</th>
                                     <th>Phone</th>
                                     <th>Identity Type</th>
                                     <th>Identity No</th>
@@ -94,6 +96,9 @@
                                         <td>{{ $item->registration_no ?? 'Not Found' }}</td>
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->gurdian_name }}</td>
+                                        <td>{{ $item->mother_name }}</td>
+                                        <td>{{ $item->village }},{{ $item->post }},{{ $item->town }},{{ $item->district }},{{ $item->state }}
+                                        </td>
                                         <td>{{ $item->phone }}</td>
                                         <td>{{ $item->identity_type ?? '—' }}</td>
                                         <td>{{ $item->identity_no ?? '—' }}</td>
@@ -123,21 +128,35 @@
                     <form action="{{ route('save-donation') }}" method="post">
                         @csrf
                         <div class="row mb-3">
-                            <!-- Receipt No. -->
-                            <div class="col-md-4">
+
+                            <div class="col-md-6 mb-2">
                                 <label class="form-label">
-                                    <span data-lang="hi">रसीद क्रमांक</span>
-                                    <span data-lang="en">Receipt No.</span>
+                                    {{-- <span data-lang="hi">रसीद क्रमांक</span> --}}
+                                    <span>Online Donation Receipt No.</span>
+                                </label>
+                                <input type="text" class="form-control @error('Onlinereceipt_no') is-invalid @enderror"
+                                    name="Onlinereceipt_no" value="{{ old('Onlinereceipt_no', $formattedOnlineReceiptNo) }}"
+                                    readonly>
+                                @error('Onlinereceipt_no')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Receipt No. -->
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label">
+                                    {{-- <span data-lang="hi">रसीद क्रमांक</span> --}}
+                                    <span>Offline Donation Receipt No.</span>
                                 </label>
                                 <input type="text" class="form-control @error('receipt_no') is-invalid @enderror"
-                                    name="receipt_no" value="{{ old('receipt_no', $newReceiptNo) }}">
+                                    name="receipt_no" value="{{ old('receipt_no', $newReceiptNo) }}" readonly>
                                 @error('receipt_no')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <!-- Session -->
-                            <div class="col-md-4">
+                            <div class="col-md-6 mb-2">
                                 <label class="form-label">
                                     <span data-lang="hi">सेशन</span>
                                     <span data-lang="en">Session</span>
@@ -156,12 +175,11 @@
                                 @enderror
                             </div>
 
-
                             <!-- Date -->
-                            <div class="col-md-4">
+                            <div class="col-md-6 mb-2">
                                 <label class="form-label">
                                     <span data-lang="hi">तारीख</span>
-                                    <span data-lang="en">Date</span>
+                                    <span data-lang="en">Donation Date</span>
                                 </label>
                                 <input type="date" class="form-control @error('date') is-invalid @enderror"
                                     name="date" value="{{ old('date') }}">
@@ -341,6 +359,8 @@
                                     Cheque</option>
                                 <option value="UPI" {{ old('payment_method') == 'upi' ? 'selected' : '' }}>यूपीआई / UPI
                                 </option>
+                                <option value="Demand Draft" {{ old('payment_method') == 'demand draft' ? 'selected' : '' }}>Demand Draft/DD
+                                </option>
                                 <option value="Other" {{ old('payment_method') == 'other' ? 'selected' : '' }}>अन्य /
                                     Other</option>
                             </select>
@@ -445,7 +465,7 @@
                         </div>
 
                         <button type="submit" class="btn btn-success">
-                            <span>Deposite</span>
+                            <span>Donation Deposite</span>
                         </button>
                     </form>
                 </div>

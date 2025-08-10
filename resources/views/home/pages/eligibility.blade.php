@@ -80,7 +80,7 @@
 
         const pageTitles = {
             hindi: "पात्रता श्रेणियाँ",
-            english: "Eligibility Categories"
+            english: "Beneficiarie Eligibility Categories"
         };
 
         function changeLanguage(lang) {

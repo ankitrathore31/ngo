@@ -12,6 +12,7 @@ class Beneficiarie_Survey extends Model
         'academic_session',
         'ngo_id',
         'beneficiarie_id',
+        'bene_category',
         'survey_details',
         'survey_date',
         'survey_officer',

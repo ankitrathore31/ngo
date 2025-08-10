@@ -109,11 +109,11 @@
         <div class="container-fluid mt-4">
 
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Donor List</h5>
+                <h5 class="mb-0">Donation List</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Donor List</li>
+                        <li class="breadcrumb-item active" aria-current="page">Donation</li>
                     </ol>
                 </nav>
             </div>
@@ -140,7 +140,7 @@
                         <!-- Category Dropdown -->
                         <div class="col-md-4 mb-3">
                             <select name="category" id="category" class="form-control" required>
-                                <option value="">Select Category</option>
+                                <option value="">Select Donation Category</option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category }}">{{ $category }}</option>
                                 @endforeach
@@ -157,6 +157,25 @@
                                 <option value="trainingFees">Training fees</option>
                                 <option value="tuitionFees">Tuition fees</option>
                             </select>
+                        </div>
+                        <div class=" col-md-4">
+                            <select class="form-select @error('payment_method') is-invalid @enderror" name="payment_method">
+                                <option value="">Select Paymnet Method</option>
+                                <option value="Cash" {{ old('payment_method') == 'cash' ? 'selected' : '' }}>नकद / Cash
+                                </option>
+                                <option value="Cheque" {{ old('payment_method') == 'cheque' ? 'selected' : '' }}>चेक /
+                                    Cheque</option>
+                                <option value="UPI" {{ old('payment_method') == 'upi' ? 'selected' : '' }}>यूपीआई / UPI
+                                </option>
+                                <option value="Demand Draft"
+                                    {{ old('payment_method') == 'demand draft' ? 'selected' : '' }}>Demand Draft/DD
+                                </option>
+                                <option value="Other" {{ old('payment_method') == 'other' ? 'selected' : '' }}>
+                                    Other</option>
+                            </select>
+                            @error('payment_method')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="col-md-4 col-sm-4 mb-3">
                             <input type="text" class="form-control" name="name" placeholder="Search By Name">
@@ -211,8 +230,9 @@
                         <thead class="table-primary">
                             <tr>
                                 <th>Sr. No.</th>
-                                <th>Receipt No.</th>
-                                <th>Donate Date</th>
+                                <th>Online Donation Receipt No.</th>
+                                <th>Offline Donation Receipt No.</th>
+                                <th>Donation Date</th>
                                 <th>Name</th>
                                 <th>Father/Husband Name</th>
                                 <th>Address</th>
@@ -236,6 +256,7 @@
                             @foreach ($donor as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $item->Onlinereceipt_no }}</td>
                                     <td>{{ $item->receipt_no }}</td>
                                     <td>
                                         {{ $item->date ? \Carbon\Carbon::parse($item->date)->format('d-m-Y') : 'No Found' }}
@@ -283,7 +304,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="9" class="text-end"><strong>Total Donation Amount:</strong></td>
+                                <td colspan="10" class="text-end"><strong>Total Donation Amount:</strong></td>
                                 <td><strong>{{ $donor->sum('amount') }}</strong></td>
                                 <td colspan="5"></td>
                             </tr>

@@ -91,6 +91,79 @@
                             <div class="border-bottom pb-3 mb-4">
                                 <h5 class="text-black"><b>Information</b></h5>
                                 <div class="row">
+                                    <!-- Identity Type -->
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-group">
+                                            <label for="identity_type" class="form-label">Identity Type: <span
+                                                    class="text-danger">*</span></label>
+                                            <select class="form-control @error('identity_type') is-invalid @enderror"
+                                                id="identity_type" name="identity_type" required>
+                                                <option value="" disabled
+                                                    {{ old('identity_type') ? '' : 'selected' }}>
+                                                    Select Identity Type</option>
+                                                <option value="Aadhar Card"
+                                                    {{ old('identity_type') == 'Aadhar Card' ? 'selected' : '' }}>Aadhar
+                                                    Card
+                                                </option>
+                                                <option value="Voter ID Card"
+                                                    {{ old('identity_type') == 'Voter ID Card' ? 'selected' : '' }}>Voter ID
+                                                    Card
+                                                </option>
+                                                <option value="Pan Card"
+                                                    {{ old('identity_type') == 'Pan Card' ? 'selected' : '' }}>Pan Card
+                                                </option>
+                                                <option value="Markshhet"
+                                                    {{ old('identity_type') == 'Markshhet' ? 'selected' : '' }}>Markshhet
+                                                </option>
+                                                <option value="Driving License"
+                                                    {{ old('identity_type') == 'Driving License' ? 'selected' : '' }}>
+                                                    Driving
+                                                    License</option>
+                                                <option value="Narega Card"
+                                                    {{ old('identity_type') == 'Narega Card' ? 'selected' : '' }}>Narega
+                                                    Card
+                                                </option>
+                                                <option value="Ration Card"
+                                                    {{ old('identity_type') == 'Ration Card' ? 'selected' : '' }}>Ration
+                                                    Card
+                                                </option>
+                                                <option value="Bank Passbook"
+                                                    {{ old('identity_type') == 'Bank Passbook' ? 'selected' : '' }}>Bank
+                                                    Passbook
+                                                </option>
+                                                <option value="Any Id Card"
+                                                    {{ old('identity_type') == 'Any Id Card' ? 'selected' : '' }}>Any Id
+                                                    Card
+                                                </option>
+                                            </select>
+                                            @error('identity_type')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <!-- Identity Number -->
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-group">
+                                            <label for="identity_no" class="form-label">Identity Card Number: <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="identity_no" name="identity_no"
+                                                placeholder="Enter Identity Card No" required>
+                                            <small id="identity_no_hint" class="form-text text-muted"></small>
+                                            @error('identity_no')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+
+                                    <!-- Identity File Upload -->
+                                    <div class="col-md-4 mb-3">
+                                        <label for="id_document" class="form-label">ID Document Upload</label>
+                                        <input type="file" class="form-control" name="id_document" id="id_document">
+                                        <small id="id_document_hint" class="form-text text-muted"></small>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-md-8">
                                         <div class="row">
                                             <div class="col-md-6 col-sm-6 form-group mb-3">
@@ -165,7 +238,8 @@
                                                 <select name="gender" id="gender"
                                                     class="form-control @error('gender') is-invalid @enderror" required>
                                                     <option value="" disabled selected>Select Gender</option>
-                                                    <option value="Male" {{ old('gender') == 'Male' ? 'selected' : '' }}>
+                                                    <option value="Male"
+                                                        {{ old('gender') == 'Male' ? 'selected' : '' }}>
                                                         Male</option>
                                                     <option value="Female"
                                                         {{ old('gender') == 'Female' ? 'selected' : '' }}>
@@ -202,7 +276,8 @@
                                         <select name="eligibility" class="form-control" id="eligibility" required>
                                             <option value="">Select Education Level</option>
                                             <option value="Uneducated"
-                                                {{ old('eligibility') == 'Uneducated' ? 'selected' : '' }}>Uneducated
+                                                {{ old('eligibility') == 'Uneducated' ? 'selected' : '' }}>
+                                                Uneducated
                                             </option>
                                             <option value="Literate"
                                                 {{ old('eligibility') == 'Literate' ? 'selected' : '' }}>
@@ -211,47 +286,72 @@
                                                 {{ old('eligibility') == 'Nursery' ? 'selected' : '' }}>
                                                 Nursery</option>
                                             <option value="Below Primary"
-                                                {{ old('eligibility') == 'Below Primary' ? 'selected' : '' }}>Below Primary
+                                                {{ old('eligibility') == 'Below Primary' ? 'selected' : '' }}>
+                                                Below
+                                                Primary
                                             </option>
-                                            <option value="Primary Failed"
-                                                {{ old('eligibility') == 'Primary Failed' ? 'selected' : '' }}>Primary
-                                                Failed
-                                            </option>
+                                            {{-- <option value="Primary Failed" {{ old('eligibility') == 'Primary Failed' ? 'selected' : '' }}>
+                                Primary Failed
+                            </option> --}}
                                             <option value="Primary Passed"
-                                                {{ old('eligibility') == 'Primary Passed' ? 'selected' : '' }}>Primary
-                                                Passed
+                                                {{ old('eligibility') == 'Primary Passed' ? 'selected' : '' }}>
+                                                Primary Passed
                                             </option>
                                             <option value="Below Middle"
-                                                {{ old('eligibility') == 'Below Middle' ? 'selected' : '' }}>Below Middle
+                                                {{ old('eligibility') == 'Below Middle' ? 'selected' : '' }}>
+                                                Below
+                                                Middle
                                             </option>
-                                            <option value="Middle Failed"
-                                                {{ old('eligibility') == 'Middle Failed' ? 'selected' : '' }}>Middle Failed
-                                            </option>
+                                            {{-- <option value="Middle Failed" {{ old('eligibility') == 'Middle Failed' ? 'selected' : '' }}>
+                                Middle
+                                Failed
+                            </option> --}}
                                             <option value="Middle Passed"
-                                                {{ old('eligibility') == 'Middle Passed' ? 'selected' : '' }}>Middle Passed
+                                                {{ old('eligibility') == 'Middle Passed' ? 'selected' : '' }}>
+                                                Middle
+                                                Passed
                                             </option>
-                                            <option value="Secondary"
-                                                {{ old('eligibility') == 'Secondary' ? 'selected' : '' }}>Secondary
+                                            <option value="Highschool"
+                                                {{ old('eligibility') == 'Highschool' ? 'selected' : '' }}>
+                                                Highschool
                                             </option>
-                                            <option value="Senior Secondary"
-                                                {{ old('eligibility') == 'Senior Secondary' ? 'selected' : '' }}>Senior
-                                                Secondary</option>
-                                            <option value="Graduation"
-                                                {{ old('eligibility') == 'Graduation' ? 'selected' : '' }}>Graduation
+                                            <option value="Intermediate"
+                                                {{ old('eligibility') == 'Intermediate' ? 'selected' : '' }}>
+                                                Intermediate</option>
+                                            <option value="B.A." {{ old('eligibility') == 'B.A.' ? 'selected' : '' }}>
+                                                B.A.
                                             </option>
-                                            <option value="Post Graduation"
-                                                {{ old('eligibility') == 'Post Graduation' ? 'selected' : '' }}>Post
-                                                Graduation
+                                            <option value="B.Sc." {{ old('eligibility') == 'B.Sc.' ? 'selected' : '' }}>
+                                                B.Sc.
                                             </option>
-                                            <option value="Degree Holder"
-                                                {{ old('eligibility') == 'Degree Holder' ? 'selected' : '' }}>Degree Holder
+                                            <option value="B.Com." {{ old('eligibility') == 'B.Com.' ? 'selected' : '' }}>
+                                                B.Com.
+                                            </option>
+                                            <option value="B.Tech."
+                                                {{ old('eligibility') == 'B.Tech.' ? 'selected' : '' }}>
+                                                B.Tech.
+                                            </option>
+                                            <option value="M.A." {{ old('eligibility') == 'M.A.' ? 'selected' : '' }}>
+                                                M.A.
+                                            </option>
+                                            <option value="M.Sc." {{ old('eligibility') == 'M.Sc.' ? 'selected' : '' }}>
+                                                M.Sc.
+                                            </option>
+                                            <option value="M.Com." {{ old('eligibility') == 'M.Com.' ? 'selected' : '' }}>
+                                                M.Com.
+                                            </option>
+                                            <option value="M.Tech."
+                                                {{ old('eligibility') == 'M.Tech.' ? 'selected' : '' }}>
+                                                M.Tech.
+                                            </option>
+                                            <option value="Other" {{ old('eligibility') == 'Other' ? 'selected' : '' }}>
+                                                Other
                                             </option>
                                         </select>
                                         @error('eligibility')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
-
 
                                     <div class="col-md-4 form-group mb-3">
                                         <label for="marital_status" class="form-label">Marital Status: <span
@@ -477,64 +577,6 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <!-- Identity Type -->
-                                <div class="col-md-4 mb-3">
-                                    <div class="form-group">
-                                        <label for="identity_type" class="form-label">Identity Type: <span
-                                                class="text-danger">*</span></label>
-                                        <select class="form-control @error('identity_type') is-invalid @enderror"
-                                            id="identity_type" name="identity_type" required>
-                                            <option value="" disabled {{ old('identity_type') ? '' : 'selected' }}>
-                                                Select Identity Type</option>
-                                            <option value="Aadhar Card"
-                                                {{ old('identity_type') == 'Aadhar Card' ? 'selected' : '' }}>Aadhar Card
-                                            </option>
-                                            <option value="Voter ID Card"
-                                                {{ old('identity_type') == 'Voter ID Card' ? 'selected' : '' }}>Voter ID
-                                                Card
-                                            </option>
-                                            <option value="Pan Card"
-                                                {{ old('identity_type') == 'Pan Card' ? 'selected' : '' }}>Pan Card
-                                            </option>
-                                            <option value="Markshhet"
-                                                {{ old('identity_type') == 'Markshhet' ? 'selected' : '' }}>Markshhet
-                                            </option>
-                                            <option value="Driving License"
-                                                {{ old('identity_type') == 'Driving License' ? 'selected' : '' }}>Driving
-                                                License</option>
-                                            <option value="Narega Card"
-                                                {{ old('identity_type') == 'Narega Card' ? 'selected' : '' }}>Narega Card
-                                            </option>
-                                            <option value="Ration Card"
-                                                {{ old('identity_type') == 'Ration Card' ? 'selected' : '' }}>Ration Card
-                                            </option>
-                                        </select>
-                                        @error('identity_type')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <!-- Identity Number -->
-                                <div class="col-md-4 mb-3">
-                                    <div class="form-group">
-                                        <label for="identity_no" class="form-label">Identity Card Number: <span
-                                                class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="identity_no" name="identity_no"
-                                            placeholder="Enter Identity Card No" required>
-                                        <small id="identity_no_hint" class="form-text text-muted"></small>
-                                        @error('identity_no')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-
-
-                                <!-- Identity File Upload -->
-                                <div class="col-md-4 mb-3">
-                                    <label for="id_document" class="form-label">ID Document Upload</label>
-                                    <input type="file" class="form-control" name="id_document" id="id_document">
-                                    <small id="id_document_hint" class="form-text text-muted"></small>
-                                </div>
                                 <div class="col-md-4 form-group mb-3">
                                     <label for="occupation" class="form-label">Occupation: <span
                                             class="text-danger">*</span></label>

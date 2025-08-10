@@ -19,6 +19,18 @@
             text-align: center;
         }
 
+        .amount {
+            background-color: green;
+            color: white;
+            font-weight: 400;
+        }
+
+        .recipt {
+            background-color: blue !important;
+            color: white !important;
+            font-weight: 400 !important;
+        }
+
         @media print {
             body * {
                 visibility: hidden;
@@ -36,6 +48,22 @@
                 left: 0;
                 top: 0;
                 width: 100%;
+            }
+
+            .amount {
+                background-color: green !important;
+                color: white !important;
+                font-weight: 400 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .recipt {
+                background-color: blue !important;
+                color: white !important;
+                font-weight: 400 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
 
             .print-red-bg {
@@ -81,11 +109,11 @@
 
     <div class="wrapper">
         <div class="d-flex justify-content-between align-donor-centre mb-0 mt-3">
-            <h5 class="mb-0">Donation</h5>
+            <h5 class="mb-0">Donation Receipt</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                     <li class="breadcrumb-donor"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-donor active" aria-current="page">View Donation</li>
+                    <li class="breadcrumb-donor active" aria-current="page">Donation</li>
                 </ol>
             </nav>
         </div>
@@ -107,12 +135,12 @@
                     <button class="btn btn-sm btn-outline-success" onclick="setLanguage('hi')">हिंदी</button>
                 </div>
             </div>
-            <div class="card shadow rounded p-4 my-4 border border-dark print-card">
+            <div class="card shadow rounded p-4 my-4 print-card" style="border: 6px solid blue;">
                 <div class="text-center mb-4 border-bottom pb-2">
                     <!-- Header -->
                     <div class="row">
                         <div class="col-sm-2 text-center text-md-start">
-                            <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="80" height="80">
+                            <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="120" height="120">
                         </div>
                         <div class="col-sm-10">
                             <p style="margin: 0;">
@@ -152,28 +180,34 @@
                 </div>
 
                 <!-- Donation Fields -->
-                <div class="row">
-                    <div class="col-sm-4 mb-2">
-                        <p><strong>
-                                <span data-lang="hi">रसीद क्रमांक:</span>
-                                <span data-lang="en">Receipt No.:</span>
-                            </strong> {{ $donor->receipt_no ?? 'Donation with OnlineCashfree' }}
-                        </p>
+                <div class="row justify-content-between">
+                    <div class="col-sm-4 text-white mb-2 recipt">
+                        {{-- <span data-lang="hi">दान रसीद</span> --}}
+                        <span> Online Donation Receipt No</span>
+                        &nbsp; &nbsp;{{ $donor->Onlinereceipt_no ?? 'Donation with OnlineCashfree' }}
                     </div>
 
-                    <div class="col-sm-5 text-center mb-2 print-red-bg">
+                    <div class="col-sm-4 text-center mb-2 print-red-bg">
                         <span data-lang="hi">दान रसीद</span>
                         <span data-lang="en">Donation Receipt</span>
                     </div>
 
                     <div class="col-sm-3 mb-2 text-end">
                         <p><strong>
-                                <span data-lang="hi">तारीख: </span>
-                                <span data-lang="en">Date: </span>
+                                <span data-lang="hi">दान तारीख: </span>
+                                <span data-lang="en">Donation Date: </span>
                             </strong> {{ \Carbon\Carbon::parse($donor->date)->format('d-m-Y') }}</p>
                     </div>
                 </div>
-
+                <div class="row">
+                    <div class="col-sm-4 border border-dark mb-2">
+                        <p><strong>
+                                <span data-lang="hi">रसीद क्रमांक-</span>
+                                <span data-lang="en">Offline Donation Receipt No </span>
+                            </strong> &nbsp; &nbsp;{{ $donor->receipt_no ?? 'Donation with OnlineCashfree' }}
+                        </p>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-sm-6 mb-2">
                         <p><strong>
@@ -204,17 +238,17 @@
                         <p>
                             <strong>
                                 <span data-lang="hi">मोबाइल नंबर</span>
-                                <span data-lang="en">Mobile Number</span>
+                                <span data-lang="en">Mobile No.</span>
                             </strong> {{ $donor->mobile }}
                         </p>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-sm-6 mb-2">
+                <div class="row justify-content-between">
+                    <div class="col-sm-4 mb-2 amount">
                         <p><strong>
-                                <span data-lang="hi">राशि (₹):</span>
-                                <span data-lang="en">Amount (₹):</span>
+                                <span data-lang="hi">दान राशि (₹):</span>
+                                <span data-lang="en">Donation Amount (₹):</span>
                             </strong>
                             <span id="amountInput" oninput="updateAmountInWords()">
                                 {{ $donor->amount }}
@@ -224,8 +258,8 @@
 
                     <div class="col-sm-6 mb-2">
                         <p><strong>
-                                <span data-lang="hi">रुपये (शब्दों में):</span>
-                                <span data-lang="en">Amount (in words):</span>
+                                <span data-lang="hi">दान रुपये (शब्दों में):</span>
+                                <span data-lang="en">Donation Amount (in words):</span>
                             </strong>
                             <span data-lang="en" id="amount-words-en"></span>
                             <span data-lang="hi" id="amount-words-hi"></span>
@@ -237,8 +271,8 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <p><strong>
-                                <span data-lang="hi">भुगतान का प्रकार नकद/चेक/यूपीआई/अन्य द्वारा:</span>
-                                <span data-lang="en">Payment Method (Cash/Cheque/UPI/Other):</span>
+                                <span data-lang="hi">भुगतान का प्रकार :</span>
+                                <span data-lang="en">Payment Method :</span>
                             </strong>{{ $donor->payment_method ?? 'Donation with OnlineCashfree' }}</p>
                     </div>
                     <div class="col-sm-6">
@@ -285,12 +319,22 @@
                             </strong> {{ $donor->remark ?? $donor->donation_remark }}
                         </p>
                     </div>
+                    {{-- <div class="col-sm-6 mb-2 border">
+                        <p><strong>
+                                <span data-lang="hi">राशि (₹):</span>
+                                <span data-lang="en">Donation Amount (₹):</span>
+                            </strong>
+                            <span id="amountInput" oninput="updateAmountInWords()">
+                                {{ $donor->amount }}
+                            </span>
+                        </p>
+                    </div> --}}
                 </div>
                 <hr>
                 <div class="row justify-content-between align-items-end mt-5">
                     <div class="col-sm-4 text-center">
-                        <p>{{ $donor->depositor_name ?? 'Donation with OnlineCashfree' }}</p>
-                        <p><strong>
+                        <p style="color: #0000FF;">{{ $donor->depositor_name ?? 'Donation with OnlineCashfree' }}</p>
+                        <p class="text-danger"><strong>
                                 <span data-lang="hi">जमाकर्ता का नाम:</span>
                                 <span data-lang="en">Depositor Name:</span>
                             </strong></p>
@@ -300,8 +344,8 @@
                     </div>
 
                     <div class="col-sm-4 text-center">
-                        <p>{{ $donor->recipient_name ?? 'Donation with OnlineCashfree' }}</p>
-                        <p><strong>
+                        <p style="color: #0000FF;">{{ $donor->recipient_name ?? 'Donation with OnlineCashfree' }}</p>
+                        <p class="text-danger"><strong>
                                 <span data-lang="hi">प्राप्तकर्ता का नाम:</span>
                                 <span data-lang="en">Recipient Name:</span>
                             </strong></p>
@@ -327,7 +371,7 @@
                         @else
                             <p class="text-muted mt-2 no-print">Not attached</p>
                         @endif
-                        <strong>Digitally Signed By <br>
+                        <strong class="text-primary">Digitally Signed By <br>
                             MANOJ KUMAR RATHOR <br>
                             DIRECTOR
                         </strong><br>

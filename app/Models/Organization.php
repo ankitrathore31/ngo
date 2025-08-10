@@ -14,6 +14,7 @@ class Organization extends Model
         'organization_no',
         'name',
         'formation_date',
+        'area_type',
         'address',
         'block',
         'state',

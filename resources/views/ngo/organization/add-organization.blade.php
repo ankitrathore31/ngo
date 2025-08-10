@@ -19,19 +19,20 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="" class="form-label">Organization</label>
-                            <select name="headorg_id" id="headorg_id" class="form-control @error('org_id') is-invalid @enderror">
-                            <option value="">select organization</option>
-                            @foreach ($headorg as $item)
-                                <option value="{{$item->id}}">{{$item->name}}</option>
-                            @endforeach
+                            <select name="headorg_id" id="headorg_id"
+                                class="form-control @error('org_id') is-invalid @enderror">
+                                <option value="">select organization</option>
+                                @foreach ($headorg as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
                             </select>
                             @error('headorg_id')
-                                <span class="text-danger">{{$message}}</span>
+                                <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="" class="form-label">Group ID.</label>
-                            <input type="text" class="form-control" value="{{$nextOrganizationNo}}" readonly>
+                            <input type="text" class="form-control" value="{{ $nextOrganizationNo }}" readonly>
                         </div>
                     </div>
                     <div class="row">
@@ -59,6 +60,21 @@
                             <input type="text" class="form-control @error('name') is-invalid @enderror" name="name"
                                 placeholder="Enter Organization Name" required>
                         </div>
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="area_type" class="form-label">Area Type: <span class="text-danger">*</span></label>
+                            <select name="area_type" class="form-control" id="area_type" required>
+                                <option value="" selected disabled>Select Area</option>
+                                <option value="Rular" {{ old('area_type') == 'Rular' ? 'selected' : '' }}>
+                                    Rular
+                                </option>
+                                <option value="Urban" {{ old('area_type') == 'Urban' ? 'selected' : '' }}>
+                                    Urban
+                                </option>
+                            </select>
+                            @error('area_type')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
                         <div class="col-md-6 mb-3">
                             <label for="address">Group Address:</label>
                             <input type="text" id="address" name="address" class="form-control"
@@ -67,7 +83,7 @@
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
-                         <div class="col-md-6 mb-3">
+                        <div class="col-md-6 mb-3">
                             <label for="address">Block:</label>
                             <input type="text" id="block" name="block" class="form-control"
                                 value="{{ old('block') }}" placeholder="Enter Organization Block" required>

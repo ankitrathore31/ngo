@@ -141,6 +141,22 @@
                     </div>
 
                     <div class="col-md-3">
+                        <label for="area_type" class="form-label">Area Type: <span class="text-danger">*</span></label>
+                        <select name="area_type" class="form-control" id="area_type" required>
+                            <option value="" selected disabled>Select Area</option>
+                            <option value="Rular" {{ old('area_type') == 'Rular' ? 'selected' : '' }}>
+                                Rular
+                            </option>
+                            <option value="Urban" {{ old('area_type') == 'Urban' ? 'selected' : '' }}>
+                                Urban
+                            </option>
+                        </select>
+                        @error('area_type')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-3">
                         <input type="text" name="block" class="form-control" value="{{ request('block') }}"
                             placeholder="Search by Block">
                     </div>
@@ -230,10 +246,14 @@
                                 <th>Block</th>
                                 <th>District</th>
                                 <th>State</th>
+                                <th>Group Area</th>
                                 <th>Session</th>
                                 <th class="no-print">Action</th>
-                                <th class="no-print">Add</th>
+                                <th class="no-print">Add Member</th>
                                 <th class="no-print">Member List</th>
+                                <th class="no-print">Group Certificate</th>
+                                <th class="no-print">Group Meeting</th>
+                                <th class="no-print">Group Work</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -248,6 +268,7 @@
                                     <td>{{ $item->block }}</td>
                                     <td>{{ $item->district }}</td>
                                     <td>{{ $item->state }}</td>
+                                    <td>{{ $item->area_type }}</td>
                                     <td>{{ $item->academic_session ?? 'N/A' }}</td>
                                     <td class="no-print">
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
@@ -274,6 +295,18 @@
                                             class="btn btn-success btn-sm px-3">
                                             Member List
                                         </a>
+                                    </td>
+                                    <td class="no-print">
+                                        <a href="{{-- route('list.group.member', $item->id) --}}"
+                                            class="btn btn-success btn-sm px-3">
+                                            certificate List
+                                        </a>
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        
                                     </td>
                                 </tr>
                             @endforeach
