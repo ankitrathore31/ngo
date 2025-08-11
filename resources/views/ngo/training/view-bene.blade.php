@@ -271,7 +271,7 @@
                         </div>
 
                     </div>
-                    <div class="row">
+                    <div class="row mb-4">
                         @if ($record->reg_type == 'Beneficiaries')
                             <div class="col-sm-8 mb-3">
                                 <strong>Help Needed:</strong> {{ $record->beneficiare->help_needed }}
@@ -288,8 +288,14 @@
                             <strong>Center Name:</strong> {{ $center->center_name }}
                         </div>
 
-                        <div class="col-sm-8 mb-3">
-                            <strong>Center Address:</strong> {{ $center->center_address }}
+                        <div class="col-sm-12 mb-3">
+                            <strong>Center Address:</strong>
+                            {{ $center->center_address}},{{ $center->post}},{{ $center->town}}
+                                        ,{{ $center->district}},{{ $center->state}}
+                        </div>
+
+                        <div class="col-sm-4 mb-3">
+                            <strong>Center Incharge:</strong>{{ \App\Models\Staff::find($center->incharge)->name ?? '' }}
                         </div>
 
                         <div class="col-sm-4 mb-3">
@@ -297,7 +303,7 @@
                         </div>
 
                         <div class="col-sm-4 mb-3">
-                            <strong>Training Course:</strong> {{ $record->training_course ?? 'N/A' }}
+                            <strong>Training Course:</strong> {{ \App\Models\Course::find($record->training_course)->course ?? '' }}
                         </div>
 
                         <div class="col-sm-4 mb-3">

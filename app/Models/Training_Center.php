@@ -15,5 +15,10 @@ class Training_Center extends Model
         'center_code',
         'center_name',
         'center_address',
+        'post',
+        'block',
+        'district',
+        'state',
+        'incharge',
     ];
 }

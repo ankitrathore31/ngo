@@ -8,6 +8,7 @@ use App\Http\Controllers\BeneficiarieController;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\CashBookController;
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\ExperienceController;
@@ -313,7 +314,8 @@ Route::controller(TrainingCenterController::class)->group(function () {
     Route::get('ngo/taining-demand-bene', 'AddBeneForCenter')->middleware('auth')->name('taining-demand-bene');
     Route::post('ngo/store-demand', 'storeTrainingDemand')->middleware('auth')->name('store-demand');
     Route::get('ngo/training-center', 'CenterListForbene')->middleware('auth')->name('taining-center-bene');
-    Route::get('ngo/approve-training-beneficiaries', 'ApproveBeneForTraining')->middleware('auth')->name('approve-taining-demand-bene');
+    Route::get('ngo/approve-training-demand-bene/{center_code}', [TrainingCenterController::class, 'ApproveBeneForTraining'])
+        ->name('approve-taining-demand-bene');
     Route::get('ngo/view-approve-training-bene/{id}/{center_code}', 'ShowApproveBeneTraining')->middleware('auth')->name('show-approve-bene-training');
     Route::get('ngo/genrate-training-certificate', 'GenrateTrainingCerti')->middleware('auth')->name('genrate-training-certi');
     Route::get('ngo/generate-tarining-certificate/{id}/{center_code}', 'GenrateTrainingCertificate')->middleware('auth')->name('genrate-training-certificate');
@@ -438,7 +440,14 @@ Route::controller(CashBookController::class)->middleware('auth')->group(function
     Route::get('ngo/income-list', 'IncomeList')->name('list.income');
     Route::get('ngo/expenditure-list', 'ExpenditureList')->name('expenditure.list');
     Route::get('ngo/balance-report', 'BalanceReportView')->name('balance.report.view');
-    Route::get('ngo/generate-balance-report','generateMonthlyReport')->name('balance.report.generate');
+    Route::get('ngo/generate-balance-report', 'generateMonthlyReport')->name('balance.report.generate');
+});
+
+Route::controller(CourseController::class)->middleware('auth')->group(function () {
+    Route::get('ngo/course-list', 'CourseList')->name('list.course');
+    Route::get('ngo/add-course', 'AddCourse')->name('add.course');
+    Route::post('ngo/store-course', 'StoreCourse')->name('store.course');
+    Route::get('ngo/delete-course/{id}', 'DeleteCourse')->name('delete.course');
 });
 
 require __DIR__ . '/auth.php';

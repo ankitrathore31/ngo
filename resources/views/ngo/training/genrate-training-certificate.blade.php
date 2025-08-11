@@ -127,7 +127,7 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-6 mb-2">
+                        <div class="col-sm-4 mb-2">
                             <p><strong>
                                     <span data-lang="hi">प्रमाण-पत्र क्रमांक:</span>
                                     <span data-lang="en">Certificate No.: </span>
@@ -136,7 +136,7 @@
                                     required></p>
                         </div>
 
-                        <div class="col-sm-6 mb-2">
+                        <div class="col-sm-4 mb-2">
                             <p><strong>
                                     <span data-lang="hi">पंजीकरण क्रमांक:</span>
                                     <span data-lang="en">Registration No.:</span>
@@ -148,7 +148,8 @@
                                     <span data-lang="hi">रोल नं.</span>
                                     <span data-lang="en">Roll No.: </span>
                                 </strong> &nbsp; <input type="number" name="roll_no"
-                                    value="{{ old('roll_no', $record->roll_no ?? '') }}" required></p>
+                                    value="{{ old('roll_no', $record->roll_no ?? ($nextRoll ?? '')) }}" readonly required>
+                            </p>
                         </div>
                     </div>
 
@@ -252,7 +253,7 @@
                                 </strong>
                                 <div
                                     style="flex-grow: 1; border-bottom: 1px dotted #000; white-space: normal; overflow-wrap: break-word;">
-                                    &nbsp;{{ $record->training_course }}
+                                    &nbsp;{{ \App\Models\Course::find($record->training_course)->course ?? '' }}
                                 </div>
                             </div>
                         </div>

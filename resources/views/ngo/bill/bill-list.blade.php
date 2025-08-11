@@ -22,7 +22,7 @@
                 <form method="GET" action="{{ route('bill-list') }}" class="row g-3 mb-4">
                     <div class="col-md-3 col-sm-4">
                         <select name="session_filter" id="session_filter" class="form-control"
-                            onchange="this.form.submit()">
+                        >
                             <option value="">All Sessions</option>
                             @foreach ($session as $session)
                                 <option value="{{ $session->session_date }}"
