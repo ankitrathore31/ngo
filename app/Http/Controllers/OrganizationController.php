@@ -127,7 +127,7 @@ class OrganizationController extends Controller
 
         $lastOrg = Organization::orderBy('id', 'desc')->first();
         if ($lastOrg && $lastOrg->organization_no) {
-            $lastNumber = intval(substr($lastOrg->organization_no, 5)); // remove 3126G
+            $lastNumber = intval(substr($lastOrg->organization_no, 5));
             $newNumber = $lastNumber + 1;
             $organizationNo = '3126G' . str_pad($newNumber, 5, '0', STR_PAD_LEFT);
         } else {
@@ -255,7 +255,6 @@ class OrganizationController extends Controller
             ->route('list.organization.member')
             ->with('success', 'Members added successfully!');
     }
-
 
 
     public function OrgMemberList(Request $request)

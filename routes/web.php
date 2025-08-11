@@ -319,6 +319,10 @@ Route::controller(TrainingCenterController::class)->group(function () {
     ->name('approve-taining-demand-bene');
     Route::get('ngo/training-present-list/{center_code}', [TrainingCenterController::class, 'TrainingBeneForPresent'])
     ->name('taining-bene-present-list');
+    Route::get('ngo/training-fees-list/{center_code}', [TrainingCenterController::class, 'TrainingBeneForFee'])
+    ->name('taining-bene-fess-list');
+    Route::get('ngo/training-progress-list/{center_code}', [TrainingCenterController::class, 'TrainingBeneForprogress'])
+    ->name('taining-bene-progress-list');
     Route::get('ngo/view-approve-training-bene/{id}/{center_code}', 'ShowApproveBeneTraining')->middleware('auth')->name('show-approve-bene-training');
     Route::get('ngo/genrate-training-certificate', 'GenrateTrainingCerti')->middleware('auth')->name('genrate-training-certi');
     Route::get('ngo/generate-tarining-certificate/{id}/{center_code}', 'GenrateTrainingCertificate')->middleware('auth')->name('genrate-training-certificate');

@@ -121,9 +121,10 @@ class TrainingCenterController extends Controller
         }
 
         $session = academic_session::all();
-        $center = $query->orderBy('id', 'desc')->get();
+        $center = $query->orderBy('id', 'asc')->get();
+        $Searchcenter = Training_Center::orderBy('center_name', 'asc')->get();
 
-        return view('ngo.training.list-center-for-bene', compact('center', 'session'));
+        return view('ngo.training.list-center-for-bene', compact('center', 'session', 'Searchcenter'));
     }
 
     public function Editcenter($id)
@@ -303,7 +304,7 @@ class TrainingCenterController extends Controller
         } else {
             $nextRoll = '001';
         }
-        return view('ngo.training.genrate-training-certificate', compact('session', 'record', 'center', 'nextCertificateNo','nextRoll'));
+        return view('ngo.training.genrate-training-certificate', compact('session', 'record', 'center', 'nextCertificateNo', 'nextRoll'));
     }
 
     public function SaveGenrateTrainingCertificate(Request $request)
@@ -399,7 +400,7 @@ class TrainingCenterController extends Controller
     }
 
     public function TrainingBeneForPresent(Request $request, $center_code)
-    {   
+    {
         $center = Training_Center::where('center_code', $center_code)->first();
         $session = academic_session::all();
         $queryBene = Training_Beneficiarie::with(['center', 'beneficiare'])
@@ -423,6 +424,63 @@ class TrainingCenterController extends Controller
 
         $record = $queryBene->orderBy('created_at', 'asc')->get();
 
-        return view('ngo.training.training-bene-pre-list', compact('session', 'record','center'));
+        return view('ngo.training.training-bene-pre-list', compact('session', 'record', 'center'));
     }
+
+    public function TrainingBeneForFee(Request $request, $center_code)
+    {
+        $center = Training_Center::where('center_code', $center_code)->first();
+        $session = academic_session::all();
+        $queryBene = Training_Beneficiarie::with(['center', 'beneficiare'])
+            ->where('center_code', $center_code);
+
+        if ($request->filled('session_filter')) {
+            $queryBene->where('academic_session', $request->session_filter);
+        }
+
+        if ($request->filled('application_no')) {
+            $queryBene->whereHas('beneficiare', function ($q) use ($request) {
+                $q->where('application_no', $request->application_no);
+            });
+        }
+
+        if ($request->filled('name')) {
+            $queryBene->whereHas('beneficiare', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->name . '%');
+            });
+        }
+
+        $record = $queryBene->orderBy('created_at', 'asc')->get();
+
+        return view('ngo.training.fee-list-bene', compact('session', 'record', 'center'));
+    }
+
+    public function TrainingBeneForprogress(Request $request, $center_code)
+    {
+        $center = Training_Center::where('center_code', $center_code)->first();
+        $session = academic_session::all();
+        $queryBene = Training_Beneficiarie::with(['center', 'beneficiare'])
+            ->where('center_code', $center_code);
+
+        if ($request->filled('session_filter')) {
+            $queryBene->where('academic_session', $request->session_filter);
+        }
+
+        if ($request->filled('application_no')) {
+            $queryBene->whereHas('beneficiare', function ($q) use ($request) {
+                $q->where('application_no', $request->application_no);
+            });
+        }
+
+        if ($request->filled('name')) {
+            $queryBene->whereHas('beneficiare', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->name . '%');
+            });
+        }
+
+        $record = $queryBene->orderBy('created_at', 'asc')->get();
+
+        return view('ngo.training.progress-list', compact('session', 'record', 'center'));
+    }
+    
 }

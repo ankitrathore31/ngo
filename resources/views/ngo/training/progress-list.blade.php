@@ -26,28 +26,28 @@
             text-align: center;
         }
 
-        .days-grid {
+        .months-grid {
             display: grid;
             grid-template-columns: repeat(10, 1fr);
-            /* 10 days per row */
+            /* 10 months per row */
             gap: 4px;
             justify-items: center;
         }
 
-        .day-column {
+        .month-column {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        .day-label {
+        .month-label {
             font-size: 10px;
             margin-bottom: 2px;
         }
 
-        .day-box {
-            width: 20px;
-            height: 20px;
+        .month-box {
+            width: 80px;
+            height: 40px;
             border: 1px solid #000;
         }
 
@@ -134,7 +134,7 @@
         <div class="container-fluid mt-4">
 
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Training Beneficiarie Present List</h5>
+                <h5 class="mb-0">Training Beneficiarie Progress Report</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
@@ -149,12 +149,6 @@
                 </div>
             @endif
             <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
-            <form method="GET">
-                <label for="days">Number of Days:</label>
-                <input type="number" name="days" id="days" value="{{ request('days', 40) }}" min="1"
-                    max="370">
-                <button type="submit">Generate</button>
-            </form>
             <div class="card shadow-sm printable">
                 <div class="card-body table-responsive">
                     <div class="text-center mb-4 border-bottom pb-3 mb-2">
@@ -211,15 +205,6 @@
                             <b>Center Incharge/Master Trainer: </b>
                             {{ \App\Models\Staff::find($center->incharge)->name ?? '' }}
                         </div>
-                        <div class="col-sm-5">
-                            <b>Training Start Date</b>
-                        </div>
-                        <div class="col-sm-2">
-                            <b>To</b>
-                        </div>
-                        <div class="col-sm-5">
-                            <b>Training End Date</b>
-                        </div>
                     </div>
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-primary">
@@ -233,11 +218,7 @@
                                 <th>Mobile No.</th>
                                 <th>Caste</th>
                                 <th>Caste Category</th>
-                                <th>Present Date/Days</th>
-                                <th>Total Days</th>
-                                <th>Total Present</th>
-                                <th>Total Absent</th>
-                                <th>Learner Signature</th>
+                                <th>Activity Progress Report</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -257,21 +238,6 @@
                                     <td>{{ $item->beneficiare->phone ?? 'N/A' }}</td>
                                     <td>{{ $item->beneficiare->caste ?? 'N/A' }}</td>
                                     <td>{{ $item->beneficiare->religion_category ?? 'N/A' }}</td>
-                                    {{-- <td>{{ $item->beneficiare->religion ?? 'N/A' }}</td> --}}
-                                    {{-- <td>{{ $item->beneficiare->academic_session ?? 'N/A' }}</td> --}}
-                                    <td>
-                                        <div class="days-grid">
-                                            @for ($i = 1; $i <= request('days', 40); $i++)
-                                                <div class="day-column">
-                                                    <div class="day-label">{{ $i }}</div>
-                                                    <div class="day-box"></div>
-                                                </div>
-                                            @endfor
-                                        </div>
-                                    </td>
-                                    <td>{{ request('days', 40) }}</td>
-                                    <td></td>
-                                    <td></td>
                                     <td></td>
                                 </tr>
                             @endforeach
