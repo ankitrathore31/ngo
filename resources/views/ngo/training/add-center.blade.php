@@ -20,7 +20,7 @@
                 <div class="col">
                     <div class="card p-3 m-3 bg-light shadow rounded">
                         <div class="card-header">
-                            <a href="{{route('center-list')}}" class="btn btn-success">Training Center List</a>
+                            <a href="{{ route('center-list') }}" class="btn btn-success">Training Center List</a>
                         </div>
                         <div class="card-body">
                             <form action="{{ route('store-center') }}" method="POST">
@@ -49,7 +49,7 @@
                                                 class="text-danger">*</span></label>
                                         <input type="text" name="center_code" id="center_code"
                                             class="form-control @error('center_code') is-invalid @enderror"
-                                            value="{{ old('center_code',$nextCenterCode) }}" readonly>
+                                            value="{{ old('center_code', $nextCenterCode) }}" readonly>
                                         @error('center_code')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -67,13 +67,102 @@
                                         @enderror
                                     </div>
 
-                                    <!-- Training Center Address -->
-                                    <div class="col-md-4 mb-3 form-group">
-                                        <label for="center_address" class="form-label">Training Center Address <span
+                                    <div class="col-md-4 form-group mb-3">
+                                        <label for="area_type" class="form-label">Area Type: <span
                                                 class="text-danger">*</span></label>
-                                        <textarea name="center_address" id="center_address" cols="30" rows="4"
-                                            class="form-control @error('center_address') is-invalid @enderror" cols="30" rows="10">{{ old('center_address') }}</textarea>
-                                        @error('center_address')
+                                        <select name="area_type" class="form-control" id="area_type" required>
+                                            <option value="" selected disabled>Select Area</option>
+                                            <option value="Rular" {{ old('area_type') == 'Rular' ? 'selected' : '' }}>
+                                                Rular
+                                            </option>
+                                            <option value="Urban" {{ old('area_type') == 'Urban' ? 'selected' : '' }}>
+                                                Urban
+                                            </option>
+                                        </select>
+                                        @error('area_type')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-4 form-group mb-3">
+                                        <label for="village" class="form-label">Village/Locality: <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" name="village" id="village"
+                                            class="form-control @error('village') is-invalid @enderror"
+                                            value="{{ old('village') }}">
+                                        @error('village')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-4 form-group mb-3">
+                                        <label for="post" class="form-label">Post/Town: <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" name="post" id="post"
+                                            class="form-control @error('post') is-invalid @enderror"
+                                            value="{{ old('post') }}" required>
+                                        @error('post')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-4 form-group mb-3">
+                                        <label for="block" class="form-label">Block: <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" name="block" id="block"
+                                            class="form-control @error('block') is-invalid @enderror"
+                                            value="{{ old('block') }}" required>
+                                        @error('block')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    @php
+                                        $districtsByState = config('districts');
+                                    @endphp
+                                    <div class="col-md-4 form-group mb-3">
+                                        <label for="stateSelect" class="form-label">State: <span
+                                                class="text-danger">*</span></label>
+                                        <select class="form-control @error('state') is-invalid @enderror" name="state"
+                                            id="stateSelect" required>
+                                            <option value="">Select State</option>
+                                            @foreach ($districtsByState as $state => $districts)
+                                                <option value="{{ $state }}"
+                                                    {{ old('state') == $state ? 'selected' : '' }}>
+                                                    {{ $state }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('state')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+
+                                    </div>
+
+                                    <div class="col-md-4 form-group mb-3">
+                                        <label for="districtSelect" class="form-label">District: <span
+                                                class="text-danger">*</span></label>
+                                        <select class="form-control @error('district') is-invalid @enderror"
+                                            name="district" id="districtSelect" required>
+                                            <option value="">Select District</option>
+                                        </select>
+                                        @error('district')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-4 mb-3 form-group">
+                                        <label for="incharge" class="form-label">Center Incharge <span
+                                                class="text-danger">*</span></label>
+                                        <select name="incharge" class="form-control" id="incharge">
+                                            <option value="">Select Incharge</option>
+                                            @foreach ($staff as $item)
+                                                <option value="{{ $item->id }}"
+                                                    {{ old('incharge') == $item->name ? 'selected' : '' }}>
+                                                    {{ $item->name }} ({{ $item->position }})
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('incharge')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
@@ -91,4 +180,31 @@
             </div>
         </div>
     </div>
+    <script>
+        const allDistricts = @json($districtsByState);
+        const oldDistrict = "{{ old('district') }}";
+        const oldState = "{{ old('state') }}";
+
+        function populateDistricts(state) {
+            const districtSelect = document.getElementById('districtSelect');
+            districtSelect.innerHTML = '<option value="">Select District</option>';
+
+            if (allDistricts[state]) {
+                allDistricts[state].forEach(function(district) {
+                    const selected = (district === oldDistrict) ? 'selected' : '';
+                    districtSelect.innerHTML += `<option value="${district}" ${selected}>${district}</option>`;
+                });
+            }
+        }
+
+        // Initial load if editing or validation failed
+        if (oldState) {
+            populateDistricts(oldState);
+        }
+
+        // On state change
+        document.getElementById('stateSelect').addEventListener('change', function() {
+            populateDistricts(this.value);
+        });
+    </script>
 @endsection

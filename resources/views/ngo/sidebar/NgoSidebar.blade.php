@@ -112,7 +112,8 @@
                                 <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Complete Work Send</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('inbox-list'))
-                                <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Complete Work Send List</a></li>
+                                <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Complete Work Send List</a>
+                                </li>
                             @endif
                         </ul>
                     </li>
@@ -202,11 +203,12 @@
                                 <li><a class="dropdown-item" href="{{ route('signature') }}">Signature</a></li>
                             @endif
                             <li><a class="dropdown-item" href="{{ route('category.list') }}">Work Category</a></li>
-                            @if (!$isStaff || $user->hasPermission('course-list'))
-                                <li><a class="dropdown-item" href="#">Course List</a></li>
-                            @endif
                             @if (!$isStaff || $user->hasPermission('add-course-centre'))
-                                <li><a class="dropdown-item" href="#">Add Course For Centre</a></li>
+                                <li><a class="dropdown-item" href="{{ route('add.course') }}">Add Course For Training Centre</a>
+                                </li>
+                            @endif
+                            @if (!$isStaff || $user->hasPermission('course-list'))
+                                <li><a class="dropdown-item" href="{{ route('list.course') }}">Course List</a></li>
                             @endif
                             <li><a class="dropdown-item" href="{{ route('email.list') }}">Emails</a></li>
                         </ul>
@@ -563,8 +565,8 @@
                                         Demand Beneficiary List</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('approve-training-demand'))
-                                <li><a class="dropdown-item"
-                                        href="{{ route('taining-center-bene') }}">Training Demand Center By Beneficiary
+                                <li><a class="dropdown-item" href="{{ route('taining-center-bene') }}">Training
+                                        Demand Center By Beneficiary
                                         List</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('generate-training-certi'))
@@ -726,8 +728,10 @@
                                 <li><a class="dropdown-item" href="{{ route('gbs-bill-list') }}">GBS Sanstha
                                         Bill/Voucher List</a></li>
                             @endif
-                            {{-- <li><a class="dropdown-item" href="">
-                                    Vaindar Registration /Account No</a></li> --}}
+                            <li><a class="dropdown-item" href="">
+                                    Add Vaindar/Shop/Farm</a></li>
+                            <li><a class="dropdown-item" href="">
+                                    Vaindar/Shop/Farm List</a></li>
                         </ul>
                     </li>
                 @endif
@@ -771,8 +775,8 @@
                                         href="{{ route('balance.report.view') }}">Year/Month-wise Report</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('year-wise-report'))
-                                <li><a class="dropdown-item"
-                                        href="{{-- route('balance.report.view') --}}">Work Category Laser Acoount</a></li>
+                                <li><a class="dropdown-item" href="{{-- route('balance.report.view') --}}">Work Category Laser
+                                        Acoount</a></li>
                             @endif
                         </ul>
                     </li>

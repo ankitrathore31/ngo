@@ -8,7 +8,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Training Center  </li>
+                        <li class="breadcrumb-item active" aria-current="page">Training Center </li>
                     </ol>
                 </nav>
             </div>
@@ -19,10 +19,10 @@
                 </div>
             @endif
             <div class="row">
-                <form method="GET" action="{{ route('approve-taining-demand-bene') }}" class="row g-3 mb-4">
+                <form method="GET" action="{{ route('taining-center-bene') }}" class="row g-3 mb-4">
                     <div class="col-md-3 col-sm-4">
                         <select name="session_filter" id="session_filter" class="form-control"
-                            onchange="this.form.submit()">
+                        >
                             <option value="">All Sessions</option>
                             @foreach ($session as $session)
                                 <option value="{{ $session->session_date }}"
@@ -40,7 +40,7 @@
                         <select name="center" class="form-control" id="">
                             <option value="">Select Center</option>
                             @foreach ($center as $item)
-                                <option value="{{$item->center_name}}">{{$item->center_name}}</option>
+                                <option value="{{ $item->center_name }}">{{ $item->center_name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -49,7 +49,7 @@
                     </div>
                     <div class="col-md-3">
                         <button type="submit" class="btn btn-primary me-1">Search</button>
-                        <a href="{{ route('approve-taining-demand-bene') }}" class="btn btn-info text-white me-1">Reset</a>
+                        <a href="{{ route('taining-center-bene') }}" class="btn btn-info text-white me-1">Reset</a>
                     </div>
                 </form>
 
@@ -63,8 +63,8 @@
                                 <th>Training Center Code</th>
                                 <th>Training Center Name</th>
                                 <th>Training Center Address</th>
+                                <th>Center Incharge</th>
                                 <th>Session</th>
-                                {{-- <th>Action</th> --}}
                                 <th>Training Beneficiarie List</th>
                                 <th>Training Beneficiarie Activity & Course List</th>
                                 <th>Training Beneficiarie Present List</th>
@@ -77,13 +77,16 @@
                             @foreach ($center as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $item->center_code}}</td>
-                                    <td>{{ $item->center_name}}</td>
-                                    <td>{{ $item->center_address}}</td>
-                                    <td>{{$item->academic_session}}</td>
+                                    <td>{{ $item->center_code }}</td>
+                                    <td>{{ $item->center_name }}</td>
+                                    <td>{{ $item->center_address }},{{ $item->post }},{{ $item->town }}
+                                        ,{{ $item->district }},{{ $item->state }}
+                                    </td>
+                                    <td>{{ \App\Models\Staff::find($item->incharge)->name ?? '' }}</td>
+                                    <td>{{ $item->academic_session }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            <a href="{{-- route('show-approve-bene-training',$item->center_code) --}}"
+                                            <a href="{{ route('approve-taining-demand-bene', $item->center_code) }}"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="View" style="min-width: 38px; height: 38px;">
                                                 Beneficiarie List

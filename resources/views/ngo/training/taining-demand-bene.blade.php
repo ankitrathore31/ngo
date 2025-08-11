@@ -173,7 +173,7 @@
                                         @foreach ($category as $item)
                                             <option value="{{ $item->category }}"
                                                 {{ old('facilities_category') == $item->category ? 'selected' : '' }}>
-                                                {{$item->category}}</option>
+                                                {{ $item->category }}</option>
                                         @endforeach
                                     </select>
                                     @error('facilities_category')
@@ -183,8 +183,15 @@
 
                                 <div class="mb-3">
                                     <label for="training_course" class="form-label">Training Course</label>
-                                    <input type="text" class="form-control" id="training_course"
-                                        name="training_course">
+                                    <select name="training_course" id="training_course" class="form-control">
+                                        <option value="">Select Course</option>
+                                        @foreach ($course as $item)
+                                            <option value="{{ $item->id }}"
+                                                {{ old('training_course', $center->id ?? '') == $item->id ? 'selected' : '' }}>
+                                                {{ $item->course }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
 
                                 <div class="mb-3">

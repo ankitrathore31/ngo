@@ -152,10 +152,10 @@
 
 
                 <div class="row d-flex justify-content-center   ">
-                    <div class="col-sm-6 mb-2">
+                    <div class="col-sm-4 mb-2">
                         <p class="text-center fw-bold p-2 print-red-bg">
-                            <span data-lang="hi">प्रशिक्षण प्रमाणपत्र</span>
-                            <span data-lang="en">Training Certificate</span>
+                            <strong> <span data-lang="hi">प्रशिक्षण प्रमाणपत्र</span>
+                                <span data-lang="en">Training Certificate</span></strong>
                         </p>
 
                     </div>
@@ -378,13 +378,13 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-5 mb-2">
+                    <div class="col-sm-5 mb-2" style="border: 2px solid blue;">
                         <div class="d-flex align-items-start w-100">
-                            <strong class="mr-2" style="white-space: nowrap;">
+                            <strong class="mr-2">
                                 <span data-lang="hi">आधार नं.</span>
                                 <span data-lang="en">AADHAR NO.</span>
                             </strong>
-                            <div class="flex-grow-1 border-bottom border-dark text-break">
+                            <div>
                                 &nbsp; {{ $record->beneficiare->identity_no }}
                             </div>
                         </div>
@@ -405,7 +405,7 @@
                         @else
                             <p class="text-muted mt-2 no-print">Not attached</p> <!-- Hidden only in print -->
                         @endif
-                        <strong>Digitally Signed By <br>
+                        <strong class="text-danger">Digitally Signed By <br>
                             DROPTI DEVI RATHOR <br>
                             PROGRAM OFFICER
                         </strong><br>
@@ -429,14 +429,14 @@
                         @else
                             <p class="text-muted mt-2 no-print">Not attached</p>
                         @endif
-                        <strong>Digitally Signed By <br>
+                        <strong class="text-danger">Digitally Signed By <br>
                             MANOJ KUMAR RATHOR <br>
                             DIRECTOR
                         </strong><br>
                     </div>
                 </div>
 
-                <div class="col-sm-12 text-center mt-2 fw-bold">
+                <div class="col-sm-12 text-center mt-2 fw-bold text-primary">
                     Grade Marks : A=76 to 100 B= 51 to 75 C= 26 to 50 D= 1 to 25
                 </div>
             </div>
