@@ -101,7 +101,6 @@
                                         @enderror
                                     </div>
 
-                                    {{-- State --}}
                                     @php $districtsByState = config('districts'); @endphp
                                     <div class="col-md-4 mb-3">
                                         <label for="stateSelect">State <span class="text-danger">*</span></label>
@@ -142,7 +141,7 @@
                                             <option value="">Select Incharge</option>
                                             @foreach ($staff as $item)
                                                 <option value="{{ $item->id }}"
-                                                    {{ old('incharge', $center->incharge_id ?? '') == $item->id ? 'selected' : '' }}>
+                                                    {{ old('incharge', $center->incharge ?? '') == $item->id ? 'selected' : '' }}>
                                                     {{ $item->name }} ({{ $item->position }})
                                                 </option>
                                             @endforeach
@@ -165,4 +164,33 @@
             </div>
         </div>
     </div>
+    <script>
+        const allDistricts = @json($districtsByState);
+
+        // Use old values if they exist, otherwise fallback to $beneficiarie
+        const oldState = "{{ old('state', $center->state) }}";
+        const oldDistrict = "{{ old('district', $center->district) }}";
+
+        function populateDistricts(state) {
+            const districtSelect = document.getElementById('districtSelect');
+            districtSelect.innerHTML = '<option value="">Select District</option>';
+
+            if (allDistricts[state]) {
+                allDistricts[state].forEach(function(district) {
+                    const selected = (district === oldDistrict) ? 'selected' : '';
+                    districtSelect.innerHTML += `<option value="${district}" ${selected}>${district}</option>`;
+                });
+            }
+        }
+
+        // Initial load
+        if (oldState) {
+            populateDistricts(oldState);
+        }
+
+        // On state change
+        document.getElementById('stateSelect').addEventListener('change', function() {
+            populateDistricts(this.value);
+        });
+    </script>
 @endsection

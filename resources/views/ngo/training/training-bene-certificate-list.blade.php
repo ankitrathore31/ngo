@@ -101,7 +101,7 @@
                                     <td>{{ $item->center->center_name}}</td>
                                     <td>{{ \App\Models\Staff::find($item->center->incharge)->name ?? '' }}</td>
                                     <td>{{ $item->facilities_category ?? 'N/A' }}</td>
-                                    <td>{{ $item->training_course ?? 'N/A' }}</td>
+                                    <td>{{ \App\Models\Course::find($item->training_course)->course ?? '' }}</td>
                                     <td>{{ \Carbon\Carbon::parse($item->start_date)->format('d-m-Y')}} To {{ \Carbon\Carbon::parse($item->end_date)->format('d-m-Y')}}
                                     </td> 
                                     <td>{{$item->duration}}</td>

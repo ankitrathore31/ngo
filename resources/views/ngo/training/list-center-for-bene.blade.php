@@ -32,15 +32,15 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-3 col-sm-4 mb-3">
+                    {{-- <div class="col-md-3 col-sm-4 mb-3">
                         <input type="number" class="form-control" name="application_no"
                             placeholder="Search By Application No.">
-                    </div>
+                    </div> --}}
                     <div class="col-md-3 col-sm-4 mb-3">
                         <select name="center" class="form-control" id="">
-                            <option value="">Select Center</option>
-                            @foreach ($center as $item)
-                                <option value="{{ $item->center_name }}">{{ $item->center_name }}</option>
+                            <option value="">All Center</option>
+                            @foreach ($Searchcenter as $item)
+                                <option value="{{ $item->center_name }}">{{ $item->center_name }} ({{ $item->center_code}})</option>
                             @endforeach
                         </select>
                     </div>
@@ -66,11 +66,10 @@
                                 <th>Center Incharge</th>
                                 <th>Session</th>
                                 <th>Training Beneficiarie List</th>
-                                <th>Training Beneficiarie Activity & Course List</th>
                                 <th>Training Beneficiarie Present List</th>
+                                <th>Training Beneficiarie Activity & Course List</th>
                                 <th>Training Beneficiarie Fees List</th>
                                 <th>Training Beneficiarie Progress Report</th>
-
                             </tr>
                         </thead>
                         <tbody>
@@ -100,9 +99,25 @@
                                                 Training Beneficiarie Present List
                                             </a>
                                     </td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>
+                                        <a href="{{-- route('taining-bene-fess-list', $item->center_code) --}}"
+                                                class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
+                                                title="View">
+                                                Training Beneficiarie Course Activity
+                                            </a>
+                                    </td>
+                                    <td><a href="{{ route('taining-bene-fess-list', $item->center_code) }}"
+                                                class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
+                                                title="View">
+                                                Training Beneficiarie Present List
+                                            </a></td>
+                                    <td>
+                                        <a href="{{ route('taining-bene-progress-list', $item->center_code) }}"
+                                                class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
+                                                title="View">
+                                                Training Beneficiarie Progress Report
+                                            </a>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

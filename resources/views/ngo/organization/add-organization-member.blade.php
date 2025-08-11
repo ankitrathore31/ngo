@@ -113,7 +113,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- Dynamic rows --}}
+                                
                             </tbody>
                         </table>
 
@@ -121,7 +121,7 @@
                     </form>
                 </div>
             </div>
-            <div class="container mt-4">
+            {{-- <div class="container mt-4">
                 <h6><b>- Group Members List</b></h6>
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover align-middle text-center">
@@ -158,7 +158,7 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 

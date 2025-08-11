@@ -18,12 +18,27 @@
                     {{ session('success') }}
                 </div>
             @endif
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <div class="card shadow p-2 bg-primary">
+                        <div class="card-body text-white text-center">
+                            <div class="card-title">
+                                <b>Total Training Beneficiaries:</b>
+                            </div>
+                            <div class="card-text">
+                                {{ $record->count() }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="card shadow-sm">
                 <div class="card-body table-responsive">
                     <table class="table table-bordered table-hover align-middle text-center">
+
                         <thead class="table-primary">
                             <tr>
-                                <th>Sr. No.</th>
+                                <th>Roll No.</th>
                                 <th>Training Center Code</th>
                                 <th>Training Center Name</th>
                                 <th>Training Center Address</th>
@@ -39,7 +54,7 @@
                                 <th>Age</th>
                                 {{-- <th>Center Code</th> --}}
                                 <th>Facilities Category</th>
-                                <th>Training Course</th> 
+                                <th>Training Course</th>
                                 <th>Start Date & End Date</th>
                                 <th>Course Duration</th>
                                 <th>Session</th>
@@ -50,10 +65,10 @@
                             @foreach ($record as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $item->center->center_code}}</td>
-                                    <td>{{ $item->center->center_name}}</td>
-                                    <td>{{ $item->center->center_address}},{{ $item->center->post}},{{ $item->center->town}}
-                                        ,{{ $item->center->district}},{{ $item->center->state}}
+                                    <td>{{ $item->center->center_code }}</td>
+                                    <td>{{ $item->center->center_name }}</td>
+                                    <td>{{ $item->center->center_address }},{{ $item->center->post }},{{ $item->center->town }}
+                                        ,{{ $item->center->district }},{{ $item->center->state }}
                                     </td>
                                     <td>{{ \App\Models\Staff::find($item->center->incharge)->name ?? '' }}</td>
                                     <td>{{ $item->beneficiare->registration_no ?? 'N/A' }}</td>
@@ -73,10 +88,11 @@
                                     </td>
                                     {{-- <td>{{ $item->center_code}}</td> --}}
                                     <td>{{ $item->facilities_category ?? 'N/A' }}</td>
-                                    <td>{{ $item->training_course ?? 'N/A' }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($item->start_date)->format('d-m-Y')}} To {{ \Carbon\Carbon::parse($item->end_date)->format('d-m-Y')}}
-                                    </td> 
-                                    <td>{{$item->duration}}</td>
+                                    <td>{{ \App\Models\Course::find($item->training_course)->course ?? '' }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($item->start_date)->format('d-m-Y') }} To
+                                        {{ \Carbon\Carbon::parse($item->end_date)->format('d-m-Y') }}
+                                    </td>
+                                    <td>{{ $item->duration }}</td>
                                     <td>{{ $item->beneficiare->academic_session ?? 'N/A' }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
