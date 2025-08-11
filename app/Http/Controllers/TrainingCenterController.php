@@ -99,7 +99,7 @@ class TrainingCenterController extends Controller
         }
 
         $data = academic_session::all();
-        $center = $query->orderBy('id', 'desc')->get(); // with pagination
+        $center = $query->orderBy('id', 'asc')->get(); // with pagination
 
         return view('ngo.training.center-list', compact('center', 'data'));
     }
@@ -396,5 +396,33 @@ class TrainingCenterController extends Controller
         $center = Training_Center::where('center_code', $center_code)->first();
         $signatures = Signature::pluck('file_path', 'role');
         return view('ngo.training.training-bene-certificate', compact('session', 'record', 'center', 'signatures'));
+    }
+
+    public function TrainingBeneForPresent(Request $request, $center_code)
+    {   
+        $center = Training_Center::where('center_code', $center_code)->first();
+        $session = academic_session::all();
+        $queryBene = Training_Beneficiarie::with(['center', 'beneficiare'])
+            ->where('center_code', $center_code);
+
+        if ($request->filled('session_filter')) {
+            $queryBene->where('academic_session', $request->session_filter);
+        }
+
+        if ($request->filled('application_no')) {
+            $queryBene->whereHas('beneficiare', function ($q) use ($request) {
+                $q->where('application_no', $request->application_no);
+            });
+        }
+
+        if ($request->filled('name')) {
+            $queryBene->whereHas('beneficiare', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->name . '%');
+            });
+        }
+
+        $record = $queryBene->orderBy('created_at', 'asc')->get();
+
+        return view('ngo.training.training-bene-pre-list', compact('session', 'record','center'));
     }
 }

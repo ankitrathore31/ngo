@@ -45,7 +45,6 @@
                         <a href="{{ route('training-certi-list') }}" class="btn btn-info text-white me-1">Reset</a>
                     </div>
                 </form>
-
             </div>
             <div class="card shadow-sm">
                 <div class="card-body table-responsive">
@@ -55,9 +54,9 @@
                                 <th>Sr. No.</th>
                                 {{-- <td>Application No.</td> --}}
                                 <th>Registration No.</th>
-                                <th>Name</th>
+                                <th>Learner Name</th>
                                 <th>Father/Husband Name</th>
-                                <th>Address</th>
+                                <th>Learner Address</th>
                                 {{-- <th>Identity No.</th>
                                 <th>Identity Type</th> --}}
                                 <th>Mobile No.</th>
@@ -66,6 +65,8 @@
                                 <th>Religion</th>
                                 {{-- <th>Age</th> --}}
                                 <th>Center Code</th>
+                                <th>Center Name</th>
+                                <th>Center Incharge</th>
                                 <th>Facilities Category</th>
                                 <th>Training Course</th> 
                                 <th>Start Date & End Date</th>
@@ -97,6 +98,8 @@
                                     {{-- <td>{{ $item->beneficiare->dob ? \Carbon\Carbon::parse($item->beneficiare->dob)->age . ' years' : 'Not Found' }}
                                     </td> --}}
                                     <td>{{ $item->center_code}}</td>
+                                    <td>{{ $item->center->center_name}}</td>
+                                    <td>{{ \App\Models\Staff::find($item->center->incharge)->name ?? '' }}</td>
                                     <td>{{ $item->facilities_category ?? 'N/A' }}</td>
                                     <td>{{ $item->training_course ?? 'N/A' }}</td>
                                     <td>{{ \Carbon\Carbon::parse($item->start_date)->format('d-m-Y')}} To {{ \Carbon\Carbon::parse($item->end_date)->format('d-m-Y')}}
