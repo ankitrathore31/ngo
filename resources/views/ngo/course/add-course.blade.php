@@ -53,11 +53,11 @@
     </style>
     <div class="wrapper">
         <div class="d-flex justify-content-between aligin-item-center mb-3 mt-2">
-            <h5 class="mb-0">Manage Staff Sallary</h5>
+            <h5 class="mb-0">Add Training Course</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                     <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Sallary</li>
+                    <li class="breadcrumb-item active" aria-current="page">Course</li>
                 </ol>
             </nav>
         </div>
