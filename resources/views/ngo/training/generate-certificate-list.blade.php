@@ -114,7 +114,6 @@
                                                 title="View" style="min-width: 38px; height: 38px;">
                                                 <i class="fa-regular fa-eye"></i>
                                             </a>
-
                                         </div>
                                     </td>
                                 </tr>

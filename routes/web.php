@@ -85,6 +85,7 @@ Route::controller(HomeControlller::class)->group(function () {
     Route::get('/organization-groups/{id}', 'groups')->name('organization.groups');
     Route::get('/organization-groups-member/{id}', 'OrgMemberListByOrganization')->name('show.group.member');
     Route::get('/demand', 'demand')->name('demand');
+    Route::get('/center', 'Center')->name('home.center.list');
 });
 
 Route::controller(CertificateController::class)->group(function () {
@@ -315,7 +316,9 @@ Route::controller(TrainingCenterController::class)->group(function () {
     Route::post('ngo/store-demand', 'storeTrainingDemand')->middleware('auth')->name('store-demand');
     Route::get('ngo/training-center', 'CenterListForbene')->middleware('auth')->name('taining-center-bene');
     Route::get('ngo/approve-training-demand-bene/{center_code}', [TrainingCenterController::class, 'ApproveBeneForTraining'])
-        ->name('approve-taining-demand-bene');
+    ->name('approve-taining-demand-bene');
+    Route::get('ngo/training-present-list/{center_code}', [TrainingCenterController::class, 'TrainingBeneForPresent'])
+    ->name('taining-bene-present-list');
     Route::get('ngo/view-approve-training-bene/{id}/{center_code}', 'ShowApproveBeneTraining')->middleware('auth')->name('show-approve-bene-training');
     Route::get('ngo/genrate-training-certificate', 'GenrateTrainingCerti')->middleware('auth')->name('genrate-training-certi');
     Route::get('ngo/generate-tarining-certificate/{id}/{center_code}', 'GenrateTrainingCertificate')->middleware('auth')->name('genrate-training-certificate');

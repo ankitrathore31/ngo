@@ -88,12 +88,18 @@
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
                                             <a href="{{ route('approve-taining-demand-bene', $item->center_code) }}"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                title="View" style="min-width: 38px; height: 38px;">
-                                                Beneficiarie List
+                                                title="View">
+                                                Training Beneficiarie List
                                             </a>
                                         </div>
                                     </td>
-                                    <td></td>
+                                    <td>
+                                        <a href="{{ route('taining-bene-present-list', $item->center_code) }}"
+                                                class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
+                                                title="View">
+                                                Training Beneficiarie Present List
+                                            </a>
+                                    </td>
                                     <td></td>
                                     <td></td>
                                     <td></td>

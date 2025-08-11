@@ -368,7 +368,7 @@
 
                     <tfoot>
                         <tr style="font-weight: bold; background-color: #f2f2f2;">
-                            <td colspan="6" class="text-end">Total Records: {{ $donations->count() }}</td>
+                            <td colspan="7" class="text-end">Total Records: {{ $donations->count() }}</td>
                             <td>₹{{ number_format($totalAmount, 2) }}</td>
                             <td colspan="5">--</td>
                         </tr>

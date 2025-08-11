@@ -19,6 +19,7 @@ use App\Models\Organization;
 use App\Models\OrganizationMember;
 use App\Models\Project;
 use App\Models\Staff;
+use App\Models\Training_Center;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -435,5 +436,26 @@ class HomeControlller extends Controller
     public function demand()
     {
         return view('home.pages.demand');
+    }
+
+    public function Center(Request $request){
+        $query = Training_Center::query();
+
+        if ($request->filled('session_filter')) {
+            $query->where('session_date', $request->session_filter);
+        }
+
+        if ($request->filled('center_code')) {
+            $query->where('center_code', $request->center_code);
+        }
+
+        if ($request->filled('center_name')) {
+            $query->where('center_name', 'like', '%' . $request->center_name . '%');
+        }
+
+        $data = academic_session::all();
+        $center = $query->orderBy('id', 'asc')->get(); // with pagination
+
+        return view('home.center.center-list', compact('center', 'data'));
     }
 }

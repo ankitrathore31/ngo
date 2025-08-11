@@ -280,6 +280,12 @@
             </a>
         </div>
 
+        <div class="col-md-2 mb-3">
+            <a href="{{ route('home.center.list') }}" class="btn btn-primary w-100">
+                Training Center 
+            </a>
+        </div>
+
     </div>
 
     <div class="owl-carousel owl-theme slider">

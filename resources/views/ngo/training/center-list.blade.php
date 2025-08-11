@@ -23,7 +23,7 @@
                 <form method="GET" action="{{ route('center-list') }}" class="row g-3 mb-4">
                     <div class="col-md-3 col-sm-4">
                         <select name="session_filter" id="session_filter" class="form-control"
-                            onchange="this.form.submit()">
+                            >
                             <option value="">All Sessions</option>
                             @foreach ($data as $session)
                                 <option value="{{ $session->session_date }}"
@@ -61,7 +61,10 @@
                                 <th>Sr. No.</th>
                                 <th>Center Code</th>           
                                 <th>Center Name</th>
-                                <th>Center Address</th>  
+                                <th>Center Address</th>
+                                <th>Block</th>
+                                <th>District</th>
+                                <th>State</th>  
                                 <th>Center Incharge</th>            
                                 <th>Session</th>
                                 <th>Action</th>
@@ -73,9 +76,12 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->center_code}}</td>
                                     <td>{{ $item->center_name}}</td>
-                                    <td>{{ $item->center_address}},{{ $item->post}},{{ $item->town}}
+                                    <td>{{ $item->center_address}},{{ $item->post}},{{ $item->block}}
                                         ,{{ $item->district}},{{ $item->state}}
                                     </td>
+                                    <td>{{ $item->block}}</td>
+                                    <td>{{ $item->district}}</td>
+                                    <td>{{ $item->state}}</td>
                                     <td>{{ \App\Models\Staff::find($item->incharge)->name ?? '' }}</td>
                                     <td>{{ $item->academic_session}}</td>
                                     <td>
