@@ -26,6 +26,7 @@ use App\Http\Controllers\SallaryController;
 use App\Http\Controllers\SignatureController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\TrainingCenterController;
+use App\Http\Controllers\VendorController;
 use App\Http\Controllers\WorkingAreaController;
 use App\Http\Controllers\WorkPlanController;
 use App\Models\academic_session;
@@ -316,13 +317,13 @@ Route::controller(TrainingCenterController::class)->group(function () {
     Route::post('ngo/store-demand', 'storeTrainingDemand')->middleware('auth')->name('store-demand');
     Route::get('ngo/training-center', 'CenterListForbene')->middleware('auth')->name('taining-center-bene');
     Route::get('ngo/approve-training-demand-bene/{center_code}', [TrainingCenterController::class, 'ApproveBeneForTraining'])
-    ->name('approve-taining-demand-bene');
+        ->name('approve-taining-demand-bene');
     Route::get('ngo/training-present-list/{center_code}', [TrainingCenterController::class, 'TrainingBeneForPresent'])
-    ->name('taining-bene-present-list');
+        ->name('taining-bene-present-list');
     Route::get('ngo/training-fees-list/{center_code}', [TrainingCenterController::class, 'TrainingBeneForFee'])
-    ->name('taining-bene-fess-list');
+        ->name('taining-bene-fess-list');
     Route::get('ngo/training-progress-list/{center_code}', [TrainingCenterController::class, 'TrainingBeneForprogress'])
-    ->name('taining-bene-progress-list');
+        ->name('taining-bene-progress-list');
     Route::get('ngo/view-approve-training-bene/{id}/{center_code}', 'ShowApproveBeneTraining')->middleware('auth')->name('show-approve-bene-training');
     Route::get('ngo/genrate-training-certificate', 'GenrateTrainingCerti')->middleware('auth')->name('genrate-training-certi');
     Route::get('ngo/generate-tarining-certificate/{id}/{center_code}', 'GenrateTrainingCertificate')->middleware('auth')->name('genrate-training-certificate');
@@ -375,6 +376,17 @@ Route::controller(BillController::class)->group(function () {
     Route::get('ngo/delete-gbs-bill/{id}', 'DeleteGbsBill')->middleware('auth')->name('delete-gbs-bill');
     Route::get('ngo/gbs-bill-list', 'GbsBillList')->middleware('auth')->name('gbs-bill-list');
     Route::get('ngo/view-gbs-bill/{id}', 'ViewGbsBill')->middleware('auth')->name('view-gbs-bill');
+});
+
+Route::controller(VendorController::class)->middleware('auth')->group(function () {
+    Route::get('ngo/add-vendor', 'AddVendor')->name('add.vendor');
+    Route::post('ngo/store-vendor', 'StoreVendor')->name('store.vendor');
+    Route::get('ngo/vendor-list', 'VendorList')->name('vendor.list');
+    Route::get('ngo/edit-vendor/{id}', 'EditVendor')->name('edit.vendor');
+    Route::post('ngo/update-vendor/{id}', 'UpdateVendor')->name('update.vendor');
+    Route::get('ngo/delete-vendor/{id}', 'DeleteVendor')->name('delete.vendor');
+    Route::get('ngo/view-vendor/{id}', 'ViewVendor')->name('view.vendor');
+
 });
 
 Route::controller(WorkPlanController::class)->group(function () {

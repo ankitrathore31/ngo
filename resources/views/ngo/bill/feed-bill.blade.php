@@ -17,7 +17,7 @@
             </div>
         @endif
         <div class="container mt-5 mb-5">
-            <form method="GET" action="{{ route('add-bill') }}">
+            <form id="searchForm" method="GET" action="{{ route('add-bill') }}">
                 <div class="row">
                     <div class="col-md-12">
                         <label class="form-label">Search Person/Farm</label>
@@ -26,7 +26,6 @@
                     </div>
                 </div>
             </form>
-
             <!-- Show matched results if any -->
             @if (!empty($searchResults))
                 <div id="searchBox">
@@ -34,13 +33,12 @@
                         @foreach ($searchResults as $item)
                             <li class="list-group-item" style="cursor: pointer;"
                                 onclick="fillData({{ json_encode($item) }})">
-                                {{ $item->s_name ?? $item->b_name }} ({{ $item->shop }})
+                                {{ $item->name}} ({{ $item->shop }})
                             </li>
                         @endforeach
                     </ul>
                 </div>
             @endif
-
         </div>
 
         <div class="container-fluid mt-5 mb-5">
@@ -397,45 +395,59 @@
     </script>
     <script>
         const searchInput = document.getElementById('searchInput');
+        const searchForm = document.getElementById('searchForm');
         const searchBox = document.getElementById('searchBox');
 
-        // Hide result list when input is cleared
-        searchInput.addEventListener('input', function() {
-            if (this.value.trim() === '' && searchBox) {
-                searchBox.style.display = 'none';
-            } else if (searchBox) {
-                searchBox.style.display = 'block';
+        // Submit search only on Enter
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (this.value.trim() !== '') {
+                    searchForm.submit();
+                } else {
+                    // Empty input → hide box & reload page
+                    if (searchBox) searchBox.style.display = 'none';
+                    window.location.reload();
+                }
             }
         });
 
-        // Hide result list after selecting an item
+        // Fill input fields from clicked search result
         function fillData(data) {
-            // Fill inputs (same as before)
             document.getElementById('shop').value = data.shop || '';
             document.getElementById('s_name').value = data.name || '';
-            document.getElementById('s_address').value = data.address || '';
+
+            // Combine address fields into one string
+            let addressParts = [];
+            if (data.village) addressParts.push(data.village);
+            if (data.post) addressParts.push(data.post);
+            if (data.town) addressParts.push(data.town);
+            if (data.district) addressParts.push(data.district);
+            if (data.state) addressParts.push(data.state);
+
+            document.getElementById('s_address').value = addressParts.join(', ');
+
             document.getElementById('s_mobile').value = data.mobile || '';
             document.getElementById('s_email').value = data.email || '';
-            document.getElementById('gst').value = data.gst || '';
-            document.getElementById('role').value = data.role || '';
-            document.getElementById('gst_type').value = data.gst_type || '';
-            document.getElementById('pancard_type').value = data.pancard_type || '';
-            document.getElementById('pancard').value = data.s_pan || '';
+            document.getElementById('gst').value = data.shop_gst_no || '';
+            document.getElementById('role').value = data.vendor_type || '';
+            document.getElementById('pancard').value = data.vendor_pan_no || '';
 
             document.getElementById('b_name').value = data.b_name || '';
             document.getElementById('b_mobile').value = data.b_mobile || '';
             document.getElementById('b_email').value = data.b_email || '';
             document.getElementById('b_address').value = data.b_address || '';
 
-            // Hide the results after selecting
+            // Hide result list after selecting
             if (searchBox) {
                 searchBox.style.display = 'none';
             }
 
-            // Clear the input (optional)
+            // Clear search input
             searchInput.value = '';
         }
     </script>
+
     <script>
         const allProjects = @json($allProjects);
 

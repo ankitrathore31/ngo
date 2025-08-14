@@ -166,27 +166,15 @@
                                             @enderror
                                         </div>
                                     </div>
-
-
-
-
-
-
-
-
                                 </div>
                                 <div class="col-md-4 col-sm-4">
                                     <div class="upload-container">
-
                                         @if (!empty($record->image))
                                             <img id="previewImage" src="{{ asset('benefries_images/' . $record->image) }}"
                                                 alt="Preview" width="160">
                                         @endif
-
-
-
                                         <label for="uploadInput" class="upload-btn">Choose File</label>
-                                        <input type="file" id="uploadInput" name="image" accept="image/*">
+                                        <input type="file" id="uploadInput" name="image" accept="image/*" capture="camera">
                                     </div>
                                 </div>
 

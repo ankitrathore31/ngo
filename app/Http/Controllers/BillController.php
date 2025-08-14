@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\GbsBill;
 use App\Models\Project;
 use App\Models\Signature;
+use App\Models\Vendor;
 use App\Models\Voucher_Item;
 use Illuminate\Http\Request;
 
@@ -17,7 +18,7 @@ class BillController extends Controller
 {
     public function AddBill(Request $request)
     {
-        $person = Bill_Voucher::get();
+        $person = Vendor::get();
         $data = academic_session::all();
         $categories = Category::orderBy('category', 'asc')->pluck('category');
         $allProjects = Project::select('name', 'category')->get();
@@ -25,9 +26,8 @@ class BillController extends Controller
 
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;
-            $searchResults = Bill_Voucher::where('shop', 'like', "%$search%")
+            $searchResults = Vendor::where('shop', 'like', "%$search%")
                 ->orWhere('name', 'like', "%$search%")
-                ->orWhere('b_name', 'like', "%$search%")
                 ->get();
         }
         return view('ngo.bill.feed-bill', compact('data', 'person', 'categories', 'allProjects', 'searchResults'));
@@ -187,22 +187,20 @@ class BillController extends Controller
 
         $searchResults = collect();
 
-        // Perform search across both models
-        if ($request->has('search') && !empty($request->search)) {
+        if ($request->filled('search')) {
             $search = $request->search;
-            // Search in Bill model
-            $searchResultsBill = GbsBill::where('shop', 'like', "%$search%")
-                ->orWhere('name', 'like', "%$search%")
-                ->get();
 
-            // Merge results into a single collection
-            $searchResults = $$searchResultsBill;
+            $searchResults = Vendor::where('shop', 'like', "%{$search}%")
+                ->orWhere('name', 'like', "%{$search}%")
+                ->get();
+        } else {
+            $searchResults = Vendor::all();
         }
 
         return view('ngo.bill.generate-person-bill', compact('states', 'data', 'categories', 'allProjects', 'searchResults'));
     }
 
-      public function GenerateSansthaBill(Request $request)
+    public function GenerateSansthaBill(Request $request)
     {
         $states = config('states');
         $data = academic_session::all();
@@ -211,26 +209,14 @@ class BillController extends Controller
 
         $searchResults = collect();
 
-        // Perform search across both models
-        if ($request->has('search') && !empty($request->search)) {
+        if ($request->filled('search')) {
             $search = $request->search;
 
-            // Search in Bill_Voucher model
-            $searchResultsBillVoucher = Bill_Voucher::where('shop', 'like', "%$search%")
-                ->orWhere('name', 'like', "%$search%")
-                ->orWhere('b_name', 'like', "%$search%")
+            $searchResults = Vendor::where('shop', 'like', "%{$search}%")
+                ->orWhere('name', 'like', "%{$search}%")
                 ->get();
-
-            // Search in Bill model
-            $searchResultsBill = Bill::where('shop', 'like', "%$search%")
-                ->orWhere('name', 'like', "%$search%")
-                ->get();
-
-            // Merge results into a single collection
-            $searchResults = $searchResultsBillVoucher->merge($searchResultsBill);
         } else {
-            // Fetch all records from Bill_Voucher if no search term
-            $searchResults = Bill_Voucher::all();
+            $searchResults = Vendor::all();
         }
 
         return view('ngo.bill.generate-sanstha-bill', compact('states', 'data', 'categories', 'allProjects', 'searchResults'));
@@ -281,8 +267,8 @@ class BillController extends Controller
         $data = academic_session::all();
         $bill = GbsBill::find($id);
         $categories = Category::orderBy('category', 'asc')->pluck('category');
-        $allProjects = Project::select('name', 'category')->get();        
-        return view('ngo.bill.edit-person-bill', compact('states', 'data', 'bill', 'categories','allProjects'));
+        $allProjects = Project::select('name', 'category')->get();
+        return view('ngo.bill.edit-person-bill', compact('states', 'data', 'bill', 'categories', 'allProjects'));
     }
 
     public function UdatePersonBill(Request $request, $id)
@@ -470,7 +456,7 @@ class BillController extends Controller
         $states = config('states');
         $categories = Category::orderBy('category', 'asc')->pluck('category');
         $allProjects = Project::select('name', 'category')->get();
-        return view('ngo.bill.edit-gbs-bill', compact('gbsBill', 'bill_items', 'data', 'states', 'categories','allProjects'));
+        return view('ngo.bill.edit-gbs-bill', compact('gbsBill', 'bill_items', 'data', 'states', 'categories', 'allProjects'));
     }
 
     public function UpdateGbsBill(Request $request, $id)
@@ -526,5 +512,4 @@ class BillController extends Controller
 
         return redirect()->back()->with('success', 'GBS Bill Deleted successfully!');
     }
-
 }
