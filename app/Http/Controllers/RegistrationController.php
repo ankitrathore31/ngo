@@ -353,7 +353,10 @@ class RegistrationController extends Controller
         $approvebeneficiarie = $queryBene->orderBy('created_at', 'asc')->get();
         $approvemember = $queryMember->orderBy('created_at', 'asc')->get();
         $data = academic_session::all();
-        $combined = $approvebeneficiarie->merge($approvemember)->sortBy('created_at');
+        $combined = $approvebeneficiarie
+            ->merge($approvemember)
+            ->sortBy('created_at')
+            ->values();
         $states = config('states');
         return view('ngo.registration.apporve-reg-list', compact('data', 'approvebeneficiarie', 'approvemember', 'combined', 'states'));
     }

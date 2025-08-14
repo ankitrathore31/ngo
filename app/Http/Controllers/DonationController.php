@@ -49,7 +49,7 @@ class DonationController extends Controller
         $data = academic_session::all();
         $categories = Category::orderBy('category', 'asc')->pluck('category');
         $allProjects = Project::select('name', 'category')->get();
-        $donors = $query->get()->sortByDesc('date');
+        $donor = $query->get()->sortByDesc('date');
 
         return view('ngo.donation.donation-list', compact('data', 'donor', 'categories', 'allProjects'));
     }

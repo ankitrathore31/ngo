@@ -64,6 +64,7 @@
                                 <option value="">Select Work Name</option>
                             </select>
                         </div>
+
                         <div class="col-md-4 mb-3">
                             <label for="bill_no">Bill/Voucher/Invoice No:</label>
                             <input type="text" id="bill_no" name="bill_no" class="form-control"
@@ -105,7 +106,7 @@
                         <div class=" col-sm-4 mb-3">
                             <label for="shop">Shop:</label>
                             <input type="text" id="shop" name="shop" class="form-control"
-                                value="{{ old('shop') }}" required>
+                                value="{{ old('shop') }}" readonly required>
                             @error('shop')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
@@ -128,7 +129,7 @@
                         <div class=" col-sm-4 mb-3">
                             <label for="name">Name:</label>
                             <input type="text" id="s_name" name="s_name" class="form-control"
-                                value="{{ old('s_name') }}" required>
+                                value="{{ old('s_name') }}" readonly required>
                             @error('s_name')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
@@ -136,7 +137,7 @@
 
                         <div class=" col-sm-4 mb-3">
                             <label for="address">Address:</label>
-                            <input type="text" id="s_address" name="s_address" class="form-control"
+                            <input type="text" id="s_address" readonly name="s_address" class="form-control"
                                 value="{{ old('s_address') }}" required>
                             @error('s_address')
                                 <small class="text-danger">{{ $message }}</small>
@@ -155,7 +156,7 @@
                         <div class=" col-sm-4 mb-3">
                             <label for="email">Email:</label>
                             <input type="text" id="s_email" name="s_email" class="form-control"
-                                value="{{ old('s_email') }}" required>
+                                value="{{ old('s_email') }}" readonly required>
                             @error('s_email')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
@@ -175,7 +176,7 @@
                         <div id="gst_input_wrapper" class="col-sm-4 mb-3" style="display: none;">
                             <label for="gst">GST</label>
                             <input type="number" name="gst" id="gst" class="form-control"
-                                value="{{ old('gst', 0) }}">
+                                value="{{ old('gst', 0) }}" readonly>
                         </div>
 
                         <div class="col-sm-4 mb-3">
@@ -192,7 +193,7 @@
                         <div id="pancard_input_wrapper" class="col-sm-4 mb-3" style="display: none;">
                             <label for="pancard">PAN Card Number:</label>
                             <input type="text" name="s_pan" id="pancard" class="form-control"
-                                value="{{ old('pancard') }}">
+                                value="{{ old('pancard') }}" readonly>
                         </div>
 
                     </div>
