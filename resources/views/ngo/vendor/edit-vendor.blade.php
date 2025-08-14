@@ -202,13 +202,123 @@
                         </div>
 
                     </div>
+                    <div class="row mb-3 mt-2">
+                        {{-- Vendor/Shop/Farm Account Detail --}}
+                        <h4>Vendor/Shop/Farm Account Detail</h4>
+
+                        <div class="form-group mb-2">
+                            <label for="vendor_account_no">Vendor/Shop/Farm Account No.</label>
+                            <input type="text" name="vendor_account_no" id="vendor_account_no"
+                                class="form-control @error('vendor_account_no') is-invalid @enderror"
+                                value="{{ old('vendor_account_no', $vendor->vendor_account_no) }}">
+                            @error('vendor_account_no')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="vendor_account_holder">Vendor/Shop/Farm Account Holder Name</label>
+                            <input type="text" name="vendor_account_holder" id="vendor_account_holder"
+                                class="form-control @error('vendor_account_holder') is-invalid @enderror"
+                                value="{{ old('vendor_account_holder', $vendor->vendor_account_holder) }}">
+                            @error('vendor_account_holder')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="vendor_bank_name">Vendor/Shop/Farm Bank Name</label>
+                            <input type="text" name="vendor_bank_name" id="vendor_bank_name"
+                                class="form-control @error('vendor_bank_name') is-invalid @enderror"
+                                value="{{ old('vendor_bank_name', $vendor->vendor_bank_name) }}">
+                            @error('vendor_bank_name')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="vendor_bank_branch">Vendor/Shop/Farm Bank Branch Name</label>
+                            <input type="text" name="vendor_bank_branch" id="vendor_bank_branch"
+                                class="form-control @error('vendor_bank_branch') is-invalid @enderror"
+                                value="{{ old('vendor_bank_branch', $vendor->vendor_bank_branch) }}">
+                            @error('vendor_bank_branch')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="vendor_bank_ifsc">Vendor/Shop/Farm Bank IFSC Code</label>
+                            <input type="text" name="vendor_bank_ifsc" id="vendor_bank_ifsc"
+                                class="form-control @error('vendor_bank_ifsc') is-invalid @enderror"
+                                value="{{ old('vendor_bank_ifsc', $vendor->vendor_bank_ifsc) }}">
+                            @error('vendor_bank_ifsc')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <hr>
+
+                        {{-- Operator Account Detail --}}
+                        <h4>Operator Account Detail</h4>
+
+                        <div class="form-group mb-2">
+                            <label for="operator_account_no">Operator Account No.</label>
+                            <input type="text" name="operator_account_no" id="operator_account_no"
+                                class="form-control @error('operator_account_no') is-invalid @enderror"
+                                value="{{ old('operator_account_no', $vendor->operator_account_no) }}">
+                            @error('operator_account_no')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="operator_account_holder">Operator Account Holder Name</label>
+                            <input type="text" name="operator_account_holder" id="operator_account_holder"
+                                class="form-control @error('operator_account_holder') is-invalid @enderror"
+                                value="{{ old('operator_account_holder', $vendor->operator_account_holder) }}">
+                            @error('operator_account_holder')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="operator_bank_name">Operator Bank Name</label>
+                            <input type="text" name="operator_bank_name" id="operator_bank_name"
+                                class="form-control @error('operator_bank_name') is-invalid @enderror"
+                                value="{{ old('operator_bank_name', $vendor->operator_bank_name) }}">
+                            @error('operator_bank_name')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="operator_bank_branch">Operator Bank Branch Name</label>
+                            <input type="text" name="operator_bank_branch" id="operator_bank_branch"
+                                class="form-control @error('operator_bank_branch') is-invalid @enderror"
+                                value="{{ old('operator_bank_branch', $vendor->operator_bank_branch) }}">
+                            @error('operator_bank_branch')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="operator_bank_ifsc">Operator Bank IFSC Code</label>
+                            <input type="text" name="operator_bank_ifsc" id="operator_bank_ifsc"
+                                class="form-control @error('operator_bank_ifsc') is-invalid @enderror"
+                                value="{{ old('operator_bank_ifsc', $vendor->operator_bank_ifsc) }}">
+                            @error('operator_bank_ifsc')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                    </div>
 
                     <div class="row mb-3 mt-2">
                         <div class="col-md-6">
                             <input type="submit" class="btn btn-primary w-100" value="Update Vendor">
                         </div>
                     </div>
-                    </form>
+                </form>
 
             </div>
         </div>

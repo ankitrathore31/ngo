@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Vendor extends Model
 {
     use HasFactory;
-     protected $fillable = [
+    protected $fillable = [
         'academic_session',
         'registration_no',
         'registration_date',
@@ -30,5 +30,18 @@ class Vendor extends Model
         'operator_pan_no',
         'shop_pan_file',
         'operator_pan_file',
+        // Vendor/Shop/Farm Account Detail
+        'vendor_account_no',
+        'vendor_account_holder',
+        'vendor_bank_name',
+        'vendor_bank_branch',
+        'vendor_bank_ifsc',
+
+        // Operator Account Detail
+        'operator_account_no',
+        'operator_account_holder',
+        'operator_bank_name',
+        'operator_bank_branch',
+        'operator_bank_ifsc',
     ];
 }

@@ -48,28 +48,43 @@ class VendorController extends Controller
         $registration_no = '3126VSF' . $newNumber;
 
         $validated = $request->validate([
-            'academic_session'  =>  'required',
-            'registration_no'   => 'required|string|max:255',
-            'registration_date' => 'required|date',
-            'shop'              => 'required|string|max:255',
-            'vendor_type'       => 'nullable|string|max:255',
-            'name'              => 'required|string|max:255',
-            'village'           => 'nullable|string|max:255',
-            'post'              => 'required|string|max:255',
-            'block'             => 'required|string|max:255',
-            'state'             => 'required|string|max:255',
-            'district'          => 'required|string|max:255',
-            'mobile'            => 'required|string|max:20',
-            'email'             => 'required|email|max:255',
-            'shop_gst_no'       => 'nullable|string|max:50',
-            'operator_gst_no'   => 'nullable|string|max:50',
-            'shop_gst'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
-            'operator_gst'      => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
-            'vendor_pan_no'     => 'nullable|string|max:50',
-            'operator_pan_no'   => 'nullable|string|max:50',
-            'shop_pan'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
-            'operator_pan'      => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'academic_session'       => 'required',
+            'registration_no'        => 'required|string|max:255',
+            'registration_date'      => 'required|date',
+            'shop'                   => 'required|string|max:255',
+            'vendor_type'            => 'nullable|string|max:255',
+            'name'                   => 'required|string|max:255',
+            'village'                => 'nullable|string|max:255',
+            'post'                   => 'required|string|max:255',
+            'block'                  => 'required|string|max:255',
+            'state'                  => 'required|string|max:255',
+            'district'               => 'required|string|max:255',
+            'mobile'                 => 'required|string|max:20',
+            'email'                  => 'required|email|max:255',
+            'shop_gst_no'            => 'nullable|string|max:50',
+            'operator_gst_no'        => 'nullable|string|max:50',
+            'shop_gst'               => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'operator_gst'           => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'vendor_pan_no'          => 'nullable|string|max:50',
+            'operator_pan_no'        => 'nullable|string|max:50',
+            'shop_pan'               => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'operator_pan'           => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+
+            // Vendor/Shop/Farm Account Detail
+            'vendor_account_no'      => 'nullable|string|max:50',
+            'vendor_account_holder'  => 'nullable|string|max:100',
+            'vendor_bank_name'       => 'nullable|string|max:100',
+            'vendor_bank_branch'     => 'nullable|string|max:100',
+            'vendor_bank_ifsc'       => 'nullable|string|max:20',
+
+            // Operator Account Detail
+            'operator_account_no'    => 'nullable|string|max:50',
+            'operator_account_holder' => 'nullable|string|max:100',
+            'operator_bank_name'     => 'nullable|string|max:100',
+            'operator_bank_branch'   => 'nullable|string|max:100',
+            'operator_bank_ifsc'     => 'nullable|string|max:20',
         ]);
+
 
         $validated['registration_no'] = $registration_no;
 
@@ -131,6 +146,19 @@ class VendorController extends Controller
             'district' => 'required|string',
             'mobile' => 'required|string|max:15',
             'email' => 'required|email',
+            // Vendor/Shop/Farm Account Detail
+            'vendor_account_no'      => 'nullable|string|max:50',
+            'vendor_account_holder'  => 'nullable|string|max:100',
+            'vendor_bank_name'       => 'nullable|string|max:100',
+            'vendor_bank_branch'     => 'nullable|string|max:100',
+            'vendor_bank_ifsc'       => 'nullable|string|max:20',
+
+            // Operator Account Detail
+            'operator_account_no'    => 'nullable|string|max:50',
+            'operator_account_holder' => 'nullable|string|max:100',
+            'operator_bank_name'     => 'nullable|string|max:100',
+            'operator_bank_branch'   => 'nullable|string|max:100',
+            'operator_bank_ifsc'     => 'nullable|string|max:20',
         ]);
 
         // Handle file uploads

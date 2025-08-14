@@ -97,6 +97,28 @@
                                 </p>
                             </div>
                         </div>
+                        <div class="row">
+                            {{-- Left Column: Vendor/Shop/Farm Account Detail --}}
+                            <div class="col-md-6">
+                                <h4>Vendor/Shop/Farm Account Detail</h4>
+                                <p><strong>Account No.:</strong> {{ $vendor->vendor_account_no ?? '-' }}</p>
+                                <p><strong>Account Holder Name:</strong> {{ $vendor->vendor_account_holder ?? '-' }}</p>
+                                <p><strong>Bank Name:</strong> {{ $vendor->vendor_bank_name ?? '-' }}</p>
+                                <p><strong>Bank Branch Name:</strong> {{ $vendor->vendor_bank_branch ?? '-' }}</p>
+                                <p><strong>Bank IFSC Code:</strong> {{ $vendor->vendor_bank_ifsc ?? '-' }}</p>
+                            </div>
+
+                            {{-- Right Column: Operator Account Detail --}}
+                            <div class="col-md-6">
+                                <h4>Operator Account Detail</h4>
+                                <p><strong>Account No.:</strong> {{ $vendor->operator_account_no ?? '-' }}</p>
+                                <p><strong>Account Holder Name:</strong> {{ $vendor->operator_account_holder ?? '-' }}</p>
+                                <p><strong>Bank Name:</strong> {{ $vendor->operator_bank_name ?? '-' }}</p>
+                                <p><strong>Bank Branch Name:</strong> {{ $vendor->operator_bank_branch ?? '-' }}</p>
+                                <p><strong>Bank IFSC Code:</strong> {{ $vendor->operator_bank_ifsc ?? '-' }}</p>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
