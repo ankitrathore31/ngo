@@ -713,9 +713,9 @@
                                 <li><a class="dropdown-item" href="{{ route('gbs-bill-list') }}">GBS Sanstha
                                         Bill/Voucher List</a></li>
                             @endif
-                            <li><a class="dropdown-item" href="">
+                            <li><a class="dropdown-item" href="{{route('add.vendor')}}">
                                     Add Vaindar/Shop/Farm</a></li>
-                            <li><a class="dropdown-item" href="">
+                            <li><a class="dropdown-item" href="{{route('vendor.list')}}">
                                     Vaindar/Shop/Farm List</a></li>
                         </ul>
                     </li>

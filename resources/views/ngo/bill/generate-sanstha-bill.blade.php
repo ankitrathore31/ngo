@@ -19,7 +19,7 @@
 
         <div id="sansthaBillContainer" class="card border p-3 container mt-5">
             <div class="container mt-5 mb-5">
-                <form method="GET" action="{{ route('generate-sanstha-bill') }}">
+                <form id="searchForm" method="GET" action="{{ route('add-bill') }}">
                     <div class="row">
                         <div class="col-md-12">
                             <label class="form-label">Search Person/Farm</label>
@@ -28,15 +28,14 @@
                         </div>
                     </div>
                 </form>
-
                 <!-- Show matched results if any -->
-                @if (!$searchResults->isEmpty())
+                @if (!empty($searchResults))
                     <div id="searchBox">
                         <ul class="list-group mt-2">
                             @foreach ($searchResults as $item)
                                 <li class="list-group-item" style="cursor: pointer;"
                                     onclick="fillData({{ json_encode($item) }})">
-                                    {{ isset($item->name) ? $item->name : $item->b_name }} ({{ $item->shop }})
+                                    {{ $item->name }} ({{ $item->shop }})
                                 </li>
                             @endforeach
                         </ul>
@@ -48,9 +47,8 @@
                 <form method="POST" action="{{ route('store-gbs-bill') }}">
                     @csrf
                     <div class="row">
-
                         <!-- Work Category Dropdown -->
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-6 mb-3">
                             <label class="form-label">Project / Work Category <span class="text-danger">*</span></label>
                             <select name="work_category" id="work_category" class="form-control" required>
                                 <option value="">Select Category</option>
@@ -61,13 +59,13 @@
                         </div>
 
                         <!-- Work Name Dropdown -->
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-6 mb-3">
                             <label class="form-label">Project / Work Name <span class="text-danger">*</span></label>
                             <select name="work_name" id="work_name" class="form-control" required>
                                 <option value="">Select Work Name</option>
                             </select>
                         </div>
-                        <div class="col-sm-4 mb-3">
+                        <div class="col-sm-6 mb-3">
                             <label for="bill_no">Bill/Voucher/Invoice No:</label>
                             <input type="text" id="bill_no" name="bill_no" class="form-control"
                                 value="{{ old('bill_no') }}" required>
@@ -76,7 +74,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-6 mb-3">
                             <label for="academic_session" class=" bold">Session <span class="login-danger">*</span></label>
                             <select class="form-control @error('academic_session') is-invalid @enderror"
                                 name="academic_session" id="academic_session" required>
@@ -93,7 +91,7 @@
                             @enderror
                         </div>
 
-                        <div class=" col-sm-4 mb-3">
+                        <div class=" col-sm-6 mb-3">
                             <label for="date">Date:</label>
                             <input type="date" id="date" name="date" class="form-control"
                                 value="{{ old('date') }}" required>
@@ -378,36 +376,62 @@
     </script>
     <script>
         const searchInput = document.getElementById('searchInput');
+        const searchForm = document.getElementById('searchForm');
         const searchBox = document.getElementById('searchBox');
+        const stateSelect = document.getElementById('stateSelect');
+        const districtSelect = document.getElementById('districtSelect');
 
-        // Hide result list when input is cleared
-        searchInput.addEventListener('input', function() {
-            if (this.value.trim() === '' && searchBox) {
-                searchBox.style.display = 'none';
-            } else if (searchBox) {
-                searchBox.style.display = 'block';
+        // Laravel config data for states & districts
+        const districtsByState = @json(config('districts'));
+
+        // Submit search only on Enter
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (this.value.trim() !== '') {
+                    searchForm.submit();
+                } else {
+                    if (searchBox) searchBox.style.display = 'none';
+                    window.location.reload();
+                }
             }
         });
 
-        // Fill data function
         function fillData(data) {
+            // Fill simple fields
             document.getElementById('shop').value = data.shop || '';
             document.getElementById('name').value = data.name || '';
-            document.getElementById('address').value = data.address || '';
+
+            let addressParts = [];
+            if (data.village) addressParts.push(data.village);
+            if (data.post) addressParts.push(data.post);
+            document.getElementById('address').value = addressParts.join(', ');
+
+            document.getElementById('block').value = data.block || '';
             document.getElementById('mobile').value = data.mobile || '';
             document.getElementById('email').value = data.email || '';
 
-            // Populate district, block, and state fields if available
-            document.getElementById('districtSelect').value = data.district || '';
-            document.getElementById('block').value = data.block || '';
-            document.getElementById('stateSelect').value = data.state || '';
+            // Fill state
+            stateSelect.value = data.state || '';
 
-            // Hide search results after filling data
+            // Populate district dropdown based on selected state
+            if (stateSelect.value && districtsByState[stateSelect.value]) {
+                districtSelect.innerHTML = '<option value="">Select District</option>';
+                districtsByState[stateSelect.value].forEach(function(district) {
+                    const option = document.createElement('option');
+                    option.value = district;
+                    option.textContent = district;
+                    districtSelect.appendChild(option);
+                });
+            }
+
+            // Fill district
+            districtSelect.value = data.district || '';
+
+            // Hide search box
             if (searchBox) {
                 searchBox.style.display = 'none';
             }
-
-            // Clear the input field (optional)
             searchInput.value = '';
         }
     </script>
