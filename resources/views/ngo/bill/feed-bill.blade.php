@@ -33,7 +33,7 @@
                         @foreach ($searchResults as $item)
                             <li class="list-group-item" style="cursor: pointer;"
                                 onclick="fillData({{ json_encode($item) }})">
-                                {{ $item->name}} ({{ $item->shop }})
+                                {{ $item->name }} ({{ $item->shop }})
                             </li>
                         @endforeach
                     </ul>
@@ -43,7 +43,7 @@
 
         <div class="container-fluid mt-5 mb-5">
             <div class="card-body shadow-lg p-4">
-                <form method="POST" action="{{ route('store-bill') }}">
+                <form method="POST" action="{{ route('store-bill') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <!-- Category Dropdown -->
@@ -147,7 +147,7 @@
                         <div class=" col-sm-4 mb-3">
                             <label for="mobile">Mobile:</label>
                             <input type="text" id="s_mobile" name="s_mobile" class="form-control"
-                                value="{{ old('s_mobile') }}" required>
+                                value="{{ old('s_mobile') }}" readonly required>
                             @error('s_mobile')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
@@ -198,7 +198,7 @@
 
                     </div>
 
-                    <div class="row">
+                    <div class="row mb-2">
                         <h5 class="mb-2">- BUYER DETAILS</h5>
                         <div class=" col-sm-4 mb-3">
                             <label for="b_name">Name:</label>
@@ -237,6 +237,25 @@
                         </div>
                     </div>
 
+                    <div class="row mb-2">
+                        <!-- Upload Input -->
+                        <div class="col-md-6 mb-3">
+                            <label for="fileInput" class="form-label">Upload Evidence Image/PDF</label>
+                            <input type="file" name="image" class="form-control" id="fileInput" accept="image/*,application/pdf"
+                            capture="environment">
+                            <small class="text-muted">Supports image, PDF, or mobile camera capture.</small>
+                            @error('image')
+                                <span class="text-danger">{{$message}}</span>
+                            @enderror
+                        </div>
+
+                        <!-- Preview -->
+                        <div class="col-md-6">
+                            <div id="preview" class="border p-2 text-center">
+                                <p class="text-muted">No file selected</p>
+                            </div>
+                        </div>
+                    </div>
 
                     <table class="table table-bordered" id="items-table">
                         <thead>
@@ -448,7 +467,6 @@
             searchInput.value = '';
         }
     </script>
-
     <script>
         const allProjects = @json($allProjects);
 
@@ -471,4 +489,32 @@
             });
         });
     </script>
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const previewContainer = document.getElementById('preview');
+            previewContainer.innerHTML = '';
+
+            if (!file) {
+                previewContainer.innerHTML = '<p class="text-muted">No file selected</p>';
+                return;
+            }
+
+            if (file.type.startsWith('image/')) {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.className = 'img-fluid';
+                previewContainer.appendChild(img);
+            } else if (file.type === 'application/pdf') {
+                const iframe = document.createElement('iframe');
+                iframe.src = URL.createObjectURL(file);
+                iframe.width = '100%';
+                iframe.height = '500px';
+                previewContainer.appendChild(iframe);
+            } else {
+                previewContainer.innerHTML = '<p class="text-danger">Unsupported file type.</p>';
+            }
+        });
+    </script>
+
 @endsection

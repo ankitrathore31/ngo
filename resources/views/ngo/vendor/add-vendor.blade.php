@@ -183,8 +183,8 @@
 
                         <div class="col-md-6 mb-2">
                             <label for="">Shop Gst Upload</label>
-                            <input type="file" name="shop_gst" id=""
-                                class="form-control @error('shop_gst') is in-valid @enderror">
+                            <input type="file" name="shop_gst" id=""accept="image/*,application/pdf"
+                                capture="environment" class="form-control @error('shop_gst') is in-valid @enderror">
                             @error('shop_gst')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -192,8 +192,8 @@
 
                         <div class="col-md-6 mb-2">
                             <label for="">Operator Gst Upload</label>
-                            <input type="file" name="operator_gst" id=""
-                                class="form-control @error('operator_gst') is in-valid @enderror">
+                            <input type="file" name="operator_gst" id=""accept="image/*,application/pdf"
+                                capture="environment" class="form-control @error('operator_gst') is in-valid @enderror">
                             @error('operator_gst')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -212,16 +212,16 @@
 
                         <div class="col-md-6 mb-2">
                             <label for="">Shop Pan Card Upload</label>
-                            <input type="file" name="shop_pan" id=""
-                                class="form-control @error('shop_pan') is in-valid @enderror">
+                            <input type="file" name="shop_pan" id="" accept="image/*,application/pdf"
+                                capture="environment" class="form-control @error('shop_pan') is in-valid @enderror">
                             @error('shop_pan')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
                         <div class="col-md-6 mb-2">
                             <label for="">Operator Pan Card Upload</label>
-                            <input type="file" name="operator_pan" id=""
-                                class="form-control @error('operator_pan') is in-valid @enderror">
+                            <input type="file" name="operator_pan" id=""accept="image/*,application/pdf"
+                                capture="environment" class="form-control @error('operator_pan') is in-valid @enderror">
                             @error('operator_pan')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror

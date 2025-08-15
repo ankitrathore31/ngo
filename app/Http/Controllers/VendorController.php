@@ -63,12 +63,12 @@ class VendorController extends Controller
             'email'                  => 'required|email|max:255',
             'shop_gst_no'            => 'nullable|string|max:50',
             'operator_gst_no'        => 'nullable|string|max:50',
-            'shop_gst'               => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
-            'operator_gst'           => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'shop_gst'               => 'nullable|mimes:jpg,jpeg,png,pdf|mimetypes:application/pdf,image/jpeg,image/png|max:5120',
+            'operator_gst'           => 'nullable|mimes:jpg,jpeg,png,pdf|mimetypes:application/pdf,image/jpeg,image/png|max:5120',
             'vendor_pan_no'          => 'nullable|string|max:50',
             'operator_pan_no'        => 'nullable|string|max:50',
-            'shop_pan'               => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
-            'operator_pan'           => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'shop_pan'               => 'nullable|mimes:jpg,jpeg,png,pdf|mimetypes:application/pdf,image/jpeg,image/png|max:5120',
+            'operator_pan'           => 'nullable|mimes:jpg,jpeg,png,pdf|mimetypes:application/pdf,image/jpeg,image/png|max:5120',
 
             // Vendor/Shop/Farm Account Detail
             'vendor_account_no'      => 'nullable|string|max:50',
@@ -91,29 +91,29 @@ class VendorController extends Controller
         if ($request->hasFile('shop_gst')) {
             $file = $request->file('shop_gst');
             $filename = time() . '_shop_gst.' . $file->getClientOriginalExtension();
-            $file->move(public_path('images/gst'), $filename);
-            $validated['shop_gst_file'] = 'images/gst/' . $filename;
+            $file->move(public_path('images'), $filename);
+            $validated['shop_gst_file'] = 'images/' . $filename;
         }
 
         if ($request->hasFile('operator_gst')) {
             $file = $request->file('operator_gst');
             $filename = time() . '_operator_gst.' . $file->getClientOriginalExtension();
-            $file->move(public_path('images/gst'), $filename);
-            $validated['operator_gst_file'] = 'images/gst/' . $filename;
+            $file->move(public_path('images'), $filename);
+            $validated['operator_gst_file'] = 'images/' . $filename;
         }
 
         if ($request->hasFile('shop_pan')) {
             $file = $request->file('shop_pan');
             $filename = time() . '_shop_pan.' . $file->getClientOriginalExtension();
-            $file->move(public_path('images/pan'), $filename);
-            $validated['shop_pan_file'] = 'images/pan/' . $filename;
+            $file->move(public_path('images'), $filename);
+            $validated['shop_pan_file'] = 'images/' . $filename;
         }
 
         if ($request->hasFile('operator_pan')) {
             $file = $request->file('operator_pan');
             $filename = time() . '_operator_pan.' . $file->getClientOriginalExtension();
-            $file->move(public_path('images/pan'), $filename);
-            $validated['operator_pan_file'] = 'images/pan/' . $filename;
+            $file->move(public_path('images'), $filename);
+            $validated['operator_pan_file'] = 'images/' . $filename;
         }
 
         $vendor = Vendor::create($validated);

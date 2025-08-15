@@ -237,7 +237,8 @@ class HomeControlller extends Controller
 
     public function rewardpage()
     {
-        return view('home.pages.reward');
+        $images = Gallery::where('gallery_type', 'Reward')->get();
+        return view('home.gallery.reward',compact('images'));
     }
 
     public function donatepage()

@@ -15,6 +15,7 @@ class Bill_Voucher extends Model
         'academic_session',
         'work_category',
         'work_name',
+        'image',
 
         // Seller details
         'shop',

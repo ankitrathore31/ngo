@@ -53,6 +53,7 @@
                             <option value="" selected>Select Type</option>
                             <option value="Gallery">For Gallery</option>
                             <option value="News">For News Paper</option>
+                            <option value="Reward">For Achieve & Reward</option>
                         </select>
                         @error('gallery_type')
                             <span class="text-danger">{{ $message }}</span>
