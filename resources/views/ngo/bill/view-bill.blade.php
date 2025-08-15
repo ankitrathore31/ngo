@@ -105,7 +105,13 @@
                     <span>Bill</span>
                 </h5>
                 <div>
-                    <button onclick="window.print()" class="btn btn-primary">Print Bill</button>
+                    <div class="mb-3 mt-2 form-check">
+                        <input class="form-check-input" type="checkbox" value="1" id="show" name="print_image">
+                        <label class="form-check-label">
+                            <b>Show Evidence</b>
+                        </label>
+                    </div>
+                    <button class="btn btn-primary" onclick="window.print()">Print Bill</button>
                     <button class="btn btn-sm btn-outline-primary" onclick="setLanguage('en')">English</button>
                     <button class="btn btn-sm btn-outline-success" onclick="setLanguage('hi')">हिंदी</button>
                 </div>
@@ -313,30 +319,27 @@
                                 </dl>
                             </div>
                             <div class="col-sm-5 text-center">
-                                {{-- @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
-                                    <div id="directorSignatureBox" class="mt-2">
-                                        <p class="text-success no-print">Attached</p>
-                                        <img src="{{ asset($signatures['director']) }}" alt="Director Signature"
-                                            class="img" style="max-height: 100px;">
-                                        <br>
-                                        <button class="btn btn-danger btn-sm mt-2 no-print"
-                                            onclick="toggleDirector(false)">Remove</button>
-                                    </div>
-
-                                    <div id="directorShowBtnBox" class="mt-2 d-none no-print">
-                                        <button class="btn btn-primary btn-sm" onclick="toggleDirector(true)">Attached
-                                            Signature</button>
-                                    </div>
-                                @else
-                                    <p class="text-muted mt-2 no-print">Not attached</p>
-                                @endif --}}
                                 {{ $bill->name }}<br>
                                 <strong>Signature
                                 </strong>
                             </div>
                         </div>
                     </div>
-
+                    <div class="container border border-dark" style="display: none;" id="evidenceContainer">
+                        <div class="row">
+                            {{-- <div class="col-6"> --}}
+                            <h5 class="mb-3 mt-2 text-center"><b> - Evidence Image</b></h5>
+                            {{-- </div>
+                            <div class="col-6">
+                                
+                            </div> --}}
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <img src="{{ asset($bill->image) }}" class="img-fluid" width="100%" alt="">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -360,4 +363,10 @@
             document.getElementById('directorShowBtnBox').classList.toggle('d-none', show);
         }
     </script>
+    <script>
+document.getElementById('show').addEventListener('change', function() {
+    document.getElementById('evidenceContainer').style.display = 
+        this.checked ? 'block' : 'none';
+});
+</script>
 @endsection

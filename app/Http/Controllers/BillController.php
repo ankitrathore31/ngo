@@ -35,40 +35,58 @@ class BillController extends Controller
 
     public function StoreBill(Request $request)
     {
-        $voucher = Bill_Voucher::create([
-            'bill_no'            => $request->bill_no,
-            'date'               => $request->date,
-            'academic_session'   => $request->academic_session,
-            'work_category'      => $request->work_category,
-            'work_name'          => $request->work_name,
-            // Seller details
-            'shop'               => $request->shop,
-            'role'               => $request->role,
-            'name'             => $request->s_name,
-            'address'          => $request->s_address,
-            'mobile'           => $request->s_mobile,
-            'email'            => $request->s_email,
-            'gst'                => $request->gst,
-            's_pan'              => $request->s_pan,
-            // Buyer details
-            'b_name'             => $request->b_name,
-            'b_mobile'           => $request->b_mobile,
-            'b_email'            => $request->b_email,
-            'b_address'          => $request->b_address,
-            'cgst' => $request->cgst,
-            'sgst' => $request->sgst,
-            'igst' => $request->igst,
+        $request->validate([
+            'bill_no'  => 'required|string|max:255',
+            'date'     => 'required|date',
+            'academic_session' => 'required|string|max:255',
+            'work_category'    => 'required|string|max:255',
+            'work_name'        => 'required|string|max:255',
+            'image'            => 'nullable|mimes:jpg,jpeg,png,gif,pdf|max:20480',
         ]);
-        foreach ($request->items as $item) {
-            Voucher_Item::create([
-                'bill_voucher_id' => $voucher->id,
-                'product' => $item['product'] ?? null,
-                'qty' => $item['qty'] ?? null,
-                'rate' => $item['rate'] ?? null,
-            ]);
+
+        $voucher = new Bill_Voucher();
+        $voucher->bill_no = $request->bill_no;
+        $voucher->date = $request->date;
+        $voucher->academic_session = $request->academic_session;
+        $voucher->work_category = $request->work_category;
+        $voucher->work_name = $request->work_name;
+        $voucher->shop = $request->shop;
+        $voucher->role = $request->role;
+        $voucher->name = $request->s_name;
+        $voucher->address = $request->s_address;
+        $voucher->mobile = $request->s_mobile;
+        $voucher->email = $request->s_email;
+        $voucher->gst = $request->gst;
+        $voucher->s_pan = $request->s_pan;
+        $voucher->b_name = $request->b_name;
+        $voucher->b_mobile = $request->b_mobile;
+        $voucher->b_email = $request->b_email;
+        $voucher->b_address = $request->b_address;
+        $voucher->cgst = $request->cgst;
+        $voucher->sgst = $request->sgst;
+        $voucher->igst = $request->igst;
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('images'), $filename);
+            $voucher->image = 'images/' . $filename;
         }
 
-        return redirect()->back()->with('success', 'Voucher saved successfully!');
+        $voucher->save();
+
+        if ($request->items) {
+            foreach ($request->items as $item) {
+                Voucher_Item::create([
+                    'bill_voucher_id' => $voucher->id,
+                    'product' => $item['product'] ?? null,
+                    'qty'     => $item['qty'] ?? null,
+                    'rate'    => $item['rate'] ?? null,
+                ]);
+            }
+        }
+
+        return back()->with('success', 'Voucher saved successfully!');
     }
 
     public function BillList(Request $request)
