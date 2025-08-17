@@ -297,7 +297,7 @@
                                             <span data-lang="en">Completed the course/Activity in</span>
                                         </strong>
                                         <div class="flex-grow-1 border-bottom border-dark text-break">
-                                            &nbsp;{{ $record->training_course }}
+                                            &nbsp;{{ \App\Models\Course::find($record->training_course)->course ?? '' }}
                                         </div>
                                     </div>
                                 </div>
