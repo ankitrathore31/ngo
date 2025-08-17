@@ -309,7 +309,6 @@ class RegistrationController extends Controller
         return view('ngo.registration.pending-reg-list', compact('data', 'combined', 'states'));
     }
 
-
     public function approveRegistration(Request $request)
     {
         $queryBene = beneficiarie::where('status', 1);
