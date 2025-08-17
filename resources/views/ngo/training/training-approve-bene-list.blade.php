@@ -93,7 +93,7 @@
                                         {{ \Carbon\Carbon::parse($item->end_date)->format('d-m-Y') }}
                                     </td>
                                     <td>{{ $item->duration }}</td>
-                                    <td>{{ $item->beneficiare->academic_session ?? 'N/A' }}</td>
+                                    <td>{{ $item->academic_session ?? 'N/A' }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
                                             <a href="{{ route('show-approve-bene-training', ['id' => $item->id, 'center_code' => $item->center_code]) }}"

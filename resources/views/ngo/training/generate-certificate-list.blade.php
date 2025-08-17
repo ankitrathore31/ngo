@@ -102,7 +102,7 @@
                                     <td>{{ \Carbon\Carbon::parse($item->start_date)->format('d-m-Y')}} To {{ \Carbon\Carbon::parse($item->end_date)->format('d-m-Y')}}
                                     </td> 
                                     <td>{{$item->duration}}</td>
-                                    <td>{{ $item->beneficiare->academic_session ?? 'N/A' }}</td>
+                                    <td>{{ $item->academic_session ?? 'N/A' }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
                                             <a href="{{ route('genrate-training-certificate',['id' => $item->id, 'center_code' => $item->center_code]) }}" class="btn btn-success btn-sm px-3"

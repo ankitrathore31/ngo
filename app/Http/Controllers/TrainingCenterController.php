@@ -167,8 +167,7 @@ class TrainingCenterController extends Controller
     public function AddBeneForCenter(Request $request)
     {
 
-        $session = academic_session::all();
-
+        $allSessions = academic_session::all();
         $queryBene = beneficiarie::where('status', 1);
 
         if ($request->filled('session_filter')) {
@@ -188,12 +187,13 @@ class TrainingCenterController extends Controller
         $category = Category::orderBy('category', 'asc')->get();
         $course = Course::orderBy('course', 'asc')->get();
 
-        return view('ngo.training.taining-demand-bene', compact('session', 'record', 'centers', 'category', 'course'));
+        return view('ngo.training.taining-demand-bene', compact('allSessions', 'record', 'centers', 'category', 'course'));
     }
 
     public function storeTrainingDemand(Request $request)
     {
         $validated = $request->validate([
+            'session'    => 'required',
             'center_code' => 'required|string|max:255',
             'facilities_category' => 'required|string',
             'training_course' => 'nullable|string|max:255',
@@ -205,11 +205,13 @@ class TrainingCenterController extends Controller
         $training = new Training_Beneficiarie();
         $training->beneficiarie_id = $request->beneficiarie_id;
         $training->center_code = $request->center_code;
+        $training->academic_session = $request->session;
         $training->facilities_category = $request->facilities_category;
         $training->training_course = $request->training_course;
         $training->start_date = $request->start_date;
         $training->end_date = $request->end_date;
         $training->duration = $request->duration;
+        $training->status = 1;
         $training->save();
 
         return redirect()->back()->with('success', 'Training demand saved successfully!');
@@ -255,7 +257,8 @@ class TrainingCenterController extends Controller
     {
         $session = academic_session::all();
 
-        $queryBene = Training_Beneficiarie::with(['center', 'beneficiare']);
+        $queryBene = Training_Beneficiarie::with(['center', 'beneficiare'])
+            ->where('certi_status', 0);
 
         if ($request->filled('session_filter')) {
             $queryBene->where('academic_session', $request->session_filter);
@@ -280,65 +283,80 @@ class TrainingCenterController extends Controller
 
     public function GenrateTrainingCertificate($id, $center_code)
     {
-
         $session = academic_session::all();
         $record = Training_Beneficiarie::with(['center', 'beneficiare'])->find($id);
         $center = Training_Center::where('center_code', $center_code)->first();
-        $lastCertificate = Training_Beneficiarie::orderBy('id', 'desc')->value('certificate_no');
 
         $prefix = '219TC';
         $startNumber = 355;
 
+        /** -------------------------
+         * GLOBAL LATEST CERTIFICATE NO
+         * ------------------------- */
+        $lastCertificate = Training_Beneficiarie::max('certificate_no');
         if ($lastCertificate) {
-            $lastNumber = (int)substr($lastCertificate, strlen($prefix));
+            $lastNumber = (int) substr($lastCertificate, strlen($prefix));
             $nextNumber = $lastNumber + 1;
         } else {
             $nextNumber = $startNumber;
         }
         $nextCertificateNo = $prefix . str_pad($nextNumber, 7, '0', STR_PAD_LEFT);
-        $lastBeneficiary = Training_Beneficiarie::orderBy('id', 'desc')->first();
 
-        if ($lastBeneficiary) {
-            $lastRoll = (int) $lastBeneficiary->roll_no;
-            $nextRoll = str_pad($lastRoll + 1, 3, '0', STR_PAD_LEFT);
-        } else {
-            $nextRoll = '001';
-        }
+        /** -------------------------
+         * CENTER-WISE LATEST ROLL NO
+         * ------------------------- */
+        $lastRoll = Training_Beneficiarie::whereHas('center', function ($q) use ($center_code) {
+            $q->where('center_code', $center_code);
+        })
+            ->max('roll_no');
+
+        $nextRoll = str_pad(($lastRoll ? $lastRoll + 1 : 1), 3, '0', STR_PAD_LEFT);
+
         return view('ngo.training.genrate-training-certificate', compact('session', 'record', 'center', 'nextCertificateNo', 'nextRoll'));
     }
+
 
     public function SaveGenrateTrainingCertificate(Request $request)
     {
         $validated = $request->validate([
             'roll_no'       => 'required|numeric',
-            'certificate_no'  => 'nullable|string',
+            'certificate_no' => 'nullable|string',
             'grade'         => 'nullable|string|max:100',
             'talent'        => 'nullable|string|max:255',
             'issue_date'    => 'required|date',
+            // 'center_code'   => 'required|string',
         ]);
 
-        $lastCertificate = Training_Beneficiarie::orderBy('id', 'desc')->value('certificate_no');
         $prefix = '219TC';
         $startNumber = 355;
+
+        /** ------------------------------
+         * GLOBAL CERTIFICATE NUMBER
+         * ------------------------------ */
+        $lastCertificate = Training_Beneficiarie::max('certificate_no');
+
         if ($lastCertificate) {
-            $lastNumber = (int)substr($lastCertificate, strlen($prefix));
+            $lastNumber = (int) substr($lastCertificate, strlen($prefix));
             $nextNumber = $lastNumber + 1;
         } else {
             $nextNumber = $startNumber;
         }
+
         $nextCertificateNo = $prefix . str_pad($nextNumber, 7, '0', STR_PAD_LEFT);
 
-        $lastBeneficiary = Training_Beneficiarie::orderBy('id', 'desc')->first();
+        /** ------------------------------
+         * CENTER-WISE ROLL NUMBER
+         * ------------------------------ */
+        $lastRoll = Training_Beneficiarie::whereHas('center', function ($q) use ($request) {
+            $q->where('center_code', $request->center_code);
+        })
+            ->max('roll_no');
 
-        if ($lastBeneficiary) {
-            // Increment last roll number
-            $lastRoll = (int) $lastBeneficiary->roll_no;
-            $newRoll = str_pad($lastRoll + 1, 3, '0', STR_PAD_LEFT);
-        } else {
-            // Start from 001 if no records
-            $newRoll = '001';
-        }
+        $newRoll = str_pad(($lastRoll ? $lastRoll + 1 : 1), 3, '0', STR_PAD_LEFT);
 
+        /** ------------------------------
+         * SAVE CERTIFICATE
+         * ------------------------------ */
         $certificate = Training_Beneficiarie::where('beneficiarie_id', $request->beneficiarie_id)
             ->where('id', $request->id)
             ->first();
@@ -354,19 +372,23 @@ class TrainingCenterController extends Controller
         $certificate->grade = $request->grade;
         $certificate->talent = $request->talent;
         $certificate->issue_date = $request->issue_date;
+        $certificate->certi_status = 1;
 
         $certificate->save();
+
         return redirect()->back()->with([
             'success' => 'Training Certificate saved successfully.',
             'next_certificate' => $nextCertificateNo
         ]);
     }
 
+
     public function TrainingCerti(Request $request)
     {
         $session = academic_session::all();
 
-        $queryBene = Training_Beneficiarie::with(['center', 'beneficiare']);
+        $queryBene = Training_Beneficiarie::with(['center', 'beneficiare'])
+            ->where('certi_status', 1);
 
         if ($request->filled('session_filter')) {
             $queryBene->where('academic_session', $request->session_filter);
@@ -482,5 +504,4 @@ class TrainingCenterController extends Controller
 
         return view('ngo.training.progress-list', compact('session', 'record', 'center'));
     }
-    
 }

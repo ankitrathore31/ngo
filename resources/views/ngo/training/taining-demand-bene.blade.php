@@ -21,10 +21,9 @@
             <div class="row">
                 <form method="GET" action="{{ route('taining-demand-bene') }}" class="row g-3 mb-4">
                     <div class="col-md-3 col-sm-4">
-                        <select name="session_filter" id="session_filter" class="form-control"
-                            onchange="this.form.submit()">
+                        <select name="session_filter" id="session_filter" class="form-control">
                             <option value="">All Sessions</option>
-                            @foreach ($session as $session)
+                            @foreach ($allSessions as $session)
                                 <option value="{{ $session->session_date }}"
                                     {{ request('session_filter') == $session->session_date ? 'selected' : '' }}>
                                     {{ $session->session_date }}
@@ -161,6 +160,23 @@
                                     <label class="form-label">Center Address</label>
                                     <input type="text" class="form-control" name="center_address" id="center_address"
                                         readonly>
+                                </div>
+
+                                <div class="mb-3 form-group">
+                                    <label for="session" class="form-label">Training Beneficiarie Session <span
+                                            class="text-danger">*</span></label>
+                                    <select name="session" class="form-control" id="session">
+                                        <option value="">Select Session</option>
+                                        @foreach ($allSessions as $s)
+                                            <option value="{{ $s->session_date }}"
+                                                {{ old('session') == $s->session_date ? 'selected' : '' }}>
+                                                {{ $s->session_date }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('session')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
 
                                 <div class="mb-3">

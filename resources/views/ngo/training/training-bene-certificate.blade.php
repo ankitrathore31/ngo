@@ -45,7 +45,7 @@
                 left: 0;
                 top: 0;
                 width: 100%;
-                max-width: 210mm;
+                max-width: 410mm;
                 /* A4 width */
                 padding: 15mm;
                 /* Print-friendly padding */
@@ -54,7 +54,7 @@
 
             html,
             body {
-                width: 210mm;
+                width: 410mm;
                 height: 297mm;
                 margin: 0;
                 padding: 0;
@@ -131,9 +131,9 @@
                 </div>
             </div>
             <div class="card shadow rounded print-card">
-                <div class="" style="border: 7px solid #FF9933;">
-                    <div style="border: 7px solid white;">
-                        <div class="p-2" style="border: 7px solid #138808;">
+                <div class="" style="border: 9px solid red;">
+                    <div style="border: 8px solid white;">
+                        <div class="p-2" style="border: 9px solid #138808;">
                             <div class="text-center mb-4 border-bottom pb-2">
                                 <div class="row">
                                     <div class="col-sm-2 text-center text-md-start">
@@ -146,9 +146,9 @@
                                                 &nbsp; &nbsp;<span>NGO NO. UP/00033062</span>&nbsp; &nbsp;
                                                 &nbsp; &nbsp;<span>PAN: AAEAG7650B</span>&nbsp;
                                             </b></p>
-                                        <h4 class="print-h4 p-1"><b>
-                                                <span data-lang="hi">ज्ञान भारती संस्था</span>
-                                                <span data-lang="en">GYAN BHARTI SANSTHA</span>
+                                        <h4 class=" p-1"><b>
+                                                <span class="print-h4 p-1" data-lang="hi">ज्ञान भारती संस्था</span>
+                                                <span class="print-h4 p-1" data-lang="en">GYAN BHARTI SANSTHA</span>
                                             </b></h4>
                                         <h6 style="color: blue;"><b>
                                                 <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत,
@@ -297,7 +297,7 @@
                                             <span data-lang="en">Completed the course/Activity in</span>
                                         </strong>
                                         <div class="flex-grow-1 border-bottom border-dark text-break">
-                                            &nbsp;{{ $record->training_course }}
+                                            &nbsp;{{ \App\Models\Course::find($record->training_course)->course ?? '' }}
                                         </div>
                                     </div>
                                 </div>
@@ -410,14 +410,14 @@
                                 </div>
                             </div>
 
-                            <div class="row d-flex justify-content-between mt-5">
-                                <div class="col-sm-4 text-center">
+                            <div class="row d-flex justify-content-around mt-5">
+                                <div class="col-sm-6 text-center">
                                     @if (!empty($signatures['program_manager']) && file_exists(public_path($signatures['program_manager'])))
                                         <div id="pmSignatureBox" class="mt-2">
                                             <p class="text-success no-print">Attached</p>
                                             <!-- This line is hidden in print -->
                                             <img src="{{ asset($signatures['program_manager']) }}" alt="PM Signature"
-                                                class="img" style="max-height: 100px;"> <!-- This will print -->
+                                                class="img" style="max-height: 80px;"> <!-- This will print -->
                                             <br>
                                             <button class="btn btn-danger btn-sm mt-2 no-print"
                                                 onclick="togglePM(false)">Remove</button>
@@ -431,12 +431,12 @@
                                     </strong><br>
                                 </div>
 
-                                <div class="col-sm-4 text-center">
+                                <div class="col-sm-6 text-center">
                                     @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
                                         <div id="directorSignatureBox" class="mt-2">
                                             <p class="text-success no-print">Attached</p>
                                             <img src="{{ asset($signatures['director']) }}" alt="Director Signature"
-                                                class="img" style="max-height: 100px;">
+                                                class="img" style="max-height: 80px;">
                                             <br>
                                             <button class="btn btn-danger btn-sm mt-2 no-print"
                                                 onclick="toggleDirector(false)">Remove</button>
