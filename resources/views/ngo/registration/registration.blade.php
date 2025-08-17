@@ -153,7 +153,7 @@
                                 <!-- Identity File Upload -->
                                 <div class="col-md-4 mb-3">
                                     <label for="id_document" class="form-label">ID Document Upload <small>(Upload Pdf Document)</small></label>
-                                    <input type="file" class="form-control" name="id_document" id="id_document" accept="image/*" capture="camera">
+                                    <input type="file" class="form-control" name="id_document" id="id_document" accept="image/*">
                                     <small id="id_document_hint" class="form-text text-muted"></small>
                                 </div>
                             </div>
@@ -260,7 +260,7 @@
                                             <span id="placeholderText">Upload Photo</span>
                                         </div>
                                         <label for="uploadInput" class="upload-btn">Choose File</label>
-                                        <input type="file" id="uploadInput" name="image" accept="image/*" capture="camera">
+                                        <input type="file" id="uploadInput" name="image" accept="image/*">
                                     </div>
                                 </div>
                             </div>

@@ -109,10 +109,10 @@
                                         </div>
 
                                         <div class="col-md-6 col-sm-6  form-group mb-3">
-                                            <label for="program_session" class="form-label bold">Program Session <span
+                                            <label for="academic_session" class="form-label bold">Program Session <span
                                                     class="login-danger">*</span></label>
-                                            <select class="form-control @error('program_session') is-invalid @enderror"
-                                                name="program_session" required>
+                                            <select class="form-control @error('academic_session') is-invalid @enderror"
+                                                name="academic_session" required>
                                                 <option value="">Select Session</option>
                                                 @foreach ($data as $session)
                                                     <option value="{{ $session->session_date }}"
