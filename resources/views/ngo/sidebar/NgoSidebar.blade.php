@@ -324,7 +324,6 @@
                         </ul>
                     </li>
                 @endif
-
                 <!-- Donation -->
                 @if (
                     !$isStaff ||
