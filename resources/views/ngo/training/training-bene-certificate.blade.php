@@ -45,7 +45,7 @@
                 left: 0;
                 top: 0;
                 width: 100%;
-                max-width: 410mm;
+                max-width: 510mm;
                 /* A4 width */
                 padding: 15mm;
                 /* Print-friendly padding */
@@ -54,8 +54,8 @@
 
             html,
             body {
-                width: 410mm;
-                height: 297mm;
+                width: 510mm;
+                height: auto;
                 margin: 0;
                 padding: 0;
                 overflow: hidden;
@@ -312,7 +312,7 @@
                                         </strong>
                                         <div class="flex-grow-1 border-bottom border-dark text-break">
                                             &nbsp;{{ $center->center_code }}, {{ $center->center_name }},
-                                            {{ $center->center_address }}
+                                            {{ $center->center_address }},{{ $center->post }},{{ $center->block }},{{ $center->district }},{{ $center->state }}
                                         </div>
                                     </div>
                                 </div>

@@ -90,7 +90,7 @@
                 </li>
 
                 <!-- Inbox -->
-                    <li class="nav-item dropdown">
+                <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
                             <i class="fas fa-tasks"></i> Staff Work
                         </a>
@@ -102,7 +102,7 @@
                                 <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Complete Work Send List</a>
                                 </li>
                         </ul>
-                    </li>
+                </li>
 
                 <!-- ACTIVITY -->
                 @if (!$isStaff || ($user->hasPermission('add-activity') || $user->hasPermission('activity-list')))
@@ -196,10 +196,12 @@
                                 <li><a class="dropdown-item" href="{{ route('list.course') }}">Course List</a></li>
                             @endif
                             <li><a class="dropdown-item" href="{{ route('email.list') }}">Emails</a></li>
+                            <li><a class="dropdown-item" href="{{ route('list.job') }}">Jobs</a></li>
                         </ul>
                     </li>
                 @endif
 
+                <!-- Registration -->
                 @if (
                     !$isStaff ||
                         $user->hasPermission('new-registration') ||
@@ -285,6 +287,7 @@
                     </li>
                 @endif
 
+                <!-- Group -->
                 @if (
                     !$isStaff ||
                         $user->hasPermission('add-group') ||
@@ -364,6 +367,7 @@
                     </li>
                 @endif
 
+                <!-- Staff -->
                 @if (
                     !$isStaff ||
                         $user->hasPermission('add-staff') ||
@@ -405,6 +409,7 @@
                             @if (!$isStaff || $user->hasPermission('staff-activity'))
                                 <li><a class="dropdown-item" href="#">Staff Activity</a></li>
                             @endif
+                            <li><a class="dropdown-item" href="{{route('position.list')}}">Manage Staff Position</a></li>
                         </ul>
                     </li>
                 @endif

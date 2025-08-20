@@ -2,8 +2,8 @@
 @section('content')
     <style>
         /* ::placeholder {
-                                                                    font-size: 8px;
-                                                                } */
+                                                                        font-size: 8px;
+                                                                    } */
 
         .upload-container {
             text-align: center;
@@ -128,10 +128,11 @@
                                 <select name="position" id="position"
                                     class="form-control @error('position') is-invalid @enderror" required>
                                     <option value="">Select Position</option>
-                                    @foreach (['Director', 'Consultant/Adviser', 'NGO Manager', 'Finance Manager', 'Project Coordinator', 'Master Trainer', 'Trainer', 'Program Officer', 'Project Manager', 'Area Manager', 'Human Resource Management', 'Supervisor', 'Coordinator', 'Computer Operator', 'Head Clerk', 'Assistant Clerk', 'Surveyor', 'Peon', 'Guard', 'Driver', 'Gardener', 'सुबिधा दाता', 'कृषि सखी', 'समूह सखी', 'विकास सखी', 'पशु सखी', 'सवास्थ्य सखी', 'सहयोगी सखी', 'Animator', 'Volunteer'] as $role)
-                                        <option value="{{ $role }}"
-                                            {{ old('position', $staff->position) == $role ? 'selected' : '' }}>
-                                            {{ $role }}</option>
+                                    @foreach ($positions as $role)
+                                        <option value="{{ $role->position }}"
+                                            {{ old('position', $staff->position) == $role->position ? 'selected' : '' }}>
+                                            {{ $role->position }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 @error('position')
@@ -697,7 +698,8 @@
                             <optgroup label="Group">
                                 <option value="add-group"data-label="Add Group">Add Group</option>
                                 <option value="group-list"data-label="Group List">Group List</option>
-                                <option value="group-member-list" data-label="Group Member List">Group Member List</option>
+                                <option value="group-member-list" data-label="Group Member List">Group Member List
+                                </option>
                             </optgroup>
 
                             <optgroup label="Promote">
@@ -832,7 +834,8 @@
 
                             <div class="input-group">
                                 <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                    id="password" name="password" value="{{$staff->password}}" placeholder="Enter Password">
+                                    id="password" name="password" value="{{ $staff->password }}"
+                                    placeholder="Enter Password">
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
                                         <i class="fa fa-eye" id="eyeIcon"></i> <!-- Eye Icon -->

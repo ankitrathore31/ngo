@@ -15,6 +15,7 @@ use App\Models\Notice;
 use App\Models\Working_Area;
 use App\Models\Event;
 use App\Models\HeadOrganization;
+use App\Models\Job;
 use App\Models\Organization;
 use App\Models\OrganizationMember;
 use App\Models\Project;
@@ -458,5 +459,11 @@ class HomeControlller extends Controller
         $center = $query->orderBy('id', 'asc')->get(); // with pagination
 
         return view('home.center.center-list', compact('center', 'data'));
+    }
+
+      public function HomeJobList()
+    {
+        $jobs = Job::with('position')->latest()->get();
+        return view('home.job.job-list', compact('jobs'));
     }
 }
