@@ -17,6 +17,7 @@ use App\Http\Controllers\NgoController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\IdcardController;
+use App\Http\Controllers\JobController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\OrganizationController;
@@ -48,7 +49,6 @@ use Illuminate\Support\Facades\DB;
 */
 
 // *=========================== Home Controllers ======================================= *//
-
 
 
 Route::get('/', [HomeControlller::class, 'index']);
@@ -87,6 +87,7 @@ Route::controller(HomeControlller::class)->group(function () {
     Route::get('/organization-groups-member/{id}', 'OrgMemberListByOrganization')->name('show.group.member');
     Route::get('/demand', 'demand')->name('demand');
     Route::get('/center', 'Center')->name('home.center.list');
+    Route::get('/vacancies','HomeJobList')->name('vacancies');
 });
 
 Route::controller(CertificateController::class)->group(function () {
@@ -254,6 +255,10 @@ Route::controller(NoticeController::class)->group(function () {
 });
 
 Route::controller(StaffController::class)->group(function () {
+    Route::get('ngo/add-position', 'addPosition')->middleware('auth')->name('add.position');
+    Route::post('ngo/store-sposition', 'StorePosition')->middleware('auth')->name('store.position');
+    Route::get('ngo/delete-position/{id}', 'DeletePosition')->middleware('auth')->name('delete.position');
+    Route::get('ngo/position-list','PositionList')->middleware('auth')->name('position.list');
     Route::get('ngo/add-staff', 'addstaff')->middleware('auth')->name('add-staff');
     Route::post('ngo/store-staff', 'StoreStaff')->middleware('auth')->name('store.staff');
     Route::get('ngo/edit-staff/{id}', 'EditStaff')->middleware('auth')->name('edit-staff');
@@ -467,6 +472,15 @@ Route::controller(CourseController::class)->middleware('auth')->group(function (
     Route::get('ngo/add-course', 'AddCourse')->name('add.course');
     Route::post('ngo/store-course', 'StoreCourse')->name('store.course');
     Route::get('ngo/delete-course/{id}', 'DeleteCourse')->name('delete.course');
+});
+
+Route::controller(JobController::class)->middleware('auth')->group(function () {
+    Route::get('ngo/job-list', 'JobList')->name('list.job');
+    Route::get('ngo/add-job', 'AddJob')->name('add.job');
+    Route::post('ngo/store-job', 'StoreJob')->name('store.job');
+    Route::get('ngo/edit-job/{id}', 'EditJob')->name('edit.job');
+    Route::post('ngo/update-job/{id}', 'UpdateJob')->name('update.job');
+    Route::get('ngo/delete-job/{id}', 'DeleteJob')->name('delete.job');
 });
 
 require __DIR__ . '/auth.php';

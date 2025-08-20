@@ -68,6 +68,7 @@ class NgoController extends Controller
             'end_date' => 'required|date',
             'start_date' => 'required|date',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'password' => 'required|string|min:6|confirmed',
         ], [
             'email.unique' => 'This email is already registered with another account.',
             'phone_number.unique' => 'This number is already registered with another account.',

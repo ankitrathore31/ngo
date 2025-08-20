@@ -286,6 +286,12 @@
             </a>
         </div>
 
+         <div class="col-md-2 mb-3">
+            <a href="{{ route('vacancies') }}" class="btn btn-primary w-100">
+                Vacancies
+            </a>
+        </div>
+
     </div>
 
     <div class="owl-carousel owl-theme slider">

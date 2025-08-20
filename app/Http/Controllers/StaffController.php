@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\academic_session;
+use App\Models\Position;
 use App\Models\Sallary;
 use App\Models\Signature;
 use App\Models\Staff;
@@ -12,22 +13,52 @@ use Illuminate\Support\Facades\Hash;
 
 class StaffController extends Controller
 {
+    public function PositionList(){
+        $position = Position::orderBy('position', 'asc')->get();
+
+        return view('ngo.staff.position-list',compact('position'));
+    }
+
+    public function addPosition(){
+        return view('ngo.staff.add-position');
+    }
+
+    public function StorePosition(Request $request){
+        $validate = $request->validate([
+            'position' => 'required|string',
+        ]);
+
+        $position = Position::create($validate);
+        $position->save();
+
+        return redirect()->back()->with('success', 'Position added successfully. ');
+    }
+
+    public function DeletePosition($id){
+
+        $position = Position::findorFail($id);
+        $position->delete();
+
+        return redirect()->back()->with('success', 'Position delete successfully. ');
+    }
+
     public function addstaff()
     {
         $data = academic_session::all();
         $lastStaff = \App\Models\Staff::orderBy('id', 'desc')->first();
 
-    if ($lastStaff && preg_match('/(\d+SC)(\d+)/', $lastStaff->staff_code, $matches)) {
-        $prefix = $matches[1]; // e.g. "3126SC"
-        $lastNumber = (int) $matches[2]; // e.g. "0043" → 43
-        $newNumber = $lastNumber + 1;
-    } else {
-        $prefix = '3126SC';
-        $newNumber = 43; // starting number if no staff exists
-    }
+        if ($lastStaff && preg_match('/(\d+SC)(\d+)/', $lastStaff->staff_code, $matches)) {
+            $prefix = $matches[1]; // e.g. "3126SC"
+            $lastNumber = (int) $matches[2]; // e.g. "0043" → 43
+            $newNumber = $lastNumber + 1;
+        } else {
+            $prefix = '3126SC';
+            $newNumber = 43; // starting number if no staff exists
+        }
 
-    $nextStaffCode = $prefix . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
-        return view('ngo.staff.add-staff', compact('data','nextStaffCode'));
+        $nextStaffCode = $prefix . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+        $position = Position::orderBy('position', 'asc')->get();
+        return view('ngo.staff.add-staff', compact('data', 'nextStaffCode','position'));
     }
 
     public function StoreStaff(Request $request)
@@ -76,7 +107,7 @@ class StaffController extends Controller
             $newNumber = $lastNumber + 1;
         } else {
             $prefix = '3126SC';
-            $newNumber = 43; 
+            $newNumber = 43;
         }
 
         $staff = new Staff();
@@ -160,7 +191,8 @@ class StaffController extends Controller
         $data = academic_session::all();
         $states = config('states');
         $existingPermissions = json_decode($staff->permissions ?? '[]', true);
-        return view('ngo.staff.edit-staff', compact('data', 'states', 'staff', 'existingPermissions'));
+        $position = Position::orderBy('position', 'asc')->get();
+        return view('ngo.staff.edit-staff', compact('data', 'states', 'staff', 'existingPermissions','position'));
     }
 
     public function UpdateStaff(Request $request, $id)

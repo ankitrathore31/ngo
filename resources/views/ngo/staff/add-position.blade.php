@@ -53,12 +53,11 @@
     </style>
     <div class="wrapper">
         <div class="d-flex justify-content-between aligin-item-center mb-3 mt-2">
-            <h5 class="mb-0">Add Training Course</h5>
-
+            <h5 class="mb-0">Manage Staff Position</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                     <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Course</li>
+                    <li class="breadcrumb-item active" aria-current="page">Position</li>
                 </ol>
             </nav>
         </div>
@@ -68,25 +67,23 @@
             </div>
         @endif
         <div class="container mt-5">
-            <form action="{{ route('store.course') }}" method="POST" enctype="multipart/form-data"
+            <form action="{{ route('store.position') }}" method="POST" enctype="multipart/form-data"
                 class="border p-4 bg-light rounded">
                 @csrf
                 <div class="row">
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <label for="" class="form-label">Course</label>
-                                <input type="text" name="course"
-                                    class="form-control @error('course') is in-valid @enderror" placeholder="Enter Course"
-                                    required>
-                                @error('course')
-                                    <span class="text-danger">{{ $message }}</span>
+                                <label for="position" class="form-label">Position <span class="text-danger">*</span></label>
+                                <input type="text" name="position" class="form-control @error('position') is in-valid @enderror">
+                                @error('position')
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
                         <div class="row mt-2">
                             <div class="col-sm-12">
-                                <input type="submit" class="btn btn-success" value="Add Course">
+                                <input type="submit" class="btn btn-success" value="Add Position">
                             </div>
                         </div>
                     </div>
