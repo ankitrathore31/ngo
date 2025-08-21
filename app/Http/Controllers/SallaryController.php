@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Position;
 use App\Models\Sallary;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,8 @@ class SallaryController extends Controller
 
     public function ManageSalary()
     {
-        return view('ngo.salary.manage-salary');
+        $position = Position::orderBy('position', 'asc')->get();
+        return view('ngo.salary.manage-salary',compact('position'));
     }
 
     public function StoreSalary(Request $request){
@@ -33,7 +35,8 @@ class SallaryController extends Controller
     public function EditSalary($id)
     {
         $salary = Sallary::findorFail($id);
-        return view('ngo.salary.edit-salary',compact('salary'));
+        $position = Position::orderBy('position', 'asc')->get();
+        return view('ngo.salary.edit-salary',compact('salary','position'));
     }
 
     public function UpdateSalary(Request $request,$id){

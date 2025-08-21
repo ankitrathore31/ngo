@@ -162,8 +162,10 @@
                                 <th>Position</th>
                                 <th>Vacancies</th>
                                 <th>Type</th>
+                                <th>salary</th>
                                 <th>Location</th>
                                 <th>Requirements</th>
+                                <th>Description</th>
                                 <th>Deadline</th>
                                 <th>Status</th>
                                 <th class="text-center">Actions</th>
@@ -177,16 +179,18 @@
                                     <td>{{ $job->position->position ?? '-' }}</td>
                                     <td>{{ $job->vacancy }}</td>
                                     <td>{{ $job->job_type ?? '-' }}</td>
+                                    <td>{{ $job->salary ?? '-' }}</td>
                                     <td>{{ $job->location ?? '-' }}</td>
                                     <td>{{ $job->requirements ?? '-' }}</td>
+                                    <td>{{ $job->description ?? '-' }}</td>
                                     <td>
                                         {{ $job->deadline ? \Carbon\Carbon::parse($job->deadline)->format('d M Y') : '-' }}
                                     </td>
                                     <td>
                                         @if ($job->status == 'active')
-                                            <span class="badge bg-success">Active</span>
+                                            <span class="badge text-white p-2 bg-success">Active</span>
                                         @else
-                                            <span class="badge bg-secondary">Closed</span>
+                                            <span class="badge text-white p-2 bg-danger">Closed</span>
                                         @endif
                                     </td>
                                     <td class="text-center">

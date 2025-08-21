@@ -75,13 +75,14 @@
                         <div class="row">
                             <div class="col-md-12 mb-3">
                                 <label for="position" class="form-label">Position <span class="text-danger">*</span></label>
-                                <select name="position" id="position"
+                                 <select name="position" id="position"
                                     class="form-control @error('position') is-invalid @enderror" required>
                                     <option value="">Select Position</option>
-                                    @foreach (['Director', 'Consultant/Adviser', 'NGO Manager', 'Finance Manager', 'Project Coordinator', 'Master Trainer', 'Trainer', 'Program Officer', 'Project Manager', 'Area Manager', 'Human Resource Management', 'Supervisor', 'Coordinator', 'Computer Operator', 'Head Clerk', 'Assistant Clerk', 'Surveyor', 'Peon', 'Guard', 'Driver', 'Gardener', 'सुबिधा दाता', 'कृषि सखी', 'समूह सखी', 'विकास सखी', 'पशु सखी', 'सवास्थ्य सखी', 'सहयोगी सखी', 'Animator', 'Volunteer'] as $role)
-                                        <option value="{{ $role }}"
-                                            {{ old('position',$salary->position) == $role ? 'selected' : '' }}>
-                                            {{ $role }}</option>
+                                    @foreach ($positions as $role)
+                                        <option value="{{ $role->position }}"
+                                            {{ old('position', $salary->position) == $role->position ? 'selected' : '' }}>
+                                            {{ $role->position }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 @error('position')
