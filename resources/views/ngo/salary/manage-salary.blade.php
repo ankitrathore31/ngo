@@ -2,8 +2,8 @@
 @section('content')
     <style>
         /* ::placeholder {
-                                                                font-size: 8px;
-                                                            } */
+                                                                    font-size: 8px;
+                                                                } */
 
         .upload-container {
             text-align: center;
@@ -78,10 +78,11 @@
                                 <select name="position" id="position"
                                     class="form-control @error('position') is-invalid @enderror" required>
                                     <option value="">Select Position</option>
-                                    @foreach (['Director', 'Consultant/Adviser', 'NGO Manager', 'Finance Manager', 'Project Coordinator', 'Master Trainer', 'Trainer', 'Program Officer', 'Project Manager', 'Area Manager', 'Human Resource Management', 'Supervisor', 'Coordinator', 'Computer Operator', 'Head Clerk', 'Assistant Clerk', 'Surveyor', 'Peon', 'Guard', 'Driver', 'Gardener', 'सुबिधा दाता', 'कृषि सखी', 'समूह सखी', 'विकास सखी', 'पशु सखी', 'सवास्थ्य सखी', 'सहयोगी सखी', 'Animator', 'Volunteer'] as $role)
-                                        <option value="{{ $role }}"
-                                            {{ old('position') == $role ? 'selected' : '' }}>
-                                            {{ $role }}</option>
+                                    @foreach ($position as $role)
+                                        <option value="{{ $role->position }}"
+                                            {{ old('position') == $role->position ? 'selected' : '' }}>
+                                            {{ $role->position }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 @error('position')
