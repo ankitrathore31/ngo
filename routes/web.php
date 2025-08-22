@@ -481,6 +481,10 @@ Route::controller(JobController::class)->middleware('auth')->group(function () {
     Route::get('ngo/edit-job/{id}', 'EditJob')->name('edit.job');
     Route::post('ngo/update-job/{id}', 'UpdateJob')->name('update.job');
     Route::get('ngo/delete-job/{id}', 'DeleteJob')->name('delete.job');
+    Route::get('ngo/apply-candidate', 'ApplyCandidate')->name('apply.candidate');
 });
+
+Route::get('/apply-job/{id}',[JobController::class, 'Apply'])->name('apply.job');
+Route::post('/store-vacancies',[JobController::class, 'StoreVacancies'])->name('vacancies.store');
 
 require __DIR__ . '/auth.php';

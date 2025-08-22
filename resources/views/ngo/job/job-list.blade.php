@@ -105,11 +105,11 @@
     </style>
     <div class="wrapper">
         <div class="d-flex justify-content-between aligin-item-center mb-3 mt-2">
-            <h5 class="mb-0">Manage Staff Sallary</h5>
+            <h5 class="mb-0">Job List</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                     <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Sallary</li>
+                    <li class="breadcrumb-item active" aria-current="page">Jobs</li>
                 </ol>
             </nav>
         </div>
@@ -121,6 +121,7 @@
         <div class="container mt-5">
             <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
             <a href="{{ route('add.job') }}" class="btn btn-success mb-3 ">Add Vacancies</a>
+            <a href="{{ route('apply.candidate') }}" class="btn btn-primary mb-3 ">Candidate List</a>
             <div class="card shadow-sm printable">
                 <div class="card-body table-responsive">
                     <div class="text-center mb-4 border-bottom pb-2">
