@@ -1,4 +1,4 @@
-@extends('home.layout.MasterLayout')
+@extends('ngo.layout.master')
 @section('content')
     <style>
         @page {
@@ -105,11 +105,11 @@
     </style>
     <div class="wrapper">
         <div class="d-flex justify-content-between aligin-item-center mb-3 mt-2">
-            <h5 class="mb-0">Sanstha Vacancies</h5>
+            <h5 class="mb-0">Candidate List</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
-                    <li class="breadcrumb-item"><a href="{{ url('welcome') }}">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Vacancies</li>
+                    <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Candidate</li>
                 </ol>
             </nav>
         </div>
@@ -118,7 +118,8 @@
                 {{ session('success') }}
             </div>
         @endif
-        <div class="container-fluid mt-5">
+        <div class="container mt-5">
+            <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
             <div class="card shadow-sm printable">
                 <div class="card-body table-responsive">
                     <div class="text-center mb-4 border-bottom pb-2">
@@ -151,78 +152,38 @@
                             </div>
                         </div>
                     </div>
-                    <table
-                        class="table table-striped table-hover align-middle shadow-sm rounded animate__animated animate__fadeIn">
+                    <table class="table table-hover align-middle animate__animated animate__fadeIn">
                         <thead class="table-primary">
                             <tr>
                                 <th>Sr. No.</th>
-                                <th>Job Title</th>
-                                <th>Position</th>
-                                <th>Vacancies</th>
-                                <th>Type</th>
-                                <th>Salary</th>
-                                <th>Location</th>
-                                <th>Requirements</th>
-                                <th>Description</th>
-                                <th>Deadline</th>
-                                <th>Status</th>
-                                <th>Apply</th>
+                                <th>Candidate Name</th>
+                                <th>Candidate Email</th>
+                                <th>Candidate Phone</th>
+                                <th>Job Position</th>
+                                <th>Candidate Address</th>
+                                <th>Resume</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($jobs as $key => $job)
-                                <tr class="animate__animated animate__fadeInUp">
-                                    <td>{{ $key + 1 }}</td>
-                                    <td>{{ $job->job_title }}</td>
-                                    <td>{{ $job->position->position ?? '-' }}</td>
-                                    <td>{{ $job->vacancy }}</td>
-                                    <td>{{ $job->job_type ?? '-' }}</td>
-                                    <td>{{ $job->salary ?? '-' }}</td>
-                                    <td>{{ $job->location ?? '-' }}</td>
-                                    <td>{{ $job->requirements ?? '-' }}</td>
-                                    <td>{{ $job->description ?? '-' }}</td>
-                                    <td>
-                                        {{ $job->deadline ? \Carbon\Carbon::parse($job->deadline)->format('d M Y') : '-' }}
-                                    </td>
-                                    <td>
-                                        @if ($job->status == 'active')
-                                            <span class="badge text-white bg-success">Active</span>
-                                        @else
-                                            <span class="badge text-white bg-danger">Closed</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($job->status == 'active')
-                                            <a href="{{route('apply.job',$job->id)}}" class="btn btn-sm btn-success">Apply</a>
-                                        @else
-                                            <span>Wait for status active</span>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @empty
+                            @foreach ($candidate as $key => $vacancy)
                                 <tr>
-                                    <td colspan="9" class="text-center text-muted">No jobs found</td>
+                                    <td>{{ $key + 1 }}</td>
+                                    <td>{{ $vacancy->name }}</td>
+                                    <td>{{ $vacancy->email }}</td>
+                                    <td>{{ $vacancy->phone }}</td>
+                                    <td>{{ $vacancy->position }}</td>
+                                    <td>{{ $vacancy->address }}</td>
+                                    <td>
+                                        <a href="{{ asset($vacancy->resume) }}" target="_blank"
+                                            class="btn btn-sm btn-outline-primary">
+                                            View Resume
+                                        </a>
+                                    </td>
                                 </tr>
-                            @endforelse
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
-            </div>
-        </div>
-        <div class="conatiner mt-5">
-            <!-- Footer Section -->
-            <div class=" p-4 bg-light rounded shadow-sm text-center animate__animated animate__fadeInUp">
-                <h4 class="mb-3">Looking to Join Our NGO?</h4>
-                <p class="text-muted">
-                    Be part of our mission to create a positive impact in the community.
-                    Apply for the job above or connect with us for volunteering opportunities.
-                </p>
-                {{-- <a href="{{ url('apply-job') }}" class="btn btn-primary btn-lg">
-                    <i class="bi bi-person-plus-fill"></i> Apply Now
-                </a> --}}
-                <a href="{{ route('contact') }}" class="btn btn-outline-secondary btn-lg ms-2">
-                    <i class="bi bi-envelope-fill"></i> Contact NGO
-                </a>
             </div>
         </div>
     </div>

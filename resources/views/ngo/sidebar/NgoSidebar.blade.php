@@ -196,6 +196,7 @@
                                 <li><a class="dropdown-item" href="{{ route('list.course') }}">Course List</a></li>
                             @endif
                             <li><a class="dropdown-item" href="{{ route('email.list') }}">Emails</a></li>
+                            
                             <li><a class="dropdown-item" href="{{ route('list.job') }}">Jobs</a></li>
                         </ul>
                     </li>
