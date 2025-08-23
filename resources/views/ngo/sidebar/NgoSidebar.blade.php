@@ -91,17 +91,17 @@
 
                 <!-- Inbox -->
                 <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-tasks"></i> Staff Work
-                        </a>
-                        <ul class="dropdown-menu bg-primary">
-                                <li><a class="dropdown-item" href="{{-- route('addactivity') --}}">Work Start (Staff)</a></li>
-                                <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Staff Report</a></li>
-                                <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Pending Work List</a></li>
-                                <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Complete Work Send</a></li>
-                                <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Complete Work Send List</a>
-                                </li>
-                        </ul>
+                    <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
+                        <i class="fas fa-tasks"></i> Staff Work
+                    </a>
+                    <ul class="dropdown-menu bg-primary">
+                        <li><a class="dropdown-item" href="{{-- route('addactivity') --}}">Work Start (Staff)</a></li>
+                        <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Staff Report</a></li>
+                        <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Pending Work List</a></li>
+                        <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Complete Work Send</a></li>
+                        <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Complete Work Send List</a>
+                        </li>
+                    </ul>
                 </li>
 
                 <!-- ACTIVITY -->
@@ -189,15 +189,14 @@
                             @endif
                             <li><a class="dropdown-item" href="{{ route('category.list') }}">Work Category</a></li>
                             @if (!$isStaff || $user->hasPermission('add-course-centre'))
-                                <li><a class="dropdown-item" href="{{ route('add.course') }}">Add Course For Training Centre</a>
+                                <li><a class="dropdown-item" href="{{ route('add.course') }}">Add Course For Training
+                                        Centre</a>
                                 </li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('course-list'))
                                 <li><a class="dropdown-item" href="{{ route('list.course') }}">Course List</a></li>
                             @endif
                             <li><a class="dropdown-item" href="{{ route('email.list') }}">Emails</a></li>
-                            
-                            <li><a class="dropdown-item" href="{{ route('list.job') }}">Jobs</a></li>
                         </ul>
                     </li>
                 @endif
@@ -397,7 +396,7 @@
                                 <li><a class="dropdown-item" href="#">Staff Resign Letter</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('staff-salary'))
-                                <li><a class="dropdown-item" href="{{ route('list.salary') }}">Staff Salary</a></li>
+                                <li><a class="dropdown-item" href="{{ route('staff.salary') }}">Staff Salary</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('staff-idcard'))
                                 <li><a class="dropdown-item" href="{{ route('staff-idcard') }}">Staff ID Card</a>
@@ -409,7 +408,12 @@
                             @if (!$isStaff || $user->hasPermission('staff-activity'))
                                 <li><a class="dropdown-item" href="#">Staff Activity</a></li>
                             @endif
-                            <li><a class="dropdown-item" href="{{route('position.list')}}">Manage Staff Position</a></li>
+                            @if (!$isStaff || $user->hasPermission('manage-salary'))
+                                <li><a class="dropdown-item" href="{{ route('list.salary') }}">Manage Salary</a></li>
+                            @endif
+                            <li><a class="dropdown-item" href="{{ route('position.list') }}">Manage Staff
+                                    Position</a></li>
+                            <li><a class="dropdown-item" href="{{ route('list.job') }}">Jobs</a></li>
                         </ul>
                     </li>
                 @endif
@@ -719,9 +723,9 @@
                                 <li><a class="dropdown-item" href="{{ route('gbs-bill-list') }}">GBS Sanstha
                                         Bill/Voucher List</a></li>
                             @endif
-                            <li><a class="dropdown-item" href="{{route('add.vendor')}}">
+                            <li><a class="dropdown-item" href="{{ route('add.vendor') }}">
                                     Add Vaindar/Shop/Farm</a></li>
-                            <li><a class="dropdown-item" href="{{route('vendor.list')}}">
+                            <li><a class="dropdown-item" href="{{ route('vendor.list') }}">
                                     Vaindar/Shop/Farm List</a></li>
                         </ul>
                     </li>

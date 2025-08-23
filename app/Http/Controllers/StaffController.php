@@ -384,7 +384,6 @@ class StaffController extends Controller
             }
         }
 
-        // Delete the staff record
         $staff->delete();
 
         return redirect()->route('staff-list')->with('success', 'Staff deleted successfully!');

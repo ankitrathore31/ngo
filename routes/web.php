@@ -278,6 +278,12 @@ Route::controller(SallaryController::class)->middleware('auth')->group(function 
     Route::get('ngo/edit-salary/{id}', 'EditSalary')->name('edit.salary');
     Route::post('ngo/update-salary/{id}', 'UpdateSalary')->name('update.salary');
     Route::get('ngo/delete-salary/{id}', 'DeleteSalary')->name('delete.salary');
+    Route::get('ngo/staff-salary', 'StaffSalary')->name('staff.salary');
+    Route::get('ngo/pay-salary/{id}', 'PaySalary')->name('pay.salary');
+    Route::post('ngo/store-salary/{id}', 'storeSalaryPayment')->name('store.salary.payment');
+    Route::post('ngo/unpaid-salary/{id}','unpaySalary')->name('unpaid.salary');
+    Route::get('ngo/salary-tranctions/{id}','salaryTransactions')->name('salary.transactions');
+
 });
 
 Route::controller(MemberController::class)->group(function () {

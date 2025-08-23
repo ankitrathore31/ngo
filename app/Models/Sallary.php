@@ -12,4 +12,5 @@ class Sallary extends Model
         'position',
         'salary',
     ];
+    
 }
