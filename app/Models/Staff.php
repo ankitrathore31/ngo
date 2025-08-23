@@ -15,7 +15,7 @@ class Staff extends Model
 
     public function hasPermission($permission)
     {
-         // Decode manually if casting doesn't work
+        // Decode manually if casting doesn't work
         $permissions = $this->permissions;
 
         if (is_string($permissions)) {
@@ -29,5 +29,9 @@ class Staff extends Model
     public function organizations()
     {
         return $this->hasMany(OrganizationMember::class, 'member_id');
+    }
+    public function transactions()
+    {
+        return $this->hasMany(SalaryTransaction::class);
     }
 }
