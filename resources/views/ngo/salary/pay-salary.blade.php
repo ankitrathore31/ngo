@@ -252,26 +252,56 @@
                                 <tr>
                                     <th>Year</th>
                                     <th>Month</th>
-                                    <th>Amount</th>
+                                    <th>Total Salary</th>
+                                    <th>Paid</th>
+                                    <th>Remaining</th>
                                     <th>Status</th>
+                                    <th>Payments</th>
                                     <th class="no-print">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse ($yearTransactions as $t)
+                                    @php
+                                        $paidAmount = $t->payments->sum('amount'); // all payments
+                                        $remaining = $t->amount - $paidAmount;
+                                    @endphp
                                     <tr>
                                         <td>{{ $t->year }}</td>
                                         <td>{{ \Carbon\Carbon::create()->month($t->month)->format('F') }}</td>
                                         <td>{{ $t->amount }}</td>
+                                        <td>{{ $paidAmount }}</td>
+                                        <td>{{ $remaining }}</td>
                                         <td>
                                             @if ($t->status == 'paid')
                                                 <span class="badge bg-success">Paid</span>
+                                            @elseif ($t->status == 'partial')
+                                                <span class="badge bg-warning text-dark">Partial</span>
                                             @else
                                                 <span class="badge bg-danger">Unpaid</span>
                                             @endif
                                         </td>
+
+                                        <!-- Show all payment rows -->
+                                        <td>
+                                            @if ($t->payments->count() > 0)
+                                                <ul class="list-unstyled mb-0">
+                                                    @foreach ($t->payments as $p)
+                                                        <li>
+                                                            {{ $p->payment_date }} -
+                                                            {{ ucfirst($p->payment_mode) }} -
+                                                            <strong>{{ $p->amount }}</strong>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            @else
+                                                <em>No payments yet</em>
+                                            @endif
+                                        </td>
+
                                         <td class="no-print">
-                                            @if ($t->status == 'unpaid')
+                                            @if ($remaining > 0)
+                                                <!-- Pay button -->
                                                 <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
                                                     data-bs-target="#payModal{{ $t->id }}">
                                                     Pay
@@ -291,16 +321,32 @@
                                                                 <div class="modal-header">
                                                                     <h5 class="modal-title">Pay Salary -
                                                                         {{ \Carbon\Carbon::create()->month($t->month)->format('F') }}
-                                                                        {{ $t->year }}</h5>
+                                                                        {{ $t->year }}
+                                                                    </h5>
                                                                     <button type="button" class="btn-close"
                                                                         data-bs-dismiss="modal"></button>
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <div class="mb-3">
-                                                                        <label>Amount</label>
+                                                                        <label>Total Salary</label>
+                                                                        <input type="text" class="form-control"
+                                                                            value="{{ $t->amount }}" readonly>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label>Paid So Far</label>
+                                                                        <input type="text" class="form-control"
+                                                                            value="{{ $paidAmount }}" readonly>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label>Remaining Balance</label>
+                                                                        <input type="text" class="form-control"
+                                                                            value="{{ $remaining }}" readonly>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label>Amount to Pay Now</label>
                                                                         <input type="number" class="form-control"
-                                                                            name="amount" value="{{ $t->amount }}"
-                                                                            readonly required>
+                                                                            name="amount" max="{{ $remaining }}"
+                                                                            required>
                                                                     </div>
                                                                     <div class="mb-3">
                                                                         <label>Payment Date</label>
@@ -309,20 +355,13 @@
                                                                     </div>
                                                                     <div class="mb-3">
                                                                         <label>Payment Mode</label>
-                                                                        <select name="payment_mode"
-                                                                            class="form-control payment-mode" required
-                                                                            data-target="{{ $t->id }}">
+                                                                        <select name="payment_mode" class="form-control"
+                                                                            required>
                                                                             <option value="cash">Cash</option>
                                                                             <option value="bank">Bank</option>
                                                                             <option value="cheque">Cheque</option>
                                                                             <option value="upi">UPI</option>
                                                                         </select>
-                                                                    </div>
-
-                                                                    {{-- Dynamic Fields --}}
-                                                                    <div class="mode-fields"
-                                                                        id="mode-fields-{{ $t->id }}">
-                                                                        <!-- JS will inject inputs based on mode -->
                                                                     </div>
                                                                 </div>
                                                                 <div class="modal-footer">
@@ -333,21 +372,28 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            @else
-                                                <form action="{{ route('unpaid.salary', $t->id) }}" method="POST">
+                                            @endif
+
+                                            @if ($t->status != 'unpaid')
+                                                <!-- Unpay button -->
+                                                <form action="{{ route('unpaid.salary', $t->id) }}" method="POST"
+                                                    style="display:inline;">
                                                     @csrf
-                                                    <button type="submit" onclick="return confirm('Do you want to unpay salary')" class="btn btn-sm btn-danger">Unpay</button>
+                                                    <button type="submit"
+                                                        onclick="return confirm('Do you want to unpay salary?')"
+                                                        class="btn btn-sm btn-danger">Unpay</button>
                                                 </form>
                                             @endif
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-center">No salary records for this year.</td>
+                                        <td colspan="8" class="text-center">No salary records for this year.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
                         </table>
+
                     </div>
                 </div>
             </div>

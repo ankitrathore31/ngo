@@ -402,9 +402,9 @@
                                 <li><a class="dropdown-item" href="{{ route('staff-idcard') }}">Staff ID Card</a>
                                 </li>
                             @endif
-                            @if (!$isStaff || $user->hasPermission('staff-passbook'))
+                            {{-- @if (!$isStaff || $user->hasPermission('staff-passbook'))
                                 <li><a class="dropdown-item" href="#">Staff Passbook</a></li>
-                            @endif
+                            @endif --}}
                             @if (!$isStaff || $user->hasPermission('staff-activity'))
                                 <li><a class="dropdown-item" href="#">Staff Activity</a></li>
                             @endif

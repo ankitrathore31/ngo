@@ -249,6 +249,7 @@
                                 <th>Session</th>
                                 <th class="no-print">Action</th>
                                 <th class="no-print">Tranctions</th>
+                                <th class="no-print">Passbook</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -293,6 +294,13 @@
                                             class="btn btn-warning btn-sm px-3 d-flex align-items-center justify-content-center"
                                             title="Salary Transactions">
                                             Transactions
+                                        </a>
+                                    </td>
+                                     <td class="no-print">
+                                        <a href="{{ route('salary.passbook', $item->id) }}"
+                                            class="btn btn-warning btn-sm px-3 d-flex align-items-center justify-content-center"
+                                            title="Salary Transactions">
+                                            Passbook
                                         </a>
                                     </td>
                                 </tr>

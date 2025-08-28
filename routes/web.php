@@ -283,6 +283,7 @@ Route::controller(SallaryController::class)->middleware('auth')->group(function 
     Route::post('ngo/store-salary/{id}', 'storeSalaryPayment')->name('store.salary.payment');
     Route::post('ngo/unpaid-salary/{id}','unpaySalary')->name('unpaid.salary');
     Route::get('ngo/salary-tranctions/{id}','salaryTransactions')->name('salary.transactions');
+    Route::get('ngo/staff-passbook/{id}','staffPassbook')->name('salary.passbook');
 
 });
 
