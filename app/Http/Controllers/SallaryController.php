@@ -166,13 +166,20 @@ class SallaryController extends Controller
             ->where('month', $request->month)
             ->firstOrFail();
 
+        $paidSoFar = $transaction->payments()->sum('amount');
+        $remaining = $transaction->amount - $paidSoFar;
+
         if ($transaction->status === 'paid') {
-            return back()->with('error', 'Already Paid');
+            return back()->with('error', 'This salary is already fully paid.');
         }
 
-        $transaction->update([
+        if ($request->amount > $remaining) {
+            return back()->with('error', 'Payment exceeds remaining balance.');
+        }
+
+        $transaction->payments()->create([
+            'staff_id'      => $staffId,
             'amount'        => $request->amount,
-            'status'        => 'paid',
             'payment_date'  => $request->payment_date,
             'payment_mode'  => $request->payment_mode,
             'bank_no'       => $request->bank_no,
@@ -180,11 +187,24 @@ class SallaryController extends Controller
             'ifsc_code'     => $request->ifsc_code,
             'cheque_no'     => $request->cheque_no,
             'upi_id'        => $request->upi_id,
-            'transaction_id' => $request->transaction_id,
+            'transaction_id_ref' => $request->transaction_id,
         ]);
 
-        return back()->with('success', 'Salary Paid Successfully');
+        $paidSoFar += $request->amount;
+        if ($paidSoFar >= $transaction->amount) {
+            $transaction->status = 'paid';
+        } elseif ($paidSoFar > 0) {
+            $transaction->status = 'partial';
+        } else {
+            $transaction->status = 'unpaid';
+        }
+
+        $transaction->save();
+
+        return back()->with('success', 'Payment recorded successfully');
     }
+
+
     public function unpaySalary($id)
     {
         $transaction = SalaryTransaction::findOrFail($id);
@@ -209,16 +229,66 @@ class SallaryController extends Controller
     }
 
     public function salaryTransactions($id)
-{
-    $staff = Staff::findOrFail($id);
+    {
+        $staff = Staff::findOrFail($id);
 
-    $transactions = SalaryTransaction::where('staff_id', $id)
-        ->where('status', 'paid') // show only paid transactions for receipt
-        ->orderByDesc('year')
-        ->orderByDesc('month')
-        ->get();
+        // Fetch only transactions that have payments (skip unpaid)
+        $transactions = SalaryTransaction::with('payments')
+            ->where('staff_id', $id)
+            ->whereHas('payments') // ensures at least one payment exists
+            ->orderByDesc('year')
+            ->orderByDesc('month')
+            ->get();
+
+        // Recalculate status based on payments
+        foreach ($transactions as $t) {
+            $paid = $t->payments->sum('amount');
+            if ($paid >= $t->amount) {
+                $t->status = 'paid';
+            } else {
+                $t->status = 'partial'; // since unpaid are excluded
+            }
+        }
+
         $signatures = Signature::pluck('file_path', 'role');
 
-    return view('ngo.salary.staff-salary-transaction', compact('staff', 'transactions'));
-}
+        return view('ngo.salary.staff-salary-transaction', compact('staff', 'transactions', 'signatures'));
+    }
+
+
+    public function staffPassbook(Request $request, $id)
+    {
+        $staff = Staff::where('status', 1)->findOrFail($id);
+
+        // Fetch only paid/partial transactions with payments
+        $transactions = SalaryTransaction::with('payments')
+            ->where('staff_id', $staff->id)
+            ->whereIn('status', ['paid', 'partial']) // exclude unpaid
+            ->orderBy('year')
+            ->orderBy('month')
+            ->get()
+            ->groupBy('year');
+
+        $years = $transactions->keys();
+        $selectedYear = $request->input('year', now()->year);
+
+        // Transactions for selected year
+        $yearTransactions = $transactions->get($selectedYear, collect());
+
+        // Totals only for paid transactions
+        $totalAmount = $yearTransactions->sum('amount');
+        $totalPaid = $yearTransactions->flatMap->payments->sum('amount');
+        $remaining = $totalAmount - $totalPaid;
+
+        return view('ngo.salary.passbook', compact(
+            'staff',
+            'transactions',
+            'yearTransactions',
+            'selectedYear',
+            'years',
+            'totalAmount',
+            'totalPaid',
+            'remaining'
+        ));
+    }
 }

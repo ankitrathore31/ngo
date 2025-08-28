@@ -106,101 +106,101 @@
             @endif
             <div class="container my-4">
                 @foreach ($transactions as $t)
-                    <div class="receipt-card border shadow p-3 mb-4 bg-white" id="receipt-{{ $t->id }}">
-                        <div class="text-center mb-4 border-bottom pb-2">
-                            <div class="row">
-                                <div class="col-sm-2 text-center text-md-start">
-                                    <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="80" height="80">
-                                </div>
-                                <div class="col-sm-10">
-                                    <p style="margin: 0;" class="d-flex justify-content-around"><b>
-                                            <span>NEETI AYOG ID NO. UP/2023/0360430</span>&nbsp;&nbsp;
-                                            <span>NGO NO. UP/00033062</span>&nbsp;&nbsp;
-                                            <span>PAN: AAEAG7650B</span>
-                                        </b></p>
-                                    <h4 class="print-h4"><b>GYAN BHARTI SANSTHA</b></h4>
-                                    <h6 style="color: blue;"><b>
-                                            Village - Kainchu Tanda, Post - Amaria, District - Pilibhit, UP - 262121
-                                        </b></h6>
+                    @foreach ($t->payments as $p)
+                        <div class="receipt-card border shadow p-3 mb-4 bg-white" id="receipt-{{ $p->id }}">
+                            <div class="text-center mb-4 border-bottom pb-2">
+                                <div class="row">
+                                    <div class="col-sm-2 text-center text-md-start">
+                                        <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="80"
+                                            height="80">
+                                    </div>
+                                    <div class="col-sm-10">
+                                        <p style="margin: 0;" class="d-flex justify-content-around"><b>
+                                                <span>NEETI AYOG ID NO. UP/2023/0360430</span>&nbsp;&nbsp;
+                                                <span>NGO NO. UP/00033062</span>&nbsp;&nbsp;
+                                                <span>PAN: AAEAG7650B</span>
+                                            </b></p>
+                                        <h4 class="print-h4"><b>GYAN BHARTI SANSTHA</b></h4>
+                                        <h6 style="color: blue;"><b>
+                                                Village - Kainchu Tanda, Post - Amaria, District - Pilibhit, UP - 262121
+                                            </b></h6>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col-sm-6">
-                                <strong>Staff Name:</strong> {{ $staff->name }} <br>
-                                <strong>Position:</strong> {{ $staff->position }} <br>
-                                <strong>Guardian:</strong> {{ $staff->gurdian_name }}
-                            </div>
-                            <div class="col-sm-6 text-end">
-                                <strong>Receipt No:</strong> RCP-{{ $t->id }} <br>
-                                <strong>Payment Date:</strong>
-                                {{ \Carbon\Carbon::parse($t->payment_date)->format('d-m-Y') }} <br>
-                                <strong>Month/Year:</strong> {{ \Carbon\Carbon::create()->month($t->month)->format('F') }}
-                                {{ $t->year }}
-                            </div>
-                        </div>
 
-                        <table class="table table-bordered">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Amount</th>
-                                    <th>Payment</th>
-                                    <th>Other</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><b>₹ {{ number_format($t->amount, 2) }}</b></td>
-                                    <td>{{ ucfirst($t->payment_mode) }}</td>
-                                    <td>
-                                        @if ($t->payment_mode == 'cash')
-                                            Paid in Cash
-                                        @elseif($t->payment_mode == 'bank')
-                                            Bank: {{ $t->bank_name }} <br>
-                                            IFSC: {{ $t->ifsc_code }} <br>
-                                            Txn ID: {{ $t->transaction_id }}
-                                        @elseif($t->payment_mode == 'cheque')
-                                            Cheque No: {{ $t->cheque_no }}
-                                        @elseif($t->payment_mode == 'upi')
-                                            UPI ID: {{ $t->upi_id }} <br>
-                                            Txn ID: {{ $t->transaction_id }}
-                                        @endif
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <div class="text-end mt-3">
-                            @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
-                                <div id="directorSignatureBox" class="mt-2">
-                                    <p class="text-success no-print">Attached</p>
-                                    <img src="{{ asset($signatures['director']) }}" alt="Director Signature" class="img"
-                                        style="max-height: 80px;">
-                                    <br>
-                                    <button class="btn btn-danger btn-sm mt-2 no-print"
-                                        onclick="toggleDirector(false)">Remove</button>
+                            <div class="row mb-2">
+                                <div class="col-sm-6">
+                                    <strong>Staff Name:</strong> {{ $staff->name }} <br>
+                                    <strong>Position:</strong> {{ $staff->position }} <br>
+                                    <strong>Guardian:</strong> {{ $staff->gurdian_name }}
                                 </div>
-
-                                <div id="directorShowBtnBox" class="mt-2 d-none no-print">
-                                    <button class="btn btn-primary btn-sm" onclick="toggleDirector(true)">Attached
-                                        Signature</button>
+                                <div class="col-sm-6 text-end">
+                                    <strong>Receipt No:</strong> RCP-{{ $p->id }} <br>
+                                    <strong>Payment Date:</strong>
+                                    {{ \Carbon\Carbon::parse($p->payment_date)->format('d-m-Y') }} <br>
+                                    <strong>Month/Year:</strong>
+                                    {{ \Carbon\Carbon::create()->month($t->month)->format('F') }}
+                                    {{ $t->year }}
                                 </div>
-                            @else
-                                <p class="text-muted mt-2 no-print">Not attached</p>
-                            @endif
-                            <strong class="text-danger">Digitally Signed By <br>
-                                MANOJ KUMAR RATHOR <br>
-                                DIRECTOR
-                            </strong><br>
-                        </div>
+                            </div>
 
-                        <div class="text-center mt-3 no-print">
-                            <button onclick="window.print()" class="btn btn-primary no-print">
-                                Print Receipt
-                            </button>
+                            <table class="table table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Amount</th>
+                                        <th>Payment Mode</th>
+                                        <th>Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><b>₹ {{ number_format($p->amount, 2) }}</b></td>
+                                        <td>{{ ucfirst($p->payment_mode) }}</td>
+                                        <td>
+                                            @if ($p->payment_mode == 'cash')
+                                                Paid in Cash
+                                            @elseif($p->payment_mode == 'bank')
+                                                Bank: {{ $p->bank_name }} <br>
+                                                IFSC: {{ $p->ifsc_code }} <br>
+                                                Txn ID: {{ $p->transaction_id }}
+                                            @elseif($p->payment_mode == 'cheque')
+                                                Cheque No: {{ $p->cheque_no }}
+                                            @elseif($p->payment_mode == 'upi')
+                                                UPI ID: {{ $p->upi_id }} <br>
+                                                Txn ID: {{ $p->transaction_id }}
+                                            @endif
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            {{-- Signature --}}
+                            <div class="text-end mt-3">
+                                @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
+                                    <div id="directorSignatureBox" class="mt-2">
+                                        <p class="text-success no-print">Attached</p>
+                                        <img src="{{ asset($signatures['director']) }}" alt="Director Signature"
+                                            class="img" style="max-height: 80px;">
+                                    </div>
+                                @else
+                                    <p class="text-muted mt-2 no-print">Not attached</p>
+                                @endif
+                                <strong class="text-danger">Digitally Signed By <br>
+                                    MANOJ KUMAR RATHOR <br>
+                                    DIRECTOR
+                                </strong><br>
+                            </div>
+
+                            <div class="text-center mt-3 no-print">
+                                <button onclick="window.print()" class="btn btn-primary no-print">
+                                    Print Receipt
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    @endforeach
                 @endforeach
+
+
             </div>
         </div>
     </div>
