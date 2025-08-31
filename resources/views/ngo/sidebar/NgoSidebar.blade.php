@@ -847,7 +847,7 @@
                     </li>
                 @endif
 
-
+                <!-- Notice -->
                 @if (!$isStaff || $user->hasPermission('add-notice') || $user->hasPermission('notice-list'))
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">

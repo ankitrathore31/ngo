@@ -1,3 +1,4 @@
+
 @extends('home.layout.MasterLayout')
 @Section('content')
     <div class="wrapper">
