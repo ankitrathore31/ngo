@@ -1,6 +1,25 @@
 @extends('ngo.layout.master')
 @Section('content')
     <style>
+        .print-red-bg {
+            background-color: red !important;
+            /* Bootstrap 'bg-danger' color */
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            color: white !important;
+            font-size: 18px;
+        }
+
+        .print-h4 {
+            background-color: red !important;
+            color: white !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-size: 28px;
+            word-spacing: 8px;
+            text-align: center;
+        }
+
         @media print {
             body * {
                 visibility: hidden;
@@ -18,10 +37,28 @@
                 width: 100%;
             }
 
+            .print-red-bg {
+                background-color: red !important;
+                /* Bootstrap 'bg-danger' color */
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                color: white !important;
+                font-size: 18px;
+            }
+
+            .print-h4 {
+                background-color: red !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                font-size: 28px;
+                word-spacing: 8px;
+                text-align: center;
+            }
+
             /* Optional: Hide buttons like Print/Download and Language Toggle */
             button,
-            .btn,
-            .d-flex.justify-content-between {
+            .btn {
                 display: none !important;
             }
         }
@@ -125,8 +162,7 @@
                         </div>
                         <div class="col-sm-4">
                             @php
-                                $imagePath =
-                                    $record->reg_type === 'Member' ? 'member_images/' : 'benefries_images/';
+                                $imagePath = $record->reg_type === 'Member' ? 'member_images/' : 'benefries_images/';
                             @endphp
                             <div class="mb-3">
                                 <img src="{{ asset($imagePath . $record->image) }}" alt="Image" class="img-thumbnail"

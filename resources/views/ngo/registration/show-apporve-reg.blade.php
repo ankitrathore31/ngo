@@ -1,6 +1,25 @@
 @extends('ngo.layout.master')
 @Section('content')
     <style>
+        .print-red-bg {
+            background-color: red !important;
+            /* Bootstrap 'bg-danger' color */
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            color: white !important;
+            font-size: 18px;
+        }
+
+        .print-h4 {
+            background-color: red !important;
+            color: white !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-size: 28px;
+            word-spacing: 8px;
+            text-align: center;
+        }
+
         /* Reset print layout */
         @media print {
             @page {
@@ -31,6 +50,25 @@
             img {
                 max-width: 100px !important;
                 height: auto !important;
+            }
+
+            .print-red-bg {
+                background-color: red !important;
+                /* Bootstrap 'bg-danger' color */
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                color: white !important;
+                font-size: 18px;
+            }
+
+            .print-h4 {
+                background-color: red !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                font-size: 28px;
+                word-spacing: 8px;
+                text-align: center;
             }
 
             h4,
