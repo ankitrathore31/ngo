@@ -95,7 +95,7 @@
                         <i class="fas fa-tasks"></i> Staff Work
                     </a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="{{-- route('addactivity') --}}">Work Start (Staff)</a></li>
+                        <li><a class="dropdown-item" href="{{ route('work.list') }}">Work Start (Staff)</a></li>
                         <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Staff Report</a></li>
                         <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Pending Work List</a></li>
                         <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Complete Work Send</a></li>
@@ -460,7 +460,7 @@
 
 
                 <!-- Promote -->
-                @if (
+                {{-- @if (
                     !$isStaff ||
                         $user->hasPermission('promote-membership') ||
                         $user->hasPermission('promote-beneficiary') ||
@@ -481,11 +481,11 @@
                             @endif
                         </ul>
                     </li>
-                @endif
+                @endif --}}
 
 
                 <!-- Certificate -->
-                @if (
+                {{-- @if (
                     !$isStaff ||
                         $user->hasPermission('add-member-certificate') ||
                         $user->hasPermission('member-certificate-list') ||
@@ -510,7 +510,7 @@
                             @endif
                         </ul>
                     </li>
-                @endif
+                @endif --}}
 
 
                 <!-- letter -->
@@ -611,7 +611,7 @@
                                 <li><a class="dropdown-item" href="{{ route('staff-idcard') }}">Staff ID Card</a>
                                 </li>
                             @endif
-                            @if (!$isStaff || $user->hasPermission('beneficiary-admit'))
+                            {{-- @if (!$isStaff || $user->hasPermission('beneficiary-admit'))
                                 <li><a class="dropdown-item" href="#">Beneficiary Admit Card</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('beneficiary-desk-slip'))
@@ -619,14 +619,14 @@
                             @endif
                             @if (!$isStaff || $user->hasPermission('beneficiary-cc-noc'))
                                 <li><a class="dropdown-item" href="#">Beneficiary CC & NOC</a></li>
-                            @endif
+                            @endif --}}
                         </ul>
                     </li>
                 @endif
 
 
                 <!-- Attendance -->
-                @if (!$isStaff || $user->hasPermission('beneficiary-attendance') || $user->hasPermission('staff-attendance'))
+                {{-- @if (!$isStaff || $user->hasPermission('beneficiary-attendance') || $user->hasPermission('staff-attendance'))
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
                             <i class="fas fa-user-check"></i> ATTENDANCE
@@ -640,7 +640,7 @@
                             @endif
                         </ul>
                     </li>
-                @endif
+                @endif --}}
 
 
                 <!-- Complaint -->

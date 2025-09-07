@@ -85,13 +85,13 @@
                         <thead class="text-white">
                             <tr class=" bg-success">
                                 <th scope="col">Sr.No.</th>
-                                <th>Session</th>
+                                {{-- <th>Session</th> --}}
                                 <th scope="col">Date/Time</th>
                                 <th scope="col">Program Image</th>
                                 <th scope="col">Program Name</th>
                                 <th scope="col">Program Category</th>
                                 <th scope="col">Program Address</th>
-                                <td>Program Session</td>
+                                <td>Session</td>
                                 <th scope="col">View</th>
                             </tr>
                         </thead>
@@ -99,7 +99,7 @@
                             @foreach ($activity as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $item->academic_session }}</td>
+                                    {{-- <td>{{ $item->academic_session }}</td> --}}
                                     <td>{{ \Carbon\Carbon::parse($item->program_date)->format('d-m-Y') }}
                                         <br> {{ $item->program_time }}
                                     </td>
