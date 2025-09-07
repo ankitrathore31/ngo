@@ -3,11 +3,11 @@
     <div class="wrapper">
         <div class="container-fluid mt-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">WorkPlan List</h5>
+                <h5 class="mb-0">Staff Work List</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">WorkPlan</li>
+                        <li class="breadcrumb-item active" aria-current="page">Staff Work</li>
                     </ol>
                 </nav>
             </div>
@@ -19,7 +19,7 @@
             @endif
 
             <div class="row">
-                <form method="GET" action="{{ route('workplan-list') }}" class="row g-3 mb-4">
+                <form method="GET" action="{{ route('work.list') }}" class="row g-3 mb-4">
                     <div class="col-md-3 col-sm-4">
                         <select name="session_filter" id="session_filter" class="form-control"
                             >
@@ -67,8 +67,6 @@
 
                     </div>
                     <div class="col-md-3 col-sm-6 form-group mb-3">
-                        {{-- <label for="districtSelect" class="form-label">District: <span
-                                    class="text-danger">*</span></label> --}}
                         <select class="form-control @error('district') is-invalid @enderror" name="district"
                             id="districtSelect">
                             <option value="">Select District</option>
@@ -85,7 +83,7 @@
 
                     <div class="col-md-3">
                         <button type="submit" class="btn btn-primary">Search</button>
-                        <a href="{{ route('workplan-list') }}" class="btn btn-info text-white">Reset</a>
+                        <a href="{{ route('work.list') }}" class="btn btn-info text-white">Reset</a>
                     </div>
                 </form>
             </div>
@@ -95,7 +93,7 @@
                         <thead class="table-primary">
                             <tr>
                                 <th>Sr. No.</th>
-                                <th>WorkPlan Date</th>
+                                <th>Work Date</th>
                                 <th>Project Code.</th>
                                 <th>Project Name</th>
                                 <th>Animator Code</th>
@@ -122,18 +120,9 @@
                                     <td>{{ $item->academic_session ?? 'N/A' }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            <a href="{{ route('view-workplan', $item->id) }}"
+                                            <a href="{{ route('work.view', $item->id) }}"
                                                 class="btn btn-success btn-sm px-3">
                                                 <i class="fa-regular fa-eye"></i>
-                                            </a>
-                                            <a href="{{ route('edit-workplan', $item->id) }}"
-                                                class="btn btn-primary btn-sm" title="Edit">
-                                                <i class="fa-regular fa-edit"></i>
-                                            </a>
-                                            <a href="{{ route('delete-workplan', $item->id) }}"
-                                                class="btn btn-danger btn-sm "
-                                                onclick="return confirm('Do you want to delete WorkPlan')" title="Delete">
-                                                <i class="fa-regular fa-trash-can"></i>
                                             </a>
                                         </div>
                                     </td>

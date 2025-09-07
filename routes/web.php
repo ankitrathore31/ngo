@@ -26,6 +26,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SallaryController;
 use App\Http\Controllers\SignatureController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\StaffWorkController;
 use App\Http\Controllers\TrainingCenterController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\WorkingAreaController;
@@ -493,5 +494,10 @@ Route::controller(JobController::class)->middleware('auth')->group(function () {
 
 Route::get('/apply-job/{id}',[JobController::class, 'Apply'])->name('apply.job');
 Route::post('/store-vacancies',[JobController::class, 'StoreVacancies'])->name('vacancies.store');
+
+Route::controller(StaffWorkController::class)->middleware('auth')->group(function(){
+    Route::get('ngo/work-list','WorkList')->name('work.list');
+    Route::get('ngo/work-view/{id}','WorkView')->name('work.view');
+});
 
 require __DIR__ . '/auth.php';
