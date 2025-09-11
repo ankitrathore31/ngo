@@ -94,7 +94,7 @@
                                     <i class="fas fa-user-plus fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Total Beneficiaries Survey</p>
-                                        <h5 class="mb-0">{{TotalSurvey() }}</h5>
+                                        <h5 class="mb-0">{{ TotalSurvey() }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -105,7 +105,7 @@
                                     <i class="fas fa-clock fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Pending Beneficiaries Survey</p>
-                                        <h5 class="mb-0">{{PendingSurvey() }}</h5>
+                                        <h5 class="mb-0">{{ PendingSurvey() }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -117,7 +117,7 @@
                                     <i class="fas fa-check-circle fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Approved Beneficiaries Survey</p>
-                                        <h5 class="mb-0">{{ ApproveSurvey()}}</h5>
+                                        <h5 class="mb-0">{{ ApproveSurvey() }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -135,7 +135,7 @@
                                     <i class="fas fa-user-plus fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Total Beneficiaries</p>
-                                        <h5 class="mb-0">{{ $allbene }}</h5>
+                                        <h5 class="mb-0">{{ ApproveSurvey() }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -158,7 +158,7 @@
                                     <i class="fas fa-check-circle fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Approved Beneficiaries</p>
-                                        <h5 class="mb-0">{{ $apbene }}</h5>
+                                        <h5 class="mb-0">{{ ApproveSurvey() }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -303,7 +303,7 @@
                                         <i class="fas fa-clipboard-list fa-2x me-3"></i>
                                         <div>
                                             <p class="mb-1">Total Project</p>
-                                            <h5 class="mb-0">{{totalProject()}}</h5>
+                                            <h5 class="mb-0">{{ totalProject() }}</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -316,7 +316,7 @@
                                         <i class="fas fa-running fa-2x me-3"></i>
                                         <div>
                                             <p class="mb-1">Total Project Report</p>
-                                            <h5 class="mb-0">{{totalProjectReport()}}</h5>
+                                            <h5 class="mb-0">{{ totalProjectReport() }}</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -328,7 +328,7 @@
                                         <i class="fas fa-clipboard-list fa-2x me-3"></i>
                                         <div>
                                             <p class="mb-1">Total Project Category</p>
-                                            <h5 class="mb-0">{{totalProjectCategory()}}</h5>
+                                            <h5 class="mb-0">{{ totalProjectCategory() }}</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -475,7 +475,7 @@
                                         <i class="fas fa-donate fa-2x me-3"></i>
                                         <div>
                                             <p class="mb-1">Total Offline Donation</p>
-                                            <h5 class="mb-0">₹ {{ number_format($offlinedonate,2) }}</h5>
+                                            <h5 class="mb-0">₹ {{ number_format($offlinedonate, 2) }}</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -653,6 +653,109 @@
                 @endif
             </div>
         </div>
+        <div class="container mt-5">
+            <div class="row">
+                <!-- Total Visitors Card -->
+                <div class="col-md-6 mb-4">
+                    <h5><b> - Website Traffic</b></h5>
+                    <!-- Today's Visitors Card -->
+                    <div class="card card-hover" style="background-color: rgb(240, 248, 255); transition: 0.3s;">
+                        <div class="card-body">
+                            <h5 class="card-title" style="color: rgb(25, 42, 86);">Visitors Today</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Tracked for the Current Day</h6>
+                            <p class="card-text display-4" style="color: rgb(0, 123, 255); font-weight: bold;">
+                                {{ todayVisitor() }}</p>
+                        </div>
+                    </div>
+                    <br>
+                    <!-- Total Visitors Card -->
+                    <div class="card card-hover" style="background-color: rgb(245, 245, 245); transition: 0.3s;">
+                        <div class="card-body">
+                            <h5 class="card-title" style="color: rgb(39, 174, 96);">Total Visitors</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Cumulative Count</h6>
+                            <p class="card-text display-4" style="color: rgb(22, 160, 133); font-weight: bold;">
+                                {{ totalVisitor() }}</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Visitor Pie Chart -->
+                <div class="col-md-6 mb-4">
+                    <div class="card card-hover">
+                        <div class="card-body">
+                            <h5 class="card-title">Visitors by Month</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">This Year</h6>
+                            <div class="chart-container" style="position: relative; height: 300px;">
+                                <canvas id="visitorChart"></canvas>
+                            </div>
 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const monthlyData = @json(monthlyVisitorData());
+        const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+        ];
+
+        const ctx = document.getElementById('visitorChart').getContext('2d');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: monthLabels,
+                datasets: [{
+                    label: 'Monthly Visitors',
+                    data: monthlyData,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.8)',
+                        'rgba(54, 162, 235, 0.8)',
+                        'rgba(255, 206, 86, 0.8)',
+                        'rgba(75, 192, 192, 0.8)',
+                        'rgba(153, 102, 255, 0.8)',
+                        'rgba(255, 159, 64, 0.8)',
+                        'rgba(201, 203, 207, 0.8)',
+                        'rgba(102, 187, 106, 0.8)',
+                        'rgba(239, 83, 80, 0.8)',
+                        'rgba(123, 31, 162, 0.8)',
+                        'rgba(66, 133, 244, 0.8)',
+                        'rgba(233, 30, 99, 0.8)',
+                    ],
+                    borderRadius: 6,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'rgb(100, 100, 100)'
+                        },
+                        grid: {
+                            color: 'rgba(200,200,200,0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'rgb(100, 100, 100)'
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    </script>
 @endsection
