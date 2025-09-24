@@ -57,20 +57,23 @@ if (!function_exists('totalApprovedReg')) {
         return $data;
     }
 }
-if(!function_exists('TotalSurvey')){
-    function TotalSurvey(){
+if (!function_exists('TotalSurvey')) {
+    function TotalSurvey()
+    {
         $data = beneficiarie::where('status', 1)->count();
         return $data;
     }
 }
-if(!function_exists('PendingSurvey')){
-    function PendingSurvey(){
+if (!function_exists('PendingSurvey')) {
+    function PendingSurvey()
+    {
         $data = beneficiarie::where('survey_status', 0)->count();
         return $data;
     }
 }
-if(!function_exists('ApproveSurvey')){
-    function ApproveSurvey(){
+if (!function_exists('ApproveSurvey')) {
+    function ApproveSurvey()
+    {
         $data = beneficiarie::where('survey_status', 1)->count();
         return $data;
     }
@@ -191,21 +194,44 @@ if (!function_exists('monthlyVisitorData')) {
         return $data;
     }
 }
-if(!function_exists('totalProject')){
-    function totalProject(){
+if (!function_exists('totalProject')) {
+    function totalProject()
+    {
         $data = Project::count();
         return $data;
     }
 }
-if(!function_exists('totalProjectReport')){
-    function totalProjectReport(){
+if (!function_exists('totalProjectReport')) {
+    function totalProjectReport()
+    {
         $data = ProjectReport::count();
         return $data;
     }
 }
-if(!function_exists('totalProjectCategory')){
-    function totalProjectCategory(){
+if (!function_exists('totalProjectCategory')) {
+    function totalProjectCategory()
+    {
         $data = Category::count();
         return $data;
     }
 }
+if (!function_exists('getTotalWithReligion')) {
+    function getTotalWithReligion($model)
+    {
+        $religions = ['Hindu', 'Islam', 'Christian', 'Sikh', 'Buddhist', 'Parsi'];
+
+        $query = $model::query();
+        $total = $query->count();
+        $religionCounts = [];
+
+        foreach ($religions as $religion) {
+            $religionCounts[$religion] = $query->where('religion', $religion)->count();
+        }
+
+        return [
+            'total' => $total,
+            'religions' => $religionCounts,
+        ];
+    }
+}
+

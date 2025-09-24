@@ -406,7 +406,7 @@ class HomeControlller extends Controller
             $query->where('district', $request->district);
         }
 
-        $group = $query->paginate(10);
+        $group = $query->get();
         $data = academic_session::all();
 
         return view('home.organization.show-group', compact('organization', 'group', 'data', 'id'));

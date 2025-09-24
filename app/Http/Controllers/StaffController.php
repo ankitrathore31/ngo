@@ -191,8 +191,8 @@ class StaffController extends Controller
         $data = academic_session::all();
         $states = config('states');
         $existingPermissions = json_decode($staff->permissions ?? '[]', true);
-        $position = Position::orderBy('position', 'asc')->get();
-        return view('ngo.staff.edit-staff', compact('data', 'states', 'staff', 'existingPermissions','position'));
+        $positions = Position::orderBy('position', 'asc')->get();
+        return view('ngo.staff.edit-staff', compact('data', 'states', 'staff', 'existingPermissions','positions'));
     }
 
     public function UpdateStaff(Request $request, $id)
