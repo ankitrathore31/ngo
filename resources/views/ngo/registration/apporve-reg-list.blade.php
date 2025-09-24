@@ -1,8 +1,31 @@
 @extends('ngo.layout.master')
 @Section('content')
+    {{-- Animations --}}
+    <style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
     <div class="wrapper">
         <div class="container-fluid mt-4">
-
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="mb-0">Approve Registraition List</h5>
                 <nav aria-label="breadcrumb">
@@ -21,8 +44,7 @@
                 <form method="GET" action="{{ route('approve-registration') }}" class="row g-3 mb-4">
                     <div class="row">
                         <div class="col-md-4 col-sm-4">
-                            <select name="session_filter" id="session_filter" class="form-control"
-                               >
+                            <select name="session_filter" id="session_filter" class="form-control">
                                 <option value="">All Sessions</option>
                                 @foreach ($data as $session)
                                     <option value="{{ $session->session_date }}"
@@ -107,6 +129,40 @@
                     </div>
                 </form>
             </div>
+            @php
+                $memberData = getTotalWithReligion(\App\Models\Member::class);
+                $beneficiarieData = getTotalWithReligion(\App\Models\Beneficiarie::class);
+            @endphp
+            <div class="row">
+                {{-- Members Card --}}
+                <div class="col-md-6 mb-3">
+                    <div class="card shadow-lg" style="background: linear-gradient(135deg, #11998e, #38ef7d); color: #fff;">
+                        <div class="card-body text-center">
+                            <h4 class="fw-bold">Total Members</h4>
+                            <h2>{{ $memberData['total'] }}</h2>
+                            <hr>
+                            @foreach ($memberData['religions'] as $religion => $count)
+                                <p><strong>{{ $religion }}:</strong> {{ $count }}</p>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Beneficiaries Card --}}
+                <div class="col-md-6 mb-3">
+                    <div class="card shadow-lg" style="background: linear-gradient(135deg, #6a11cb, #2575fc); color: #fff;">
+                        <div class="card-body text-center">
+                            <h4 class="fw-bold">Total Beneficiaries</h4>
+                            <h2>{{ $beneficiarieData['total'] }}</h2>
+                            <hr>
+                            @foreach ($beneficiarieData['religions'] as $religion => $count)
+                                <p><strong>{{ $religion }}:</strong> {{ $count }}</p>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="card shadow-sm">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <a href="{{ route('registration') }}" class="btn btn-success btn-sm">+ New Registraition</a>
