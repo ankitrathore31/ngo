@@ -12,7 +12,13 @@ use App\Models\Project;
 use App\Models\ProjectReport;
 use App\Models\Visitor;
 
-
+if (!function_exists('hello')) {
+    function hello()
+    {
+        return print('hello');
+        
+    }
+}
 if (!function_exists('totalReg')) {
     function totalReg()
     {
@@ -235,6 +241,7 @@ if (!function_exists('totalStats')) {
         ];
     }
 }
+
 
 
 
