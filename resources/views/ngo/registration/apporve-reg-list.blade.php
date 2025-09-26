@@ -1,29 +1,5 @@
 @extends('ngo.layout.master')
 @Section('content')
-    {{-- Animations --}}
-    <style>
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
     <div class="wrapper">
         <div class="container-fluid mt-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -129,45 +105,78 @@
                     </div>
                 </form>
             </div>
-            @php
-                $memberData = getTotalWithReligion(\App\Models\Member::class);
-                $beneficiarieData = getTotalWithReligion(\App\Models\Beneficiarie::class);
-            @endphp
-            <div class="row">
-                {{-- Members Card --}}
-                <div class="col-md-6 mb-3">
-                    <div class="card shadow-lg" style="background: linear-gradient(135deg, #11998e, #38ef7d); color: #fff;">
-                        <div class="card-body text-center">
-                            <h4 class="fw-bold">Total Members</h4>
-                            <h2>{{ $memberData['total'] }}</h2>
-                            <hr>
-                            @foreach ($memberData['religions'] as $religion => $count)
-                                <p><strong>{{ $religion }}:</strong> {{ $count }}</p>
-                            @endforeach
+
+            <div class="card shadow-sm border-0">
+                {{-- <div class="card-header bg-primary text-white text-center">
+                    <h4 class="mb-0">Overall Statistics</h4>
+                </div> --}}
+                <div class="card-body">
+                    <!-- Totals Section -->
+                    <div class="row text-center mb-4">
+                        <div class="col-md-4">
+                            <div class="p-3 bg-light rounded shadow-sm">
+                                <h5 class="fw-bold text-primary">Total Registrations</h5>
+                                <p class="fs-4 mb-0">{{ totalStats()['total'] }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 bg-light rounded shadow-sm">
+                                <h5 class="fw-bold text-success">Total Beneficiaries</h5>
+                                <p class="fs-4 mb-0">{{ totalStats()['ben'] }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 bg-light rounded shadow-sm">
+                                <h5 class="fw-bold text-warning">Total Members</h5>
+                                <p class="fs-4 mb-0">{{ totalStats()['mem'] }}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                {{-- Beneficiaries Card --}}
-                <div class="col-md-6 mb-3">
-                    <div class="card shadow-lg" style="background: linear-gradient(135deg, #6a11cb, #2575fc); color: #fff;">
-                        <div class="card-body text-center">
-                            <h4 class="fw-bold">Total Beneficiaries</h4>
-                            <h2>{{ $beneficiarieData['total'] }}</h2>
-                            <hr>
-                            @foreach ($beneficiarieData['religions'] as $religion => $count)
-                                <p><strong>{{ $religion }}:</strong> {{ $count }}</p>
-                            @endforeach
+                    <!-- Religion-Wise Section -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5 class="text-primary">Religion-wise Beneficiaries</h5>
+                            <table class="table table-bordered table-sm">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Religion</th>
+                                        <th>Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (totalStats()['benReligion'] as $religion => $count)
+                                        <tr>
+                                            <td>{{ $religion }}</td>
+                                            <td>{{ $count }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="text-success">Religion-wise Members</h5>
+                            <table class="table table-bordered table-sm">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Religion</th>
+                                        <th>Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (totalStats()['memReligion'] as $religion => $count)
+                                        <tr>
+                                            <td>{{ $religion }}</td>
+                                            <td>{{ $count }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
-
             <div class="card shadow-sm">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <a href="{{ route('registration') }}" class="btn btn-success btn-sm">+ New Registraition</a>
-                </div>
-
                 <div class="card-body table-responsive">
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-primary">

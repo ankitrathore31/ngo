@@ -12,13 +12,6 @@ use App\Models\Project;
 use App\Models\ProjectReport;
 use App\Models\Visitor;
 
-if (!function_exists('print_hello')) {
-    function print_hello()
-    {
-        $data = 'hello helper';
-        return $data;
-    }
-}
 
 if (!function_exists('totalReg')) {
     function totalReg()
@@ -215,23 +208,33 @@ if (!function_exists('totalProjectCategory')) {
         return $data;
     }
 }
-if (!function_exists('getTotalWithReligion')) {
-    function getTotalWithReligion($model)
+if (!function_exists('totalStats')) {
+    function totalStats()
     {
+        $ben = beneficiarie::where('status',1)->count();
+        $mem = Member::count();
+        $total = $ben + $mem;
+
+        // Religion list
         $religions = ['Hindu', 'Islam', 'Christian', 'Sikh', 'Buddhist', 'Parsi'];
 
-        $query = $model::query();
-        $total = $query->count();
-        $religionCounts = [];
-
-        foreach ($religions as $religion) {
-            $religionCounts[$religion] = $query->where('religion', $religion)->count();
+        // Religion counts separately
+        $benReligion = [];
+        $memReligion = [];
+        foreach ($religions as $rel) {
+            $benReligion[$rel] = beneficiarie::where('status',1)->where('religion', $rel)->count();
+            $memReligion[$rel] = Member::where('status',1)->where('religion', $rel)->count();
         }
 
         return [
-            'total' => $total,
-            'religions' => $religionCounts,
+            'total'        => $total,
+            'ben'          => $ben,
+            'mem'          => $mem,
+            'benReligion'  => $benReligion,
+            'memReligion'  => $memReligion,
         ];
     }
 }
+
+
 
