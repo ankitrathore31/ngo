@@ -7,7 +7,7 @@
                 <h5 class="mb-0">Demand Beneficiarie List For Facilities</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
-                        <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url('ngo') }}">Dashboard</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Demand Beneficiarie List</li>
                     </ol>
                 </nav>
@@ -31,9 +31,9 @@
                                 @endforeach
                             </select>
                         </div>
-                               <div class=" col-md-4">
+                        <div class=" col-md-4">
                             {{-- <label for="bene_category">Beneficiarie Eligibility Category</label> --}}
-                            <select id="bene_category" name="bene_category" class="form-control" required>
+                            <select id="bene_category" name="bene_category" class="form-control" >
                                 <option value="">-- Select Beneficiarie Eligibility Category --</option>
                                 <option value="Homeless Families">1. Homeless Families</option>
                                 <option value="People living in kutcha or one-room houses">2. People living in kutcha or
@@ -115,11 +115,23 @@
                     </div>
                 </form>
             </div>
+            {{-- Add this button in card header --}}
             <div class="card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Survey List</h5>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#bulkFacilitiesModal">
+                        <i class="fa fa-plus"></i> Add Facilities to Multiple Surveys
+                    </button>
+                </div>
+
                 <div class="card-body table-responsive">
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-primary">
                             <tr>
+                                <th>
+                                    <input type="checkbox" id="selectAll" class="form-check-input">
+                                </th>
                                 <th>Sr. No.</th>
                                 <th>Registration No.</th>
                                 <th>Name</th>
@@ -145,6 +157,10 @@
                             @foreach ($surveys as $survey)
                                 @php $item = $survey->beneficiarie; @endphp
                                 <tr>
+                                    <td>
+                                        <input type="checkbox" class="form-check-input survey-checkbox"
+                                            value="{{ $survey->id }}" data-beneficiarie-id="{{ $item->id }}">
+                                    </td>
                                     <td>{{ $srNo++ }}</td>
                                     <td>{{ $item->registration_no ?? 'No Found' }}</td>
                                     <td>{{ $item->name }}</td>
@@ -186,8 +202,86 @@
                                 </tr>
                             @endforeach
                         </tbody>
-
                     </table>
+                </div>
+            </div>
+
+            {{-- Modal for Bulk Facilities --}}
+            <div class="modal fade" id="bulkFacilitiesModal" tabindex="-1" aria-labelledby="bulkFacilitiesModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title" id="bulkFacilitiesModalLabel">Add Facilities to Multiple Surveys</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <form action="{{ route('store-bulk-beneficiarie-facilities') }}" method="POST"
+                            id="bulkFacilitiesForm">
+                            @csrf
+                            <div class="modal-body">
+                                {{-- Selected Surveys Display --}}
+                                <div class="alert alert-info" id="selectedSurveysAlert">
+                                    <strong>Selected Surveys:</strong> <span id="selectedCount">0</span>
+                                </div>
+
+                                {{-- Hidden input for survey IDs --}}
+                                <input type="hidden" name="survey_ids" id="surveyIdsInput">
+
+                                {{-- Session Selection --}}
+                                <div class="mb-3">
+                                    <label for="session" class="form-label fw-bold">
+                                        Session <span class="text-danger">*</span>
+                                    </label>
+                                    <select class="form-control @error('session') is-invalid @enderror" name="session"
+                                        required>
+                                        <option value="">Select Session</option>
+                                        @foreach ($data as $sess)
+                                            <option value="{{ $sess->session_date }}">{{ $sess->session_date }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('session')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                {{-- Facilities Category --}}
+                                <div class="mb-3">
+                                    <label for="bulk_facilities_category" class="form-label fw-bold">
+                                        Facilities Category <span class="text-danger">*</span>
+                                    </label>
+                                    <select name="facilities_category" id="bulk_facilities_category"
+                                        class="form-select @error('facilities_category') is-invalid @enderror" required>
+                                        <option value="">-- Select Category --</option>
+                                        @foreach ($category as $item)
+                                            <option value="{{ $item->category }}">{{ $item->category }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('facilities_category')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                {{-- Facilities Details --}}
+                                <div class="mb-3">
+                                    <label for="bulk_facilities" class="form-label fw-bold">
+                                        Facilities <span class="text-danger">*</span>
+                                    </label>
+                                    <textarea class="form-control @error('facilities') is-invalid @enderror" id="bulk_facilities" name="facilities"
+                                        rows="4" placeholder="Enter facility details..." required></textarea>
+                                    @error('facilities')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-success" id="submitBulkBtn" disabled>
+                                    <i class="fa fa-save"></i> Add Facilities
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -219,4 +313,83 @@
             populateDistricts(this.value);
         });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectAllCheckbox = document.getElementById('selectAll');
+            const surveyCheckboxes = document.querySelectorAll('.survey-checkbox');
+            const selectedCountSpan = document.getElementById('selectedCount');
+            const surveyIdsInput = document.getElementById('surveyIdsInput');
+            const submitBtn = document.getElementById('submitBulkBtn');
+            const bulkModal = document.getElementById('bulkFacilitiesModal');
+
+            // Select All functionality
+            selectAllCheckbox.addEventListener('change', function() {
+                surveyCheckboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                });
+                updateSelectedCount();
+            });
+
+            // Individual checkbox change
+            surveyCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    updateSelectAllState();
+                    updateSelectedCount();
+                });
+            });
+
+            // Update select all state
+            function updateSelectAllState() {
+                const allChecked = Array.from(surveyCheckboxes).every(cb => cb.checked);
+                const anyChecked = Array.from(surveyCheckboxes).some(cb => cb.checked);
+                selectAllCheckbox.checked = allChecked;
+                selectAllCheckbox.indeterminate = anyChecked && !allChecked;
+            }
+
+            // Update selected count and submit button state
+            function updateSelectedCount() {
+                const selectedCheckboxes = document.querySelectorAll('.survey-checkbox:checked');
+                const count = selectedCheckboxes.length;
+                selectedCountSpan.textContent = count;
+
+                // Enable/disable submit button
+                submitBtn.disabled = count === 0;
+
+                // Update hidden input with survey IDs
+                const surveyIds = Array.from(selectedCheckboxes).map(cb => cb.value);
+                surveyIdsInput.value = JSON.stringify(surveyIds);
+            }
+
+            // Update count when modal is opened
+            bulkModal.addEventListener('show.bs.modal', function() {
+                updateSelectedCount();
+                if (document.querySelectorAll('.survey-checkbox:checked').length === 0) {
+                    alert('Please select at least one survey first!');
+                    return false;
+                }
+            });
+
+            // Reset form when modal is closed
+            bulkModal.addEventListener('hidden.bs.modal', function() {
+                document.getElementById('bulkFacilitiesForm').reset();
+            });
+        });
+    </script>
+
+    <style>
+        .survey-checkbox,
+        #selectAll {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+
+        .modal-header {
+            border-bottom: 2px solid #0d6efd;
+        }
+
+        #selectedSurveysAlert {
+            border-left: 4px solid #0dcaf0;
+        }
+    </style>
 @endsection

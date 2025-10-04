@@ -139,7 +139,7 @@ Route::get('/ngo', [NgoController::class, 'ngo'])
     ->middleware(['auth'])
     ->name('ngo');
 
-
+    
 Route::controller(NgoController::class)->group(function () {
     Route::post('save-ngo', 'savengo')->middleware('auth')->name('save-ngo');
     Route::get('edit-ngo/{id}', 'editngo')->middleware('auth')->name('edit-ngo');
@@ -233,6 +233,8 @@ Route::controller(BeneficiarieController::class)->group(function () {
     Route::get('ngo/beneficiarie-report-list', 'beneficiarieReportList')->middleware('auth')->name('beneficiarie-report-list');
     Route::get('ngo/show-beneficiarie-report/{beneficiarie_id}/survey/{survey_id}', 'showbeneficiariereport')->middleware('auth')->name('show-beneficiarie-report');
     Route::get('ngo/Survey-received-list', 'surveyrecivedlist')->middleware('auth')->name('survey-received-list');
+    Route::post('/beneficiaries/facilities/bulk-store',  'storeBulkBeneficiarieFacilities')->middleware('auth')
+    ->name('store-bulk-beneficiarie-facilities');
 });
 
 Route::controller(WorkingAreaController::class)->group(function () {

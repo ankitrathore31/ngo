@@ -110,7 +110,7 @@
                 <h5 class="mb-0">Approval Demand Beneficiarie Facilities List</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
-                        <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url('ngo') }}">Dashboard</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Demand Approval Facilities List</li>
                     </ol>
                 </nav>
@@ -125,8 +125,7 @@
                     <form method="GET" action="{{ route('beneficiarie-facilities-list') }}" class="row g-3 mb-4">
                         <div class="col-md-4">
                             {{-- <label for="session_filter" class="form-label">Select Session</label> --}}
-                            <select name="session_filter" id="session_filter" class="form-control"
-                                onchange="this.form.submit()">
+                            <select name="session_filter" id="session_filter" class="form-control">
                                 <option value="">All Sessions</option> <!-- Default option to show all -->
                                 @foreach ($data as $session)
                                     <option value="{{ $session->session_date }}"
@@ -155,7 +154,7 @@
 
                         <div class=" col-md-4">
                             {{-- <label for="bene_category">Beneficiarie Eligibility Category</label> --}}
-                            <select id="bene_category" name="bene_category" class="form-control" required>
+                            <select id="bene_category" name="bene_category" class="form-control" >
                                 <option value="">-- Select Beneficiarie Eligibility Category --</option>
                                 <option value="Homeless Families">1. Homeless Families</option>
                                 <option value="People living in kutcha or one-room houses">2. People living in kutcha or
@@ -193,9 +192,7 @@
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
-
-
-                        <div class="col-md-4 d-flex">
+                        <div class="col-md-4">
                             <button type="submit" class="btn btn-primary me-2">Search</button>
                             <a href="{{ route('beneficiarie-facilities-list') }}"
                                 class="btn btn-info text-white me-2">Reset</a>
