@@ -156,7 +156,7 @@
 
                             <div class=" col-md-4">
                                 {{-- <label for="bene_category">Beneficiarie Eligibility Category</label> --}}
-                                <select id="bene_category" name="bene_category" class="form-control" required>
+                                <select id="bene_category" name="bene_category" class="form-control" >
                                     <option value="">-- Select Beneficiarie Eligibility Category --</option>
                                     <option value="Homeless Families">1. Homeless Families</option>
                                     <option value="People living in kutcha or one-room houses">2. People living in kutcha or

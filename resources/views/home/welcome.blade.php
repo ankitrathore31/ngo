@@ -282,11 +282,11 @@
 
         <div class="col-md-2 mb-3">
             <a href="{{ route('home.center.list') }}" class="btn btn-primary w-100">
-                Training Center 
+                Training Center
             </a>
         </div>
 
-         <div class="col-md-2 mb-3">
+        <div class="col-md-2 mb-3">
             <a href="{{ route('vacancies') }}" class="btn btn-primary w-100">
                 Vacancies
             </a>
@@ -644,6 +644,7 @@
             </div>
             <div class="row">
                 @php
+                    $organizations = organization();
                     $gradients = [
                         'background: linear-gradient(45deg, #ff6a00, #ffcc00);', // orange to yellow
                         'background: linear-gradient(45deg, #ff416c, #ff4b2b);', // pink to red
@@ -653,20 +654,37 @@
                         'background: linear-gradient(45deg, #7f00ff, #e100ff);', // purple to magenta
                     ];
                 @endphp
-                @foreach (organization() as $index => $item)
+
+                {{-- <div class="col-12 mb-3">
+                    <h4 class="fw-bold">कुल संगठन : {{ count($organizations) }}</h4>
+                </div> --}}
+                <div class="col-md-4 mb-2">
+                        <div class="card text-center shadow-sm text-white"
+                            style="background: linear-gradient(45deg, #43e97b, #38f9d7);">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold"> कुल संगठन </h5>
+                                <p class="card-text fs-4">{{ count($organizations) }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                @foreach ($organizations as $index => $item)
                     <div class="col-md-4 mb-2">
                         <div class="card text-center shadow-sm text-white"
                             style="{{ $gradients[$index % count($gradients)] }}">
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">{{ $item->name }}</h5>
                                 <p class="card-text fs-4">{{ TotalorganizationGroup($item->id) }}</p>
-                                <small><a href="{{ route('organization.groups', $item->id) }}"
-                                        class="btn btn-primary">Click Here</a></small>
+                                <small>
+                                    <a href="{{ route('organization.groups', $item->id) }}" class="btn btn-primary">Click
+                                        Here</a>
+                                </small>
                             </div>
                         </div>
                     </div>
                 @endforeach
             </div>
+
         </div>
     </section>
 
