@@ -16,7 +16,6 @@ if (!function_exists('hello')) {
     function hello()
     {
         return print('hello');
-        
     }
 }
 if (!function_exists('totalReg')) {
@@ -126,6 +125,13 @@ if (!function_exists('organization')) {
         return $data;
     }
 }
+if (!function_exists('TotalOrganization')) {
+    function TotalOrganization()
+    {
+        $data = Organization::count();
+        return $data;
+    }
+}
 
 if (!function_exists('TotalorganizationGroup')) {
     function TotalorganizationGroup($id)
@@ -217,20 +223,51 @@ if (!function_exists('totalProjectCategory')) {
 if (!function_exists('totalStats')) {
     function totalStats()
     {
-        $ben = beneficiarie::where('status',1)->count();
+        $ben = beneficiarie::where('status', 1)->count();
         $mem = Member::count();
         $total = $ben + $mem;
 
         // Religion list
         $religions = ['Hindu', 'Islam', 'Christian', 'Sikh', 'Buddhist', 'Parsi'];
 
-        // Religion counts separately
         $benReligion = [];
         $memReligion = [];
         foreach ($religions as $rel) {
-            $benReligion[$rel] = beneficiarie::where('status',1)->where('religion', $rel)->count();
-            $memReligion[$rel] = Member::where('status',1)->where('religion', $rel)->count();
+            $benReligion[$rel] = beneficiarie::where('status', 1)->where('religion', $rel)->count();
+            $memReligion[$rel] = Member::where('status', 1)->where('religion', $rel)->count();
         }
+
+        // Caste
+        // Get unique caste values from your beneficiarie or Member model
+        $castes = beneficiarie::where('status', 1)
+            ->distinct()
+            ->pluck('caste')
+            ->filter() // removes null/empty values
+            ->toArray();
+
+        // If you also want to include caste values from Member table
+        $memberCastes = Member::where('status', 1)
+            ->distinct()
+            ->pluck('caste')
+            ->filter()
+            ->toArray();
+
+        // Merge both and remove duplicates
+        $castes = array_unique(array_merge($castes, $memberCastes));
+
+        $benCaste = [];
+        $memCaste = [];
+
+        foreach ($castes as $cat) {
+            $benCaste[$cat] = beneficiarie::where('status', 1)
+                ->where('caste', $cat)
+                ->count();
+
+            $memCaste[$cat] = Member::where('status', 1)
+                ->where('caste', $cat)
+                ->count();
+        }
+
 
         return [
             'total'        => $total,
@@ -238,10 +275,8 @@ if (!function_exists('totalStats')) {
             'mem'          => $mem,
             'benReligion'  => $benReligion,
             'memReligion'  => $memReligion,
+            'benCaste'     => $benCaste,
+            'memCaste'     => $memCaste,
         ];
     }
 }
-
-
-
-

@@ -663,7 +663,7 @@
                             style="background: linear-gradient(45deg, #43e97b, #38f9d7);">
                             <div class="card-body">
                                 <h5 class="card-title fw-bold"> कुल संगठन </h5>
-                                <p class="card-text fs-4">{{ count($organizations) }}</p>
+                                <p class="card-text fs-4">{{ TotalOrganization() }}</p>
                             </div>
                         </div>
                     </div>
