@@ -107,9 +107,6 @@
             </div>
 
             <div class="card shadow-sm border-0">
-                {{-- <div class="card-header bg-primary text-white text-center">
-                    <h4 class="mb-0">Overall Statistics</h4>
-                </div> --}}
                 <div class="card-body">
                     <!-- Totals Section -->
                     <div class="row text-center mb-4">
@@ -134,7 +131,7 @@
                     </div>
 
                     <!-- Religion-Wise Section -->
-                    <div class="row">
+                    <div class="row mb-4">
                         <div class="col-md-6">
                             <h5 class="text-primary">Religion-wise Beneficiaries</h5>
                             <table class="table table-bordered table-sm">
@@ -174,8 +171,51 @@
                             </table>
                         </div>
                     </div>
+
+                    <!-- Caste-Wise Section -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5 class="text-primary">Caste-wise Beneficiaries</h5>
+                            <table class="table table-bordered table-sm">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Caste</th>
+                                        <th>Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (totalStats()['benCaste'] as $caste => $count)
+                                        <tr>
+                                            <td>{{ $caste ?: 'Not Specified' }}</td>
+                                            <td>{{ $count }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="text-success">Caste-wise Members</h5>
+                            <table class="table table-bordered table-sm">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Caste</th>
+                                        <th>Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (totalStats()['memCaste'] as $caste => $count)
+                                        <tr>
+                                            <td>{{ $caste ?: 'Not Specified' }}</td>
+                                            <td>{{ $count }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
+
             <div class="card shadow-sm">
                 <div class="card-body table-responsive">
                     <table class="table table-bordered table-hover align-middle text-center">
