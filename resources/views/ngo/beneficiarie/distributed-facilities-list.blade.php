@@ -156,7 +156,7 @@
 
                             <div class=" col-md-4">
                                 {{-- <label for="bene_category">Beneficiarie Eligibility Category</label> --}}
-                                <select id="bene_category" name="bene_category" class="form-control" >
+                                <select id="bene_category" name="bene_category" class="form-control">
                                     <option value="">-- Select Beneficiarie Eligibility Category --</option>
                                     <option value="Homeless Families">1. Homeless Families</option>
                                     <option value="People living in kutcha or one-room houses">2. People living in kutcha or
@@ -278,6 +278,130 @@
                             </div>
                         </div>
                     </div>
+                    <div class="card border-0 shadow-sm rounded-4 mb-4">
+                        <div class="card-body">
+
+                            <!-- Total Distributed -->
+                            <div class="row text-center mb-4">
+                                <div class="col-md-12">
+                                    <div class="p-4 bg-white rounded-4 shadow-sm hover-card">
+                                        <i class="fa-solid fa-truck-fast fa-2x text-success mb-2"></i>
+                                        <h6 class="fw-bold text-success mb-1">Total Distributed</h6>
+                                        <p class="fs-4 fw-semibold text-dark mb-0">{{ distributeStats()['total'] }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Facility Category Section -->
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <div class="stat-card rounded-4 p-3 shadow-sm bg-light">
+                                        <h5 class="fw-bold text-success mb-3">
+                                            <i class="fa-solid fa-box-open me-2"></i>Facility Category-wise Distribution
+                                        </h5>
+                                        <table class="table table-sm table-bordered align-middle mb-0">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Facility Category</th>
+                                                    <th>Count</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (distributeStats()['facilityStats'] as $facility => $count)
+                                                    <tr>
+                                                        <td>{{ $facility ?: 'Not Specified' }}</td>
+                                                        <td>{{ $count }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Religion Section -->
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <div class="stat-card rounded-4 p-3 shadow-sm bg-light">
+                                        <h5 class="fw-bold text-primary mb-3">
+                                            <i class="fa-solid fa-hands-praying me-2"></i>Religion-wise Distribution
+                                        </h5>
+                                        <table class="table table-sm table-bordered align-middle mb-0">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Religion</th>
+                                                    <th>Count</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (distributeStats()['religionStats'] as $religion => $count)
+                                                    <tr>
+                                                        <td>{{ $religion }}</td>
+                                                        <td>{{ $count }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Caste Section -->
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <div class="stat-card rounded-4 p-3 shadow-sm bg-light">
+                                        <h5 class="fw-bold text-info mb-3">
+                                            <i class="fa-solid fa-users me-2"></i>Caste-wise Distribution
+                                        </h5>
+                                        <table class="table table-sm table-bordered align-middle mb-0">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Caste</th>
+                                                    <th>Count</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (distributeStats()['casteStats'] as $caste => $count)
+                                                    <tr>
+                                                        <td>{{ $caste ?: 'Not Specified' }}</td>
+                                                        <td>{{ $count }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Caste Category Section -->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="stat-card rounded-4 p-3 shadow-sm bg-light">
+                                        <h5 class="fw-bold text-warning mb-3">
+                                            <i class="fa-solid fa-layer-group me-2"></i>Caste Category-wise Distribution
+                                        </h5>
+                                        <table class="table table-sm table-bordered align-middle mb-0">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Category</th>
+                                                    <th>Count</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (distributeStats()['categoryStats'] as $category => $count)
+                                                    <tr>
+                                                        <td>{{ $category }}</td>
+                                                        <td>{{ $count }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-primary">
                             <tr>

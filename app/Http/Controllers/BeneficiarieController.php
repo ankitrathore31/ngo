@@ -170,8 +170,8 @@ class BeneficiarieController extends Controller
         // Pass sessions data to the view for filter dropdown
         $data = academic_session::all();
         $states = config('states');
-        $category = Category::orderBy('category', 'asc')->get();
-        return view('ngo.beneficiarie.beneficiarie-facilities', compact('surveys', 'data', 'states', 'category','staff'));
+        $categories = Category::orderBy('category', 'asc')->get();
+        return view('ngo.beneficiarie.beneficiarie-facilities', compact('surveys', 'data', 'states', 'categories','staff'));
     }
 
     public function showbeneficiariesurvey($beneficiarie_id, $survey_id)

@@ -1,5 +1,25 @@
 @extends('ngo.layout.master')
 @Section('content')
+    <style>
+        .hover-card {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .hover-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+        }
+
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+    </style>
     <div class="wrapper">
         <div class="container-fluid mt-4">
 
@@ -33,7 +53,7 @@
                         </div>
                         <div class=" col-md-4">
                             {{-- <label for="bene_category">Beneficiarie Eligibility Category</label> --}}
-                            <select id="bene_category" name="bene_category" class="form-control" >
+                            <select id="bene_category" name="bene_category" class="form-control">
                                 <option value="">-- Select Beneficiarie Eligibility Category --</option>
                                 <option value="Homeless Families">1. Homeless Families</option>
                                 <option value="People living in kutcha or one-room houses">2. People living in kutcha or
@@ -115,6 +135,103 @@
                     </div>
                 </form>
             </div>
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-body">
+
+                    <!-- Total Surveys -->
+                    <div class="row text-center mb-4">
+                        <div class="col-md-12">
+                            <div class="p-4 bg-white rounded-4 shadow-sm hover-card">
+                                <i class="fa-solid fa-list-check fa-2x text-primary mb-2"></i>
+                                <h6 class="fw-bold text-primary mb-1">Total Surveys</h6>
+                                <p class="fs-4 fw-semibold text-dark mb-0">{{ surveyStats()['total'] }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Religion Section -->
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <div class="stat-card rounded-4 p-3 shadow-sm bg-light">
+                                <h5 class="fw-bold text-primary mb-3">
+                                    <i class="fa-solid fa-hands-praying me-2"></i>Religion-wise Distribution
+                                </h5>
+                                <table class="table table-sm table-bordered align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Religion</th>
+                                            <th>Count</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (surveyStats()['religionStats'] as $religion => $count)
+                                            <tr>
+                                                <td>{{ $religion }}</td>
+                                                <td>{{ $count }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Caste Category Section -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="stat-card rounded-4 p-3 shadow-sm bg-light">
+                                <h5 class="fw-bold text-warning mb-3">
+                                    <i class="fa-solid fa-layer-group me-2"></i>Caste Category-wise Distribution
+                                </h5>
+                                <table class="table table-sm table-bordered align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Category</th>
+                                            <th>Count</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (surveyStats()['categoryStats'] as $category => $count)
+                                            <tr>
+                                                <td>{{ $category }}</td>
+                                                <td>{{ $count }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Caste Section -->
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <div class="stat-card rounded-4 p-3 shadow-sm bg-light">
+                                <h5 class="fw-bold text-success mb-3">
+                                    <i class="fa-solid fa-people-group me-2"></i>Caste-wise Distribution
+                                </h5>
+                                <table class="table table-sm table-bordered align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Caste</th>
+                                            <th>Count</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (surveyStats()['casteStats'] as $caste => $count)
+                                            <tr>
+                                                <td>{{ $caste ?: 'Not Specified' }}</td>
+                                                <td>{{ $count }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {{-- Add this button in card header --}}
             <div class="card shadow-sm">
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -253,7 +370,7 @@
                                     <select name="facilities_category" id="bulk_facilities_category"
                                         class="form-select @error('facilities_category') is-invalid @enderror" required>
                                         <option value="">-- Select Category --</option>
-                                        @foreach ($category as $item)
+                                        @foreach ($categories as $item)
                                             <option value="{{ $item->category }}">{{ $item->category }}</option>
                                         @endforeach
                                     </select>

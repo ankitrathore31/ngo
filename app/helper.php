@@ -11,6 +11,7 @@ use App\Models\Problem;
 use App\Models\Project;
 use App\Models\ProjectReport;
 use App\Models\Visitor;
+use Illuminate\Support\Facades\DB;
 
 if (!function_exists('hello')) {
     function hello()
@@ -237,22 +238,19 @@ if (!function_exists('totalStats')) {
             $memReligion[$rel] = Member::where('status', 1)->where('religion', $rel)->count();
         }
 
-        // Caste
-        // Get unique caste values from your beneficiarie or Member model
+        // Caste list
         $castes = beneficiarie::where('status', 1)
             ->distinct()
             ->pluck('caste')
-            ->filter() // removes null/empty values
+            ->filter()
             ->toArray();
 
-        // If you also want to include caste values from Member table
         $memberCastes = Member::where('status', 1)
             ->distinct()
             ->pluck('caste')
             ->filter()
             ->toArray();
 
-        // Merge both and remove duplicates
         $castes = array_unique(array_merge($castes, $memberCastes));
 
         $benCaste = [];
@@ -268,15 +266,132 @@ if (!function_exists('totalStats')) {
                 ->count();
         }
 
+        // 🆕 Caste Category list
+        $categories = ['General', 'OBC', 'SC', 'ST', 'Minority'];
+
+        $benCategory = [];
+        $memCategory = [];
+        foreach ($categories as $cat) {
+            $benCategory[$cat] = beneficiarie::where('status', 1)
+                ->where('religion_category', $cat)
+                ->count();
+
+            $memCategory[$cat] = Member::where('status', 1)
+                ->where('religion_category', $cat)
+                ->count();
+        }
 
         return [
-            'total'        => $total,
-            'ben'          => $ben,
-            'mem'          => $mem,
-            'benReligion'  => $benReligion,
-            'memReligion'  => $memReligion,
-            'benCaste'     => $benCaste,
-            'memCaste'     => $memCaste,
+            'total'         => $total,
+            'ben'           => $ben,
+            'mem'           => $mem,
+            'benReligion'   => $benReligion,
+            'memReligion'   => $memReligion,
+            'benCaste'      => $benCaste,
+            'memCaste'      => $memCaste,
+            'benCategory'   => $benCategory,
+            'memCategory'   => $memCategory,
+        ];
+    }
+
+}
+
+if (!function_exists('surveyStats')) {
+    function surveyStats()
+    {
+        // Step 1: Get first survey for each beneficiary
+        $firstSurveyIds = DB::table('beneficiarie__surveys')
+            ->selectRaw('MIN(id) as id')
+            ->groupBy('beneficiarie_id')
+            ->pluck('id');
+
+        // Step 2: Load those survey records with beneficiary relationship
+        $surveys = Beneficiarie_Survey::with('beneficiarie')
+            ->whereIn('id', $firstSurveyIds)
+            ->get();
+
+        // Step 3: Religion Stats
+        $religions = ['Hindu', 'Islam', 'Christian', 'Sikh', 'Buddhist', 'Parsi'];
+        $religionStats = [];
+        foreach ($religions as $rel) {
+            $religionStats[$rel] = $surveys->where('beneficiarie.religion', $rel)->count();
+        }
+
+        // Step 4: Caste Stats (auto-detect unique castes)
+        $castes = $surveys->pluck('beneficiarie.caste')->filter()->unique();
+        $casteStats = [];
+        foreach ($castes as $caste) {
+            $casteStats[$caste] = $surveys->where('beneficiarie.caste', $caste)->count();
+        }
+
+        // Step 5: Caste Category Stats
+        $categories = ['General', 'OBC', 'SC', 'ST', 'Minority'];
+        $categoryStats = [];
+        foreach ($categories as $cat) {
+            $categoryStats[$cat] = $surveys->where('beneficiarie.religion_category', $cat)->count();
+        }
+
+        // Step 6: Total Surveys
+        $total = $surveys->count();
+
+        // Step 7: Return formatted array
+        return [
+            'total'         => $total,
+            'religionStats' => $religionStats,
+            'casteStats'    => $casteStats,
+            'categoryStats' => $categoryStats,
         ];
     }
 }
+if (!function_exists('distributeStats')) {
+    function distributeStats()
+    {
+        // Get all distributed surveys
+        $distributed = Beneficiarie_Survey::with('beneficiarie')
+            ->where('status', 'Distributed')
+            ->get();
+
+        // Total distributed
+        $total = $distributed->count();
+
+        // Religion stats
+        $religions = ['Hindu', 'Islam', 'Christian', 'Sikh', 'Buddhist', 'Parsi'];
+        $religionStats = [];
+        foreach ($religions as $rel) {
+            $religionStats[$rel] = $distributed->where('beneficiarie.religion', $rel)->count();
+        }
+
+        // Caste stats
+        $castes = $distributed->pluck('beneficiarie.caste')->filter()->unique();
+        $casteStats = [];
+        foreach ($castes as $caste) {
+            $casteStats[$caste] = $distributed->where('beneficiarie.caste', $caste)->count();
+        }
+
+        // Caste Category stats
+        $categories = ['General', 'OBC', 'SC', 'ST', 'Minority'];
+        $categoryStats = [];
+        foreach ($categories as $cat) {
+            $categoryStats[$cat] = $distributed->where('beneficiarie.religion_category', $cat)->count();
+        }
+
+        // Facility Category stats
+        $facilityCategories = $distributed->pluck('facilities_category')->filter()->unique();
+        $facilityStats = [];
+        foreach ($facilityCategories as $fac) {
+            $facilityStats[$fac] = $distributed->where('facilities_category', $fac)->count();
+        }
+
+        return [
+            'total'           => $total,
+            'religionStats'   => $religionStats,
+            'casteStats'      => $casteStats,
+            'categoryStats'   => $categoryStats,
+            'facilityStats'   => $facilityStats,
+        ];
+    }
+}
+
+
+
+
