@@ -280,6 +280,12 @@
             </a>
         </div>
 
+         <div class="col-md-2 mb-3">
+            <a href="{{ route('document') }}" class="btn btn-danger w-100">
+                Form Download
+            </a>
+        </div>
+
         <div class="col-md-2 mb-3">
             <a href="{{ route('home.center.list') }}" class="btn btn-primary w-100">
                 Training Center

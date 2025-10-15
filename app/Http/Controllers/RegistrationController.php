@@ -140,17 +140,36 @@ class RegistrationController extends Controller
             $data['id_document'] = $idDocName;
         }
 
-        // Save data to respective table
         try {
             if ($request->reg_type === 'Member') {
-                Member::create($data);
+                // Create a new Member record
+                $newRecord = Member::create($data);
+
+                logWork(
+                    'Member',
+                    $newRecord->id,
+                    'New Member Registration',
+                    'Application No: ' . $newRecord->application_no . ' | Name: ' . $newRecord->name
+                );
             } else {
-                beneficiarie::create($data);
+                // Create a new Beneficiarie record
+                $newRecord = beneficiarie::create($data);
+
+                logWork(
+                    'Beneficiarie',
+                    $newRecord->id,
+                    'New Beneficiary Registration',
+                    'Application No: ' . $newRecord->application_no . ' | Name: ' . $newRecord->name
+                );
             }
 
-            return redirect()->route('pending-registration')->with('success', 'Registration saved successfully.');
+            return redirect()
+                ->route('pending-registration')
+                ->with('success', 'Registration saved successfully.');
         } catch (\Exception $e) {
-            return back()->withInput()->with('error', 'Something went wrong: ' . $e->getMessage());
+            return back()
+                ->withInput()
+                ->with('error', 'Something went wrong: ' . $e->getMessage());
         }
     }
 
@@ -369,7 +388,7 @@ class RegistrationController extends Controller
         $prefix = '2192000';
 
         // Get latest registration_no from both models
-        $latestBeneficiarie = beneficiarie::where('registration_no', 'LIKE', $prefix . '%')
+        $latestBeneficiarie = Beneficiarie::where('registration_no', 'LIKE', $prefix . '%')
             ->orderBy('registration_no', 'desc')
             ->first();
 
@@ -392,7 +411,7 @@ class RegistrationController extends Controller
         $registrationNo = $prefix . str_pad($sequenceNumber, 3, '0', STR_PAD_LEFT);
 
         if ($type === 'Beneficiaries') {
-            $beneficiarie = beneficiarie::find($id);
+            $beneficiarie = Beneficiarie::find($id);
             if (!$beneficiarie) {
                 return back()->with('error', 'Beneficiarie not found.');
             }
@@ -402,6 +421,13 @@ class RegistrationController extends Controller
             $beneficiarie->registration_date = Carbon::parse($request->registration_date);
             $beneficiarie->survey_status = 0;
             $beneficiarie->save();
+
+            logWork(
+                'Beneficiarie',
+                $beneficiarie->id,
+                'Approve Beneficiary Registration',
+                'Registration No: ' . $registrationNo
+            );
 
             return redirect()->route('approve-registration')->with('success', 'Beneficiarie approved successfully.');
         }
@@ -417,11 +443,19 @@ class RegistrationController extends Controller
             $member->registration_date = Carbon::parse($request->registration_date);
             $member->save();
 
+            logWork(
+                'Member',
+                $member->id,
+                'Approve Member Registration',
+                'Registration No: ' . $registrationNo
+            );
+
             return redirect()->route('approve-registration')->with('success', 'Member approved successfully.');
         }
 
-        return redirect()->back()->with('error', 'Unknown registration type.');
+        return back()->with('error', 'Unknown registration type.');
     }
+
 
     public function showApporveReg($id, $type)
     {

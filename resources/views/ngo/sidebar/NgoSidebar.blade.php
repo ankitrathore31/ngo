@@ -95,11 +95,11 @@
                         <i class="fas fa-tasks"></i> Staff Work
                     </a>
                     <ul class="dropdown-menu bg-primary">
-                        <li><a class="dropdown-item" href="{{ route('work.list') }}">Work Start (Staff)</a></li>
-                        <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Staff Report</a></li>
-                        <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Pending Work List</a></li>
-                        <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Complete Work Send</a></li>
-                        <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Complete Work Send List</a>
+                        <li><a class="dropdown-item" href="{{ route('work.list') }}">Work List</a></li>
+                        {{--<li><a class="dropdown-item" href=" route('activitylist') }}">Staff Report</a></li>
+                        <li><a class="dropdown-item" href="{{-- route('activitylist') }}">Pending Work List</a></li>
+                        <li><a class="dropdown-item" href="{{-- route('activitylist') }}">Complete Work Send</a></li>
+                        <li><a class="dropdown-item" href="{{-- route('activitylist') }}">Complete Work Send List</a> --}}
                         </li>
                     </ul>
                 </li>
@@ -196,6 +196,7 @@
                             @if (!$isStaff || $user->hasPermission('course-list'))
                                 <li><a class="dropdown-item" href="{{ route('list.course') }}">Course List</a></li>
                             @endif
+                            <li><a class="dropdown-item" href="{{ route('form-downloads.index') }}">Add Forms</a></li>
                             <li><a class="dropdown-item" href="{{ route('email.list') }}">Emails</a></li>
                         </ul>
                     </li>
