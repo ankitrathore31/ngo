@@ -16,13 +16,13 @@ class DocumentController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
-        return view('ngo.document.document-list', compact('forms'));
+        return view('ngo.forms.document-list', compact('forms'));
     }
 
     // Show upload form
     public function create()
     {
-        return view('ngo.document.upload');
+        return view('ngo.forms.upload');
     }
 
     public function store(Request $request)
