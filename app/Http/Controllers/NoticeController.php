@@ -37,6 +37,12 @@ class NoticeController extends Controller
         $notice->notice_for = $request->notice_for;
         $notice->notice = $request->notice;
         $notice->save();
+         logWork(
+            'Notice',
+            $notice->id,
+            'New Notice Added',
+            'Notice Date: ' . $notice->date . ' | Notice: ' . $notice->notice
+        );
 
         return redirect()->route('notice-list')->with('success', 'Notice Add Successfully');
     }

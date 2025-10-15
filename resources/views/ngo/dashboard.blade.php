@@ -653,46 +653,53 @@
                 @endif
             </div>
         </div>
-        <div class="container mt-5">
-            <div class="row">
-                <!-- Total Visitors Card -->
-                <div class="col-md-6 mb-4">
-                    <h5><b> - Website Traffic</b></h5>
-                    <!-- Today's Visitors Card -->
-                    <div class="card card-hover" style="background-color: rgb(240, 248, 255); transition: 0.3s;">
-                        <div class="card-body">
-                            <h5 class="card-title" style="color: rgb(25, 42, 86);">Visitors Today</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">Tracked for the Current Day</h6>
-                            <p class="card-text display-4" style="color: rgb(0, 123, 255); font-weight: bold;">
-                                {{ todayVisitor() }}</p>
-                        </div>
-                    </div>
-                    <br>
-                    <!-- Total Visitors Card -->
-                    <div class="card card-hover" style="background-color: rgb(245, 245, 245); transition: 0.3s;">
-                        <div class="card-body">
-                            <h5 class="card-title" style="color: rgb(39, 174, 96);">Total Visitors</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">Cumulative Count</h6>
-                            <p class="card-text display-4" style="color: rgb(22, 160, 133); font-weight: bold;">
-                                {{ totalVisitor() }}</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Visitor Pie Chart -->
-                <div class="col-md-6 mb-4">
-                    <div class="card card-hover">
-                        <div class="card-body">
-                            <h5 class="card-title">Visitors by Month</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">This Year</h6>
-                            <div class="chart-container" style="position: relative; height: 300px;">
-                                <canvas id="visitorChart"></canvas>
-                            </div>
+        @php
+            $user = auth()->user();
+            $isNGO = $user && $user->user_type === 'ngo';
+        @endphp
 
+        @if ($isNGO)
+            <div class="container mt-5">
+                <div class="row">
+                    <!-- Total Visitors Card -->
+                    <div class="col-md-6 mb-4">
+                        <h5><b> - Website Traffic</b></h5>
+                        <!-- Today's Visitors Card -->
+                        <div class="card card-hover" style="background-color: rgb(240, 248, 255); transition: 0.3s;">
+                            <div class="card-body">
+                                <h5 class="card-title" style="color: rgb(25, 42, 86);">Visitors Today</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Tracked for the Current Day</h6>
+                                <p class="card-text display-4" style="color: rgb(0, 123, 255); font-weight: bold;">
+                                    {{ todayVisitor() }}</p>
+                            </div>
+                        </div>
+                        <br>
+                        <!-- Total Visitors Card -->
+                        <div class="card card-hover" style="background-color: rgb(245, 245, 245); transition: 0.3s;">
+                            <div class="card-body">
+                                <h5 class="card-title" style="color: rgb(39, 174, 96);">Total Visitors</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Cumulative Count</h6>
+                                <p class="card-text display-4" style="color: rgb(22, 160, 133); font-weight: bold;">
+                                    {{ totalVisitor() }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Visitor Pie Chart -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card card-hover">
+                            <div class="card-body">
+                                <h5 class="card-title">Visitors by Month</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">This Year</h6>
+                                <div class="chart-container" style="position: relative; height: 300px;">
+                                    <canvas id="visitorChart"></canvas>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
+
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>

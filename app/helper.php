@@ -12,6 +12,8 @@ use App\Models\Project;
 use App\Models\ProjectReport;
 use App\Models\Visitor;
 use Illuminate\Support\Facades\DB;
+use App\Models\WorkLog;
+use Illuminate\Support\Facades\Auth;
 
 if (!function_exists('hello')) {
     function hello()
@@ -293,7 +295,6 @@ if (!function_exists('totalStats')) {
             'memCategory'   => $memCategory,
         ];
     }
-
 }
 
 if (!function_exists('surveyStats')) {
@@ -391,7 +392,28 @@ if (!function_exists('distributeStats')) {
         ];
     }
 }
+if (!function_exists('logWork')) {
+    function logWork($modelName, $recordId, $title, $description)
+    {
+        $user = Auth::user();
+        // if (!$user) return;
 
-
-
-
+        $staff = $user->staff;
+        try {
+            WorkLog::create([
+                'user_id'     => $user->id,
+                'user_type'   => $user->user_type,
+                'user_name'   => $staff->name ?? $user->name,
+                'user_code'   => $staff->staff_code ?? $user->staff_code ?? 'NGO',
+                'model_name'  => $modelName,
+                'record_id'   => $recordId,
+                'work_date'   => now()->toDateString(),
+                'title'       => $title,
+                'description' => $description,
+            ]);
+        } catch (\Exception $e) {
+            // Avoid breaking your flow if logging fails
+            \Log::error('WorkLog failed: ' . $e->getMessage());
+        }
+    }
+}

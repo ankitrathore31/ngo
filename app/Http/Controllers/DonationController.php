@@ -90,28 +90,25 @@ class DonationController extends Controller
             'payment_method' => 'required',
         ]);
 
-        $lastReceipt = \App\Models\Donation::orderBy('id', 'desc')->first();
-        if ($lastReceipt && is_numeric($lastReceipt->receipt_no)) {
-            $newReceiptNo = (int)$lastReceipt->receipt_no + 1;
-        } else {
-            $newReceiptNo = 1;
-        }
+        // --- Generate Normal Receipt No ---
+        $lastReceipt = Donation::latest('id')->first();
+        $newReceiptNo = $lastReceipt && is_numeric($lastReceipt->receipt_no)
+            ? (int) $lastReceipt->receipt_no + 1
+            : 1;
         $formattedReceiptNo = str_pad($newReceiptNo, 3, '0', STR_PAD_LEFT);
 
-        $lastOnlineReceipt = \App\Models\Donation::orderBy('id', 'desc')->first();
-
+        // --- Generate Online Receipt No ---
+        $lastOnlineReceipt = Donation::latest('id')->first();
         if ($lastOnlineReceipt && preg_match('/(\d+DR)(\d+)/', $lastOnlineReceipt->Onlinereceipt_no, $matches)) {
-            $prefix = $matches[1]; 
-            $lastNumber = (int)$matches[2]; // e.g. 360
-            $newNumber = $lastNumber + 1;
+            $prefix = $matches[1];
+            $newNumber = (int)$matches[2] + 1;
         } else {
             $prefix = '219DR';
             $newNumber = 360;
         }
-
         $formattedOnlineReceiptNo = $prefix . str_pad($newNumber, 7, '0', STR_PAD_LEFT);
 
-
+        // --- Save Donation ---
         $donation = new Donation;
         $donation->receipt_no = $formattedReceiptNo;
         $donation->Onlinereceipt_no = $formattedOnlineReceiptNo;
@@ -126,15 +123,14 @@ class DonationController extends Controller
         $donation->state = $request->state;
         $donation->district = $request->district;
         $donation->amountType = $request->amountType;
-        $donation->category   = $request->category;
+        $donation->category = $request->category;
         $donation->amount = $request->amount;
         $donation->depositor_name = $request->depositor_name;
         $donation->relationship = $request->relationship;
         $donation->recipient_name = $request->recipient_name;
         $donation->remark = $request->remark;
 
-
-        // Conditional Cheque fields
+        // Conditional fields
         if ($request->payment_method == 'Cheque') {
             $donation->cheque_no = $request->cheque_no;
             $donation->bank_name = $request->bank_name;
@@ -142,16 +138,22 @@ class DonationController extends Controller
             $donation->cheque_date = $request->cheque_date;
         }
 
-        // Conditional UPI fields
         if ($request->payment_method == 'UPI') {
             $donation->transaction_no = $request->transaction_no;
             $donation->transaction_date = $request->transaction_date;
         }
 
         $donation->save();
+        logWork(
+            'Donation',
+            $donation->id,
+            'New Donation Submit',
+            'Receipt No: ' . $formattedOnlineReceiptNo . ' | Name: ' . $donation->name
+        );
 
         return redirect()->route('donation-list')->with('success', 'Donation saved successfully!');
     }
+
 
     public function EditDonation($id)
     {

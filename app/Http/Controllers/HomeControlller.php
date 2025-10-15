@@ -10,6 +10,7 @@ use App\Models\Member;
 use App\Models\academic_session;
 use App\Models\Beneficiarie_Survey;
 use App\Models\Category;
+use App\Models\Document;
 use App\Models\Donation;
 use App\Models\Notice;
 use App\Models\Working_Area;
@@ -239,7 +240,7 @@ class HomeControlller extends Controller
     public function rewardpage()
     {
         $images = Gallery::where('gallery_type', 'Reward')->get();
-        return view('home.gallery.reward',compact('images'));
+        return view('home.gallery.reward', compact('images'));
     }
 
     public function donatepage()
@@ -440,7 +441,8 @@ class HomeControlller extends Controller
         return view('home.pages.demand');
     }
 
-    public function Center(Request $request){
+    public function Center(Request $request)
+    {
         $query = Training_Center::query();
 
         if ($request->filled('session_filter')) {
@@ -461,9 +463,19 @@ class HomeControlller extends Controller
         return view('home.center.center-list', compact('center', 'data'));
     }
 
-      public function HomeJobList()
+    public function HomeJobList()
     {
         $jobs = Job::with('position')->latest()->get();
         return view('home.job.job-list', compact('jobs'));
+    }
+
+    public function document()
+    {
+        $forms = Document::with('uploader')
+            ->where('is_active', 1)
+            ->orderByDesc('created_at')
+            ->get();
+
+        return view('home.pages.document', compact('forms'));
     }
 }

@@ -5,40 +5,58 @@ namespace App\Http\Controllers;
 use App\Models\academic_session;
 use App\Models\Plan;
 use App\Models\Signature;
+use App\Models\WorkLog;
 use App\Models\WorkPlan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StaffWorkController extends Controller
 {
     public function WorkList(Request $request)
     {
+        $user = Auth::user();
+        $date = $request->input('date', now()->toDateString());
         $session = academic_session::all();
 
-        $records = WorkPlan::query()
-            ->when($request->filled('session_filter'), fn($q) => $q->where('academic_session', $request->session_filter))
-            ->when($request->filled('date'), fn($q) => $q->whereDate('date', $request->date))
-            ->when($request->filled('project_code'), fn($q) => $q->where('project_code', 'like', '%' . $request->project_code . '%'))
-            ->when($request->filled('project_name'), fn($q) => $q->where('project_name', 'like', '%' . $request->project_name . '%'))
-            ->when($request->filled('state'), fn($q) => $q->where('state', 'like', '%' . $request->state . '%'))
-            ->when($request->filled('district'), fn($q) => $q->where('district', 'like', '%' . $request->district . '%'))
-            ->when($request->filled('name'), fn($q) => $q->where('name', 'like', '%' . $request->name . '%'));
+        // ✅ Base query
+        $query = WorkLog::query();
 
-        if (auth()->user()->role == 'staff') {
-            $records->where('animator_code', auth()->user()->staff_code);
+        // 🧠 Role-based filter
+        if ($user->user_type === 'staff') {
+            // Staff see only their own logs
+            $query->where('user_id', $user->id);
+        } else {
+            // NGO/Admin filters
+            if ($request->user_filter === 'staff') {
+                $query->where('user_type', 'staff');
+            } elseif ($request->user_filter === 'ngo') {
+                $query->where('user_type', 'ngo');
+            } // else show all by default
+
+            $query->when($request->name, fn($q) => $q->where('user_name', 'like', '%' . $request->name . '%'));
+            $query->when($request->code, fn($q) => $q->where('user_code', 'like', '%' . $request->code . '%'));
         }
 
-        $records = $records->orderBy('created_at', 'desc')->get();
+        // 🗓️ Common filters
+        $query->when($request->date, fn($q) => $q->whereDate('work_date', $request->date));
+        $query->when($request->session_filter, fn($q) => $q->where('work_date', 'like', '%' . $request->session_filter . '%'));
 
-        return view('ngo.staff-work.work-list', compact('session', 'records'));
-    }
+        // 📋 Fetch logs
+        $logs = $query
+            ->orderBy('user_name')
+            ->orderByDesc('work_date')
+            ->get()
+            ->groupBy('user_name');
 
-    public function WorkView($id)
-    {
-        $workplan = WorkPlan::find($id);
-        $work_id = $workplan->id;
+        // 📊 Stats
+        if ($user->user_type === 'staff') {
+            $totalLogs = WorkLog::where('user_id', $user->id)->count();
+            $todayLogs = WorkLog::where('user_id', $user->id)->whereDate('work_date', now())->count();
+        } else {
+            $totalLogs = WorkLog::count();
+            $todayLogs = WorkLog::whereDate('work_date', now())->count();
+        }
 
-        $plans = Plan::where('workplan_id', $work_id)->get();
-        $signatures = Signature::pluck('file_path', 'role');
-        return view('ngo.staff-work.view-work', compact('workplan', 'plans', 'signatures'));
+        return view('ngo.staff-work.staff-work-list', compact('logs', 'date', 'session', 'user', 'totalLogs', 'todayLogs'));
     }
 }

@@ -90,6 +90,12 @@ class SocialActivityController extends Controller
             $activity->program_image = $filename;
         }
         $activity->save();
+         logWork(
+            'Activity',
+            $activity->id,
+            'New Activity Added',
+            'Activity Date: ' . $activity->program_date . ' | Name: ' . $activity->program_name
+        );
 
         return redirect()->route('activitylist')->with('success', 'Program registered successfully!');
     }
@@ -219,6 +225,12 @@ class SocialActivityController extends Controller
             $event->event_image = $filename;
         }
         $event->save();
+         logWork(
+            'Event',
+            $event->id,
+            'New Activity Added',
+            'Activity Date: ' . $event->event_date . ' | Name: ' . $event->event
+        );
 
         return redirect()->route('event-list')->with('success', 'Event Save successfully!');
     }
