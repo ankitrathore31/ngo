@@ -509,8 +509,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('ngo/store-document', [DocumentController::class, 'create'])->name('form-downloads.create');
     Route::post('ngo/form-downloads', [DocumentController::class, 'store'])->name('form-downloads.store');
     Route::get('ngo/form-downloads/{id}/download', [DocumentController::class, 'download'])->name('form-downloads.download');
-    Route::get('ngo/form-downloads/{id}/preview', [DocumentController::class, 'preview'])->name('form-downloads.preview');
     Route::delete('/form-downloads/{id}', [DocumentController::class, 'destroy'])->name('form-downloads.destroy');
 });
+Route::get('ngo/form-downloads/{id}/preview', [DocumentController::class, 'preview'])->name('form-downloads.preview');
 
 require __DIR__ . '/auth.php';
