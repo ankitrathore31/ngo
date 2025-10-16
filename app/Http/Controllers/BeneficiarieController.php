@@ -79,6 +79,12 @@ class BeneficiarieController extends Controller
         $survey->survey_date = Carbon::parse($request->input('survey_date'));
         $survey->surveyfacility_status = $request->input('surveyfacility_status', []);
         $survey->save();
+        logWork(
+            'Survey',
+            $survey->id,
+            'New Survey Submit',
+            'Survey Date: ' . $survey->survey_date . ' | Details: ' . $survey->bene_category
+        );
 
         beneficiarie::where('id', $id)->update(['survey_status' => 1]);
 
@@ -171,7 +177,7 @@ class BeneficiarieController extends Controller
         $data = academic_session::all();
         $states = config('states');
         $categories = Category::orderBy('category', 'asc')->get();
-        return view('ngo.beneficiarie.beneficiarie-facilities', compact('surveys', 'data', 'states', 'categories','staff'));
+        return view('ngo.beneficiarie.beneficiarie-facilities', compact('surveys', 'data', 'states', 'categories', 'staff'));
     }
 
     public function showbeneficiariesurvey($beneficiarie_id, $survey_id)
@@ -238,6 +244,12 @@ class BeneficiarieController extends Controller
             $newSurvey->facilities = $request->input('facilities'); // Single facility
             $newSurvey->facilities_status = 1;
             $newSurvey->save();
+            logWork(
+                'Facilities',
+                $newSurvey->id,
+                'Benefries Facilities Added',
+                'Category: ' . $newSurvey->facilities_category . ' | Facilities: ' . $newSurvey->facilities
+            );
 
             return redirect()->route('beneficiarie-facilities-list')->with('success', 'Facility added successfully');
         } catch (\Throwable $th) {
@@ -246,71 +258,75 @@ class BeneficiarieController extends Controller
     }
     // Add this method to your controller
 
-public function storeBulkBeneficiarieFacilities(Request $request)
-{
-    $request->validate([
-        'survey_ids' => 'required|json',
-        'facilities_category' => 'required|string',
-        'facilities' => 'required|string',
-        'session' => 'required|string',
-    ]);
+    public function storeBulkBeneficiarieFacilities(Request $request)
+    {
+        $request->validate([
+            'survey_ids' => 'required|json',
+            'facilities_category' => 'required|string',
+            'facilities' => 'required|string',
+            'session' => 'required|string',
+        ]);
 
-    try {
-        // Decode survey IDs
-        $surveyIds = json_decode($request->input('survey_ids'), true);
-        
-        if (empty($surveyIds)) {
-            return back()->withErrors(['error' => 'No surveys selected.']);
-        }
+        try {
+            // Decode survey IDs
+            $surveyIds = json_decode($request->input('survey_ids'), true);
 
-        $successCount = 0;
-        $errors = [];
-
-        // Loop through each selected survey
-        foreach ($surveyIds as $surveyId) {
-            try {
-                // Get the original survey
-                $previousSurvey = Beneficiarie_Survey::findOrFail($surveyId);
-                
-                // Create new survey entry with facilities
-                $newSurvey = new Beneficiarie_Survey();
-                $newSurvey->beneficiarie_id = $previousSurvey->beneficiarie_id;
-                $newSurvey->survey_details = $previousSurvey->survey_details;
-                $newSurvey->survey_officer = $previousSurvey->survey_officer;
-                $newSurvey->survey_date = $previousSurvey->survey_date;
-                $newSurvey->surveyfacility_status = $previousSurvey->surveyfacility_status;
-                $newSurvey->bene_category = $previousSurvey->bene_category;
-                
-                // Add new facility data
-                $newSurvey->facilities_category = $request->input('facilities_category');
-                $newSurvey->academic_session = $request->input('session');
-                $newSurvey->facilities = $request->input('facilities');
-                $newSurvey->facilities_status = 1;
-                
-                $newSurvey->save();
-                $successCount++;
-                
-            } catch (\Exception $e) {
-                $errors[] = "Failed to add facility for Survey ID: {$surveyId}";
+            if (empty($surveyIds)) {
+                return back()->withErrors(['error' => 'No surveys selected.']);
             }
-        }
 
-        $message = "Facilities added successfully to {$successCount} beneficiaries.";
-        
-        if (!empty($errors)) {
-            $message .= " However, " . count($errors) . " survey(s) failed.";
+            $successCount = 0;
+            $errors = [];
+
+            // Loop through each selected survey
+            foreach ($surveyIds as $surveyId) {
+                try {
+                    // Get the original survey
+                    $previousSurvey = Beneficiarie_Survey::findOrFail($surveyId);
+
+                    // Create new survey entry with facilities
+                    $newSurvey = new Beneficiarie_Survey();
+                    $newSurvey->beneficiarie_id = $previousSurvey->beneficiarie_id;
+                    $newSurvey->survey_details = $previousSurvey->survey_details;
+                    $newSurvey->survey_officer = $previousSurvey->survey_officer;
+                    $newSurvey->survey_date = $previousSurvey->survey_date;
+                    $newSurvey->surveyfacility_status = $previousSurvey->surveyfacility_status;
+                    $newSurvey->bene_category = $previousSurvey->bene_category;
+
+                    // Add new facility data
+                    $newSurvey->facilities_category = $request->input('facilities_category');
+                    $newSurvey->academic_session = $request->input('session');
+                    $newSurvey->facilities = $request->input('facilities');
+                    $newSurvey->facilities_status = 1;
+
+                    $newSurvey->save();
+                    logWork(
+                        'Facilities',
+                        $newSurvey->id,
+                        'Benefries Facilities Added',
+                        'Category: ' . $newSurvey->facilities_category . ' | Facilities: ' . $newSurvey->facilities
+                    );
+                    $successCount++;
+                } catch (\Exception $e) {
+                    $errors[] = "Failed to add facility for Survey ID: {$surveyId}";
+                }
+            }
+
+            $message = "Facilities added successfully to {$successCount} beneficiaries.";
+
+            if (!empty($errors)) {
+                $message .= " However, " . count($errors) . " survey(s) failed.";
+                return redirect()->route('beneficiarie-facilities-list')
+                    ->with('warning', $message)
+                    ->withErrors($errors);
+            }
+
             return redirect()->route('beneficiarie-facilities-list')
-                ->with('warning', $message)
-                ->withErrors($errors);
+                ->with('success', $message);
+        } catch (\Throwable $th) {
+            return back()->withInput()->withErrors(['error' => 'Failed to add facilities: ' . $th->getMessage()]);
         }
-
-        return redirect()->route('beneficiarie-facilities-list')
-            ->with('success', $message);
-            
-    } catch (\Throwable $th) {
-        return back()->withInput()->withErrors(['error' => 'Failed to add facilities: ' . $th->getMessage()]);
     }
-}
 
     public function editFacilities($beneficiarie_id, $survey_id)
     {
@@ -386,7 +402,7 @@ public function storeBulkBeneficiarieFacilities(Request $request)
         $categories = Beneficiarie_Survey::select('facilities_category')->distinct()->pluck('facilities_category');
         $staff = Staff::get();
 
-        return view('ngo.beneficiarie.beneficiarie-facilities-list', compact('data', 'categories', 'beneficiarie', 'category','staff'));
+        return view('ngo.beneficiarie.beneficiarie-facilities-list', compact('data', 'categories', 'beneficiarie', 'category', 'staff'));
     }
 
     public function showbeneficiariefacilities($beneficiarie_id, $survey_id)
@@ -441,6 +457,12 @@ public function storeBulkBeneficiarieFacilities(Request $request)
             $distribute->status = $request->input('status');
             $distribute->pending_reason = $request->input('pending_reason');
             $distribute->save();
+            logWork(
+                'Distribute Facilities',
+                $distribute->id,
+                'Benefries Facilities Distribute',
+                'Distribute Date: ' . $distribute->distribute_date . ' | Status: ' . $distribute->status
+            );
 
             if ($request->input('status') === 'Distributed') {
                 return redirect()->route('distributed-list')->with('success', 'Distributed successfully');
