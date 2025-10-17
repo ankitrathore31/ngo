@@ -512,5 +512,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/form-downloads/{id}', [DocumentController::class, 'destroy'])->name('form-downloads.destroy');
 });
 Route::get('ngo/form-downloads/{id}/preview', [DocumentController::class, 'preview'])->name('form-downloads.preview');
-
+Route::controller(StaffWorkController::class)->middleware('auth')->group(function(){
+    Route::get('ngo/survey-start', 'Survey')->name('survey.start');
+    Route::post('ngo/survey-store','StoreSurvey')->name('store.survey');
+    Route::get('ngo/survey-list','SurveyList')->name('survey.list');
+});
 require __DIR__ . '/auth.php';

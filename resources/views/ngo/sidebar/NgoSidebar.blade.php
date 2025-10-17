@@ -96,6 +96,8 @@
                     </a>
                     <ul class="dropdown-menu bg-primary">
                         <li><a class="dropdown-item" href="{{ route('work.list') }}">Work List</a></li>
+                        <li><a class="dropdown-item" href="{{ route('survey.start') }}">Survey Work</a></li>
+                        <li><a class="dropdown-item" href="{{ route('survey.list') }}">Survey List</a></li>
                         {{--<li><a class="dropdown-item" href=" route('activitylist') }}">Staff Report</a></li>
                         <li><a class="dropdown-item" href="{{-- route('activitylist') }}">Pending Work List</a></li>
                         <li><a class="dropdown-item" href="{{-- route('activitylist') }}">Complete Work Send</a></li>
