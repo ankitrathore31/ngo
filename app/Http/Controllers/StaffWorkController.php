@@ -77,8 +77,22 @@ class StaffWorkController extends Controller
             $user_name = $user->staff->name;
             $user_code = $user->staff->staff_code;
         }
+         // Fetch last record
+        $lastSurvey = SurveyBenefries::orderBy('id', 'desc')->first();
 
-        return view('ngo.staff-work.survey', compact('data', 'states', 'user_name', 'user_code', 'user_id'));
+        $prefix = '3126SID';
+        $nextNumber = 1; // Default starting number
+
+        if ($lastSurvey && $lastSurvey->survey_id) {
+            // Extract numeric part from last Survey ID
+            $lastNumber = intval(substr($lastSurvey->survey_id, -7));
+            $nextNumber = $lastNumber + 1;
+        }
+
+        // Format to: 3126SID0000001
+        $newSurveyId = sprintf("%s%07d", $prefix, $nextNumber);
+
+        return view('ngo.staff-work.survey', compact('data', 'states', 'user_name', 'user_code', 'user_id','newSurveyId'));
     }
 
     public function StoreSurvey(Request $request)

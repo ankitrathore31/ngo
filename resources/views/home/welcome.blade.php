@@ -228,6 +228,18 @@
             background-color: #7d3c98;
         }
     </style>
+    {{-- Small CSS Enhancement --}}
+    <style>
+        .card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+            border-radius: 10px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
 
     <div class="row d-flex  m-3">
 
@@ -280,7 +292,7 @@
             </a>
         </div>
 
-         <div class="col-md-2 mb-3">
+        <div class="col-md-2 mb-3">
             <a href="{{ route('document') }}" class="btn btn-danger w-100">
                 Form Download
             </a>
@@ -295,6 +307,12 @@
         <div class="col-md-2 mb-3">
             <a href="{{ route('vacancies') }}" class="btn btn-primary w-100">
                 Vacancies
+            </a>
+        </div>
+
+        <div class="col-md-2 mb-3">
+            <a href="{{ route('true.story') }}" class="btn btn-success w-100">
+                True Story
             </a>
         </div>
 
@@ -475,6 +493,27 @@
         <div class="container-fluid mt-5">
             <div class="row justify-content-center d-flex">
                 <div class="col-md-12 justify-content-center d-flex" style="gap: 15px;">
+                    <h4 class="section-title mb-4"><b>Total True Story</b></h4>
+                    <select class="form-control w-25" id="session">
+                        <option value="">All Session</option>
+                        @foreach ($data as $session)
+                            <option value="{{ $session->session_date }}">{{ $session->session_date }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="text-white bg-primary p-3 h-100">
+                        <div>
+                            <p class="mb-1">Total True Story</p>
+                            <h5 class="mb-0">{{ totalProblem() }}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center d-flex">
+                <div class="col-md-12 justify-content-center d-flex" style="gap: 15px;">
                     <h4 class="section-title mb-4"><b>Registration/Demand/Distribute Facilities</b></h4>
                     <select class="form-control w-25" id="session">
                         <option value="">All Session</option>
@@ -484,92 +523,129 @@
                     </select>
                 </div>
             </div>
-            <div class="row text-center g-2">
+            {{-- Dashboard Summary Cards --}}
+            <div class="row text-center g-3">
+
+                {{-- Registration Section --}}
                 <div class="col-6 col-md-3 mb-3">
-                    <div class="p-2 bg-light shadow-sm rounded">
-                        <span class="fw-bold text-danger d-block">Total Registration</span>
-                        <span class="fs-5 fw-bold text-primary">{{ totalReg() }}</span>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3 mb-3">
-                    <div class="p-2 bg-light shadow-sm rounded">
-                        <span class="fw-bold text-warning d-block">Pending Registration</span>
-                        <span class="fs-5 fw-bold text-warning">{{ totalPendingReg() }}</span>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3 mb-3">
-                    <div class="p-2 bg-light shadow-sm rounded">
-                        <span class="fw-bold text-success d-block">Approved Registration</span>
-                        <span class="fs-5 fw-bold text-success">{{ totalApprovedReg() }}</span>
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body">
+                            <span class="fw-bold d-block fs-6 text-primary">Total Registration</span>
+                            <span class="fs-4 fw-bold text-primary">{{ totalReg() }}</span>
+                        </div>
                     </div>
                 </div>
                 <div class="col-6 col-md-3 mb-3">
-                    <div class="p-2 bg-light shadow-sm rounded">
-                        <span class="fw-bold text-danger d-block">Rejected Registration</span>
-                        <span class="fs-5 fw-bold text-danger">{{ totalRejectedReg() }}</span>
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body">
+                            <span class="fw-bold d-block fs-6 text-warning">Pending Registration</span>
+                            <span class="fs-4 fw-bold text-warning">{{ totalPendingReg() }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 mb-3">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body">
+                            <span class="fw-bold d-block fs-6 text-success">Approved Registration</span>
+                            <span class="fs-4 fw-bold text-success">{{ totalApprovedReg() }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 mb-3">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body">
+                            <span class="fw-bold d-block fs-6 text-danger">Rejected Registration</span>
+                            <span class="fs-4 fw-bold text-danger">{{ totalRejectedReg() }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="row text-center g-2">
+
+            <div class="row text-center g-3">
+                {{-- Survey Section --}}
                 <div class="col-6 col-md-4 mb-3">
-                    <div class="p-2 bg-light shadow-sm rounded">
-                        <span class="fw-bold text-info d-block">Total Survey</span>
-                        <span class="fs-5 fw-bold text-info">{{ TotalSurvey() }}</span>
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body">
+                            <span class="fw-bold d-block fs-6 text-info">Total Survey</span>
+                            <span class="fs-4 fw-bold text-info">{{ TotalSurvey() }}</span>
+                        </div>
                     </div>
                 </div>
                 <div class="col-6 col-md-4 mb-3">
-                    <div class="p-2 bg-light shadow-sm rounded">
-                        <span class="fw-bold text-warning d-block">Pending Survey</span>
-                        <span class="fs-5 fw-bold text-warning">{{ PendingSurvey() }}</span>
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body">
+                            <span class="fw-bold d-block fs-6 text-warning">Pending Survey</span>
+                            <span class="fs-4 fw-bold text-warning">{{ PendingSurvey() }}</span>
+                        </div>
                     </div>
                 </div>
                 <div class="col-6 col-md-4 mb-3">
-                    <div class="p-2 bg-light shadow-sm rounded">
-                        <span class="fw-bold text-success d-block">Completed Survey</span>
-                        <span class="fs-5 fw-bold text-success">{{ ApproveSurvey() }}</span>
-                    </div>
-                </div>
-            </div>
-            <div class="row text-center g-2">
-                <div class="col-6 col-md-4 mb-3">
-                    <div class="p-2 bg-light shadow-sm rounded">
-                        <span class="fw-bold text-info d-block">Total Demand</span>
-                        <span class="fs-5 fw-bold text-info">{{ totalDemand() }}</span>
-                    </div>
-                </div>
-                <div class="col-6 col-md-4 mb-3">
-                    <div class="p-2 bg-light shadow-sm rounded">
-                        <span class="fw-bold text-warning d-block">Pending Demand</span>
-                        <span class="fs-5 fw-bold text-warning">{{ totalPendingDemand() }}</span>
-                    </div>
-                </div>
-                <div class="col-6 col-md-4 mb-3">
-                    <div class="p-2 bg-light shadow-sm rounded">
-                        <span class="fw-bold text-success d-block">Approved Demand</span>
-                        <span class="fs-5 fw-bold text-success">{{ totalApprovedDemand() }}</span>
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body">
+                            <span class="fw-bold d-block fs-6 text-success">Completed Survey</span>
+                            <span class="fs-4 fw-bold text-success">{{ ApproveSurvey() }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="row text-center g-2">
+
+            <div class="row text-center g-3">
+                {{-- Demand Section --}}
                 <div class="col-6 col-md-4 mb-3">
-                    <div class="p-2 bg-light shadow-sm rounded">
-                        <span class="fw-bold text-warning d-block">Total Demand Distribution</span>
-                        <span class="fs-5 fw-bold text-warning">{{ totalDemandDistributed() }}</span>
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body">
+                            <span class="fw-bold d-block fs-6 text-info">Total Demand</span>
+                            <span class="fs-4 fw-bold text-info">{{ totalDemand() }}</span>
+                        </div>
                     </div>
                 </div>
                 <div class="col-6 col-md-4 mb-3">
-                    <div class="p-2 bg-light shadow-sm rounded">
-                        <span class="fw-bold text-primary d-block">Total Distributed</span>
-                        <span class="fs-5 fw-bold text-primary">{{ totalDistributed() }}</span>
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body">
+                            <span class="fw-bold d-block fs-6 text-warning">Pending Demand</span>
+                            <span class="fs-4 fw-bold text-warning">{{ totalPendingDemand() }}</span>
+                        </div>
                     </div>
                 </div>
                 <div class="col-6 col-md-4 mb-3">
-                    <div class="p-2 bg-light shadow-sm rounded">
-                        <span class="fw-bold text-danger d-block">Rejected Distribution</span>
-                        <span class="fs-5 fw-bold text-danger">{{ totalRejectedDistributed() }}</span>
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body">
+                            <span class="fw-bold d-block fs-6 text-success">Approved Demand</span>
+                            <span class="fs-4 fw-bold text-success">{{ totalApprovedDemand() }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <div class="row text-center g-3">
+                {{-- Distribution Section --}}
+                <div class="col-6 col-md-4 mb-3">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body">
+                            <span class="fw-bold d-block fs-6 text-warning">Total Demand Distribution</span>
+                            <span class="fs-4 fw-bold text-warning">{{ totalDemandDistributed() }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 mb-3">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body">
+                            <span class="fw-bold d-block fs-6 text-primary">Total Distributed</span>
+                            <span class="fs-4 fw-bold text-primary">{{ totalDistributed() }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 mb-3">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body">
+                            <span class="fw-bold d-block fs-6 text-danger">Rejected Distribution</span>
+                            <span class="fs-4 fw-bold text-danger">{{ totalRejectedDistributed() }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
             <div class="row justify-content-center d-flex">
                 <div class="col-md-12 justify-content-center d-flex" style="gap: 15px;">
                     <h4 class="section-title mb-4"><b>Social Problems</b></h4>
@@ -609,7 +685,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </section>
     {{-- <section>
@@ -665,14 +740,14 @@
                     <h4 class="fw-bold">कुल संगठन : {{ count($organizations) }}</h4>
                 </div> --}}
                 <div class="col-md-4 mb-2">
-                        <div class="card text-center shadow-sm text-white"
-                            style="background: linear-gradient(45deg, #43e97b, #38f9d7);">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold"> Total Organization </h5>
-                                <p class="card-text fs-4">{{ TotalOrganization() }}</p>
-                            </div>
+                    <div class="card text-center shadow-sm text-white"
+                        style="background: linear-gradient(45deg, #43e97b, #38f9d7);">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold"> Total Organization </h5>
+                            <p class="card-text fs-4">{{ TotalOrganization() }}</p>
                         </div>
                     </div>
+                </div>
 
                 @foreach ($organizations as $index => $item)
                     <div class="col-md-4 mb-2">

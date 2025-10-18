@@ -26,6 +26,7 @@
                 {{ session('success') }}
             </div>
         @endif
+
         <div class="container mt-5">
             <form id="surveyForm" method="POST" action="{{ route('store.survey') }}">
                 @csrf
@@ -36,7 +37,25 @@
                     </div>
                     <input type="hidden" name="user_id" value="{{ $user_id }}" readonly>
 
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-6 mb-3">
+                        <label for="survey_id">Survey ID:</label>
+                        <input type="text" id="survey_id" name="survey_id" class="form-control"
+                            value="{{ old('survey_id', $newSurveyId) }}" readonly required>
+                        @error('survey_id')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="date">Survey Date:</label>
+                        <input type="date" id="date" name="date" class="form-control" value="{{ old('date') }}"
+                            required>
+                        @error('date')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6 mb-3">
                         <label for="project_code">Project Code:</label>
                         <input type="text" id="project_code" name="project_code" class="form-control"
                             value="{{ old('project_code') }}" required>
@@ -45,7 +64,7 @@
                         @enderror
                     </div>
 
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="project_name">Project Name:</label>
                         <input type="text" id="project_name" name="project_name" class="form-control"
                             value="{{ old('project_name') }}" required>
@@ -54,46 +73,16 @@
                         @enderror
                     </div>
 
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="center">Center Name:</label>
-                        <input type="text" id="center" name="center" class="form-control" value="{{ old('center') }}"
-                            required>
+                        <input type="text" id="center" name="center" class="form-control"
+                            value="{{ old('center') }}" required>
                         @error('center')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
-                    @php
-                        $districtsByState = config('districts');
-                    @endphp
-                    <div class="col-md-4 form-group mb-3">
-                        <label for="stateSelect" class="form-label">State: <span class="text-danger">*</span></label>
-                        <select class="form-control @error('state') is-invalid @enderror" name="state" id="stateSelect"
-                            required>
-                            <option value="">Select State</option>
-                            @foreach ($districtsByState as $state => $districts)
-                                <option value="{{ $state }}" {{ old('state') == $state ? 'selected' : '' }}>
-                                    {{ $state }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('state')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
 
-                    </div>
-
-                    <div class="col-md-4 form-group mb-3">
-                        <label for="districtSelect" class="form-label">District: <span class="text-danger">*</span></label>
-                        <select class="form-control @error('district') is-invalid @enderror" name="district"
-                            id="districtSelect" required>
-                            <option value="">Select District</option>
-                        </select>
-                        @error('district')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="col-sm-4 mb-3">
+                    <div class="col-sm-6 mb-3">
                         <label for="animator_code">Animator Code:</label>
                         <input type="text" id="animator_code" name="animator_code" class="form-control"
                             value="{{ old('animator_code', $user_code) }}" readonly required>
@@ -102,7 +91,7 @@
                         @enderror
                     </div>
 
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="animator_name">Animator Name:</label>
                         <input type="text" id="animator_name" name="animator_name" class="form-control"
                             value="{{ old('animator_name', $user_name) }}" readonly required>
@@ -111,7 +100,7 @@
                         @enderror
                     </div>
 
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="session" class="bold">Session <span class="text-danger">*</span></label>
                         <select class="form-control @error('session') is-invalid @enderror" name="session" id="session"
                             required>
@@ -129,14 +118,6 @@
                     </div>
 
 
-                    <div class="col-md-4 mb-3">
-                        <label for="date">Date:</label>
-                        <input type="date" id="date" name="date" class="form-control"
-                            value="{{ old('date') }}" required>
-                        @error('date')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
 
                 </div>
 
@@ -156,11 +137,72 @@
                         <input type="text" id="father_husband_name" class="form-control">
                     </div>
 
+
+                    @php
+                        $districtsByState = config('districts');
+                    @endphp
+                    <div class="col-md-6 form-group mb-3">
+                        <label for="stateSelect" class="form-label">Address &nbsp; State: <span
+                                class="text-danger">*</span></label>
+                        <select class="form-control @error('state') is-invalid @enderror" name="state" id="stateSelect"
+                            required>
+                            <option value="">Select State</option>
+                            @foreach ($districtsByState as $state => $districts)
+                                <option value="{{ $state }}" {{ old('state') == $state ? 'selected' : '' }}>
+                                    {{ $state }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('state')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+
+                    </div>
+
+                    <div class="col-md-6 form-group mb-3">
+                        <label for="districtSelect" class="form-label">District: <span
+                                class="text-danger">*</span></label>
+                        <select class="form-control @error('district') is-invalid @enderror" name="district"
+                            id="districtSelect" required>
+                            <option value="">Select District</option>
+                        </select>
+                        @error('district')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6 form-group mb-3">
+                        <label for="area_type" class="form-label">Area Type: <span class="text-danger">*</span></label>
+                        <select class="form-control" id="area_type" required>
+                            <option value="" selected disabled>Select Area</option>
+                            <option value="Rular" {{ old('area_type') == 'Rular' ? 'selected' : '' }}>
+                                Rular
+                            </option>
+                            <option value="Urban" {{ old('area_type') == 'Urban' ? 'selected' : '' }}>
+                                Urban
+                            </option>
+                        </select>
+                        @error('area_type')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="block">Block:</label>
+                        <input type="text" id="block" class="form-control">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="block">Post/Town:</label>
+                        <input type="text" id="block" class="form-control">
+                    </div>
+
                     {{-- Address --}}
                     <div class="col-md-6">
-                        <label for="address">Address: <span class="text-danger">*</span></label>
+                        <label for="address">Village/Locality: <span class="text-danger">*</span></label>
                         <textarea id="address" class="form-control" rows="2"></textarea>
                     </div>
+
 
                     {{-- Mobile No. --}}
                     <div class="col-md-6">
@@ -174,6 +216,26 @@
                         <input type="text" id="caste" class="form-control">
                     </div>
 
+                    <!-- Caste Category -->
+                    <div class="col-md-6 mb-3">
+                        <label for="category" class="form-label">Caste Category <span
+                                class="text-danger">*</span></label>
+                        <select class="form-select @error('caste_category') is-invalid @enderror" id="category"
+                            name="caste_category" required>
+                            <option value="" disabled {{ old('caste_category') ? '' : 'selected' }}>
+                                Select Category</option>
+                            @foreach (['General', 'OBC', 'SC', 'ST', 'Minority'] as $category)
+                                <option value="{{ $category }}"
+                                    {{ old('caste_category') == $category ? 'selected' : '' }}>
+                                    {{ $category }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('caste_category')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
                     {{-- Age --}}
                     <div class="col-md-6">
                         <label for="age">Age: <span class="text-danger">*</span></label>
@@ -182,33 +244,71 @@
 
                     {{-- Beneficiaries Type --}}
                     <div class="col-md-6">
-                        <label for="beneficiaries_type">Beneficiaries Type: <span class="text-danger">*</span></label>
-                        <input type="text" id="beneficiaries_type" class="form-control">
+                        <label for="beneficiaries_type">Scheme Type: <span class="text-danger">*</span></label>
+                        <input list="beneficiaries_type_list"
+                            class="form-control @error('beneficiaries_type') is-invalid @enderror" id="beneficiaries_type"
+                            name="beneficiaries_type" value="{{ old('beneficiaries_type') }}"
+                            placeholder="Select or type new type" required>
+
+                        <datalist id="beneficiaries_type_list">
+                            @foreach (['CM Child Welfare (CM Baal Seva)', 'Economically Weaker Section', 'Elderly Women', 'Homeless Families', 'Laborers', 'Landless', 'Large Farmers', 'Labour Card', 'Marginal Farmers', 'Old Age', 'People Living in Kutcha or One-Room Houses', 'Persons with Disabilities (Viklang Log)', 'Scheduled Castes','Shadi Anudaan','Samuhik vivah', 'Scheduled Tribes', 'Small Farmers', 'Sumangla Scheme', 'Victims (Pidit Log)', 'Widows'] as $category)
+                                <option value="{{ $category }}"></option>
+                            @endforeach
+                        </datalist>
                     </div>
 
                     {{-- Disability --}}
-                    <div class="col-md-6">
+                    <div class="col-md-6" id="disability_div">
                         <label for="disability_percentage">Disability %:</label>
                         <input type="number" id="disability_percentage" class="form-control" min="0"
                             max="100">
                     </div>
 
                     {{-- Widow Since --}}
-                    <div class="col-md-6">
+                    <div class="col-md-6" id="widow_since_div">
                         <label for="widow_since">Widow Since:</label>
                         <input type="text" id="widow_since" class="form-control">
                     </div>
 
                     {{-- Type of Victim --}}
-                    <div class="col-md-6">
+                    <div class="col-md-6" id="type_of_victim_div">
                         <label for="type_of_victim">Type of Victim:</label>
                         <input type="text" id="type_of_victim" class="form-control">
                     </div>
 
-                    {{-- Class --}}
-                    <div class="col-md-6">
+                    {{-- Class (for Sumangla & Baal Seva) --}}
+                    <div class="col-md-6" id="class_div">
                         <label for="class">Class:</label>
                         <input type="text" id="class" class="form-control">
+                    </div>
+
+                    {{-- Person Death Date (for Baal Seva) --}}
+                    <div class="col-md-6" id="death_date_div">
+                        <label for="death_date">Person Death Date:</label>
+                        <input type="date" id="death_date" class="form-control">
+                    </div>
+
+                    {{-- Labour Card Details --}}
+                    <div class="col-md-6" id="labour_card_no_div">
+                        <label for="labour_card_no">Labour Card No:</label>
+                        <input type="text" id="labour_card_no" class="form-control">
+                    </div>
+
+                    <div class="col-md-6" id="labour_card_date_div">
+                        <label for="labour_card_date">Labour Card Date:</label>
+                        <input type="date" id="labour_card_date" class="form-control">
+                    </div>
+
+                    {{-- Land (for all Farmer types) --}}
+                    <div class="col-md-6" id="land_div">
+                        <label for="land">Land (in Beegah):</label>
+                        <input type="text" id="land" class="form-control">
+                    </div>
+
+                    {{-- Remark (default for others) --}}
+                    <div class="col-md-6" id="remark_div">
+                        <label for="remark">Remark:</label>
+                        <input type="text" id="remark" class="form-control">
                     </div>
 
                     {{-- Place Identification Mark --}}
@@ -234,6 +334,7 @@
                 <button type="submit" class="btn btn-primary">Save Survey</button>
             </form>
         </div>
+        
     </div>
 
 
@@ -407,6 +508,75 @@
         // On state change
         document.getElementById('stateSelect').addEventListener('change', function() {
             populateDistricts(this.value);
+        });
+    </script>
+    {{-- JavaScript --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const typeInput = document.getElementById('beneficiaries_type');
+
+            const fields = {
+                disability: document.getElementById('disability_div'),
+                widow: document.getElementById('widow_since_div'),
+                victim: document.getElementById('type_of_victim_div'),
+                class: document.getElementById('class_div'),
+                deathDate: document.getElementById('death_date_div'),
+                labourCardNo: document.getElementById('labour_card_no_div'),
+                labourCardDate: document.getElementById('labour_card_date_div'),
+                land: document.getElementById('land_div'),
+                remark: document.getElementById('remark_div')
+            };
+
+            function hideAll() {
+                Object.values(fields).forEach(div => div.style.display = 'none');
+            }
+
+            function updateFields() {
+                const value = typeInput.value.trim().toLowerCase();
+                hideAll();
+
+                // CM Baal Seva
+                if (value.includes('baal seva')) {
+                    fields.class.style.display = 'block';
+                    fields.deathDate.style.display = 'block';
+                }
+                // Sumangla Scheme
+                else if (value === 'sumangla scheme') {
+                    fields.class.style.display = 'block';
+                }
+                // Widows
+                else if (value === 'widows') {
+                    fields.widow.style.display = 'block';
+                    fields.victim.style.display = 'block';
+                }
+                // Victims
+                else if (value.includes('pidit log') || value.includes('victim')) {
+                    fields.victim.style.display = 'block';
+                }
+                // Persons with Disabilities
+                else if (value.includes('viklang log')) {
+                    fields.disability.style.display = 'block';
+                }
+                // Labour Card
+                else if (value.includes('labour card')) {
+                    fields.labourCardNo.style.display = 'block';
+                    fields.labourCardDate.style.display = 'block';
+                }
+                // Any Farmer Type
+                else if (value.includes('farmer')) {
+                    fields.land.style.display = 'block';
+                }
+                // Default Case
+                else {
+                    fields.remark.style.display = 'block';
+                }
+            }
+
+            // Run when input changes
+            typeInput.addEventListener('input', updateFields);
+
+            // Initialize on load
+            updateFields();
         });
     </script>
 @endsection

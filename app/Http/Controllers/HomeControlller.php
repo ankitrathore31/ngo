@@ -478,4 +478,8 @@ class HomeControlller extends Controller
 
         return view('home.pages.document', compact('forms'));
     }
+
+    public function TrueStory(){
+        return view('home.gallery.story');
+    }
 }

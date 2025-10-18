@@ -50,7 +50,10 @@
                 <ul class="dropdown-menu dropdown-menu-end mt-2 shadow-sm border-0" aria-labelledby="userDropdown">
                     <li><a class="dropdown-item text-dark fw-medium" href="#"><i
                                 class="fas fa-user me-2 text-primary"></i>Profile</a></li>
-                    <li><a class="dropdown-item text-dark fw-medium" href="#"><i
+                    <li><a class="dropdown-item text-dark fw-medium" href="{{route('password.change')}}"><i
+                                class="fas fa-cog me-2 text-secondary"></i>Change Password</a></li>
+                    <li>
+                     <li><a class="dropdown-item text-dark fw-medium" href="#"><i
                                 class="fas fa-cog me-2 text-secondary"></i>Settings</a></li>
                     <li>
                         <hr class="dropdown-divider">

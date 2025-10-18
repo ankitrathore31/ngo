@@ -499,6 +499,15 @@
                 @if (!$isStaff || $user->hasPermission('add-group') || $user->hasPermission('group-list'))
                     <div class="row">
                         <h5 class="fw-bold mb-2">- Organization</h5>
+                        <div class="col-md-3 mb-2">
+                            <div class="card text-center shadow-sm text-white"
+                                style="background: linear-gradient(45deg, #43e97b, #38f9d7);">
+                                <div class="card-body">
+                                    <p class="card-title fw-bold"> Total Organization </p>
+                                    <h5 class="card-text fs-4">{{ TotalOrganization() }}</h5>
+                                </div>
+                            </div>
+                        </div>
                         @php
                             $gradients = [
                                 'background: linear-gradient(45deg, #ff6a00, #ffcc00);', // orange to yellow

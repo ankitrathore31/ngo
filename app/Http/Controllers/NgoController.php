@@ -298,4 +298,8 @@ class NgoController extends Controller
             'remainingBalance'
         ));
     }
+
+    public function changePass(){
+        return view('ngo.profile.change-password');
+    }
 }
