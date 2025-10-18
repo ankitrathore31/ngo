@@ -91,6 +91,7 @@ Route::controller(HomeControlller::class)->group(function () {
     Route::get('/center', 'Center')->name('home.center.list');
     Route::get('/vacancies','HomeJobList')->name('vacancies');
     Route::get('/download-document','document')->name('document');
+    Route::get('/true-story','TrueStory')->name('true.story');
 });
 
 Route::controller(CertificateController::class)->group(function () {
@@ -153,6 +154,8 @@ Route::controller(NgoController::class)->group(function () {
     Route::get('admin/activengo-list', 'activengo')->middleware('auth')->name('activengo-list');
     Route::get('admin/deactivengo-list', 'deactivengo')->middleware('auth')->name('deactivengo-list');
 });
+    Route::get('ngo/change-pass', [NgoController::class, 'changePass'])->middleware('auth')->name('password.change');
+
 
 Route::controller(SocialActivityController::class)->group(function () {
     Route::get('ngo/activitylist', 'activitylist')->middleware('auth')->name('activitylist');

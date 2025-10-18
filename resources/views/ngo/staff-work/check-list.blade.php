@@ -151,15 +151,6 @@
 
                     {{-- 👇 Only visible for NGO users --}}
                     @if ($user->user_type == 'ngo')
-                        <div class="col-md-3 col-sm-6">
-                            <select name="user_filter" class="form-control">
-                                <option value="">All Users</option>
-                                <option value="ngo" {{ request('user_filter') == 'ngo' ? 'selected' : '' }}>NGO
-                                </option>
-                                <option value="staff" {{ request('user_filter') == 'staff' ? 'selected' : '' }}>Staff
-                                </option>
-                            </select>
-                        </div>
 
                         <div class="col-md-3 col-sm-6">
                             <input type="text" name="name" class="form-control" value="{{ request('name') }}"
@@ -234,19 +225,22 @@
                                     <th>Sr No</th>
                                     <th>Survey ID</th>
                                     <th>Survey Date</th>
-                                    <th>Project Code</th>
-                                    <th>Project Name</th>
-                                    <th>Center</th>
-                                    <th>Animator Code</th>
                                     <th>Animator Name</th>
                                     <th>Beneficiary Name</th>
                                     <th>Father/Husband Name</th>
                                     <th>Address</th>
                                     <th>Mobile No</th>
-                                    <th>Caste</th>
-                                    <th>Age</th>
                                     <th>Scheme Type</th>
-                                    <th>Place Identification Mark</th>
+                                    <th>Aadhar Benefries father mother gurdian </th>
+                                    <th>Account No. Benefries father mother gurdian </th>
+                                    <th>Aay Jati Nivas father mother gurdian </th>
+                                    <th>Aay Jati nivas Benefries </th>
+                                    <th>Adhyan pramn patr Benefries father mother gurdian</th>
+                                    <th>Ration Card Benefries father mother gurdian</th>
+                                    <th>Color Photo Benefries father mother gurdian</th>
+                                    <th>Mobile Aaadhar Link Benefries father mother gurdian</th>
+                                    <th>Signature/Thumb Benefries father mother gurdian</th>
+                                    <th>Remark</th>
                                     <th>Session</th>
                                     <th>Action</th>
                                 </tr>

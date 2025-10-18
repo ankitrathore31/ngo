@@ -85,6 +85,18 @@
                     {{ session('success') }}
                 </div>
             @endif
+             <div class="container">
+            <div class="row justify-content-between mb-5">
+                <div class="col-sm-4 text-start">
+                    <span class="p-1" style="font-size: 25px; font-weight: 500;">
+                        Total Activity: <strong>{{ $activity->count() }}</strong>
+                    </span>
+                </div>
+                <div class="col-sm-8" style="font-size: 25px; font-weight: 500;">
+                    Social Activity / Work
+                </div>
+            </div>
+        </div>
             <div class="row">
                 <div class="col-md-12">
                     <form method="GET" action="{{ route('activitylist') }}" class="row g-3 mb-4">
