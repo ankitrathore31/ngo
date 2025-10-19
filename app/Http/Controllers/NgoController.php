@@ -299,7 +299,4 @@ class NgoController extends Controller
         ));
     }
 
-    public function changePass(){
-        return view('ngo.profile.change-password');
-    }
 }

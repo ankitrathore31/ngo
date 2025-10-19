@@ -171,6 +171,44 @@
                                 placeholder="Search by Staff Code">
                         </div>
                     @endif
+                    @php
+                        $districtsByState = config('districts');
+                    @endphp
+                    <div class="col-md-3 col-sm-6 form-group mb-3">
+                        {{-- <label for="stateSelect" class="form-label">State: <span class="text-danger">*</span></label> --}}
+                        <select class="form-control @error('state') is-invalid @enderror" name="state" id="stateSelect">
+                            <option value="">Select State</option>
+                            @foreach ($districtsByState as $state => $districts)
+                                <option value="{{ $state }}" {{ old('state') == $state ? 'selected' : '' }}>
+                                    {{ $state }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('state')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+
+                    </div>
+                    <div class="col-md-3 col-sm-6 form-group mb-3">
+                        {{-- <label for="districtSelect" class="form-label">District: <span
+                                    class="text-danger">*</span></label> --}}
+                        <select class="form-control @error('district') is-invalid @enderror" name="district"
+                            id="districtSelect">
+                            <option value="">Select District</option>
+                        </select>
+                        @error('district')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="col-md-3 col-sm-6 form-group mb-3">
+                        {{-- <label for="block" class="form-label">Block: <span class="text-danger">*</span></label> --}}
+                        <input type="text" name="block" id="block"
+                            class="form-control @error('block') is-invalid @enderror" value="{{ old('block') }}"
+                            placeholder="Search by Block">
+                        @error('block')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
 
                     <div class="col-md-3 col-sm-6">
                         <button type="submit" class="btn btn-primary w-100">Search</button>
@@ -187,121 +225,142 @@
             </div>
         </div>
 
-        @if ($surveys->isEmpty())
+        {{-- @if ($surveys->isEmpty())
             <div class="alert alert-info mt-5">No surveys found.</div>
-        @else
-            <div class="card shadow-sm printable">
-                <div class="card-body table-responsive">
-                    <div class="text-center mb-4 border-bottom pb-2">
-                        <!-- Header -->
-                        <div class="row">
-                            <div class="col-sm-2 text-center text-md-start">
-                                <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="80" height="80">
-                            </div>
-                            <div class="col-sm-10">
-                                <p style="margin: 0;" class="d-flex justify-content-around"><b>
-                                        <span>NEETI AYOG ID NO. UP/2023/0360430</span>&nbsp;
-                                        &nbsp; &nbsp;<span>NGO NO. UP/00033062</span>&nbsp; &nbsp;
-                                        &nbsp; &nbsp;<span>PAN: AAEAG7650B</span>&nbsp;
-                                    </b></p>
-                                <h4 class="print-h4"><b>
-                                        {{-- <span data-lang="hi">ज्ञान भारती संस्था</span> --}}
-                                        <span data-lang="en">GYAN BHARTI SANSTHA</span>
-                                    </b></h4>
-                                <h6 style="color: blue;"><b>
-                                        {{-- <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर
+        @else --}}
+        <div class="card shadow-sm printable">
+            <div class="card-body table-responsive">
+                <div class="text-center mb-4 border-bottom pb-2">
+                    <!-- Header -->
+                    <div class="row">
+                        <div class="col-sm-2 text-center text-md-start">
+                            <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="80" height="80">
+                        </div>
+                        <div class="col-sm-10">
+                            <p style="margin: 0;" class="d-flex justify-content-around"><b>
+                                    <span>NEETI AYOG ID NO. UP/2023/0360430</span>&nbsp;
+                                    &nbsp; &nbsp;<span>NGO NO. UP/00033062</span>&nbsp; &nbsp;
+                                    &nbsp; &nbsp;<span>PAN: AAEAG7650B</span>&nbsp;
+                                </b></p>
+                            <h4 class="print-h4"><b>
+                                    {{-- <span data-lang="hi">ज्ञान भारती संस्था</span> --}}
+                                    <span data-lang="en">GYAN BHARTI SANSTHA</span>
+                                </b></h4>
+                            <h6 style="color: blue;"><b>
+                                    {{-- <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर
                                             प्रदेश -
                                             262121</span> --}}
-                                        <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit,
-                                            UP
-                                            -
-                                            262121</span>
-                                    </b></h6>
-                                <p style="font-size: 14px; margin: 0;">
-                                    <b>
-                                        <span>Website: www.gyanbhartingo.org | Email: gyanbhartingo600@gmail.com
-                                            | Mob:
-                                            9411484111</span>
-                                    </b>
-                                </p>
-                            </div>
+                                    <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit,
+                                        UP
+                                        -
+                                        262121</span>
+                                </b></h6>
+                            <p style="font-size: 14px; margin: 0;">
+                                <b>
+                                    <span>Website: www.gyanbhartingo.org | Email: gyanbhartingo600@gmail.com
+                                        | Mob:
+                                        9411484111</span>
+                                </b>
+                            </p>
                         </div>
                     </div>
-                    <div class="table-responsive mt-5">
-                        <table class="table table-bordered table-striped align-middle">
-                            <thead class="table-light text-center">
+                </div>
+                <div class="table-responsive mt-5">
+                    <table class="table table-bordered table-striped align-middle">
+                        <thead class="table-light text-center">
+                            <tr>
+                                <th>Sr No</th>
+                                <th>Survey ID</th>
+                                <th>Survey Date</th>
+                                <th>Beneficiary Name</th>
+                                <th>Father/Husband Name</th>
+                                <th>Address</th>
+                                <th>Mobile No</th>
+                                <th>Caste</th>
+                                <th>Caste Category</th>
+                                <th>Age</th>
+                                <th>Scheme Type</th>
+                                <th>Place Identification Mark</th>
+                                <th>Session</th>
+                                {{-- <th>Project Code</th> --}}
+                                <th>Project Name/Code</th>
+                                <th>Center</th>
+                                {{-- <th>Animator Code</th> --}}
+                                <th>Animator Name/Code</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($surveys as $key => $survey)
                                 <tr>
-                                    <th>Sr No</th>
-                                    <th>Survey ID</th>
-                                    <th>Survey Date</th>
-                                    <th>Project Code</th>
-                                    <th>Project Name</th>
-                                    <th>Center</th>
-                                    <th>Animator Code</th>
-                                    <th>Animator Name</th>
-                                    <th>Beneficiary Name</th>
-                                    <th>Father/Husband Name</th>
-                                    <th>Address</th>
-                                    <th>Mobile No</th>
-                                    <th>Caste</th>
-                                    <th>Age</th>
-                                    <th>Scheme Type</th>
-                                    <th>Place Identification Mark</th>
-                                    <th>Session</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($surveys as $key => $survey)
-                                    <tr>
-                                        <td class="text-center">{{ $key + 1 }}</td>
-                                        <td>{{ $survey->user_id }}</td>
-                                        <td>{{ $survey->project_code }}</td>
-                                        <td>{{ $survey->project_name }}</td>
-                                        <td>{{ $survey->center }}</td>
-                                        <td>{{ $survey->state }}</td>
-                                        <td>{{ $survey->district }}</td>
-                                        <td>{{ $survey->animator_code }}</td>
-                                        <td>{{ $survey->animator_name }}</td>
-                                        <td>{{ $survey->session }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($survey->date)->format('d-m-Y') }}</td>
-                                        <td>{{ $survey->name }}</td>
-                                        <td>{{ $survey->father_husband_name }}</td>
-                                        <td>{{ $survey->address }}</td>
-                                        <td>{{ $survey->mobile_no }}</td>
-                                        <td>{{ $survey->caste }}</td>
-                                        <td>{{ $survey->age }}</td>
-                                        <td>{{ $survey->beneficiaries_type }}</td>
-                                        <td>{{ $survey->disability_percentage }}</td>
-                                        <td>{{ $survey->widow_since }}</td>
-                                        <td>{{ $survey->type_of_victim }}</td>
-                                        <td>{{ $survey->class }}</td>
-                                        <td>{{ $survey->place_identification_mark }}</td>
-                                        <td class="text-center">
-                                            <a href="{{-- route('survey.show', $survey->id) --}}" class="btn btn-sm btn-info">View</a>
-                                            <a href="{{-- route('survey.edit', $survey->id) --}}" class="btn btn-sm btn-warning">Edit</a>
+                                    <td class="text-center">{{ $key + 1 }}</td>
+                                    <td>{{ $survey->survey_id }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($survey->date)->format('d-m-Y') }}</td>
+                                    <td>{{ $survey->name }}</td>
+                                    <td>{{ $survey->father_husband_name }}</td>
+                                    <td>{{ $survey->address }}, {{ $survey->post_town }},{{ $survey->block }},
+                                        {{ $survey->state }}
+                                        {{ $survey->district }}</td>
+                                    <td>{{ $survey->mobile_no }}</td>
+                                    <td>{{ $survey->caste }}</td>
+                                    <td>{{ $survey->caste_category }}</td>
+                                    <td>{{ $survey->age }}</td>
+                                    <td>{{ $survey->beneficiaries_type }}</td>
+                                    <td>{{ $survey->place_identification_mark }}</td>
+                                    <td>{{ $survey->session }}</td>
+                                    <td>{{ $survey->project_name }} ({{ $survey->project_code }})</td>
+                                    <td>{{ $survey->center }}</td>
+                                    <td>{{ $survey->animator_name }} ({{ $survey->animator_code }})</td>
+                                    <td class="text-center">
+                                        <a href="{{ route('survey.show', $survey->id) }}" class="btn btn-sm btn-info">View</a>
+                                        <a href="{{ route('survey.edit', $survey->id) }}" class="btn btn-sm btn-warning">Edit</a>
 
-                                            @if ($user->user_type === 'ngo')
-                                                <form action="{{-- route('survey.destroy', $survey->id) --}}" method="POST" class="d-inline"
-                                                    onsubmit="return confirm('Are you sure you want to delete this record?')">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button class="btn btn-sm btn-danger" type="submit">Delete</button>
-                                                </form>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                                        @if ($user->user_type == 'ngo')
+                                            <a href="{{ route('survey.delete', $survey->id) }}" class="btn btn-sm btn-danger"
+                                                onclick="return confirm('Are you sure you want to delete this record?')">
+                                                Delete
+                                            </a>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        @endif
+        </div>
+        {{-- @endif --}}
     </div>
     <script>
         function printTable() {
             window.print();
         }
+    </script>
+    <script>
+        const allDistricts = @json($districtsByState);
+        const oldDistrict = "{{ old('district') }}";
+        const oldState = "{{ old('state') }}";
+
+        function populateDistricts(state) {
+            const districtSelect = document.getElementById('districtSelect');
+            districtSelect.innerHTML = '<option value="">Select District</option>';
+
+            if (allDistricts[state]) {
+                allDistricts[state].forEach(function(district) {
+                    const selected = (district === oldDistrict) ? 'selected' : '';
+                    districtSelect.innerHTML += `<option value="${district}" ${selected}>${district}</option>`;
+                });
+            }
+        }
+
+        // Initial load if editing or validation failed
+        if (oldState) {
+            populateDistricts(oldState);
+        }
+
+        // On state change
+        document.getElementById('stateSelect').addEventListener('change', function() {
+            populateDistricts(this.value);
+        });
     </script>
 @endsection

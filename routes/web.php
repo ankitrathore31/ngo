@@ -23,6 +23,7 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\ProblemController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SallaryController;
 use App\Http\Controllers\SignatureController;
@@ -154,9 +155,15 @@ Route::controller(NgoController::class)->group(function () {
     Route::get('admin/activengo-list', 'activengo')->middleware('auth')->name('activengo-list');
     Route::get('admin/deactivengo-list', 'deactivengo')->middleware('auth')->name('deactivengo-list');
 });
-    Route::get('ngo/change-pass', [NgoController::class, 'changePass'])->middleware('auth')->name('password.change');
 
-
+Route::controller(ProfileController::class)->group(function () {
+    Route::get('ngo/profile', 'Profile')->middleware('auth')->name('profile');
+    Route::post('ngo/store-profile', 'StoreProfile')->middleware('auth')->name('profile.store');
+    Route::get('ngo/edit-profile', 'EditProfile')->middleware('auth')->name('edit.profile');
+    Route::post('ngo/update-profile', 'UpdateProfile')->middleware('auth')->name('profile.update');
+    Route::get('ngo/change-pass', 'ChangePassword')->Middleware('auth')->name('change.pass.show');
+    Route::post('ngo/update-pass', 'UpdatePass')->middleware('auth')->name('password.change');
+});
 Route::controller(SocialActivityController::class)->group(function () {
     Route::get('ngo/activitylist', 'activitylist')->middleware('auth')->name('activitylist');
     Route::get('ngo/addactivity', 'addactivity')->middleware('auth')->name('addactivity');
@@ -518,6 +525,12 @@ Route::get('ngo/form-downloads/{id}/preview', [DocumentController::class, 'previ
 Route::controller(StaffWorkController::class)->middleware('auth')->group(function(){
     Route::get('ngo/survey-start', 'Survey')->name('survey.start');
     Route::post('ngo/survey-store','StoreSurvey')->name('store.survey');
+    Route::get('ngo/edit-survey/{id}','editSurvey')->name('survey.edit');
+    Route::post('ngo/update-survey/{id}','UpdateSurvey')->name('update.survey');
+    Route::get('ngo/view-survey/{id}', 'ViewSurvey')->name('survey.show');
+    Route::get('ngo/survey-delete/{id}','SurveyDelete')->name('survey.delete');
     Route::get('ngo/survey-list','SurveyList')->name('survey.list');
+    Route::get('/check-survey-identity', [StaffWorkController::class, 'checkIdentity'])->name('check.survey.identity');
+
 });
 require __DIR__ . '/auth.php';
