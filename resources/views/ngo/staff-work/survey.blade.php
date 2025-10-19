@@ -188,6 +188,7 @@
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
+
                     <!-- Identity Type -->
                     <div class="col-md-6 mb-3">
                         <div class="form-group">
@@ -232,6 +233,7 @@
                             @enderror
                         </div>
                     </div>
+                    
                     <!-- Identity Number -->
                     <div class="col-md-6 mb-3">
                         <div class="form-group">
@@ -246,6 +248,7 @@
                             @enderror
                         </div>
                     </div>
+
                     <div id="identity_info" class="text-center"
                         style="margin-top:1px; margin-bottom:4px; color:red; display:none;">
                         Survey ID: <span id="identity_reg"></span> &nbsp; &nbsp;
@@ -253,6 +256,7 @@
                         Father/Husband: <span id="identity_guardian"></span> &nbsp; &nbsp;
                         Animator Name: <span id="animator_name"></span>
                     </div>
+
                     {{-- Name --}}
                     <div class="col-md-6">
                         <label for="name">Name: <span class="text-danger">*</span></label>
@@ -371,16 +375,17 @@
                     {{-- Beneficiaries Type --}}
                     <div class="col-md-6">
                         <label for="beneficiaries_type">Scheme Type: <span class="text-danger">*</span></label>
-                        <input list="beneficiaries_type_list"
-                            class="form-control @error('beneficiaries_type') is-invalid @enderror" id="beneficiaries_type"
-                            name="beneficiaries_type" value="{{ old('beneficiaries_type') }}"
-                            placeholder="Select or type new type" required>
-
-                        <datalist id="beneficiaries_type_list">
+                        <select class="form-control @error('beneficiaries_type') is-invalid @enderror"
+                            id="beneficiaries_type" name="beneficiaries_type" required>
+                            <option value="" disabled {{ old('beneficiaries_type') ? '' : 'selected' }}>Select
+                                Scheme Type</option>
                             @foreach (['CM Child Welfare (CM Baal Seva)', 'Economically Weaker Section', 'Elderly Women', 'Homeless Families', 'Laborers', 'Landless', 'Large Farmers', 'Labour Card', 'Marginal Farmers', 'Old Age', 'People Living in Kutcha or One-Room Houses', 'Persons with Disabilities (Viklang Log)', 'Scheduled Castes', 'Shadi Anudaan', 'Samuhik vivah', 'Scheduled Tribes', 'Small Farmers', 'Sumangla Scheme', 'Victims (Pidit Log)', 'Widows'] as $category)
-                                <option value="{{ $category }}"></option>
+                                <option value="{{ $category }}"
+                                    {{ old('beneficiaries_type') == $category ? 'selected' : '' }}>
+                                    {{ $category }}
+                                </option>
                             @endforeach
-                        </datalist>
+                        </select>
                     </div>
 
                     {{-- Disability --}}
@@ -986,7 +991,8 @@
                     if (data.exists) {
                         document.getElementById('identity_name').textContent = data.name || '';
                         document.getElementById('identity_reg').textContent = data.survey_id || '';
-                        document.getElementById('identity_guardian').textContent = data.father_husband_name || '';
+                        document.getElementById('identity_guardian').textContent = data.father_husband_name ||
+                            '';
                         document.getElementById('animator_name').textContent = data.animator_name || '';
                         infoLine.style.display = 'block';
                     } else {
