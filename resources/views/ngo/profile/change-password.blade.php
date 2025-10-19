@@ -1,57 +1,91 @@
 @extends('ngo.layout.master')
 @section('content')
-<div class="main-content">
-    <div class="container my-5">
-        <div class="card mx-auto shadow-sm" style="max-width: 600px;">
-            <div class="card-header bg-warning text-white">
-                <h5 class="mb-0">Change Password</h5>
-            </div>
+    <div class="main-content">
+        <div class="container my-5">
+            <div class="row g-4 justify-content-center">
 
-            <div class="card-body">
-                @if (session('success'))
-                    <div class="alert alert-success">{{ session('success') }}</div>
-                @endif
+                {{-- 👤 User Info Card --}}
+                <div class="col-md-6">
+                    <div class="card shadow-sm border-primary">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">User Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">User Email</label>
+                                <input type="text" class="form-control" value="{{ Auth::user()->email }}" readonly>
+                            </div>
 
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul class="mb-0">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
+                            @if (Auth::user()->user_type == 'staff')
+                                <div class="mb-3">
+                                    <label class="form-label">Staff Name</label>
+                                    <input type="text" class="form-control" value="{{ Auth::user()->staff->name }}"
+                                        readonly>
+                                </div>
+                            @endif
+
+                            @if (Auth::user()->user_type == 'ngo')
+                                <div class="mb-3">
+                                    <label class="form-label">Ngo Name</label>
+                                    <input type="text" class="form-control" value="{{ Auth::user()->name }}" readonly>
+                                </div>
+                            @endif
+
+                            <div class="mb-3">
+                                <label class="form-label">Current Password</label>
+                                <input type="password" class="form-control" value="********" readonly>
+                            </div>
+                        </div>
                     </div>
-                @endif
+                </div>
 
-                <form method="POST" action="{{-- route('password.change') --}}">
-                    @csrf
+                {{-- 🔑 Change Password Card --}}
+                <div class="col-md-6">
+                    <div class="card shadow-sm border-success">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">Change Password</h5>
+                        </div>
+                        <div class="card-body">
+                            @if (session('success'))
+                                <div class="alert alert-success">{{ session('success') }}</div>
+                            @endif
 
-                    <div class="mb-3">
-                        <label class="form-label">User ID</label>
-                        
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul class="mb-0">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
+                            <form method="POST" action="{{ route('password.change') }}">
+                                @csrf
+
+                                {{-- New Password --}}
+                                <div class="mb-3">
+                                    <label class="form-label">New Password</label>
+                                    <input type="password" name="new_password" class="form-control" required>
+                                </div>
+
+                                {{-- Confirm New Password --}}
+                                <div class="mb-3">
+                                    <label class="form-label">Confirm New Password</label>
+                                    <input type="password" name="new_password_confirmation" class="form-control" required>
+                                </div>
+
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-success">Change Password</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
+                </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Show Password</label>
-                        <input type="password" name="old_password" class="form-control" readonly required>
-                        <a href="{{-- route('password.forgot') --}}" class="small d-block mt-1">Forgot old password?</a>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">New Password</label>
-                        <input type="password" name="new_password" class="form-control" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Confirm New Password</label>
-                        <input type="password" name="new_password_confirmation" class="form-control" required>
-                    </div>
-
-                    <div class="text-end">
-                        <button type="submit" class="btn btn-success">Change Password</button>
-                    </div>
-                </form>
             </div>
         </div>
+
+
     </div>
-</div>
 @endsection

@@ -96,6 +96,8 @@
                     </a>
                     <ul class="dropdown-menu bg-primary">
                         <li><a class="dropdown-item" href="{{ route('survey.start') }}">Work Start</a></li>
+                        <li><a class="dropdown-item" href="{{ route('work.list') }}">Survey Recieved & Start</a></li>
+                        <li><a class="dropdown-item" href="{{ route('work.list') }}">Survey Send Complete</a></li>
                         <li><a class="dropdown-item" href="{{ route('work.list') }}">Work Dashboard</a></li>
                         <li><a class="dropdown-item" href="{{ route('survey.list') }}">Work List</a></li>
                         <li><a class="dropdown-item" href=" route('activitylist') }}">Work List Check Document</a></li>
@@ -259,8 +261,10 @@
                                         Beneficiary
                                         List</a></li>
                             @endif
-                            {{-- <li><a class="dropdown-item" href="{{ route('survey-received-list') }}">Survey Recived List</a>
-                        </li> --}}
+                            <li><a class="dropdown-item" href="{{ route('survey-received-list') }}">Survey Send</a>
+                        </li>
+                            <li><a class="dropdown-item" href="{{ route('survey-received-list') }}">Survey Recived & Pending List</a>
+                        </li>
                             @if (!$isStaff || $user->hasPermission('demand-facilities'))
                                 <li><a class="dropdown-item" href="{{ route('beneficiarie-facilities') }}">Demand
                                         Beneficiary
