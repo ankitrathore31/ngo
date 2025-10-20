@@ -164,7 +164,7 @@ class RegistrationController extends Controller
             }
 
             return redirect()
-                ->route('pending-registration')
+                ->back()
                 ->with('success', 'Registration saved successfully.');
         } catch (\Exception $e) {
             return back()

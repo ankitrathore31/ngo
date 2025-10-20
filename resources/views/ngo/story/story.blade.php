@@ -1,10 +1,11 @@
-@extends('home.layout.MasterLayout')
+@extends('ngo.layout.master')
+
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h5 class="mb-0">True Story List</h5>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
-                <li class="breadcrumb-item"><a href="{{ url('home') }}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
                 <li class="breadcrumb-item active" aria-current="page">True Story</li>
             </ol>
         </nav>
@@ -15,6 +16,11 @@
             {{ session('success') }}
         </div>
     @endif
+    <div class="row mt-2 mb-3">
+        <div class="col">
+            <a href="{{route('add-story')}}" class="btn btn-primary">+ ADD STORY</a>
+        </div>
+    </div>
     <div class="container mt-4">
         <div class="row">
             @forelse ($stories as $story)
@@ -76,8 +82,7 @@
                         {{-- Footer --}}
                         <div
                             class="card-footer bg-white border-0 d-flex justify-content-between align-items-center px-4 pb-3">
-                            <a href="#"
-                                class="btn btn-sm btn-outline-primary rounded-pill px-3">True Story</a>
+                            <a href="{{route('delete-story', $story->id )}}" onclick="return confirm('Do you want to delete Story')" class="btn btn-sm btn-outline-danger rounded-pill px-3">Delete</a>
                             <span class="text-muted small"><i
                                     class="bi bi-clock me-1"></i>{{ $story->created_at->diffForHumans() }}</span>
                         </div>

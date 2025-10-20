@@ -45,24 +45,46 @@
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="category">Category:</label>
+                        <select id="category" name="category" class="form-control" required>
+                            <option value="">-- Select Category --</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}"
+                                    {{ old('category') == $category->category ? 'selected' : '' }}>
+                                    {{ $category->category }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('category')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+
+                    <div class="col-md-6 mb-3">
+                        <label for="project_select">Select Project (Code or name):</label>
+                        <select id="project_select" class="form-control" onchange="updateProjectFields(this)">
+                            <option value="">-- Select Project --</option>
+                            @foreach ($projects as $project)
+                                <option value="{{ $project->id }}" data-code="{{ $project->code }}"
+                                    data-name="{{ $project->category }}">
+                                    {{ $project->code }} - {{ $project->category }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="project_code">Project Code:</label>
-                        <input type="text" id="project_code" name="project_code" class="form-control"
-                            value="{{ old('project_code') }}" required>
-                        @error('project_code')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
+                        <input type="text" id="project_code" name="project_code" class="form-control" readonly>
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="project_name">Project Name:</label>
-                        <input type="text" id="project_name" name="project_name" class="form-control"
-                            value="{{ old('project_name') }}" required>
-                        @error('project_name')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
+                        <input type="text" id="project_name" name="project_name" class="form-control" readonly>
                     </div>
+
 
                     <div class="col-md-6 mb-3">
                         <label for="center">Center Name:</label>
@@ -233,7 +255,7 @@
                             @enderror
                         </div>
                     </div>
-                    
+
                     <!-- Identity Number -->
                     <div class="col-md-6 mb-3">
                         <div class="form-group">
@@ -304,7 +326,7 @@
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="area_type" class="form-label">Area Type: <span class="text-danger">*</span></label>
-                        <select class="form-control" id="area_type" required>
+                        <select class="form-control" name="area_type" id="area_type" required>
                             <option value="" selected disabled>Select Area</option>
                             <option value="Rular" {{ old('area_type') == 'Rular' ? 'selected' : '' }}>
                                 Rular
@@ -703,50 +725,70 @@
                 tableDiv.style.display = query && match ? 'block' : 'none';
             });
 
-            // ✅ Handle row click — fill form fields
+            // ✅ Helper: safely set input values
+            const safeSet = (id, value) => {
+                const el = document.getElementById(id);
+                if (el && value !== undefined && value !== null) el.value = value.trim();
+            };
+
+            // ✅ Handle row click
             tableRows.forEach(row => {
                 row.addEventListener('click', function() {
-                    const name = this.dataset.name || '';
-                    const phone = this.dataset.phone || '';
-                    const gurdian = this.dataset.gurdian || '';
-                    const address = this.dataset.address || '';
-                    const block = this.dataset.block || '';
-                    const district = this.dataset.district || '';
-                    const state = this.dataset.state || '';
-                    const registration = this.dataset.registration || '';
-                    const registrationDate = this.dataset.registrationdate || '';
+                    const data = this.dataset;
+                    const cells = this.querySelectorAll('td');
 
-                    // ✅ Fill inputs by ID (not name)
-                    const safeSet = (id, value) => {
-                        const el = document.getElementById(id);
-                        if (el) el.value = value;
+                    // ✅ Fallback function (dataset → table cell)
+                    const getValue = (key, cellIndex = null) => {
+                        if (data[key]) return data[key];
+                        if (cellIndex !== null && cells[cellIndex]) return cells[cellIndex]
+                            .innerText.trim();
+                        return '';
                     };
 
-                    safeSet('name', name);
-                    safeSet('father_husband_name', gurdian);
-                    safeSet('address', address);
-                    safeSet('mobile_no', phone);
-                    safeSet('block_name', block);
-                    safeSet('stateSelect', state);
-                    safeSet('survey_id', registration);
+                    // ✅ Fill personal info
+                    safeSet('name', getValue('name', 2));
+                    safeSet('father_husband_name', getValue('gurdian', 3));
+                    safeSet('mobile_no', getValue('phone', 6));
+                    safeSet('identity_type', getValue('identity_type', 7));
+                    safeSet('identity_no', getValue('identity_no', 8));
+                    safeSet('caste', getValue('caste', 6));
+                    safeSet('category', getValue('religion_category')); // ✅ Corrected field name
+                    safeSet('area_type', getValue('area_type', 8));
+                    safeSet('address', getValue('village')); // village/locality
+                    safeSet('post_town', getValue('post_town') || getValue(
+                        'post')); // ✅ safer fallback
+                    safeSet('block_name', getValue('block_name') || getValue(
+                        'block')); // ✅ safer fallback
 
-                    // ✅ Populate districts based on state
-                    populateDistricts(state);
-                    const districtSelect = document.getElementById('districtSelect');
-                    if (districtSelect) districtSelect.value = district;
+
+                    // ✅ Handle state and district dropdowns
+                    if (data.state) {
+                        const stateSelect = document.getElementById('stateSelect');
+                        if (stateSelect) {
+                            stateSelect.value = data.state;
+                            if (typeof populateDistricts === 'function') {
+                                populateDistricts(data.state);
+                            }
+                        }
+                    }
+
+                    if (data.district) {
+                        const districtSelect = document.getElementById('districtSelect');
+                        if (districtSelect) districtSelect.value = data.district;
+                    }
 
                     // ✅ Show selected info card
                     selectedInfo.innerHTML = `
-                    <div class="row">
-                        <div class="col-md-3"><strong>Name:</strong> ${name}</div>
-                        <div class="col-md-3"><strong>Mobile:</strong> ${phone}</div>
-                        <div class="col-md-3"><strong>Registration No.:</strong> ${registration}</div>
-                        <div class="col-md-3"><strong>District:</strong> ${district}</div>
-                    </div>
-                `;
+                <div class="row">
+                    <div class="col-md-3"><strong>Name:</strong> ${getValue('name', 2)}</div>
+                    <div class="col-md-3"><strong>Mobile:</strong> ${getValue('phone', 6)}</div>
+                    <div class="col-md-3"><strong>District:</strong> ${data.district || ''}</div>
+                    <div class="col-md-3"><strong>State:</strong> ${data.state || ''}</div>
+                </div>
+            `;
                     selectedRecord.style.display = 'block';
 
-                    // ✅ Hide the table and clear search
+                    // ✅ Hide table & clear search
                     tableDiv.style.display = 'none';
                     searchInput.value = '';
                 });
@@ -1005,6 +1047,13 @@
                     infoLine.style.display = 'none';
                 });
         });
+    </script>
+    <script>
+        function updateProjectFields(select) {
+            const selectedOption = select.options[select.selectedIndex];
+            document.getElementById('project_code').value = selectedOption.dataset.code || '';
+            document.getElementById('project_name').value = selectedOption.dataset.name || '';
+        }
     </script>
 
 @endsection

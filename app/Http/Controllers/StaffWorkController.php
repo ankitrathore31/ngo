@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\academic_session;
 use App\Models\beneficiarie;
+use App\Models\Category;
 use App\Models\Member;
 use App\Models\Plan;
+use App\Models\Project;
 use App\Models\Signature;
 use App\Models\SurveyBenefries;
 use App\Models\WorkLog;
@@ -18,40 +20,39 @@ class StaffWorkController extends Controller
     public function WorkList(Request $request)
     {
         $user = Auth::user();
-        $date = $request->input('date', now()->toDateString());
+        $date_from = $request->input('date_from', now()->toDateString());
+        $date_to = $request->input('date_to', now()->toDateString());
         $session = academic_session::all();
 
-        // ✅ Base query
         $query = WorkLog::query();
 
-        // 🧠 Role-based filter
+        // Role-based filter
         if ($user->user_type === 'staff') {
-            // Staff see only their own logs
             $query->where('user_id', $user->id);
         } else {
-            // NGO/Admin filters
             if ($request->user_filter === 'staff') {
                 $query->where('user_type', 'staff');
             } elseif ($request->user_filter === 'ngo') {
                 $query->where('user_type', 'ngo');
-            } // else show all by default
+            }
 
             $query->when($request->name, fn($q) => $q->where('user_name', 'like', '%' . $request->name . '%'));
             $query->when($request->code, fn($q) => $q->where('user_code', 'like', '%' . $request->code . '%'));
         }
 
-        // 🗓️ Common filters
-        $query->when($request->date, fn($q) => $q->whereDate('work_date', $request->date));
+        // Date range filter
+        $query->whereBetween('work_date', [$date_from, $date_to]);
+
+        // Session filter (optional)
         $query->when($request->session_filter, fn($q) => $q->where('work_date', 'like', '%' . $request->session_filter . '%'));
 
-        // 📋 Fetch logs
         $logs = $query
             ->orderBy('user_name')
             ->orderByDesc('work_date')
             ->get()
             ->groupBy('user_name');
 
-        // 📊 Stats
+        // Stats
         if ($user->user_type === 'staff') {
             $totalLogs = WorkLog::where('user_id', $user->id)->count();
             $todayLogs = WorkLog::where('user_id', $user->id)->whereDate('work_date', now())->count();
@@ -60,45 +61,54 @@ class StaffWorkController extends Controller
             $todayLogs = WorkLog::whereDate('work_date', now())->count();
         }
 
-        return view('ngo.staff-work.staff-work-list', compact('logs', 'date', 'session', 'user', 'totalLogs', 'todayLogs'));
+        return view('ngo.staff-work.staff-work-list', compact('logs', 'date_from', 'date_to', 'session', 'user', 'totalLogs', 'todayLogs'));
     }
+
 
     public function Survey()
-    {
-        $states = config('states');
-        $data = academic_session::all();
-        $user = Auth::user();
-        $user_id = $user->id;
-        $user_name = null;
-        $user_code = null;
+{
+    $user = Auth::user();
+    $states = config('states');
+    $data = academic_session::all();
 
-        if ($user->user_type == 'ngo') {
-            $user_name = $user->name;
-            $user_code = 'Ngo';
-        } elseif ($user->user_type == 'staff') {
-            $user_name = $user->staff->name;
-            $user_code = $user->staff->staff_code;
-        }
-        // Fetch last record
-        $lastSurvey = SurveyBenefries::orderBy('id', 'desc')->first();
-
-        $prefix = '3126SID';
-        $nextNumber = 1; // Default starting number
-
-        if ($lastSurvey && $lastSurvey->survey_id) {
-            // Extract numeric part from last Survey ID
-            $lastNumber = intval(substr($lastSurvey->survey_id, -7));
-            $nextNumber = $lastNumber + 1;
-        }
-
-        // Format to: 3126SID0000001
-        $newSurveyId = sprintf("%s%07d", $prefix, $nextNumber);
-        $beneficiaries = beneficiarie::all();
-        $members = Member::all();
-        $record = $beneficiaries->merge($members);
-
-        return view('ngo.staff-work.survey', compact('data', 'states', 'user_name', 'user_code', 'user_id', 'newSurveyId', 'record'));
+    // Determine user info
+    if ($user->user_type === 'ngo') {
+        $user_name = $user->name;
+        $user_code = 'Ngo';
+    } elseif ($user->user_type === 'staff') {
+        $user_name = $user->staff->name ?? null;
+        $user_code = $user->staff->staff_code ?? null;
     }
+    $user_id = $user->id;
+
+    // Generate next Survey ID
+    $lastSurvey = SurveyBenefries::latest('id')->first();
+    $prefix = '3126SID';
+    $nextNumber = $lastSurvey ? intval(substr($lastSurvey->survey_id, -7)) + 1 : 1;
+    $newSurveyId = sprintf("%s%07d", $prefix, $nextNumber);
+
+    // Combine beneficiaries and members
+    $beneficiaries = beneficiarie::all();
+    $members = Member::all();
+    $record = $beneficiaries->merge($members);
+
+    // Fetch projects with code and category
+    $projects = Project::select('id', 'name', 'code', 'category')->get();
+    $categories = Category::orderBy('category', 'asc')->get();
+
+    return view('ngo.staff-work.survey', compact(
+        'data', 
+        'states', 
+        'user_name', 
+        'user_code', 
+        'user_id', 
+        'newSurveyId', 
+        'record', 
+        'projects',
+        'categories'
+    ));
+}
+
 
     public function StoreSurvey(Request $request)
     {
@@ -106,6 +116,7 @@ class StaffWorkController extends Controller
             // Validate request
             $validated = $request->validate([
                 'user_id'        => 'required',
+                'category'         =>'required|string',
                 'project_code'   => 'required|string|max:255',
                 'project_name'   => 'required|string|max:255',
                 'center'         => 'required|string|max:255',
@@ -128,6 +139,7 @@ class StaffWorkController extends Controller
             // Common data for all beneficiaries
             $commonData = [
                 'user_id'       => $request->user_id,
+                'category'      =>$request->category,
                 'project_code'  => $request->project_code,
                 'project_name'  => $request->project_name,
                 'center'        => $request->center,
@@ -181,6 +193,22 @@ class StaffWorkController extends Controller
             // Insert data if available
             if (!empty($insertData)) {
                 SurveyBenefries::insert($insertData);
+
+                // ✅ Added logWork() for survey_id and name
+                $surveyDetails = collect($request->beneficiaries)
+                    ->map(function ($b) {
+                        return 'Survey ID: ' . ($b['survey_id'] ?? '-') . ' | Name: ' . ($b['name'] ?? '-');
+                    })
+                    ->implode(' || ');
+
+                logWork(
+                    'Survey',
+                    null,
+                    'New Survey Entry',
+                    'Added ' . count($insertData) . ' beneficiary record(s) for project: ' . $request->project_name .
+                        ' — ' . $surveyDetails
+                );
+
                 return redirect()->route('survey.list')
                     ->with('success', '✅ ' . count($insertData) . ' beneficiary/beneficiaries saved successfully!');
             } else {
@@ -189,25 +217,25 @@ class StaffWorkController extends Controller
                     ->withInput();
             }
         } catch (\Illuminate\Validation\ValidationException $e) {
-            // Handle validation errors
             return redirect()->back()
                 ->withErrors($e->validator)
                 ->withInput()
                 ->with('error', '⚠️ Please fix the validation errors.');
         } catch (\Exception $e) {
-            // Log the error
             \Log::error('Survey Store Error: ' . $e->getMessage());
-
-            // Return with error message
             return redirect()->back()
                 ->with('error', '❌ An error occurred while saving: ' . $e->getMessage())
                 ->withInput();
         }
     }
 
+
     public function SurveyList(Request $request)
     {
         $user = Auth::user();
+
+        $date_from = $request->input('date_from', now()->toDateString());
+        $date_to = $request->input('date_to', now()->toDateString());
 
         // Base query depending on user type
         if ($user->user_type === 'ngo') {
@@ -221,9 +249,8 @@ class StaffWorkController extends Controller
             $query->where('session', $request->session_filter);
         }
 
-        if ($request->filled('date')) {
-            $query->whereDate('date', $request->date);
-        }
+        // ✅ Date range filter (default: today)
+        $query->whereBetween('date', [$date_from, $date_to]);
 
         if ($request->filled('user_filter')) {
             if ($request->user_filter === 'ngo') {
@@ -258,10 +285,10 @@ class StaffWorkController extends Controller
 
         // Additional data for filters
         $session = academic_session::all();
-        $date = $request->input('date', now()->toDateString());
 
-        return view('ngo.staff-work.survey-list', compact('surveys', 'user', 'session', 'date'));
+        return view('ngo.staff-work.survey-list', compact('surveys', 'user', 'session', 'date_from', 'date_to'));
     }
+
 
     public function ViewSurvey($id)
     {

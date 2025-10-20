@@ -311,7 +311,7 @@
         </div>
 
         <div class="col-md-2 mb-3">
-            <a href="{{ route('true.story') }}" class="btn btn-success w-100">
+            <a href="{{ route('true.story.list') }}" class="btn btn-success w-100">
                 True Story
             </a>
         </div>
@@ -507,7 +507,7 @@
                     <div class="text-white bg-primary p-3 h-100">
                         <div>
                             <p class="mb-1">Total True Story</p>
-                            <h5 class="mb-0">{{ totalProblem() }}</h5>
+                            <h5 class="mb-0">{{ totalStories() }}</h5>
                         </div>
                     </div>
                 </div>

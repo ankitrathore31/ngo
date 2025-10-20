@@ -21,6 +21,7 @@ use App\Models\Organization;
 use App\Models\OrganizationMember;
 use App\Models\Project;
 use App\Models\Staff;
+use App\Models\Story;
 use App\Models\Training_Center;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
@@ -480,6 +481,7 @@ class HomeControlller extends Controller
     }
 
     public function TrueStory(){
-        return view('home.gallery.story');
+        $stories = Story::latest()->get();
+        return view('home.gallery.story',compact('stories'));
     }
 }
