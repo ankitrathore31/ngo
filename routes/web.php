@@ -29,6 +29,7 @@ use App\Http\Controllers\SallaryController;
 use App\Http\Controllers\SignatureController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StaffWorkController;
+use App\Http\Controllers\StoryController;
 use App\Http\Controllers\TrainingCenterController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\WorkingAreaController;
@@ -92,7 +93,7 @@ Route::controller(HomeControlller::class)->group(function () {
     Route::get('/center', 'Center')->name('home.center.list');
     Route::get('/vacancies','HomeJobList')->name('vacancies');
     Route::get('/download-document','document')->name('document');
-    Route::get('/true-story','TrueStory')->name('true.story');
+    Route::get('/true-story','TrueStory')->name('true.story.list');
 });
 
 Route::controller(CertificateController::class)->group(function () {
@@ -533,4 +534,12 @@ Route::controller(StaffWorkController::class)->middleware('auth')->group(functio
     Route::get('/check-survey-identity', [StaffWorkController::class, 'checkIdentity'])->name('check.survey.identity');
 
 });
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('ngo/true-story', [StoryController::class, 'TrueStory'])->name('true.story');
+    Route::get('ngo/add-story', [StoryController::class, 'AddStory'])->name('add-story');
+    Route::post('ngo/save-story', [StoryController::class, 'store'])->name('save-story');
+    Route::get('ngo/delete-story/{id}', [StoryController::class, 'DeleteStory'])->name('delete-story');
+});
+
 require __DIR__ . '/auth.php';

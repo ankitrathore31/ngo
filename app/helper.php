@@ -10,6 +10,7 @@ use App\Models\OrganizationMember;
 use App\Models\Problem;
 use App\Models\Project;
 use App\Models\ProjectReport;
+use App\Models\Story;
 use App\Models\Visitor;
 use Illuminate\Support\Facades\DB;
 use App\Models\WorkLog;
@@ -417,3 +418,10 @@ if (!function_exists('logWork')) {
         }
     }
 }
+if (!function_exists('totalStories')) {
+    function totalStories()
+    {
+        return Story::count();
+    }
+}
+

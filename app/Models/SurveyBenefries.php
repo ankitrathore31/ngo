@@ -18,7 +18,7 @@ class SurveyBenefries extends Model
         'animator_name',
         'session',
         'date',
-
+        'category',
         'name',
         'father_husband_name',
         'state',

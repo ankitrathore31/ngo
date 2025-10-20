@@ -146,8 +146,14 @@
                     </div>
 
                     <div class="col-md-3 col-sm-6">
-                        <input type="date" name="date" class="form-control" value="{{ request('date', $date) }}">
+                        <input type="date" name="date_from" class="form-control"
+                            value="{{ request('date_from', now()->toDateString()) }}">
                     </div>
+                    <div class="col-md-3 col-sm-6">
+                        <input type="date" name="date_to" class="form-control"
+                            value="{{ request('date_to', now()->toDateString()) }}">
+                    </div>
+
 
                     {{-- 👇 Only visible for NGO users --}}
                     @if ($user->user_type == 'ngo')
@@ -279,10 +285,12 @@
                                 <th>Caste</th>
                                 <th>Caste Category</th>
                                 <th>Age</th>
+                                <th>Identity Type</th>
+                                <th>Indenty No.</th>
                                 <th>Scheme Type</th>
                                 <th>Place Identification Mark</th>
                                 <th>Session</th>
-                                {{-- <th>Project Code</th> --}}
+                                <th>Category</th>
                                 <th>Project Name/Code</th>
                                 <th>Center</th>
                                 {{-- <th>Animator Code</th> --}}
@@ -305,18 +313,24 @@
                                     <td>{{ $survey->caste }}</td>
                                     <td>{{ $survey->caste_category }}</td>
                                     <td>{{ $survey->age }}</td>
+                                    <td>{{ $survey->identity_type }}</td>
+                                    <td>{{ $survey->identity_no }}</td>
                                     <td>{{ $survey->beneficiaries_type }}</td>
                                     <td>{{ $survey->place_identification_mark }}</td>
                                     <td>{{ $survey->session }}</td>
+                                    <td>{{ $survey->category }}</td>
                                     <td>{{ $survey->project_name }} ({{ $survey->project_code }})</td>
                                     <td>{{ $survey->center }}</td>
                                     <td>{{ $survey->animator_name }} ({{ $survey->animator_code }})</td>
                                     <td class="text-center">
-                                        <a href="{{ route('survey.show', $survey->id) }}" class="btn btn-sm btn-info">View</a>
-                                        <a href="{{ route('survey.edit', $survey->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                        <a href="{{ route('survey.show', $survey->id) }}"
+                                            class="btn btn-sm btn-info">View</a>
+                                        <a href="{{ route('survey.edit', $survey->id) }}"
+                                            class="btn btn-sm btn-warning">Edit</a>
 
                                         @if ($user->user_type == 'ngo')
-                                            <a href="{{ route('survey.delete', $survey->id) }}" class="btn btn-sm btn-danger"
+                                            <a href="{{ route('survey.delete', $survey->id) }}"
+                                                class="btn btn-sm btn-danger"
                                                 onclick="return confirm('Are you sure you want to delete this record?')">
                                                 Delete
                                             </a>

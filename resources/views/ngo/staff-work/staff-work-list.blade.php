@@ -186,8 +186,14 @@
                         </div>
 
                         <div class="col-md-3 col-sm-6">
-                            <input type="date" name="date" class="form-control" value="{{ request('date', $date) }}">
+                            <input type="date" name="date_from" class="form-control"
+                                value="{{ request('date_from', now()->toDateString()) }}">
                         </div>
+                        <div class="col-md-3 col-sm-6">
+                            <input type="date" name="date_to" class="form-control"
+                                value="{{ request('date_to', now()->toDateString()) }}">
+                        </div>
+
 
                         {{-- 👇 Only visible for NGO users --}}
                         @if ($user->user_type == 'ngo')
