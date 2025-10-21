@@ -12,17 +12,27 @@
                     </ol>
                 </nav>
             </div>
+            
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
             @if (session('success'))
-                <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+                <div class="alert alert-success">
                     {{ session('success') }}
                 </div>
             @endif
             <div class="row mt-2 mb-3">
-        <div class="col">
-            <a href="{{route('true.story')}}" class="btn btn-primary">BACK</a>
-        </div>
-    </div>
+                <div class="col">
+                    <a href="{{ route('true.story') }}" class="btn btn-primary">BACK</a>
+                </div>
+            </div>
 
             <form action="{{ route('save-story') }}" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -47,7 +57,8 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="name" class="form-label">Story Title / Name:</label>
-                        <input type="text" name="name" id="name" class="form-control" placeholder="Enter story title">
+                        <input type="text" name="name" id="name" class="form-control"
+                            placeholder="Enter story title">
                         @error('name')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -58,7 +69,8 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="link" class="form-label">YouTube Video Link:</label>
-                        <input type="text" name="link" id="link" class="form-control" placeholder="Paste YouTube link">
+                        <input type="text" name="link" id="link" class="form-control"
+                            placeholder="Paste YouTube link">
                         @error('link')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -79,7 +91,8 @@
                 <div class="row mb-3">
                     <div class="col">
                         <label for="description" class="form-label">Description:</label>
-                        <textarea name="description" id="description" rows="4" class="form-control" placeholder="Write about this story..."></textarea>
+                        <textarea name="description" id="description" rows="4" class="form-control"
+                            placeholder="Write about this story..."></textarea>
                         @error('description')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

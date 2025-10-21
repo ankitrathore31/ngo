@@ -18,7 +18,7 @@
     @endif
     <div class="row mt-2 mb-3">
         <div class="col">
-            <a href="{{route('add-story')}}" class="btn btn-primary">+ ADD STORY</a>
+            <a href="{{ route('add-story') }}" class="btn btn-primary">+ ADD STORY</a>
         </div>
     </div>
     <div class="container mt-4">
@@ -31,7 +31,7 @@
                             $images = $story->file_path ? json_decode($story->file_path, true) : [];
                         @endphp
 
-                        @if (!empty($images))
+                        @if (!empty($images) && count($images) > 0)
                             <div id="carousel{{ $story->id }}" class="carousel slide" data-bs-ride="carousel">
                                 <div class="carousel-inner">
                                     @foreach ($images as $index => $img)
@@ -41,18 +41,22 @@
                                         </div>
                                     @endforeach
                                 </div>
+
                                 @if (count($images) > 1)
                                     <button class="carousel-control-prev" type="button"
                                         data-bs-target="#carousel{{ $story->id }}" data-bs-slide="prev">
-                                        <span class="carousel-control-prev-icon"></span>
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
                                     </button>
                                     <button class="carousel-control-next" type="button"
                                         data-bs-target="#carousel{{ $story->id }}" data-bs-slide="next">
-                                        <span class="carousel-control-next-icon"></span>
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
                                     </button>
                                 @endif
                             </div>
                         @endif
+
 
                         {{-- Content --}}
                         <div class="card-body p-4 d-flex flex-column">
@@ -66,7 +70,7 @@
                             @endif
 
                             <p class="card-text text-secondary mb-3" style="flex-grow: 1;">
-                                {{ Str::limit($story->description, 150, '...') }}
+                                {{ $story->description }}
                             </p>
 
                             {{-- YouTube Video --}}
@@ -82,7 +86,9 @@
                         {{-- Footer --}}
                         <div
                             class="card-footer bg-white border-0 d-flex justify-content-between align-items-center px-4 pb-3">
-                            <a href="{{route('delete-story', $story->id )}}" onclick="return confirm('Do you want to delete Story')" class="btn btn-sm btn-outline-danger rounded-pill px-3">Delete</a>
+                            <a href="{{ route('delete-story', $story->id) }}"
+                                onclick="return confirm('Do you want to delete Story')"
+                                class="btn btn-sm btn-outline-danger rounded-pill px-3">Delete</a>
                             <span class="text-muted small"><i
                                     class="bi bi-clock me-1"></i>{{ $story->created_at->diffForHumans() }}</span>
                         </div>
@@ -119,12 +125,6 @@
             line-height: 1.5;
         }
 
-        .story-image {
-            height: 230px;
-            object-fit: cover;
-            border-top-left-radius: 12px;
-            border-top-right-radius: 12px;
-        }
 
         .carousel-control-prev-icon,
         .carousel-control-next-icon {
@@ -140,6 +140,29 @@
         .btn-outline-primary:hover {
             background-color: #0d6efd;
             color: white;
+        }
+
+        .story-image {
+            width: 100%;
+            height: 400px;
+            /* Default desktop height */
+            object-fit: cover;
+            /* Covers container without stretching */
+            object-position: center;
+            /* Center image */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .story-image {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .story-image {
+                height: 200px;
+            }
         }
     </style>
 

@@ -320,7 +320,7 @@
                 </tr>
                 <tr>
                     <td class="label">Age</td>
-                    <td class="value">{{ $survey->age ?? '-' }} Years</td>
+                    <td class="value">{{ \Carbon\Carbon::parse($survey->age)->age ?? '-' }}</td>
                 </tr>
                 <tr>
                     <td class="label">Mobile Number</td>

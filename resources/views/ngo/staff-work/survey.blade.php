@@ -1,6 +1,7 @@
 @extends('ngo.layout.master')
 @section('content')
     <div class="wrapper">
+
         <div class="d-flex justify-content-between align-items-center mb-1 mt-2">
             <h5 class="mb-0">Survey</h5>
             <nav aria-label="breadcrumb">
@@ -45,12 +46,14 @@
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
+
                     <div class="col-md-6 mb-3">
-                        <label for="category">Category:</label>
-                        <select id="category" name="category" class="form-control" required>
+                        <label for="category">Project Category:</label>
+                        <select id="category" name="category" class="form-control" required
+                            onchange="filterProjectsByCategory()">
                             <option value="">-- Select Category --</option>
                             @foreach ($categories as $category)
-                                <option value="{{ $category->id }}"
+                                <option value="{{ $category->category }}"
                                     {{ old('category') == $category->category ? 'selected' : '' }}>
                                     {{ $category->category }}
                                 </option>
@@ -61,15 +64,14 @@
                         @enderror
                     </div>
 
-
                     <div class="col-md-6 mb-3">
-                        <label for="project_select">Select Project (Code or name):</label>
+                        <label for="project_select">Select Project (Code or Name):</label>
                         <select id="project_select" class="form-control" onchange="updateProjectFields(this)">
                             <option value="">-- Select Project --</option>
                             @foreach ($projects as $project)
                                 <option value="{{ $project->id }}" data-code="{{ $project->code }}"
-                                    data-name="{{ $project->category }}">
-                                    {{ $project->code }} - {{ $project->category }}
+                                    data-name="{{ $project->name }}" data-category="{{ $project->category }}">
+                                    {{ $project->code }} - {{ $project->name }}
                                 </option>
                             @endforeach
                         </select>
@@ -84,7 +86,6 @@
                         <label for="project_name">Project Name:</label>
                         <input type="text" id="project_name" name="project_name" class="form-control" readonly>
                     </div>
-
 
                     <div class="col-md-6 mb-3">
                         <label for="center">Center Name:</label>
@@ -136,6 +137,7 @@
                         <h5><b>Add Beneficiary Survey</b></h5>
                     </div>
                 </div>
+
                 <div id="beneficiary-form" class="row g-3 mt-4">
                     <!-- Search Input -->
                     <div class="row">
@@ -166,26 +168,31 @@
                             <tbody>
                                 @foreach ($record as $item)
                                     <tr class="record-row" data-name="{{ $item->name }}"
-                                        data-phone="{{ $item->phone }}"
-                                        data-gurdian="{{ $item->gurdian_name }}"data-registration="{{ $item->registration_no }}"
-                                        data-registrationDate="{{ $item->registration_date }}"
-                                        data-address="{{ $item->village }}, {{ $item->post }}"
+                                        data-phone="{{ $item->phone }}" data-gurdian="{{ $item->gurdian_name }}"
+                                        data-registration="{{ $item->registration_no }}"
+                                        data-registrationdate="{{ $item->registration_date }}"
+                                        data-address="{{ $item->village }}" data-post="{{ $item->post }}"
+                                        data-caste="{{ $item->caste }}"
+                                        data-caste_category="{{ $item->religion_category }}"
+                                        data-dob="{{ $item->dob }}" data-area_type="{{ $item->area_type }}"
                                         data-block="{{ $item->block }}" data-district="{{ $item->district }}"
-                                        data-state="{{ $item->state }}" style="cursor: pointer;">
+                                        data-state="{{ $item->state }}" style="cursor:pointer;">
+
                                         <td>{{ get_class($item) === 'App\\Models\\beneficiarie' ? 'Beneficiary' : 'Member' }}
                                         </td>
                                         <td>{{ $item->registration_no ?? 'Not Found' }}</td>
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->gurdian_name }}</td>
                                         <td>{{ $item->mother_name }}</td>
-                                        <td>{{ $item->village }},{{ $item->post }},{{ $item->town }},{{ $item->district }},{{ $item->state }}
-                                        </td>
+                                        <td>{{ $item->village }}, {{ $item->post }}, {{ $item->town }},
+                                            {{ $item->district }}, {{ $item->state }}</td>
                                         <td>{{ $item->phone }}</td>
                                         <td>{{ $item->identity_type ?? '—' }}</td>
                                         <td>{{ $item->identity_no ?? '—' }}</td>
                                         <td>{{ $item->academic_session ?? '_' }}</td>
                                     </tr>
                                 @endforeach
+
                             </tbody>
                         </table>
                     </div>
@@ -323,17 +330,12 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-
                     <div class="col-md-6 form-group mb-3">
                         <label for="area_type" class="form-label">Area Type: <span class="text-danger">*</span></label>
                         <select class="form-control" name="area_type" id="area_type" required>
                             <option value="" selected disabled>Select Area</option>
-                            <option value="Rular" {{ old('area_type') == 'Rular' ? 'selected' : '' }}>
-                                Rular
-                            </option>
-                            <option value="Urban" {{ old('area_type') == 'Urban' ? 'selected' : '' }}>
-                                Urban
-                            </option>
+                            <option value="Rural" {{ old('area_type') == 'Rural' ? 'selected' : '' }}>Rural</option>
+                            <option value="Urban" {{ old('area_type') == 'Urban' ? 'selected' : '' }}>Urban</option>
                         </select>
                         @error('area_type')
                             <span class="text-danger">{{ $message }}</span>
@@ -342,7 +344,7 @@
 
                     <div class="col-md-6">
                         <label for="block_name">Block:</label>
-                        <input type="text" id="block_name" name="block" class="form-control">
+                        <input type="text" id="block_name" name="block_name" class="form-control">
                     </div>
 
                     <div class="col-md-6">
@@ -350,32 +352,26 @@
                         <input type="text" id="post_town" name="post_town" class="form-control">
                     </div>
 
-                    {{-- Address --}}
                     <div class="col-md-6">
                         <label for="address">Village/Locality: <span class="text-danger">*</span></label>
-                        <textarea id="address" class="form-control" rows="2"></textarea>
+                        <textarea id="address" name="address" class="form-control" rows="2"></textarea>
                     </div>
 
-                    {{-- Mobile No. --}}
                     <div class="col-md-6">
                         <label for="mobile_no">Mobile No.: <span class="text-danger">*</span></label>
-                        <input type="text" id="mobile_no" class="form-control" maxlength="10">
+                        <input type="text" id="mobile_no" name="mobile_no" class="form-control" maxlength="10">
                     </div>
 
-                    {{-- Caste --}}
                     <div class="col-md-6">
                         <label for="caste">Caste:</label>
-                        <input type="text" id="caste" class="form-control">
+                        <input type="text" id="caste" name="caste" class="form-control">
                     </div>
 
-                    <!-- Caste Category -->
                     <div class="col-md-6 mb-3">
-                        <label for="category" class="form-label">Caste Category <span
+                        <label for="caste_category" class="form-label">Caste Category <span
                                 class="text-danger">*</span></label>
-                        <select class="form-select @error('caste_category') is-invalid @enderror" id="category"
-                            name="caste_category" required>
-                            <option value="" disabled {{ old('caste_category') ? '' : 'selected' }}>
-                                Select Category</option>
+                        <select class="form-select" id="caste_category" name="caste_category" required>
+                            <option value="" disabled selected>Select Category</option>
                             @foreach (['General', 'OBC', 'SC', 'ST', 'Minority'] as $category)
                                 <option value="{{ $category }}"
                                     {{ old('caste_category') == $category ? 'selected' : '' }}>
@@ -383,16 +379,13 @@
                                 </option>
                             @endforeach
                         </select>
-                        @error('caste_category')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
                     </div>
 
-                    {{-- Age --}}
                     <div class="col-md-6">
                         <label for="age">Age: <span class="text-danger">*</span></label>
-                        <input type="number" id="age" class="form-control" min="1" max="120">
+                        <input type="date" id="age" name="age" class="form-control">
                     </div>
+
 
                     {{-- Beneficiaries Type --}}
                     <div class="col-md-6">
@@ -401,7 +394,7 @@
                             id="beneficiaries_type" name="beneficiaries_type" required>
                             <option value="" disabled {{ old('beneficiaries_type') ? '' : 'selected' }}>Select
                                 Scheme Type</option>
-                            @foreach (['CM Child Welfare (CM Baal Seva)', 'Economically Weaker Section', 'Elderly Women', 'Homeless Families', 'Laborers', 'Landless', 'Large Farmers', 'Labour Card', 'Marginal Farmers', 'Old Age', 'People Living in Kutcha or One-Room Houses', 'Persons with Disabilities (Viklang Log)', 'Scheduled Castes', 'Shadi Anudaan', 'Samuhik vivah', 'Scheduled Tribes', 'Small Farmers', 'Sumangla Scheme', 'Victims (Pidit Log)', 'Widows'] as $category)
+                            @foreach (['CM Child Welfare (CM Baal Seva)', 'Economically Weaker Section', 'Elderly Women', 'Homeless Families', 'Laborers', 'Landless', 'Large Farmers', 'Labour Card', 'Marginal Farmers', 'Old Age', 'People Living in Kutcha or One-Room Houses', 'Persons with Disabilities (Viklang Log)','People Relation (Jan Sampark)', 'Scheduled Castes', 'Shadi Anudaan', 'Samuhik vivah', 'Scheduled Tribes', 'Small Farmers', 'Sumangla Scheme','To help', 'Victims (Pidit Log)', 'Widows'] as $category)
                                 <option value="{{ $category }}"
                                     {{ old('beneficiaries_type') == $category ? 'selected' : '' }}>
                                     {{ $category }}
@@ -516,7 +509,7 @@
                 address: document.getElementById('address').value.trim(),
                 mobile_no: document.getElementById('mobile_no').value.trim(),
                 caste: document.getElementById('caste').value.trim(),
-                caste_category: document.getElementById('category').value.trim(),
+                caste_category: document.getElementById('caste_category').value.trim(),
                 age: document.getElementById('age').value.trim(),
                 beneficiaries_type: document.getElementById('beneficiaries_type').value.trim(),
                 disability_percentage: document.getElementById('disability_percentage').value.trim(),
@@ -573,7 +566,7 @@
             const fieldsToClear = [
                 'identity_type', 'identity_no', 'name', 'father_husband_name',
                 'stateSelect', 'districtSelect', 'area_type', 'block_name',
-                'post_town', 'address', 'mobile_no', 'caste', 'category',
+                'post_town', 'address', 'mobile_no', 'caste', 'caste_category',
                 'age', 'beneficiaries_type', 'disability_percentage',
                 'widow_since', 'type_of_victim', 'class', 'death_date',
                 'labour_card_no', 'labour_card_date', 'land', 'remark',
@@ -609,7 +602,7 @@
                 list.innerHTML += `
         <li class="list-group-item d-flex justify-content-between align-items-center">
             <span>
-                <strong>${b.survey_id}</strong> — ${b.name} — ${b.mobile_no} (${b.beneficiaries_type})
+                <strong>${b.survey_id}</strong> — ${b.name} — ${b.mobile_no} — ${b.father_husband_name}   (${b.beneficiaries_type})
             </span>
             <button type="button" class="btn btn-sm btn-danger" onclick="removeBeneficiary(${i})">❌ Remove</button>
         </li>`;
@@ -730,69 +723,73 @@
                 const el = document.getElementById(id);
                 if (el && value !== undefined && value !== null) el.value = value.trim();
             };
-
-            // ✅ Handle row click
             tableRows.forEach(row => {
                 row.addEventListener('click', function() {
                     const data = this.dataset;
                     const cells = this.querySelectorAll('td');
 
-                    // ✅ Fallback function (dataset → table cell)
                     const getValue = (key, cellIndex = null) => {
-                        if (data[key]) return data[key];
+                        if (data[key]) return data[key].trim();
                         if (cellIndex !== null && cells[cellIndex]) return cells[cellIndex]
                             .innerText.trim();
                         return '';
                     };
 
-                    // ✅ Fill personal info
+                    // ✅ Basic info
                     safeSet('name', getValue('name', 2));
                     safeSet('father_husband_name', getValue('gurdian', 3));
                     safeSet('mobile_no', getValue('phone', 6));
                     safeSet('identity_type', getValue('identity_type', 7));
                     safeSet('identity_no', getValue('identity_no', 8));
-                    safeSet('caste', getValue('caste', 6));
-                    safeSet('category', getValue('religion_category')); // ✅ Corrected field name
-                    safeSet('area_type', getValue('area_type', 8));
-                    safeSet('address', getValue('village')); // village/locality
-                    safeSet('post_town', getValue('post_town') || getValue(
-                        'post')); // ✅ safer fallback
-                    safeSet('block_name', getValue('block_name') || getValue(
-                        'block')); // ✅ safer fallback
+                    safeSet('caste', getValue('caste'));
+                    safeSet('caste_category', getValue('caste_category') || getValue(
+                        'religion_category'));
+                    safeSet('area_type', getValue('area_type'));
+                    safeSet('address', getValue('address') || getValue('village'));
+                    safeSet('post_town', getValue('post') || getValue('post_town'));
+                    safeSet('block_name', getValue('block'));
 
+                    // ✅ Directly set DOB (instead of converting to age)
+                    const dobValue = getValue('dob');
+                    if (dobValue) safeSet('age', dobValue);
 
-                    // ✅ Handle state and district dropdowns
-                    if (data.state) {
-                        const stateSelect = document.getElementById('stateSelect');
-                        if (stateSelect) {
-                            stateSelect.value = data.state;
-                            if (typeof populateDistricts === 'function') {
-                                populateDistricts(data.state);
+                    // ✅ Handle State and District (in proper order)
+                    const stateValue = data.state ? data.state.trim() : '';
+                    const districtValue = data.district ? data.district.trim() : '';
+
+                    const stateSelect = document.getElementById('stateSelect');
+                    const districtSelect = document.getElementById('districtSelect');
+
+                    if (stateSelect) {
+                        stateSelect.value = stateValue;
+                        populateDistricts(stateValue); // load all districts for that state
+
+                        // Delay to ensure districts are populated before setting
+                        setTimeout(() => {
+                            if (districtSelect && districtValue) {
+                                districtSelect.value = districtValue;
                             }
-                        }
+                        }, 100);
                     }
 
-                    if (data.district) {
-                        const districtSelect = document.getElementById('districtSelect');
-                        if (districtSelect) districtSelect.value = data.district;
-                    }
-
-                    // ✅ Show selected info card
+                    // ✅ Show selected info summary
                     selectedInfo.innerHTML = `
-                <div class="row">
-                    <div class="col-md-3"><strong>Name:</strong> ${getValue('name', 2)}</div>
-                    <div class="col-md-3"><strong>Mobile:</strong> ${getValue('phone', 6)}</div>
-                    <div class="col-md-3"><strong>District:</strong> ${data.district || ''}</div>
-                    <div class="col-md-3"><strong>State:</strong> ${data.state || ''}</div>
-                </div>
-            `;
+            <div class="row">
+                <div class="col-md-3"><strong>Name:</strong> ${getValue('name', 2)}</div>
+                <div class="col-md-3"><strong>Mobile:</strong> ${getValue('phone', 6)}</div>
+                <div class="col-md-3"><strong>District:</strong> ${districtValue}</div>
+                <div class="col-md-3"><strong>State:</strong> ${stateValue}</div>
+            </div>
+        `;
                     selectedRecord.style.display = 'block';
-
-                    // ✅ Hide table & clear search
                     tableDiv.style.display = 'none';
                     searchInput.value = '';
                 });
             });
+
+
+
+
         });
     </script>
 
@@ -1049,11 +1046,45 @@
         });
     </script>
     <script>
+        // Update Project Code and Name
         function updateProjectFields(select) {
             const selectedOption = select.options[select.selectedIndex];
             document.getElementById('project_code').value = selectedOption.dataset.code || '';
             document.getElementById('project_name').value = selectedOption.dataset.name || '';
         }
+
+        // Filter Projects based on selected category
+        function filterProjectsByCategory() {
+            const categorySelect = document.getElementById('category');
+            const projectSelect = document.getElementById('project_select');
+            const selectedCategory = categorySelect.value;
+
+            // Loop through all project options
+            for (let i = 0; i < projectSelect.options.length; i++) {
+                const option = projectSelect.options[i];
+                const optionCategory = option.dataset.category;
+
+                // Show only if category matches or it's the placeholder
+                if (!selectedCategory || option.value === "") {
+                    option.style.display = '';
+                } else if (optionCategory === selectedCategory) {
+                    option.style.display = '';
+                } else {
+                    option.style.display = 'none';
+                }
+            }
+
+            // Reset project select value & project fields
+            projectSelect.value = "";
+            document.getElementById('project_code').value = '';
+            document.getElementById('project_name').value = '';
+        }
+
+        // Optional: run filter on page load if category is preselected
+        document.addEventListener('DOMContentLoaded', function() {
+            filterProjectsByCategory();
+        });
     </script>
+
 
 @endsection

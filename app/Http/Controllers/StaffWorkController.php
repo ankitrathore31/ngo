@@ -66,48 +66,48 @@ class StaffWorkController extends Controller
 
 
     public function Survey()
-{
-    $user = Auth::user();
-    $states = config('states');
-    $data = academic_session::all();
+    {
+        $user = Auth::user();
+        $states = config('states');
+        $data = academic_session::all();
 
-    // Determine user info
-    if ($user->user_type === 'ngo') {
-        $user_name = $user->name;
-        $user_code = 'Ngo';
-    } elseif ($user->user_type === 'staff') {
-        $user_name = $user->staff->name ?? null;
-        $user_code = $user->staff->staff_code ?? null;
+        // Determine user info
+        if ($user->user_type === 'ngo') {
+            $user_name = $user->name;
+            $user_code = 'Ngo';
+        } elseif ($user->user_type === 'staff') {
+            $user_name = $user->staff->name ?? null;
+            $user_code = $user->staff->staff_code ?? null;
+        }
+        $user_id = $user->id;
+
+        // Generate next Survey ID
+        $lastSurvey = SurveyBenefries::latest('id')->first();
+        $prefix = '3126SID';
+        $nextNumber = $lastSurvey ? intval(substr($lastSurvey->survey_id, -7)) + 1 : 1;
+        $newSurveyId = sprintf("%s%07d", $prefix, $nextNumber);
+
+        // Combine beneficiaries and members
+        $beneficiaries = beneficiarie::all();
+        $members = Member::all();
+        $record = $beneficiaries->merge($members);
+
+        // Fetch projects with code and category
+        $projects = Project::select('id', 'name', 'code', 'category')->get();
+        $categories = Category::orderBy('category', 'asc')->get();
+
+        return view('ngo.staff-work.survey', compact(
+            'data',
+            'states',
+            'user_name',
+            'user_code',
+            'user_id',
+            'newSurveyId',
+            'record',
+            'projects',
+            'categories'
+        ));
     }
-    $user_id = $user->id;
-
-    // Generate next Survey ID
-    $lastSurvey = SurveyBenefries::latest('id')->first();
-    $prefix = '3126SID';
-    $nextNumber = $lastSurvey ? intval(substr($lastSurvey->survey_id, -7)) + 1 : 1;
-    $newSurveyId = sprintf("%s%07d", $prefix, $nextNumber);
-
-    // Combine beneficiaries and members
-    $beneficiaries = beneficiarie::all();
-    $members = Member::all();
-    $record = $beneficiaries->merge($members);
-
-    // Fetch projects with code and category
-    $projects = Project::select('id', 'name', 'code', 'category')->get();
-    $categories = Category::orderBy('category', 'asc')->get();
-
-    return view('ngo.staff-work.survey', compact(
-        'data', 
-        'states', 
-        'user_name', 
-        'user_code', 
-        'user_id', 
-        'newSurveyId', 
-        'record', 
-        'projects',
-        'categories'
-    ));
-}
 
 
     public function StoreSurvey(Request $request)
@@ -116,7 +116,7 @@ class StaffWorkController extends Controller
             // Validate request
             $validated = $request->validate([
                 'user_id'        => 'required',
-                'category'         =>'required|string',
+                'category'         => 'required|string',
                 'project_code'   => 'required|string|max:255',
                 'project_name'   => 'required|string|max:255',
                 'center'         => 'required|string|max:255',
@@ -139,7 +139,7 @@ class StaffWorkController extends Controller
             // Common data for all beneficiaries
             $commonData = [
                 'user_id'       => $request->user_id,
-                'category'      =>$request->category,
+                'category'      => $request->category,
                 'project_code'  => $request->project_code,
                 'project_name'  => $request->project_name,
                 'center'        => $request->center,
@@ -197,7 +197,7 @@ class StaffWorkController extends Controller
                 // ✅ Added logWork() for survey_id and name
                 $surveyDetails = collect($request->beneficiaries)
                     ->map(function ($b) {
-                        return 'Survey ID: ' . ($b['survey_id'] ?? '-') . ' | Name: ' . ($b['name'] ?? '-');
+                        return 'Survey ID: ' . ($b['survey_id'] ?? '-') . ' | Name: ' . ($b['name'] ?? '-') . ' | Scheme Type: ' . ($b['beneficiaries_type'] ?? '-');
                     })
                     ->implode(' || ');
 
@@ -244,12 +244,26 @@ class StaffWorkController extends Controller
             $query = SurveyBenefries::where('user_id', $user->id);
         }
 
-        // 🔹 Apply search filters only if filled
+        // 🔹 New Search: name / mobile_no / father_husband_name
+        if ($request->filled('search_text')) {
+            $search = $request->search_text;
+            $query->where(function ($q) use ($search) {
+                $q->where('animator_name', 'like', "%{$search}%")
+                    ->orWhere('mobile_no', 'like', "%{$search}%")
+                    ->orWhere('father_husband_name', 'like', "%{$search}%");
+            });
+        }
+
+        // 🔹 New Search: survey ID
+        if ($request->filled('survey_id')) {
+            $query->where('id', $request->survey_id);
+        }
+
+        // Existing filters remain unchanged
         if ($request->filled('session_filter')) {
             $query->where('session', $request->session_filter);
         }
 
-        // ✅ Date range filter (default: today)
         $query->whereBetween('date', [$date_from, $date_to]);
 
         if ($request->filled('user_filter')) {
@@ -288,6 +302,7 @@ class StaffWorkController extends Controller
 
         return view('ngo.staff-work.survey-list', compact('surveys', 'user', 'session', 'date_from', 'date_to'));
     }
+
 
 
     public function ViewSurvey($id)
