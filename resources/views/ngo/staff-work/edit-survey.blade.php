@@ -300,8 +300,8 @@
                     <!-- Age -->
                     <div class="col-md-6 mb-3">
                         <label for="age">Age: <span class="text-danger">*</span></label>
-                        <input type="number" id="age" name="age" class="form-control"
-                            value="{{ old('age', $survey->age) }}" min="1" max="120" required>
+                        <input type="date" id="age" name="age" class="form-control"
+                            value="{{ old('age', $survey->age) }}" required>
                         @error('age')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

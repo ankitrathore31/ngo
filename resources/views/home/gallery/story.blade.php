@@ -60,7 +60,7 @@
                             @endif
 
                             <p class="card-text text-secondary mb-3" style="flex-grow: 1;">
-                                {{ Str::limit($story->description, 150, '...') }}
+                                {{ $story->description }}
                             </p>
 
                             {{-- YouTube Video --}}

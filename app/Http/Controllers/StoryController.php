@@ -20,59 +20,78 @@ class StoryController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'link' => [
-                'nullable',
-            ],
-            'date' => 'nullable|date',
-        ]);
+        try {
+            // ✅ Validate input
+            $validated = $request->validate([
+                'images.*' => 'nullable|image|mimes:jpeg,png,jpg|max:12288', // 12MB
+                'name' => 'required|string|max:255',
+                'description' => 'required|string',
+                'link' => 'nullable|string',
+                'date' => 'nullable|date',
+            ]);
 
-        $filePaths = [];
+            $filePaths = [];
 
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $file) {
-                $extension = $file->getClientOriginalExtension();
-                $filename = time() . '_' . uniqid() . '.' . $extension;
-                $file->move(public_path('gallery'), $filename);
-                $filePaths[] = 'gallery/' . $filename;
+            // ✅ Handle image uploads
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $file) {
+                    if ($file->isValid()) {
+                        $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                        $file->move(public_path('gallery'), $filename);
+                        $filePaths[] = 'gallery/' . $filename;
+                    } else {
+                        \Log::warning('Invalid file skipped: ' . $file->getClientOriginalName());
+                    }
+                }
             }
+
+            // ✅ Default date
+            $date = $request->input('date', now()->format('Y-m-d'));
+
+            // ✅ Convert YouTube or embed link
+            $embedLink = $request->filled('link') ? $this->convertYouTubeLink($request->link) : null;
+
+            // ✅ Save to DB
+            Story::create([
+                'file_path'   => json_encode($filePaths),
+                'name'        => $validated['name'],
+                'description' => $validated['description'],
+                'link'        => $embedLink,
+                'date'        => $date,
+            ]);
+
+            return back()->with('success', 'Story added successfully.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
+            \Log::error('Story upload failed: ' . $e->getMessage());
+            return back()->with('error', 'Something went wrong while saving the story.')->withInput();
         }
-
-        $date = $request->filled('date') ? $request->date : now()->format('Y-m-d');
-
-        // 🧠 Optional: Convert YouTube link to embeddable format
-        $embedLink = null;
-        if ($request->filled('link')) {
-            $embedLink = $this->convertYouTubeLink($request->link);
-        }
-
-        Story::create([
-            'file_path' => json_encode($filePaths),
-            'name' => $request->name,
-            'description' => $request->description,
-            'link' => $embedLink,
-            'date' => $date,
-        ]);
-
-        return redirect()->back()->with('success', 'Story added successfully.');
     }
 
     /**
-     * Convert YouTube URL to embed format
+     * ✅ Converts YouTube URLs or embed links to a valid embeddable format
      */
     private function convertYouTubeLink($url)
     {
-        if (
-            preg_match('/youtu\.be\/([^\?]+)/', $url, $matches) ||
-            preg_match('/youtube\.com\/(?:watch\?v=|embed\/)([^\&]+)/', $url, $matches)
-        ) {
+        if (empty($url)) return null;
+        $url = trim($url);
+
+        // Already in embed form
+        if (preg_match('/youtube\.com\/embed\/([a-zA-Z0-9_-]+)/', $url, $matches)) {
             return 'https://www.youtube.com/embed/' . $matches[1];
         }
+
+        // Standard YouTube link
+        if (preg_match('/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/', $url, $matches)) {
+            return 'https://www.youtube.com/embed/' . $matches[1];
+        }
+
+        // Non-YouTube link → keep as-is
         return $url;
     }
+
+
 
     public function DeleteStory($id)
     {

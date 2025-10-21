@@ -177,6 +177,17 @@
                                 placeholder="Search by Staff Code">
                         </div>
                     @endif
+                    {{-- Search by Name / Mobile / Father/Husband --}}
+                    <div class="col-md-3">
+                        <input type="text" name="search_text" class="form-control"
+                            placeholder="Search by Name / Mobile / Father/Husband" value="{{ request('search_text') }}">
+                    </div>
+
+                    {{-- Search by Survey ID --}}
+                    <div class="col-md-3">
+                        <input type="text" name="survey_id" class="form-control" placeholder="Search by Survey ID"
+                            value="{{ request('survey_id') }}">
+                    </div>
                     @php
                         $districtsByState = config('districts');
                     @endphp
@@ -290,7 +301,7 @@
                                 <th>Scheme Type</th>
                                 <th>Place Identification Mark</th>
                                 <th>Session</th>
-                                <th>Category</th>
+                                <th>Project Category</th>
                                 <th>Project Name/Code</th>
                                 <th>Center</th>
                                 {{-- <th>Animator Code</th> --}}
@@ -312,13 +323,15 @@
                                     <td>{{ $survey->mobile_no }}</td>
                                     <td>{{ $survey->caste }}</td>
                                     <td>{{ $survey->caste_category }}</td>
-                                    <td>{{ $survey->age }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($survey->age)->age ?? '-' }} Years</td>
                                     <td>{{ $survey->identity_type }}</td>
                                     <td>{{ $survey->identity_no }}</td>
                                     <td>{{ $survey->beneficiaries_type }}</td>
                                     <td>{{ $survey->place_identification_mark }}</td>
                                     <td>{{ $survey->session }}</td>
-                                    <td>{{ $survey->category }}</td>
+                                    <td>
+                                        {{ is_numeric($survey->category) ? \App\Models\Category::find($survey->category)?->category ?? '—' : $survey->category }}
+                                    </td>
                                     <td>{{ $survey->project_name }} ({{ $survey->project_code }})</td>
                                     <td>{{ $survey->center }}</td>
                                     <td>{{ $survey->animator_name }} ({{ $survey->animator_code }})</td>
