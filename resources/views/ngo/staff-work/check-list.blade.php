@@ -290,7 +290,7 @@
                                     <th>Sr No</th>
                                     <th>Survey ID</th>
                                     <th>Survey Date</th>
-                                    <th>Animator Name</th>
+                                    <th>Animator Name (Code)</th>
                                     <th>Beneficiary Name</th>
                                     <th>Father/Husband Name</th>
                                     <th>Address</th>
@@ -307,21 +307,23 @@
                                     <th>Mobile Aaadhar Link Benefries father mother gurdian</th>
                                     <th>Signature/Thumb Benefries father mother gurdian</th>
                                     <th>Remark</th>
-                                    <th>Action</th>
+                                    <th class="no-print">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($surveys as $key => $survey)
                                     <tr>
                                         <td class="text-center">{{ $key + 1 }}</td>
-                                        <td>{{ $survey->user_id }}</td>
-                                        <td>{{ $survey->project_code }}</td>
-                                        <td>{{ $survey->project_name }}</td>
-                                        <td>{{ $survey->center }}</td>
-                                        <td>{{ $survey->state }}</td>
-                                        <td>{{ $survey->district }}</td>
-                                        <td>{{ $survey->animator_code }}</td>
-                                        <td>{{ $survey->animator_name }}</td>
+                                        <td>{{ $survey->survey_id }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($survey->date)->format('d-m-Y') }}</td>
+                                        <td>{{ $survey->animator_name }} ({{ $survey->animator_code }})</td>
+                                        <td>{{ $survey->name }}</td>
+                                        <td>{{ $survey->father_husband_name }}</td>
+                                        <td>{{ $survey->address }}, {{ $survey->post_town }},{{ $survey->block }},
+                                            {{ $survey->state }}
+                                            {{ $survey->district }}</td>
+                                        <td>{{ $survey->mobile_no }}</td>
+                                        <td>{{ $survey->beneficiaries_type }}</td>
                                         <td>{{ $survey->session }}</td>
                                         <td class="text-center">
                                             <input type="checkbox" class="form-check-input document-checkbox"
@@ -374,8 +376,8 @@
                                         </td>
 
                                         <td>
-                                            <textarea type="text" class="form-control form-control-sm remark-input" data-survey-id="{{ $survey->id }}"
-                                             placeholder="Enter remark">{{ $survey->surveyDocument?->remark }}</textarea>
+                                            {{-- <textarea type="text" class="form-control form-control-sm remark-input" data-survey-id="{{ $survey->id }}"
+                                             placeholder="Enter remark">{{ $survey->surveyDocument?->remark }}</textarea> --}}
                                         </td>
                                         <td class="text-center">
                                             <button type="button" class="btn btn-sm btn-primary save-documents"
