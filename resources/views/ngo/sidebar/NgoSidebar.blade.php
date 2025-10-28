@@ -208,7 +208,7 @@
                         <li><a class="dropdown-item" href="{{ route('work.list') }}">Survey Send Complete</a></li>
                         <li><a class="dropdown-item" href="{{ route('work.list') }}">Work Dashboard</a></li>
                         <li><a class="dropdown-item" href="{{ route('survey.list') }}">Work List</a></li>
-                        <li><a class="dropdown-item" href=" route('activitylist') }}">Work List Check Document</a></li>
+                        <li><a class="dropdown-item" href="{{ route('Survey.CheckDocument') }}">Work List Check Document</a></li>
                         {{-- <li><a class="dropdown-item" href="{{-- route('activitylist') }}">Pending Work List</a></li>
                         <li><a class="dropdown-item" href="{{-- route('activitylist') }}">Complete Work Send</a></li>
                         <li><a class="dropdown-item" href="{{-- route('activitylist') }}">Complete Work Send List</a> </li> --}}

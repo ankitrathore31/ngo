@@ -47,4 +47,8 @@ class SurveyBenefries extends Model
         'created_at',
         'updated_at',
     ];
+    // public function surveyDocument()
+    // {
+    //     return $this->hasOne(SurveyDocument::class, 'benefres_survey_id');
+    // }
 }

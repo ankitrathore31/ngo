@@ -531,7 +531,10 @@ Route::controller(StaffWorkController::class)->middleware('auth')->group(functio
     Route::get('ngo/view-survey/{id}', 'ViewSurvey')->name('survey.show');
     Route::get('ngo/survey-delete/{id}','SurveyDelete')->name('survey.delete');
     Route::get('ngo/survey-list','SurveyList')->name('survey.list');
-    Route::get('/check-survey-identity', [StaffWorkController::class, 'checkIdentity'])->name('check.survey.identity');
+    Route::get('ngo/check-survey-identity', [StaffWorkController::class, 'checkIdentity'])->name('check.survey.identity');
+    Route::get('ngo/check-document', 'CheckDocument')->name('Survey.CheckDocument');
+    Route::post('ngo/update-document-checkbox', [StaffWorkController::class, 'updateCheckbox'])->name('update-document-checkbox');
+    Route::post('ngo/{benefresSurveyId}/update-document', [StaffWorkController::class, 'updateDocuments'])->name('update-document');
 
 });
 

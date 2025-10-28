@@ -132,7 +132,7 @@
 
         <div class="card shadow-sm mb-4">
             <div class="card-body">
-                <form method="GET" action="{{ route('survey.list') }}" class="row g-3">
+                <form method="GET" action="{{ route('Survey.CheckDocument') }}" class="row g-3">
                     <div class="col-md-3 col-sm-6">
                         <select name="session_filter" id="session_filter" class="form-control">
                             <option value="">All Sessions</option>
@@ -146,11 +146,26 @@
                     </div>
 
                     <div class="col-md-3 col-sm-6">
-                        <input type="date" name="date" class="form-control" value="{{ request('date', $date) }}">
+                        <input type="date" name="date_from" class="form-control"
+                            value="{{ request('date_from', now()->toDateString()) }}">
                     </div>
+                    <div class="col-md-3 col-sm-6">
+                        <input type="date" name="date_to" class="form-control"
+                            value="{{ request('date_to', now()->toDateString()) }}">
+                    </div>
+
 
                     {{-- 👇 Only visible for NGO users --}}
                     @if ($user->user_type == 'ngo')
+                        <div class="col-md-3 col-sm-6">
+                            <select name="user_filter" class="form-control">
+                                <option value="">All Users</option>
+                                <option value="ngo" {{ request('user_filter') == 'ngo' ? 'selected' : '' }}>NGO
+                                </option>
+                                <option value="staff" {{ request('user_filter') == 'staff' ? 'selected' : '' }}>Staff
+                                </option>
+                            </select>
+                        </div>
 
                         <div class="col-md-3 col-sm-6">
                             <input type="text" name="name" class="form-control" value="{{ request('name') }}"
@@ -162,12 +177,62 @@
                                 placeholder="Search by Staff Code">
                         </div>
                     @endif
+                    {{-- Search by Name / Mobile / Father/Husband --}}
+                    <div class="col-md-3">
+                        <input type="text" name="search_text" class="form-control"
+                            placeholder="Search by Name / Mobile / Father/Husband" value="{{ request('search_text') }}">
+                    </div>
+
+                    {{-- Search by Survey ID --}}
+                    <div class="col-md-3">
+                        <input type="text" name="survey_id" class="form-control" placeholder="Search by Survey ID"
+                            value="{{ request('survey_id') }}">
+                    </div>
+                    @php
+                        $districtsByState = config('districts');
+                    @endphp
+                    <div class="col-md-3 col-sm-6 form-group mb-3">
+                        {{-- <label for="stateSelect" class="form-label">State: <span class="text-danger">*</span></label> --}}
+                        <select class="form-control @error('state') is-invalid @enderror" name="state" id="stateSelect">
+                            <option value="">Select State</option>
+                            @foreach ($districtsByState as $state => $districts)
+                                <option value="{{ $state }}" {{ old('state') == $state ? 'selected' : '' }}>
+                                    {{ $state }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('state')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+
+                    </div>
+                    <div class="col-md-3 col-sm-6 form-group mb-3">
+                        {{-- <label for="districtSelect" class="form-label">District: <span
+                                    class="text-danger">*</span></label> --}}
+                        <select class="form-control @error('district') is-invalid @enderror" name="district"
+                            id="districtSelect">
+                            <option value="">Select District</option>
+                        </select>
+                        @error('district')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="col-md-3 col-sm-6 form-group mb-3">
+                        {{-- <label for="block" class="form-label">Block: <span class="text-danger">*</span></label> --}}
+                        <input type="text" name="block" id="block"
+                            class="form-control @error('block') is-invalid @enderror" value="{{ old('block') }}"
+                            placeholder="Search by Block">
+                        @error('block')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
 
                     <div class="col-md-3 col-sm-6">
                         <button type="submit" class="btn btn-primary w-100">Search</button>
                     </div>
+
                     <div class="col-md-3 col-sm-6">
-                        <a href="{{ route('survey.list') }}" class="btn btn-info text-white w-100">Reset</a>
+                        <a href="{{ route('Survey.CheckDocument') }}" class="btn btn-info text-white w-100">Reset</a>
                     </div>
 
                     <div class="col-md-3 col-sm-6">
@@ -231,6 +296,7 @@
                                     <th>Address</th>
                                     <th>Mobile No</th>
                                     <th>Scheme Type</th>
+                                    <th>Session</th>
                                     <th>Aadhar Benefries father mother gurdian </th>
                                     <th>Account No. Benefries father mother gurdian </th>
                                     <th>Aay Jati Nivas father mother gurdian </th>
@@ -241,7 +307,6 @@
                                     <th>Mobile Aaadhar Link Benefries father mother gurdian</th>
                                     <th>Signature/Thumb Benefries father mother gurdian</th>
                                     <th>Remark</th>
-                                    <th>Session</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -258,31 +323,65 @@
                                         <td>{{ $survey->animator_code }}</td>
                                         <td>{{ $survey->animator_name }}</td>
                                         <td>{{ $survey->session }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($survey->date)->format('d-m-Y') }}</td>
-                                        <td>{{ $survey->name }}</td>
-                                        <td>{{ $survey->father_husband_name }}</td>
-                                        <td>{{ $survey->address }}</td>
-                                        <td>{{ $survey->mobile_no }}</td>
-                                        <td>{{ $survey->caste }}</td>
-                                        <td>{{ $survey->age }}</td>
-                                        <td>{{ $survey->beneficiaries_type }}</td>
-                                        <td>{{ $survey->disability_percentage }}</td>
-                                        <td>{{ $survey->widow_since }}</td>
-                                        <td>{{ $survey->type_of_victim }}</td>
-                                        <td>{{ $survey->class }}</td>
-                                        <td>{{ $survey->place_identification_mark }}</td>
                                         <td class="text-center">
-                                            <a href="{{-- route('survey.show', $survey->id) --}}" class="btn btn-sm btn-info">View</a>
-                                            <a href="{{-- route('survey.edit', $survey->id) --}}" class="btn btn-sm btn-warning">Edit</a>
+                                            <input type="checkbox" class="form-check-input document-checkbox"
+                                                data-field="aadhar_guardian" data-survey-id="{{ $survey->id }}"
+                                                {{ $survey->surveyDocument?->aadhar_guardian ? 'checked' : '' }}>
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="checkbox" class="form-check-input document-checkbox"
+                                                data-field="account_no_guardian" data-survey-id="{{ $survey->id }}"
+                                                {{ $survey->surveyDocument?->account_no_guardian ? 'checked' : '' }}>
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="checkbox" class="form-check-input document-checkbox"
+                                                data-field="aay_jati_nivas_guardian" data-survey-id="{{ $survey->id }}"
+                                                {{ $survey->surveyDocument?->aay_jati_nivas_guardian ? 'checked' : '' }}>
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="checkbox" class="form-check-input document-checkbox"
+                                                data-field="aay_jati_nivas_beneficiary"
+                                                data-survey-id="{{ $survey->id }}"
+                                                {{ $survey->surveyDocument?->aay_jati_nivas_beneficiary ? 'checked' : '' }}>
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="checkbox" class="form-check-input document-checkbox"
+                                                data-field="adhyan_pramn_patr_guardian"
+                                                data-survey-id="{{ $survey->id }}"
+                                                {{ $survey->surveyDocument?->adhyan_pramn_patr_guardian ? 'checked' : '' }}>
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="checkbox" class="form-check-input document-checkbox"
+                                                data-field="ration_card_guardian" data-survey-id="{{ $survey->id }}"
+                                                {{ $survey->surveyDocument?->ration_card_guardian ? 'checked' : '' }}>
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="checkbox" class="form-check-input document-checkbox"
+                                                data-field="color_photo_guardian" data-survey-id="{{ $survey->id }}"
+                                                {{ $survey->surveyDocument?->color_photo_guardian ? 'checked' : '' }}>
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="checkbox" class="form-check-input document-checkbox"
+                                                data-field="mobile_aadhar_link_guardian"
+                                                data-survey-id="{{ $survey->id }}"
+                                                {{ $survey->surveyDocument?->mobile_aadhar_link_guardian ? 'checked' : '' }}>
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="checkbox" class="form-check-input document-checkbox"
+                                                data-field="signature_thumb_guardian"
+                                                data-survey-id="{{ $survey->id }}"
+                                                {{ $survey->surveyDocument?->signature_thumb_guardian ? 'checked' : '' }}>
+                                        </td>
 
-                                            @if ($user->user_type === 'ngo')
-                                                <form action="{{-- route('survey.destroy', $survey->id) --}}" method="POST" class="d-inline"
-                                                    onsubmit="return confirm('Are you sure you want to delete this record?')">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button class="btn btn-sm btn-danger" type="submit">Delete</button>
-                                                </form>
-                                            @endif
+                                        <td>
+                                            <textarea type="text" class="form-control form-control-sm remark-input" data-survey-id="{{ $survey->id }}"
+                                             placeholder="Enter remark">{{ $survey->surveyDocument?->remark }}</textarea>
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-sm btn-primary save-documents"
+                                                data-survey-id="{{ $survey->id }}">
+                                                Save
+                                            </button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -297,5 +396,97 @@
         function printTable() {
             window.print();
         }
+    </script>
+    <script>
+        $(document).ready(function() {
+            // CSRF Token setup
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            // Auto-save checkbox on change
+            $('.document-checkbox').on('change', function() {
+                const checkbox = $(this);
+                const surveyId = checkbox.data('survey-id');
+                const field = checkbox.data('field');
+                const value = checkbox.is(':checked');
+
+                // Visual feedback
+                checkbox.prop('disabled', true);
+
+                $.ajax({
+                    url: '/survey-documents/update-document-checkbox',
+                    method: 'POST',
+                    data: {
+                        benefres_survey_id: surveyId,
+                        field: field,
+                        value: value
+                    },
+                    success: function(response) {
+                        checkbox.prop('disabled', false);
+                        // Optional: Show brief success indicator
+                        showToast('Updated successfully', 'success');
+                    },
+                    error: function(xhr) {
+                        checkbox.prop('disabled', false);
+                        checkbox.prop('checked', !value); // Revert on error
+                        showToast('Error updating checkbox', 'error');
+                    }
+                });
+            });
+
+            // Save all documents for a row
+            $('.save-documents').on('click', function() {
+                const btn = $(this);
+                const surveyId = btn.data('survey-id');
+                const row = $(`tr[data-survey-id="${surveyId}"]`);
+
+                // Collect all checkbox states
+                const data = {};
+                row.find('.document-checkbox').each(function() {
+                    const checkbox = $(this);
+                    data[checkbox.data('field')] = checkbox.is(':checked');
+                });
+
+                // Add remark
+                data.remark = row.find('.remark-input').val();
+
+                // Show loading
+                btn.prop('disabled', true).text('Saving...');
+
+                $.ajax({
+                    url: `/survey-documents/${surveyId}/update-document`,
+                    method: 'POST',
+                    data: data,
+                    success: function(response) {
+                        btn.prop('disabled', false).text('Save');
+                        showToast(response.message, 'success');
+                    },
+                    error: function(xhr) {
+                        btn.prop('disabled', false).text('Save');
+                        showToast('Error saving documents', 'error');
+                    }
+                });
+            });
+
+            // Toast notification function
+            function showToast(message, type) {
+                const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+                const toast = $(`
+            <div class="alert ${alertClass} alert-dismissible fade show position-fixed top-0 end-0 m-3" role="alert" style="z-index: 9999;">
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `);
+
+                $('body').append(toast);
+
+                setTimeout(function() {
+                    toast.alert('close');
+                }, 3000);
+            }
+        });
     </script>
 @endsection
