@@ -463,4 +463,140 @@ class StaffWorkController extends Controller
             'animator_name' => null
         ]);
     }
+
+    public function CheckDocument(Request $request)
+    {
+        $user = Auth::user();
+
+        $date_from = $request->input('date_from', now()->toDateString());
+        $date_to = $request->input('date_to', now()->toDateString());
+
+        // Base query depending on user type
+        if ($user->user_type === 'ngo') {
+            $query = SurveyBenefries::query();
+        } else {
+            $query = SurveyBenefries::where('user_id', $user->id);
+        }
+
+        if ($request->filled('search_text')) {
+            $search = $request->search_text;
+            $query->where(function ($q) use ($search) {
+                $q->where('animator_name', 'like', "%{$search}%")
+                    ->orWhere('mobile_no', 'like', "%{$search}%")
+                    ->orWhere('father_husband_name', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('survey_id')) {
+            $query->where('id', $request->survey_id);
+        }
+
+        if ($request->filled('session_filter')) {
+            $query->where('session', $request->session_filter);
+        }
+
+
+        if ($request->filled('user_filter')) {
+            if ($request->user_filter === 'ngo') {
+                $query->where('animator_code', 'Ngo');
+            } elseif ($request->user_filter === 'staff') {
+                $query->where('animator_code', '!=', 'Ngo');
+            }
+        }
+
+        if ($request->filled('name')) {
+            $query->where('animator_name', 'like', '%' . $request->name . '%');
+        }
+
+        if ($request->filled('code')) {
+            $query->where('animator_code', 'like', '%' . $request->code . '%');
+        }
+
+        if ($request->filled('state')) {
+            $query->where('state', $request->state);
+        }
+
+        if ($request->filled('district')) {
+            $query->where('district', $request->district);
+        }
+
+        if ($request->filled('block')) {
+            $query->where('block', 'like', '%' . $request->block . '%');
+        }
+
+        $surveys = $query->latest()->get();
+
+        $session = academic_session::all();
+
+        return view('ngo.staff-work.check-list', compact('surveys', 'user', 'session', 'date_from', 'date_to'));
+    }
+
+    
+    public function updateDocuments(Request $request, $benefresSurveyId)
+    {
+        $validated = $request->validate([
+            'aadhar_guardian' => 'nullable|boolean',
+            'account_no_guardian' => 'nullable|boolean',
+            'aay_jati_nivas_guardian' => 'nullable|boolean',
+            'adhyan_pramn_patr_guardian' => 'nullable|boolean',
+            'ration_card_guardian' => 'nullable|boolean',
+            'color_photo_guardian' => 'nullable|boolean',
+            'mobile_aadhar_link_guardian' => 'nullable|boolean',
+            'signature_thumb_guardian' => 'nullable|boolean',
+            'aay_jati_nivas_beneficiary' => 'nullable|boolean',
+            'remark' => 'nullable|string',
+        ]);
+
+        // Convert checkbox values to boolean
+        $checkboxFields = [
+            'aadhar_guardian',
+            'account_no_guardian',
+            'aay_jati_nivas_guardian',
+            'adhyan_pramn_patr_guardian',
+            'ration_card_guardian',
+            'color_photo_guardian',
+            'mobile_aadhar_link_guardian',
+            'signature_thumb_guardian',
+            'aay_jati_nivas_beneficiary',
+        ];
+
+        foreach ($checkboxFields as $field) {
+            $validated[$field] = $request->has($field) ? true : false;
+        }
+
+        $validated['benefres_survey_id'] = $benefresSurveyId;
+
+        // Update or create document record
+        SurveyDocument::updateOrCreate(
+            ['benefres_survey_id' => $benefresSurveyId],
+            $validated
+        );
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Documents updated successfully'
+        ]);
+    }
+
+    public function updateCheckbox(Request $request)
+    {
+        $validated = $request->validate([
+            'benefres_survey_id' => 'required|exists:benefres_surveys,id',
+            'field' => 'required|string',
+            'value' => 'required|boolean',
+        ]);
+
+        $surveyDocument = SurveyDocument::firstOrCreate(
+            ['benefres_survey_id' => $validated['benefres_survey_id']]
+        );
+
+        $surveyDocument->update([
+            $validated['field'] => $validated['value']
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Checkbox updated successfully'
+        ]);
+    }
 }
