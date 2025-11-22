@@ -372,9 +372,10 @@
                                 class="form-control @error('survey_officer') is-invalid @enderror">
                                 <option value="">Select Survey Officer</option>
                                 @foreach ($staff as $person)
-                                    <option value="{{ $person->name }}"
-                                        {{ old('survey_officer') == $person->name ? 'selected' : '' }}>
-                                        {{ $person->name }}
+                                    <option
+                                        value="{{ $person->name }} ( {{ $person->staff_code }} ) ( {{ $person->position }} ) "
+                                        {{ old('survey_officer') == $person->name . ' - ' . $person->staff_code . ' - ' . $person->position ? 'selected' : '' }}>
+                                        {{ $person->name }} ({{ $person->staff_code }}) ({{ $person->position }})
                                     </option>
                                 @endforeach
                             </select>

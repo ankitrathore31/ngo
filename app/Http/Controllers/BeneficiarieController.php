@@ -69,16 +69,20 @@ class BeneficiarieController extends Controller
             'survey_details' => 'required|string',
             'survey_date' => 'required',
             'bene_category' => 'required',
+            'survey_officer' => 'required', // <-- Add this
         ]);
 
+
         $survey = new Beneficiarie_Survey;
-        $survey->beneficiarie_id = $request->input('beneficiarie_id');
-        $survey->survey_details = $request->input('survey_details');
-        $survey->survey_officer = $request->input('survey_officer');
-        $survey->bene_category  = $request->input('bene_category');
-        $survey->survey_date = Carbon::parse($request->input('survey_date'));
-        $survey->surveyfacility_status = $request->input('surveyfacility_status', []);
+        $survey->beneficiarie_id = $request->beneficiarie_id;
+        $survey->survey_details = $request->survey_details;
+        $survey->survey_officer = $request->survey_officer; // <-- Saves text
+        $survey->bene_category = $request->bene_category;
+        $survey->survey_date = Carbon::parse($request->survey_date);
+        $survey->surveyfacility_status = $request->surveyfacility_status ?? [];
         $survey->save();
+
+        beneficiarie::where('id', $id)->update(['survey_status' => 1]);
         logWork(
             'Survey',
             $survey->id,
