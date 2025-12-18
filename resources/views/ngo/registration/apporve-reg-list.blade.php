@@ -326,6 +326,7 @@
                                 <th>Session</th>
                                 <th>Status</th>
                                 <th>Action</th>
+                                <th>Registration card / Certificate</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -376,6 +377,13 @@
                                                 <i class="fa-regular fa-trash-can"></i>
                                             </a>
                                         </div>
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('show-reg-card', ['id' => $item->id, 'type' => $item->reg_type]) }}"
+                                            class="btn btn-success btn-sm px-3 align-items-center justify-content-center"
+                                            title="View">
+                                            <i class="fa-regular fa-eye"></i>
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach
