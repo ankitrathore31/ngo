@@ -8,6 +8,7 @@ use App\Models\beneficiarie;
 use App\Models\Member;
 use App\Models\academic_session;
 use App\Models\Setting;
+use App\Models\Signature;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
@@ -818,5 +819,16 @@ class RegistrationController extends Controller
         Setting::setValue('online_registration_enabled', $status);
 
         return redirect()->back()->with('success', 'Registration setting updated.');
+    }
+
+    public function showApporveRegCard($id, $type)
+    {
+        if ($type === 'Beneficiaries') {
+            $record = beneficiarie::where('status', 1)->findorFail($id);
+        } else {
+            $record = Member::where('status', 1)->findorFail($id);
+        }
+        $signatures = Signature::pluck('file_path', 'role');
+        return view('ngo.registration.reg-card', compact('record','signatures'));
     }
 }
