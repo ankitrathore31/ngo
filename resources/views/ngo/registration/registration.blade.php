@@ -375,7 +375,7 @@
                                             class="text-danger">*</span></label>
                                     <input type="text" name="phone" id="phone"
                                         class="form-control @error('phone') is-invalid @enderror"
-                                        value="{{ old('phone') }}" required>
+                                        value="{{ old('phone') }}" maxlength="10" required>
                                     @error('phone')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
