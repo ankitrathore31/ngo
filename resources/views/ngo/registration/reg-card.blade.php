@@ -45,7 +45,7 @@
                 left: 0;
                 top: 0;
                 width: 100%;
-                max-width: 610mm;
+                max-width: 510mm;
                 /* A4 width */
                 padding: 10mm;
                 /* Print-friendly padding */
@@ -54,7 +54,7 @@
 
             html,
             body {
-                width: 610mm;
+                width: 510mm;
                 height: auto;
                 margin: 0;
                 padding: 0;
@@ -92,6 +92,7 @@
                 size: A4;
                 margin: 15mm;
             }
+            
 
             /* Optional: Hide any interactive or irrelevant UI */
             button,
@@ -155,8 +156,8 @@
                                                 <span class="print-h4 p-1" data-lang="hi">ज्ञान भारती संस्था</span>
                                                 <span class="print-h4 p-1" data-lang="en">GYAN BHARTI SANSTHA</span>
                                             </b></h4>
-                                        <h5>   <strong>
-                                            <span>The Path To Peace And Development</span></strong></h5>
+                                        <h5> <strong>
+                                                <span>The Path To Peace And Development</span></strong></h5>
                                         <h6 style="color: blue;"><b>
                                                 <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत,
                                                     उत्तर प्रदेश -
@@ -178,7 +179,7 @@
                             <div class="row d-flex justify-content-center">
                                 <div class="col-sm-4 mb-2">
                                     <p class="text-center fw-bold p-2">
-                                     
+
                                     </p>
                                 </div>
                             </div>
@@ -256,9 +257,11 @@
                                 <div class="col-sm-4 mb-3">
                                     <strong>Occupation:</strong> {{ $record->occupation }}
                                 </div>
-                                <div class="col-sm-8 mb-3">
-                                    <strong>What do the beneficiaries need?:</strong>
-                                </div>
+                                @if ($record->reg_type == 'Beneficiaries')
+                                    <div class="col-sm-8 mb-3">
+                                        <strong>What do the beneficiaries need?:</strong> {{ $record->help_needed }}
+                                    </div>
+                                @endif
 
                             </div>
 

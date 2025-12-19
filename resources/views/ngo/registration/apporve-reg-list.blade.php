@@ -382,7 +382,7 @@
                                         <a href="{{ route('show-reg-card', ['id' => $item->id, 'type' => $item->reg_type]) }}"
                                             class="btn btn-success btn-sm px-3 align-items-center justify-content-center"
                                             title="View">
-                                            <i class="fa-regular fa-eye"></i>
+                                            Registration Card / Certificate>
                                         </a>
                                     </td>
                                 </tr>
