@@ -112,25 +112,34 @@ class RegistrationController extends Controller
         $data = $request->except(['image', 'id_document']);
         $data['status'] = 0;
 
-        // Generate application_no
+        // Generate application_no with proper sequence handling
         $prefix = '2191000';
+        $prefixLength = strlen($prefix);
 
-$latestMember = Member::where('application_no', 'LIKE', $prefix . '%')
-    ->selectRaw("CAST(SUBSTRING(application_no, LENGTH(?) + 1) AS UNSIGNED) as seq", [$prefix])
-    ->orderByDesc('seq')
-    ->first();
+        // Get latest from Member table
+        $latestMember = Member::where('application_no', 'LIKE', $prefix . '%')
+            ->whereRaw("LENGTH(application_no) > ?", [$prefixLength])
+            ->selectRaw("CAST(SUBSTRING(application_no, ? + 1) AS UNSIGNED) as seq", [$prefixLength])
+            ->orderByDesc('seq')
+            ->first();
 
-$latestBeneficiary = beneficiarie::where('application_no', 'LIKE', $prefix . '%')
-    ->selectRaw("CAST(SUBSTRING(application_no, LENGTH(?) + 1) AS UNSIGNED) as seq", [$prefix])
-    ->orderByDesc('seq')
-    ->first();
+        // Get latest from Beneficiary table
+        $latestBeneficiary = beneficiarie::where('application_no', 'LIKE', $prefix . '%')
+            ->whereRaw("LENGTH(application_no) > ?", [$prefixLength])
+            ->selectRaw("CAST(SUBSTRING(application_no, ? + 1) AS UNSIGNED) as seq", [$prefixLength])
+            ->orderByDesc('seq')
+            ->first();
 
-$lastSequence = max(
-    $latestMember ? $latestMember->seq : 0,
-    $latestBeneficiary ? $latestBeneficiary->seq : 0
-);
+        // Get the maximum sequence number
+        $lastSequence = max(
+            $latestMember ? $latestMember->seq : 0,
+            $latestBeneficiary ? $latestBeneficiary->seq : 0
+        );
 
-$data['application_no'] = $prefix . ($lastSequence + 1);
+        // Generate new application number
+        $data['application_no'] = $prefix . ($lastSequence + 1);
+
+
 
         // Set folder based on reg_type
         $folder = $request->reg_type === 'Member' ? 'member_images' : 'benefries_images';
@@ -394,29 +403,35 @@ $data['application_no'] = $prefix . ($lastSequence + 1);
             'registration_date' => 'required|date',
         ]);
 
-       $prefix = '2192000';
+        // Generate registration_no with proper sequence handling
+        $prefix = '2192000';
+        $prefixLength = strlen($prefix);
 
-// Get latest registration_no from both models
-$latestBeneficiarie = beneficiarie::where('registration_no', 'LIKE', $prefix . '%')
-    ->selectRaw("CAST(SUBSTRING(registration_no, LENGTH(?) + 1) AS UNSIGNED) as seq", [$prefix])
-    ->orderByDesc('seq')
-    ->first();
+        // Get latest from Beneficiarie table
+        $latestBeneficiarie = beneficiarie::where('registration_no', 'LIKE', $prefix . '%')
+            ->whereRaw("LENGTH(registration_no) > ?", [$prefixLength])
+            ->selectRaw("CAST(SUBSTRING(registration_no, ? + 1) AS UNSIGNED) as seq", [$prefixLength])
+            ->orderByDesc('seq')
+            ->first();
 
-$latestMember = Member::where('registration_no', 'LIKE', $prefix . '%')
-    ->selectRaw("CAST(SUBSTRING(registration_no, LENGTH(?) + 1) AS UNSIGNED) as seq", [$prefix])
-    ->orderByDesc('seq')
-    ->first();
+        // Get latest from Member table
+        $latestMember = Member::where('registration_no', 'LIKE', $prefix . '%')
+            ->whereRaw("LENGTH(registration_no) > ?", [$prefixLength])
+            ->selectRaw("CAST(SUBSTRING(registration_no, ? + 1) AS UNSIGNED) as seq", [$prefixLength])
+            ->orderByDesc('seq')
+            ->first();
 
-// Extract sequence numbers (fallback to 54)
-$lastSequenceBeneficiarie = $latestBeneficiarie ? $latestBeneficiarie->seq : 54;
-$lastSequenceMember = $latestMember ? $latestMember->seq : 54;
+        // Extract sequence numbers (fallback to 54 if no records exist)
+        $lastSequenceBeneficiarie = $latestBeneficiarie ? $latestBeneficiarie->seq : 54;
+        $lastSequenceMember = $latestMember ? $latestMember->seq : 54;
 
-// Determine the next sequence number
-$lastSequence = max($lastSequenceBeneficiarie, $lastSequenceMember);
-$sequenceNumber = $lastSequence + 1;
+        // Determine the next sequence number
+        $lastSequence = max($lastSequenceBeneficiarie, $lastSequenceMember);
+        $sequenceNumber = $lastSequence + 1;
 
-// Final registration number (no limit)
-$registrationNo = $prefix . $sequenceNumber;
+        // Final registration number (supports infinite growth)
+        $registrationNo = $prefix . $sequenceNumber;
+
 
 
         if ($type === 'Beneficiaries') {
@@ -782,16 +797,33 @@ $registrationNo = $prefix . $sequenceNumber;
         $data['status'] = 0;
 
         // Generate unique application number
+        // Generate application_no with proper sequence handling
         $prefix = '2191000';
-        $latestMember = Member::where('application_no', 'LIKE', $prefix . '%')->orderByDesc('application_no')->first();
-        $latestBeneficiary = beneficiarie::where('application_no', 'LIKE', $prefix . '%')->orderByDesc('application_no')->first();
+        $prefixLength = strlen($prefix);
 
+        // Get latest from Member table
+        $latestMember = Member::where('application_no', 'LIKE', $prefix . '%')
+            ->whereRaw("LENGTH(application_no) > ?", [$prefixLength])
+            ->selectRaw("CAST(SUBSTRING(application_no, ? + 1) AS UNSIGNED) as seq", [$prefixLength])
+            ->orderByDesc('seq')
+            ->first();
+
+        // Get latest from Beneficiary table
+        $latestBeneficiary = beneficiarie::where('application_no', 'LIKE', $prefix . '%')
+            ->whereRaw("LENGTH(application_no) > ?", [$prefixLength])
+            ->selectRaw("CAST(SUBSTRING(application_no, ? + 1) AS UNSIGNED) as seq", [$prefixLength])
+            ->orderByDesc('seq')
+            ->first();
+
+        // Get the maximum sequence number
         $lastSequence = max(
-            $latestMember ? (int)substr($latestMember->application_no, strlen($prefix)) : 0,
-            $latestBeneficiary ? (int)substr($latestBeneficiary->application_no, strlen($prefix)) : 0
+            $latestMember ? $latestMember->seq : 0,
+            $latestBeneficiary ? $latestBeneficiary->seq : 0
         );
 
-        $data['application_no'] = $prefix . str_pad($lastSequence + 1, 3, '0', STR_PAD_LEFT);
+        // Generate new application number
+        $data['application_no'] = $prefix . ($lastSequence + 1);
+
 
         // Handle file uploads
         $folder = $request->reg_type === 'Beneficiaries' ? 'benefries_images' : 'member_images';
@@ -837,6 +869,6 @@ $registrationNo = $prefix . $sequenceNumber;
             $record = Member::where('status', 1)->findorFail($id);
         }
         $signatures = Signature::pluck('file_path', 'role');
-        return view('ngo.registration.reg-card', compact('record','signatures'));
+        return view('ngo.registration.reg-card', compact('record', 'signatures'));
     }
 }
