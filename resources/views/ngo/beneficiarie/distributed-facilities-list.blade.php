@@ -428,6 +428,8 @@
                                 <th>Beneficiarie Eligibility category</th>
                                 <th>Session</th>
                                 <th class="no-print">Action</th>
+                                <th class="no-print">Token No.</th>
+                                <th class="no-print">Receiving Receipt</th>
                             </tr>
                         </thead>
 
@@ -478,6 +480,13 @@
                                                     class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                     title="Edit">
                                                     <i class="fa-regular fa-edit"></i>
+                                                </a>
+                                            </div>
+                                            <div class="d-flex justify-content-center gap-2 flex-wrap">
+                                                <a href="{{-- route('edit-distribute-facilities', [$item->id, $survey->id]) --}}"
+                                                    class="btn btn-danger btn-sm px-3 d-flex align-items-center justify-content-center"
+                                                    title="Delete">
+                                                    <i class="fa-regular fa-trash"></i>
                                                 </a>
                                             </div>
                                         </td>

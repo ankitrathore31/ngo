@@ -194,7 +194,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('ngo/approve-status/{type}/{id}', [RegistrationController::class, 'approveStatus'])->name('approve-status');
     Route::get('ngo/approve-registration', [RegistrationController::class, 'approveRegistration'])->name('approve-registration');
     Route::get('ngo/show-apporve-registration/{id}/{type}', [RegistrationController::class, 'showApporveReg'])->name('show-apporve-reg');
-     Route::get('ngo/show-registration-card/{id}/{type}', [RegistrationController::class, 'showApporveRegCard'])->name('show-reg-card');
+    Route::get('ngo/show-registration-card/{id}/{type}', [RegistrationController::class, 'showApporveRegCard'])->name('show-reg-card');
+    Route::get('ngo/show-health-card/{id}/{type}', [RegistrationController::class, 'showRegHealthCard'])->name('show-health-card');
     Route::patch('ngo/pending-status/{type}/{id}', [RegistrationController::class, 'pendingStatus'])->name('pending-status');
     Route::get('ngo/view-registration/{id}/{type}', [RegistrationController::class, 'viewRegistration'])->name('view-reg');
     Route::get('ngo/delete-view/{id}/{type}', [RegistrationController::class, 'deleteRegistrationPage'])->name('delete-view');

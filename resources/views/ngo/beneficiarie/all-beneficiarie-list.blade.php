@@ -330,11 +330,13 @@
                                 <th>Facilities Category</th>
                                 <th>Facilities</th>
                                 <th>Signature/
-                                    Thumb Impression of the Recipient</th>
+                                Thumb Impression of the Recipient</th>
                                 <th>Remark</th>
                                 <th>Beneficiarie Eligibility category</th>
                                 <th>Session</th>
                                 <th class="no-print">Action</th>
+                                <th class="no-print">Token No.</th>
+                                <th class="no-print">Receiving Receipt</th>
                             </tr>
                         </thead>
 
