@@ -131,9 +131,10 @@
                                 <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Demand List</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Distribute Benefries List</a></li>
+                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Distribute Benefries
+                                        List</a></li>
                             @endif
-                             @if (!$isStaff || $user->hasPermission('investigation'))
+                            @if (!$isStaff || $user->hasPermission('investigation'))
                                 <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Staff List</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('investigation'))
@@ -164,13 +165,15 @@
                                 <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Gallery Backup</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Socail Problem List</a></li>
+                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Socail Problem List</a>
+                                </li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('investigation'))
                                 <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Complain</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Tarining Benefries</a></li>
+                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Tarining Benefries</a>
+                                </li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('investigation'))
                                 <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Course List</a></li>
@@ -192,7 +195,8 @@
                                 <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Stock List</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Website Traffic</a></li>
+                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Website Traffic</a>
+                                </li>
                             @endif
                         </ul>
                     </li>
@@ -208,7 +212,8 @@
                         <li><a class="dropdown-item" href="{{ route('work.list') }}">Survey Send Complete</a></li>
                         <li><a class="dropdown-item" href="{{ route('work.list') }}">Work Dashboard</a></li>
                         <li><a class="dropdown-item" href="{{ route('survey.list') }}">Work List</a></li>
-                        <li><a class="dropdown-item" href="{{ route('Survey.CheckDocument') }}">Work List Check Document</a></li>
+                        <li><a class="dropdown-item" href="{{ route('Survey.CheckDocument') }}">Work List Check
+                                Document</a></li>
                         {{-- <li><a class="dropdown-item" href="{{-- route('activitylist') }}">Pending Work List</a></li>
                         <li><a class="dropdown-item" href="{{-- route('activitylist') }}">Complete Work Send</a></li>
                         <li><a class="dropdown-item" href="{{-- route('activitylist') }}">Complete Work Send List</a> </li> --}}
@@ -391,21 +396,26 @@
                                         Demand
                                         Distribut Facilities List</a></li>
                             @endif
+                            @if (!$isStaff || $user->hasPermission('approval-facilities'))
+                                <li><a class="dropdown-item"
+                                        href="{{-- route('beneficiarie-facilities-list') --}}">
+                                        Approval Distribute Facilities List</a></li>
+                            @endif
                             @if (!$isStaff || $user->hasPermission('distributed-facilities'))
-                                <li><a class="dropdown-item" href="{{ route('distributed-list') }}">Distributed
-                                        Beneficiary
+                                <li><a class="dropdown-item" href="{{ route('distributed-list') }}">All Approve Distributed
                                         Facilities List</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('pending-distribute'))
-                                <li><a class="dropdown-item" href="{{ route('pending-distribute-list') }}">Pending
-                                        Beneficiary
+                                <li><a class="dropdown-item" href="{{ route('pending-distribute-list') }}">Pending/Reject
+                                        Distribute
                                         Facilities List</a></li>
                             @endif
-                            @if (!$isStaff || $user->hasPermission('all-beneficiarie-list'))
+                            
+                            {{-- @if (!$isStaff || $user->hasPermission('all-beneficiarie-list'))
                                 <li><a class="dropdown-item" href="{{ route('all-beneficiarie-list') }}">All
                                         Beneficiary
                                         List</a></li>
-                            @endif
+                            @endif --}}
                         </ul>
                     </li>
                 @endif
@@ -526,12 +536,17 @@
                                 <li><a class="dropdown-item" href="{{ route('staff-idcard') }}">Staff ID Card</a>
                                 </li>
                             @endif
-                            {{-- @if (!$isStaff || $user->hasPermission('staff-passbook'))
-                                <li><a class="dropdown-item" href="#">Staff Passbook</a></li>
-                            @endif --}}
-                            @if (!$isStaff || $user->hasPermission('staff-activity'))
-                                <li><a class="dropdown-item" href="#">Staff Activity</a></li>
+                            @if (!$isStaff || $user->hasPermission('staff-idcard'))
+                                <li><a class="dropdown-item" href="{{-- route('staff-idcard') --}}">Staff Premotion</a>
+                                </li>
                             @endif
+                            @if (!$isStaff || $user->hasPermission('staff-idcard'))
+                                <li><a class="dropdown-item" href="{{-- route('staff-idcard') --}}">Staff Demotion</a>
+                                </li>
+                            @endif
+                            {{-- @if (!$isStaff || $user->hasPermission('staff-activity'))
+                                <li><a class="dropdown-item" href="#">Staff Activity</a></li>
+                            @endif --}}
                             @if (!$isStaff || $user->hasPermission('manage-salary'))
                                 <li><a class="dropdown-item" href="{{ route('list.salary') }}">Manage Salary</a></li>
                             @endif
@@ -948,7 +963,7 @@
                 @if (!$isStaff || $user->hasPermission('add-workplan') || $user->hasPermission('workplan-list'))
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-tasks"></i> Work Plan
+                            <i class="fas fa-tasks"></i> WORK PLAN
                         </a>
                         <ul class="dropdown-menu bg-primary">
                             @if (!$isStaff || $user->hasPermission('add-workplan'))
@@ -975,6 +990,41 @@
                             @endif
                             @if (!$isStaff || $user->hasPermission('notice-list'))
                                 <li><a class="dropdown-item" href="{{ route('notice-list') }}">Notice List</a></li>
+                            @endif
+                        </ul>
+                    </li>
+                @endif
+                <!-- Kyc -->
+                @if (!$isStaff || $user->hasPermission('kyc') || $user->hasPermission('kyc'))
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-chalkboard-teacher"></i> KYC
+                        </a>
+                        <ul class="dropdown-menu bg-primary">
+                            @if (!$isStaff || $user->hasPermission('kyc'))
+                                <li><a class="dropdown-item" href="{{-- route('kyc') --}}">KYC Start</a></li>
+                            @endif
+                            @if (!$isStaff || $user->hasPermission('kyc'))
+                                <li><a class="dropdown-item" href="{{-- route('notice-list') --}}">KYC Pending List</a></li>
+                            @endif
+                            @if (!$isStaff || $user->hasPermission('kyc'))
+                                <li><a class="dropdown-item" href="{{-- route('notice-list') --}}">KYC Approve List</a></li>
+                            @endif
+                        </ul>
+                    </li>
+                @endif
+                <!-- Facility -->
+                @if (!$isStaff || $user->hasPermission('kyc') || $user->hasPermission('kyc'))
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-chalkboard-teacher"></i> FACILITY
+                        </a>
+                        <ul class="dropdown-menu bg-primary">
+                            @if (!$isStaff || $user->hasPermission('kyc'))
+                                <li><a class="dropdown-item" href="{{-- route('kyc') --}}">Health Card Generate</a></li>
+                            @endif
+                            @if (!$isStaff || $user->hasPermission('kyc'))
+                                <li><a class="dropdown-item" href="{{-- route('notice-list') --}}">Health Card List</a></li>
                             @endif
                         </ul>
                     </li>

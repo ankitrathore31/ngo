@@ -30,7 +30,12 @@
                     </div>
 
                     <div class="card-body">
-                        <p><strong>Date:</strong>
+                        <p><strong>Notice No:</strong>
+                            <span class="text-primary" id="noticeDate">
+                                00
+                            </span>
+                        </p>
+                        <p><strong>Notice Date:</strong>
                             <span class="text-primary" id="noticeDate">
                                 {{ $notice && $notice->date ? \Carbon\Carbon::parse($notice->date)->format('d-m-Y') : 'N/A' }}
                             </span>
@@ -49,6 +54,7 @@
 
                 </div>
             </div>
+
         </div>
     </div>
     <script>

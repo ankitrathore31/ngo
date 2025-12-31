@@ -871,4 +871,14 @@ class RegistrationController extends Controller
         $signatures = Signature::pluck('file_path', 'role');
         return view('ngo.registration.reg-card', compact('record', 'signatures'));
     }
+     public function showRegHealthCard($id, $type)
+    {
+        if ($type === 'Beneficiaries') {
+            $record = beneficiarie::where('status', 1)->findorFail($id);
+        } else {
+            $record = Member::where('status', 1)->findorFail($id);
+        }
+        $signatures = Signature::pluck('file_path', 'role');
+        return view('ngo.registration.reg-healthcard', compact('record', 'signatures'));
+    }
 }

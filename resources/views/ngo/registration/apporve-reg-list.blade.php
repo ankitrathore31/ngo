@@ -39,7 +39,7 @@
             <div class="row">
                 <form method="GET" action="{{ route('approve-registration') }}" class="row g-3 mb-4">
                     <div class="row">
-                        <div class="col-md-4 col-sm-4">
+                        <div class="col-md-3 col-sm-4">
                             <select name="session_filter" id="session_filter" class="form-control">
                                 <option value="">All Sessions</option>
                                 @foreach ($data as $session)
@@ -50,12 +50,16 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-4 col-sm-4 mb-3">
+                        <div class="col-md-3 col-sm-4 mb-3">
                             <input type="number" class="form-control" name="application_no"
-                                placeholder="Search By Application No.">
+                                placeholder="Search By Application/Registration No.">
                         </div>
-                        <div class="col-md-4 col-sm-4 mb-3">
-                            <input type="text" class="form-control" name="name" placeholder="Search By Name">
+                        <div class="col-md-3 col-sm-4 mb-3">
+                            <input type="number" class="form-control" name="registration_no" 
+                            placeholder="Search By Mobile/Idtinty No.">
+                        </div>
+                        <div class="col-md-3 col-sm-4 mb-3">
+                            <input type="text" class="form-control" name="name" placeholder="Search By Person/Guardian's Name">
                         </div>
                     </div>
                     <div class="row">
@@ -327,6 +331,9 @@
                                 <th>Status</th>
                                 <th>Action</th>
                                 <th>Registration card / Certificate</th>
+                                <th>Notice</th>
+                                <th>All Facility</th>
+                                <th>Health Card</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -383,6 +390,27 @@
                                             class="btn btn-success btn-sm px-3 align-items-center justify-content-center"
                                             title="View">
                                             Registration Card / Certificate>
+                                        </a>
+                                    </td>
+                                     <td>
+                                        <a href="{{ route('show-reg-card', ['id' => $item->id, 'type' => $item->reg_type]) }}"
+                                            class="btn btn-danger btn-sm px-3 align-items-center justify-content-center"
+                                            title="View">
+                                            Notice
+                                        </a>
+                                    </td>
+                                     <td>
+                                        <a href="{{ route('show-reg-card', ['id' => $item->id, 'type' => $item->reg_type]) }}"
+                                            class="btn btn-warning btn-sm px-3 align-items-center justify-content-center"
+                                            title="View">
+                                            All Facility
+                                        </a>
+                                    </td>
+                                     <td>
+                                        <a href="{{ route('show-health-card', ['id' => $item->id, 'type' => $item->reg_type]) }}"
+                                            class="btn btn-success btn-sm px-3 align-items-center justify-content-center"
+                                            title="View">
+                                            Health Card
                                         </a>
                                     </td>
                                 </tr>

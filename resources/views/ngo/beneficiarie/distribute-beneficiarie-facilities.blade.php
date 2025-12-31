@@ -359,6 +359,7 @@
                             <option value="" selected>Select Status</option>
                             <option value="Pending">Pending</option>
                             <option value="Distributed">Distributed</option>
+                            <option value="Reject">Reject</option>
                         </select>
                         @error('status')
                             <span class="text-danger">{{ $message }}</span>
