@@ -102,15 +102,13 @@
             }
         }
     </style>
-
-
     <div class="wrapper">
         <div class="d-flex justify-content-between align-record-centre mb-0 mt-4">
-            <h5 class="mb-0">Registraition Card</h5>
+            <h5 class="mb-0">Generate Health Card</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                     <li class="breadcrumb-record"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-record active" aria-current="page">Card</li>
+                    <li class="breadcrumb-record active" aria-current="page">Health Card</li>
                 </ol>
             </nav>
         </div>
@@ -119,82 +117,11 @@
                 {{ session('success') }}
             </div>
         @endif
-        <div class="container-fluid mt-5">
-            <!-- Language Toggle -->
-            <div class="d-flex justify-content-between align-records-center mb-3 mt-4">
-                <h5 class="mb-0">
-                    <span>Health Card</span>
-                </h5>
-                <div>
-                    <button onclick="window.print()" class="btn btn-primary">Print </button>
-                    {{-- <button class="btn btn-sm btn-outline-primary" onclick="setLanguage('en')">English</button>
-                    <button class="btn btn-sm btn-outline-success" onclick="setLanguage('hi')">हिंदी</button> --}}
-                </div>
-            </div>
+        <div class="container-fluid mt-3">
             <div class=" rounded print-card">
-                <div class="" style="border: 9px solid red;">
+                <div class="">
                     <div>
-                        <div class="p-2" style="border: 9px solid #138808;">
-                            <div class="text-center mb-4 border-bottom pb-2">
-                                <div class="row mb-2">
-                                    <div class="col-sm-12">
-                                        <h4><b>Health Card</b></h4>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-2 text-center text-md-start">
-                                        <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="120"
-                                            height="120">
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <p style="margin: 0;" class="d-flex justify-content-around"><b>
-                                                <span>NEETI AYOG ID NO. UP/2023/0360430</span>&nbsp;
-                                                &nbsp; &nbsp;<span>NGO NO. UP/00033062</span>&nbsp; &nbsp;
-                                                &nbsp; &nbsp;<span>PAN: AAEAG7650B</span>&nbsp;
-                                            </b></p>
-                                        <h4 class=" p-1"><b>
-                                                <span class="print-h4 p-1" data-lang="hi">ज्ञान भारती संस्था</span>
-                                                <span class="print-h4 p-1" data-lang="en">GYAN BHARTI SANSTHA</span>
-                                            </b></h4>
-                                        <h5> <strong>
-                                                <span>The Path To Peace And Development</span></strong></h5>
-                                        <h6 style="color: blue;"><b>
-                                                <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत,
-                                                    उत्तर प्रदेश -
-                                                    262121</span>
-                                                <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District -
-                                                    Pilibhit, UP -
-                                                    262121</span>
-                                            </b></h6>
-                                        <p style="font-size: 14px; margin: 0;">
-                                            <b>
-                                                <span>Website: www.gyanbhartingo.org | Email: gyanbhartingo600@gmail.com
-                                                    | Mob:
-                                                    9411484111</span>
-                                            </b>
-                                        </p>
-                                    </div>
-                                    <div class="col-sm-2 text-center text-md-start">
-                                        <img src="{{ asset('images/plu.png') }}" alt="Logo" width="120"
-                                            height="120">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row d-flex justify-content-center">
-                                <div class="col-sm-4 mb-2">
-                                    <p class="text-center fw-bold p-2">
-
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-sm-4 mb-3">
-                                    <h4><strong>Health Card No:</strong></h4> {{-- $record->registration_no --}}
-                                </div>
-                                <div class="col-sm-4 mb-3">
-                                    <strong>Beneficiaries ID No:</strong> {{ $record->identity_no }}
-                                </div>
-                            </div>
+                        <div class="p-2">
                             <div class="row mb-3">
                                 <div class="col-sm-4 mb-3">
                                     <strong>Registraition No:</strong> {{ $record->registration_no }}
@@ -244,7 +171,6 @@
                                         $imagePath =
                                             $record->reg_type === 'Member' ? 'member_images/' : 'benefries_images/';
                                     @endphp
-
                                     {{-- @if ($record->image) --}}
                                     <div class=" mb-3">
                                         <img src="{{ asset($imagePath . $record->image) }}" alt="Image"
@@ -274,65 +200,101 @@
                                         <strong>What do the beneficiaries need?:</strong> {{ $record->help_needed }}
                                     </div>
                                 @endif
-                                <div class="col-sm-8 mb-3">
-                                    <strong>Health Facility/Disease Name:</strong> {{-- $record->occupation --}}
-                                </div>
-                                <div class="col-sm-4 mb-3">
-                                    <strong>Hospital Name:</strong> {{-- $record->occupation --}}
-                                </div>
-
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="conatiner mt-2">
+                <div class="card-body shadow-sm">
+                    <div class="row">
+                        <div class="col">
+                            <form method="POST" action="{{ route('healthcard.store') }}">
+                                @csrf
+                                <div class="row">
 
-                            <div class="row d-flex justify-content-around mt-5">
-                                <div class="col-sm-6 text-center">
+                                    <input type="text" class="form-control" value="{{ $record->id }}" name="reg_id"
+                                        hidden>
+
+                                    <div class="col-md-6 mb-2">
+                                        <label>Health Card No</label>
+                                        <input type="text" class="form-control"
+                                            value="{{ $healthcard->healthcard_no ?? $nextCard }}" name="healthcard_no"
+                                            readonly>
+                                    </div>
+
+                                    <div class="col-md-6 mb-2">
+                                        <label>Hospital</label>
+                                        <select name="hospital_name" class="form-control" required>
+                                            <option value="">Select Hospital</option>
+                                            @foreach ($hospitals as $hospital)
+                                                <option value="{{ $hospital->hospital_name }}({{ $hospital->hospital_code }})"
+                                                    {{ isset($healthcard) && $healthcard->hospital_name == $hospital->hospital_name ? 'selected' : '' }}>
+                                                    {{ $hospital->hospital_name }}({{ $hospital->hospital_code }})
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6 mb-2">
+                                        <label>Disease</label>
+                                        <select id="diseaseSelect" class="form-control">
+                                            <option value="">Select Disease</option>
+                                            @foreach ($diseases as $d)
+                                                <option value="{{ $d->disease }}">{{ $d->disease }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6 mt-3">
+                                        <div id="selectedDiseases" class="d-flex flex-wrap gap-2"></div>
+                                    </div>
+
+                                    <div class="col-md-12 mt-3">
+                                        <button class="btn btn-success">
+                                            Save
+                                        </button>
+                                    </div>
                                 </div>
+                            </form>
 
-                                <div class="col-sm-6 text-center">
-                                    @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
-                                        <div id="directorSignatureBox" class="mt-2">
-                                            <p class="text-success no-print">Attached</p>
-                                            <img src="{{ asset($signatures['director']) }}" alt="Director Signature"
-                                                class="img" style="max-height: 80px;">
-                                            <br>
-                                            <button class="btn btn-danger btn-sm mt-2 no-print"
-                                                onclick="toggleDirector(false)">Remove</button>
-                                        </div>
-
-                                        <div id="directorShowBtnBox" class="mt-2 d-none no-print">
-                                            <button class="btn btn-primary btn-sm" onclick="toggleDirector(true)">Attached
-                                                Signature</button>
-                                        </div>
-                                    @else
-                                        <p class="text-muted mt-2 no-print">Not attached</p>
-                                    @endif
-                                    <strong class="text-danger">Digitally Signed By <br>
-                                        MANOJ KUMAR RATHOR <br>
-                                        DIRECTOR
-                                    </strong><br>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <script>
-            function setLanguage(lang) {
-                document.querySelectorAll('[data-lang]').forEach(el => {
-                    el.style.display = el.getAttribute('data-lang') === lang ? 'inline' : 'none';
+            let selectedDiseases = @json($healthcard->diseases ?? []);
+
+            function renderDiseases() {
+                const box = document.getElementById('selectedDiseases');
+                box.innerHTML = '';
+
+                selectedDiseases.forEach(d => {
+                    const tag = document.createElement('div');
+                    tag.className = 'badge bg-primary me-2 mb-2 d-flex align-items-center';
+                    tag.innerHTML = `
+            <span class="me-2">${d}</span>
+            <button type="button" class="btn btn-sm btn-light" onclick="removeDisease('${d}')">&times;</button>
+            <input type="hidden" name="diseases[]" value="${d}">
+        `;
+                    box.appendChild(tag);
                 });
             }
-            window.onload = () => setLanguage('en'); // Set Eng as default
-        </script>
-        <script>
-            function togglePM(show) {
-                document.getElementById('pmSignatureBox').classList.toggle('d-none', !show);
-                document.getElementById('pmShowBtnBox').classList.toggle('d-none', show);
+
+            document.getElementById('diseaseSelect').addEventListener('change', function() {
+                if (this.value && !selectedDiseases.includes(this.value)) {
+                    selectedDiseases.push(this.value);
+                    renderDiseases();
+                }
+                this.value = '';
+            });
+
+            function removeDisease(val) {
+                selectedDiseases = selectedDiseases.filter(v => v !== val);
+                renderDiseases();
             }
 
-            function toggleDirector(show) {
-                document.getElementById('directorSignatureBox').classList.toggle('d-none', !show);
-                document.getElementById('directorShowBtnBox').classList.toggle('d-none', show);
-            }
+            renderDiseases();
         </script>
     @endsection

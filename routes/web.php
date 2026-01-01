@@ -17,6 +17,7 @@ use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\NgoController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\HealthCardController;
 use App\Http\Controllers\IdcardController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\MemberController;
@@ -195,7 +196,6 @@ Route::middleware('auth')->group(function () {
     Route::get('ngo/approve-registration', [RegistrationController::class, 'approveRegistration'])->name('approve-registration');
     Route::get('ngo/show-apporve-registration/{id}/{type}', [RegistrationController::class, 'showApporveReg'])->name('show-apporve-reg');
     Route::get('ngo/show-registration-card/{id}/{type}', [RegistrationController::class, 'showApporveRegCard'])->name('show-reg-card');
-    Route::get('ngo/show-health-card/{id}/{type}', [RegistrationController::class, 'showRegHealthCard'])->name('show-health-card');
     Route::patch('ngo/pending-status/{type}/{id}', [RegistrationController::class, 'pendingStatus'])->name('pending-status');
     Route::get('ngo/view-registration/{id}/{type}', [RegistrationController::class, 'viewRegistration'])->name('view-reg');
     Route::get('ngo/delete-view/{id}/{type}', [RegistrationController::class, 'deleteRegistrationPage'])->name('delete-view');
@@ -545,6 +545,23 @@ Route::middleware(['auth'])->group(function () {
     Route::get('ngo/add-story', [StoryController::class, 'AddStory'])->name('add-story');
     Route::post('ngo/save-story', [StoryController::class, 'store'])->name('save-story');
     Route::get('ngo/delete-story/{id}', [StoryController::class, 'DeleteStory'])->name('delete-story');
+});
+
+Route::controller(HealthCardController::class)->middleware('auth')->group(function(){
+    Route::get('ngo/add-disease', 'AddDisease')->name('add.disease');
+    Route::post('ngo/disease/store', 'StoreDisease')->name('store.disease');
+    Route::delete('ngo/disease/{id}', 'DestroyDisease')->name('disease.delete');
+    Route::get('ngo/list-hospital', 'ListHospital')->name('list.hospital');
+    Route::get('ngo/add-hospital', 'AddHospital')->name('add.hospital');
+    Route::post('ngo/hospital/store', 'StoreHospital')->name('store.hospital');
+    Route::get('ngo/list-generate-healthcard','RegList')->name('generatelist.healthcard');
+    Route::get('ngo/generate-healthcard/{id}/{type}','GenerateHealthCard')->name('generate.healthcard');
+    Route::post('ngo/healthcard/store', 'StoreHealthCard')->name('healthcard.store');
+    Route::get('ngo/healthcard/{id}/edit', 'EditHealthCard')->name('healthcard.edit');
+    Route::put('ngo/healthcard/{id}', 'UpdateHealthCard')->name('healthcard.update');
+    Route::get('ngo/healthcard-list','CardList')->name('list.healthcard');
+    Route::get('ngo/show-healthcard/{id}/{health_id}', 'ShowHealthCard')->name('show.healthcard');
+
 });
 
 require __DIR__ . '/auth.php';

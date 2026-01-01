@@ -72,7 +72,6 @@ class BeneficiarieController extends Controller
             'survey_officer' => 'required', // <-- Add this
         ]);
 
-
         $survey = new Beneficiarie_Survey;
         $survey->beneficiarie_id = $request->beneficiarie_id;
         $survey->survey_details = $request->survey_details;
