@@ -1021,10 +1021,26 @@
                         </a>
                         <ul class="dropdown-menu bg-primary">
                             @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{-- route('kyc') --}}">Health Card Generate</a></li>
+                                <li><a class="dropdown-item" href="{{ route('generatelist.healthcard') }}">Health Card Generate</a></li>
+                            @endif
+
+                            @if (!$isStaff || $user->hasPermission('kyc'))
+                                <li><a class="dropdown-item" href="{{ route('list.healthcard') }}">Health Card List</a></li>
+                            @endif
+                             @if (!$isStaff || $user->hasPermission('kyc'))
+                                <li><a class="dropdown-item" href="{{-- route('list.healthcard') --}}">Demand Health Facility</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{-- route('notice-list') --}}">Health Card List</a></li>
+                                <li><a class="dropdown-item" href="{{-- route('list.healthcard') --}}">Health Facility Demand Pending</a></li>
+                            @endif
+                            @if (!$isStaff || $user->hasPermission('kyc'))
+                                <li><a class="dropdown-item" href="{{-- route('list.healthcard') --}}">Health Facility Demand Approve</a></li>
+                            @endif
+                            @if (!$isStaff || $user->hasPermission('kyc'))
+                                <li><a class="dropdown-item" href="{{ route('add.disease') }}">Add Disease</a></li>
+                            @endif
+                            @if (!$isStaff || $user->hasPermission('kyc'))
+                                <li><a class="dropdown-item" href="{{ route('list.hospital') }}">Hospital List</a></li>
                             @endif
                         </ul>
                     </li>

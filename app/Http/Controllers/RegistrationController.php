@@ -356,14 +356,34 @@ class RegistrationController extends Controller
             $queryMember->where('academic_session', $request->session_filter);
         }
 
+        // Application / Registration Number Search
         if ($request->filled('application_no')) {
-            $queryBene->where('application_no', $request->application_no);
-            $queryMember->where('application_no', $request->application_no);
+            $search = $request->application_no;
+
+            $queryBene->where(function ($q) use ($search) {
+                $q->where('application_no', 'like', "%$search%")
+                    ->orWhere('registration_no', 'like', "%$search%");
+            });
+
+            $queryMember->where(function ($q) use ($search) {
+                $q->where('application_no', 'like', "%$search%")
+                    ->orWhere('registration_no', 'like', "%$search%");
+            });
         }
 
-        if ($request->filled('name')) {
-            $queryBene->where('name', 'like', '%' . $request->name . '%');
-            $queryMember->where('name', 'like', '%' . $request->name . '%');
+        // Mobile / Identity Number Search
+        if ($request->filled('identity_no')) {
+            $identity = $request->identity_no;
+
+            $queryBene->where(function ($q) use ($identity) {
+                $q->where('phone', 'like', "%$identity%")
+                    ->orWhere('identity_no', 'like', "%$identity%");
+            });
+
+            $queryMember->where(function ($q) use ($identity) {
+                $q->where('phone', 'like', "%$identity%")
+                    ->orWhere('identity_no', 'like', "%$identity%");
+            });
         }
 
         if ($request->filled('reg_type')) {
@@ -372,8 +392,8 @@ class RegistrationController extends Controller
         }
 
         if ($request->filled('block')) {
-            $queryBene->where('block', 'like', '%' . $request->block . '%');
-            $queryMember->where('block', 'like', '%' . $request->block . '%');
+            $queryBene->where('block', 'like', "%{$request->block}%");
+            $queryMember->where('block', 'like', "%{$request->block}%");
         }
 
         if ($request->filled('state')) {
@@ -388,14 +408,21 @@ class RegistrationController extends Controller
 
         $approvebeneficiarie = $queryBene->orderBy('created_at', 'asc')->get();
         $approvemember = $queryMember->orderBy('created_at', 'asc')->get();
+
+        $combined = $approvebeneficiarie->merge($approvemember)->sortBy('created_at');
+
         $data = academic_session::all();
-        $combined = $approvebeneficiarie
-            ->merge($approvemember)
-            ->sortBy('created_at')
-            ->values();
         $states = config('states');
-        return view('ngo.registration.apporve-reg-list', compact('data', 'approvebeneficiarie', 'approvemember', 'combined', 'states'));
+
+        return view('ngo.registration.apporve-reg-list', compact(
+            'data',
+            'approvebeneficiarie',
+            'approvemember',
+            'combined',
+            'states'
+        ));
     }
+
 
     public function approveStatus(Request $request, $type, $id)
     {
@@ -871,14 +898,5 @@ class RegistrationController extends Controller
         $signatures = Signature::pluck('file_path', 'role');
         return view('ngo.registration.reg-card', compact('record', 'signatures'));
     }
-     public function showRegHealthCard($id, $type)
-    {
-        if ($type === 'Beneficiaries') {
-            $record = beneficiarie::where('status', 1)->findorFail($id);
-        } else {
-            $record = Member::where('status', 1)->findorFail($id);
-        }
-        $signatures = Signature::pluck('file_path', 'role');
-        return view('ngo.registration.reg-healthcard', compact('record', 'signatures'));
-    }
+
 }
