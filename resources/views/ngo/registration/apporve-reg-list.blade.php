@@ -55,11 +55,12 @@
                                 placeholder="Search By Application/Registration No.">
                         </div>
                         <div class="col-md-3 col-sm-4 mb-3">
-                            <input type="number" class="form-control" name="registration_no" 
-                            placeholder="Search By Mobile/Idtinty No.">
+                            <input type="number" class="form-control" name="registration_no"
+                                placeholder="Search By Mobile/Idtinty No.">
                         </div>
                         <div class="col-md-3 col-sm-4 mb-3">
-                            <input type="text" class="form-control" name="name" placeholder="Search By Person/Guardian's Name">
+                            <input type="text" class="form-control" name="name"
+                                placeholder="Search By Person/Guardian's Name">
                         </div>
                     </div>
                     <div class="row">
@@ -157,7 +158,18 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-sm-4 mb-4">
+                    <button class="btn btn-outline-primary mb-3" onclick="toggleStatsCard()">
+                        Show / Hide Statistics
+                    </button>
+                </div>
+            </div>
 
+            <div id="statsCard" class="card border-0 shadow-sm rounded-4 mb-4" style="display: none;">
+                <div class="card-body">
                     <!-- Religion-Wise Section -->
                     <div class="row mb-4">
                         <div class="col-md-6 mb-3">
@@ -392,22 +404,22 @@
                                             Registration Card / Certificate>
                                         </a>
                                     </td>
-                                     <td>
+                                    <td>
                                         <a href="{{ route('show-reg-card', ['id' => $item->id, 'type' => $item->reg_type]) }}"
                                             class="btn btn-danger btn-sm px-3 align-items-center justify-content-center"
                                             title="View">
                                             Notice
                                         </a>
                                     </td>
-                                     <td>
+                                    <td>
                                         <a href="{{ route('show-reg-card', ['id' => $item->id, 'type' => $item->reg_type]) }}"
                                             class="btn btn-warning btn-sm px-3 align-items-center justify-content-center"
                                             title="View">
                                             All Facility
                                         </a>
                                     </td>
-                                     <td>
-                                        <a href="{{ route('show-health-card', ['id' => $item->id, 'type' => $item->reg_type]) }}"
+                                    <td>
+                                        <a href="{{-- route('show-health-card', ['id' => $item->id, 'type' => $item->reg_type]) --}}"
                                             class="btn btn-success btn-sm px-3 align-items-center justify-content-center"
                                             title="View">
                                             Health Card
@@ -447,5 +459,15 @@
         document.getElementById('stateSelect').addEventListener('change', function() {
             populateDistricts(this.value);
         });
+    </script>
+    <script>
+        function toggleStatsCard() {
+            const card = document.getElementById('statsCard');
+            if (card.style.display === 'none') {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        }
     </script>
 @endsection
