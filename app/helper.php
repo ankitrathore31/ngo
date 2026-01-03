@@ -424,4 +424,3 @@ if (!function_exists('totalStories')) {
         return Story::count();
     }
 }
-

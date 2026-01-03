@@ -92,9 +92,9 @@ Route::controller(HomeControlller::class)->group(function () {
     Route::get('/organization-groups-member/{id}', 'OrgMemberListByOrganization')->name('show.group.member');
     Route::get('/demand', 'demand')->name('demand');
     Route::get('/center', 'Center')->name('home.center.list');
-    Route::get('/vacancies','HomeJobList')->name('vacancies');
-    Route::get('/download-document','document')->name('document');
-    Route::get('/true-story','TrueStory')->name('true.story.list');
+    Route::get('/vacancies', 'HomeJobList')->name('vacancies');
+    Route::get('/download-document', 'document')->name('document');
+    Route::get('/true-story', 'TrueStory')->name('true.story.list');
 });
 
 Route::controller(CertificateController::class)->group(function () {
@@ -145,7 +145,7 @@ Route::get('/ngo', [NgoController::class, 'ngo'])
     ->middleware(['auth'])
     ->name('ngo');
 
-    
+
 Route::controller(NgoController::class)->group(function () {
     Route::post('save-ngo', 'savengo')->middleware('auth')->name('save-ngo');
     Route::get('edit-ngo/{id}', 'editngo')->middleware('auth')->name('edit-ngo');
@@ -249,7 +249,7 @@ Route::controller(BeneficiarieController::class)->group(function () {
     Route::get('ngo/show-beneficiarie-report/{beneficiarie_id}/survey/{survey_id}', 'showbeneficiariereport')->middleware('auth')->name('show-beneficiarie-report');
     Route::get('ngo/Survey-received-list', 'surveyrecivedlist')->middleware('auth')->name('survey-received-list');
     Route::post('/beneficiaries/facilities/bulk-store',  'storeBulkBeneficiarieFacilities')->middleware('auth')
-    ->name('store-bulk-beneficiarie-facilities');
+        ->name('store-bulk-beneficiarie-facilities');
 });
 
 Route::controller(WorkingAreaController::class)->group(function () {
@@ -276,7 +276,7 @@ Route::controller(StaffController::class)->group(function () {
     Route::get('ngo/add-position', 'addPosition')->middleware('auth')->name('add.position');
     Route::post('ngo/store-sposition', 'StorePosition')->middleware('auth')->name('store.position');
     Route::get('ngo/delete-position/{id}', 'DeletePosition')->middleware('auth')->name('delete.position');
-    Route::get('ngo/position-list','PositionList')->middleware('auth')->name('position.list');
+    Route::get('ngo/position-list', 'PositionList')->middleware('auth')->name('position.list');
     Route::get('ngo/add-staff', 'addstaff')->middleware('auth')->name('add-staff');
     Route::post('ngo/store-staff', 'StoreStaff')->middleware('auth')->name('store.staff');
     Route::get('ngo/edit-staff/{id}', 'EditStaff')->middleware('auth')->name('edit-staff');
@@ -299,10 +299,9 @@ Route::controller(SallaryController::class)->middleware('auth')->group(function 
     Route::get('ngo/staff-salary', 'StaffSalary')->name('staff.salary');
     Route::get('ngo/pay-salary/{id}', 'PaySalary')->name('pay.salary');
     Route::post('ngo/store-salary/{id}', 'storeSalaryPayment')->name('store.salary.payment');
-    Route::post('ngo/unpaid-salary/{id}','unpaySalary')->name('unpaid.salary');
-    Route::get('ngo/salary-tranctions/{id}','salaryTransactions')->name('salary.transactions');
-    Route::get('ngo/staff-passbook/{id}','staffPassbook')->name('salary.passbook');
-
+    Route::post('ngo/unpaid-salary/{id}', 'unpaySalary')->name('unpaid.salary');
+    Route::get('ngo/salary-tranctions/{id}', 'salaryTransactions')->name('salary.transactions');
+    Route::get('ngo/staff-passbook/{id}', 'staffPassbook')->name('salary.passbook');
 });
 
 Route::controller(MemberController::class)->group(function () {
@@ -416,7 +415,6 @@ Route::controller(VendorController::class)->middleware('auth')->group(function (
     Route::post('ngo/update-vendor/{id}', 'UpdateVendor')->name('update.vendor');
     Route::get('ngo/delete-vendor/{id}', 'DeleteVendor')->name('delete.vendor');
     Route::get('ngo/view-vendor/{id}', 'ViewVendor')->name('view.vendor');
-
 });
 
 Route::controller(WorkPlanController::class)->group(function () {
@@ -509,12 +507,12 @@ Route::controller(JobController::class)->middleware('auth')->group(function () {
     Route::get('ngo/apply-candidate', 'ApplyCandidate')->name('apply.candidate');
 });
 
-Route::get('/apply-job/{id}',[JobController::class, 'Apply'])->name('apply.job');
-Route::post('/store-vacancies',[JobController::class, 'StoreVacancies'])->name('vacancies.store');
+Route::get('/apply-job/{id}', [JobController::class, 'Apply'])->name('apply.job');
+Route::post('/store-vacancies', [JobController::class, 'StoreVacancies'])->name('vacancies.store');
 
-Route::controller(StaffWorkController::class)->middleware('auth')->group(function(){
-    Route::get('ngo/work-list','WorkList')->name('work.list');
-    Route::get('ngo/work-view/{id}','WorkView')->name('work.view');
+Route::controller(StaffWorkController::class)->middleware('auth')->group(function () {
+    Route::get('ngo/work-list', 'WorkList')->name('work.list');
+    Route::get('ngo/work-view/{id}', 'WorkView')->name('work.view');
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -525,19 +523,18 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/form-downloads/{id}', [DocumentController::class, 'destroy'])->name('form-downloads.destroy');
 });
 Route::get('ngo/form-downloads/{id}/preview', [DocumentController::class, 'preview'])->name('form-downloads.preview');
-Route::controller(StaffWorkController::class)->middleware('auth')->group(function(){
+Route::controller(StaffWorkController::class)->middleware('auth')->group(function () {
     Route::get('ngo/survey-start', 'Survey')->name('survey.start');
-    Route::post('ngo/survey-store','StoreSurvey')->name('store.survey');
-    Route::get('ngo/edit-survey/{id}','editSurvey')->name('survey.edit');
-    Route::post('ngo/update-survey/{id}','UpdateSurvey')->name('update.survey');
+    Route::post('ngo/survey-store', 'StoreSurvey')->name('store.survey');
+    Route::get('ngo/edit-survey/{id}', 'editSurvey')->name('survey.edit');
+    Route::post('ngo/update-survey/{id}', 'UpdateSurvey')->name('update.survey');
     Route::get('ngo/view-survey/{id}', 'ViewSurvey')->name('survey.show');
-    Route::get('ngo/survey-delete/{id}','SurveyDelete')->name('survey.delete');
-    Route::get('ngo/survey-list','SurveyList')->name('survey.list');
+    Route::get('ngo/survey-delete/{id}', 'SurveyDelete')->name('survey.delete');
+    Route::get('ngo/survey-list', 'SurveyList')->name('survey.list');
     Route::get('ngo/check-survey-identity', [StaffWorkController::class, 'checkIdentity'])->name('check.survey.identity');
     Route::get('ngo/check-document', 'CheckDocument')->name('Survey.CheckDocument');
     Route::post('ngo/update-document-checkbox', [StaffWorkController::class, 'updateCheckbox'])->name('update-document-checkbox');
     Route::post('ngo/{benefresSurveyId}/update-document', [StaffWorkController::class, 'updateDocuments'])->name('update-document');
-
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -547,21 +544,25 @@ Route::middleware(['auth'])->group(function () {
     Route::get('ngo/delete-story/{id}', [StoryController::class, 'DeleteStory'])->name('delete-story');
 });
 
-Route::controller(HealthCardController::class)->middleware('auth')->group(function(){
+Route::controller(HealthCardController::class)->middleware('auth')->group(function () {
     Route::get('ngo/add-disease', 'AddDisease')->name('add.disease');
     Route::post('ngo/disease/store', 'StoreDisease')->name('store.disease');
     Route::delete('ngo/disease/{id}', 'DestroyDisease')->name('disease.delete');
     Route::get('ngo/list-hospital', 'ListHospital')->name('list.hospital');
     Route::get('ngo/add-hospital', 'AddHospital')->name('add.hospital');
     Route::post('ngo/hospital/store', 'StoreHospital')->name('store.hospital');
-    Route::get('ngo/list-generate-healthcard','RegList')->name('generatelist.healthcard');
-    Route::get('ngo/generate-healthcard/{id}/{type}','GenerateHealthCard')->name('generate.healthcard');
+    Route::get('ngo/list-generate-healthcard', 'RegList')->name('generatelist.healthcard');
+    Route::get('ngo/generate-healthcard/{id}/{type}', 'GenerateHealthCard')->name('generate.healthcard');
     Route::post('ngo/healthcard/store', 'StoreHealthCard')->name('healthcard.store');
     Route::get('ngo/edit-healthcard/{health_id}/edit', 'EditHealthCard')->name('healthcard.edit');
     Route::post('ngo/update-healthcard/{health_id}', 'UpdateHealthCard')->name('healthcard.update');
-    Route::get('ngo/healthcard-list','CardList')->name('list.healthcard');
+    Route::get('ngo/healthcard-list', 'CardList')->name('list.healthcard');
     Route::get('ngo/show-healthcard/{id}/{health_id}', 'ShowHealthCard')->name('show.healthcard');
-
+    Route::get('ngo/demand-facility-list', 'DemandFacilityList')->name('list.demandfacility');
+    Route::get('ngo/demand-health-facility/{id}/{health_id}', 'DemandFacility')->name('demand.health.facility');
+    Route::post('ngo/health-facility/store', 'StoreDemandFacilities')->name('health.facility.store');
+    Route::get('ngo/pending-facility-list', 'PendingFacilityList')->name('list.pendingfacility');
+    Route::get('ngo/pending-healthfacility/{facility}','ShowPendingFacility')->name('pending.healthfacility.show');
 });
 
 require __DIR__ . '/auth.php';

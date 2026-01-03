@@ -77,10 +77,10 @@
                                     <th>Sr. No.</th>
                                     <th>Hospital Code</th>
                                     <th>Registration Date</th>
-                                    <th>Hospital Name</th>
-                                    <th>Hospital Address</th>
+                                    <th>Hospital / Clinic / Medical Name</th>
+                                    <th>Hospital / Clinic / Medical Address</th>
                                     <th>Contact Number</th>
-                                    <th>Operator Name</th>
+                                    <th>Doctor / Operator Name</th>
                                     <th>Status</th>
                                     <th width="180">Action</th>
                                 </tr>

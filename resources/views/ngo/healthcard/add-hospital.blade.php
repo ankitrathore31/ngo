@@ -23,7 +23,7 @@
                     <div class="row">
 
                         <div class="col-md-4 mb-2">
-                            <label>Hospital Code</label>
+                            <label>Hospital / Clinic / Medical Code</label>
                             <input type="text" class="form-control" value="{{ $nextCode }}" readonly>
                         </div>
 
@@ -33,7 +33,7 @@
                         </div>
 
                         <div class="col-md-4 mb-2">
-                            <label>Hospital Name</label>
+                            <label>Hospital / Clinic / Medical Name</label>
                             <input type="text" name="hospital_name" class="form-control" required>
                         </div>
 
@@ -43,12 +43,12 @@
                         </div>
 
                          <div class="col-md-4 mb-2">
-                            <label>Hospital Address</label>
+                            <label>Hospital / Clinic / Medical Address</label>
                             <textarea type="text" name="address" class="form-control"></textarea>
                         </div>
 
                         <div class="col-md-4 mb-2">
-                            <label>Operator Name</label>
+                            <label>Operator / Doctor Name</label>
                             <input type="text" name="operator_name" class="form-control">
                         </div>
 

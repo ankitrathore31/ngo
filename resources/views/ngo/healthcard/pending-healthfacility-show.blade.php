@@ -105,12 +105,12 @@
 
 
     <div class="wrapper">
-        <div class="d-flex justify-content-between align-record-centre mb-0 mt-4">
-            <h5 class="mb-0">Health Card</h5>
+        <div class="d-flex justify-content-between align-person-centre mb-0 mt-4">
+            <h5 class="mb-0">Pending Health person</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
-                    <li class="breadcrumb-record"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-record active" aria-current="page">Health Card</li>
+                    <li class="breadcrumb-person"><a href="{{ url('dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-person active" aria-current="page">Health Card</li>
                 </ol>
             </nav>
         </div>
@@ -121,9 +121,9 @@
         @endif
         <div class="container-fluid mt-5">
             <!-- Language Toggle -->
-            <div class="d-flex justify-content-between align-records-center mb-3 mt-4">
+            <div class="d-flex justify-content-between align-persons-center mb-3 mt-4">
                 <h5 class="mb-0">
-                    <span>Health Card</span>
+                    <span>Pending Health Facilities</span>
                 </h5>
                 <div>
                     <button onclick="window.print()" class="btn btn-primary">Print </button>
@@ -188,65 +188,65 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-sm-6 mb-3">
-                                    <h4><b>Health Card No:</b> <b>{{ $healthCard->healthcard_no }}</b></h4> 
+                                    <h4><b>Health Card No:</b> <b>{{ $card->healthcard_no }}</b></h4>
                                 </div>
                                 <div class="col-sm-6 mb-3">
-                                    <strong>Beneficiaries ID No:</strong> {{ $record->identity_no }}
+                                    <strong>Beneficiaries ID No:</strong> {{ $person->identity_no }}
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-sm-4 mb-3">
-                                    <strong>Registraition No:</strong> {{ $record->registration_no }}
+                                    <strong>Registraition No:</strong> {{ $person->registration_no }}
                                 </div>
                                 <div class="col-sm-4 mb-3">
                                     <strong>Registraition Date:</strong>
-                                    {{ \Carbon\Carbon::parse($record->registraition_date)->format('d-m-Y') }}
+                                    {{ \Carbon\Carbon::parse($person->registraition_date)->format('d-m-Y') }}
                                 </div>
                                 <div class="col-sm-4 mb-3">
-                                    <strong>Registraition Type:</strong> {{ $record->reg_type }}
+                                    <strong>Registraition Type:</strong> {{ $person->reg_type }}
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-8">
                                     <div class="row">
                                         <div class="col-sm-6 mb-3">
-                                            <strong>Name:</strong> {{ $record->name }}
+                                            <strong>Name:</strong> {{ $person->name }}
                                         </div>
                                         <div class="col-sm-6 mb-3">
-                                            <strong>Father / Husband's Name:</strong> {{ $record->gurdian_name }}
+                                            <strong>Father / Husband's Name:</strong> {{ $person->gurdian_name }}
                                         </div>
                                         <div class="col-sm-6 mb-3">
-                                            <strong>Gender:</strong> {{ $record->gender }}
+                                            <strong>Gender:</strong> {{ $person->gender }}
                                         </div>
                                         <div class="col-sm-6 mb-3">
                                             <strong>Date of Birth:</strong>
-                                            {{ \Carbon\Carbon::parse($record->dob)->format('d-m-Y') }}
+                                            {{ \Carbon\Carbon::parse($person->dob)->format('d-m-Y') }}
                                         </div>
                                         <div class="col-sm-12 mb-3">
                                             <strong>Address: </strong>
-                                            {{ $record->village }},
-                                            {{ $record->post }},
-                                            {{ $record->block }},
-                                            {{ $record->district }},
-                                            {{ $record->state }} - {{ $record->pincode }},({{ $record->area_type }})
+                                            {{ $person->village }},
+                                            {{ $person->post }},
+                                            {{ $person->block }},
+                                            {{ $person->district }},
+                                            {{ $person->state }} - {{ $person->pincode }},({{ $person->area_type }})
                                         </div>
                                         <div class="col-sm-6 mb-3">
-                                            <strong>Phone:</strong> {{ $record->phone }}
-                                        </div>  
+                                            <strong>Phone:</strong> {{ $person->phone }}
+                                        </div>
                                         <div class="col-sm-6 mb-3">
-                                            <strong>Marital Status:</strong> {{ $record->marital_status }}
+                                            <strong>Marital Status:</strong> {{ $person->marital_status }}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     @php
                                         $imagePath =
-                                            $record->reg_type === 'Member' ? 'member_images/' : 'benefries_images/';
+                                            $person->reg_type === 'Member' ? 'member_images/' : 'benefries_images/';
                                     @endphp
 
-                                    {{-- @if ($record->image) --}}
+                                    {{-- @if ($person->image) --}}
                                     <div class=" mb-3">
-                                        <img src="{{ asset($imagePath . $record->image) }}" alt="Image"
+                                        <img src="{{ asset($imagePath . $person->image) }}" alt="Image"
                                             class="img-thumbnail" width="150" style="max-width: 250">
                                         {{-- <br>
                                     <strong class="text-center"> Image:</strong> --}}
@@ -256,48 +256,71 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-4 mb-3">
-                                    <strong>Caste:</strong> {{ $record->caste }}
+                                    <strong>Caste:</strong> {{ $person->caste }}
                                 </div>
                                 <div class="col-sm-4 mb-3">
-                                    <strong>Caste Category:</strong> {{ $record->religion_category }}
+                                    <strong>Caste Category:</strong> {{ $person->religion_category }}
                                 </div>
                                 <div class="col-sm-4 mb-3">
-                                    <strong>Religion:</strong> {{ $record->religion }}
+                                    <strong>Religion:</strong> {{ $person->religion }}
                                 </div>
 
                                 <div class="col-sm-4 mb-3">
-                                    <strong>Occupation:</strong> {{ $record->occupation }}
+                                    <strong>Occupation:</strong> {{ $person->occupation }}
                                 </div>
 
-                                @if ($record->reg_type == 'Beneficiaries')
+                                @if ($person->reg_type == 'Beneficiaries')
                                     <div class="col-sm-4 mb-3">
-                                        <strong>What do the beneficiaries need?:</strong> {{ $record->help_needed }}
+                                        <strong>What do the beneficiaries need?:</strong> {{ $person->help_needed }}
                                     </div>
                                 @endif
 
                                 <div class="col-sm-12 mb-3">
-                                    <strong>Health Facility/Disease Name:</strong> {{ implode(', ', $healthCard->diseases ?? []) }}
+                                    <strong>Health person/Disease Name:</strong>
+                                    {{ implode(', ', $card->diseases ?? []) }}
                                 </div>
 
                                 <div class="col-sm-6 mb-3">
-                                    <strong>Hospital / Clinic / Medical Name:</strong> {{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->hospital_name }}, {{ $healthCard->hospital_name }}
-                                    ,{{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->address }},{{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->operator_name }},
-                                    {{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->contact_number }}
+                                    <strong>Hospital / Clinic / Medical Name:</strong>
+                                    {{ \App\Models\HealthCard::hospital($card->hospital_name)->hospital_name }},
+                                    {{ $card->hospital_name }}
+                                    ,{{ \App\Models\HealthCard::hospital($card->hospital_name)->address }},{{ \App\Models\HealthCard::hospital($card->hospital_name)->operator_name }},
+                                    {{ \App\Models\HealthCard::hospital($card->hospital_name)->contact_number }}
                                 </div>
-
-                                {{-- <div class="col-sm-6 mb-3">
-                                    <strong>Hospital Code:</strong> 
+                                <div class="row">
+                                    <h5 class="mb-2"><b>HEALTH FACILITY</b></h5>
+                                    <div class="col-sm-4 mb-3">
+                                        <strong>Treatment Type:</strong> {{ $facility->treatment_type ?? '-' }}
+                                    </div>
+                                    <div class="col-sm-4 mb-3">
+                                        <strong>Medical Name:</strong> {{ $facility->hospital_name ?? '-' }}
+                                    </div>
+                                    <div class="col-sm-4 mb-3">
+                                        <strong>Bill No:</strong> {{ $facility->bill_no ?? '-' }}
+                                    </div>
+                                    <div class="col-sm-4 mb-3">
+                                        <strong>Bill Date:</strong>
+                                        {{ $facility->bill_date ? \Carbon\Carbon::parse($facility->bill_date)->format('d-m-Y') : '-' }}
+                                    </div>
+                                    <div class="col-sm-4 mb-3">
+                                        <strong>GST:</strong> {{ $facility->bill_gst ?? '0' }}
+                                    </div>
+                                    <div class="col-sm-4 mb-3">
+                                        <strong>Bill Amount:</strong> {{ number_format($facility->bill_amount ?? 0, 2) }}
+                                    </div>
+                                    {{-- <div class="col-sm-4 mb-3">
+                                        <strong>Bill Upload:</strong>
+                                        @if ($facility->bill_upload)
+                                            <a href="{{ asset('bills/' . $facility->bill_upload) }}"
+                                                target="_blank">View</a>
+                                        @else
+                                            -
+                                        @endif
+                                    </div> --}}
+                                    {{-- <div class="col-sm-4 mb-3">
+                                        <strong>Status:</strong> {{ $facility->status ?? '-' }}
+                                    </div> --}}
                                 </div>
-
-                                <div class="col-sm-8 mb-3">
-                                    <strong>Hospital Address:</strong> 
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <strong>Hospital Operator Name:</strong> 
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <strong>Hospital Operator Contact No.:</strong> 
-                                </div> --}}
 
                             </div>
 
