@@ -346,7 +346,7 @@ class HealthCardController extends Controller
     public function ShowHealthCard($id, $health_id)
 {
     // Try to find Beneficiarie first
-    $record = \App\Models\Beneficiarie::with('healthCard')
+    $record = \App\Models\beneficiarie::with('healthCard')
         ->where('id', $id)
         ->whereHas('healthCard', function($q) use ($health_id) {
             $q->where('id', $health_id);
