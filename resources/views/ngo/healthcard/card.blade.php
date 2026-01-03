@@ -188,10 +188,11 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-sm-6 mb-3">
-                                    <h4><b>Health Card No:</b> <b>{{ $healthCard->healthcard_no }}</b></h4> 
+                                    <h4><b>Health Card No:</b> <b>{{ $healthCard->healthcard_no }}</b></h4>
                                 </div>
                                 <div class="col-sm-6 mb-3">
-                                    <strong>Beneficiaries ID No:</strong> {{ $record->identity_no }}
+                                    <strong>Health Card Registraition Date:</strong>
+                                    {{ \Carbon\Carbon::parse($healthCard->registraition_date)->format('d-m-Y') }}
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -232,7 +233,7 @@
                                         </div>
                                         <div class="col-sm-6 mb-3">
                                             <strong>Phone:</strong> {{ $record->phone }}
-                                        </div>  
+                                        </div>
                                         <div class="col-sm-6 mb-3">
                                             <strong>Marital Status:</strong> {{ $record->marital_status }}
                                         </div>
@@ -269,35 +270,28 @@
                                     <strong>Occupation:</strong> {{ $record->occupation }}
                                 </div>
 
-                                @if ($record->reg_type == 'Beneficiaries')
-                                    <div class="col-sm-4 mb-3">
-                                        <strong>What do the beneficiaries need?:</strong> {{ $record->help_needed }}
-                                    </div>
-                                @endif
-
-                                <div class="col-sm-12 mb-3">
-                                    <strong>Health Facility/Disease Name:</strong> {{ implode(', ', $healthCard->diseases ?? []) }}
+                                <div class="col-sm-6 mb-3">
+                                    <strong>Beneficiaries ID No:</strong> {{ $record->identity_no }}
                                 </div>
 
-                                <div class="col-sm-6 mb-3">
-                                    <strong>Hospital / Clinic / Medical Name:</strong> {{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->hospital_name }}, {{ $healthCard->hospital_name }}
+                                <div class="col-sm-12 mb-3">
+                                    <strong>Health Facility/Disease Name:</strong>
+                                    @if (!empty($healthCard->diseases))
+                                        @foreach ($healthCard->diseases as $disease)
+                                            {{ $loop->iteration }}. {{ $disease }}@if (!$loop->last)
+                                                ,
+                                            @endif
+                                        @endforeach
+                                    @endif
+                                </div>
+
+                                <div class="col-sm-12 mb-3">
+                                    <strong>Hospital / Clinic / Medical / Doctor Name:</strong>
+                                    {{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->hospital_name }},
+                                    {{ $healthCard->hospital_name }}
                                     ,{{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->address }},{{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->operator_name }},
                                     {{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->contact_number }}
                                 </div>
-
-                                {{-- <div class="col-sm-6 mb-3">
-                                    <strong>Hospital Code:</strong> 
-                                </div>
-
-                                <div class="col-sm-8 mb-3">
-                                    <strong>Hospital Address:</strong> 
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <strong>Hospital Operator Name:</strong> 
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <strong>Hospital Operator Contact No.:</strong> 
-                                </div> --}}
 
                             </div>
 

@@ -398,7 +398,7 @@
                             @endif
                             @if (!$isStaff || $user->hasPermission('approval-facilities'))
                                 <li><a class="dropdown-item"
-                                        href="{{-- route('beneficiarie-facilities-list') --}}">
+                                        href="{{ route('distributed-list-for-approve') }}">
                                         Approval Distribute Facilities List</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('distributed-facilities'))

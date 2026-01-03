@@ -224,46 +224,6 @@
                         </div>
                     </div>
 
-
-                    {{-- <div class="row ">
-                        
-                        <div class="col-md-8">
-                            <div class="row d-flex justify-content-between">
-                                <div class="col-md-3 mb-3 bg-light">
-                                    <div class="form-group">
-                                        <label class="form-label">Identity Type:</label>
-                                        <p class="form-control-plaintext">
-                                            {{ $beneficiarie->identity_type ?? 'N/A' }}
-                                        </p>
-                                    </div>
-                                </div>
-
-                               
-                                <div class="col-md-3 mb-3 bg-light">
-                                    <div class="form-group">
-                                        <label class="form-label">Identity Card Number:</label>
-                                        <p class="form-control-plaintext">
-                                            {{ $beneficiarie->identity_no ?? 'N/A' }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="row">
-                                
-                                <div class="col-md-12 mb-3">
-                                    <label class="form-label">ID Document Uploaded:</label>
-                                    @if (!empty($beneficiarie->id_document))
-                                        <img src="{{ asset('benefries_images/' . $beneficiarie->id_document) }}"
-                                            alt="Preview" width="150">
-                                    @else
-                                        <p class="form-control-plaintext">No document uploaded</p>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
                     <div class="row">
 
                         <!-- Occupation -->
@@ -319,6 +279,20 @@
                                 </p>
                             </div>
                         </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="bg-light border rounded p-3 h-100">
+                                <label class="form-label fw-bold">Distribute Date:</label>
+                                <p>{{ \Carbon\Carbon::parse($survey->distribute_date)->format('d-m-Y') }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-8 mb-3">
+                            <div class="bg-light border rounded p-3 h-100">
+                                <label class="form-label fw-bold">Distribute Place:</label>
+                                <p class="card-text"><strong>Facilities:</strong>
+                                    {{ $survey->distribute_place ?? 'Not Found' }}
+                                </p>
+                            </div>
+                        </div>
 
                         {{-- @endforeach --}}
                     @else
@@ -330,28 +304,53 @@
             </div>
             <div class="card mt-4 p-3 border border-success rounded">
                 <form
-                    action="{{ route('store-distribute-facilities', ['beneficiarie_id' => $beneficiarie->id, 'survey_id' => $survey->id]) }}"
+                    action="{{ route('store-distribute-status', ['beneficiarie_id' => $beneficiarie->id, 'survey_id' => $survey->id]) }}"
                     method="POST">
                     @csrf
                     <h5 class="text-success text-center">Distribute Beneficiarie Facilities</h5>
-
-                    <div class="mb-3">
-                        <label for="distribute_date" class="form-label">
-                            Distribute Date<span class="text-danger">*</span>
+                    <div class="mt-2 mb-3">
+                        <label for="officer" class="form-label">Approve Officer:</label>
+                        <select name="officer" class="form-control @error('officer') is-invalid @enderror">
+                            <option value="">Select Approve Officer</option>
+                            @foreach ($staff as $person)
+                                <option
+                                    value="{{ $person->name }} ( {{ $person->staff_code }} ) ( {{ $person->position }} ) "
+                                    {{ old('officer') == $person->name . ' - ' . $person->staff_code . ' - ' . $person->position ? 'selected' : '' }}>
+                                    {{ $person->name }} ({{ $person->staff_code }}) ({{ $person->position }})
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('officer')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="mb-3 mt-1">
+                        <label for="facilities" class="form-label">
+                            Status <span class="text-danger">*</span>
                         </label>
-                        <input type="date" name="distribute_date" class="form-control">
-                        @error('distribute_date')
+                        <select name="status" id="status" class="form-control">
+                            <option value="" selected>Select Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Distributed">Distributed</option>
+                            <option value="Reject">Reject</option>
+                        </select>
+                        @error('status')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-                    <div class="mb-3">
-                        <label for="distribute_place" class="form-label">Distribute Place</label>
-                        <textarea name="distribute_place" class="form-control"></textarea>
-                        @error('distribute_place')
+
+                    <div class="mb-3 mt-1" id="pendingDiv" style="display: none;">
+                        <label for="pending_reason" class="form-label">
+                            Reason: <span class="text-danger"></span>
+                        </label>
+                        <textarea name="pending_reason" id="pending_reason" class="form-control">
+
+                       </textarea>
+                        @error('pending_reason')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-                 
+
 
                     <div class="d-flex justify-content-between">
                         <button type="submit" class="btn btn-success">Distribute Beneficiarie Facilities</button>
@@ -361,22 +360,23 @@
         </div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function(){
+        document.addEventListener('DOMContentLoaded', function() {
             const statusSelect = document.getElementById('status');
             const PendingDiv = document.getElementById('pendingDiv');
 
-            function togglePendingReason(){
-                if(statusSelect.value === 'Pending'){
+            function togglePendingReason() {
+                if (statusSelect.value === 'Pending' || statusSelect.value === 'Reject') {
                     PendingDiv.style.display = 'block';
-                }
-                else{
+                } else {
                     PendingDiv.style.display = 'none';
                 }
             }
 
+            // Run on page load
             togglePendingReason();
 
+            // Run on change
             statusSelect.addEventListener('change', togglePendingReason);
-        })
+        });
     </script>
 @endsection

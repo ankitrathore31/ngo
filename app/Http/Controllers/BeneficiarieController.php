@@ -443,10 +443,84 @@ class BeneficiarieController extends Controller
     public function storedistributefacilities(Request $request, $beneficiarie_id, $survey_id)
     {
         $request->validate([
-            'distribute_date' => 'required|date',
-            'status' => 'required',
+            'distribute_date'  => 'required|date',
             'distribute_place' => 'required|string',
+        ]);
+
+        try {
+
+            DB::transaction(function () use ($request, $beneficiarie_id, $survey_id) {
+
+                $distribute = Beneficiarie_Survey::lockForUpdate()
+                    ->where('beneficiarie_id', $beneficiarie_id)
+                    ->where('id', $survey_id)
+                    ->firstOrFail();
+
+                $distribute->distribute_date  = Carbon::parse($request->distribute_date);
+                $distribute->distribute_place = $request->distribute_place;
+
+                // Set status as STRING '0'
+                $distribute->status = '0';
+
+                /*
+         |-------------------------------------------------
+         | TOKEN GENERATION LOGIC (RESET IF NO STATUS = '0')
+         |-------------------------------------------------
+         */
+                if ($distribute->status === '0' && empty($distribute->token_no)) {
+
+                    // Get last token ONLY from status = '0'
+                    $lastToken = Beneficiarie_Survey::where('status', '0')
+                        ->whereNotNull('token_no')
+                        ->orderByRaw('CAST(token_no AS UNSIGNED) DESC')
+                        ->lockForUpdate()
+                        ->value('token_no');
+
+                    // If no status = '0' exists → restart from 01
+                    $nextToken = $lastToken
+                        ? str_pad(((int) $lastToken + 1), 2, '0', STR_PAD_LEFT)
+                        : '01';
+
+                    $distribute->token_no = $nextToken;
+                }
+
+                $distribute->save();
+
+                logWork(
+                    'Distribute Facilities',
+                    $distribute->id,
+                    'Benefries Facilities Distribute',
+                    'Distribute Date: ' . $distribute->distribute_date
+                );
+            });
+
+            return redirect()
+                ->route('distributed-list-for-approve')
+                ->with('success', 'Facilities Now For Distribute');
+        } catch (\Throwable $th) {
+            return back()
+                ->withInput()
+                ->withErrors(['error' => 'Failed to update distribution.']);
+        }
+    }
+
+    public function DistributeFacilitiesStatus($beneficiarie_id, $survey_id)
+    {
+        $survey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+            ->where('id', $survey_id)
+            ->with('beneficiarie')
+            ->firstOrFail();
+        $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->find($beneficiarie_id);
+        $staff = Staff::get();
+        return view('ngo.beneficiarie.approve-facilities', compact('beneficiarie', 'survey', 'staff'));
+    }
+
+    public function storedistributefacilitiesStatus(Request $request, $beneficiarie_id, $survey_id)
+    {
+        $request->validate([
+            'status' => 'required',
             'pending_reason' => 'required_if:status,Pending',
+            'officer' => 'required',
         ]);
 
         try {
@@ -455,16 +529,15 @@ class BeneficiarieController extends Controller
                 ->with('beneficiarie')
                 ->firstOrFail();
 
-            $distribute->distribute_date = Carbon::parse($request->input('distribute_date'));
-            $distribute->distribute_place = $request->input('distribute_place'); // FIXED here
+            $distribute->officer = $request->input('officer'); // FIXED here
             $distribute->status = $request->input('status');
             $distribute->pending_reason = $request->input('pending_reason');
             $distribute->save();
             logWork(
                 'Distribute Facilities',
                 $distribute->id,
-                'Benefries Facilities Distribute',
-                'Distribute Date: ' . $distribute->distribute_date . ' | Status: ' . $distribute->status
+                'Benefries Facilities Distribute Status',
+                'Distribute Approve Officer: ' . $distribute->officer . ' | Status: ' . $distribute->status
             );
 
             if ($request->input('status') === 'Distributed') {
@@ -476,6 +549,69 @@ class BeneficiarieController extends Controller
             return back()->withInput()->withErrors(['error' => 'Failed to update distribution.']);
         }
     }
+
+    public function DistributeFacilitiesForApprove(Request $request)
+    {
+        /* Survey filter (STATUS MUST BE STRING '0') */
+        $surveyFilter = function ($q) use ($request) {
+            $q->where('status', '0')
+                ->orderBy('created_at', 'asc');
+
+            if ($request->filled('session_filter')) {
+                $q->where('session_date', $request->session_filter);
+            }
+
+            if ($request->filled('category_filter')) {
+                $q->where('facilities_category', $request->category_filter);
+            }
+
+            if ($request->filled('distribute_date')) {
+                $q->whereDate('distribute_date', $request->distribute_date);
+            }
+
+            if ($request->filled('bene_category')) {
+                $q->where('bene_category', $request->bene_category);
+            }
+        };
+
+        /* Main Query */
+        $query = beneficiarie::where('status', 1)
+            ->whereHas('surveys', $surveyFilter)
+            ->with(['surveys' => $surveyFilter]);
+
+        /* Location Filters */
+        if ($request->filled('block')) {
+            $query->where('block', 'like', '%' . $request->block . '%');
+        }
+
+        if ($request->filled('district')) {
+            $query->where('district', $request->district);
+        }
+
+        if ($request->filled('state')) {
+            $query->where('state', $request->state);
+        }
+
+        /* Fetch Data */
+        $beneficiarie = $query->orderBy('id', 'desc')->get();
+
+        /* Supporting Data */
+        $data = academic_session::all();
+
+        $category = Category::orderBy('category', 'asc')->get();
+
+        $categories = Beneficiarie_Survey::where('status', '0')
+            ->select('facilities_category')
+            ->distinct()
+            ->pluck('facilities_category');
+
+        return view(
+            'ngo.beneficiarie.pending-facility-list',
+            compact('beneficiarie', 'data', 'categories', 'category')
+        );
+    }
+
+
 
     public function EditDistributeFacilities($beneficiarie_id, $survey_id)
     {
@@ -584,7 +720,7 @@ class BeneficiarieController extends Controller
     public function pendingfacilities(Request $request)
     {
         $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
-            $q->where('status', 'Pending')
+            $q->whereIn('status', ['Pending', 'Reject'])
                 ->orderBy('created_at', 'asc');
 
             if ($request->session_filter) {
@@ -598,7 +734,7 @@ class BeneficiarieController extends Controller
 
         // Get only beneficiaries who actually have at least one distributed survey
         $beneficiarie = $query->whereHas('surveys', function ($q) use ($request) {
-            $q->where('status', 'Pending')
+            $q->whereIn('status', ['Pending', 'Reject'])
                 ->orderBy('created_at', 'asc');
 
             if ($request->session_filter) {
@@ -617,7 +753,7 @@ class BeneficiarieController extends Controller
         $data = academic_session::all();
         $categories = Beneficiarie_Survey::select('facilities_category')->distinct()->pluck('facilities_category');
         $category = Category::orderBy('category', 'asc')->get();
-        return view('ngo.beneficiarie.pending-facilities-list', compact('beneficiarie', 'data', 'categories', 'category'));
+        return view('ngo.beneficiarie.reject-facilities-list', compact('beneficiarie', 'data', 'categories', 'category'));
     }
 
     public function allbeneficiarielist(Request $request)
@@ -687,5 +823,15 @@ class BeneficiarieController extends Controller
         $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->where('survey_status', 1)->get();
 
         return view('ngo.beneficiarie.survey-received-list', compact('beneficiarie'));
+    }
+
+    public function showbeneficiarietoken($beneficiarie_id, $survey_id)
+    {
+        $survey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+            ->where('id', $survey_id)
+            ->with('beneficiarie')
+            ->firstOrFail();
+        $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->find($beneficiarie_id);
+        return view('ngo.beneficiarie.token', compact('beneficiarie', 'survey'));
     }
 }

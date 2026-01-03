@@ -243,6 +243,9 @@ Route::controller(BeneficiarieController::class)->group(function () {
     Route::get('ngo/edit-distribute-facilities/{beneficiarie_id}/survey/{survey_id}', 'EditDistributeFacilities')->middleware('auth')->name('edit-distribute-facilities');
     Route::post('ngo/update-distribute-facilities/{beneficiarie_id}/survey/{survey_id}', 'Updatedistributefacilities')->middleware('auth')->name('update-distribute-facilities');
     Route::get('ngo/distributed-facilities', 'distributefacilities')->middleware('auth')->name('distributed-list');
+    Route::get('ngo/distributed-facilities-for-approve', 'DistributeFacilitiesForApprove')->middleware('auth')->name('distributed-list-for-approve');
+    Route::get('ngo/distribute-approve-facilities/{beneficiarie_id}/survey/{survey_id}', 'DistributeFacilitiesStatus')->middleware('auth')->name('distribute-facilities-status');
+    Route::post('ngo/store-approve-facilities/{beneficiarie_id}/survey/{survey_id}', 'storedistributefacilitiesStatus')->middleware('auth')->name('store-distribute-status');
     Route::get('ngo/all-beneficiarie-list', 'allbeneficiarielist')->middleware('auth')->name('all-beneficiarie-list');
     Route::get('ngo/Pending-facilities', 'pendingfacilities')->middleware('auth')->name('pending-distribute-list');
     Route::get('ngo/beneficiarie-report-list', 'beneficiarieReportList')->middleware('auth')->name('beneficiarie-report-list');
@@ -250,6 +253,7 @@ Route::controller(BeneficiarieController::class)->group(function () {
     Route::get('ngo/Survey-received-list', 'surveyrecivedlist')->middleware('auth')->name('survey-received-list');
     Route::post('/beneficiaries/facilities/bulk-store',  'storeBulkBeneficiarieFacilities')->middleware('auth')
         ->name('store-bulk-beneficiarie-facilities');
+    Route::get('ngo/show-beneficiarie-token/{beneficiarie_id}/survey/{survey_id}', 'showbeneficiarietoken')->middleware('auth')->name('show-beneficiarie-token');
 });
 
 Route::controller(WorkingAreaController::class)->group(function () {
