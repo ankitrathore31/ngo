@@ -223,7 +223,8 @@ class HealthCardController extends Controller
         $request->validate([
             'hospital_name' => 'required',
             'reg_id'    => 'required',
-            'diseases' => 'required|array|min:1'
+            'diseases' => 'required|array|min:1',
+            'Health_registration_date' => 'required|date',
         ]);
 
         \App\Models\HealthCard::create([
@@ -231,44 +232,66 @@ class HealthCardController extends Controller
             'healthcard_no' => $request->healthcard_no,
             'hospital_name' => $request->hospital_name,
             'diseases' => $request->diseases,
+            'Health_registration_date' => $request->Health_registration_date,
             'status'   => '1',
         ]);
 
         return redirect()->back()->with('success', 'Health card created successfully.');
     }
-    public function EditHealthCard($id)
+    public function EditHealthCard($health_id)
     {
-        $healthcard = HealthCard::findOrFail($id);
-        $hospitals  = Hospital::orderBy('hospital_name')->get();
-        $diseases   = Disease::orderBy('disease')->get();
+        $healthcard = HealthCard::with(['beneficiary', 'member'])->findOrFail($health_id);
 
-        return view('ngo.healthcard.generate-card', compact('healthcard', 'hospitals', 'diseases'));
+        // Detect owner (Beneficiary or Member)
+        $person = $healthcard->beneficiary ?? $healthcard->member;
+
+        if (!$person) {
+            abort(404, 'Person not found for this health card');
+        }
+
+        $hospitals = Hospital::orderBy('hospital_name')->get();
+        $diseases  = Disease::orderBy('disease')->get();
+
+        return view('ngo.healthcard.edit-card', compact(
+            'healthcard',
+            'person',
+            'hospitals',
+            'diseases'
+        ));
     }
-    public function UpdateHealthCard(Request $request, $id)
+    public function UpdateHealthCard(Request $request, $health_id)
     {
         $request->validate([
-            'hospital_name' => 'required',
-            'diseases' => 'required|array'
+            'Health_registration_date' => 'required|date',
+            'hospital_name'            => 'required|string',
+            'diseases'                 => 'required|array',
+            'diseases.*'               => 'string'
         ]);
 
-        $card = HealthCard::findOrFail($id);
+        $healthcard = HealthCard::findOrFail($health_id);
 
-        $card->update([
-            'hospital_name' => $request->hospital_name,
-            'diseases' => $request->diseases,
+        $healthcard->update([
+            'Health_registration_date' => $request->Health_registration_date,
+            'hospital_name'            => $request->hospital_name,
+            'diseases'                 => $request->diseases,
         ]);
+
 
         return redirect()->back()->with('success', 'Health Card updated successfully');
     }
     public function CardList(Request $request)
     {
-        $queryBene = beneficiarie::with('healthCard')
+        $queryBene = beneficiarie::with(['healthCard' => function ($q) {
+            $q->where('status', 1);
+        }])
             ->where('status', 1)
             ->whereHas('healthCard', function ($q) {
                 $q->where('status', 1);
             });
 
-        $queryMember = Member::with('healthCard')
+        $queryMember = Member::with(['healthCard' => function ($q) {
+            $q->where('status', 1);
+        }])
             ->where('status', 1)
             ->whereHas('healthCard', function ($q) {
                 $q->where('status', 1);
@@ -282,29 +305,33 @@ class HealthCardController extends Controller
         if ($request->filled('application_no')) {
             $search = $request->application_no;
 
-            $queryBene->where(function ($q) use ($search) {
+            $queryBene->where(
+                fn($q) =>
                 $q->where('application_no', 'like', "%$search%")
-                    ->orWhere('registration_no', 'like', "%$search%");
-            });
+                    ->orWhere('registration_no', 'like', "%$search%")
+            );
 
-            $queryMember->where(function ($q) use ($search) {
+            $queryMember->where(
+                fn($q) =>
                 $q->where('application_no', 'like', "%$search%")
-                    ->orWhere('registration_no', 'like', "%$search%");
-            });
+                    ->orWhere('registration_no', 'like', "%$search%")
+            );
         }
 
         if ($request->filled('identity_no')) {
             $identity = $request->identity_no;
 
-            $queryBene->where(function ($q) use ($identity) {
+            $queryBene->where(
+                fn($q) =>
                 $q->where('phone', 'like', "%$identity%")
-                    ->orWhere('identity_no', 'like', "%$identity%");
-            });
+                    ->orWhere('identity_no', 'like', "%$identity%")
+            );
 
-            $queryMember->where(function ($q) use ($identity) {
+            $queryMember->where(
+                fn($q) =>
                 $q->where('phone', 'like', "%$identity%")
-                    ->orWhere('identity_no', 'like', "%$identity%");
-            });
+                    ->orWhere('identity_no', 'like', "%$identity%")
+            );
         }
 
         if ($request->filled('reg_type')) {
@@ -327,49 +354,60 @@ class HealthCardController extends Controller
             $queryMember->where('district', $request->district);
         }
 
-        $approvebeneficiarie = $queryBene->orderBy('created_at', 'asc')->get();
-        $approvemember = $queryMember->orderBy('created_at', 'asc')->get();
+        $beneficiaries = $queryBene->get();
+        $members = $queryMember->get();
 
-        $combined = $approvebeneficiarie->merge($approvemember)->sortBy('created_at');
+        /* FLATTEN: one row per health card */
+        $combined = collect()
+            ->merge($beneficiaries)
+            ->merge($members)
+            ->flatMap(function ($item) {
+                return $item->healthCard->map(function ($card) use ($item) {
+                    return [
+                        'person' => $item,
+                        'card'   => $card
+                    ];
+                });
+            })
+            ->sortBy(fn($row) => $row['card']->created_at)
+            ->values();
 
         $data = academic_session::all();
         $states = config('states');
 
         return view('ngo.healthcard.card-list', compact(
-            'data',
-            'approvebeneficiarie',
-            'approvemember',
             'combined',
+            'data',
             'states'
         ));
     }
-    public function ShowHealthCard($id, $health_id)
-{
-    // Try to find Beneficiarie first
-    $record = \App\Models\beneficiarie::with('healthCard')
-        ->where('id', $id)
-        ->whereHas('healthCard', function($q) use ($health_id) {
-            $q->where('id', $health_id);
-        })
-        ->first();
 
-    // If not found, try Member
-    if (!$record) {
-        $record = \App\Models\Member::with('healthCard')
+    public function ShowHealthCard($id, $health_id)
+    {
+        // Try to find Beneficiarie first
+        $record = \App\Models\beneficiarie::with('healthCard')
             ->where('id', $id)
-            ->whereHas('healthCard', function($q) use ($health_id) {
+            ->whereHas('healthCard', function ($q) use ($health_id) {
                 $q->where('id', $health_id);
             })
             ->first();
+
+        // If not found, try Member
+        if (!$record) {
+            $record = \App\Models\Member::with('healthCard')
+                ->where('id', $id)
+                ->whereHas('healthCard', function ($q) use ($health_id) {
+                    $q->where('id', $health_id);
+                })
+                ->first();
+        }
+
+        if (!$record) {
+            return redirect()->back()->with('error', 'record or Health Card not found.');
+        }
+
+        $healthCard = $record->healthCard;
+
+        return view('ngo.healthcard.card', compact('record', 'healthCard'));
     }
-
-    if (!$record) {
-        return redirect()->back()->with('error', 'record or Health Card not found.');
-    }
-
-    $healthCard = $record->healthCard;
-
-    return view('ngo.healthcard.card', compact('record', 'healthCard'));
-}
-
 }

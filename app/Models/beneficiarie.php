@@ -83,6 +83,6 @@ class beneficiarie extends Model
     }
     public function healthCard()
     {
-        return $this->hasOne(\App\Models\HealthCard::class, 'reg_id', 'id');
+        return $this->hasMany(\App\Models\HealthCard::class, 'reg_id', 'id');
     }
 }

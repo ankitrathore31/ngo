@@ -103,12 +103,12 @@
         }
     </style>
     <div class="wrapper">
-        <div class="d-flex justify-content-between align-record-centre mb-0 mt-4">
-            <h5 class="mb-0">Generate Health Card</h5>
+        <div class="d-flex justify-content-between align-person-centre mb-0 mt-4">
+            <h5 class="mb-0">Edit Health Card</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
-                    <li class="breadcrumb-record"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-record active" aria-current="page">Health Card</li>
+                    <li class="breadcrumb-person"><a href="{{ url('dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-person active" aria-current="page">Health Card</li>
                 </ol>
             </nav>
         </div>
@@ -124,56 +124,56 @@
                         <div class="p-2">
                             <div class="row mb-3">
                                 <div class="col-sm-4 mb-3">
-                                    <strong>Registraition No:</strong> {{ $record->registration_no }}
+                                    <strong>Registraition No:</strong> {{ $person->registration_no }}
                                 </div>
                                 <div class="col-sm-4 mb-3">
                                     <strong>Registraition Date:</strong>
-                                    {{ \Carbon\Carbon::parse($record->registraition_date)->format('d-m-Y') }}
+                                    {{ \Carbon\Carbon::parse($person->registraition_date)->format('d-m-Y') }}
                                 </div>
                                 <div class="col-sm-4 mb-3">
-                                    <strong>Registraition Type:</strong> {{ $record->reg_type }}
+                                    <strong>Registraition Type:</strong> {{ $person->reg_type }}
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-8">
                                     <div class="row">
                                         <div class="col-sm-6 mb-3">
-                                            <strong>Name:</strong> {{ $record->name }}
+                                            <strong>Name:</strong> {{ $person->name }}
                                         </div>
                                         <div class="col-sm-6 mb-3">
-                                            <strong>Father / Husband's Name:</strong> {{ $record->gurdian_name }}
+                                            <strong>Father / Husband's Name:</strong> {{ $person->gurdian_name }}
                                         </div>
                                         <div class="col-sm-6 mb-3">
-                                            <strong>Gender:</strong> {{ $record->gender }}
+                                            <strong>Gender:</strong> {{ $person->gender }}
                                         </div>
                                         <div class="col-sm-6 mb-3">
                                             <strong>Date of Birth:</strong>
-                                            {{ \Carbon\Carbon::parse($record->dob)->format('d-m-Y') }}
+                                            {{ \Carbon\Carbon::parse($person->dob)->format('d-m-Y') }}
                                         </div>
                                         <div class="col-sm-12 mb-3">
                                             <strong>Address: </strong>
-                                            {{ $record->village }},
-                                            {{ $record->post }},
-                                            {{ $record->block }},
-                                            {{ $record->district }},
-                                            {{ $record->state }} - {{ $record->pincode }},({{ $record->area_type }})
+                                            {{ $person->village }},
+                                            {{ $person->post }},
+                                            {{ $person->block }},
+                                            {{ $person->district }},
+                                            {{ $person->state }} - {{ $person->pincode }},({{ $person->area_type }})
                                         </div>
                                         <div class="col-sm-6 mb-3">
-                                            <strong>Phone:</strong> {{ $record->phone }}
+                                            <strong>Phone:</strong> {{ $person->phone }}
                                         </div>
                                         <div class="col-sm-6 mb-3">
-                                            <strong>Marital Status:</strong> {{ $record->marital_status }}
+                                            <strong>Marital Status:</strong> {{ $person->marital_status }}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     @php
                                         $imagePath =
-                                            $record->reg_type === 'Member' ? 'member_images/' : 'benefries_images/';
+                                            $person->reg_type === 'Member' ? 'member_images/' : 'benefries_images/';
                                     @endphp
-                                    {{-- @if ($record->image) --}}
+                                    {{-- @if ($person->image) --}}
                                     <div class=" mb-3">
-                                        <img src="{{ asset($imagePath . $record->image) }}" alt="Image"
+                                        <img src="{{ asset($imagePath . $person->image) }}" alt="Image"
                                             class="img-thumbnail" width="150" style="max-width: 250">
                                         {{-- <br>
                                     <strong class="text-center"> Image:</strong> --}}
@@ -183,21 +183,21 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-4 mb-3">
-                                    <strong>Caste:</strong> {{ $record->caste }}
+                                    <strong>Caste:</strong> {{ $person->caste }}
                                 </div>
                                 <div class="col-sm-4 mb-3">
-                                    <strong>Caste Category:</strong> {{ $record->religion_category }}
+                                    <strong>Caste Category:</strong> {{ $person->religion_category }}
                                 </div>
                                 <div class="col-sm-4 mb-3">
-                                    <strong>Religion:</strong> {{ $record->religion }}
+                                    <strong>Religion:</strong> {{ $person->religion }}
                                 </div>
 
                                 <div class="col-sm-4 mb-3">
-                                    <strong>Occupation:</strong> {{ $record->occupation }}
+                                    <strong>Occupation:</strong> {{ $person->occupation }}
                                 </div>
-                                @if ($record->reg_type == 'Beneficiaries')
+                                @if ($person->reg_type == 'Beneficiaries')
                                     <div class="col-sm-4 mb-3">
-                                        <strong>What do the beneficiaries need?:</strong> {{ $record->help_needed }}
+                                        <strong>What do the beneficiaries need?:</strong> {{ $person->help_needed }}
                                     </div>
                                 @endif
                             </div>
@@ -209,34 +209,34 @@
                 <div class="card-body shadow-sm">
                     <div class="row">
                         <div class="col">
-                            <form method="POST" action="{{ route('healthcard.store') }}">
+                            <form method="POST" action="{{ route('healthcard.update', $healthcard->id) }}">
                                 @csrf
+
                                 <div class="row">
 
-                                    <input type="text" class="form-control" value="{{ $record->id }}" name="reg_id"
-                                        hidden>
-
-                                    <div class="col-md-6 mb-2">
+                                    <div class="col-md-6 mb-3">
                                         <label>Health Card No</label>
-                                        <input type="text" class="form-control"
-                                            value="{{ $healthcard->healthcard_no ?? $nextCard }}" name="healthcard_no"
+                                        <input type="text" class="form-control" value="{{ $healthcard->healthcard_no }}"
                                             readonly>
                                     </div>
 
-                                    <div class="col-md-6 mb-2">
-                                        <label>Health Card Registration Date</label>
-                                        <input type="date" name="Health_registration_date" class="form-control">
+                                    <div class="col-md-6 mb-3">
+                                        <label>Health Registration Date</label>
+                                        <input type="date" name="Health_registration_date" class="form-control"
+                                            value="{{ $healthcard->Health_registration_date }}" required>
                                     </div>
 
-                                    <div class="col-md-6 mb-2">
+                                    <div class="col-md-6 mb-3">
                                         <label>Hospital</label>
                                         <select name="hospital_name" class="form-control" required>
                                             <option value="">Select Hospital</option>
                                             @foreach ($hospitals as $hospital)
                                                 <option
                                                     value="{{ $hospital->hospital_name }}({{ $hospital->hospital_code }})"
-                                                    {{ isset($healthcard) && $healthcard->hospital_name == $hospital->hospital_name ? 'selected' : '' }}>
-                                                    {{ $hospital->hospital_name }}({{ $hospital->hospital_code }})
+                                                    {{ $healthcard->hospital_name == $hospital->hospital_name . '(' . $hospital->hospital_code . ')'
+                                                        ? 'selected'
+                                                        : '' }}>
+                                                    {{ $hospital->hospital_name }} ({{ $hospital->hospital_code }})
                                                 </option>
                                             @endforeach
                                         </select>
@@ -256,11 +256,12 @@
                                         <div id="selectedDiseases" class="d-flex flex-wrap gap-2"></div>
                                     </div>
 
-                                    <div class="col-md-12 mt-3">
-                                        <button class="btn btn-success">
-                                            Save
-                                        </button>
+
+                                    <div class="col-md-12 mt-4">
+                                        <button class="btn btn-success">Update Health Card</button>
+                                        <a href="{{ url()->previous() }}" class="btn btn-secondary">Back</a>
                                     </div>
+
                                 </div>
                             </form>
 
@@ -270,37 +271,61 @@
             </div>
         </div>
         <script>
-            let selectedDiseases = @json($healthcard->diseases ?? []);
+            document.addEventListener('DOMContentLoaded', function() {
 
-            function renderDiseases() {
+                let selectedDiseases = Array.isArray(@json($healthcard->diseases ?? [])) ?
+                    @json($healthcard->diseases ?? []) : [];
+
+                const diseaseSelect = document.getElementById('diseaseSelect');
                 const box = document.getElementById('selectedDiseases');
-                box.innerHTML = '';
 
-                selectedDiseases.forEach(d => {
-                    const tag = document.createElement('div');
-                    tag.className = 'badge bg-primary me-2 mb-2 d-flex align-items-center';
-                    tag.innerHTML = `
-            <span class="me-2">${d}</span>
-            <button type="button" class="btn btn-sm btn-light" onclick="removeDisease('${d}')">&times;</button>
-            <input type="hidden" name="diseases[]" value="${d}">
-        `;
-                    box.appendChild(tag);
-                });
-            }
+                function renderDiseases() {
+                    box.innerHTML = '';
 
-            document.getElementById('diseaseSelect').addEventListener('change', function() {
-                if (this.value && !selectedDiseases.includes(this.value)) {
-                    selectedDiseases.push(this.value);
+                    selectedDiseases.forEach((disease, index) => {
+                        const tag = document.createElement('div');
+                        tag.className = 'badge bg-primary me-2 mb-2 d-inline-flex align-items-center';
+
+                        const text = document.createElement('span');
+                        text.className = 'me-2';
+                        text.textContent = disease;
+
+                        const removeBtn = document.createElement('button');
+                        removeBtn.type = 'button';
+                        removeBtn.className = 'btn btn-sm btn-light';
+                        removeBtn.innerHTML = '&times;';
+                        removeBtn.onclick = () => removeDisease(index);
+
+                        const hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = 'diseases[]';
+                        hiddenInput.value = disease;
+
+                        tag.appendChild(text);
+                        tag.appendChild(removeBtn);
+                        tag.appendChild(hiddenInput);
+
+                        box.appendChild(tag);
+                    });
+                }
+
+                function removeDisease(index) {
+                    selectedDiseases.splice(index, 1);
                     renderDiseases();
                 }
-                this.value = '';
-            });
 
-            function removeDisease(val) {
-                selectedDiseases = selectedDiseases.filter(v => v !== val);
+                diseaseSelect.addEventListener('change', function() {
+                    const value = this.value;
+
+                    if (value && !selectedDiseases.includes(value)) {
+                        selectedDiseases.push(value);
+                        renderDiseases();
+                    }
+
+                    this.value = '';
+                });
+
                 renderDiseases();
-            }
-
-            renderDiseases();
+            });
         </script>
     @endsection
