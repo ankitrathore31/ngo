@@ -6,6 +6,7 @@ use App\Models\academic_session;
 use App\Models\beneficiarie;
 use App\Models\Disease;
 use App\Models\HealthCard;
+use App\Models\HealthFacility;
 use App\Models\Hospital;
 use App\Models\Member;
 use App\Models\Signature;
@@ -405,7 +406,277 @@ class HealthCardController extends Controller
         if (!$healthCard) {
             return redirect()->back()->with('error', 'Health Card not found.');
         }
+        $signatures = Signature::pluck('file_path', 'role');
 
-        return view('ngo.healthcard.card', compact('record', 'healthCard'));
+        return view('ngo.healthcard.card', compact('record', 'healthCard', 'signatures'));
+    }
+    public static function hospital($hospitalCode)
+    {
+        return Hospital::where('healthcard_code', $hospitalCode)->first() ?? new Hospital;
+    }
+    public function DemandFacilityList(Request $request)
+    {
+
+        $healthCardConstraint = function ($q) use ($request) {
+            $q->where('status', 1);
+
+            if ($request->filled('healthcard_no')) {
+                $q->where('healthcard_no', trim($request->healthcard_no));
+            }
+        };
+
+
+        $queryBene = beneficiarie::with(['healthCard' => $healthCardConstraint])
+            ->where('status', 1)
+            ->whereHas('healthCard', $healthCardConstraint);
+
+
+        $queryMember = Member::with(['healthCard' => $healthCardConstraint])
+            ->where('status', 1)
+            ->whereHas('healthCard', $healthCardConstraint);
+
+
+        if ($request->filled('application_no')) {
+            $search = $request->application_no;
+
+            $queryBene->where(function ($q) use ($search) {
+                $q->where('application_no', 'like', "%$search%")
+                    ->orWhere('registration_no', 'like', "%$search%");
+            });
+
+            $queryMember->where(function ($q) use ($search) {
+                $q->where('application_no', 'like', "%$search%")
+                    ->orWhere('registration_no', 'like', "%$search%");
+            });
+        }
+
+
+        if ($request->filled('registration_no')) {
+            $identity = $request->registration_no;
+
+            $queryBene->where(function ($q) use ($identity) {
+                $q->where('phone', 'like', "%$identity%")
+                    ->orWhere('identity_no', 'like', "%$identity%");
+            });
+
+            $queryMember->where(function ($q) use ($identity) {
+                $q->where('phone', 'like', "%$identity%")
+                    ->orWhere('identity_no', 'like', "%$identity%");
+            });
+        }
+
+
+        if ($request->filled('name')) {
+            $name = $request->name;
+
+            $queryBene->where(function ($q) use ($name) {
+                $q->where('name', 'like', "%$name%")
+                    ->orWhere('gurdian_name', 'like', "%$name%");
+            });
+
+            $queryMember->where(function ($q) use ($name) {
+                $q->where('name', 'like', "%$name%")
+                    ->orWhere('gurdian_name', 'like', "%$name%");
+            });
+        }
+
+
+        $beneficiaries = $queryBene->get();
+        $members = $queryMember->get();
+
+        $combined = collect()
+            ->merge($beneficiaries)
+            ->merge($members)
+            ->flatMap(function ($item) {
+                return $item->healthCard->map(function ($card) use ($item) {
+                    return [
+                        'person' => $item,
+                        'card'   => $card
+                    ];
+                });
+            })
+            ->sortBy(fn($row) => $row['card']->created_at)
+            ->values();
+
+
+        $data   = academic_session::all();
+        $states = config('states');
+
+        return view('ngo.healthcard.demand-facility-list', compact(
+            'combined',
+            'data',
+            'states'
+        ));
+    }
+
+    public function DemandFacility($id, $health_id)
+    {
+        // Try Beneficiarie first
+        $record = Beneficiarie::find($id);
+
+        // If not found, try Member
+        if (!$record) {
+            $record = Member::find($id);
+        }
+
+        // If neither found
+        if (!$record) {
+            return redirect()->back()->with('error', 'Record not found.');
+        }
+
+        // Fetch ONE health card from hasMany relationship
+        $healthCard = $record->healthCard()
+            ->where('id', $health_id)
+            ->first();
+
+        if (!$healthCard) {
+            return redirect()->back()->with('error', 'Health Card not found.');
+        }
+        $signatures = Signature::pluck('file_path', 'role');
+        $hospitals = \App\Models\Hospital::orderBy('hospital_name')->get();
+
+        return view('ngo.healthcard.demand-facility', compact('record', 'healthCard', 'signatures', 'hospitals'));
+    }
+    public function StoreDemandFacilities(Request $request)
+    {
+        $validated = $request->validate([
+            'card_id'      => 'required',
+            'reg_id'      => 'required',
+            'treatment_type' => 'required|in:treatment_start,treatment_end',
+            'hospital_name'   => 'required|string|max:255',
+            'bill_no'        => 'required|string|max:100',
+            'bill_date'      => 'required|date',
+            'bill_gst'       => 'nullable|numeric',
+            'bill_amount'    => 'required|numeric',
+            'bill_upload'    => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048',
+        ]);
+
+        // Save file directly to public/documents
+        if ($request->hasFile('bill_upload')) {
+            $file = $request->file('bill_upload');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('documents'), $filename);
+
+            $validated['bill_upload'] = 'documents/' . $filename;
+        }
+
+        // Set default status
+        $validated['status'] = 'Pending';
+
+        HealthFacility::create($validated);
+
+        return redirect()->back()->with('success', 'Health facility record saved successfully.');
+    }
+    public function PendingFacilityList(Request $request)
+    {
+        $healthCardConstraint = function ($q) use ($request) {
+            $q->where('status', 1)
+                ->whereHas('healthFacilities', function ($hf) {
+                    $hf->where('status', 'Pending');
+                })
+                ->with(['healthFacilities' => function ($hf) {
+                    $hf->where('status', 'Pending');
+                }]);
+
+            if ($request->filled('healthcard_no')) {
+                $q->where('healthcard_no', trim($request->healthcard_no));
+            }
+        };
+
+        $queryBene = beneficiarie::with(['healthCard' => $healthCardConstraint])
+            ->where('status', 1)
+            ->whereHas('healthCard', $healthCardConstraint);
+
+        $queryMember = Member::with(['healthCard' => $healthCardConstraint])
+            ->where('status', 1)
+            ->whereHas('healthCard', $healthCardConstraint);
+
+        /* Existing filters */
+        if ($request->filled('application_no')) {
+            $search = $request->application_no;
+
+            $queryBene->where(
+                fn($q) =>
+                $q->where('application_no', 'like', "%$search%")
+                    ->orWhere('registration_no', 'like', "%$search%")
+            );
+
+            $queryMember->where(
+                fn($q) =>
+                $q->where('application_no', 'like', "%$search%")
+                    ->orWhere('registration_no', 'like', "%$search%")
+            );
+        }
+
+        if ($request->filled('registration_no')) {
+            $identity = $request->registration_no;
+
+            $queryBene->where(
+                fn($q) =>
+                $q->where('phone', 'like', "%$identity%")
+                    ->orWhere('identity_no', 'like', "%$identity%")
+            );
+
+            $queryMember->where(
+                fn($q) =>
+                $q->where('phone', 'like', "%$identity%")
+                    ->orWhere('identity_no', 'like', "%$identity%")
+            );
+        }
+
+        if ($request->filled('name')) {
+            $name = $request->name;
+
+            $queryBene->where(
+                fn($q) =>
+                $q->where('name', 'like', "%$name%")
+                    ->orWhere('gurdian_name', 'like', "%$name%")
+            );
+
+            $queryMember->where(
+                fn($q) =>
+                $q->where('name', 'like', "%$name%")
+                    ->orWhere('gurdian_name', 'like', "%$name%")
+            );
+        }
+
+        $beneficiaries = $queryBene->get();
+        $members       = $queryMember->get();
+
+        /* FLATTEN RESULT: Card + Facility */
+        $combined = collect()
+            ->merge($beneficiaries)
+            ->merge($members)
+            ->flatMap(function ($item) {
+                return $item->healthCard->flatMap(function ($card) use ($item) {
+                    return $card->healthFacilities->map(function ($facility) use ($item, $card) {
+                        return [
+                            'person'   => $item,
+                            'card'     => $card,
+                            'facility' => $facility,
+                        ];
+                    });
+                });
+            })
+            ->sortBy(fn($row) => $row['facility']->created_at)
+            ->values();
+
+        $data   = academic_session::all();
+        $states = config('states');
+
+        return view(
+            'ngo.healthcard.pending-facility-list',
+            compact('combined', 'data', 'states')
+        );
+    }
+    public function ShowPendingFacility(HealthFacility $facility)
+    {
+        $card = $facility->healthCard;
+
+    // Dynamically determine the person (beneficiarie or member)
+    $person = \App\Models\beneficiarie::find($card->reg_id)
+              ?? \App\Models\Member::find($card->reg_id);
+
+        return view('ngo.healthcard.pending-healthfacility-show', compact('facility','card','person'));
     }
 }

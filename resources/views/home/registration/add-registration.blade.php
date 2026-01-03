@@ -660,6 +660,7 @@
             populateDistricts(this.value);
         });
     </script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const regTypeSelect = document.getElementById('reg_type');
@@ -680,59 +681,7 @@
             regTypeSelect.addEventListener('change', toggleBeneficiaryHelp);
         });
     </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const identityType = document.getElementById('identity_type');
-            const identityNo = document.getElementById('identity_no');
-            const hint = document.getElementById('identity_no_hint');
 
-            identityType.addEventListener('change', function() {
-                const type = this.value;
-                let pattern = '';
-                let message = '';
-
-                switch (type) {
-                    case 'Aadhar Card':
-                        pattern = '^[2-9]{1}[0-9]{11}$';
-                        message = 'Enter 12-digit Aadhar Number.';
-                        break;
-                    case 'Voter ID Card':
-                        pattern = '^[A-Z]{3}[0-9]{7}$';
-                        message = 'Enter valid Voter ID (e.g., ABC1234567).';
-                        break;
-                    case 'Pan Card':
-                        pattern = '^[A-Z]{5}[0-9]{4}[A-Z]{1}$';
-                        message = 'Enter valid PAN number (e.g., ABCDE1234F).';
-                        break;
-                    case 'Driving License':
-                        pattern = '^[A-Z]{2}[0-9]{2} ?[0-9]{11}$';
-                        message = 'Enter valid Driving License number (e.g., RJ14 12345678901).';
-                        break;
-                    case 'Markshhet':
-                    case 'Narega Card':
-                    case 'Ration Card':
-                        pattern = '^[a-zA-Z0-9/-]{5,20}$';
-                        message = 'Enter a valid number (alphanumeric, 5-20 chars).';
-                        break;
-                    default:
-                        pattern = '';
-                        message = '';
-                }
-
-                identityNo.setAttribute('pattern', pattern);
-                identityNo.setCustomValidity('');
-                hint.textContent = message;
-            });
-
-            // Optional: Prevent form submission if invalid
-            document.querySelector('form').addEventListener('submit', function(e) {
-                if (!identityNo.checkValidity()) {
-                    e.preventDefault();
-                    identityNo.reportValidity();
-                }
-            });
-        });
-    </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         document.getElementById('identity_no').addEventListener('input', function() {
@@ -767,6 +716,75 @@
                     hint.style.color = 'orange';
                     infoLine.style.display = 'none';
                 });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const identityType = document.getElementById('identity_type');
+            const identityNo = document.getElementById('identity_no');
+            const hint = document.getElementById('identity_no_hint');
+
+            const config = {
+                "Aadhar Card": {
+                    pattern: "^[2-9][0-9]{11}$",
+                    hint: "Enter 12-digit Aadhaar number"
+                },
+                "Voter ID Card": {
+                    pattern: "^[A-Z]{3}[0-9]{7}$",
+                    hint: "Enter Voter ID (e.g. ABC1234567)"
+                },
+                "Pan Card": {
+                    pattern: "^[A-Z]{5}[0-9]{4}[A-Z]$",
+                    hint: "Enter PAN (e.g. ABCDE1234F)"
+                },
+                "Driving License": {
+                    pattern: "^[A-Z0-9 -]{5,20}$",
+                    hint: "Enter Driving License number"
+                },
+                "Markshhet": {
+                    pattern: "^[A-Z0-9/-]{5,20}$",
+                    hint: "Enter Marksheet number"
+                },
+                "Narega Card": {
+                    pattern: "^[A-Z0-9/-]{5,20}$",
+                    hint: "Enter Narega Card number"
+                },
+                "Ration Card": {
+                    pattern: "^[A-Z0-9/-]{5,20}$",
+                    hint: "Enter Ration Card number"
+                },
+                "Bank Passbook": {
+                    pattern: "^[A-Z0-9/-]{5,20}$",
+                    hint: "Enter Passbook number"
+                },
+                "Any Id Card": {
+                    pattern: "^[A-Z0-9/-]{5,20}$",
+                    hint: "Enter valid ID number"
+                }
+            };
+
+            identityType.addEventListener('change', function() {
+                const selected = config[this.value];
+
+                if (selected) {
+                    identityNo.value = "";
+                    identityNo.setAttribute("pattern", selected.pattern);
+                    identityNo.setAttribute("title", selected.hint);
+                    hint.textContent = selected.hint;
+                } else {
+                    identityNo.removeAttribute("pattern");
+                    identityNo.removeAttribute("title");
+                    hint.textContent = "";
+                }
+
+                identityNo.setCustomValidity("");
+            });
+
+            identityNo.addEventListener("input", function() {
+                this.setCustomValidity("");
+            });
+
         });
     </script>
 

@@ -34,4 +34,12 @@ class HealthCard extends Model
     {
         return $this->belongsTo(Member::class, 'reg_id');
     }
+    public static function hospital($hospitalCode)
+    {
+        return Hospital::where('hospital_code', $hospitalCode)->first();
+    }
+    public function healthFacilities()
+    {
+        return $this->hasMany(HealthFacility::class, 'card_id');
+    }
 }

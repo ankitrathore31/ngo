@@ -102,9 +102,11 @@
             }
         }
     </style>
+
+
     <div class="wrapper">
         <div class="d-flex justify-content-between align-record-centre mb-0 mt-4">
-            <h5 class="mb-0">Generate Health Card</h5>
+            <h5 class="mb-0">Demand Health Facility</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                     <li class="breadcrumb-record"><a href="{{ url('dashboard') }}">Dashboard</a></li>
@@ -117,11 +119,19 @@
                 {{ session('success') }}
             </div>
         @endif
-        <div class="container-fluid mt-3">
+        <div class="container-fluid mt-5">
             <div class=" rounded print-card">
-                <div class="">
+                <div>
                     <div>
                         <div class="p-2">
+                            <div class="row mb-3">
+                                <div class="col-sm-6 mb-3">
+                                    <h4><b>Health Card No:</b> <b>{{ $healthCard->healthcard_no }}</b></h4>
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <strong>Beneficiaries ID No:</strong> {{ $record->identity_no }}
+                                </div>
+                            </div>
                             <div class="row mb-3">
                                 <div class="col-sm-4 mb-3">
                                     <strong>Registraition No:</strong> {{ $record->registration_no }}
@@ -171,6 +181,7 @@
                                         $imagePath =
                                             $record->reg_type === 'Member' ? 'member_images/' : 'benefries_images/';
                                     @endphp
+
                                     {{-- @if ($record->image) --}}
                                     <div class=" mb-3">
                                         <img src="{{ asset($imagePath . $record->image) }}" alt="Image"
@@ -195,112 +206,101 @@
                                 <div class="col-sm-4 mb-3">
                                     <strong>Occupation:</strong> {{ $record->occupation }}
                                 </div>
+
                                 @if ($record->reg_type == 'Beneficiaries')
                                     <div class="col-sm-4 mb-3">
                                         <strong>What do the beneficiaries need?:</strong> {{ $record->help_needed }}
                                     </div>
                                 @endif
+
+                                <div class="col-sm-12 mb-3">
+                                    <strong>Health Facility/Disease Name:</strong>
+                                    {{ implode(', ', $healthCard->diseases ?? []) }}
+                                </div>
+
+                                <div class="col-sm-6 mb-3">
+                                    <strong>Hospital Name:</strong>
+                                    {{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->hospital_name }},
+                                    {{ $healthCard->hospital_name }}
+                                    ,{{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->address }},{{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->operator_name }},
+                                    {{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->contact_number }}
+                                </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="conatiner mt-2">
-                <div class="card-body shadow-sm">
+        </div>
+        <div class="container mt-4">
+            <div class="card-body">
+                <form action="{{ route('health.facility.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+
                     <div class="row">
-                        <div class="col">
-                            <form method="POST" action="{{ route('healthcard.store') }}">
-                                @csrf
-                                <div class="row">
+                        {{-- Type of Treatment --}}
+                        <input type="text" name="card_id" value="{{ $healthCard->id }}" hidden>
+                        <input type="text"name="reg_id" value="{{ $record->id }}" hidden>
 
-                                    <input type="text" class="form-control" value="{{ $record->id }}" name="reg_id"
-                                        hidden>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Type of Treatment</label>
+                            <select name="treatment_type" class="form-control">
+                                <option value="">Select</option>
+                                <option value="treatment_start">Treatment Start</option>
+                                <option value="treatment_end">Treatment End</option>
+                            </select>
+                        </div>
 
-                                    <div class="col-md-6 mb-2">
-                                        <label>Health Card No</label>
-                                        <input type="text" class="form-control"
-                                            value="{{ $healthcard->healthcard_no ?? $nextCard }}" name="healthcard_no"
-                                            readonly>
-                                    </div>
+                        {{-- Hospital / Clinic / Medical Name --}}
+                        <div class="col-md-6 mb-2">
+                            <label>Hospital</label>
+                            <select name="hospital_name" class="form-control" required>
+                                <option value="">Select Hospital</option>
+                                @foreach ($hospitals as $hospital)
+                                    <option value="{{ $hospital->hospital_name }} ({{ $hospital->hospital_code }})"
+                                        {{ isset($healthcard) && $healthcard->hospital_name == $hospital->hospital_name ? 'selected' : '' }}>
+                                        {{ $hospital->hospital_name }}({{ $hospital->hospital_code }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                                    <div class="col-md-6 mb-2">
-                                        <label>Health Card Registration Date</label>
-                                        <input type="date" name="Health_registration_date" class="form-control">
-                                    </div>
+                        {{-- Bill No --}}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Bill No</label>
+                            <input type="text" name="bill_no" class="form-control">
+                        </div>
 
-                                    <div class="col-md-6 mb-2">
-                                        <label>Hospital</label>
-                                        <select name="hospital_name" class="form-control" required>
-                                            <option value="">Select Hospital</option>
-                                            @foreach ($hospitals as $hospital)
-                                                <option
-                                                    value="{{ $hospital->hospital_code }}"
-                                                    {{ isset($healthcard) && $healthcard->hospital_name == $hospital->hospital_name ? 'selected' : '' }}>
-                                                    {{ $hospital->hospital_name }}({{ $hospital->hospital_code }})
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                        {{-- Bill Date --}}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Bill Date</label>
+                            <input type="date" name="bill_date" class="form-control">
+                        </div>
 
-                                    <div class="col-md-6 mb-2">
-                                        <label>Disease</label>
-                                        <select id="diseaseSelect" class="form-control">
-                                            <option value="">Select Disease</option>
-                                            @foreach ($diseases as $d)
-                                                <option value="{{ $d->disease }}">{{ $d->disease }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                        {{-- Bill GST --}}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Bill GST</label>
+                            <input type="text" name="bill_gst" class="form-control">
+                        </div>
 
-                                    <div class="col-md-6 mt-3">
-                                        <div id="selectedDiseases" class="d-flex flex-wrap gap-2"></div>
-                                    </div>
+                        {{-- Bill Amount --}}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Bill Amount</label>
+                            <input type="text" name="bill_amount" class="form-control">
+                        </div>
 
-                                    <div class="col-md-12 mt-3">
-                                        <button class="btn btn-success">
-                                            Save
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-
+                        {{-- Bill Upload --}}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Bill Upload</label>
+                            <input type="file" name="bill_upload" class="form-control">
                         </div>
                     </div>
-                </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        Submit
+                    </button>
+
+                </form>
             </div>
         </div>
-        <script>
-            let selectedDiseases = @json($healthcard->diseases ?? []);
-
-            function renderDiseases() {
-                const box = document.getElementById('selectedDiseases');
-                box.innerHTML = '';
-
-                selectedDiseases.forEach(d => {
-                    const tag = document.createElement('div');
-                    tag.className = 'badge bg-primary me-2 mb-2 d-flex align-items-center';
-                    tag.innerHTML = `
-            <span class="me-2">${d}</span>
-            <button type="button" class="btn btn-sm btn-light" onclick="removeDisease('${d}')">&times;</button>
-            <input type="hidden" name="diseases[]" value="${d}">
-        `;
-                    box.appendChild(tag);
-                });
-            }
-
-            document.getElementById('diseaseSelect').addEventListener('change', function() {
-                if (this.value && !selectedDiseases.includes(this.value)) {
-                    selectedDiseases.push(this.value);
-                    renderDiseases();
-                }
-                this.value = '';
-            });
-
-            function removeDisease(val) {
-                selectedDiseases = selectedDiseases.filter(v => v !== val);
-                renderDiseases();
-            }
-
-            renderDiseases();
-        </script>
     @endsection

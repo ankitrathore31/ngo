@@ -23,7 +23,7 @@
     <div class="wrapper">
         <div class="container-fluid mt-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Registraition List For Health Card</h5>
+                <h5 class="mb-0">Health Card List</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
@@ -102,8 +102,6 @@
 
                         </div>
                         <div class="col-md-3 col-sm-6 form-group mb-3">
-                            {{-- <label for="districtSelect" class="form-label">District: <span
-                                    class="text-danger">*</span></label> --}}
                             <select class="form-control @error('district') is-invalid @enderror" name="district"
                                 id="districtSelect">
                                 <option value="">Select District</option>
@@ -137,11 +135,10 @@
                         <thead class="table-primary">
                             <tr>
                                 <th>Sr. No.</th>
-                                {{-- <th>Application Date</th>
-                                <td>Application No.</td> --}}
-                                <th>Registration Date.</th>
-                                <th>Health Card No.</th>
-                                <th>Registration No.</th>
+                                <th>Health Card Registration Date</th>
+                                <th>Health Card No</th>
+                                <th>Registration No</th>
+                                <th>Registration Date</th>
                                 <th>Image</th>
                                 <th>Name</th>
                                 <th>Father/Husband Name</th>
@@ -151,8 +148,6 @@
                                 <th>Religion</th>
                                 <th>Mobile No.</th>
                                 <th>Registration Type</th>
-                                <th>Health Card Registraition Date</th>
-                                <th>Hospital Name</th>
                                 <th>Disease</th>
                                 <th>Action</th>
                             </tr>
@@ -165,9 +160,11 @@
                                 @endphp
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($item->registration_date)->format('d-m-Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($card->Health_registration_date)->format('d-m-Y') }}
+                                    </td>
                                     <td>{{ $card->healthcard_no }}</td>
                                     <td>{{ $item->registration_no }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($item->registration_date)->format('d-m-Y') }}</td>
 
                                     <td>
                                         <img src="{{ asset(($item instanceof \App\Models\beneficiarie ? 'benefries_images/' : 'member_images/') . $item->image) }}"
@@ -192,8 +189,6 @@
                                     <td>{{ $item->phone }}</td>
                                     <td>{{ $item->reg_type ?? 'Member' }}</td>
 
-                                    <td>{{ \Carbon\Carbon::parse($card->Health_registration_date)->format('d-m-Y') }}</td>
-                                    <td>{{ $card->hospital_name }}</td>
                                     <td>{{ implode(', ', $card->diseases ?? []) }}</td>
 
                                     <td class="text-center">
