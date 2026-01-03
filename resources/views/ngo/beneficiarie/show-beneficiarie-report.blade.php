@@ -236,27 +236,12 @@
                             <strong>Distribute Place:</strong> {{ $survey->distribute_place ?? 'No Found' }}
                         </div>
                         <div class="col-sm-4 mb-3">
+                            <strong>Distribute Officer:</strong> {{ $survey->officer ?? 'No Found' }}
+                        </div>
+                        <div class="col-sm-4 mb-3">
                             <strong>Distribute Status:</strong> {{ $survey->status ?? 'No Found' }}
                         </div>
                     </div>
-                    {{-- <div class="row">
-                    @if ($beneficiarie->image)
-                        <div class="row mb-3">
-                            <div class="col-sm-4 mb-3">
-                                <strong>Profile Image:</strong><br>
-                                <img src="{{ asset('benefries_images/' . $beneficiarie->image) }}" alt="Profile Image"
-                                    class="img-thumbnail" width="150">
-                            </div>
-                        </div>
-                    @endif
-                    <div class="col-sm-3 mb-3">
-                        @if ($beneficiarie->id_document)
-                            <strong>ID Document:</strong>
-                            <a href="{{ asset('benefries_images/' . $beneficiarie->id_document) }}" target="_blank">View
-                                Document</a>
-                        @endif
-                    </div>
-                </div> --}}
                     <hr>
                     <div class="row d-flex justify-content-between mt-2">
                         <div class="col-sm-4 mb-5">

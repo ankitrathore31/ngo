@@ -108,7 +108,7 @@
         <div class="container-fluid mt-4">
 
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Distributed Beneficiarie Facilities List</h5>
+                <h5 class="mb-0">Approval Distributed Facilities List</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
@@ -241,129 +241,6 @@
                     <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
                 </div>
             </div>
-            <div class="card border-0 shadow-sm rounded-4 mb-4">
-                <div class="card-body">
-
-                    <!-- Total Distributed -->
-                    <div class="row text-center mb-4">
-                        <div class="col-md-12">
-                            <div class="p-4 bg-white rounded-4 shadow-sm hover-card">
-                                <i class="fa-solid fa-truck-fast fa-2x text-success mb-2"></i>
-                                <h6 class="fw-bold text-success mb-1">Total Distributed</h6>
-                                <p class="fs-4 fw-semibold text-dark mb-0">{{ distributeStats()['total'] }}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Facility Category Section -->
-                    <div class="row mb-4">
-                        <div class="col-md-12">
-                            <div class="stat-card rounded-4 p-3 shadow-sm bg-light">
-                                <h5 class="fw-bold text-success mb-3">
-                                    <i class="fa-solid fa-box-open me-2"></i>Facility Category-wise Distribution
-                                </h5>
-                                <table class="table table-sm table-bordered align-middle mb-0">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Facility Category</th>
-                                            <th>Count</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (distributeStats()['facilityStats'] as $facility => $count)
-                                            <tr>
-                                                <td>{{ $facility ?: 'Not Specified' }}</td>
-                                                <td>{{ $count }}</td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Religion Section -->
-                    <div class="row mb-4">
-                        <div class="col-md-12">
-                            <div class="stat-card rounded-4 p-3 shadow-sm bg-light">
-                                <h5 class="fw-bold text-primary mb-3">
-                                    <i class="fa-solid fa-hands-praying me-2"></i>Religion-wise Distribution
-                                </h5>
-                                <table class="table table-sm table-bordered align-middle mb-0">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Religion</th>
-                                            <th>Count</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (distributeStats()['religionStats'] as $religion => $count)
-                                            <tr>
-                                                <td>{{ $religion }}</td>
-                                                <td>{{ $count }}</td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Caste Section -->
-                    <div class="row mb-4">
-                        <div class="col-md-12">
-                            <div class="stat-card rounded-4 p-3 shadow-sm bg-light">
-                                <h5 class="fw-bold text-info mb-3">
-                                    <i class="fa-solid fa-users me-2"></i>Caste-wise Distribution
-                                </h5>
-                                <table class="table table-sm table-bordered align-middle mb-0">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Caste</th>
-                                            <th>Count</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (distributeStats()['casteStats'] as $caste => $count)
-                                            <tr>
-                                                <td>{{ $caste ?: 'Not Specified' }}</td>
-                                                <td>{{ $count }}</td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Caste Category Section -->
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="stat-card rounded-4 p-3 shadow-sm bg-light">
-                                <h5 class="fw-bold text-warning mb-3">
-                                    <i class="fa-solid fa-layer-group me-2"></i>Caste Category-wise Distribution
-                                </h5>
-                                <table class="table table-sm table-bordered align-middle mb-0">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Category</th>
-                                            <th>Count</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (distributeStats()['categoryStats'] as $category => $count)
-                                            <tr>
-                                                <td>{{ $category }}</td>
-                                                <td>{{ $count }}</td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="card shadow-sm printable">
                 <div class="card-body table-responsive">
                     <div class="text-center mb-4 border-bottom pb-2">
@@ -401,6 +278,8 @@
                             </div>
                         </div>
                     </div>
+
+
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-primary">
                             <tr>
@@ -420,15 +299,13 @@
                                 <th>Distribute Place</th>
                                 <th>Facilities Category</th>
                                 <th>Facilities</th>
-                                <th>Officer</th>
-                                <th>Status</th>
                                 <th>Signature/
                                     Thumb Impression of the Recipient
                                 </th>
                                 <th>Beneficiarie Eligibility category</th>
                                 <th>Session</th>
                                 <th class="no-print">Action</th>
-                                {{-- <th class="no-print">Token No.</th> --}}
+                                <th class="no-print">Token No.</th>
                                 <th class="no-print">Receiving Receipt</th>
                             </tr>
                         </thead>
@@ -463,42 +340,34 @@
                                         <td>{{ $survey->distribute_place ?? 'No Found' }}</td>
                                         <td>{{ $survey->facilities_category ?? 'No Found' }}</td>
                                         <td>{{ $survey->facilities ?? 'No Found' }}</td>
-                                        <td>{{ $survey->officer ?? 'No Found' }}</td>
-                                        <td>{{ $survey->status ?? 'No Found' }} </td>
                                         <td></td>
                                         <td>{{ $survey->bene_category ?? 'No Found' }}</td>
                                         <td>{{ $survey->academic_session }}</td>
                                         <td class="no-print">
-                                            <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap">
+                                            <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
 
-                                                <a href="{{ route('show-beneficiarie-report', [$item->id, $survey->id]) }}"
-                                                    class="btn btn-success btn-sm px-3" title="View">
-                                                    <i class="fa-regular fa-eye"></i>
+                                                <a href="{{ route('distribute-facilities-status', [$item->id, $survey->id]) }}"
+                                                    class="btn btn-success px-4 py-2" title="Approve">
+                                                    Approve
                                                 </a>
 
-                                                <a href="{{ route('edit-distribute-facilities', [$item->id, $survey->id]) }}"
-                                                    class="btn btn-primary btn-sm px-3" title="Edit">
-                                                    <i class="fa-regular fa-edit"></i>
-                                                </a>
-
-                                                <a href="javascript:void(0)" class="btn btn-danger btn-sm px-3"
+                                                <a href="javascript:void(0)" class="btn btn-danger px-4 py-2"
                                                     title="Delete">
-                                                    <i class="fa-regular fa-trash"></i>
+                                                    <i class="fa-regular fa-trash me-1"></i> Delete
                                                 </a>
 
                                             </div>
                                         </td>
-
-                                        {{-- <td>
+                                        <td>
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">
                                                 <a href="{{ route('show-beneficiarie-token', [$item->id, $survey->id]) }}"
                                                     class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                     title="View">
                                                     Token
                                                 </a>
-                                            </div> 
-                                        </td> --}}
-                                        <td class="no-print">
+                                            </div>
+                                        </td>
+                                        <td>
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">
                                                 <a href="{{-- route('show-beneficiarie-report', [$item->id, $survey->id]) --}}"
                                                     class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"

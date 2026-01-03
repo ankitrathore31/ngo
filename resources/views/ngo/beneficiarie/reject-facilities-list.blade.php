@@ -241,7 +241,7 @@
                                 <th>Facilities Category</th>
                                 <th>Facilities</th>
                                 <th>Status</th>
-                                <th>Pending Reason</th>
+                                <th>Reason</th>
                                 <th>Signature/
                                     Thumb Impression of the Recipient</th>
                                 <th>Beneficiarie Eligibility category</th>
