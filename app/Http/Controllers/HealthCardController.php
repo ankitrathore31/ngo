@@ -384,29 +384,27 @@ class HealthCardController extends Controller
 
     public function ShowHealthCard($id, $health_id)
     {
-        // Try to find Beneficiarie first
-        $record = \App\Models\beneficiarie::with('healthCard')
-            ->where('id', $id)
-            ->whereHas('healthCard', function ($q) use ($health_id) {
-                $q->where('id', $health_id);
-            })
-            ->first();
+        // Try Beneficiarie first
+        $record = Beneficiarie::find($id);
 
         // If not found, try Member
         if (!$record) {
-            $record = \App\Models\Member::with('healthCard')
-                ->where('id', $id)
-                ->whereHas('healthCard', function ($q) use ($health_id) {
-                    $q->where('id', $health_id);
-                })
-                ->first();
+            $record = Member::find($id);
         }
 
+        // If neither found
         if (!$record) {
-            return redirect()->back()->with('error', 'record or Health Card not found.');
+            return redirect()->back()->with('error', 'Record not found.');
         }
 
-        $healthCard = $record->healthCard;
+        // Fetch ONE health card from hasMany relationship
+        $healthCard = $record->healthCard()
+            ->where('id', $health_id)
+            ->first();
+
+        if (!$healthCard) {
+            return redirect()->back()->with('error', 'Health Card not found.');
+        }
 
         return view('ngo.healthcard.card', compact('record', 'healthCard'));
     }
