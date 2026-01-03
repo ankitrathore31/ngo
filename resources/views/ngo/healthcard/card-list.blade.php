@@ -37,7 +37,7 @@
                 </div>
             @endif
             <div class="row">
-                <form method="GET" action="{{ route('approve-registration') }}" class="row g-3 mb-4">
+                <form method="GET" action="{{ route('list.healthcard') }}" class="row g-3 mb-4">
                     <div class="row">
                         <div class="col-md-3 col-sm-4">
                             <select name="session_filter" id="session_filter" class="form-control">
@@ -125,7 +125,7 @@
                     <div class="row">
                         <div class="col-md-4">
                             <button type="submit" class="btn btn-primary me-1">Search</button>
-                            <a href="{{ route('approve-registration') }}" class="btn btn-info text-white me-1">Reset</a>
+                            <a href="{{ route('list.healthcard') }}" class="btn btn-info text-white me-1">Reset</a>
                         </div>
                     </div>
                 </form>
@@ -140,6 +140,7 @@
                                 {{-- <th>Application Date</th>
                                 <td>Application No.</td> --}}
                                 <th>Registration Date.</th>
+                                <th>Health Card No.</th>
                                 <th>Registration No.</th>
                                 <th>Image</th>
                                 <th>Name</th>
@@ -150,50 +151,69 @@
                                 <th>Religion</th>
                                 <th>Mobile No.</th>
                                 <th>Registration Type</th>
-                                <th>Health Card No.</th>
+                                <th>Health Card Registraition Date</th>
                                 <th>Hospital Name</th>
                                 <th>Disease</th>
-                                <th>Health Card</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($combined as $index => $item)
+                            @foreach ($combined as $index => $row)
+                                @php
+                                    $item = $row['person'];
+                                    $card = $row['card'];
+                                @endphp
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    {{-- <td>{{ \Carbon\Carbon::parse($item->application_date)->format('d-m-Y') }}</td>
-                                    <td>{{ $item->application_no }}</td> --}}
                                     <td>{{ \Carbon\Carbon::parse($item->registration_date)->format('d-m-Y') }}</td>
+                                    <td>{{ $card->healthcard_no }}</td>
                                     <td>{{ $item->registration_no }}</td>
+
                                     <td>
-                                        <img id="previewImage"
-                                            src="{{ asset(($item instanceof \App\Models\beneficiarie ? 'benefries_images/' : 'member_images/') . $item->image) }}"
-                                            alt="Preview" width="100">
+                                        <img src="{{ asset(($item instanceof \App\Models\beneficiarie ? 'benefries_images/' : 'member_images/') . $item->image) }}"
+                                            width="100">
                                     </td>
+
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->gurdian_name }}</td>
-                                    <td>{{ $item->village }},
+
+                                    <td>
+                                        {{ $item->village }},
                                         {{ $item->post }},
                                         {{ $item->block }},
                                         {{ $item->district }},
-                                        {{ $item->state }} - {{ $item->pincode }},({{ $item->area_type }})</td>
+                                        {{ $item->state }} - {{ $item->pincode }}
+                                        ({{ $item->area_type }})
+                                    </td>
+
                                     <td>{{ $item->caste }}</td>
                                     <td>{{ $item->religion_category }}</td>
                                     <td>{{ $item->religion }}</td>
                                     <td>{{ $item->phone }}</td>
                                     <td>{{ $item->reg_type ?? 'Member' }}</td>
-                                    <td>{{ $item->healthCard->healthcard_no ?? 'N/A' }}</td>
-                                    <td>{{ $item->healthCard->hospital_name ?? 'N/A' }}</td>
-                                    <td>{{ implode(', ', $item->healthCard->diseases ?? []) }}</td>
-                                    <td>
-                                        <a href="{{ route('show.healthcard', ['id' => $item->id, 'health_id' => $item->healthCard->id]) }}"
-                                            class="btn btn-success btn-sm px-3 align-items-center justify-content-center"
-                                            title="View">
-                                            Health Card
-                                        </a>
+
+                                    <td>{{ \Carbon\Carbon::parse($card->Health_registration_date)->format('d-m-Y') }}</td>
+                                    <td>{{ $card->hospital_name }}</td>
+                                    <td>{{ implode(', ', $card->diseases ?? []) }}</td>
+
+                                    <td class="text-center">
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <a href="{{ route('show.healthcard', ['id' => $item->id, 'health_id' => $card->id]) }}"
+                                                class="btn btn-sm btn-success px-3">
+                                                Health Card
+                                            </a>
+
+                                            <a href="{{ route('healthcard.edit', $card->id) }}"
+                                                class="btn btn-sm btn-primary px-3">
+                                                Edit
+                                            </a>
+                                        </div>
                                     </td>
+
                                 </tr>
                             @endforeach
                         </tbody>
+
                     </table>
                 </div>
             </div>

@@ -176,7 +176,7 @@
                                     </div>
                                     <div class="col-sm-2 text-center text-md-start">
                                         <img src="{{ asset('images/plu.png') }}" alt="Logo" width="120"
-                                            height="120">
+                                            height="130">
                                     </div>
                                 </div>
                             </div>
@@ -188,10 +188,10 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <div class="col-sm-4 mb-3">
+                                <div class="col-sm-6 mb-3">
                                     <h4><strong>Health Card No:</strong> {{ $healthCard->healthcard_no }}</h4> 
                                 </div>
-                                <div class="col-sm-4 mb-3">
+                                <div class="col-sm-6 mb-3">
                                     <strong>Beneficiaries ID No:</strong> {{ $record->identity_no }}
                                 </div>
                             </div>
@@ -269,15 +269,18 @@
                                 <div class="col-sm-4 mb-3">
                                     <strong>Occupation:</strong> {{ $record->occupation }}
                                 </div>
+
                                 @if ($record->reg_type == 'Beneficiaries')
                                     <div class="col-sm-4 mb-3">
                                         <strong>What do the beneficiaries need?:</strong> {{ $record->help_needed }}
                                     </div>
                                 @endif
-                                <div class="col-sm-8 mb-3">
+
+                                <div class="col-sm-12 mb-3">
                                     <strong>Health Facility/Disease Name:</strong> {{ implode(', ', $healthCard->diseases ?? []) }}
                                 </div>
-                                <div class="col-sm-4 mb-3">
+
+                                <div class="col-sm-12 mb-3">
                                     <strong>Hospital Name:</strong> {{ $healthCard->hospital_name }}
                                 </div>
 

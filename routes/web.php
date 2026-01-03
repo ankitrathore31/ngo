@@ -557,8 +557,8 @@ Route::controller(HealthCardController::class)->middleware('auth')->group(functi
     Route::get('ngo/list-generate-healthcard','RegList')->name('generatelist.healthcard');
     Route::get('ngo/generate-healthcard/{id}/{type}','GenerateHealthCard')->name('generate.healthcard');
     Route::post('ngo/healthcard/store', 'StoreHealthCard')->name('healthcard.store');
-    Route::get('ngo/healthcard/{id}/edit', 'EditHealthCard')->name('healthcard.edit');
-    Route::put('ngo/healthcard/{id}', 'UpdateHealthCard')->name('healthcard.update');
+    Route::get('ngo/edit-healthcard/{health_id}/edit', 'EditHealthCard')->name('healthcard.edit');
+    Route::post('ngo/update-healthcard/{health_id}', 'UpdateHealthCard')->name('healthcard.update');
     Route::get('ngo/healthcard-list','CardList')->name('list.healthcard');
     Route::get('ngo/show-healthcard/{id}/{health_id}', 'ShowHealthCard')->name('show.healthcard');
 
