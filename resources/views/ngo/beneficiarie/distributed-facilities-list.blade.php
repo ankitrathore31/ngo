@@ -481,7 +481,7 @@
                                                     <i class="fa-regular fa-edit"></i>
                                                 </a>
 
-                                                <a href="javascript:void(0)" class="btn btn-danger btn-sm px-3"
+                                                <a href="{{ route('delete-distribute-facilities', [$item->id, $survey->id]) }}" onclick="return confirm('Are you sure want to delete Distribute Facilities')" class="btn btn-danger btn-sm px-3"
                                                     title="Delete">
                                                     <i class="fa-regular fa-trash"></i>
                                                 </a>

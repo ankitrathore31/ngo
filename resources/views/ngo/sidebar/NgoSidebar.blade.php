@@ -13,11 +13,7 @@
     }
 
     /* Navbar item hover effect */
-    .navbar-nav .nav-link:hover {
-        background-color: rgba(255, 255, 255, 0.2);
-        /* Subtle background on hover */
-        border-radius: 5px;
-    }
+    
 </style>
 
 @php
@@ -35,7 +31,7 @@
 
         <!-- Navbar content -->
         <div class="collapse navbar-collapse" id="mainNavbar">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav w-100 justify-content-center">
 
                 <li class="nav-item">
                     <a href="{{ route('ngo') }}" class="nav-link text-white"><i class="fas fa-tachometer-alt"></i>
@@ -446,7 +442,7 @@
             <span class="navbar-toggler-icon"></span>
         </button> --}}
         <div class="collapse navbar-collapse" id="mainNavbar">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav w-100 justify-content-center">
 
                 <!-- Staff -->
                 @if (
@@ -875,7 +871,7 @@
             <span class="navbar-toggler-icon"></span>
         </button> --}}
         <div class="collapse navbar-collapse" id="mainNavbar">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav w-100 justify-content-center">
 
                 <!-- Notice -->
                 @if (!$isStaff || $user->hasPermission('add-notice') || $user->hasPermission('notice-list'))

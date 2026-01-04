@@ -200,24 +200,6 @@
 
                         </div>
                         <hr>
-                        {{-- <div class="row">
-                    @if ($beneficiarie->image)
-                        <div class="row mb-3">
-                            <div class="col-sm-4 mb-3">
-                                <strong>Profile Image:</strong><br>
-                                <img src="{{ asset('benefries_images/' . $beneficiarie->image) }}" alt="Profile Image"
-                                    class="img-thumbnail" width="150">
-                            </div>
-                        </div>
-                    @endif
-                    <div class="col-sm-3 mb-3">
-                        @if ($beneficiarie->id_document)
-                            <strong>ID Document:</strong>
-                            <a href="{{ asset('benefries_images/' . $beneficiarie->id_document) }}" target="_blank">View
-                                Document</a>
-                        @endif
-                    </div>
-                </div> --}}
                     </div>
                 </div>
             </div>
@@ -343,6 +325,7 @@
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
+                        
                         <div class=" col-md-4 form-group mb-3">
                             <label for="bene_category">Beneficiarie Eligibility Category</label>
                             <select id="bene_category" name="bene_category" class="form-control" required>

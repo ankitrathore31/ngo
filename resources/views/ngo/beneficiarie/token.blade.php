@@ -106,11 +106,11 @@
 
     <div class="wrapper">
         <div class="d-flex justify-content-between align-beneficiarie-centre mb-0 mt-4">
-            <h5 class="mb-0">Health Card</h5>
+            <h5 class="mb-0">Distribute Facilities Token</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                     <li class="breadcrumb-beneficiarie"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-beneficiarie active" aria-current="page">Health Card</li>
+                    <li class="breadcrumb-beneficiarie active" aria-current="page">Token</li>
                 </ol>
             </nav>
         </div>
@@ -123,7 +123,7 @@
             <!-- Language Toggle -->
             <div class="d-flex justify-content-between align-beneficiaries-center mb-3 mt-4">
                 <h5 class="mb-0">
-                    <span>Health Card</span>
+                    <span>Token</span>
                 </h5>
                 <div>
                     <button onclick="window.print()" class="btn btn-primary">Print </button>
@@ -188,13 +188,7 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-sm-4 mb-3">
-                                    <h6><b>Token No:</b> <b>{{ $survey->token_no }}</b></h6>
-                                </div>
-                                <div class="col-sm-4 mb-3">
-                                    <h6><b>Seat No:</b> <b>{{ $survey->token_no }}</b></h6>
-                                </div>
-                                <div class="col-sm-4 mb-3">
-                                    <h6><b>Matarial No:</b> <b>{{ $survey->token_no }}</b></h6>
+                                    <h5><b>Token / Seat / Matarial / Gate Pass No:</b> <b>{{ $survey->token_no }}</b></h5>
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -203,7 +197,7 @@
                                 </div>
                                 <div class="col-sm-4 mb-3">
                                     <strong>Registraition Date:</strong>
-                                    {{ \Carbon\Carbon::parse($beneficiarie->registraition_date)->format('d-m-Y') }}
+                                    {{ \Carbon\Carbon::parse($beneficiarie->registration_date)->format('d-m-Y') }}
                                 </div>
                                 <div class="col-sm-4 mb-3">
                                     <strong>Registraition Type:</strong> {{ $beneficiarie->reg_type }}
@@ -274,16 +268,17 @@
                                 <div class="col-sm-4 mb-3">
                                     <strong>Beneficiaries ID No:</strong> {{ $beneficiarie->identity_no }}
                                 </div>
-                                <div class="col-sm-4 mb-3">
-                                    <strong>Facilities Category:</strong> {{ $survey->facilities_category }}
-                                </div>
-                                <div class="col-sm-4 mb-3">
-                                    <strong>Facilities:</strong> {{ $survey->facilities }}
-                                </div>
+                                {{-- <div class="col-sm-4 mb-3">
+                                    <strong>Distribution Matarial name:</strong> {{ $survey->facilities_category }}
+                                </div> --}}
                                 <div class="col-sm-4 mb-3">
                                     <strong>Distribute Date:</strong>
                                     {{ \Carbon\Carbon::parse($survey->distribute_date)->format('d-m-Y') }}
                                 </div>
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Distribution Matarial Name:</strong> {{ $survey->facilities }}
+                                </div>
+
                                 <div class="col-sm-12 mb-3">
                                     <strong>Distribute Place:</strong> {{ $survey->distribute_place ?? 'No Found' }}
                                 </div>

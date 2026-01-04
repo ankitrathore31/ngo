@@ -241,6 +241,10 @@
                     <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
                 </div>
             </div>
+            <button type="button" id="openDistributeModal" class="btn btn-success" disabled>
+                Distribute Selected (<span id="selectedDistributeCount">0</span>)
+            </button>
+
             <div class="card shadow-sm printable">
                 <div class="card-body table-responsive">
                     <div class="text-center mb-4 border-bottom pb-2">
@@ -283,6 +287,9 @@
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-primary">
                             <tr>
+                                <th class="no-print">
+                                    <input type="checkbox" id="select_all_distribute">
+                                </th>
                                 <th>Sr. No.</th>
                                 <th>Registration No.</th>
                                 <th>Name</th>
@@ -314,6 +321,11 @@
                             @foreach ($beneficiarie as $item)
                                 @foreach ($item->surveys as $survey)
                                     <tr>
+                                        <td class="no-print">
+                                            <input type="checkbox" class="select_distribute_item"
+                                                value="{{ $item->id }}|{{ $survey->id }}">
+                                        </td>
+
                                         <td>{{ $loop->parent->iteration }}</td>
                                         <td>{{ $item->registration_no }}</td>
                                         <td>{{ $item->name }}</td>
@@ -351,14 +363,14 @@
                                                     Approve
                                                 </a>
 
-                                                <a href="javascript:void(0)" class="btn btn-danger px-4 py-2"
+                                               <a href="{{ route('delete-distribute-facilities', [$item->id, $survey->id]) }}" onclick="return confirm('Are you sure want to delete Distribute Facilities')" class="btn btn-danger btn-sm px-3"
                                                     title="Delete">
-                                                    <i class="fa-regular fa-trash me-1"></i> Delete
+                                                    <i class="fa-regular fa-trash"></i>
                                                 </a>
 
                                             </div>
                                         </td>
-                                        <td>
+                                        <td class="no-print">
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">
                                                 <a href="{{ route('show-beneficiarie-token', [$item->id, $survey->id]) }}"
                                                     class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
@@ -367,7 +379,7 @@
                                                 </a>
                                             </div>
                                         </td>
-                                        <td>
+                                        <td class="no-print">
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">
                                                 <a href="{{-- route('show-beneficiarie-report', [$item->id, $survey->id]) --}}"
                                                     class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
@@ -384,6 +396,97 @@
                     </table>
                 </div>
             </div>
+
+            <!-- Modal (Place at the end, before closing </div></div>) -->
+            <div class="modal fade" id="bulkDistributeModal" tabindex="-1" aria-labelledby="bulkDistributeModalLabel"
+                aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <form action="{{ route('store-bulk-distribute-status') }}" method="POST"
+                            id="bulkDistributeForm">
+                            @csrf
+
+                            <!-- Hidden input to store selected items -->
+                            <input type="hidden" name="distribute_items" id="distribute_items">
+
+                            <div class="modal-header bg-success text-white">
+                                <h5 class="modal-title" id="bulkDistributeModalLabel">
+                                    Distribute Beneficiarie Facilities
+                                    (<span id="modalDistributeCount">0</span> Selected)
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="alert alert-info">
+                                    <i class="fa fa-info-circle"></i>
+                                    You are about to distribute facilities to <strong><span
+                                            id="modalDistributeCountText">0</span></strong> beneficiaries.
+                                </div>
+
+                                <!-- Approve Officer -->
+                                <div class="mb-3">
+                                    <label for="officer" class="form-label">Approve Officer:</label>
+                                    <select name="officer" id="officer"
+                                        class="form-control @error('officer') is-invalid @enderror">
+                                        <option value="">Select Approve Officer</option>
+                                        @foreach ($staff as $person)
+                                            <option
+                                                value="{{ $person->name }} ( {{ $person->staff_code }} ) ( {{ $person->position }} )"
+                                                {{ old('officer') == $person->name . ' ( ' . $person->staff_code . ' ) ( ' . $person->position . ' )' ? 'selected' : '' }}>
+                                                {{ $person->name }} ({{ $person->staff_code }}) ({{ $person->position }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('officer')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <!-- Status -->
+                                <div class="mb-3">
+                                    <label for="status" class="form-label">
+                                        Status <span class="text-danger">*</span>
+                                    </label>
+                                    <select name="status" id="status"
+                                        class="form-control @error('status') is-invalid @enderror" required>
+                                        <option value="">Select Status</option>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Distributed">Distributed</option>
+                                        <option value="Reject">Reject</option>
+                                    </select>
+                                    @error('status')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <!-- Pending/Reject Reason (Hidden by default) -->
+                                <div class="mb-3" id="pendingDiv" style="display: none;">
+                                    <label for="pending_reason" class="form-label">
+                                        Reason: <span class="text-danger">*</span>
+                                    </label>
+                                    <textarea name="pending_reason" id="pending_reason" class="form-control" rows="3"
+                                        placeholder="Enter reason for pending or rejection..."></textarea>
+                                    @error('pending_reason')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fa fa-times"></i> Cancel
+                                </button>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fa fa-check"></i> Distribute Facilities
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
     <script>
@@ -416,6 +519,164 @@
         // On state change
         document.getElementById('stateSelect').addEventListener('change', function() {
             populateDistricts(this.value);
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const selectAll = document.getElementById('select_all_distribute');
+            const items = document.querySelectorAll('.select_distribute_item');
+            const openBtn = document.getElementById('openDistributeModal');
+            const tableCount = document.getElementById('selectedDistributeCount');
+            const modalCount = document.getElementById('modalDistributeCount');
+            const hiddenInput = document.getElementById('distribute_items');
+            const modalEl = document.getElementById('bulkDistributeModal');
+
+            // Initialize Bootstrap modal instance
+            const modal = new bootstrap.Modal(modalEl, {
+                backdrop: 'static',
+                keyboard: false
+            });
+
+            // Force hide modal and clean up any artifacts on page load
+            function cleanupModal() {
+                modalEl.classList.remove('show', 'fade');
+                modalEl.style.display = 'none';
+                modalEl.setAttribute('aria-hidden', 'true');
+                modalEl.removeAttribute('aria-modal');
+                modalEl.removeAttribute('role');
+                document.body.classList.remove('modal-open');
+                document.body.style.removeProperty('overflow');
+                document.body.style.removeProperty('padding-right');
+
+                // Remove any existing backdrops
+                const backdrops = document.querySelectorAll('.modal-backdrop');
+                backdrops.forEach(backdrop => backdrop.remove());
+
+                // Re-add fade class for animation
+                setTimeout(() => {
+                    modalEl.classList.add('fade');
+                }, 50);
+            }
+
+            // Clean up on initial load
+            cleanupModal();
+
+            // Update selection state and UI
+            function updateState() {
+                const selected = Array.from(items).filter(cb => cb.checked);
+                const count = selected.length;
+
+                // Update all count displays
+                if (tableCount) tableCount.textContent = count;
+                if (modalCount) modalCount.textContent = count;
+
+                // Update third count in modal alert (if exists)
+                const modalCountText = document.getElementById('modalDistributeCountText');
+                if (modalCountText) modalCountText.textContent = count;
+
+                // Enable/disable distribute button
+                openBtn.disabled = count === 0;
+
+                // Update hidden input with selected values
+                hiddenInput.value = selected.map(cb => cb.value).join(',');
+
+                // Update select all checkbox state
+                if (selectAll) {
+                    const allChecked = count === items.length && items.length > 0;
+                    const someChecked = count > 0 && count < items.length;
+
+                    selectAll.checked = allChecked;
+                    selectAll.indeterminate = someChecked;
+                }
+            }
+
+            // Select/Deselect all functionality
+            if (selectAll) {
+                selectAll.addEventListener('change', function() {
+                    const isChecked = this.checked;
+                    items.forEach(cb => {
+                        cb.checked = isChecked;
+                    });
+                    updateState();
+                });
+            }
+
+            // Individual checkbox change
+            items.forEach(cb => {
+                cb.addEventListener('change', updateState);
+            });
+
+            // Open modal button click
+            openBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // Double check we have selections
+                if (!hiddenInput.value || hiddenInput.value.trim() === '') {
+                    alert('Please select at least one beneficiary to distribute facilities.');
+                    return;
+                }
+
+                // Update modal count one more time before showing
+                const selectedCount = hiddenInput.value.split(',').filter(v => v.trim()).length;
+                if (modalCount) modalCount.textContent = selectedCount;
+
+                // Show the modal
+                modal.show();
+            });
+
+            // Clean up when modal is hidden
+            modalEl.addEventListener('hidden.bs.modal', function() {
+                cleanupModal();
+            });
+
+            // Initialize state on page load
+            updateState();
+
+            // ========================================
+            // Status Change - Show/Hide Pending Reason
+            // ========================================
+            const statusSelect = document.getElementById('status');
+            const pendingDiv = document.getElementById('pendingDiv');
+            const pendingReasonTextarea = document.getElementById('pending_reason');
+
+            function togglePendingReason() {
+                if (statusSelect && pendingDiv) {
+                    const statusValue = statusSelect.value;
+
+                    if (statusValue === 'Pending' || statusValue === 'Reject') {
+                        pendingDiv.style.display = 'block';
+                        if (pendingReasonTextarea) {
+                            pendingReasonTextarea.setAttribute('required', 'required');
+                        }
+                    } else {
+                        pendingDiv.style.display = 'none';
+                        if (pendingReasonTextarea) {
+                            pendingReasonTextarea.removeAttribute('required');
+                            pendingReasonTextarea.value = ''; // Clear value when hidden
+                        }
+                    }
+                }
+            }
+
+            // Run on page load
+            if (statusSelect) {
+                togglePendingReason();
+
+                // Run on status change
+                statusSelect.addEventListener('change', togglePendingReason);
+            }
+
+            // Reset form when modal is closed
+            modalEl.addEventListener('hidden.bs.modal', function() {
+                const form = document.getElementById('bulkDistributeForm');
+                if (form) {
+                    form.reset();
+                    togglePendingReason(); // Hide pending div after reset
+                }
+                cleanupModal();
+            });
+
         });
     </script>
 @endsection

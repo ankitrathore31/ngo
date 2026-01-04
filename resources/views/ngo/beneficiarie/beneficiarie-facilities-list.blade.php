@@ -154,7 +154,7 @@
 
                         <div class=" col-md-4">
                             {{-- <label for="bene_category">Beneficiarie Eligibility Category</label> --}}
-                            <select id="bene_category" name="bene_category" class="form-control" >
+                            <select id="bene_category" name="bene_category" class="form-control">
                                 <option value="">-- Select Beneficiarie Eligibility Category --</option>
                                 <option value="Homeless Families">1. Homeless Families</option>
                                 <option value="People living in kutcha or one-room houses">2. People living in kutcha or
@@ -201,6 +201,11 @@
                     <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
                 </div>
             </div>
+            <button type="button" id="openDistributeModal" class="btn btn-success" disabled>
+                Distribute Selected
+            </button>
+
+
             <div class="card shadow-sm printable">
                 <div class="card-body table-responsive">
                     <div class="text-center mb-4 border-bottom pb-2">
@@ -240,6 +245,9 @@
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-primary">
                             <tr>
+                                <th class="no-print">
+                                    <input type="checkbox" id="select_all_distribute">
+                                </th>
                                 <th>Sr. No.</th>
                                 <th>Registration No.</th>
                                 <th>Name</th>
@@ -266,6 +274,11 @@
                             @foreach ($beneficiarie as $item)
                                 @foreach ($item->surveys as $survey)
                                     <tr>
+                                        <td class="no-print">
+                                            <input type="checkbox" class="select_distribute_item"
+                                                value="{{ $item->id }}|{{ $survey->id }}">
+                                        </td>
+
                                         <td>{{ $serial++ }}</td>
                                         <td>{{ $item->registration_no }}</td>
                                         <td>{{ $item->name }}</td>
@@ -307,12 +320,10 @@
                                                     <i class="fa-regular fa-eye"></i> Facilities
                                                 </a>
 
-                                                {{-- <a href="{{ route('delete-facilities', [$item->id, $survey->id]) }}"
-                                                    class="btn btn-danger btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                    title="View Survey" style="min-width: 38px; height: 38px;" 
-                                                    onclick="return confirm('Are you sure want to delete survey')">
-                                                    <i class="fa-regular fa-trash"></i> 
-                                                </a> --}}
+                                                <a href="{{ route('delete-distribute-facilities', [$item->id, $survey->id]) }}" onclick="return confirm('Are you sure want to delete Distribute Facilities')" class="btn btn-danger btn-sm px-3"
+                                                    title="Delete">
+                                                    <i class="fa-regular fa-trash"></i>
+                                                </a>
 
                                                 <a href="{{ route('edit-facilities', [$item->id, $survey->id]) }}"
                                                     class="btn btn-primary btn-sm px-3 d-flex align-items-center justify-content-center"
@@ -328,6 +339,60 @@
                     </table>
                 </div>
             </div>
+
+            <div class="modal fade" id="bulkDistributeModal" tabindex="-1" aria-hidden="true"
+                data-bs-backdrop="static" data-bs-keyboard="false">
+
+                <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+
+                        <form action="{{ route('store-bulk-distribute-status') }}" method="POST">
+                            @csrf
+
+                            <!-- IMPORTANT: single hidden input ONLY -->
+                            <input type="hidden" name="distribute_items" id="distribute_items">
+
+                            <div class="modal-header bg-success text-white">
+                                <h5 class="modal-title">
+                                    Distribute Beneficiarie Facilities
+                                    (<span id="modalDistributeCount">0</span> Selected)
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white"
+                                    data-bs-dismiss="modal"></button>
+                            </div>
+
+                            <div class="modal-body">
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Distribute Date <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="date" name="distribute_date" class="form-control" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Distribute Place</label>
+                                    <textarea name="distribute_place" class="form-control"></textarea>
+                                </div>
+
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-success">
+                                    Distribute Facilities
+                                </button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    Cancel
+                                </button>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+
         </div>
     </div>
     <script>
@@ -335,4 +400,61 @@
             window.print();
         }
     </script>
+   <script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const selectAll   = document.getElementById('select_all_distribute');
+    const items       = document.querySelectorAll('.select_distribute_item');
+    const openBtn     = document.getElementById('openDistributeModal');
+    const modalCount  = document.getElementById('modalDistributeCount');
+    const hiddenInput = document.getElementById('distribute_items');
+    const modalEl     = document.getElementById('bulkDistributeModal');
+
+    let modalInstance = null;
+
+    function updateSelection() {
+        const selected = Array.from(items).filter(i => i.checked);
+        const count = selected.length;
+
+        openBtn.disabled = count === 0;
+        modalCount.textContent = count;
+        hiddenInput.value = selected.map(i => i.value).join(',');
+
+        if (selectAll) {
+            selectAll.checked = count === items.length && items.length > 0;
+            selectAll.indeterminate = count > 0 && count < items.length;
+        }
+    }
+
+    /* Individual checkbox */
+    items.forEach(item => {
+        item.addEventListener('change', updateSelection);
+    });
+
+    /* Select all checkbox */
+    if (selectAll) {
+        selectAll.addEventListener('change', function () {
+            items.forEach(i => i.checked = this.checked);
+            updateSelection();
+        });
+    }
+
+    /* Open modal ONLY on button click */
+    openBtn.addEventListener('click', function () {
+
+        if (!hiddenInput.value) return;
+
+        if (!modalInstance) {
+            modalInstance = new bootstrap.Modal(modalEl, {
+                backdrop: 'static',
+                keyboard: false
+            });
+        }
+
+        modalInstance.show();
+    });
+
+});
+</script>
+
 @endsection

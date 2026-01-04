@@ -254,6 +254,13 @@ Route::controller(BeneficiarieController::class)->group(function () {
     Route::post('/beneficiaries/facilities/bulk-store',  'storeBulkBeneficiarieFacilities')->middleware('auth')
         ->name('store-bulk-beneficiarie-facilities');
     Route::get('ngo/show-beneficiarie-token/{beneficiarie_id}/survey/{survey_id}', 'showbeneficiarietoken')->middleware('auth')->name('show-beneficiarie-token');
+    Route::post('ngo/store-bulk-beneficiarie', 'storeBulkBeneficiarie')->middleware('auth')->name('store-bulk-beneficiarie');
+    Route::post('ngo/store-bulk-distribute', 'storeBulkDistribute')->middleware('auth')->name('store-bulk-distribute');
+    Route::post('ngo/store-bulk-distribute-status', 'storeBulkDistributeStatus')->middleware('auth')->name('store-bulk-distribute-status');
+        Route::get('ngo/delete-distribute-facilities/{beneficiarie_id}/survey/{survey_id}', 'DeleteDistribueFacilities')->middleware('auth')->name('delete-distribute-facilities');
+
+
+
 });
 
 Route::controller(WorkingAreaController::class)->group(function () {
