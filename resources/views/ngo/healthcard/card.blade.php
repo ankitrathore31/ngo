@@ -192,7 +192,7 @@
                                 </div>
                                 <div class="col-sm-6 mb-3">
                                     <strong>Health Card Registraition Date:</strong>
-                                    {{ \Carbon\Carbon::parse($healthCard->registraition_date)->format('d-m-Y') }}
+                                    {{ \Carbon\Carbon::parse($healthCard->Health_registration_date)->format('d-m-Y') }}
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -201,7 +201,7 @@
                                 </div>
                                 <div class="col-sm-4 mb-3">
                                     <strong>Registraition Date:</strong>
-                                    {{ \Carbon\Carbon::parse($record->registraition_date)->format('d-m-Y') }}
+                                    {{ \Carbon\Carbon::parse($record->registration_date)->format('d-m-Y') }}
                                 </div>
                                 <div class="col-sm-4 mb-3">
                                     <strong>Registraition Type:</strong> {{ $record->reg_type }}
@@ -287,10 +287,10 @@
 
                                 <div class="col-sm-12 mb-3">
                                     <strong>Hospital / Clinic / Medical / Doctor Name:</strong>
-                                    {{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->hospital_name }},
-                                    {{ $healthCard->hospital_name }}
-                                    ,{{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->address }},{{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->operator_name }},
-                                    {{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->contact_number }}
+                                    1. {{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->hospital_name }}&nbsp;
+                                    2. {{ $healthCard->hospital_name }} &nbsp;
+                                    3. {{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->address }}&nbsp; 4. {{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->operator_name }}&nbsp;
+                                    5. {{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->contact_number }}
                                 </div>
 
                             </div>
