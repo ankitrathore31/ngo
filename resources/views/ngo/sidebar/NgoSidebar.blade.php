@@ -1,10 +1,7 @@
 <style>
-    /* Fix navbar container */
-    .navbar,
-    nav {
-        position: relative;
-        overflow: visible !important;
-        /* Prevent navbar from creating scroll space */
+    .dropdown-menu {
+        max-height: 70vh;
+        overflow-y: auto;
     }
 
     /* Navbar text styling */
@@ -21,77 +18,14 @@
         /* Subtle background on hover */
         border-radius: 5px;
     }
-
-    /* Make dropdown parent positioned */
-    .navbar-nav .nav-item.dropdown {
-        position: relative !important;
-        /* Relative position for each dropdown */
-    }
-
-    /* Dropdown show on click */
-    .navbar-nav .nav-item.dropdown.show>.dropdown-menu,
-    .navbar-nav .dropdown-menu.show {
-        display: block !important;
-        animation: fadeIn 0.3s ease;
-    }
-
-    .navbar-nav .dropdown-menu {
-        display: none;
-        background-color: #007bff;
-        /* Make sure dropdown menu has the same background */
-        position: absolute !important;
-        /* This makes it overlay on top */
-        top: 100% !important;
-        /* Position it right below the menu item */
-        left: 0 !important;
-        z-index: 9999 !important;
-        /* Ensure it appears above everything */
-        margin-top: 0 !important;
-    }
-
-    .dropdown-item {
-        color: white;
-        font-size: 14px;
-        font-weight: 400;
-    }
-
-    /* Dropdown item hover effect */
-    .dropdown-item:hover {
-        background-color: rgba(255, 255, 255, 0.2);
-        border-radius: 5px;
-    }
-
-    /* Dropdown animation */
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(-5px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    /* Navbar branding (optional) */
-    .navbar-brand {
-        font-size: 22px;
-        font-weight: bold;
-        color: white !important;
-    }
-
-    /* Adjusting padding and margins */
-    .navbar-toggler {
-        border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-
-    .navbar-nav .nav-item {
-        margin-left: 15px;
-    }
 </style>
-<!-- Navbar -->
-<nav class="navbar navbar-expand-md bg-primary">
+
+@php
+    $user = auth()->user();
+    $isStaff = $user && $user->user_type === 'staff';
+@endphp
+
+<nav class="navbar navbar-expand-md bg-primary" style="margin: 0; padding: 0;">
     <div class="container-fluid">
         <!-- Toggle for Mobile -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
@@ -99,18 +33,15 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        @php
-            $user = auth()->user();
-            $isStaff = $user && $user->user_type === 'staff';
-        @endphp
         <!-- Navbar content -->
         <div class="collapse navbar-collapse" id="mainNavbar">
-            <ul class="navbar-nav flex-wrap w-100 justify-content-center overflow-auto">
+            <ul class="navbar-nav">
 
                 <li class="nav-item">
                     <a href="{{ route('ngo') }}" class="nav-link text-white"><i class="fas fa-tachometer-alt"></i>
                         DASHBOARD</a>
                 </li>
+
                 <!-- Investgation -->
                 @if (!$isStaff || ($user->hasPermission('investigation') || $user->hasPermission('investigation')))
                     <li class="nav-item dropdown">
@@ -397,20 +328,21 @@
                                         Distribut Facilities List</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('approval-facilities'))
-                                <li><a class="dropdown-item"
-                                        href="{{ route('distributed-list-for-approve') }}">
+                                <li><a class="dropdown-item" href="{{ route('distributed-list-for-approve') }}">
                                         Approval Distribute Facilities List</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('distributed-facilities'))
-                                <li><a class="dropdown-item" href="{{ route('distributed-list') }}">All Approve Distributed
+                                <li><a class="dropdown-item" href="{{ route('distributed-list') }}">All Approve
+                                        Distributed
                                         Facilities List</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('pending-distribute'))
-                                <li><a class="dropdown-item" href="{{ route('pending-distribute-list') }}">Pending/Reject
+                                <li><a class="dropdown-item"
+                                        href="{{ route('pending-distribute-list') }}">Pending/Reject
                                         Distribute
                                         Facilities List</a></li>
                             @endif
-                            
+
                             {{-- @if (!$isStaff || $user->hasPermission('all-beneficiarie-list'))
                                 <li><a class="dropdown-item" href="{{ route('all-beneficiarie-list') }}">All
                                         Beneficiary
@@ -500,6 +432,22 @@
                     </li>
                 @endif
 
+            </ul>
+        </div>
+
+    </div>
+</nav>
+
+<nav class="navbar navbar-expand-md bg-primary" style="margin: 0; padding: 0;">
+    <div class="container-fluid no-border">
+        <!-- Toggle for Mobile -->
+        {{-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar2"
+            aria-controls="mainNavbar2" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button> --}}
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav">
+
                 <!-- Staff -->
                 @if (
                     !$isStaff ||
@@ -557,7 +505,6 @@
                     </li>
                 @endif
 
-
                 <!-- Membership -->
                 @if (
                     !$isStaff ||
@@ -596,51 +543,6 @@
                         </ul>
                     </li>
                 @endif
-
-
-                <!-- Promote -->
-                {{-- @if (!$isStaff || $user->hasPermission('promote-membership') || $user->hasPermission('promote-beneficiary') || $user->hasPermission('promote-staff'))
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-bullhorn"></i> PROMOTE
-                        </a>
-                        <ul class="dropdown-menu bg-primary">
-                            @if (!$isStaff || $user->hasPermission('promote-membership'))
-                                <li><a class="dropdown-item" href="#">Promote Membership</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('promote-beneficiary'))
-                                <li><a class="dropdown-item" href="#">Promote Beneficiary</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('promote-staff'))
-                                <li><a class="dropdown-item" href="#">Promote Staff</a></li>
-                            @endif
-                        </ul>
-                    </li>
-                @endif --}}
-
-
-                <!-- Certificate -->
-                {{-- @if (!$isStaff || $user->hasPermission('add-member-certificate') || $user->hasPermission('member-certificate-list') || $user->hasPermission('add-beneficiary-certificate') || $user->hasPermission('beneficiary-certificate-list'))
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-certificate"></i> CERTIFICATE
-                        </a>
-                        <ul class="dropdown-menu bg-primary">
-                            @if (!$isStaff || $user->hasPermission('add-member-certificate'))
-                                <li><a class="dropdown-item" href="#">Add Member Certificate</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('member-certificate-list'))
-                                <li><a class="dropdown-item" href="#">Member Certificate List</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('add-beneficiary-certificate'))
-                                <li><a class="dropdown-item" href="#">Add Beneficiary Certificate</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('beneficiary-certificate-list'))
-                                <li><a class="dropdown-item" href="#">Beneficiary Certificate List</a></li>
-                            @endif
-                        </ul>
-                    </li>
-                @endif --}}
 
 
                 <!-- letter -->
@@ -753,24 +655,6 @@
                         </ul>
                     </li>
                 @endif
-
-
-                <!-- Attendance -->
-                {{-- @if (!$isStaff || $user->hasPermission('beneficiary-attendance') || $user->hasPermission('staff-attendance'))
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-check"></i> ATTENDANCE
-                        </a>
-                        <ul class="dropdown-menu bg-primary">
-                            @if (!$isStaff || $user->hasPermission('beneficiary-attendance'))
-                                <li><a class="dropdown-item" href="#">Beneficiary Attendance</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('staff-attendance'))
-                                <li><a class="dropdown-item" href="#">Staff Attendance</a></li>
-                            @endif
-                        </ul>
-                    </li>
-                @endif --}}
 
 
                 <!-- Complaint -->
@@ -978,6 +862,21 @@
                     </li>
                 @endif
 
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<nav class="navbar navbar-expand-md bg-primary" style="margin: 0; padding: 0;">
+    <div class="container-fluid">
+        <!-- Toggle for Mobile -->
+        {{-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar3"
+            aria-controls="mainNavbar3" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button> --}}
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav">
+
                 <!-- Notice -->
                 @if (!$isStaff || $user->hasPermission('add-notice') || $user->hasPermission('notice-list'))
                     <li class="nav-item dropdown">
@@ -994,6 +893,7 @@
                         </ul>
                     </li>
                 @endif
+
                 <!-- Kyc -->
                 @if (!$isStaff || $user->hasPermission('kyc') || $user->hasPermission('kyc'))
                     <li class="nav-item dropdown">
@@ -1013,6 +913,8 @@
                         </ul>
                     </li>
                 @endif
+
+
                 <!-- Facility -->
                 @if (!$isStaff || $user->hasPermission('kyc') || $user->hasPermission('kyc'))
                     <li class="nav-item dropdown">
@@ -1020,50 +922,63 @@
                             <i class="fas fa-chalkboard-teacher"></i> FACILITY
                         </a>
                         <ul class="dropdown-menu bg-primary">
-                             @if (!$isStaff || $user->hasPermission('kyc'))
+                            @if (!$isStaff || $user->hasPermission('kyc'))
                                 <li><a class="dropdown-item" href="{{ route('add.disease') }}">Add Disease</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{ route('list.hospital') }}">Hospital List</a></li>
+                                <li><a class="dropdown-item" href="{{ route('list.hospital') }}">Hospital List</a>
+                                </li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{ route('generatelist.healthcard') }}">Health Card Generate</a></li>
+                                <li><a class="dropdown-item" href="{{ route('generatelist.healthcard') }}">Health
+                                        Card Generate</a></li>
                             @endif
 
                             @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{ route('list.healthcard') }}">Health Card List</a></li>
-                            @endif
-                             @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{ route('list.demandfacility') }}">Demand Health Facility</a></li>
+                                <li><a class="dropdown-item" href="{{ route('list.healthcard') }}">Health Card
+                                        List</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{ route('list.pendingfacility') }}">Health Facility Pending</a></li>
+                                <li><a class="dropdown-item" href="{{ route('list.demandfacility') }}">Demand Health
+                                        Facility</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{-- route('list.healthcard') --}}">Health Facility Bill Investigation</a></li>
+                                <li><a class="dropdown-item" href="{{ route('list.pendingfacility') }}">Health
+                                        Facility Pending</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{-- route('list.healthcard') --}}">Health Facility Bill Verify</a></li>
+                                <li><a class="dropdown-item" href="{{-- route('list.healthcard') --}}">Health Facility Bill
+                                        Investigation</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{-- route('list.healthcard') --}}">Health Facility Demand Approve</a></li>
+                                <li><a class="dropdown-item" href="{{-- route('list.healthcard') --}}">Health Facility Bill
+                                        Verify</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{-- route('list.healthcard') --}}">Final Approve Health Facility</a></li>
+                                <li><a class="dropdown-item" href="{{-- route('list.healthcard') --}}">Health Facility Demand
+                                        Approve</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{-- route('list.healthcard') --}}">Health Facility Reject</a></li>
+                                <li><a class="dropdown-item" href="{{-- route('list.healthcard') --}}">Final Approve Health
+                                        Facility</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{-- route('list.healthcard') --}}">Pending Health Facility</a></li>
+                                <li><a class="dropdown-item" href="{{-- route('list.healthcard') --}}">Health Facility Reject</a>
+                                </li>
                             @endif
-                             @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{-- route('list.healthcard') --}}">Non-Budget Health Facility</a></li>
+                            @if (!$isStaff || $user->hasPermission('kyc'))
+                                <li><a class="dropdown-item" href="{{-- route('list.healthcard') --}}">Pending Health Facility</a>
+                                </li>
                             @endif
-                           
+                            @if (!$isStaff || $user->hasPermission('kyc'))
+                                <li><a class="dropdown-item" href="{{-- route('list.healthcard') --}}">Non-Budget Health
+                                        Facility</a></li>
+                            @endif
+
                         </ul>
                     </li>
                 @endif
+
             </ul>
         </div>
     </div>

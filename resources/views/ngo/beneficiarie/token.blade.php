@@ -187,8 +187,14 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <div class="col-sm-6 mb-3">
-                                    <h4><b>Token No:</b> <b>{{ $survey->token_no }}</b></h4>
+                                <div class="col-sm-4 mb-3">
+                                    <h6><b>Token No:</b> <b>{{ $survey->token_no }}</b></h6>
+                                </div>
+                                <div class="col-sm-4 mb-3">
+                                    <h6><b>Seat No:</b> <b>{{ $survey->token_no }}</b></h6>
+                                </div>
+                                <div class="col-sm-4 mb-3">
+                                    <h6><b>Matarial No:</b> <b>{{ $survey->token_no }}</b></h6>
                                 </div>
                             </div>
                             <div class="row mb-3">

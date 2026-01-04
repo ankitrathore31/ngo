@@ -4,6 +4,8 @@ use App\Models\beneficiarie;
 use App\Models\Beneficiarie_Survey;
 use App\Models\Category;
 use App\Models\HeadOrganization;
+use App\Models\HealthCard;
+use App\Models\HealthFacility;
 use App\Models\Member;
 use App\Models\Organization;
 use App\Models\OrganizationMember;
@@ -422,5 +424,47 @@ if (!function_exists('totalStories')) {
     function totalStories()
     {
         return Story::count();
+    }
+}
+if (!function_exists('totalHealthCard')) {
+    function totalHealthCard()
+    {
+        $data = HealthCard::count();
+        return $data;
+    }
+}
+if (!function_exists('DemandHalthFacility')) {
+    function DemandHalthFacility()
+    {
+        $data = HealthFacility::where('status', 'Pending')->count();
+        return $data;
+    }
+}
+if (!function_exists('InvestigationHalthFacility')) {
+    function InvestigationHalthFacility()
+    {
+        $data = HealthFacility::where('status', 'Investigation')->count();
+        return $data;
+    }
+}
+if (!function_exists('VerifyHalthFacility')) {
+    function VerifyHalthFacility()
+    {
+        $data = HealthFacility::where('status', 'Verify')->count();
+        return $data;
+    }
+}
+if (!function_exists('ApproveHalthFacility')) {
+    function ApproveHalthFacility()
+    {
+        $data = HealthFacility::where('status', 'Approve')->count();
+        return $data;
+    }
+}
+if (!function_exists('RejectHalthFacility')) {
+    function RejectHalthFacility()
+    {
+        $data = HealthFacility::where('status', 'Reject')->count();
+        return $data;
     }
 }

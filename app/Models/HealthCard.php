@@ -18,7 +18,8 @@ class HealthCard extends Model
     ];
 
     protected $casts = [
-        'diseases' => 'array'
+        'hospital_name' => 'array',
+        'diseases' => 'array',
     ];
 
     public function healthCards()

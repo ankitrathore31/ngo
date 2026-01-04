@@ -114,12 +114,6 @@
                         <div class="col-sm-4 mb-3">
                             <strong>Registraition Type:</strong> {{ $record->reg_type }}
                         </div>
-                        {{-- <div class="col-sm-4 mb-3">
-                        <strong>Registraition No:</strong> {{ $record->registration_no ?? 'Not '}}
-                    </div>
-                    <div class="col-sm-4 mb-3">
-                        <strong>Registraition Date:</strong> {{ \Carbon\Carbon::parse($record->registraition_date)->format('d-m-Y') }}
-                    </div> --}}
                         <div class="col-sm-4 mb-3">
                             <strong>Session:</strong> {{ $record->academic_session }}
                         </div>

@@ -222,8 +222,8 @@ class HealthCardController extends Controller
     public function StoreHealthCard(Request $request)
     {
         $request->validate([
-            'hospital_name' => 'required',
-            'reg_id'    => 'required',
+            'hospital_name' => 'required|array|min:1',
+            'reg_id' => 'required',
             'diseases' => 'required|array|min:1',
             'Health_registration_date' => 'required|date',
         ]);
@@ -231,14 +231,15 @@ class HealthCardController extends Controller
         \App\Models\HealthCard::create([
             'reg_id' => $request->reg_id,
             'healthcard_no' => $request->healthcard_no,
-            'hospital_name' => $request->hospital_name,
-            'diseases' => $request->diseases,
+            'hospital_name' => $request->hospital_name, // JSON array
+            'diseases' => $request->diseases,           // JSON array
             'Health_registration_date' => $request->Health_registration_date,
-            'status'   => '1',
+            'status' => '1',
         ]);
 
         return redirect()->back()->with('success', 'Health card created successfully.');
     }
+
     public function EditHealthCard($health_id)
     {
         $healthcard = HealthCard::with(['beneficiary', 'member'])->findOrFail($health_id);
@@ -264,22 +265,26 @@ class HealthCardController extends Controller
     {
         $request->validate([
             'Health_registration_date' => 'required|date',
-            'hospital_name'            => 'required|string',
-            'diseases'                 => 'required|array',
-            'diseases.*'               => 'string'
+
+            // MUST be array
+            'hospital_name' => 'required|array|min:1',
+            'hospital_name.*' => 'string',
+
+            'diseases' => 'required|array|min:1',
+            'diseases.*' => 'string',
         ]);
 
         $healthcard = HealthCard::findOrFail($health_id);
 
         $healthcard->update([
             'Health_registration_date' => $request->Health_registration_date,
-            'hospital_name'            => $request->hospital_name,
-            'diseases'                 => $request->diseases,
+            'hospital_name' => $request->hospital_name, // JSON array
+            'diseases' => $request->diseases,           // JSON array
         ]);
-
 
         return redirect()->back()->with('success', 'Health Card updated successfully');
     }
+
     public function CardList(Request $request)
     {
         $queryBene = beneficiarie::with(['healthCard' => function ($q) {
@@ -673,10 +678,10 @@ class HealthCardController extends Controller
     {
         $card = $facility->healthCard;
 
-    // Dynamically determine the person (beneficiarie or member)
-    $person = \App\Models\beneficiarie::find($card->reg_id)
-              ?? \App\Models\Member::find($card->reg_id);
+        // Dynamically determine the person (beneficiarie or member)
+        $person = \App\Models\beneficiarie::find($card->reg_id)
+            ?? \App\Models\Member::find($card->reg_id);
 
-        return view('ngo.healthcard.pending-healthfacility-show', compact('facility','card','person'));
+        return view('ngo.healthcard.pending-healthfacility-show', compact('facility', 'card', 'person'));
     }
 }
