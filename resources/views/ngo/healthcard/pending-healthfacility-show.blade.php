@@ -275,22 +275,32 @@
                                 </div>
 
                                 <div class="col-sm-12 mb-3">
-                                    <strong>Health Facility/Disease Name:</strong>
-                                    @if (!empty($card->diseases))
-                                        @foreach ($card->diseases as $disease)
-                                            {{ $loop->iteration }}. {{ $disease }}@if (!$loop->last)
-                                                ,
-                                            @endif
-                                        @endforeach
-                                    @endif
-                                </div>
-
-                                <div class="col-sm-12 mb-3">
                                     <strong>Hospital / Clinic / Medical Name:</strong>
                                     {{ \App\Models\HealthCard::hospital($card->hospital_name)->hospital_name }},
                                     {{ $card->hospital_name }}
                                     ,{{ \App\Models\HealthCard::hospital($card->hospital_name)->address }},{{ \App\Models\HealthCard::hospital($card->hospital_name)->operator_name }},
                                     {{ \App\Models\HealthCard::hospital($card->hospital_name)->contact_number }}
+                                </div>
+                                              <div class="col-sm-12 mb-3">
+                                    <strong>Hospital / Clinic / Medical / Doctor Name:</strong>
+
+                                    @if (!empty($healthCard->hospital_name))
+                                        @foreach ($healthCard->hospital_name as $index => $hospitalCode)
+                                            @php
+                                                $hospital = \App\Models\HealthCard::hospital($hospitalCode);
+                                            @endphp
+
+                                            @if ($hospital)
+                                                <div class="col-12 mt-1">
+                                                    {{ $index + 1 }}.
+                                                    {{ $hospital->hospital_name }}
+                                                    {{ $hospital->address }}
+                                                    {{ $hospital->operator_name }}
+                                                    {{ $hospital->contact_number }}
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    @endif
                                 </div>
                                 <div class="row">
                                     <h5 class="mb-2"><b>HEALTH FACILITY</b></h5>

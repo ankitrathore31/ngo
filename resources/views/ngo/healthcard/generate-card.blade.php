@@ -230,17 +230,20 @@
 
                                     <div class="col-md-6 mb-2">
                                         <label>Hospital</label>
-                                        <select name="hospital_name" class="form-control" required>
+                                        <select id="hospitalSelect" class="form-control">
                                             <option value="">Select Hospital</option>
                                             @foreach ($hospitals as $hospital)
-                                                <option
-                                                    value="{{ $hospital->hospital_code }}"
-                                                    {{ isset($healthcard) && $healthcard->hospital_name == $hospital->hospital_name ? 'selected' : '' }}>
-                                                    {{ $hospital->hospital_name }}({{ $hospital->hospital_code }})
+                                                <option value="{{ $hospital->hospital_code }}">
+                                                    {{ $hospital->hospital_name }} ({{ $hospital->hospital_code }})
                                                 </option>
                                             @endforeach
                                         </select>
                                     </div>
+
+                                    <div class="col-md-6 mt-3">
+                                        <div id="selectedHospitals" class="d-flex flex-wrap gap-2"></div>
+                                    </div>
+
 
                                     <div class="col-md-6 mb-2">
                                         <label>Disease</label>
@@ -270,37 +273,60 @@
             </div>
         </div>
         <script>
+            /* ---------- Initial Data (Edit Mode Support) ---------- */
             let selectedDiseases = @json($healthcard->diseases ?? []);
+            let selectedHospitals = @json($healthcard->hospital_name ?? []);
 
-            function renderDiseases() {
-                const box = document.getElementById('selectedDiseases');
+            /* ---------- Generic Render Function ---------- */
+            function renderTags(containerId, items, inputName, removeFn) {
+                const box = document.getElementById(containerId);
                 box.innerHTML = '';
 
-                selectedDiseases.forEach(d => {
+                items.forEach(val => {
                     const tag = document.createElement('div');
-                    tag.className = 'badge bg-primary me-2 mb-2 d-flex align-items-center';
+                    tag.className = 'badge bg-primary d-flex align-items-center me-2 mb-2';
+
                     tag.innerHTML = `
-            <span class="me-2">${d}</span>
-            <button type="button" class="btn btn-sm btn-light" onclick="removeDisease('${d}')">&times;</button>
-            <input type="hidden" name="diseases[]" value="${d}">
-        `;
+                <span class="me-2">${val}</span>
+                <button type="button" class="btn btn-sm btn-light"
+                    onclick="${removeFn}('${val}')">&times;</button>
+                <input type="hidden" name="${inputName}[]" value="${val}">
+            `;
+
                     box.appendChild(tag);
                 });
             }
 
+            /* ---------- Disease ---------- */
             document.getElementById('diseaseSelect').addEventListener('change', function() {
                 if (this.value && !selectedDiseases.includes(this.value)) {
                     selectedDiseases.push(this.value);
-                    renderDiseases();
+                    renderTags('selectedDiseases', selectedDiseases, 'diseases', 'removeDisease');
                 }
                 this.value = '';
             });
 
             function removeDisease(val) {
                 selectedDiseases = selectedDiseases.filter(v => v !== val);
-                renderDiseases();
+                renderTags('selectedDiseases', selectedDiseases, 'diseases', 'removeDisease');
             }
 
-            renderDiseases();
+            /* ---------- Hospital ---------- */
+            document.getElementById('hospitalSelect').addEventListener('change', function() {
+                if (this.value && !selectedHospitals.includes(this.value)) {
+                    selectedHospitals.push(this.value);
+                    renderTags('selectedHospitals', selectedHospitals, 'hospital_name', 'removeHospital');
+                }
+                this.value = '';
+            });
+
+            function removeHospital(val) {
+                selectedHospitals = selectedHospitals.filter(v => v !== val);
+                renderTags('selectedHospitals', selectedHospitals, 'hospital_name', 'removeHospital');
+            }
+
+            /* ---------- Initial Render ---------- */
+            renderTags('selectedDiseases', selectedDiseases, 'diseases', 'removeDisease');
+            renderTags('selectedHospitals', selectedHospitals, 'hospital_name', 'removeHospital');
         </script>
     @endsection

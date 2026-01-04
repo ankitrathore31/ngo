@@ -287,11 +287,26 @@
 
                                 <div class="col-sm-12 mb-3">
                                     <strong>Hospital / Clinic / Medical / Doctor Name:</strong>
-                                    1. {{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->hospital_name }}&nbsp;
-                                    2. {{ $healthCard->hospital_name }} &nbsp;
-                                    3. {{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->address }}&nbsp; 4. {{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->operator_name }}&nbsp;
-                                    5. {{ \App\Models\HealthCard::hospital($healthCard->hospital_name)->contact_number }}
+
+                                    @if (!empty($healthCard->hospital_name))
+                                        @foreach ($healthCard->hospital_name as $index => $hospitalCode)
+                                            @php
+                                                $hospital = \App\Models\HealthCard::hospital($hospitalCode);
+                                            @endphp
+
+                                            @if ($hospital)
+                                                <div class="col-12 mt-1">
+                                                    {{ $index + 1 }}.
+                                                    {{ $hospital->hospital_name }}
+                                                    {{ $hospital->address }}
+                                                    {{ $hospital->operator_name }}
+                                                    {{ $hospital->contact_number }}
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    @endif
                                 </div>
+
 
                             </div>
 

@@ -660,8 +660,122 @@
                         </div>
                     </div>
                 @endif
+                @if (
+                    !$isStaff ||
+                        $user->hasPermission('health-card') ||
+                        $user->hasPermission('health-card') ||
+                        $user->hasPermission('health-card'))
+                    <div class="row">
+                        <h5 class="fw-bold mb-2">- Health Card Facility</h5>
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="card text-white bg-success p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-coins fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Total Health Card</p>
+                                        <h5 class="mb-0">{{ totalHealthCard() }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="card text-dark bg-warning p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-file-invoice-dollar fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Demand Health Facility</p>
+                                        <h5 class="mb-0">{{ DemandHalthFacility() }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="card text-white bg-secondary p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-wallet fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Health Facility Bill Investigation</p>
+                                        <h5 class="mb-0">{{ InvestigationHalthFacility() }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="card text-white bg-primary p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-wallet fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Health Facility Bill Verify</p>
+                                        <h5 class="mb-0">{{ VerifyHalthFacility() }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="card text-white bg-warning p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-wallet fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Health Facility Demand Approve</p>
+                                        <h5 class="mb-0">{{ ApproveHalthFacility() }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="card text-white bg-danger p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-wallet fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Health Facility Demand Reject</p>
+                                        <h5 class="mb-0">{{ RejectHalthFacility() }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="card text-white bg-success p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-wallet fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Health Facility Final Approve</p>
+                                        <h5 class="mb-0">{{-- FinalApproveHalthFacility() --}}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="card text-white bg-primary p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-wallet fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Pending Health Facility</p>
+                                        <h5 class="mb-0">{{-- RejectHalthFacility() --}}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="card text-white bg-primary p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-wallet fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Non-Budget Health Facility</p>
+                                        <h5 class="mb-0">{{-- RejectHalthFacility() --}}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
+
         @php
             $user = auth()->user();
             $isNGO = $user && $user->user_type === 'ngo';
