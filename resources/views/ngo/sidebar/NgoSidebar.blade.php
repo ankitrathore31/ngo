@@ -83,7 +83,7 @@
 
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg bg-primary">
+<nav class="navbar navbar-expand-md bg-primary">
     <div class="container-fluid">
         <!-- Toggle for Mobile -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
