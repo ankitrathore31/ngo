@@ -254,13 +254,11 @@ Route::controller(BeneficiarieController::class)->group(function () {
     Route::post('/beneficiaries/facilities/bulk-store',  'storeBulkBeneficiarieFacilities')->middleware('auth')
         ->name('store-bulk-beneficiarie-facilities');
     Route::get('ngo/show-beneficiarie-token/{beneficiarie_id}/survey/{survey_id}', 'showbeneficiarietoken')->middleware('auth')->name('show-beneficiarie-token');
+    Route::get('ngo/show-beneficiarie-receipt/{beneficiarie_id}/survey/{survey_id}', 'showbeneficiarieRecipt')->middleware('auth')->name('show-beneficiarie-receipt');
     Route::post('ngo/store-bulk-beneficiarie', 'storeBulkBeneficiarie')->middleware('auth')->name('store-bulk-beneficiarie');
     Route::post('ngo/store-bulk-distribute', 'storeBulkDistribute')->middleware('auth')->name('store-bulk-distribute');
     Route::post('ngo/store-bulk-distribute-status', 'storeBulkDistributeStatus')->middleware('auth')->name('store-bulk-distribute-status');
-        Route::get('ngo/delete-distribute-facilities/{beneficiarie_id}/survey/{survey_id}', 'DeleteDistribueFacilities')->middleware('auth')->name('delete-distribute-facilities');
-
-
-
+    Route::get('ngo/delete-distribute-facilities/{beneficiarie_id}/survey/{survey_id}', 'DeleteDistribueFacilities')->middleware('auth')->name('delete-distribute-facilities');
 });
 
 Route::controller(WorkingAreaController::class)->group(function () {
@@ -557,11 +555,15 @@ Route::middleware(['auth'])->group(function () {
 
 Route::controller(HealthCardController::class)->middleware('auth')->group(function () {
     Route::get('ngo/add-disease', 'AddDisease')->name('add.disease');
+    Route::get('ngo/delete-disease/{id}', 'DeleteDisease')->name('delete.disease');
     Route::post('ngo/disease/store', 'StoreDisease')->name('store.disease');
     Route::delete('ngo/disease/{id}', 'DestroyDisease')->name('disease.delete');
     Route::get('ngo/list-hospital', 'ListHospital')->name('list.hospital');
     Route::get('ngo/add-hospital', 'AddHospital')->name('add.hospital');
     Route::post('ngo/hospital/store', 'StoreHospital')->name('store.hospital');
+    Route::get('ngo/edit-hospital/{id}', 'EditHospital')->name('edit.hospital');
+    Route::post('ngo/hospital/update/{id}', 'UpdateHospital')->name('update.hospital');
+    Route::get('ngo/delete-hospital/{id}', 'deleteHospital')->name('delete.hospital');
     Route::get('ngo/list-generate-healthcard', 'RegList')->name('generatelist.healthcard');
     Route::get('ngo/generate-healthcard/{id}/{type}', 'GenerateHealthCard')->name('generate.healthcard');
     Route::post('ngo/healthcard/store', 'StoreHealthCard')->name('healthcard.store');
@@ -573,7 +575,7 @@ Route::controller(HealthCardController::class)->middleware('auth')->group(functi
     Route::get('ngo/demand-health-facility/{id}/{health_id}', 'DemandFacility')->name('demand.health.facility');
     Route::post('ngo/health-facility/store', 'StoreDemandFacilities')->name('health.facility.store');
     Route::get('ngo/pending-facility-list', 'PendingFacilityList')->name('list.pendingfacility');
-    Route::get('ngo/pending-healthfacility/{facility}','ShowPendingFacility')->name('pending.healthfacility.show');
+    Route::get('ngo/pending-healthfacility/{facility}', 'ShowPendingFacility')->name('pending.healthfacility.show');
 });
 
 require __DIR__ . '/auth.php';

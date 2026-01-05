@@ -1,19 +1,73 @@
 <style>
+    /* Keep navbar items in single row with horizontal scroll */
+    .navbar-nav {
+        white-space: nowrap;
+    }
+
+    /* Horizontal scrollbar styling */
+    .navbar-nav::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .navbar-nav::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.4);
+        border-radius: 10px;
+    }
+
+    /* Dropdown menu scroll */
     .dropdown-menu {
         max-height: 70vh;
         overflow-y: auto;
+        background-color: var(--bs-primary);
+        /* bg-primary */
+        border: none;
     }
 
-    /* Navbar text styling */
+    /* Dropdown item text */
+    .dropdown-menu .dropdown-item {
+        color: #ffffff;
+        font-weight: 500;
+    }
+
+    /* Hover & focus state */
+    .dropdown-menu .dropdown-item:hover,
+    .dropdown-menu .dropdown-item:focus {
+        background-color: rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+    }
+
+    /* Active dropdown item */
+    .dropdown-menu .dropdown-item.active,
+    .dropdown-menu .dropdown-item:active {
+        background-color: rgba(255, 255, 255, 0.25);
+        color: #ffffff;
+    }
+
+    /* Navbar link styling */
     .navbar-nav .nav-link {
-        color: white;
+        color: #ffffff;
         font-size: 16px;
         font-weight: 500;
         cursor: pointer;
     }
 
-    /* Navbar item hover effect */
-    
+    /* Navbar link hover */
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link:focus {
+        color: #ffffff;
+        background-color: rgba(255, 255, 255, 0.15);
+        border-radius: 4px;
+    }
+
+    /* Dropdown toggle arrow color */
+    .navbar-nav .dropdown-toggle::after {
+        border-top-color: #ffffff;
+    }
+
+    /* Prevent Bootstrap default white hover */
+    .dropdown-item:hover {
+        background-image: none;
+    }
 </style>
 
 @php
@@ -30,8 +84,8 @@
         </button>
 
         <!-- Navbar content -->
-        <div class="collapse navbar-collapse" id="mainNavbar">
-            <ul class="navbar-nav w-100 justify-content-center">
+        <div class="collapse navbar-collapse navbar-scroll" id="mainNavbar">
+            <ul class="navbar-nav flex-row flex-nowrap w-100">
 
                 <li class="nav-item">
                     <a href="{{ route('ngo') }}" class="nav-link text-white"><i class="fas fa-tachometer-alt"></i>
@@ -436,13 +490,8 @@
 
 <nav class="navbar navbar-expand-md bg-primary" style="margin: 0; padding: 0;">
     <div class="container-fluid no-border">
-        <!-- Toggle for Mobile -->
-        {{-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar2"
-            aria-controls="mainNavbar2" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button> --}}
-        <div class="collapse navbar-collapse" id="mainNavbar">
-            <ul class="navbar-nav w-100 justify-content-center">
+        <div class="collapse navbar-collapse navbar-scroll" id="mainNavbar">
+            <ul class="navbar-nav flex-row flex-nowrap w-100">
 
                 <!-- Staff -->
                 @if (
@@ -865,13 +914,8 @@
 
 <nav class="navbar navbar-expand-md bg-primary" style="margin: 0; padding: 0;">
     <div class="container-fluid">
-        <!-- Toggle for Mobile -->
-        {{-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar3"
-            aria-controls="mainNavbar3" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button> --}}
-        <div class="collapse navbar-collapse" id="mainNavbar">
-            <ul class="navbar-nav w-100 justify-content-center">
+        <div class="collapse navbar-collapse navbar-scroll" id="mainNavbar">
+            <ul class="navbar-nav flex-row flex-nowrap w-100">
 
                 <!-- Notice -->
                 @if (!$isStaff || $user->hasPermission('add-notice') || $user->hasPermission('notice-list'))

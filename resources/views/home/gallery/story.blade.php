@@ -76,8 +76,7 @@
                         {{-- Footer --}}
                         <div
                             class="card-footer bg-white border-0 d-flex justify-content-between align-items-center px-4 pb-3">
-                            <a href="#"
-                                class="btn btn-sm btn-outline-primary rounded-pill px-3">True Story</a>
+                            <a href="#" class="btn btn-sm btn-outline-primary rounded-pill px-3">True Story</a>
                             <span class="text-muted small"><i
                                     class="bi bi-clock me-1"></i>{{ $story->created_at->diffForHumans() }}</span>
                         </div>
@@ -116,10 +115,15 @@
 
         .story-image {
             height: 230px;
-            object-fit: cover;
+            width: 100%;
+            object-fit: contain;
+            /* SHOW FULL IMAGE */
+            background-color: #f2f2f2;
+            /* optional neutral background */
             border-top-left-radius: 12px;
             border-top-right-radius: 12px;
         }
+
 
         .carousel-control-prev-icon,
         .carousel-control-next-icon {

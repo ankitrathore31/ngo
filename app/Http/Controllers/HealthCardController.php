@@ -42,16 +42,18 @@ class HealthCardController extends Controller
         return redirect()->back()->with('success', 'Disease added successfully.');
     }
 
-    public function DestroyDisease($id)
+    public function DeleteDisease($id)
     {
         Disease::findOrFail($id)->delete();
         return redirect()->back()->with('success', 'Disease deleted successfully.');
     }
+
     public function ListHospital()
     {
         $hospitals = Hospital::orderBy('hospital_name', 'ASC')->get();
         return view('ngo.healthcard.hospital-list', compact('hospitals'));
     }
+
     public function AddHospital()
     {
         // Get last hospital code
@@ -68,40 +70,32 @@ class HealthCardController extends Controller
 
         return view('ngo.healthcard.add-hospital', compact('hospitals', 'nextCode'));
     }
+
     public function StoreHospital(Request $request)
     {
         $request->validate([
             'hospital_name' => 'required|string|max:255',
             'contact_number' => 'nullable|digits_between:10,12',
             'registration_date' => 'nullable|date',
-            'gst_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-            'license_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-            'operator_degree_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-            'operator_aadhar_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+            'gst_document' => 'nullable|mimes:jpg,jpeg,png,pdf',
+            'license_document' => 'nullable|mimes:jpg,jpeg,png,pdf',
+            'operator_degree_document' => 'nullable|mimes:jpg,jpeg,png,pdf',
+            'operator_aadhar_document' => 'nullable|mimes:jpg,jpeg,png,pdf',
         ]);
 
-        // Generate Hospital Code
-        $last = \App\Models\Hospital::orderBy('id', 'desc')->first();
+        $last = Hospital::orderBy('id', 'desc')->first();
         $nextCode = $last
-            ? '219HC' . str_pad((int)substr($last->hospital_code, 6) + 1, 5, '0', STR_PAD_LEFT)
+            ? '219HC' . str_pad((int) substr($last->hospital_code, 6) + 1, 5, '0', STR_PAD_LEFT)
             : '219HC00001';
 
-        $data = $request->only([
-            'hospital_name',
-            'address',
-            'contact_number',
-            'operator_name',
-            'registration_date',
-            'status',
-            'operator_aadhar',
-            'operator_degree',
-            'gst_no',
-            'license_no'
-        ]);
-
+        $data = $request->except('_token');
         $data['hospital_code'] = $nextCode;
 
-        // Uploads
+        $uploadPath = public_path('documents');
+        if (!file_exists($uploadPath)) {
+            mkdir($uploadPath, 0777, true);
+        }
+
         foreach (
             [
                 'gst_document',
@@ -110,15 +104,92 @@ class HealthCardController extends Controller
                 'operator_aadhar_document'
             ] as $file
         ) {
+
             if ($request->hasFile($file)) {
-                $data[$file] = $request->file($file)->store("documents", "public");
+                $filename = time() . '_' . $file . '.' . $request->file($file)->extension();
+                $request->file($file)->move($uploadPath, $filename);
+                $data[$file] = 'documents/' . $filename;
             }
         }
 
-        \App\Models\Hospital::create($data);
+        Hospital::create($data);
 
-        return redirect()->back()->with('success', 'Hospital added successfully.');
+        return redirect()->route('list.hospital')->with('success', 'Hospital added successfully.');
     }
+
+    public function EditHospital($id)
+    {
+
+        $hospital = Hospital::findOrFail($id);
+
+        return view('ngo.healthcard.edit-hospital', compact('hospital'));
+    }
+
+    public function UpdateHospital(Request $request, $id)
+    {
+        $hospital = Hospital::findOrFail($id);
+
+        $request->validate([
+            'hospital_name' => 'required|string|max:255',
+            'contact_number' => 'nullable|digits_between:10,12',
+            'registration_date' => 'nullable|date',
+            'gst_document' => 'nullable|mimes:jpg,jpeg,png,pdf',
+            'license_document' => 'nullable|mimes:jpg,jpeg,png,pdf',
+            'operator_degree_document' => 'nullable|mimes:jpg,jpeg,png,pdf',
+            'operator_aadhar_document' => 'nullable|mimes:jpg,jpeg,png,pdf',
+        ]);
+
+        $data = $request->except('_token', '_method');
+
+        $uploadPath = public_path('documents');
+
+        foreach (
+            [
+                'gst_document',
+                'license_document',
+                'operator_degree_document',
+                'operator_aadhar_document'
+            ] as $file
+        ) {
+
+            if ($request->hasFile($file)) {
+
+                if ($hospital->$file && file_exists(public_path($hospital->$file))) {
+                    unlink(public_path($hospital->$file));
+                }
+
+                $filename = time() . '_' . $file . '.' . $request->file($file)->extension();
+                $request->file($file)->move($uploadPath, $filename);
+                $data[$file] = 'documents/' . $filename;
+            }
+        }
+
+        $hospital->update($data);
+
+        return redirect()->route('list.hospital')->with('success', 'Hospital updated successfully.');
+    }
+
+    public function deleteHospital($id)
+{
+    $hospital = \App\Models\Hospital::findOrFail($id);
+
+    foreach ([
+        'gst_document',
+        'license_document',
+        'operator_degree_document',
+        'operator_aadhar_document'
+    ] as $file) {
+
+        if ($hospital->$file && file_exists(public_path($hospital->$file))) {
+            unlink(public_path($hospital->$file));
+        }
+    }
+
+    $hospital->delete();
+
+    return redirect()->back()->with('success', 'Hospital deleted successfully.');
+}
+
 
     public function RegList(Request $request)
     {
@@ -542,6 +613,7 @@ class HealthCardController extends Controller
 
         return view('ngo.healthcard.demand-facility', compact('record', 'healthCard', 'signatures', 'hospitals'));
     }
+
     public function StoreDemandFacilities(Request $request)
     {
         $validated = $request->validate([
@@ -572,6 +644,7 @@ class HealthCardController extends Controller
 
         return redirect()->back()->with('success', 'Health facility record saved successfully.');
     }
+
     public function PendingFacilityList(Request $request)
     {
         $healthCardConstraint = function ($q) use ($request) {
@@ -674,6 +747,7 @@ class HealthCardController extends Controller
             compact('combined', 'data', 'states')
         );
     }
+
     public function ShowPendingFacility(HealthFacility $facility)
     {
         $card = $facility->healthCard;
