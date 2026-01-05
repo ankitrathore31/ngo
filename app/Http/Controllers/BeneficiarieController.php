@@ -402,7 +402,6 @@ class BeneficiarieController extends Controller
         }
     }
 
-
     public function beneficiarieFacilitiesList(Request $request)
     {
         $query = beneficiarie::with(['surveys' => function ($q) use ($request) {

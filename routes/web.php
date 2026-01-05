@@ -574,8 +574,15 @@ Route::controller(HealthCardController::class)->middleware('auth')->group(functi
     Route::get('ngo/demand-facility-list', 'DemandFacilityList')->name('list.demandfacility');
     Route::get('ngo/demand-health-facility/{id}/{health_id}', 'DemandFacility')->name('demand.health.facility');
     Route::post('ngo/health-facility/store', 'StoreDemandFacilities')->name('health.facility.store');
+    Route::get('ngo/edit-health-facility/{facility}', 'EditFacility')->name('edit.healthfacility');
+    Route::post('ngo/health-facility/update/{id}', 'UpdtaeDemandFacilities')->name('health.facility.update');
+    Route::get('ngo/delete-health-facility/{facility}', 'DeleteFacility')->name('delete.healthfacility');
     Route::get('ngo/pending-facility-list', 'PendingFacilityList')->name('list.pendingfacility');
+    Route::post('ngo/health-facility-investigation/store/{facility}', 'StoreFacilitiesInvestigation')->name('investigation.healthfacility.store');
     Route::get('ngo/pending-healthfacility/{facility}', 'ShowPendingFacility')->name('pending.healthfacility.show');
+    Route::get('ngo/Investigation-facility-list', 'InvestigationFacilityList')->name('list.Investigationfacility');
+    Route::post('ngo/health-facility-verify/store/{facility}', 'StoreFacilitiesVerify')->name('verify.healthfacility.store');
+    Route::get('ngo/Investigation-facility-delete/{facility}', 'DeleteFacilitiesInvestigation')->name('delete.Investigationfacility');
 });
 
 require __DIR__ . '/auth.php';

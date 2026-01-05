@@ -10,6 +10,7 @@ use App\Models\HealthFacility;
 use App\Models\Hospital;
 use App\Models\Member;
 use App\Models\Signature;
+use App\Models\Staff;
 use Illuminate\Http\Request;
 
 class HealthCardController extends Controller
@@ -170,26 +171,27 @@ class HealthCardController extends Controller
     }
 
     public function deleteHospital($id)
-{
-    $hospital = \App\Models\Hospital::findOrFail($id);
+    {
+        $hospital = \App\Models\Hospital::findOrFail($id);
 
-    foreach ([
-        'gst_document',
-        'license_document',
-        'operator_degree_document',
-        'operator_aadhar_document'
-    ] as $file) {
+        foreach (
+            [
+                'gst_document',
+                'license_document',
+                'operator_degree_document',
+                'operator_aadhar_document'
+            ] as $file
+        ) {
 
-        if ($hospital->$file && file_exists(public_path($hospital->$file))) {
-            unlink(public_path($hospital->$file));
+            if ($hospital->$file && file_exists(public_path($hospital->$file))) {
+                unlink(public_path($hospital->$file));
+            }
         }
+
+        $hospital->delete();
+
+        return redirect()->back()->with('success', 'Hospital deleted successfully.');
     }
-
-    $hospital->delete();
-
-    return redirect()->back()->with('success', 'Hospital deleted successfully.');
-}
-
 
     public function RegList(Request $request)
     {
@@ -642,7 +644,85 @@ class HealthCardController extends Controller
 
         HealthFacility::create($validated);
 
-        return redirect()->back()->with('success', 'Health facility record saved successfully.');
+        return redirect()->route('list.pendingfacility')->with('success', 'Health facility record saved successfully.');
+    }
+
+    public function EditFacility(HealthFacility $facility)
+    {
+        // Same logic as Show
+        $card = $facility->healthCard;
+
+        if (!$card) {
+            return redirect()->back()->with('error', 'Health Card not found.');
+        }
+
+        $person = beneficiarie::find($card->reg_id)
+            ?? Member::find($card->reg_id);
+
+        if (!$person) {
+            return redirect()->back()->with('error', 'Person not found.');
+        }
+
+        $hospitals  = Hospital::orderBy('hospital_name')->get();
+        $signatures = Signature::pluck('file_path', 'role');
+
+        return view(
+            'ngo.healthcard.edit-facility',
+            compact('facility', 'card', 'person', 'hospitals', 'signatures')
+        );
+    }
+
+
+    public function UpdtaeDemandFacilities(Request $request, $id)
+    {
+        $facility = HealthFacility::findOrFail($id);
+
+        $validated = $request->validate([
+            'card_id'        => 'required',
+            'reg_id'         => 'required',
+            'treatment_type' => 'required|in:treatment_start,treatment_end',
+            'hospital_name'  => 'required|string|max:255',
+            'bill_no'        => 'required|string|max:100',
+            'bill_date'      => 'required|date',
+            'bill_gst'       => 'nullable|numeric',
+            'bill_amount'    => 'required|numeric',
+            'bill_upload'    => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048',
+        ]);
+
+        // Handle file upload (replace old file if new uploaded)
+        if ($request->hasFile('bill_upload')) {
+
+            // Optional: delete old file
+            if ($facility->bill_upload && file_exists(public_path($facility->bill_upload))) {
+                unlink(public_path($facility->bill_upload));
+            }
+
+            $file = $request->file('bill_upload');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('documents'), $filename);
+
+            $validated['bill_upload'] = 'documents/' . $filename;
+        }
+
+        $facility->update($validated);
+
+        return redirect()
+            ->route('list.pendingfacility')
+            ->with('success', 'Health facility record updated successfully.');
+    }
+
+    public function DeleteFacility(HealthFacility $facility)
+    {
+        // Delete uploaded bill file (if exists)
+        if ($facility->bill_upload && file_exists(public_path($facility->bill_upload))) {
+            unlink(public_path($facility->bill_upload));
+        }
+
+        $facility->delete();
+
+        return redirect()
+            ->route('list.pendingfacility')
+            ->with('success', 'Health facility record deleted successfully.');
     }
 
     public function PendingFacilityList(Request $request)
@@ -741,10 +821,11 @@ class HealthCardController extends Controller
 
         $data   = academic_session::all();
         $states = config('states');
+        $staff = Staff::get();
 
         return view(
             'ngo.healthcard.pending-facility-list',
-            compact('combined', 'data', 'states')
+            compact('combined', 'data', 'states', 'staff')
         );
     }
 
@@ -757,5 +838,140 @@ class HealthCardController extends Controller
             ?? \App\Models\Member::find($card->reg_id);
 
         return view('ngo.healthcard.pending-healthfacility-show', compact('facility', 'card', 'person'));
+    }
+
+    public function StoreFacilitiesInvestigation(Request $request, HealthFacility $facility)
+    {
+        $validated = $request->validate([
+            'person_paying_bill'    => 'required|string|max:255',
+            'investigation_officer' => 'required|string|max:255',
+        ]);
+
+        $facility->update([
+            'person_paying_bill'    => $validated['person_paying_bill'],
+            'investigation_officer' => $validated['investigation_officer'],
+            'status'                => 'Investigation',
+        ]);
+
+        return redirect()
+            ->route('list.Investigationfacility')
+            ->with('success', 'Investigation details saved successfully.');
+    }
+
+    public function DeleteFacilitiesInvestigation(HealthFacility $facility)
+    {
+        $facility->update([
+            'person_paying_bill'    => null,
+            'investigation_officer' => null,
+            'status'                => 'Pending',
+        ]);
+
+        return redirect()
+            ->back()
+            ->with('success', 'Investigation details removed successfully.');
+    }
+
+    public function InvestigationFacilityList(Request $request)
+    {
+        $healthCardConstraint = function ($q) use ($request) {
+            $q->where('status', 1)
+                ->whereHas('healthFacilities', function ($hf) {
+                    $hf->where('status', 'Investigation');
+                })
+                ->with(['healthFacilities' => function ($hf) {
+                    $hf->where('status', 'Investigation');
+                }]);
+
+            if ($request->filled('healthcard_no')) {
+                $q->where('healthcard_no', trim($request->healthcard_no));
+            }
+        };
+
+        $queryBene = beneficiarie::with(['healthCard' => $healthCardConstraint])
+            ->where('status', 1)
+            ->whereHas('healthCard', $healthCardConstraint);
+
+        $queryMember = Member::with(['healthCard' => $healthCardConstraint])
+            ->where('status', 1)
+            ->whereHas('healthCard', $healthCardConstraint);
+
+        /* Existing filters */
+        if ($request->filled('application_no')) {
+            $search = $request->application_no;
+
+            $queryBene->where(
+                fn($q) =>
+                $q->where('application_no', 'like', "%$search%")
+                    ->orWhere('registration_no', 'like', "%$search%")
+            );
+
+            $queryMember->where(
+                fn($q) =>
+                $q->where('application_no', 'like', "%$search%")
+                    ->orWhere('registration_no', 'like', "%$search%")
+            );
+        }
+
+        if ($request->filled('registration_no')) {
+            $identity = $request->registration_no;
+
+            $queryBene->where(
+                fn($q) =>
+                $q->where('phone', 'like', "%$identity%")
+                    ->orWhere('identity_no', 'like', "%$identity%")
+            );
+
+            $queryMember->where(
+                fn($q) =>
+                $q->where('phone', 'like', "%$identity%")
+                    ->orWhere('identity_no', 'like', "%$identity%")
+            );
+        }
+
+        if ($request->filled('name')) {
+            $name = $request->name;
+
+            $queryBene->where(
+                fn($q) =>
+                $q->where('name', 'like', "%$name%")
+                    ->orWhere('gurdian_name', 'like', "%$name%")
+            );
+
+            $queryMember->where(
+                fn($q) =>
+                $q->where('name', 'like', "%$name%")
+                    ->orWhere('gurdian_name', 'like', "%$name%")
+            );
+        }
+
+        $beneficiaries = $queryBene->get();
+        $members       = $queryMember->get();
+
+        /* FLATTEN RESULT: Card + Facility */
+        $combined = collect()
+            ->merge($beneficiaries)
+            ->merge($members)
+            ->flatMap(function ($item) {
+                return $item->healthCard->flatMap(function ($card) use ($item) {
+                    return $card->healthFacilities->map(function ($facility) use ($item, $card) {
+                        return [
+                            'person'   => $item,
+                            'card'     => $card,
+                            'facility' => $facility,
+                        ];
+                    });
+                });
+            })
+            ->sortBy(fn($row) => $row['facility']->created_at)
+            ->values();
+
+        $data   = academic_session::all();
+        $states = config('states');
+        $staff = Staff::get();
+
+        return view(
+            'ngo.healthcard.investigation-list',
+            compact('combined', 'data', 'states', 'staff')
+        );
     }
 }
