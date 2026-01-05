@@ -274,18 +274,28 @@
                                     <strong>Beneficiaries ID No:</strong> {{ $person->identity_no }}
                                 </div>
 
-                                <div class="col-sm-12 mb-3">
+                                {{-- <div class="col-sm-12 mb-3">
                                     <strong>Hospital / Clinic / Medical Name:</strong>
                                     {{ \App\Models\HealthCard::hospital($card->hospital_name)->hospital_name }},
                                     {{ $card->hospital_name }}
                                     ,{{ \App\Models\HealthCard::hospital($card->hospital_name)->address }},{{ \App\Models\HealthCard::hospital($card->hospital_name)->operator_name }},
                                     {{ \App\Models\HealthCard::hospital($card->hospital_name)->contact_number }}
+                                </div> --}}
+                                  <div class="col-sm-12 mb-3">
+                                    <strong>Health Facility/Disease Name:</strong>
+                                    @if (!empty($card->diseases))
+                                        @foreach ($card->diseases as $disease)
+                                            {{ $loop->iteration }}. {{ $disease }}@if (!$loop->last)
+                                                ,
+                                            @endif
+                                        @endforeach
+                                    @endif
                                 </div>
-                                              <div class="col-sm-12 mb-3">
+                                <div class="col-sm-12 mb-3">
                                     <strong>Hospital / Clinic / Medical / Doctor Name:</strong>
 
-                                    @if (!empty($healthCard->hospital_name))
-                                        @foreach ($healthCard->hospital_name as $index => $hospitalCode)
+                                    @if (!empty($card->hospital_name))
+                                        @foreach ($card->hospital_name as $index => $hospitalCode)
                                             @php
                                                 $hospital = \App\Models\HealthCard::hospital($hospitalCode);
                                             @endphp

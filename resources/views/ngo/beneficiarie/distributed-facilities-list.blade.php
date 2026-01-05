@@ -500,7 +500,7 @@
                                         </td> --}}
                                         <td class="no-print">
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                                <a href="{{-- route('show-beneficiarie-report', [$item->id, $survey->id]) --}}"
+                                                <a href="{{ route('show-beneficiarie-receipt', [$item->id, $survey->id]) }}"
                                                     class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                     title="View">
                                                     Recipt

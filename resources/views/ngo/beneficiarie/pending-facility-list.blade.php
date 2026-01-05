@@ -241,8 +241,8 @@
                     <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
                 </div>
             </div>
-            <button type="button" id="openDistributeModal" class="btn btn-success" disabled>
-                Distribute Selected (<span id="selectedDistributeCount">0</span>)
+            <button type="button" id="openDistributeModal" class="btn btn-success mb-2" disabled>
+                Approve Distribute Selected (<span id="selectedDistributeCount">0</span>)
             </button>
 
             <div class="card shadow-sm printable">
@@ -521,6 +521,7 @@
             populateDistricts(this.value);
         });
     </script>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 

@@ -1078,4 +1078,14 @@ class BeneficiarieController extends Controller
         $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->find($beneficiarie_id);
         return view('ngo.beneficiarie.token', compact('beneficiarie', 'survey'));
     }
+
+    public function showbeneficiarieRecipt($beneficiarie_id, $survey_id)
+    {
+        $survey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+            ->where('id', $survey_id)
+            ->with('beneficiarie')
+            ->firstOrFail();
+        $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->find($beneficiarie_id);
+        return view('ngo.beneficiarie.recipt', compact('beneficiarie', 'survey'));
+    }
 }

@@ -52,12 +52,9 @@
                                 <td>{{ $key + 1 }}</td>
                                 <td>{{ $disease->disease }}</td>
                                 <td>
-                                    <form action="{{ route('disease.delete', $disease->id) }}" method="POST"
-                                        onsubmit="return confirm('Are you sure?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-danger btn-sm">Delete</button>
-                                    </form>
+                                    <a href="{{ route('delete.disease', $disease->id) }}"
+                                                onclick="return confirm('Are sure want to delete disease')"
+                                                class="btn btn-danger btn-sm">Delete</a>
                                 </td>
                             </tr>
                         @empty

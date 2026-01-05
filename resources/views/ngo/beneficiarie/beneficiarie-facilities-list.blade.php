@@ -201,7 +201,7 @@
                     <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
                 </div>
             </div>
-            <button type="button" id="openDistributeModal" class="btn btn-success" disabled>
+            <button type="button" id="openDistributeModal" class="btn btn-success mb-2" disabled>
                 Distribute Selected
             </button>
 
@@ -320,8 +320,9 @@
                                                     <i class="fa-regular fa-eye"></i> Facilities
                                                 </a>
 
-                                                <a href="{{ route('delete-distribute-facilities', [$item->id, $survey->id]) }}" onclick="return confirm('Are you sure want to delete Distribute Facilities')" class="btn btn-danger btn-sm px-3"
-                                                    title="Delete">
+                                                <a href="{{ route('delete-distribute-facilities', [$item->id, $survey->id]) }}"
+                                                    onclick="return confirm('Are you sure want to delete Distribute Facilities')"
+                                                    class="btn btn-danger btn-sm px-3" title="Delete">
                                                     <i class="fa-regular fa-trash"></i>
                                                 </a>
 
@@ -346,7 +347,7 @@
                 <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
                     <div class="modal-content">
 
-                        <form action="{{ route('store-bulk-distribute-status') }}" method="POST">
+                        <form action="{{ route('store-bulk-distribute') }}" method="POST">
                             @csrf
 
                             <!-- IMPORTANT: single hidden input ONLY -->
@@ -400,61 +401,60 @@
             window.print();
         }
     </script>
-   <script>
-document.addEventListener('DOMContentLoaded', function () {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
 
-    const selectAll   = document.getElementById('select_all_distribute');
-    const items       = document.querySelectorAll('.select_distribute_item');
-    const openBtn     = document.getElementById('openDistributeModal');
-    const modalCount  = document.getElementById('modalDistributeCount');
-    const hiddenInput = document.getElementById('distribute_items');
-    const modalEl     = document.getElementById('bulkDistributeModal');
+            const selectAll = document.getElementById('select_all_distribute');
+            const items = document.querySelectorAll('.select_distribute_item');
+            const openBtn = document.getElementById('openDistributeModal');
+            const modalCount = document.getElementById('modalDistributeCount');
+            const hiddenInput = document.getElementById('distribute_items');
+            const modalEl = document.getElementById('bulkDistributeModal');
 
-    let modalInstance = null;
+            let modalInstance = null;
 
-    function updateSelection() {
-        const selected = Array.from(items).filter(i => i.checked);
-        const count = selected.length;
+            function updateSelection() {
+                const selected = Array.from(items).filter(i => i.checked);
+                const count = selected.length;
 
-        openBtn.disabled = count === 0;
-        modalCount.textContent = count;
-        hiddenInput.value = selected.map(i => i.value).join(',');
+                openBtn.disabled = count === 0;
+                modalCount.textContent = count;
+                hiddenInput.value = selected.map(i => i.value).join(',');
 
-        if (selectAll) {
-            selectAll.checked = count === items.length && items.length > 0;
-            selectAll.indeterminate = count > 0 && count < items.length;
-        }
-    }
+                if (selectAll) {
+                    selectAll.checked = count === items.length && items.length > 0;
+                    selectAll.indeterminate = count > 0 && count < items.length;
+                }
+            }
 
-    /* Individual checkbox */
-    items.forEach(item => {
-        item.addEventListener('change', updateSelection);
-    });
-
-    /* Select all checkbox */
-    if (selectAll) {
-        selectAll.addEventListener('change', function () {
-            items.forEach(i => i.checked = this.checked);
-            updateSelection();
-        });
-    }
-
-    /* Open modal ONLY on button click */
-    openBtn.addEventListener('click', function () {
-
-        if (!hiddenInput.value) return;
-
-        if (!modalInstance) {
-            modalInstance = new bootstrap.Modal(modalEl, {
-                backdrop: 'static',
-                keyboard: false
+            /* Individual checkbox */
+            items.forEach(item => {
+                item.addEventListener('change', updateSelection);
             });
-        }
 
-        modalInstance.show();
-    });
+            /* Select all checkbox */
+            if (selectAll) {
+                selectAll.addEventListener('change', function() {
+                    items.forEach(i => i.checked = this.checked);
+                    updateSelection();
+                });
+            }
 
-});
-</script>
+            /* Open modal ONLY on button click */
+            openBtn.addEventListener('click', function() {
 
+                if (!hiddenInput.value) return;
+
+                if (!modalInstance) {
+                    modalInstance = new bootstrap.Modal(modalEl, {
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                }
+
+                modalInstance.show();
+            });
+
+        });
+    </script>
 @endsection
