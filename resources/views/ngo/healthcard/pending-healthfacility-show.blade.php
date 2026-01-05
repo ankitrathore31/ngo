@@ -333,15 +333,15 @@
                                     <div class="col-sm-4 mb-3">
                                         <strong>Bill Amount:</strong> {{ number_format($facility->bill_amount ?? 0, 2) }}
                                     </div>
-                                    {{-- <div class="col-sm-4 mb-3">
-                                        <strong>Bill Upload:</strong>
+                                    <div class="col-sm-4 mb-3">
+                                        <strong>Bill Uploaded:</strong>
                                         @if ($facility->bill_upload)
-                                            <a href="{{ asset('bills/' . $facility->bill_upload) }}"
+                                            <a href="{{ asset($facility->bill_upload) }}"
                                                 target="_blank">View</a>
                                         @else
                                             -
                                         @endif
-                                    </div> --}}
+                                    </div>
                                     {{-- <div class="col-sm-4 mb-3">
                                         <strong>Status:</strong> {{ $facility->status ?? '-' }}
                                     </div> --}}

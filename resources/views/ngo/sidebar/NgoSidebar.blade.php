@@ -1,9 +1,4 @@
 <style>
-    /* Keep navbar items in single row with horizontal scroll */
-    .navbar-nav {
-        white-space: nowrap;
-    }
-
     /* Horizontal scrollbar styling */
     .navbar-nav::-webkit-scrollbar {
         height: 6px;
@@ -68,14 +63,27 @@
     .dropdown-item:hover {
         background-image: none;
     }
+
+    /* Make dropdowns appear in front */
+    /* Prevent menu items from being cut off */
+    .navbar-nav {
+        flex-wrap: wrap;
+    }
+
+    .nav-item {
+        white-space: nowrap;
+    }
+
+
+    .navbar-nav .nav-link {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.9rem;
+    }
 </style>
 
-@php
-    $user = auth()->user();
-    $isStaff = $user && $user->user_type === 'staff';
-@endphp
 
-<nav class="navbar navbar-expand-md bg-primary" style="margin: 0; padding: 0;">
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg bg-primary">
     <div class="container-fluid">
         <!-- Toggle for Mobile -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
@@ -83,105 +91,19 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
+        @php
+            $user = auth()->user();
+            $isStaff = $user && $user->user_type === 'staff';
+        @endphp
         <!-- Navbar content -->
-        <div class="collapse navbar-collapse navbar-scroll" id="mainNavbar">
-            <ul class="navbar-nav flex-row flex-nowrap w-100">
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav">
 
                 <li class="nav-item">
                     <a href="{{ route('ngo') }}" class="nav-link text-white"><i class="fas fa-tachometer-alt"></i>
                         DASHBOARD</a>
                 </li>
 
-                <!-- Investgation -->
-                @if (!$isStaff || ($user->hasPermission('investigation') || $user->hasPermission('investigation')))
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-tasks"></i> INVESTIGATION REPORT
-                        </a>
-                        <ul class="dropdown-menu bg-primary">
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('addactivity') --}}">Total Registration</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Member List</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('activitylist') --}}">Total benefries List</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Demand List</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Distribute Benefries
-                                        List</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Staff List</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Organization</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total True Story List</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Social Activty</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Project</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Event List</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Donation</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Contact</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Work List</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Gallery Backup</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Socail Problem List</a>
-                                </li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Complain</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Tarining Benefries</a>
-                                </li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Course List</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Working Area</a></li>
-                            @endif
-
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Balance List</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Invest</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Expend</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Stock List</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('investigation'))
-                                <li><a class="dropdown-item" href="{{-- route('true.story') --}}">Total Website Traffic</a>
-                                </li>
-                            @endif
-                        </ul>
-                    </li>
-                @endif
                 <!-- Inbox -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
@@ -482,17 +404,6 @@
                     </li>
                 @endif
 
-            </ul>
-        </div>
-
-    </div>
-</nav>
-
-<nav class="navbar navbar-expand-md bg-primary" style="margin: 0; padding: 0;">
-    <div class="container-fluid no-border">
-        <div class="collapse navbar-collapse navbar-scroll" id="mainNavbar">
-            <ul class="navbar-nav flex-row flex-nowrap w-100">
-
                 <!-- Staff -->
                 @if (
                     !$isStaff ||
@@ -550,6 +461,7 @@
                     </li>
                 @endif
 
+
                 <!-- Membership -->
                 @if (
                     !$isStaff ||
@@ -588,6 +500,51 @@
                         </ul>
                     </li>
                 @endif
+
+
+                <!-- Promote -->
+                {{-- @if (!$isStaff || $user->hasPermission('promote-membership') || $user->hasPermission('promote-beneficiary') || $user->hasPermission('promote-staff'))
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-bullhorn"></i> PROMOTE
+                        </a>
+                        <ul class="dropdown-menu bg-primary">
+                            @if (!$isStaff || $user->hasPermission('promote-membership'))
+                                <li><a class="dropdown-item" href="#">Promote Membership</a></li>
+                            @endif
+                            @if (!$isStaff || $user->hasPermission('promote-beneficiary'))
+                                <li><a class="dropdown-item" href="#">Promote Beneficiary</a></li>
+                            @endif
+                            @if (!$isStaff || $user->hasPermission('promote-staff'))
+                                <li><a class="dropdown-item" href="#">Promote Staff</a></li>
+                            @endif
+                        </ul>
+                    </li>
+                @endif --}}
+
+
+                <!-- Certificate -->
+                {{-- @if (!$isStaff || $user->hasPermission('add-member-certificate') || $user->hasPermission('member-certificate-list') || $user->hasPermission('add-beneficiary-certificate') || $user->hasPermission('beneficiary-certificate-list'))
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-certificate"></i> CERTIFICATE
+                        </a>
+                        <ul class="dropdown-menu bg-primary">
+                            @if (!$isStaff || $user->hasPermission('add-member-certificate'))
+                                <li><a class="dropdown-item" href="#">Add Member Certificate</a></li>
+                            @endif
+                            @if (!$isStaff || $user->hasPermission('member-certificate-list'))
+                                <li><a class="dropdown-item" href="#">Member Certificate List</a></li>
+                            @endif
+                            @if (!$isStaff || $user->hasPermission('add-beneficiary-certificate'))
+                                <li><a class="dropdown-item" href="#">Add Beneficiary Certificate</a></li>
+                            @endif
+                            @if (!$isStaff || $user->hasPermission('beneficiary-certificate-list'))
+                                <li><a class="dropdown-item" href="#">Beneficiary Certificate List</a></li>
+                            @endif
+                        </ul>
+                    </li>
+                @endif --}}
 
 
                 <!-- letter -->
@@ -700,6 +657,24 @@
                         </ul>
                     </li>
                 @endif
+
+
+                <!-- Attendance -->
+                {{-- @if (!$isStaff || $user->hasPermission('beneficiary-attendance') || $user->hasPermission('staff-attendance'))
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-check"></i> ATTENDANCE
+                        </a>
+                        <ul class="dropdown-menu bg-primary">
+                            @if (!$isStaff || $user->hasPermission('beneficiary-attendance'))
+                                <li><a class="dropdown-item" href="#">Beneficiary Attendance</a></li>
+                            @endif
+                            @if (!$isStaff || $user->hasPermission('staff-attendance'))
+                                <li><a class="dropdown-item" href="#">Staff Attendance</a></li>
+                            @endif
+                        </ul>
+                    </li>
+                @endif --}}
 
 
                 <!-- Complaint -->
@@ -907,16 +882,6 @@
                     </li>
                 @endif
 
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<nav class="navbar navbar-expand-md bg-primary" style="margin: 0; padding: 0;">
-    <div class="container-fluid">
-        <div class="collapse navbar-collapse navbar-scroll" id="mainNavbar">
-            <ul class="navbar-nav flex-row flex-nowrap w-100">
-
                 <!-- Notice -->
                 @if (!$isStaff || $user->hasPermission('add-notice') || $user->hasPermission('notice-list'))
                     <li class="nav-item dropdown">
@@ -933,7 +898,6 @@
                         </ul>
                     </li>
                 @endif
-
                 <!-- Kyc -->
                 @if (!$isStaff || $user->hasPermission('kyc') || $user->hasPermission('kyc'))
                     <li class="nav-item dropdown">
@@ -953,8 +917,6 @@
                         </ul>
                     </li>
                 @endif
-
-
                 <!-- Facility -->
                 @if (!$isStaff || $user->hasPermission('kyc') || $user->hasPermission('kyc'))
                     <li class="nav-item dropdown">
@@ -987,7 +949,7 @@
                                         Facility Pending</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{-- route('list.healthcard') --}}">Health Facility Bill
+                                <li><a class="dropdown-item" href="{{ route('list.Investigationfacility') }}">Health Facility Bill
                                         Investigation</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('kyc'))
@@ -1018,7 +980,6 @@
                         </ul>
                     </li>
                 @endif
-
             </ul>
         </div>
     </div>

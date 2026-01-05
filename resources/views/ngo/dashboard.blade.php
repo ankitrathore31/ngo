@@ -25,6 +25,7 @@
             font-weight: bold;
         }
     </style>
+
     <div class="container-fluid my-4">
         @php
             $user = auth()->user();
@@ -824,6 +825,7 @@
         @endif
 
     </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         const monthlyData = @json(monthlyVisitorData());
