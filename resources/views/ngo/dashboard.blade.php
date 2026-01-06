@@ -722,30 +722,19 @@
                                     <i class="fas fa-wallet fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Health Facility Demand Approve</p>
-                                        <h5 class="mb-0">{{ ApproveHalthFacility() }}</h5>
+                                        <h5 class="mb-0">{{ ApprovelHalthFacility() }}</h5>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-md-4 col-sm-6 mb-3">
-                            <div class="card text-white bg-danger p-3 h-100 card-hover">
-                                <div class="d-flex align-items-center">
-                                    <i class="fas fa-wallet fa-2x me-3"></i>
-                                    <div>
-                                        <p class="mb-1">Health Facility Demand Reject</p>
-                                        <h5 class="mb-0">{{ RejectHalthFacility() }}</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-6 mb-3">
                             <div class="card text-white bg-success p-3 h-100 card-hover">
                                 <div class="d-flex align-items-center">
                                     <i class="fas fa-wallet fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Health Facility Final Approve</p>
-                                        <h5 class="mb-0">{{-- FinalApproveHalthFacility() --}}</h5>
+                                        <h5 class="mb-0">{{ ApproveHalthFacility() }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -756,7 +745,7 @@
                                     <i class="fas fa-wallet fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Pending Health Facility</p>
-                                        <h5 class="mb-0">{{-- RejectHalthFacility() --}}</h5>
+                                        <h5 class="mb-0">{{ DemandPendingHalthFacility() }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -767,7 +756,18 @@
                                     <i class="fas fa-wallet fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Non-Budget Health Facility</p>
-                                        <h5 class="mb-0">{{-- RejectHalthFacility() --}}</h5>
+                                        <h5 class="mb-0">{{ NonBudgetHalthFacility() }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="card text-white bg-danger p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-wallet fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Health Facility Demand Reject</p>
+                                        <h5 class="mb-0">{{ RejectHalthFacility() }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -825,7 +825,7 @@
         @endif
 
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         const monthlyData = @json(monthlyVisitorData());

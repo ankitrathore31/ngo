@@ -17,17 +17,26 @@ class HealthFacility extends Model
         'bill_date',
         'bill_gst',
         'bill_amount',
+        'clearness_amount',
         'bill_upload',
         'person_paying_bill',
         'investigation_officer',
         'verification_report',
-        'bill_witness',
-        'bill_witness_number',
-        'bill_status',
+        'verify_officer',
+        'verify_proof',
+        'investigation_proof',
+        'account_no',
+        'account_holder_name',
+        'ifsc_code',
+        'bank_name',
+        'bank_branch',
+        'account_holder_address',
+        'reason',
+        'remark',
         'status',
     ];
 
-      public function healthCard()
+    public function healthCard()
     {
         return $this->belongsTo(HealthCard::class, 'card_id');
     }

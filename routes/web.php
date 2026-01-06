@@ -253,7 +253,8 @@ Route::controller(BeneficiarieController::class)->group(function () {
     Route::get('ngo/Survey-received-list', 'surveyrecivedlist')->middleware('auth')->name('survey-received-list');
     Route::post('/beneficiaries/facilities/bulk-store',  'storeBulkBeneficiarieFacilities')->middleware('auth')
         ->name('store-bulk-beneficiarie-facilities');
-    Route::get('ngo/show-beneficiarie-token/{beneficiarie_id}/survey/{survey_id}', 'showbeneficiarietoken')->middleware('auth')->name('show-beneficiarie-token');
+    Route::get('ngo/show-beneficiarie-token', 'showbeneficiarietoken')->middleware('auth')->name('show-beneficiarie-token');
+        // Route::get('ngo/show-beneficiarie-token/{beneficiarie_id}/survey/{survey_id}', 'showbeneficiarietoken')->middleware('auth')->name('show-beneficiarie-token');
     Route::get('ngo/show-beneficiarie-receipt/{beneficiarie_id}/survey/{survey_id}', 'showbeneficiarieRecipt')->middleware('auth')->name('show-beneficiarie-receipt');
     Route::post('ngo/store-bulk-beneficiarie', 'storeBulkBeneficiarie')->middleware('auth')->name('store-bulk-beneficiarie');
     Route::post('ngo/store-bulk-distribute', 'storeBulkDistribute')->middleware('auth')->name('store-bulk-distribute');
@@ -581,10 +582,21 @@ Route::controller(HealthCardController::class)->middleware('auth')->group(functi
     Route::post('ngo/health-facility-investigation/store/{facility}', 'StoreFacilitiesInvestigation')->name('investigation.healthfacility.store');
     Route::get('ngo/pending-healthfacility/{facility}', 'ShowPendingFacility')->name('pending.healthfacility.show');
     Route::get('ngo/Investigation-facility-list', 'InvestigationFacilityList')->name('list.Investigationfacility');
+    Route::get('ngo/verify-facility-list', 'VerifyFacilityList')->name('list.Verifyhealthfacility');
     Route::post('ngo/health-facility-verify/store/{facility}', 'StoreFacilitiesVerify')->name('verify.healthfacility.store');
+    Route::post('ngo/facility-investigation-form/store/{facility}', 'StoreInvestigationForm')->name('investigation.form.store');
     Route::get('ngo/Investigation-facility-delete/{facility}', 'DeleteFacilitiesInvestigation')->name('delete.Investigationfacility');
-        Route::get('ngo/show-healthfacility-investigation/{facility}', 'ShowPendingInvestigationForm')->name('investigation.healthfacility.show');
-
+    Route::get('ngo/show-healthfacility-investigation/{facility}', 'ShowPendingInvestigationForm')->name('investigation.healthfacility.show');
+    Route::get('ngo/approvel-facility-list', 'ApprovelFacilityList')->name('list.Approvalhealthfacility');
+    Route::get('ngo/show-healthfacility-investigation-form/{facility}', 'ShowInvestigationForm')->name('healthfacility.investigation.form.show');
+    Route::post('ngo/facility-verify/store/{facility}', 'StoreVerifyHealth')->name('verify.healthfacility.store');
+    Route::get('ngo/show-healthfacility-verify-form/{facility}', 'ShowVerifyForm')->name('healthfacility.verify.form.show');
+    Route::post('ngo/facility-status/store/{facility}', 'StoreHealthFacilitiesStatus')->name('status.healthfacility.store');
+    Route::get('ngo/approve-facility-list', 'ApproveFacilityList')->name('list.Approvehealthfacility');
+    Route::get('ngo/non-budget-facility-list', 'NonBudgetFacilityList')->name('list.NonBudgethealthfacility');
+    Route::get('ngo/reject-facility-list', 'RejectFacilityList')->name('list.Rejecthealthfacility');
+    Route::get('ngo/demandpending-facility-list', 'DemandPendingFacilityList')->name('list.DemandPendinghealthfacility');
+    Route::get('ngo/show-healthfacility-final-form/{facility}', 'ShowFinalForm')->name('healthfacility.final.form.show');
 });
 
 require __DIR__ . '/auth.php';

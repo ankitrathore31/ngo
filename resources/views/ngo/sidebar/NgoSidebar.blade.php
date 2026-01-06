@@ -953,27 +953,27 @@
                                         Investigation</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{-- route('list.healthcard') --}}">Health Facility Bill
+                                <li><a class="dropdown-item" href="{{ route('list.Verifyhealthfacility') }}">Health Facility Bill
                                         Verify</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{-- route('list.healthcard') --}}">Health Facility Demand
+                                <li><a class="dropdown-item" href="{{ route('list.Approvalhealthfacility') }}">Health Facility Demand
                                         Approve</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{-- route('list.healthcard') --}}">Final Approve Health
+                                <li><a class="dropdown-item" href="{{ route('list.Approvehealthfacility') }}">Final Approve Health
                                         Facility</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{-- route('list.healthcard') --}}">Health Facility Reject</a>
+                                <li><a class="dropdown-item" href="{{ route('list.Rejecthealthfacility') }}">Health Facility Reject</a>
                                 </li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{-- route('list.healthcard') --}}">Pending Health Facility</a>
+                                <li><a class="dropdown-item" href="{{ route('list.DemandPendinghealthfacility') }}">Pending Health Facility</a>
                                 </li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{-- route('list.healthcard') --}}">Non-Budget Health
+                                <li><a class="dropdown-item" href="{{ route('list.NonBudgethealthfacility') }}">Non-Budget Health
                                         Facility</a></li>
                             @endif
 

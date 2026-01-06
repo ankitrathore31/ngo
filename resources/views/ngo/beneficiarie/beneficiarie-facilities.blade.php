@@ -251,7 +251,7 @@
                                 </th>
                                 <th>Sr. No.</th>
                                 <th>Registration No.</th>
-                                <th>Name</th>
+                                <th>Beneficiarie Name</th>
                                 <th>Father/Husband Name</th>
                                 <th>Address</th>
                                 <th>Identity No.</th>

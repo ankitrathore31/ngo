@@ -119,6 +119,12 @@
                 {{ session('success') }}
             </div>
         @endif
+        @if (session('warning'))
+            <div class="alert alert-warning">
+                {{ session('warning') }}
+            </div>
+        @endif
+
         <div class="container-fluid mt-5">
             <div class=" rounded print-card">
                 <div>
@@ -286,9 +292,14 @@
                         </div>
 
                         {{-- Bill Date --}}
+                        {{-- Bill Date --}}
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Bill Date</label>
                             <input type="date" name="bill_date" class="form-control">
+
+                            <small class="text-danger">
+                                Please submit the bill for only one month with the current date.
+                            </small>
                         </div>
 
                         {{-- Bill GST --}}
