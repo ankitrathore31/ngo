@@ -773,6 +773,131 @@
         <div class="container-fluid mt-5">
             <div class="row justify-content-center d-flex">
                 <div class="col-md-10 justify-content-center d-flex" style="gap: 15px;">
+                    <h2 class="section-title mb-4"><b>- HEALTH CARD FACILITY</b></h2>
+                    <select class="form-control w-25" id="session">
+                        <option value="">All Session</option>
+                        @foreach ($data as $session)
+                            <option value="{{ $session->session_date }}">{{ $session->session_date }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="card text-white bg-success p-3 h-100 card-hover">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-coins fa-2x me-3"></i>
+                            <div>
+                                <p class="mb-1">Total Health Card</p>
+                                <h5 class="mb-0">{{ totalHealthCard() }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="card text-dark bg-warning p-3 h-100 card-hover">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-file-invoice-dollar fa-2x me-3"></i>
+                            <div>
+                                <p class="mb-1">Demand Health Facility</p>
+                                <h5 class="mb-0">{{ DemandHalthFacility() }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="card text-white bg-secondary p-3 h-100 card-hover">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-wallet fa-2x me-3"></i>
+                            <div>
+                                <p class="mb-1">Health Facility Bill Investigation</p>
+                                <h5 class="mb-0">{{ InvestigationHalthFacility() }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="card text-white bg-primary p-3 h-100 card-hover">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-wallet fa-2x me-3"></i>
+                            <div>
+                                <p class="mb-1">Health Facility Bill Verify</p>
+                                <h5 class="mb-0">{{ VerifyHalthFacility() }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="card text-white bg-warning p-3 h-100 card-hover">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-wallet fa-2x me-3"></i>
+                            <div>
+                                <p class="mb-1">Health Facility Demand Approve</p>
+                                <h5 class="mb-0">{{ ApproveHalthFacility() }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="card text-white bg-success p-3 h-100 card-hover">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-wallet fa-2x me-3"></i>
+                            <div>
+                                <p class="mb-1">Health Facility Final Approve</p>
+                                <h5 class="mb-0">{{ ApprovelHalthFacility() }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="card text-white bg-primary p-3 h-100 card-hover">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-wallet fa-2x me-3"></i>
+                            <div>
+                                <p class="mb-1">Pending Health Facility</p>
+                                <h5 class="mb-0">{{ DemandPendingHalthFacility() }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="card text-white bg-primary p-3 h-100 card-hover">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-wallet fa-2x me-3"></i>
+                            <div>
+                                <p class="mb-1">Non-Budget Health Facility</p>
+                                <h5 class="mb-0">{{ NonBudgetHalthFacility() }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="card text-white bg-danger p-3 h-100 card-hover">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-wallet fa-2x me-3"></i>
+                            <div>
+                                <p class="mb-1">Health Facility Demand Reject</p>
+                                <h5 class="mb-0">{{ RejectHalthFacility() }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section>
+        <div class="container-fluid mt-5">
+            <div class="row justify-content-center d-flex">
+                <div class="col-md-10 justify-content-center d-flex" style="gap: 15px;">
                     <h2 class="section-title mb-4"><b>SANSTHA WORKING AREA</b></h2>
 
 

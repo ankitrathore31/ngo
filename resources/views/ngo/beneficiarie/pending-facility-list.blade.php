@@ -241,9 +241,22 @@
                     <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
                 </div>
             </div>
-            <button type="button" id="openDistributeModal" class="btn btn-success mb-2" disabled>
-                Approve Distribute Selected (<span id="selectedDistributeCount">0</span>)
-            </button>
+            <div class="row mb-3">
+                <!-- Left side button -->
+                <div class="col-md-6 text-start">
+                    <button type="button" id="openDistributeModal" class="btn btn-success mb-2" disabled>
+                        Approve Distribute Selected
+                        (<span id="selectedDistributeCount">0</span>)
+                    </button>
+                </div>
+
+                <!-- Right side button -->
+                <div class="col-md-6 text-end">
+                    <a href="{{ route('show-beneficiarie-token') }}" class="btn btn-success btn-sm px-3" title="View">
+                        Token
+                    </a>
+                </div>
+            </div>
 
             <div class="card shadow-sm printable">
                 <div class="card-body table-responsive">
@@ -292,7 +305,7 @@
                                 </th>
                                 <th>Sr. No.</th>
                                 <th>Registration No.</th>
-                                <th>Name</th>
+                                <th>Beneficiarie Name</th>
                                 <th>Father/Husband Name</th>
                                 <th>Address</th>
                                 <th>Identity No.</th>
@@ -312,7 +325,7 @@
                                 <th>Beneficiarie Eligibility category</th>
                                 <th>Session</th>
                                 <th class="no-print">Action</th>
-                                <th class="no-print">Token No.</th>
+                                {{-- <th class="no-print">Token No.</th> --}}
                                 <th class="no-print">Receiving Receipt</th>
                             </tr>
                         </thead>
@@ -363,14 +376,15 @@
                                                     Approve
                                                 </a>
 
-                                               <a href="{{ route('delete-distribute-facilities', [$item->id, $survey->id]) }}" onclick="return confirm('Are you sure want to delete Distribute Facilities')" class="btn btn-danger btn-sm px-3"
-                                                    title="Delete">
+                                                <a href="{{ route('delete-distribute-facilities', [$item->id, $survey->id]) }}"
+                                                    onclick="return confirm('Are you sure want to delete Distribute Facilities')"
+                                                    class="btn btn-danger btn-sm px-3" title="Delete">
                                                     <i class="fa-regular fa-trash"></i>
                                                 </a>
 
                                             </div>
                                         </td>
-                                        <td class="no-print">
+                                        {{-- <td class="no-print">
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">
                                                 <a href="{{ route('show-beneficiarie-token', [$item->id, $survey->id]) }}"
                                                     class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
@@ -378,10 +392,10 @@
                                                     Token
                                                 </a>
                                             </div>
-                                        </td>
+                                        </td> --}}
                                         <td class="no-print">
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                                <a href="{{-- route('show-beneficiarie-report', [$item->id, $survey->id]) --}}"
+                                                <a href="{{ route('show-beneficiarie-receipt', [$item->id, $survey->id]) }}"
                                                     class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                     title="View">
                                                     Recipt
@@ -521,7 +535,7 @@
             populateDistricts(this.value);
         });
     </script>
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 

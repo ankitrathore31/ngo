@@ -461,6 +461,21 @@ if (!function_exists('ApproveHalthFacility')) {
         return $data;
     }
 }
+if (!function_exists('ApproveHalthFacility')) {
+    function ApproveHalthFacility()
+    {
+        $data = HealthFacility::where('status', 'Approve')->count();
+        return $data;
+    }
+}
+if (!function_exists('ApprovelHalthFacility')) {
+    function ApprovelHalthFacility()
+    {
+        $data = HealthFacility::where('status', 'Approval')->count();
+        return $data;
+    }
+}
+
 if (!function_exists('RejectHalthFacility')) {
     function RejectHalthFacility()
     {
@@ -468,3 +483,20 @@ if (!function_exists('RejectHalthFacility')) {
         return $data;
     }
 }
+
+if (!function_exists('NonBudgetHalthFacility')) {
+    function NonBudgetHalthFacility()
+    {
+        $data = HealthFacility::where('status', 'Non-Budget')->count();
+        return $data;
+    }
+}
+if (!function_exists('DemandPendinglHalthFacility')) {
+    function DemandPendingHalthFacility()
+    {
+        $data = HealthFacility::where('status', 'Demand-Pending')->count();
+        return $data;
+    }
+}
+
+

@@ -106,7 +106,7 @@
 
     <div class="wrapper">
         <div class="d-flex justify-content-between align-person-centre mb-0 mt-4">
-            <h5 class="mb-0">Investigation Form</h5>
+            <h5 class="mb-0">Verify Health Facilities Bill</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                     <li class="breadcrumb-person"><a href="{{ url('dashboard') }}">Dashboard</a></li>
@@ -119,20 +119,11 @@
                 {{ session('success') }}
             </div>
         @endif
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
         <div class="container-fluid mt-5">
             <!-- Language Toggle -->
             <div class="d-flex justify-content-between align-persons-center mb-3 mt-4">
                 <h5 class="mb-0">
-                    <span>Investigation Form</span>
+                    <span>Verify Health Facilities Bill</span>
                 </h5>
                 <div>
                     <button onclick="window.print()" class="btn btn-primary">Print </button>
@@ -147,7 +138,7 @@
                             <div class="text-center mb-4 border-bottom pb-2">
                                 <div class="row mb-2">
                                     <div class="col-sm-12">
-                                        <h3><b>Investigation Form</b></h3>
+                                        <h3><b>Verify Health Facilities Bill</b></h3>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -327,7 +318,7 @@
                                         <strong>Treatment Type:</strong> {{ $facility->treatment_type ?? '-' }}
                                     </div>
                                     <div class="col-sm-6 mb-3">
-                                        <strong>Hospital/Clinic/Medical/Doctor Name::</strong>
+                                        <strong>Hospital/Clinic/Medical/Doctor Name:</strong>
                                         {{ $facility->hospital_name ?? '-' }}
                                     </div>
                                     <div class="col-sm-4 mb-3">
@@ -343,7 +334,7 @@
                                     <div class="col-sm-4 mb-3">
                                         <strong>Bill Amount:</strong> {{ number_format($facility->bill_amount ?? 0, 2) }}
                                     </div>
-                                    <div class="col-sm-4 mb-3">
+                                    <div class="col-sm-4 mb-3 no-print">
                                         <strong>Bill Uploaded:</strong>
                                         @if ($facility->bill_upload)
                                             <a href="{{ asset($facility->bill_upload) }}" target="_blank">View</a>
@@ -352,76 +343,75 @@
                                         @endif
                                     </div>
                                     <div class="col-sm-4 mb-3">
-                                        <b>Investigation Officer</b> {{ $facility->investigation_officer ?? 'Not Found' }}
+                                        <b>Investigation Officer:</b> {{ $facility->investigation_officer ?? 'Not Found' }}
                                     </div>
 
-                                    <form action="{{ route('investigation.form.store', $facility->id) }}" method="POST"
-                                        enctype="multipart/form-data">
+                                    <div class="col-sm-4 mb-3">
+                                        <b>Person Paying Bill Name:</b>
+                                        {{ $facility->person_paying_bill ?? 'Not Found' }}
+                                    </div>
+
+                                    <div class="col-sm-4 mb-3">
+                                        <b>Account No:</b>
+                                        {{ $facility->investigation_officer ?? 'Not Found' }}
+                                    </div>
+
+                                    <div class="col-sm-4 mb-3">
+                                        <b>Account Holder Name:</b>
+                                        {{ $facility->account_holder_name ?? 'Not Found' }}
+                                    </div>
+
+                                    <div class="col-sm-4 mb-3">
+                                        <b>Bank IFSC Code:</b>
+                                        {{ $facility->ifsc_code ?? 'Not Found' }}
+                                    </div>
+
+                                    <div class="col-sm-4 mb-3">
+                                        <b>Bank Name:</b>
+                                        {{ $facility->bank_name ?? 'Not Found' }}
+                                    </div>
+
+                                    <div class="col-sm-4 mb-3">
+                                        <b>Bank Branch:</b>
+                                        {{ $facility->bank_branch ?? 'Not Found' }}
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3">
+                                        <b>Account Holder Address:</b>
+                                        {{ $facility->account_holder_address ?? 'Not Found' }}
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <b>Verify Officer:</b>
+                                        {{ $facility->verify_officer ?? 'Not Found' }}
+                                    </div>
+                                    @if ($facility->investigation_proof)
+                                        <div class="mb-3 col-sm-6 no-print">
+                                            <b>Investigation Proof:</b>
+                                            <a href="{{ asset('images/' . $facility->investigation_proof) }}"
+                                                target="_blank">
+                                                View Proof
+                                            </a>
+                                        </div>
+                                    @endif
+
+                                    <form action="{{ route('verify.healthfacility.store', $facility->id) }}"
+                                        method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <div class="row">
 
-                                            <div class="col-sm-4 mb-3">
-                                                <b>Person Paying Bill Name</b>
-                                                <input type="text" class="form-control no-print"
-                                                    name="person_paying_bill">
-                                            </div>
-
-                                            <div class="col-sm-4 mb-3">
-                                                <b>Account No.</b>
-                                                <input type="text" class="form-control no-print" name="account_no">
-                                            </div>
-
-                                            <div class="col-sm-4 mb-3">
-                                                <b>Account Holder Name</b>
-                                                <input type="text" class="form-control no-print"
-                                                    name="account_holder_name">
-                                            </div>
-
-                                            <div class="col-sm-4 mb-3">
-                                                <b>Bank IFSC Code</b>
-                                                <input type="text" class="form-control no-print" name="ifsc_code">
-                                            </div>
-
-                                            <div class="col-sm-4 mb-3">
-                                                <b>Bank Name</b>
-                                                <input type="text" class="form-control no-print" name="bank_name">
-                                            </div>
-
-                                            <div class="col-sm-4 mb-3">
-                                                <b>Bank Branch</b>
-                                                <input type="text" class="form-control no-print" name="bank_branch">
-                                            </div>
-
-                                            <div class="col-sm-6 mb-3">
-                                                <b>Account Holder Address</b>
-                                                <textarea class="form-control no-print" name="account_holder_address" rows="3"></textarea>
-                                            </div>
-
                                             <div class="col-sm-6 mb-3 no-print">
-                                                <b>Verify Officer</b>
-                                                <select name="verify_officer" class="form-control" required>
-                                                    <option value="">Select Officer</option>
-                                                    @foreach ($staff as $person)
-                                                        <option
-                                                            value="{{ $person->name }} ({{ $person->staff_code }}) ({{ $person->position }})"
-                                                            {{ $facility->verify_officer == $person->name . ' (' . $person->staff_code . ') (' . $person->position . ')'
-                                                                ? 'selected'
-                                                                : '' }}>
-                                                            {{ $person->name }} ({{ $person->staff_code }})
-                                                            ({{ $person->position }})
-                                                        </option>
-                                                    @endforeach
-                                                </select>
+                                                <b>Verify Proof <small>(Upload Photo)</small></b>
+                                                <input type="file" name="verify_proof" class="form-control">
                                             </div>
 
-                                            <div class="col-sm-6 mb-3 no-print">
-                                                <b>Investigation Proof <small>(Upload Photo)</small></b>
-                                                <input type="file" name="investigation_proof" class="form-control">
+                                            <div class="col-sm-3 mb-3 no-print">
+                                                <input type="submit" value="Send To Director"
+                                                    class="btn btn-success mt-4 no-print">
                                             </div>
 
-                                            <div class="col-sm-6 mb-3 no-print">
-                                                <input type="submit" value="Send To Verify"
-                                                    class="btn btn-success mt-2 no-print">
+                                            <div class="col-sm-3 mb-3 text-start no-print">
+                                                <a href="{{-- route('reject.healthfacility.investigation', $facility->id) --}}"
+                                                    class="btn mt-4 btn-danger">Reject Investigation</a>
                                             </div>
 
                                         </div>
@@ -429,7 +419,7 @@
                                     </form>
 
                                     <div class="col-sm-12 mb-4 text-end mb-3">
-                                        <b>Investigation Officer Sign</b>
+                                        <b>Verify Officer Sign</b>
                                     </div>
 
                                 </div>
