@@ -843,12 +843,12 @@ class HealthCardController extends Controller
     public function StoreFacilitiesInvestigation(Request $request, HealthFacility $facility)
     {
         $validated = $request->validate([
-            'person_paying_bill'    => 'required|string|max:255',
+            // 'person_paying_bill'    => 'required|string|max:255',
             'investigation_officer' => 'required|string|max:255',
         ]);
 
         $facility->update([
-            'person_paying_bill'    => $validated['person_paying_bill'],
+            // 'person_paying_bill'    => $validated['person_paying_bill'],
             'investigation_officer' => $validated['investigation_officer'],
             'status'                => 'Investigation',
         ]);
@@ -973,5 +973,16 @@ class HealthCardController extends Controller
             'ngo.healthcard.investigation-list',
             compact('combined', 'data', 'states', 'staff')
         );
+    }
+
+    public function ShowPendingInvestigationForm(HealthFacility $facility)
+    {
+        $card = $facility->healthCard;
+
+        // Dynamically determine the person (beneficiarie or member)
+        $person = \App\Models\beneficiarie::find($card->reg_id)
+            ?? \App\Models\Member::find($card->reg_id);
+
+        return view('ngo.healthcard.investigation-form', compact('facility', 'card', 'person'));
     }
 }

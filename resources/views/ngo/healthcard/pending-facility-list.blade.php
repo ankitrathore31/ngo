@@ -189,22 +189,17 @@
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <strong>Name:</strong> {{ $item->name }}<br>
-                                            <strong>Father/Husband Name:</strong> {{ $item->name }}<br>
-                                            <strong>Reg No:</strong> {{ $item->registration_no }}
+                                            <strong>Father/Husband Name:</strong> {{ $item->gurdian_name }}<br>
+                                            <strong>Registration No:</strong> {{ $item->registration_no }}
                                         </div>
                                         <div class="col-md-6">
-                                            <strong>Card No:</strong> {{ $card->healthcard_no }}<br>
-                                            <strong>Bill No:</strong> {{ $facility->bill_no }}
+                                            <strong>Health Card No:</strong> {{ $card->healthcard_no }}<br>
+                                            <strong>Bill No:</strong> {{ $facility->bill_no }} <br>
+                                            <strong>Amount:</strong> {{ number_format($facility->bill_amount ?? 0, 2) }}
                                         </div>
                                     </div>
 
                                     <hr>
-
-                                    <div class="mb-3">
-                                        <label class="form-label">Person Paying Bill</label>
-                                        <input type="text" name="person_paying_bill" class="form-control"
-                                            value="{{ $facility->person_paying_bill }}" required>
-                                    </div>
 
                                     <div class="mb-3">
                                         <label class="form-label">Investigation Officer</label>
@@ -227,7 +222,7 @@
                                 </div>
 
                                 <div class="modal-footer">
-                                    <button type="submit" class="btn btn-success">Save</button>
+                                    <button type="submit" class="btn btn-success">Send Investigation Officer</button>
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                         Cancel
                                     </button>

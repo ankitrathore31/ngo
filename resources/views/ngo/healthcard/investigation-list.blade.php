@@ -59,7 +59,8 @@
                     <div class="row">
                         <div class="col-md-4">
                             <button type="submit" class="btn btn-primary me-1">Search</button>
-                            <a href="{{ route('list.Investigationfacility') }}" class="btn btn-info text-white me-1">Reset</a>
+                            <a href="{{ route('list.Investigationfacility') }}"
+                                class="btn btn-info text-white me-1">Reset</a>
                         </div>
                     </div>
                 </form>
@@ -90,7 +91,7 @@
                                 <th>Bill Date</th>
                                 <th>Bill Amount</th>
                                 <th>Investigation Officer</th>
-                                <th>Bill Pay Person</th>
+                                {{-- <th>Bill Pay Person</th> --}}
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -134,28 +135,23 @@
                                     </td>
                                     <td>{{ number_format($facility->bill_amount ?? 0, 2) }}</td>
                                     <td>{{ $facility->investigation_officer }}</td>
-                                    <td>{{ $facility->person_paying_bill }}</td>
+                                    {{-- <td>{{ $facility->person_paying_bill }}</td> --}}
                                     <td>
-                                        {{-- <a href="{{ route('pending.healthfacility.show', $facility->id) }}"
-                                            class="btn btn-info btn-sm me-1" title="Show">
-                                            <i class="fa fa-eye"></i>
+                                        <a href="{{ route('investigation.healthfacility.show', $facility->id) }}"
+                                            class="btn btn-warning btn-sm me-2 mb-1" title="Edit">
+                                            Investigation
                                         </a>
 
-                                        <a href="{{ route('edit.healthfacility', $facility->id) }}"
-                                            class="btn btn-warning btn-sm me-1" title="Edit">
-                                            <i class="fa fa-edit"></i>
-                                        </a> --}}
+                                        {{-- <button type="button" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal"
+                                            data-bs-target="#investigationModal-{{ $facility->id }}">
+                                            Investigation
+                                        </button> --}}
 
                                         <a href="{{ route('delete.Investigationfacility', $facility->id) }}"
                                             onclick="return confirm('Are sure want to delete Health Facility Investigation')"
-                                            class="btn btn-danger btn-sm me-1" title="Delete">
+                                            class="btn btn-danger btn-sm me-2" title="Delete">
                                             <i class="fa fa-trash"></i>
                                         </a>
-
-                                        <button type="button" class="btn btn-primary btn-sm me-1" data-bs-toggle="modal"
-                                            data-bs-target="#investigationModal-{{ $facility->id }}">
-                                            Verify
-                                        </button>
 
                                     </td>
                                 </tr>
@@ -190,14 +186,13 @@
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <strong>Name:</strong> {{ $item->name }}<br>
-                                            <strong>Father/Husband Name:</strong> {{ $item->name }}<br>
+                                            <strong>Father/Husband Name:</strong> {{ $item->gurdian_name }}<br>
                                             <strong>Reg No:</strong> {{ $item->registration_no }}
                                         </div>
                                         <div class="col-md-6">
                                             <strong>Card No:</strong> {{ $card->healthcard_no }}<br>
                                             <strong>Bill No:</strong> {{ $facility->bill_no }}
                                             <strong>Investigation Officer:</strong> {{ $facility->investigation_officer }}
-                                            {{-- <strong>Bill No:</strong> {{ $facility->bill_no }} --}}
                                         </div>
                                     </div>
 

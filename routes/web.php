@@ -583,6 +583,8 @@ Route::controller(HealthCardController::class)->middleware('auth')->group(functi
     Route::get('ngo/Investigation-facility-list', 'InvestigationFacilityList')->name('list.Investigationfacility');
     Route::post('ngo/health-facility-verify/store/{facility}', 'StoreFacilitiesVerify')->name('verify.healthfacility.store');
     Route::get('ngo/Investigation-facility-delete/{facility}', 'DeleteFacilitiesInvestigation')->name('delete.Investigationfacility');
+        Route::get('ngo/show-healthfacility-investigation/{facility}', 'ShowPendingInvestigationForm')->name('investigation.healthfacility.show');
+
 });
 
 require __DIR__ . '/auth.php';
