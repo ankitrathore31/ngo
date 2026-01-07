@@ -410,7 +410,7 @@
                                             </div>
 
                                             <div class="col-sm-3 mb-3 text-start no-print">
-                                                <a href="{{-- route('reject.healthfacility.investigation', $facility->id) --}}"
+                                                <a href="{{ route('healthfacility.investigation.form.reject', $facility->id) }}"
                                                     class="btn mt-4 btn-danger">Reject Investigation</a>
                                             </div>
 

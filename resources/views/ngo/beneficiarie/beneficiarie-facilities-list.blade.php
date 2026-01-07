@@ -123,7 +123,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <form method="GET" action="{{ route('beneficiarie-facilities-list') }}" class="row g-3 mb-4">
-                        <div class="col-md-4">
+                        <div class="col-md-3 mb-2">
                             {{-- <label for="session_filter" class="form-label">Select Session</label> --}}
                             <select name="session_filter" id="session_filter" class="form-control">
                                 <option value="">All Sessions</option> <!-- Default option to show all -->
@@ -136,7 +136,20 @@
                             </select>
                         </div>
 
-                        <div class="col-md-4 mb-3">
+                          <div class="col-md-3 col-sm-4 mb-3">
+                            <input type="number" class="form-control" name="application_no"
+                                placeholder="Search By Application/Registration No.">
+                        </div>
+                        <div class="col-md-3 col-sm-4 mb-3">
+                            <input type="number" class="form-control" name="registration_no"
+                                placeholder="Search By Mobile/Idtinty No.">
+                        </div>
+                        <div class="col-md-3 col-sm-4 mb-3">
+                            <input type="text" class="form-control" name="name"
+                                placeholder="Search By Person/Guardian's Name">
+                        </div>
+
+                        <div class="col-md-3 mb-3">
                             <select id="category_filter" name="category_filter"
                                 class="form-control @error('category_filter') is-invalid @enderror">
                                 <option value="">-- Select Facilities Category --</option>
@@ -152,7 +165,7 @@
                             @enderror
                         </div>
 
-                        <div class=" col-md-4">
+                        <div class=" col-md-3 mb-2">
                             {{-- <label for="bene_category">Beneficiarie Eligibility Category</label> --}}
                             <select id="bene_category" name="bene_category" class="form-control">
                                 <option value="">-- Select Beneficiarie Eligibility Category --</option>
@@ -174,24 +187,7 @@
                                 <option value="Large Farmers">15. Large Farmers</option>
                             </select>
                         </div>
-
-
-                        <div class="col-md-4 mb-3">
-                            <label for="survey_officer" class="form-label">Survey Officer:</label>
-                            <select name="survey_officer"
-                                class="form-control @error('survey_officer') is-invalid @enderror">
-                                <option value="">Select Survey Officer</option>
-                                @foreach ($staff as $person)
-                                    <option value="{{ $person->id }}"
-                                        {{ old('survey_officer') == $person->id ? 'selected' : '' }}>
-                                        {{ $person->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('survey_officer')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
+                        
                         <div class="col-md-4">
                             <button type="submit" class="btn btn-primary me-2">Search</button>
                             <a href="{{ route('beneficiarie-facilities-list') }}"

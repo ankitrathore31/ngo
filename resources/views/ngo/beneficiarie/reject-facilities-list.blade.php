@@ -123,62 +123,128 @@
             <div class="row">
                 <div class="col-md-12">
                     <form method="GET" action="{{ route('pending-distribute-list') }}" class="row g-3 mb-4">
-                        <div class="col-md-4">
-                            {{-- <label for="session_filter" class="form-label">Select Session</label> --}}
-                            <select name="session_filter" id="session_filter" class="form-control"
-                                >
-                                <option value="">All Sessions</option> <!-- Default option to show all -->
-                                @foreach ($data as $session)
-                                    <option value="{{ $session->session_date }}"
-                                        {{ request('session_filter') == $session->session_date ? 'selected' : '' }}>
-                                        {{ $session->session_date }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                {{-- <label for="session_filter" class="form-label">Select Session</label> --}}
+                                <select name="session_filter" id="session_filter" class="form-control">
+                                    <option value="">All Sessions</option> <!-- Default option to show all -->
+                                    @foreach ($data as $session)
+                                        <option value="{{ $session->session_date }}"
+                                            {{ request('session_filter') == $session->session_date ? 'selected' : '' }}>
+                                            {{ $session->session_date }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
 
-                        <div class="col-md-4 mb-3">
-                            <select id="category_filter" name="category_filter"
-                                class="form-control @error('category_filter') is-invalid @enderror">
-                                <option value="">-- Select Facilities Category --</option>
-                                @foreach ($category as $cat)
-                                    <option value="{{ $cat->category }}"
-                                        {{ request('category_filter') == $cat->category ? 'selected' : '' }}>
-                                        {{ $cat->category }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('category_filter')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
+                            <div class="col-md-3 col-sm-4 mb-3">
+                                <input type="number" class="form-control" name="application_no"
+                                    placeholder="Search By Application/Registration No.">
+                            </div>
+                            <div class="col-md-3 col-sm-4 mb-3">
+                                <input type="number" class="form-control" name="registration_no"
+                                    placeholder="Search By Mobile/Idtinty No.">
+                            </div>
+                            <div class="col-md-3 col-sm-4 mb-3">
+                                <input type="text" class="form-control" name="name"
+                                    placeholder="Search By Person/Guardian's Name">
+                            </div>
 
-                        <div class=" col-md-4">
-                            {{-- <label for="bene_category">Beneficiarie Eligibility Category</label> --}}
-                            <select id="bene_category" name="bene_category" class="form-control" >
-                                <option value="">-- Select Beneficiarie Eligibility Category --</option>
-                                <option value="Homeless Families">1. Homeless Families</option>
-                                <option value="People living in kutcha or one-room houses">2. People living in kutcha or
-                                    one-room houses</option>
-                                <option value="Widows">3. Widows</option>
-                                <option value="Elderly Women">4. Elderly Women</option>
-                                <option value="Persons with Disabilities">5. Persons with Disabilities</option>
-                                <option value="Landless">6. Landless</option>
-                                <option value="Economically Weaker Section">7. Economically Weaker Section</option>
-                                <option value="Laborers">8. Laborers</option>
-                                <option value="Scheduled Tribes">9. Scheduled Tribes</option>
-                                <option value="Scheduled Castes">10. Scheduled Castes</option>
-                                <option value="Based on Low Income">11. Based on Low Income</option>
-                                <option value="Affected People">12. Affected People</option>
-                                <option value="Marginal Farmers">13. Marginal Farmers</option>
-                                <option value="Small Farmers">14. Small Farmers</option>
-                                <option value="Large Farmers">15. Large Farmers</option>
-                            </select>
+                            <div class="col-md-3 mb-3">
+                                <select id="category_filter" name="category_filter"
+                                    class="form-control @error('category_filter') is-invalid @enderror">
+                                    <option value="">-- Select Facilities Category --</option>
+                                    @foreach ($category as $cat)
+                                        <option value="{{ $cat->category }}"
+                                            {{ request('category_filter') == $cat->category ? 'selected' : '' }}>
+                                            {{ $cat->category }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('category_filter')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div class=" col-md-3">
+                                {{-- <label for="bene_category">Beneficiarie Eligibility Category</label> --}}
+                                <select id="bene_category" name="bene_category" class="form-control">
+                                    <option value="">-- Select Beneficiarie Eligibility Category --</option>
+                                    <option value="Homeless Families">1. Homeless Families</option>
+                                    <option value="People living in kutcha or one-room houses">2. People living in kutcha or
+                                        one-room houses</option>
+                                    <option value="Widows">3. Widows</option>
+                                    <option value="Elderly Women">4. Elderly Women</option>
+                                    <option value="Persons with Disabilities">5. Persons with Disabilities</option>
+                                    <option value="Landless">6. Landless</option>
+                                    <option value="Economically Weaker Section">7. Economically Weaker Section</option>
+                                    <option value="Laborers">8. Laborers</option>
+                                    <option value="Scheduled Tribes">9. Scheduled Tribes</option>
+                                    <option value="Scheduled Castes">10. Scheduled Castes</option>
+                                    <option value="Based on Low Income">11. Based on Low Income</option>
+                                    <option value="Affected People">12. Affected People</option>
+                                    <option value="Marginal Farmers">13. Marginal Farmers</option>
+                                    <option value="Small Farmers">14. Small Farmers</option>
+                                    <option value="Large Farmers">15. Large Farmers</option>
+                                </select>
+                            </div>
+
+
+                            <div class="col-md-3 form-group mb-3">
+                                <input type="date" id="distribute_date" name="distribute_date" class="form-control"
+                                    value="{{ old('distribute_date') }}">
+                                <small class="form-text text-muted"><b>Select Distribute Date</b></small>
+                                @error('distribute_date')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            @php
+                                $districtsByState = config('districts');
+                            @endphp
+                            <div class="col-md-3 col-sm-6 form-group mb-3">
+                                {{-- <label for="stateSelect" class="form-label">State: <span class="text-danger">*</span></label> --}}
+                                <select class="form-control @error('state') is-invalid @enderror" name="state"
+                                    id="stateSelect">
+                                    <option value="">Select State</option>
+                                    @foreach ($districtsByState as $state => $districts)
+                                        <option value="{{ $state }}"
+                                            {{ old('state') == $state ? 'selected' : '' }}>
+                                            {{ $state }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('state')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+
+                            </div>
+                            <div class="col-md-3 col-sm-6 form-group mb-3">
+                                {{-- <label for="districtSelect" class="form-label">District: <span
+                                    class="text-danger">*</span></label> --}}
+                                <select class="form-control @error('district') is-invalid @enderror" name="district"
+                                    id="districtSelect">
+                                    <option value="">Select District</option>
+                                </select>
+                                @error('district')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col-md-3 col-sm-6 form-group mb-3">
+                                {{-- <label for="block" class="form-label">Block: <span class="text-danger">*</span></label> --}}
+                                <input type="text" name="block" id="block"
+                                    class="form-control @error('block') is-invalid @enderror" value="{{ old('block') }}"
+                                    placeholder="Search by Block">
+                                @error('block')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
                         </div>
 
                         <div class="col-md-4 d-flex">
                             <button type="submit" class="btn btn-primary me-2">Search</button>
-                            <a href="{{ route('pending-distribute-list') }}" class="btn btn-info text-white me-2">Reset</a>
+                            <a href="{{ route('pending-distribute-list') }}"
+                                class="btn btn-info text-white me-2">Reset</a>
                         </div>
 
                     </form>
@@ -207,7 +273,8 @@
                                         {{-- <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर
                                             प्रदेश -
                                             262121</span> --}}
-                                        <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit, UP
+                                        <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit,
+                                            UP
                                             -
                                             262121</span>
                                     </b></h6>

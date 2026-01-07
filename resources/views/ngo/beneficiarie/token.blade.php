@@ -28,139 +28,143 @@
             text-align: center;
         }
 
-       @media print {
-    @page {
-        size: A4 portrait;
-        margin: 8mm;
-    }
-    
-    html,
-    body {
-        width: 210mm;
-        height: 297mm;
-        margin: 0;
-        padding: 0;
-        font-size: 10px;
-    }
-    
-    body * {
-        visibility: hidden;
-    }
-    
-    .print-container,
-    .print-container * {
-        visibility: visible;
-    }
-    
-    .print-container {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-    }
-    
-    /* Each token takes ~46mm height (297mm - 16mm margins = 281mm / 6 = ~46.8mm) */
-    .print-card {
-        width: 100%;
-        margin-bottom: 1mm;
-        page-break-inside: avoid;
-        box-sizing: border-box;
-        overflow: hidden;
-    }
-    
-    /* Force new page after every 6 tokens */
-    .print-card:nth-of-type(6n) {
-        page-break-after: always;
-        margin-bottom: 0;
-    }
-    
-    /* Compact spacing */
-    .print-card .p-2 {
-        padding: 2mm !important;
-    }
-    
-    .text-center.mb-4 {
-        margin-bottom: 2mm !important;
-    }
-    
-    .border-bottom {
-        padding-bottom: 1mm !important;
-    }
-    
-    /* Header styling */
-    .print-h4 {
-        font-size: 15px !important;
-        padding: 2px 0 !important;
-        background: red !important;
-        color: white !important;
-        text-align: center;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-    }
-    
-    h3 {
-        font-size: 13px !important;
-        margin: 1mm 0 !important;
-    }
-    
-    h5 {
-        font-size: 11px !important;
-        margin: 1mm 0 !important;
-    }
-    
-    h6 {
-        font-size: 9px !important;
-        margin: 0.5mm 0 !important;
-    }
-    
-    p {
-        margin: 0.5mm 0 !important;
-        font-size: 9px !important;
-    }
-    
-    /* Logo and images */
-    .print-card img {
-        max-width: 70px !important;
-        max-height: 65px !important;
-        object-fit: contain;
-    }
-    
-    /* Row spacing */
-    .row {
-        margin-bottom: 1mm !important;
-    }
-    
-    .mb-3 {
-        margin-bottom: 1mm !important;
-    }
-    
-    /* Column spacing */
-    .col-sm-2, .col-sm-4, .col-sm-6, 
-    .col-sm-8, .col-sm-10, .col-sm-12 {
-        padding: 0 2mm !important;
-    }
-    
-    strong {
-        font-size: 9px !important;
-    }
-    
-    /* Signature section */
-    .mt-5 {
-        margin-top: 2mm !important;
-    }
-    
-    .text-danger {
-        font-size: 9px !important;
-    }
-    
-    /* Hide non-print elements */
-    .btn,
-    .no-print,
-    button,
-    .alert {
-        display: none !important;
-    }
-}
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 8mm;
+            }
+
+            html,
+            body {
+                width: 210mm;
+                height: 297mm;
+                margin: 0;
+                padding: 0;
+                font-size: 10px;
+            }
+
+            body * {
+                visibility: hidden;
+            }
+
+            .print-container,
+            .print-container * {
+                visibility: visible;
+            }
+
+            .print-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+
+            /* Each token takes ~46mm height (297mm - 16mm margins = 281mm / 6 = ~46.8mm) */
+            .print-card {
+                width: 100%;
+                margin-bottom: 1mm;
+                page-break-inside: avoid;
+                box-sizing: border-box;
+                overflow: hidden;
+            }
+
+            /* Force new page after every 6 tokens */
+            .print-card:nth-of-type(6n) {
+                page-break-after: always;
+                margin-bottom: 0;
+            }
+
+            /* Compact spacing */
+            .print-card .p-2 {
+                padding: 2mm !important;
+            }
+
+            .text-center.mb-4 {
+                margin-bottom: 2mm !important;
+            }
+
+            .border-bottom {
+                padding-bottom: 1mm !important;
+            }
+
+            /* Header styling */
+            .print-h4 {
+                font-size: 15px !important;
+                padding: 2px 0 !important;
+                background: red !important;
+                color: white !important;
+                text-align: center;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            h3 {
+                font-size: 13px !important;
+                margin: 1mm 0 !important;
+            }
+
+            h5 {
+                font-size: 11px !important;
+                margin: 1mm 0 !important;
+            }
+
+            h6 {
+                font-size: 9px !important;
+                margin: 0.5mm 0 !important;
+            }
+
+            p {
+                margin: 0.5mm 0 !important;
+                font-size: 9px !important;
+            }
+
+            /* Logo and images */
+            .print-card img {
+                max-width: 70px !important;
+                max-height: 65px !important;
+                object-fit: contain;
+            }
+
+            /* Row spacing */
+            .row {
+                margin-bottom: 1mm !important;
+            }
+
+            .mb-3 {
+                margin-bottom: 1mm !important;
+            }
+
+            /* Column spacing */
+            .col-sm-2,
+            .col-sm-4,
+            .col-sm-6,
+            .col-sm-8,
+            .col-sm-10,
+            .col-sm-12 {
+                padding: 0 2mm !important;
+            }
+
+            strong {
+                font-size: 9px !important;
+            }
+
+            /* Signature section */
+            .mt-5 {
+                margin-top: 2mm !important;
+            }
+
+            .text-danger {
+                font-size: 9px !important;
+            }
+
+            /* Hide non-print elements */
+            .btn,
+            .no-print,
+            button,
+            .alert {
+                display: none !important;
+            }
+        }
     </style>
 
 
@@ -183,7 +187,7 @@
             <div class="col-md-12">
                 <form method="GET" action="{{ route('show-beneficiarie-token') }}" class="row g-3 mb-4">
                     <div class="row">
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
                             {{-- <label for="session_filter" class="form-label">Select Session</label> --}}
                             <select name="session_filter" id="session_filter" class="form-control">
                                 <option value="">All Sessions</option> <!-- Default option to show all -->
@@ -196,7 +200,20 @@
                             </select>
                         </div>
 
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 col-sm-4 mb-3">
+                            <input type="number" class="form-control" name="application_no"
+                                placeholder="Search By Application/Registration No.">
+                        </div>
+                        <div class="col-md-3 col-sm-4 mb-3">
+                            <input type="number" class="form-control" name="registration_no"
+                                placeholder="Search By Mobile/Idtinty No.">
+                        </div>
+                        <div class="col-md-3 col-sm-4 mb-3">
+                            <input type="text" class="form-control" name="name"
+                                placeholder="Search By Person/Guardian's Name">
+                        </div>
+
+                        <div class="col-md-3 mb-3">
                             <select id="category_filter" name="category_filter"
                                 class="form-control @error('category_filter') is-invalid @enderror">
                                 <option value="">-- Select Facilities Category --</option>
@@ -212,10 +229,10 @@
                             @enderror
                         </div>
 
-                        <div class=" col-md-4">
-                            {{-- <label for="bene_category">item Eligibility Category</label> --}}
+                        <div class=" col-md-3">
+                            {{-- <label for="bene_category">Beneficiarie Eligibility Category</label> --}}
                             <select id="bene_category" name="bene_category" class="form-control">
-                                <option value="">-- Select item Eligibility Category --</option>
+                                <option value="">-- Select Beneficiarie Eligibility Category --</option>
                                 <option value="Homeless Families">1. Homeless Families</option>
                                 <option value="People living in kutcha or one-room houses">2. People living in kutcha or
                                     one-room houses</option>
@@ -236,7 +253,7 @@
                         </div>
 
 
-                        <div class="col-md-4 form-group mb-3">
+                        <div class="col-md-3 form-group mb-3">
                             <input type="date" id="distribute_date" name="distribute_date" class="form-control"
                                 value="{{ old('distribute_date') }}">
                             <small class="form-text text-muted"><b>Select Distribute Date</b></small>
@@ -248,7 +265,7 @@
                         @php
                             $districtsByState = config('districts');
                         @endphp
-                        <div class="col-md-4 col-sm-6 form-group mb-3">
+                        <div class="col-md-3 col-sm-6 form-group mb-3">
                             {{-- <label for="stateSelect" class="form-label">State: <span class="text-danger">*</span></label> --}}
                             <select class="form-control @error('state') is-invalid @enderror" name="state"
                                 id="stateSelect">
@@ -264,7 +281,7 @@
                             @enderror
 
                         </div>
-                        <div class="col-md-4 col-sm-6 form-group mb-3">
+                        <div class="col-md-3 col-sm-6 form-group mb-3">
                             {{-- <label for="districtSelect" class="form-label">District: <span
                                     class="text-danger">*</span></label> --}}
                             <select class="form-control @error('district') is-invalid @enderror" name="district"
@@ -275,7 +292,7 @@
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
-                        <div class="col-md-4 col-sm-6 form-group mb-3">
+                        <div class="col-md-3 col-sm-6 form-group mb-3">
                             {{-- <label for="block" class="form-label">Block: <span class="text-danger">*</span></label> --}}
                             <input type="text" name="block" id="block"
                                 class="form-control @error('block') is-invalid @enderror" value="{{ old('block') }}"
@@ -288,7 +305,8 @@
                     <div class="row">
                         <div class="col-md-4">
                             <button type="submit" class="btn btn-primary me-1">Search</button>
-                            <a href="{{ route('show-beneficiarie-token') }}" class="btn btn-info text-white me-1">Reset</a>
+                            <a href="{{ route('show-beneficiarie-token') }}"
+                                class="btn btn-info text-white me-1">Reset</a>
                         </div>
                     </div>
                 </form>

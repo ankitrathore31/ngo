@@ -125,7 +125,7 @@
                 <div class="col-md-12">
                     <form method="GET" action="{{ route('distributed-list') }}" class="row g-3 mb-4">
                         <div class="row">
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-3 mb-3">
                                 {{-- <label for="session_filter" class="form-label">Select Session</label> --}}
                                 <select name="session_filter" id="session_filter" class="form-control">
                                     <option value="">All Sessions</option> <!-- Default option to show all -->
@@ -137,8 +137,20 @@
                                     @endforeach
                                 </select>
                             </div>
+                            <div class="col-md-3 col-sm-4 mb-3">
+                                <input type="number" class="form-control" name="application_no"
+                                    placeholder="Search By Application/Registration No.">
+                            </div>
+                            <div class="col-md-3 col-sm-4 mb-3">
+                                <input type="number" class="form-control" name="registration_no"
+                                    placeholder="Search By Mobile/Idtinty No.">
+                            </div>
+                            <div class="col-md-3 col-sm-4 mb-3">
+                                <input type="text" class="form-control" name="name"
+                                    placeholder="Search By Person/Guardian's Name">
+                            </div>
 
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-3 mb-3">
                                 <select id="category_filter" name="category_filter"
                                     class="form-control @error('category_filter') is-invalid @enderror">
                                     <option value="">-- Select Facilities Category --</option>
@@ -154,7 +166,7 @@
                                 @enderror
                             </div>
 
-                            <div class=" col-md-4">
+                            <div class=" col-md-3 mb-3">
                                 {{-- <label for="bene_category">Beneficiarie Eligibility Category</label> --}}
                                 <select id="bene_category" name="bene_category" class="form-control">
                                     <option value="">-- Select Beneficiarie Eligibility Category --</option>
@@ -178,7 +190,7 @@
                             </div>
 
 
-                            <div class="col-md-4 form-group mb-3">
+                            <div class="col-md-3 form-group mb-3">
                                 <input type="date" id="distribute_date" name="distribute_date" class="form-control"
                                     value="{{ old('distribute_date') }}">
                                 <small class="form-text text-muted"><b>Select Distribute Date</b></small>
@@ -187,13 +199,10 @@
                                 @enderror
                             </div>
 
-                        </div>
-                        <div class="row">
-
                             @php
                                 $districtsByState = config('districts');
                             @endphp
-                            <div class="col-md-4 col-sm-6 form-group mb-3">
+                            <div class="col-md-3 col-sm-6 form-group mb-3">
                                 {{-- <label for="stateSelect" class="form-label">State: <span class="text-danger">*</span></label> --}}
                                 <select class="form-control @error('state') is-invalid @enderror" name="state"
                                     id="stateSelect">
@@ -210,7 +219,7 @@
                                 @enderror
 
                             </div>
-                            <div class="col-md-4 col-sm-6 form-group mb-3">
+                            <div class="col-md-3 col-sm-6 form-group mb-3">
                                 {{-- <label for="districtSelect" class="form-label">District: <span
                                     class="text-danger">*</span></label> --}}
                                 <select class="form-control @error('district') is-invalid @enderror" name="district"
@@ -221,7 +230,7 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="col-md-4 col-sm-6 form-group mb-3">
+                            <div class="col-md-3 col-sm-6 form-group mb-3">
                                 {{-- <label for="block" class="form-label">Block: <span class="text-danger">*</span></label> --}}
                                 <input type="text" name="block" id="block"
                                     class="form-control @error('block') is-invalid @enderror" value="{{ old('block') }}"
