@@ -20,33 +20,56 @@ class BeneficiarieController extends Controller
     {
         $beneficiarie = beneficiarie::where('status', 1)
             ->where('survey_status', 0)
+
             ->when($request->session_filter, function ($query, $session_filter) {
                 return $query->where('session_date', $session_filter);
             })
+
             ->when($request->application_no, function ($query, $application_no) {
                 return $query->where('application_no', $application_no);
             })
-            ->when($request->name, function ($query, $name) {
-                return $query->where('name', 'like', '%' . $name . '%');
+
+            ->when($request->registration_no, function ($query, $registration_no) {
+                return $query->where(function ($q) use ($registration_no) {
+                    $q->where('registration_no', $registration_no)
+                        ->orWhere('mobile_no', $registration_no)
+                        ->orWhere('identity_no', $registration_no);
+                });
             })
+
+            ->when($request->name, function ($query, $name) {
+                return $query->where(function ($q) use ($name) {
+                    $q->where('name', 'like', '%' . $name . '%')
+                        ->orWhere('guardian_name', 'like', '%' . $name . '%');
+                });
+            })
+
             ->when($request->state, function ($query, $state) {
                 return $query->where('state', $state);
             })
+
             ->when($request->district, function ($query, $district) {
                 return $query->where('district', $district);
             })
+
             ->when($request->block, function ($query, $block) {
                 return $query->where('block', 'like', '%' . $block . '%');
             })
+
             ->when($request->village, function ($query, $village) {
                 return $query->where('village', 'like', '%' . $village . '%');
             })
+
             ->get();
 
         $data = academic_session::all();
         $states = config('states');
         $staff = Staff::get();
-        return view('ngo.beneficiarie.add-beneficiarie-list', compact('beneficiarie', 'data', 'states', 'staff'));
+
+        return view(
+            'ngo.beneficiarie.add-beneficiarie-list',
+            compact('beneficiarie', 'data', 'states', 'staff')
+        );
     }
 
     public function viewbeneficiarie($id)
@@ -168,9 +191,12 @@ class BeneficiarieController extends Controller
             ->orderBy('id', 'asc');
 
         // Step 3: Apply filters from the form
+
         if ($request->filled('session_filter')) {
             $surveys->where('session_date', $request->session_filter);
         }
+
+        /* ===== Beneficiarie-based search ===== */
 
         if ($request->filled('application_no')) {
             $surveys->whereHas('beneficiarie', function ($query) use ($request) {
@@ -178,9 +204,18 @@ class BeneficiarieController extends Controller
             });
         }
 
+        if ($request->filled('registration_no')) {
+            $surveys->whereHas('beneficiarie', function ($query) use ($request) {
+                $query->where('registration_no', $request->registration_no)
+                    ->orWhere('mobile_no', $request->registration_no)
+                    ->orWhere('identity_no', $request->registration_no);
+            });
+        }
+
         if ($request->filled('name')) {
             $surveys->whereHas('beneficiarie', function ($query) use ($request) {
-                $query->where('name', 'like', '%' . $request->name . '%');
+                $query->where('name', 'like', '%' . $request->name . '%')
+                    ->orWhere('guardian_name', 'like', '%' . $request->name . '%');
             });
         }
 
@@ -202,27 +237,36 @@ class BeneficiarieController extends Controller
             });
         }
 
-        if ($request->filled('bene_category')) {
-            $surveys->whereHas('beneficiarie', function ($query) use ($request) {
-                $query->where('bene_category', $request->bene_category);
-            });
-        }
-
         if ($request->filled('village')) {
             $surveys->whereHas('beneficiarie', function ($query) use ($request) {
                 $query->where('village', 'like', '%' . $request->village . '%');
             });
         }
 
+        /* ===== Survey-based search ===== */
+
+        if ($request->filled('survey_officer')) {
+            $surveys->where('survey_officer', $request->survey_officer);
+        }
+
+        if ($request->filled('bene_category')) {
+            $surveys->where('bene_category', $request->bene_category);
+        }
+
         // Fetch the filtered results
         $surveys = $surveys->get();
+
         $staff = Staff::get();
-        // Pass sessions data to the view for filter dropdown
         $data = academic_session::all();
         $states = config('states');
         $categories = Category::orderBy('category', 'asc')->get();
-        return view('ngo.beneficiarie.beneficiarie-facilities', compact('surveys', 'data', 'states', 'categories', 'staff'));
+
+        return view(
+            'ngo.beneficiarie.beneficiarie-facilities',
+            compact('surveys', 'data', 'states', 'categories', 'staff')
+        );
     }
+
 
     public function showbeneficiariesurvey($beneficiarie_id, $survey_id)
     {
@@ -417,8 +461,13 @@ class BeneficiarieController extends Controller
             if ($request->category_filter) {
                 $q->where('facilities_category', $request->category_filter);
             }
+
+            if ($request->bene_category) {
+                $q->where('bene_category', $request->bene_category);
+            }
         }])
-            // Filter only beneficiaries that have surveys matching the same conditions
+
+            // Survey-level filtering
             ->whereHas('surveys', function ($q) use ($request) {
                 $q->where('facilities_status', 1)
                     ->whereNull('status');
@@ -430,11 +479,34 @@ class BeneficiarieController extends Controller
                 if ($request->category_filter) {
                     $q->where('facilities_category', $request->category_filter);
                 }
+
                 if ($request->bene_category) {
                     $q->where('bene_category', $request->bene_category);
                 }
             })
+
+            // Beneficiarie-level search filters
             ->where('status', 1)
+
+            ->when($request->application_no, function ($q) use ($request) {
+                $q->where('application_no', $request->application_no);
+            })
+
+            ->when($request->registration_no, function ($q) use ($request) {
+                $q->where(function ($sub) use ($request) {
+                    $sub->where('registration_no', $request->registration_no)
+                        ->orWhere('mobile_no', $request->registration_no)
+                        ->orWhere('identity_no', $request->registration_no);
+                });
+            })
+
+            ->when($request->name, function ($q) use ($request) {
+                $q->where(function ($sub) use ($request) {
+                    $sub->where('name', 'like', '%' . $request->name . '%')
+                        ->orWhere('gurdian_name', 'like', '%' . $request->name . '%');
+                });
+            })
+
             ->orderBy('id', 'desc');
 
         $beneficiarie = $query->get();
@@ -444,7 +516,10 @@ class BeneficiarieController extends Controller
         $categories = Beneficiarie_Survey::select('facilities_category')->distinct()->pluck('facilities_category');
         $staff = Staff::get();
 
-        return view('ngo.beneficiarie.beneficiarie-facilities-list', compact('data', 'categories', 'beneficiarie', 'category', 'staff'));
+        return view(
+            'ngo.beneficiarie.beneficiarie-facilities-list',
+            compact('data', 'categories', 'beneficiarie', 'category', 'staff')
+        );
     }
 
     public function showbeneficiariefacilities($beneficiarie_id, $survey_id)
@@ -774,7 +849,7 @@ class BeneficiarieController extends Controller
         /* Survey filter (STATUS MUST BE STRING '0') */
         $surveyFilter = function ($q) use ($request) {
             $q->where('status', '0')
-                 ->orderBy('updated_at', 'asc');
+                ->orderBy('updated_at', 'asc');
 
             if ($request->filled('session_filter')) {
                 $q->where('session_date', $request->session_filter);
@@ -797,6 +872,26 @@ class BeneficiarieController extends Controller
         $query = beneficiarie::where('status', 1)
             ->whereHas('surveys', $surveyFilter)
             ->with(['surveys' => $surveyFilter]);
+
+        /* Beneficiarie Search Filters */
+        if ($request->filled('application_no')) {
+            $query->where('application_no', $request->application_no);
+        }
+
+        if ($request->filled('registration_no')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('registration_no', $request->registration_no)
+                    ->orWhere('mobile_no', $request->registration_no)
+                    ->orWhere('identity_no', $request->registration_no);
+            });
+        }
+
+        if ($request->filled('name')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->name . '%')
+                    ->orWhere('gurdian_name', 'like', '%' . $request->name . '%');
+            });
+        }
 
         /* Location Filters */
         if ($request->filled('block')) {
@@ -823,13 +918,14 @@ class BeneficiarieController extends Controller
             ->select('facilities_category')
             ->distinct()
             ->pluck('facilities_category');
+
         $staff = Staff::get();
+
         return view(
             'ngo.beneficiarie.pending-facility-list',
             compact('beneficiarie', 'data', 'categories', 'category', 'staff')
         );
     }
-
 
     public function EditDistributeFacilities($beneficiarie_id, $survey_id)
     {
@@ -876,8 +972,9 @@ class BeneficiarieController extends Controller
 
     public function distributefacilities(Request $request)
     {
-        $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
-            $q->where('status', 'Distributed') ->orderBy('updated_at', 'asc');
+        $query = beneficiarie::with(['surveys' => function ($q) use ($request) {
+            $q->where('status', 'Distributed')
+                ->orderBy('updated_at', 'asc');
 
             if ($request->session_filter) {
                 $q->where('session_date', $request->session_filter);
@@ -890,9 +987,33 @@ class BeneficiarieController extends Controller
             if ($request->distribute_date) {
                 $q->where('distribute_date', $request->distribute_date);
             }
+
+            if ($request->bene_category) {
+                $q->where('bene_category', $request->bene_category);
+            }
         }])->where('status', 1);
 
-        // Filter by block, district, and state
+        /* Beneficiarie Search Filters */
+        if ($request->filled('application_no')) {
+            $query->where('application_no', $request->application_no);
+        }
+
+        if ($request->filled('registration_no')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('registration_no', $request->registration_no)
+                    ->orWhere('mobile_no', $request->registration_no)
+                    ->orWhere('identity_no', $request->registration_no);
+            });
+        }
+
+        if ($request->filled('name')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->name . '%')
+                    ->orWhere('gurdian_name', 'like', '%' . $request->name . '%');
+            });
+        }
+
+        /* Location Filters */
         if ($request->filled('block')) {
             $query->where('block', 'like', '%' . $request->block . '%');
         }
@@ -905,7 +1026,7 @@ class BeneficiarieController extends Controller
             $query->where('state', $request->state);
         }
 
-        // Filter only those with matching surveys
+        /* Filter only those with matching surveys */
         $query->whereHas('surveys', function ($q) use ($request) {
             $q->where('status', 'Distributed');
 
@@ -920,6 +1041,7 @@ class BeneficiarieController extends Controller
             if ($request->distribute_date) {
                 $q->where('distribute_date', $request->distribute_date);
             }
+
             if ($request->bene_category) {
                 $q->where('bene_category', $request->bene_category);
             }
@@ -927,19 +1049,23 @@ class BeneficiarieController extends Controller
 
         $beneficiarie = $query->orderBy('id', 'desc')->get();
 
-        // Dropdown values
+        /* Dropdown values */
         $data = academic_session::all();
         $category = Category::orderBy('category', 'asc')->get();
         $categories = Beneficiarie_Survey::select('facilities_category')->distinct()->pluck('facilities_category');
 
-        return view('ngo.beneficiarie.distributed-facilities-list', compact('beneficiarie', 'data', 'categories', 'category'));
+        return view(
+            'ngo.beneficiarie.distributed-facilities-list',
+            compact('beneficiarie', 'data', 'categories', 'category')
+        );
     }
+
 
     public function pendingfacilities(Request $request)
     {
         $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
             $q->whereIn('status', ['Pending', 'Reject'])
-                 ->orderBy('updated_at', 'asc');
+                ->orderBy('updated_at', 'asc');
 
             if ($request->session_filter) {
                 $q->where('academic_session', $request->session_filter);
@@ -948,9 +1074,33 @@ class BeneficiarieController extends Controller
             if ($request->category_filter) {
                 $q->where('facilities_category', $request->category_filter);
             }
+
+            if ($request->bene_category) {
+                $q->where('bene_category', $request->bene_category);
+            }
         }])->where('status', 1);
 
-        // Get only beneficiaries who actually have at least one distributed survey
+        /* Beneficiarie Search Filters */
+        if ($request->filled('application_no')) {
+            $query->where('application_no', $request->application_no);
+        }
+
+        if ($request->filled('registration_no')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('registration_no', $request->registration_no)
+                    ->orWhere('mobile_no', $request->registration_no)
+                    ->orWhere('identity_no', $request->registration_no);
+            });
+        }
+
+        if ($request->filled('name')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->name . '%')
+                    ->orWhere('gurdian_name', 'like', '%' . $request->name . '%');
+            });
+        }
+
+        /* Filter only beneficiaries with matching surveys */
         $beneficiarie = $query->whereHas('surveys', function ($q) use ($request) {
             $q->whereIn('status', ['Pending', 'Reject'])
                 ->orderBy('created_at', 'asc');
@@ -962,22 +1112,30 @@ class BeneficiarieController extends Controller
             if ($request->category_filter) {
                 $q->where('facilities_category', $request->category_filter);
             }
+
             if ($request->bene_category) {
                 $q->where('bene_category', $request->bene_category);
             }
-        })->orderBy('id', 'desc')->get();
+        })
+            ->orderBy('id', 'desc')
+            ->get();
 
-        // For dropdowns/filters
+        /* Dropdowns / Filters */
         $data = academic_session::all();
         $categories = Beneficiarie_Survey::select('facilities_category')->distinct()->pluck('facilities_category');
         $category = Category::orderBy('category', 'asc')->get();
-        return view('ngo.beneficiarie.reject-facilities-list', compact('beneficiarie', 'data', 'categories', 'category'));
+
+        return view(
+            'ngo.beneficiarie.reject-facilities-list',
+            compact('beneficiarie', 'data', 'categories', 'category')
+        );
     }
+
 
     public function allbeneficiarielist(Request $request)
     {
         $query = Beneficiarie::with(['surveys' => function ($q) use ($request) {
-            $q->where('status', 'Distributed') ->orderBy('updated_at', 'asc');
+            $q->where('status', 'Distributed')->orderBy('updated_at', 'asc');
 
             if ($request->session_filter) {
                 $q->where('academic_session', $request->session_filter);
@@ -1097,6 +1255,26 @@ class BeneficiarieController extends Controller
             ->whereHas('surveys', $surveyFilter)
             ->with(['surveys' => $surveyFilter]);
 
+        /* Beneficiarie Search Filters */
+        if ($request->filled('application_no')) {
+            $query->where('application_no', $request->application_no);
+        }
+
+        if ($request->filled('registration_no')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('registration_no', $request->registration_no)
+                    ->orWhere('mobile_no', $request->registration_no)
+                    ->orWhere('identity_no', $request->registration_no);
+            });
+        }
+
+        if ($request->filled('name')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->name . '%')
+                    ->orWhere('gurdian_name', 'like', '%' . $request->name . '%');
+            });
+        }
+
         /* Location Filters */
         if ($request->filled('block')) {
             $query->where('block', 'like', '%' . $request->block . '%');
@@ -1115,13 +1293,13 @@ class BeneficiarieController extends Controller
 
         /* Supporting Data */
         $data = academic_session::all();
-
         $category = Category::orderBy('category', 'asc')->get();
 
         $categories = Beneficiarie_Survey::where('status', '0')
             ->select('facilities_category')
             ->distinct()
             ->pluck('facilities_category');
+
         $staff = Staff::get();
         $signatures = Signature::pluck('file_path', 'role');
 
@@ -1138,7 +1316,7 @@ class BeneficiarieController extends Controller
             ->with('beneficiarie')
             ->firstOrFail();
         $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->find($beneficiarie_id);
-         $signatures = Signature::pluck('file_path', 'role');
-        return view('ngo.beneficiarie.recipt', compact('beneficiarie', 'survey','signatures'));
+        $signatures = Signature::pluck('file_path', 'role');
+        return view('ngo.beneficiarie.recipt', compact('beneficiarie', 'survey', 'signatures'));
     }
 }

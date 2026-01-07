@@ -1031,6 +1031,17 @@ class HealthCardController extends Controller
             ->with('success', 'Investigation Form Send To Verification successfully.');
     }
 
+    public function RejectInvestigationForm(HealthFacility $facility)
+    {
+        $facility->update([
+            'status'                 => 'Investigation',
+        ]);
+
+        return redirect()
+            ->route('list.Verifyhealthfacility')
+            ->with('success', 'Investigation rejected successfully.');
+    }
+
 
     public function ShowPendingInvestigationForm(HealthFacility $facility)
     {
@@ -1182,6 +1193,19 @@ class HealthCardController extends Controller
             ->route('list.Approvalhealthfacility')
             ->with('success', 'Verification Send To Director Successfully.');
     }
+
+    public function RejectVerifyHealth(HealthFacility $facility)
+    {
+        $facility->update([
+            'verify_proof' => null,
+            'status'       => 'Verify',
+        ]);
+
+        return redirect()
+            ->route('list.Approvalhealthfacility')
+            ->with('success', 'Verification rejected successfully.');
+    }
+
 
     public function ApprovelFacilityList(Request $request)
     {
@@ -1740,8 +1764,7 @@ class HealthCardController extends Controller
         // Dynamically determine the person (beneficiarie or member)
         $person = \App\Models\beneficiarie::find($card->reg_id)
             ?? \App\Models\Member::find($card->reg_id);
-         $signatures = Signature::pluck('file_path', 'role');
-        return view('ngo.healthcard.show-final-form', compact('facility', 'card', 'person','signatures'));
+        $signatures = Signature::pluck('file_path', 'role');
+        return view('ngo.healthcard.show-final-form', compact('facility', 'card', 'person', 'signatures'));
     }
-    
 }

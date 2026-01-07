@@ -40,9 +40,10 @@
             <div class="row">
                 <form method="GET" action="{{ route('beneficiarie-facilities') }}" class="row g-3 mb-4">
                     <div class="row">
-                        <div class="col-md-4 col-sm-4">
+                        <div class="col-md-3 mb-3">
+                            {{-- <label for="session_filter" class="form-label">Select Session</label> --}}
                             <select name="session_filter" id="session_filter" class="form-control">
-                                <option value="">All Sessions</option>
+                                <option value="">All Sessions</option> <!-- Default option to show all -->
                                 @foreach ($data as $session)
                                     <option value="{{ $session->session_date }}"
                                         {{ request('session_filter') == $session->session_date ? 'selected' : '' }}>
@@ -51,7 +52,20 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class=" col-md-4">
+
+                        <div class="col-md-3 col-sm-4 mb-3">
+                            <input type="number" class="form-control" name="application_no"
+                                placeholder="Search By Application/Registration No.">
+                        </div>
+                        <div class="col-md-3 col-sm-4 mb-3">
+                            <input type="number" class="form-control" name="registration_no"
+                                placeholder="Search By Mobile/Idtinty No.">
+                        </div>
+                        <div class="col-md-3 col-sm-4 mb-3">
+                            <input type="text" class="form-control" name="name"
+                                placeholder="Search By Person/Guardian's Name">
+                        </div>
+                        <div class=" col-md-3 mb-2">
                             {{-- <label for="bene_category">Beneficiarie Eligibility Category</label> --}}
                             <select id="bene_category" name="bene_category" class="form-control">
                                 <option value="">-- Select Beneficiarie Eligibility Category --</option>
@@ -73,15 +87,22 @@
                                 <option value="Large Farmers">15. Large Farmers</option>
                             </select>
                         </div>
-                        <div class="col-md-4 col-sm-4 mb-3">
-                            <input type="number" class="form-control" name="application_no"
-                                placeholder="Search By Application No.">
+                        <div class="col-md-3 mb-3">
+                            <select name="survey_officer"
+                                class="form-control @error('survey_officer') is-invalid @enderror">
+                                <option value="">Select Survey Officer</option>
+                                @foreach ($staff as $person)
+                                    <option
+                                        value="{{ $person->name }} ( {{ $person->staff_code }} ) ( {{ $person->position }} ) "
+                                        {{ old('survey_officer') == $person->name . ' - ' . $person->staff_code . ' - ' . $person->position ? 'selected' : '' }}>
+                                        {{ $person->name }} ({{ $person->staff_code }}) ({{ $person->position }})
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('survey_officer')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
-                        <div class="col-md-4 col-sm-4 mb-3">
-                            <input type="text" class="form-control" name="name" placeholder="Search By Name">
-                        </div>
-                    </div>
-                    <div class="row">
                         @php
                             $districtsByState = config('districts');
                         @endphp
@@ -102,6 +123,8 @@
 
                         </div>
                         <div class="col-md-3 col-sm-6 form-group mb-3">
+                            {{-- <label for="districtSelect" class="form-label">District: <span
+                                    class="text-danger">*</span></label> --}}
                             <select class="form-control @error('district') is-invalid @enderror" name="district"
                                 id="districtSelect">
                                 <option value="">Select District</option>
@@ -111,18 +134,11 @@
                             @enderror
                         </div>
                         <div class="col-md-3 col-sm-6 form-group mb-3">
+                            {{-- <label for="block" class="form-label">Block: <span class="text-danger">*</span></label> --}}
                             <input type="text" name="block" id="block"
                                 class="form-control @error('block') is-invalid @enderror" value="{{ old('block') }}"
                                 placeholder="Search by Block">
                             @error('block')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="col-md-3 col-sm-6 form-group mb-3">
-                            <input type="text" name="village" id="village"
-                                class="form-control @error('village') is-invalid @enderror" value="{{ old('village') }}"
-                                placeholder="Search by village">
-                            @error('village')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
@@ -204,7 +220,7 @@
                     </div>
 
                     <!-- Caste Section -->
-                    <div class="row mb-4">
+                    {{-- <div class="row mb-4">
                         <div class="col-md-12">
                             <div class="stat-card rounded-4 p-3 shadow-sm bg-light">
                                 <h5 class="fw-bold text-success mb-3">
@@ -228,14 +244,13 @@
                                 </table>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
 
             {{-- Add this button in card header --}}
             <div class="card shadow-sm">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Survey List</h5>
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                         data-bs-target="#bulkFacilitiesModal">
                         <i class="fa fa-plus"></i> Add Facilities to Multiple Surveys

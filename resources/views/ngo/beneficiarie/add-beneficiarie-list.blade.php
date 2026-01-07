@@ -21,9 +21,10 @@
             <div class="row">
                 <form method="GET" action="{{ route('beneficiarie-add-list') }}" class="row g-3 mb-4">
                     <div class="row">
-                        <div class="col-md-4 col-sm-4">
+                        <div class="col-md-3 mb-3">
+                            {{-- <label for="session_filter" class="form-label">Select Session</label> --}}
                             <select name="session_filter" id="session_filter" class="form-control">
-                                <option value="">All Sessions</option>
+                                <option value="">All Sessions</option> <!-- Default option to show all -->
                                 @foreach ($data as $session)
                                     <option value="{{ $session->session_date }}"
                                         {{ request('session_filter') == $session->session_date ? 'selected' : '' }}>
@@ -32,37 +33,20 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class=" col-md-4">
-                            {{-- <label for="bene_category">Beneficiarie Eligibility Category</label> --}}
-                            <select id="bene_category" name="bene_category" class="form-control" required>
-                                <option value="">-- Select Beneficiarie Eligibility Category --</option>
-                                <option value="Homeless Families">1. Homeless Families</option>
-                                <option value="People living in kutcha or one-room houses">2. People living in kutcha or
-                                    one-room houses</option>
-                                <option value="Widows">3. Widows</option>
-                                <option value="Elderly Women">4. Elderly Women</option>
-                                <option value="Persons with Disabilities">5. Persons with Disabilities</option>
-                                <option value="Landless">6. Landless</option>
-                                <option value="Economically Weaker Section">7. Economically Weaker Section</option>
-                                <option value="Laborers">8. Laborers</option>
-                                <option value="Scheduled Tribes">9. Scheduled Tribes</option>
-                                <option value="Scheduled Castes">10. Scheduled Castes</option>
-                                <option value="Based on Low Income">11. Based on Low Income</option>
-                                <option value="Affected People">12. Affected People</option>
-                                <option value="Marginal Farmers">13. Marginal Farmers</option>
-                                <option value="Small Farmers">14. Small Farmers</option>
-                                <option value="Large Farmers">15. Large Farmers</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 col-sm-4 mb-3">
+
+                        <div class="col-md-3 col-sm-4 mb-3">
                             <input type="number" class="form-control" name="application_no"
-                                placeholder="Search By Application No.">
+                                placeholder="Search By Application/Registration No.">
                         </div>
-                        <div class="col-md-4 col-sm-4 mb-3">
-                            <input type="text" class="form-control" name="name" placeholder="Search By Name">
+                        <div class="col-md-3 col-sm-4 mb-3">
+                            <input type="number" class="form-control" name="registration_no"
+                                placeholder="Search By Mobile/Idtinty No.">
                         </div>
-                    </div>
-                    <div class="row">
+                        <div class="col-md-3 col-sm-4 mb-3">
+                            <input type="text" class="form-control" name="name"
+                                placeholder="Search By Person/Guardian's Name">
+                        </div>
+
                         @php
                             $districtsByState = config('districts');
                         @endphp
@@ -83,6 +67,8 @@
 
                         </div>
                         <div class="col-md-3 col-sm-6 form-group mb-3">
+                            {{-- <label for="districtSelect" class="form-label">District: <span
+                                    class="text-danger">*</span></label> --}}
                             <select class="form-control @error('district') is-invalid @enderror" name="district"
                                 id="districtSelect">
                                 <option value="">Select District</option>
@@ -92,18 +78,11 @@
                             @enderror
                         </div>
                         <div class="col-md-3 col-sm-6 form-group mb-3">
+                            {{-- <label for="block" class="form-label">Block: <span class="text-danger">*</span></label> --}}
                             <input type="text" name="block" id="block"
                                 class="form-control @error('block') is-invalid @enderror" value="{{ old('block') }}"
                                 placeholder="Search by Block">
                             @error('block')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="col-md-3 col-sm-6 form-group mb-3">
-                            <input type="text" name="village" id="village"
-                                class="form-control @error('village') is-invalid @enderror" value="{{ old('village') }}"
-                                placeholder="Search by village">
-                            @error('village')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
@@ -118,7 +97,7 @@
             </div>
             <div class="card shadow-sm">
                 <div class="card-body table-responsive">
-                    <button type="button" id="openSurveyModal" class="btn btn-primary" disabled>
+                    <button type="button" id="openSurveyModal" class="btn btn-primary mb-2" disabled>
                         Add Survey (<span id="selectedBeneficiarieCount">0</span>)
                     </button>
 
@@ -432,92 +411,91 @@
             populateDistricts(this.value);
         });
     </script>
-   <script>
-document.addEventListener('DOMContentLoaded', function () {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
 
-    /* =====================================================
-       SURVEY YES / NO TOGGLE
-    ====================================================== */
-    const yesRadio = document.getElementById('start_survey_yes');
-    const noRadio = document.getElementById('start_survey_no');
-    const surveySection = document.getElementById('survey_section');
+            /* =====================================================
+               SURVEY YES / NO TOGGLE
+            ====================================================== */
+            const yesRadio = document.getElementById('start_survey_yes');
+            const noRadio = document.getElementById('start_survey_no');
+            const surveySection = document.getElementById('survey_section');
 
-    if (yesRadio && noRadio && surveySection) {
-        const toggleSurvey = () => {
-            surveySection.style.display = yesRadio.checked ? 'block' : 'none';
-        };
-        yesRadio.addEventListener('change', toggleSurvey);
-        noRadio.addEventListener('change', toggleSurvey);
-    }
+            if (yesRadio && noRadio && surveySection) {
+                const toggleSurvey = () => {
+                    surveySection.style.display = yesRadio.checked ? 'block' : 'none';
+                };
+                yesRadio.addEventListener('change', toggleSurvey);
+                noRadio.addEventListener('change', toggleSurvey);
+            }
 
-    /* =====================================================
-       BULK SELECTION LOGIC
-    ====================================================== */
-    const selectAll = document.getElementById('select_all');
-    const items = document.querySelectorAll('.select_item');
-    const openModalBtn = document.getElementById('openSurveyModal');
-    const tableCount = document.getElementById('selectedBeneficiarieCount');
-    const modalCount = document.getElementById('modalSelectedCount');
-    const hiddenIds = document.getElementById('beneficiarie_ids');
+            /* =====================================================
+               BULK SELECTION LOGIC
+            ====================================================== */
+            const selectAll = document.getElementById('select_all');
+            const items = document.querySelectorAll('.select_item');
+            const openModalBtn = document.getElementById('openSurveyModal');
+            const tableCount = document.getElementById('selectedBeneficiarieCount');
+            const modalCount = document.getElementById('modalSelectedCount');
+            const hiddenIds = document.getElementById('beneficiarie_ids');
 
-    if (!selectAll || !openModalBtn || !tableCount || !hiddenIds) {
-        console.error('Bulk survey elements missing from DOM.');
-        return;
-    }
+            if (!selectAll || !openModalBtn || !tableCount || !hiddenIds) {
+                console.error('Bulk survey elements missing from DOM.');
+                return;
+            }
 
-    function updateSelectionState() {
-        const selectedItems = Array.from(items).filter(cb => cb.checked);
-        const count = selectedItems.length;
+            function updateSelectionState() {
+                const selectedItems = Array.from(items).filter(cb => cb.checked);
+                const count = selectedItems.length;
 
-        // Update counts
-        tableCount.textContent = count;
-        if (modalCount) modalCount.textContent = count;
+                // Update counts
+                tableCount.textContent = count;
+                if (modalCount) modalCount.textContent = count;
 
-        // Enable / disable button
-        openModalBtn.disabled = count === 0;
+                // Enable / disable button
+                openModalBtn.disabled = count === 0;
 
-        // Update hidden input
-        hiddenIds.value = selectedItems.map(cb => cb.value).join(',');
+                // Update hidden input
+                hiddenIds.value = selectedItems.map(cb => cb.value).join(',');
 
-        // Select-all checkbox state
-        if (items.length > 0) {
-            selectAll.checked = count === items.length;
-            selectAll.indeterminate = count > 0 && count < items.length;
-        }
-    }
+                // Select-all checkbox state
+                if (items.length > 0) {
+                    selectAll.checked = count === items.length;
+                    selectAll.indeterminate = count > 0 && count < items.length;
+                }
+            }
 
-    /* Select-all click */
-    selectAll.addEventListener('change', function () {
-        items.forEach(cb => cb.checked = this.checked);
-        updateSelectionState();
-    });
+            /* Select-all click */
+            selectAll.addEventListener('change', function() {
+                items.forEach(cb => cb.checked = this.checked);
+                updateSelectionState();
+            });
 
-    /* Individual checkbox click */
-    items.forEach(cb => {
-        cb.addEventListener('change', updateSelectionState);
-    });
+            /* Individual checkbox click */
+            items.forEach(cb => {
+                cb.addEventListener('change', updateSelectionState);
+            });
 
-    /* =====================================================
-       OPEN MODAL BUTTON
-    ====================================================== */
-    openModalBtn.addEventListener('click', function () {
+            /* =====================================================
+               OPEN MODAL BUTTON
+            ====================================================== */
+            openModalBtn.addEventListener('click', function() {
 
-        if (hiddenIds.value.trim() === '') {
-            alert('Please select at least one beneficiary.');
-            return;
-        }
+                if (hiddenIds.value.trim() === '') {
+                    alert('Please select at least one beneficiary.');
+                    return;
+                }
 
-        // Ensure modal count is correct at open time
-        if (modalCount) {
-            modalCount.textContent = tableCount.textContent;
-        }
+                // Ensure modal count is correct at open time
+                if (modalCount) {
+                    modalCount.textContent = tableCount.textContent;
+                }
 
-        const modalEl = document.getElementById('bulkSurveyModal');
-        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
-        modal.show();
-    });
+                const modalEl = document.getElementById('bulkSurveyModal');
+                const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                modal.show();
+            });
 
-});
-</script>
-
+        });
+    </script>
 @endsection

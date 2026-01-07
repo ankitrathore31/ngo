@@ -589,6 +589,7 @@ Route::controller(HealthCardController::class)->middleware('auth')->group(functi
     Route::get('ngo/show-healthfacility-investigation/{facility}', 'ShowPendingInvestigationForm')->name('investigation.healthfacility.show');
     Route::get('ngo/approvel-facility-list', 'ApprovelFacilityList')->name('list.Approvalhealthfacility');
     Route::get('ngo/show-healthfacility-investigation-form/{facility}', 'ShowInvestigationForm')->name('healthfacility.investigation.form.show');
+    Route::get('ngo/reject-healthfacility-investigation-form/{facility}', 'RejectInvestigationForm')->name('healthfacility.investigation.form.reject');
     Route::post('ngo/facility-verify/store/{facility}', 'StoreVerifyHealth')->name('verify.healthfacility.store');
     Route::get('ngo/show-healthfacility-verify-form/{facility}', 'ShowVerifyForm')->name('healthfacility.verify.form.show');
     Route::post('ngo/facility-status/store/{facility}', 'StoreHealthFacilitiesStatus')->name('status.healthfacility.store');
