@@ -11,6 +11,7 @@ use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\EduactionCardController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\RegistrationController;
@@ -598,6 +599,16 @@ Route::controller(HealthCardController::class)->middleware('auth')->group(functi
     Route::get('ngo/reject-facility-list', 'RejectFacilityList')->name('list.Rejecthealthfacility');
     Route::get('ngo/demandpending-facility-list', 'DemandPendingFacilityList')->name('list.DemandPendinghealthfacility');
     Route::get('ngo/show-healthfacility-final-form/{facility}', 'ShowFinalForm')->name('healthfacility.final.form.show');
+});
+
+Route::controller(EduactionCardController::class)->middleware('auth')->group(function () {
+    Route::get('ngo/education-reg', 'RegList')->name('eduaction.reg.list');
+    Route::get('ngo/add-school', 'AddSchool')->name('add.school');
+    Route::post('ngo/store-school', 'StoreSchool')->name('store.school');
+    Route::get('ngo/edit-school/{id}', 'EditSchool')->name('edit.school');
+    Route::post('ngo/update-school/{id}', 'UpdateSchool')->name('update.school');
+    Route::get('ngo/delete-school/{id}', 'DeleteSchool')->name('delete.school');
+    Route::get('ngo/list-school', 'SchoolList')->name('list.school');
 });
 
 require __DIR__ . '/auth.php';

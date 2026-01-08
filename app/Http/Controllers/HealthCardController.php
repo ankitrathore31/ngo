@@ -990,6 +990,7 @@ class HealthCardController extends Controller
             compact('combined', 'data', 'states', 'staff')
         );
     }
+    
 
     public function StoreInvestigationForm(Request $request, HealthFacility $facility)
     {

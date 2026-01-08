@@ -325,8 +325,11 @@
                 </div>
             </div>
             <div class="print-container">
+                <?php $tokenCounter = 1; ?>
                 @forelse ($beneficiarie as $item)
                     @forelse ($item->surveys as $survey)
+                        <?php $survey->token_no = $tokenCounter;
+                        $tokenCounter++; ?>
                         <div class=" rounded print-card">
                             <div class="" style="border: 9px solid red;">
                                 <div>
@@ -378,7 +381,7 @@
                                         <div class="row mb-3">
                                             <div class="col-sm-12 mb-3">
                                                 <h5><b>Token / Notice / Seat / Matarial / Gate Pass No:</b>
-                                                    <b>0{{ $loop->parent->iteration }}</b>
+                                                    <b>{{ str_pad($survey->token_no, 2, '0', STR_PAD_LEFT) }}</b>
                                                 </h5>
                                             </div>
                                         </div>

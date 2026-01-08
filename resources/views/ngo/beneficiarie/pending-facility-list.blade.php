@@ -123,7 +123,7 @@
             @endif
             <div class="row">
                 <div class="col-md-12">
-                    <form method="GET" action="{{ route('distributed-list') }}" class="row g-3 mb-4">
+                    <form method="GET" action="{{ route('distributed-list-for-approve') }}" class="row g-3 mb-4">
                         <div class="row">
                             <div class="col-md-3 mb-3">
                                 {{-- <label for="session_filter" class="form-label">Select Session</label> --}}
@@ -243,7 +243,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <button type="submit" class="btn btn-primary me-1">Search</button>
-                                <a href="{{ route('distributed-list') }}" class="btn btn-info text-white me-1">Reset</a>
+                                <a href="{{ route('distributed-list-for-approve') }}" class="btn btn-info text-white me-1">Reset</a>
                             </div>
                         </div>
                     </form>

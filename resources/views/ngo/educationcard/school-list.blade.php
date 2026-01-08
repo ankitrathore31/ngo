@@ -22,7 +22,7 @@
     </style>
     <div class="wrapper">
         <div class="container-fluid mt-4">
-                        <div class="row mb-3 mt-4">
+            <div class="row mb-3 mt-4">
                 @php
                     $user = auth()->user();
                     $isStaff = $user && $user->user_type === 'staff';
@@ -30,116 +30,121 @@
                 <div class="col-12">
                     <div class="d-flex flex-wrap gap-1">
 
-                        @if (!$isStaff || $user->hasPermission('healthfacility_add_disease'))
-                            <a href="{{ route('add.disease') }}" class="btn btn-sm btn-primary">
-                                Add Disease
+                        @if (!$isStaff || $user->hasPermission('educationfacility_add_disease'))
+                            <a href="{{-- route('add.disease') --}}" class="btn btn-sm btn-primary">
+                                Add Class
                             </a>
                         @endif
 
-                        @if (!$isStaff || $user->hasPermission('healthfacility_hospital_list'))
-                            <a href="{{ route('list.hospital') }}" class="btn btn-sm btn-primary">
-                                Hospital List
+                        @if (!$isStaff || $user->hasPermission('educationfacility_hospital_list'))
+                            <a href="{{ route('list.school') }}" class="btn btn-sm btn-primary">
+                                School List
                             </a>
                         @endif
 
-                        @if (!$isStaff || $user->hasPermission('healthfacility_healthcard_generate'))
-                            <a href="{{ route('generatelist.healthcard') }}" class="btn btn-sm btn-primary">
-                                Health Card Generate
+                        @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_generate'))
+                            <a href="{{ route('eduaction.reg.list') }}" class="btn btn-sm btn-primary">
+                                Education Card Generate
                             </a>
                         @endif
 
-                        @if (!$isStaff || $user->hasPermission('healthfacility_healthcard_list'))
-                            <a href="{{ route('list.healthcard') }}" class="btn btn-sm btn-primary">
-                                Health Card List
+                        {{-- @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
+                            <a href="{{ route('eduaction.reg.list') }}" class="btn btn-sm btn-primary">
+                                education Card List
                             </a>
                         @endif
 
-                        @if (!$isStaff || $user->hasPermission('healthfacility_demand'))
+                        @if (!$isStaff || $user->hasPermission('educationfacility_demand'))
                             <a href="{{ route('list.demandfacility') }}" class="btn btn-sm btn-warning text-dark">
                                 Demand Facility
                             </a>
                         @endif
 
-                        @if (!$isStaff || $user->hasPermission('healthfacility_pending'))
+                        @if (!$isStaff || $user->hasPermission('educationfacility_pending'))
                             <a href="{{ route('list.pendingfacility') }}" class="btn btn-sm btn-info text-white">
                                 Facility Pending
                             </a>
                         @endif
 
-                        @if (!$isStaff || $user->hasPermission('healthfacility_bill_investigation'))
+                        @if (!$isStaff || $user->hasPermission('educationfacility_bill_investigation'))
                             <a href="{{ route('list.Investigationfacility') }}" class="btn btn-sm btn-secondary">
                                 Bill Investigation
                             </a>
-                        @endif
+                        @endif --}}
 
-                        @if (!$isStaff || $user->hasPermission('healthfacility_bill_verify'))
-                            <a href="{{ route('list.Verifyhealthfacility') }}" class="btn btn-sm btn-secondary">
+                        {{-- @if (!$isStaff || $user->hasPermission('educationfacility_bill_verify'))
+                            <a href="{{ route('list.Verifyeducationfacility') }}" class="btn btn-sm btn-secondary">
                                 Bill Verify
                             </a>
                         @endif
 
-                        @if (!$isStaff || $user->hasPermission('healthfacility_demand_approve'))
-                            <a href="{{ route('list.Approvalhealthfacility') }}" class="btn btn-sm btn-success">
+                        @if (!$isStaff || $user->hasPermission('educationfacility_demand_approve'))
+                            <a href="{{ route('list.Approvaleducationfacility') }}" class="btn btn-sm btn-success">
                                 Demand Approve
                             </a>
                         @endif
 
-                        @if (!$isStaff || $user->hasPermission('healthfacility_final_approve'))
-                            <a href="{{ route('list.Approvehealthfacility') }}" class="btn btn-sm btn-success">
+                        @if (!$isStaff || $user->hasPermission('educationfacility_final_approve'))
+                            <a href="{{ route('list.Approveeducationfacility') }}" class="btn btn-sm btn-success">
                                 Final Approve
                             </a>
                         @endif
 
-                        @if (!$isStaff || $user->hasPermission('healthfacility_reject'))
-                            <a href="{{ route('list.Rejecthealthfacility') }}" class="btn btn-sm btn-danger">
+                        @if (!$isStaff || $user->hasPermission('educationfacility_reject'))
+                            <a href="{{ route('list.Rejecteducationfacility') }}" class="btn btn-sm btn-danger">
                                 Reject Facility
                             </a>
-                        @endif
+                        @endif --}}
 
-                        @if (!$isStaff || $user->hasPermission('healthfacility_pending_demand'))
-                            <a href="{{ route('list.DemandPendinghealthfacility') }}"
+                        {{-- @if (!$isStaff || $user->hasPermission('educationfacility_pending_demand'))
+                            <a href="{{ route('list.DemandPendingeducationfacility') }}"
                                 class="btn btn-sm btn-warning text-dark">
                                 Pending Demand
                             </a>
                         @endif
 
-                        @if (!$isStaff || $user->hasPermission('healthfacility_non_budget'))
-                            <a href="{{ route('list.NonBudgethealthfacility') }}" class="btn btn-sm btn-dark">
+                        @if (!$isStaff || $user->hasPermission('educationfacility_non_budget'))
+                            <a href="{{ route('list.NonBudgeteducationfacility') }}" class="btn btn-sm btn-dark">
                                 Non-Budget
                             </a>
-                        @endif
+                        @endif --}}
 
                     </div>
                 </div>
             </div>
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Hospital List</h5>
+                <h5 class="mb-0">School List</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Health Card</li>
+                        <li class="breadcrumb-item active" aria-current="page">Education Card</li>
                     </ol>
                 </nav>
             </div>
+
             @if (session('success'))
                 <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success') }}
                 </div>
             @endif
             <div class="row">
-                <form method="GET" action="{{ route('list.hospital') }}" class="row g-3 mb-4">
+                <form method="GET" action="{{ route('list.school') }}" class="row g-3 mb-4">
                     <div class="row">
                         <div class="col-md-3 col-sm-4 mb-3">
-                            <input type="text" class="form-control" name="name" placeholder="Search By Hospital Name">
+                            <input type="text" class="form-control" name="school_name"
+                                value="{{ request('school_name') }}" placeholder="Search By School Name">
                         </div>
+
                         <div class="col-md-3 col-sm-4 mb-3">
-                            <input type="text" class="form-control" name="name" placeholder="Search By Hospital Code">
+                            <input type="text" class="form-control" name="school_code"
+                                value="{{ request('school_code') }}" placeholder="Search By School Code">
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="col-md-4">
                             <button type="submit" class="btn btn-primary me-1">Search</button>
-                            <a href="{{ route('list.hospital') }}" class="btn btn-info text-white me-1">Reset</a>
+                            <a href="{{ route('list.school') }}" class="btn btn-info text-white me-1">Reset</a>
                         </div>
                     </div>
                 </form>
@@ -149,63 +154,57 @@
                 <div class="card shadow-sm">
 
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Hospital List</h5>
-                        <a href="{{ route('add.hospital') }}" class="btn btn-primary btn-sm">
-                            + Add Hospital
+                        <a href="{{ route('add.school') }}" class="btn btn-primary btn-sm">
+                            + Add School
                         </a>
                     </div>
 
                     <div class="card-body">
 
-                        @if (session('success'))
-                            <div class="alert alert-success">{{ session('success') }}</div>
-                        @endif
-
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>Sr. No.</th>
-                                    <th>Hospital Code</th>
+                                    <th>School Code</th>
                                     <th>Registration Date</th>
-                                    <th>Hospital / Clinic / Medical Name</th>
-                                    <th>Hospital / Clinic / Medical Address</th>
+                                    <th>School / Institution / Tuition Name</th>
+                                    <th>Address</th>
                                     <th>Contact Number</th>
-                                    <th>Doctor / Operator Name</th>
+                                    <th>Principal / / Teacher / Head</th>
                                     <th>Status</th>
                                     <th width="180">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($hospitals as $key => $hospital)
+                                @forelse($schools as $key => $school)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>{{ $hospital->hospital_code }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($hospital->registration_date)->format('d-m-Y') }}</td>
-                                        <td>{{ $hospital->hospital_name }}</td>
-                                        <td>{{ $hospital->address }}</td>
-                                        <td>{{ $hospital->contact_number ?? '-' }}</td>
-                                        <td>{{ $hospital->operator_name }}</td>
+                                        <td>{{ $school->school_code }}</td>
+                                        <td>
+                                            {{ $school->registration_date ? \Carbon\Carbon::parse($school->registration_date)->format('d-m-Y') : '-' }}
+                                        </td>
+                                        <td>{{ $school->school_name }}</td>
+                                        <td>{{ $school->address }}</td>
+                                        <td>{{ $school->contact_number ?? '-' }}</td>
+                                        <td>{{ $school->principal_name ?? '-' }}</td>
                                         <td>
                                             <span
-                                                class="badge {{ $hospital->status == 'active' ? 'bg-success' : 'bg-danger' }}">
-                                                {{ ucfirst($hospital->status) }}
+                                                class="badge {{ $school->status == 'active' ? 'bg-success' : 'bg-danger' }}">
+                                                {{ ucfirst($school->status) }}
                                             </span>
                                         </td>
                                         <td>
-                                            <a href="{{-- route('hospital.show', $hospital->id) --}}" class="btn btn-info btn-sm">View</a>
-
-                                            <a href="{{ route('edit.hospital', $hospital->id) }}"
+                                            <a href="{{ route('edit.school', $school->id) }}"
                                                 class="btn btn-warning btn-sm">Edit</a>
 
-                                            <a href="{{ route('delete.hospital', $hospital->id) }}"
-                                                onclick="return confirm('Are sure want to delete hospital')"
+                                            <a href="{{ route('delete.school', $school->id) }}"
+                                                onclick="return confirm('Are you sure want to delete school?')"
                                                 class="btn btn-danger btn-sm">Delete</a>
-
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="text-center">No hospital found</td>
+                                        <td colspan="9" class="text-center">No school found</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -214,6 +213,7 @@
                     </div>
                 </div>
             </div>
+
 
         </div>
     </div>
