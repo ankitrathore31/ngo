@@ -501,52 +501,6 @@
                     </li>
                 @endif
 
-
-                <!-- Promote -->
-                {{-- @if (!$isStaff || $user->hasPermission('promote-membership') || $user->hasPermission('promote-beneficiary') || $user->hasPermission('promote-staff'))
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-bullhorn"></i> PROMOTE
-                        </a>
-                        <ul class="dropdown-menu bg-primary">
-                            @if (!$isStaff || $user->hasPermission('promote-membership'))
-                                <li><a class="dropdown-item" href="#">Promote Membership</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('promote-beneficiary'))
-                                <li><a class="dropdown-item" href="#">Promote Beneficiary</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('promote-staff'))
-                                <li><a class="dropdown-item" href="#">Promote Staff</a></li>
-                            @endif
-                        </ul>
-                    </li>
-                @endif --}}
-
-
-                <!-- Certificate -->
-                {{-- @if (!$isStaff || $user->hasPermission('add-member-certificate') || $user->hasPermission('member-certificate-list') || $user->hasPermission('add-beneficiary-certificate') || $user->hasPermission('beneficiary-certificate-list'))
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-certificate"></i> CERTIFICATE
-                        </a>
-                        <ul class="dropdown-menu bg-primary">
-                            @if (!$isStaff || $user->hasPermission('add-member-certificate'))
-                                <li><a class="dropdown-item" href="#">Add Member Certificate</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('member-certificate-list'))
-                                <li><a class="dropdown-item" href="#">Member Certificate List</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('add-beneficiary-certificate'))
-                                <li><a class="dropdown-item" href="#">Add Beneficiary Certificate</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('beneficiary-certificate-list'))
-                                <li><a class="dropdown-item" href="#">Beneficiary Certificate List</a></li>
-                            @endif
-                        </ul>
-                    </li>
-                @endif --}}
-
-
                 <!-- letter -->
                 @if (!$isStaff || $user->hasPermission('generate-letter') || $user->hasPermission('letter-list'))
                     <li class="nav-item dropdown">
@@ -645,37 +599,9 @@
                                 <li><a class="dropdown-item" href="{{ route('staff-idcard') }}">Staff ID Card</a>
                                 </li>
                             @endif
-                            {{-- @if (!$isStaff || $user->hasPermission('beneficiary-admit'))
-                                <li><a class="dropdown-item" href="#">Beneficiary Admit Card</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('beneficiary-desk-slip'))
-                                <li><a class="dropdown-item" href="#">Beneficiary Desk Slip</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('beneficiary-cc-noc'))
-                                <li><a class="dropdown-item" href="#">Beneficiary CC & NOC</a></li>
-                            @endif --}}
                         </ul>
                     </li>
                 @endif
-
-
-                <!-- Attendance -->
-                {{-- @if (!$isStaff || $user->hasPermission('beneficiary-attendance') || $user->hasPermission('staff-attendance'))
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-check"></i> ATTENDANCE
-                        </a>
-                        <ul class="dropdown-menu bg-primary">
-                            @if (!$isStaff || $user->hasPermission('beneficiary-attendance'))
-                                <li><a class="dropdown-item" href="#">Beneficiary Attendance</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('staff-attendance'))
-                                <li><a class="dropdown-item" href="#">Staff Attendance</a></li>
-                            @endif
-                        </ul>
-                    </li>
-                @endif --}}
-
 
                 <!-- Complaint -->
                 @if (
@@ -898,6 +824,7 @@
                         </ul>
                     </li>
                 @endif
+
                 <!-- Kyc -->
                 @if (!$isStaff || $user->hasPermission('kyc') || $user->hasPermission('kyc'))
                     <li class="nav-item dropdown">
@@ -917,69 +844,29 @@
                         </ul>
                     </li>
                 @endif
-                <!-- Facility -->
-                @if (!$isStaff || $user->hasPermission('kyc') || $user->hasPermission('kyc'))
+
+                {{-- Facility Main Menu --}}
+                @if (!$isStaff || $user->hasPermission('facility_access'))
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-chalkboard-teacher"></i> FACILITY
+                            <i class="fas fa-building"></i> FACILITY
                         </a>
                         <ul class="dropdown-menu bg-primary">
-                            @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{ route('add.disease') }}">Add Disease</a></li>
+                            @if (!$isStaff || $user->hasPermission('health_facility'))
+                                <li><a class="dropdown-item" href="{{ route('generatelist.healthcard') }}">
+                                        Health Card Facility
+                                    </a></li>
                             @endif
-                            @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{ route('list.hospital') }}">Hospital List</a>
-                                </li>
+                            {{-- Education Facility Menu --}}
+                            @if (!$isStaff || $user->hasPermission('education_facility'))
+                                 <li><a class="dropdown-item" href="{{ route('eduaction.reg.list') }}">
+                                        Eduaction Card Facility
+                                    </a></li>
                             @endif
-                            @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{ route('generatelist.healthcard') }}">Health
-                                        Card Generate</a></li>
-                            @endif
-
-                            @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{ route('list.healthcard') }}">Health Card
-                                        List</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{ route('list.demandfacility') }}">Demand Health
-                                        Facility</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{ route('list.pendingfacility') }}">Health
-                                        Facility Pending</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{ route('list.Investigationfacility') }}">Health Facility Bill
-                                        Investigation</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{ route('list.Verifyhealthfacility') }}">Health Facility Bill
-                                        Verify</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{ route('list.Approvalhealthfacility') }}">Health Facility Demand
-                                        Approve</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{ route('list.Approvehealthfacility') }}">Final Approve Health
-                                        Facility</a></li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{ route('list.Rejecthealthfacility') }}">Health Facility Reject</a>
-                                </li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{ route('list.DemandPendinghealthfacility') }}">Pending Health Facility</a>
-                                </li>
-                            @endif
-                            @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{ route('list.NonBudgethealthfacility') }}">Non-Budget Health
-                                        Facility</a></li>
-                            @endif
-
                         </ul>
                     </li>
                 @endif
+
             </ul>
         </div>
     </div>

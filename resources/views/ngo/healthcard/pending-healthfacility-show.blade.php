@@ -106,6 +106,96 @@
 
     <div class="wrapper">
         <div class="d-flex justify-content-between align-person-centre mb-0 mt-4">
+                        <div class="row mb-3 mt-4">
+                @php
+                    $user = auth()->user();
+                    $isStaff = $user && $user->user_type === 'staff';
+                @endphp
+                <div class="col-12">
+                    <div class="d-flex flex-wrap gap-1">
+
+                        @if (!$isStaff || $user->hasPermission('healthfacility_add_disease'))
+                            <a href="{{ route('add.disease') }}" class="btn btn-sm btn-primary">
+                                Add Disease
+                            </a>
+                        @endif
+
+                        @if (!$isStaff || $user->hasPermission('healthfacility_hospital_list'))
+                            <a href="{{ route('list.hospital') }}" class="btn btn-sm btn-primary">
+                                Hospital List
+                            </a>
+                        @endif
+
+                        @if (!$isStaff || $user->hasPermission('healthfacility_healthcard_generate'))
+                            <a href="{{ route('generatelist.healthcard') }}" class="btn btn-sm btn-primary">
+                                Health Card Generate
+                            </a>
+                        @endif
+
+                        @if (!$isStaff || $user->hasPermission('healthfacility_healthcard_list'))
+                            <a href="{{ route('list.healthcard') }}" class="btn btn-sm btn-primary">
+                                Health Card List
+                            </a>
+                        @endif
+
+                        @if (!$isStaff || $user->hasPermission('healthfacility_demand'))
+                            <a href="{{ route('list.demandfacility') }}" class="btn btn-sm btn-warning text-dark">
+                                Demand Facility
+                            </a>
+                        @endif
+
+                        @if (!$isStaff || $user->hasPermission('healthfacility_pending'))
+                            <a href="{{ route('list.pendingfacility') }}" class="btn btn-sm btn-info text-white">
+                                Facility Pending
+                            </a>
+                        @endif
+
+                        @if (!$isStaff || $user->hasPermission('healthfacility_bill_investigation'))
+                            <a href="{{ route('list.Investigationfacility') }}" class="btn btn-sm btn-secondary">
+                                Bill Investigation
+                            </a>
+                        @endif
+
+                        @if (!$isStaff || $user->hasPermission('healthfacility_bill_verify'))
+                            <a href="{{ route('list.Verifyhealthfacility') }}" class="btn btn-sm btn-secondary">
+                                Bill Verify
+                            </a>
+                        @endif
+
+                        @if (!$isStaff || $user->hasPermission('healthfacility_demand_approve'))
+                            <a href="{{ route('list.Approvalhealthfacility') }}" class="btn btn-sm btn-success">
+                                Demand Approve
+                            </a>
+                        @endif
+
+                        @if (!$isStaff || $user->hasPermission('healthfacility_final_approve'))
+                            <a href="{{ route('list.Approvehealthfacility') }}" class="btn btn-sm btn-success">
+                                Final Approve
+                            </a>
+                        @endif
+
+                        @if (!$isStaff || $user->hasPermission('healthfacility_reject'))
+                            <a href="{{ route('list.Rejecthealthfacility') }}" class="btn btn-sm btn-danger">
+                                Reject Facility
+                            </a>
+                        @endif
+
+                        @if (!$isStaff || $user->hasPermission('healthfacility_pending_demand'))
+                            <a href="{{ route('list.DemandPendinghealthfacility') }}"
+                                class="btn btn-sm btn-warning text-dark">
+                                Pending Demand
+                            </a>
+                        @endif
+
+                        @if (!$isStaff || $user->hasPermission('healthfacility_non_budget'))
+                            <a href="{{ route('list.NonBudgethealthfacility') }}" class="btn btn-sm btn-dark">
+                                Non-Budget
+                            </a>
+                        @endif
+
+                    </div>
+                </div>
+            </div>
             <h5 class="mb-0">Pending Health person</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
