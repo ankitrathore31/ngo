@@ -603,12 +603,26 @@ Route::controller(HealthCardController::class)->middleware('auth')->group(functi
 
 Route::controller(EduactionCardController::class)->middleware('auth')->group(function () {
     Route::get('ngo/education-reg', 'RegList')->name('eduaction.reg.list');
+    Route::get('ngo/add-class', 'AddClass')->name('add.class');
+    Route::post('ngo/store-class', 'StoreClass')->name('store.class');
+    Route::get('ngo/delete-class/{id}', 'DeleteClass')->name('delete.class');
     Route::get('ngo/add-school', 'AddSchool')->name('add.school');
     Route::post('ngo/store-school', 'StoreSchool')->name('store.school');
     Route::get('ngo/edit-school/{id}', 'EditSchool')->name('edit.school');
     Route::post('ngo/update-school/{id}', 'UpdateSchool')->name('update.school');
     Route::get('ngo/delete-school/{id}', 'DeleteSchool')->name('delete.school');
     Route::get('ngo/list-school', 'SchoolList')->name('list.school');
+    Route::get('ngo/add-student', 'AddStudent')->name('add.student');
+    Route::post('ngo/store-student', 'StoreStudent')->name('store.student');
+    Route::get('ngo/edit-student/{id}', 'EditStudent')->name('edit.student');
+    Route::post('ngo/update-student/{id}', 'UpdateStudent')->name('update.student');
+    Route::get('ngo/list-student', 'StudentList')->name('list.student');
+    Route::get('ngo/generate-educationcard/{id}/{type}', 'GenerateEducationCard')->name('generate.educationcard');
+    Route::post('ngo/educationcard/store', 'StoreEducationCard')->name('educationcard.store');
+    Route::get('ngo/education-card-list', 'EducationCardList')->name('eduaction.card.list');
+        Route::get('ngo/show-education-card/{id}/{education_id}', 'ShowEducationCard')->name('show.educationcard');
+
+
 });
 
 require __DIR__ . '/auth.php';

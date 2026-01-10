@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\academic_session;
 use App\Models\beneficiarie;
+use App\Models\Education_class;
+use App\Models\EducationCard;
 use App\Models\Member;
 use App\Models\School;
+use App\Models\Signature;
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 class EduactionCardController extends Controller
@@ -102,6 +106,7 @@ class EduactionCardController extends Controller
         $schools = School::orderBy('school_name', 'asc')->get();
         return view('ngo.educationcard.add-school', compact('nextCode'));
     }
+
     public function StoreSchool(Request $request)
     {
         $request->validate([
@@ -170,13 +175,12 @@ class EduactionCardController extends Controller
         return redirect()->route('list.school')->with('success', 'School saved successfully');
     }
 
-     public function EditSchool($id)
+    public function EditSchool($id)
     {
         $school = School::findOrFail($id);
         return view('ngo.educationcard.edit-school', compact('school'));
     }
 
-    
     public function UpdateSchool(Request $request, $id)
     {
         $school = School::findOrFail($id);
@@ -295,5 +299,250 @@ class EduactionCardController extends Controller
         $schools = $query->orderBy('id', 'desc')->get();
 
         return view('ngo.educationcard.school-list', compact('schools'));
+    }
+
+    public function AddClass()
+    {
+        $classes = Education_class::get();
+
+        return view('ngo.educationcard.add-class', compact('classes'));
+    }
+
+    public function StoreClass(Request $request)
+    {
+        $request->validate([
+            'class' => 'required',
+        ]);
+
+        Education_class::create([
+            'class' => $request->class,
+        ]);
+
+        return redirect()->back()->with('success', 'Class Added Successfully.');
+    }
+
+    public function DeleteClass($id)
+    {
+        $class = Education_class::findorFail($id);
+        $class->delete();
+
+        return redirect()->back()->with('success', 'Class delete successfully.');
+    }
+
+    public function AddStudent()
+    {
+        $data = academic_session::get();
+        return view('ngo.educationcard.add-student', compact('data'));
+    }
+
+    public function StoreStudent(Request $request)
+    {
+        $request->validate([
+            'student_name'      => 'required|string|max:255',
+        ]);
+
+        Student::create([
+            'student_name' => $request->student_name,
+        ]);
+
+        return redirect()->back()->with('success', 'Student Added Successfully.');
+    }
+
+    public function StudentList(Request $request)
+    {
+        $students = Student::query();
+
+        if ($request->filled('registration_no')) {
+            $students->where('registration_no', 'like', '%' . $request->registration_no . '%');
+        }
+
+        if ($request->filled('student_name')) {
+            $students->where('student_name', 'like', '%' . $request->student_name . '%');
+        }
+
+        $students = $students->get();
+
+        return view('ngo.educationcard.student-list', compact('students'));
+    }
+
+    public function GenerateEducationCard($id, $type)
+    {
+        if ($type === 'Beneficiaries') {
+            $record = beneficiarie::where('status', 1)->findorFail($id);
+        } else {
+            $record = Member::where('status', 1)->findorFail($id);
+        }
+        $prefix = '219EC';
+
+        $last = EducationCard::where('educationcard_no', 'like', $prefix . '%')
+            ->orderBy('educationcard_no', 'desc')
+            ->value('educationcard_no');
+
+        $number = $last
+            ? intval(substr($last, strlen($prefix))) + 1
+            : 1;
+
+        $educationcard_no = $prefix . str_pad($number, 7, '0', STR_PAD_LEFT);
+        $schools = \App\Models\School::orderBy('school_name')->get();
+        $students  = \App\Models\Student::orderBy('student_name')->get();
+
+        return view('ngo.educationcard.generate-card', compact('educationcard_no', 'record', 'schools', 'students'));
+    }
+
+    public function StoreEducationCard(Request $request)
+    {
+        $request->validate([
+            'reg_id' => 'required|integer',
+            'educationcard_no' => 'required|string',
+            'education_registration_date' => 'required|date',
+            'students' => 'nullable|array',
+            'students.*' => 'string',
+            'school_name' => 'nullable|array',
+            'school_name.*' => 'string',
+        ]);
+
+        $educationCard = EducationCard::create([
+            'reg_id' => $request->reg_id,
+            'educationcard_no' => $request->educationcard_no,
+            'education_registration_date' => $request->education_registration_date,
+            'students' => $request->students ?? [],
+            'school_name' => $request->school_name ?? [],
+            'status' => 1,
+        ]);
+
+        return redirect()
+            ->route('eduaction.card.list')
+            ->with('success', 'Education Card saved successfully.');
+    }
+
+    public function EducationCardList(Request $request)
+    {
+        $queryBene = beneficiarie::with(['educationCards' => function ($q) {
+            $q->where('status', 1);
+        }])
+            ->where('status', 1)
+            ->whereHas('educationCards', function ($q) {
+                $q->where('status', 1);
+            });
+
+        $queryMember = Member::with(['educationCards' => function ($q) {
+            $q->where('status', 1);
+        }])
+            ->where('status', 1)
+            ->whereHas('educationCards', function ($q) {
+                $q->where('status', 1);
+            });
+
+        if ($request->filled('session_filter')) {
+            $queryBene->where('academic_session', $request->session_filter);
+            $queryMember->where('academic_session', $request->session_filter);
+        }
+
+        if ($request->filled('application_no')) {
+            $search = $request->application_no;
+
+            $queryBene->where(
+                fn($q) =>
+                $q->where('application_no', 'like', "%$search%")
+                    ->orWhere('registration_no', 'like', "%$search%")
+            );
+
+            $queryMember->where(
+                fn($q) =>
+                $q->where('application_no', 'like', "%$search%")
+                    ->orWhere('registration_no', 'like', "%$search%")
+            );
+        }
+
+        if ($request->filled('identity_no')) {
+            $identity = $request->identity_no;
+
+            $queryBene->where(
+                fn($q) =>
+                $q->where('phone', 'like', "%$identity%")
+                    ->orWhere('identity_no', 'like', "%$identity%")
+            );
+
+            $queryMember->where(
+                fn($q) =>
+                $q->where('phone', 'like', "%$identity%")
+                    ->orWhere('identity_no', 'like', "%$identity%")
+            );
+        }
+
+        if ($request->filled('reg_type')) {
+            $queryBene->where('reg_type', $request->reg_type);
+            $queryMember->where('reg_type', $request->reg_type);
+        }
+
+        if ($request->filled('block')) {
+            $queryBene->where('block', 'like', "%{$request->block}%");
+            $queryMember->where('block', 'like', "%{$request->block}%");
+        }
+
+        if ($request->filled('state')) {
+            $queryBene->where('state', $request->state);
+            $queryMember->where('state', $request->state);
+        }
+
+        if ($request->filled('district')) {
+            $queryBene->where('district', $request->district);
+            $queryMember->where('district', $request->district);
+        }
+
+        $beneficiaries = $queryBene->get();
+        $members = $queryMember->get();
+
+        /* FLATTEN: one row per health card */
+        $combined = collect()
+            ->merge($beneficiaries)
+            ->merge($members)
+            ->flatMap(function ($item) {
+                return $item->educationCards->map(function ($card) use ($item) {
+                    return [
+                        'person' => $item,
+                        'card'   => $card
+                    ];
+                });
+            })
+            ->sortBy(fn($row) => $row['card']->created_at)
+            ->values();
+
+        $data = academic_session::all();
+        $states = config('states');
+
+        return view('ngo.educationcard.card-list', compact(
+            'combined',
+            'data',
+            'states'
+        ));
+    }
+
+    public function ShowEducationCard($id, $education_id)
+    {
+        // Try Beneficiarie first
+        $record = beneficiarie::find($id);
+
+        // If not found, try Member
+        if (!$record) {
+            $record = Member::find($id);
+        }
+
+        // If neither found
+        if (!$record) {
+            return redirect()->back()->with('error', 'Record not found.');
+        }
+
+        // Fetch ONE health card from hasMany relationship
+        $educationCard = $record->educationCards()
+            ->where('id', $education_id)
+            ->first();
+
+        if (!$educationCard) {
+            return redirect()->back()->with('error', 'Education Card not found.');
+        }
+        $signatures = Signature::pluck('file_path', 'role');
+
+        return view('ngo.educationcard.card', compact('record', 'educationCard', 'signatures'));
     }
 }

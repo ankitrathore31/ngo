@@ -466,7 +466,7 @@ class HealthCardController extends Controller
     public function ShowHealthCard($id, $health_id)
     {
         // Try Beneficiarie first
-        $record = Beneficiarie::find($id);
+        $record = beneficiarie::find($id);
 
         // If not found, try Member
         if (!$record) {

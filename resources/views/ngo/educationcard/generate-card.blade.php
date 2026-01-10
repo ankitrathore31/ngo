@@ -103,102 +103,12 @@
         }
     </style>
     <div class="wrapper">
-                    <div class="row mb-3 mt-4">
-                @php
-                    $user = auth()->user();
-                    $isStaff = $user && $user->user_type === 'staff';
-                @endphp
-                <div class="col-12">
-                    <div class="d-flex flex-wrap gap-1">
-
-                        @if (!$isStaff || $user->hasPermission('healthfacility_add_disease'))
-                            <a href="{{ route('add.disease') }}" class="btn btn-sm btn-primary">
-                                Add Disease
-                            </a>
-                        @endif
-
-                        @if (!$isStaff || $user->hasPermission('healthfacility_hospital_list'))
-                            <a href="{{ route('list.hospital') }}" class="btn btn-sm btn-primary">
-                                Hospital List
-                            </a>
-                        @endif
-
-                        @if (!$isStaff || $user->hasPermission('healthfacility_healthcard_generate'))
-                            <a href="{{ route('generatelist.healthcard') }}" class="btn btn-sm btn-primary">
-                                Health Card Generate
-                            </a>
-                        @endif
-
-                        @if (!$isStaff || $user->hasPermission('healthfacility_healthcard_list'))
-                            <a href="{{ route('list.healthcard') }}" class="btn btn-sm btn-primary">
-                                Health Card List
-                            </a>
-                        @endif
-
-                        @if (!$isStaff || $user->hasPermission('healthfacility_demand'))
-                            <a href="{{ route('list.demandfacility') }}" class="btn btn-sm btn-warning text-dark">
-                                Demand Facility
-                            </a>
-                        @endif
-
-                        @if (!$isStaff || $user->hasPermission('healthfacility_pending'))
-                            <a href="{{ route('list.pendingfacility') }}" class="btn btn-sm btn-info text-white">
-                                Facility Pending
-                            </a>
-                        @endif
-
-                        @if (!$isStaff || $user->hasPermission('healthfacility_bill_investigation'))
-                            <a href="{{ route('list.Investigationfacility') }}" class="btn btn-sm btn-secondary">
-                                Bill Investigation
-                            </a>
-                        @endif
-
-                        @if (!$isStaff || $user->hasPermission('healthfacility_bill_verify'))
-                            <a href="{{ route('list.Verifyhealthfacility') }}" class="btn btn-sm btn-secondary">
-                                Bill Verify
-                            </a>
-                        @endif
-
-                        @if (!$isStaff || $user->hasPermission('healthfacility_demand_approve'))
-                            <a href="{{ route('list.Approvalhealthfacility') }}" class="btn btn-sm btn-success">
-                                Demand Approve
-                            </a>
-                        @endif
-
-                        @if (!$isStaff || $user->hasPermission('healthfacility_final_approve'))
-                            <a href="{{ route('list.Approvehealthfacility') }}" class="btn btn-sm btn-success">
-                                Final Approve
-                            </a>
-                        @endif
-
-                        @if (!$isStaff || $user->hasPermission('healthfacility_reject'))
-                            <a href="{{ route('list.Rejecthealthfacility') }}" class="btn btn-sm btn-danger">
-                                Reject Facility
-                            </a>
-                        @endif
-
-                        @if (!$isStaff || $user->hasPermission('healthfacility_pending_demand'))
-                            <a href="{{ route('list.DemandPendinghealthfacility') }}"
-                                class="btn btn-sm btn-warning text-dark">
-                                Pending Demand
-                            </a>
-                        @endif
-
-                        @if (!$isStaff || $user->hasPermission('healthfacility_non_budget'))
-                            <a href="{{ route('list.NonBudgethealthfacility') }}" class="btn btn-sm btn-dark">
-                                Non-Budget
-                            </a>
-                        @endif
-
-                    </div>
-                </div>
-            </div>
         <div class="d-flex justify-content-between align-record-centre mb-0 mt-4">
-            <h5 class="mb-0">Generate Health Card</h5>
+            <h5 class="mb-0">Generate Education Card</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                     <li class="breadcrumb-record"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-record active" aria-current="page">Health Card</li>
+                    <li class="breadcrumb-record active" aria-current="page">Education Card</li>
                 </ol>
             </nav>
         </div>
@@ -285,6 +195,7 @@
                                 <div class="col-sm-4 mb-3">
                                     <strong>Occupation:</strong> {{ $record->occupation }}
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -294,64 +205,64 @@
                 <div class="card-body shadow-sm">
                     <div class="row">
                         <div class="col">
-                            <form method="POST" action="{{ route('healthcard.store') }}">
+                            <form method="POST" action="{{ route('educationcard.store') }}">
                                 @csrf
+
+                                <input type="hidden" name="reg_id" value="{{ $record->id }}">
+
                                 <div class="row">
 
-                                    <input type="text" class="form-control" value="{{ $record->id }}" name="reg_id"
-                                        hidden>
-
                                     <div class="col-md-6 mb-2">
-                                        <label>Health Card No</label>
-                                        <input type="text" class="form-control"
-                                            value="{{ $healthcard->healthcard_no ?? $nextCard }}" name="healthcard_no"
-                                            readonly>
+                                        <label>Education Card No</label>
+                                        <input type="text" class="form-control" value="{{ $educationcard_no }}"
+                                            name="educationcard_no" readonly>
                                     </div>
 
                                     <div class="col-md-6 mb-2">
-                                        <label>Health Card Registration Date</label>
-                                        <input type="date" name="Health_registration_date" class="form-control">
+                                        <label>Education Card Registration Date</label>
+                                        <input type="date" name="education_registration_date" class="form-control">
                                     </div>
 
+                                    <!-- School Select -->
                                     <div class="col-md-6 mb-2">
-                                        <label>Hospital</label>
-                                        <select id="hospitalSelect" class="form-control">
-                                            <option value="">Select Hospital</option>
-                                            @foreach ($hospitals as $hospital)
-                                                <option value="{{ $hospital->hospital_code }}">
-                                                    {{ $hospital->hospital_name }} ({{ $hospital->hospital_code }})
+                                        <label>School</label>
+                                        <select id="schoolSelect" class="form-control">
+                                            <option value="">Select School</option>
+                                            @foreach ($schools as $school)
+                                                <option value="{{ $school->school_code }}">
+                                                    {{ $school->school_name }} ({{ $school->school_code }})
                                                 </option>
                                             @endforeach
                                         </select>
                                     </div>
 
                                     <div class="col-md-6 mt-3">
-                                        <div id="selectedHospitals" class="d-flex flex-wrap gap-2"></div>
+                                        <div id="selectedSchools" class="d-flex flex-wrap gap-2"></div>
                                     </div>
 
-
                                     <div class="col-md-6 mb-2">
-                                        <label>Disease</label>
-                                        <select id="diseaseSelect" class="form-control">
-                                            <option value="">Select Disease</option>
-                                            @foreach ($diseases as $d)
-                                                <option value="{{ $d->disease }}">{{ $d->disease }}</option>
+                                        <label>Student</label>
+                                        <select id="studentSelect" class="form-control">
+                                            <option value="">Select Student</option>
+                                            @foreach ($students as $student)
+                                                <option value="{{ $student->student_name }}">
+                                                    {{ $student->student_name }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
 
                                     <div class="col-md-6 mt-3">
-                                        <div id="selectedDiseases" class="d-flex flex-wrap gap-2"></div>
+                                        <div id="selectedStudents" class="d-flex flex-wrap gap-2"></div>
                                     </div>
+
 
                                     <div class="col-md-12 mt-3">
-                                        <button class="btn btn-success">
-                                            Save
-                                        </button>
+                                        <button class="btn btn-success">Save</button>
                                     </div>
+
                                 </div>
                             </form>
-
                         </div>
                     </div>
                 </div>
@@ -359,8 +270,8 @@
         </div>
         <script>
             /* ---------- Initial Data (Edit Mode Support) ---------- */
-            let selectedDiseases = @json($healthcard->diseases ?? []);
-            let selectedHospitals = @json($healthcard->hospital_name ?? []);
+            let selectedStudents = @json($educationCard->students ?? []);
+            let selectedSchools = @json($educationCard->school_name ?? []);
 
             /* ---------- Generic Render Function ---------- */
             function renderTags(containerId, items, inputName, removeFn) {
@@ -373,8 +284,9 @@
 
                     tag.innerHTML = `
                 <span class="me-2">${val}</span>
-                <button type="button" class="btn btn-sm btn-light"
-                    onclick="${removeFn}('${val}')">&times;</button>
+                <button type="button"
+                        class="btn btn-sm btn-light"
+                        onclick="${removeFn}('${val}')">&times;</button>
                 <input type="hidden" name="${inputName}[]" value="${val}">
             `;
 
@@ -382,36 +294,36 @@
                 });
             }
 
-            /* ---------- Disease ---------- */
-            document.getElementById('diseaseSelect').addEventListener('change', function() {
-                if (this.value && !selectedDiseases.includes(this.value)) {
-                    selectedDiseases.push(this.value);
-                    renderTags('selectedDiseases', selectedDiseases, 'diseases', 'removeDisease');
+            /* ---------- Student ---------- */
+            document.getElementById('studentSelect').addEventListener('change', function() {
+                if (this.value && !selectedStudents.includes(this.value)) {
+                    selectedStudents.push(this.value);
+                    renderTags('selectedStudents', selectedStudents, 'students', 'removeStudent');
                 }
                 this.value = '';
             });
 
-            function removeDisease(val) {
-                selectedDiseases = selectedDiseases.filter(v => v !== val);
-                renderTags('selectedDiseases', selectedDiseases, 'diseases', 'removeDisease');
+            function removeStudent(val) {
+                selectedStudents = selectedStudents.filter(v => v !== val);
+                renderTags('selectedStudents', selectedStudents, 'students', 'removeStudent');
             }
 
-            /* ---------- Hospital ---------- */
-            document.getElementById('hospitalSelect').addEventListener('change', function() {
-                if (this.value && !selectedHospitals.includes(this.value)) {
-                    selectedHospitals.push(this.value);
-                    renderTags('selectedHospitals', selectedHospitals, 'hospital_name', 'removeHospital');
+            /* ---------- School ---------- */
+            document.getElementById('schoolSelect').addEventListener('change', function() {
+                if (this.value && !selectedSchools.includes(this.value)) {
+                    selectedSchools.push(this.value);
+                    renderTags('selectedSchools', selectedSchools, 'school_name', 'removeSchool');
                 }
                 this.value = '';
             });
 
-            function removeHospital(val) {
-                selectedHospitals = selectedHospitals.filter(v => v !== val);
-                renderTags('selectedHospitals', selectedHospitals, 'hospital_name', 'removeHospital');
+            function removeSchool(val) {
+                selectedSchools = selectedSchools.filter(v => v !== val);
+                renderTags('selectedSchools', selectedSchools, 'school_name', 'removeSchool');
             }
 
             /* ---------- Initial Render ---------- */
-            renderTags('selectedDiseases', selectedDiseases, 'diseases', 'removeDisease');
-            renderTags('selectedHospitals', selectedHospitals, 'hospital_name', 'removeHospital');
+            renderTags('selectedStudents', selectedStudents, 'students', 'removeStudent');
+            renderTags('selectedSchools', selectedSchools, 'school_name', 'removeSchool');
         </script>
     @endsection

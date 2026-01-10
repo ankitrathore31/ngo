@@ -40,7 +40,7 @@ class BeneficiarieController extends Controller
             ->when($request->name, function ($query, $name) {
                 return $query->where(function ($q) use ($name) {
                     $q->where('name', 'like', '%' . $name . '%')
-                        ->orWhere('guardian_name', 'like', '%' . $name . '%');
+                        ->orWhere('gurdian_name', 'like', '%' . $name . '%');
                 });
             })
 
@@ -215,7 +215,7 @@ class BeneficiarieController extends Controller
         if ($request->filled('name')) {
             $surveys->whereHas('beneficiarie', function ($query) use ($request) {
                 $query->where('name', 'like', '%' . $request->name . '%')
-                    ->orWhere('guardian_name', 'like', '%' . $request->name . '%');
+                    ->orWhere('gurdian_name', 'like', '%' . $request->name . '%');
             });
         }
 
@@ -1289,7 +1289,8 @@ class BeneficiarieController extends Controller
         }
 
         /* Fetch Data */
-        $beneficiarie = $query->orderBy('id', 'desc')->get();
+        $beneficiarie = $query->orderBy('id', 'asc')
+            ->get();
 
         /* Supporting Data */
         $data = academic_session::all();
@@ -1302,7 +1303,13 @@ class BeneficiarieController extends Controller
 
         $staff = Staff::get();
         $signatures = Signature::pluck('file_path', 'role');
+        $tokenCounter = 1;
 
+        foreach ($beneficiarie as $beneficiary) {
+            foreach ($beneficiary->surveys as $survey) {
+                $survey->token_no = $tokenCounter++;
+            }
+        }
         return view(
             'ngo.beneficiarie.token',
             compact('beneficiarie', 'data', 'categories', 'category', 'staff', 'signatures')

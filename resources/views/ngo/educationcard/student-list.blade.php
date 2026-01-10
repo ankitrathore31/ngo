@@ -31,8 +31,8 @@
                     <div class="d-flex flex-wrap gap-1">
 
                         @if (!$isStaff || $user->hasPermission('educationfacility_add_disease'))
-                            <a href="{{ route('list.student') }}" class="btn btn-sm btn-primary">
-                                Add Student
+                            <a href="{{-- route('add.disease') --}}" class="btn btn-sm btn-primary">
+                                Add Class
                             </a>
                         @endif
 
@@ -48,11 +48,66 @@
                             </a>
                         @endif
 
-                        @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
-                            <a href="{{ route('eduaction.card.list') }}" class="btn btn-sm btn-primary">
+                        {{-- @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
+                            <a href="{{ route('eduaction.reg.list') }}" class="btn btn-sm btn-primary">
                                 education Card List
                             </a>
                         @endif
+
+                        @if (!$isStaff || $user->hasPermission('educationfacility_demand'))
+                            <a href="{{ route('list.demandfacility') }}" class="btn btn-sm btn-warning text-dark">
+                                Demand Facility
+                            </a>
+                        @endif
+
+                        @if (!$isStaff || $user->hasPermission('educationfacility_pending'))
+                            <a href="{{ route('list.pendingfacility') }}" class="btn btn-sm btn-info text-white">
+                                Facility Pending
+                            </a>
+                        @endif
+
+                        @if (!$isStaff || $user->hasPermission('educationfacility_bill_investigation'))
+                            <a href="{{ route('list.Investigationfacility') }}" class="btn btn-sm btn-secondary">
+                                Bill Investigation
+                            </a>
+                        @endif --}}
+
+                        {{-- @if (!$isStaff || $user->hasPermission('educationfacility_bill_verify'))
+                            <a href="{{ route('list.Verifyeducationfacility') }}" class="btn btn-sm btn-secondary">
+                                Bill Verify
+                            </a>
+                        @endif
+
+                        @if (!$isStaff || $user->hasPermission('educationfacility_demand_approve'))
+                            <a href="{{ route('list.Approvaleducationfacility') }}" class="btn btn-sm btn-success">
+                                Demand Approve
+                            </a>
+                        @endif
+
+                        @if (!$isStaff || $user->hasPermission('educationfacility_final_approve'))
+                            <a href="{{ route('list.Approveeducationfacility') }}" class="btn btn-sm btn-success">
+                                Final Approve
+                            </a>
+                        @endif
+
+                        @if (!$isStaff || $user->hasPermission('educationfacility_reject'))
+                            <a href="{{ route('list.Rejecteducationfacility') }}" class="btn btn-sm btn-danger">
+                                Reject Facility
+                            </a>
+                        @endif --}}
+
+                        {{-- @if (!$isStaff || $user->hasPermission('educationfacility_pending_demand'))
+                            <a href="{{ route('list.DemandPendingeducationfacility') }}"
+                                class="btn btn-sm btn-warning text-dark">
+                                Pending Demand
+                            </a>
+                        @endif
+
+                        @if (!$isStaff || $user->hasPermission('educationfacility_non_budget'))
+                            <a href="{{ route('list.NonBudgeteducationfacility') }}" class="btn btn-sm btn-dark">
+                                Non-Budget
+                            </a>
+                        @endif --}}
 
                     </div>
                 </div>
@@ -73,93 +128,73 @@
                 </div>
             @endif
             <div class="row">
-                <form method="GET" action="{{ route('list.school') }}" class="row g-3 mb-4">
+                <form method="GET" action="{{ route('list.student') }}" class="row g-3 mb-4">
+
                     <div class="row">
-                        <div class="col-md-3 col-sm-4 mb-3">
-                            <input type="text" class="form-control" name="school_name"
-                                value="{{ request('school_name') }}" placeholder="Search By School Name">
-                        </div>
+
 
                         <div class="col-md-3 col-sm-4 mb-3">
-                            <input type="text" class="form-control" name="school_code"
-                                value="{{ request('school_code') }}" placeholder="Search By School Code">
+                            <input type="text" class="form-control" name="student_name"
+                                value="{{ request('student_name') }}" placeholder="Search By Student Name">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-4">
                             <button type="submit" class="btn btn-primary me-1">Search</button>
-                            <a href="{{ route('list.school') }}" class="btn btn-info text-white me-1">Reset</a>
+                            <a href="{{ route('list.student') }}" class="btn btn-info text-white me-1">Reset</a>
                         </div>
                     </div>
+
                 </form>
             </div>
+
 
             <div class="container-fluid mt-4">
                 <div class="card shadow-sm">
 
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <a href="{{ route('add.school') }}" class="btn btn-primary btn-sm">
-                            + Add School
+                        <a href="{{ route('add.student') }}" class="btn btn-primary btn-sm">
+                            + Add Student
                         </a>
                     </div>
-
                     <div class="card-body">
 
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>Sr. No.</th>
-                                    <th>School Code</th>
-                                    <th>Registration Date</th>
-                                    <th>School / Institution / Tuition Name</th>
-                                    <th>Address</th>
-                                    <th>Contact Number</th>
-                                    <th>Principal / / Teacher / Head</th>
-                                    <th>Status</th>
+
+                                    <th>Student Name</th>
+
                                     <th width="180">Action</th>
                                 </tr>
                             </thead>
+
                             <tbody>
-                                @forelse($schools as $key => $school)
+                                @forelse($students as $key => $student)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>{{ $school->school_code }}</td>
-                                        <td>
-                                            {{ $school->registration_date ? \Carbon\Carbon::parse($school->registration_date)->format('d-m-Y') : '-' }}
-                                        </td>
-                                        <td>{{ $school->school_name }}</td>
-                                        <td>{{ $school->address }}</td>
-                                        <td>{{ $school->contact_number ?? '-' }}</td>
-                                        <td>{{ $school->principal_name ?? '-' }}</td>
-                                        <td>
-                                            <span
-                                                class="badge {{ $school->status == 'active' ? 'bg-success' : 'bg-danger' }}">
-                                                {{ ucfirst($school->status) }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <a href="{{ route('edit.school', $school->id) }}"
-                                                class="btn btn-warning btn-sm">Edit</a>
 
-                                            <a href="{{ route('delete.school', $school->id) }}"
-                                                onclick="return confirm('Are you sure want to delete school?')"
+                                        <td>{{ $student->student_name }}</td>
+
+                                        <td>
+                                            <a href="{{ route('edit.student', $student->id) }}"
+                                                class="btn btn-warning btn-sm">Edit</a>
+                                            <a href="{{ route('edit.student', $student->id) }}"
                                                 class="btn btn-danger btn-sm">Delete</a>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="9" class="text-center">No school found</td>
+                                        <td colspan="9" class="text-center">No student found</td>
                                     </tr>
                                 @endforelse
                             </tbody>
                         </table>
 
                     </div>
+
                 </div>
             </div>
-
-
-        </div>
-    </div>
-@endsection
+        @endsection
