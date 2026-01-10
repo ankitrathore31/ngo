@@ -58,7 +58,7 @@
                 </div>
             </div>
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Registraition List For Education Card</h5>
+                <h5 class="mb-0">Education Card List</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
@@ -72,9 +72,8 @@
                     {{ session('success') }}
                 </div>
             @endif
-
             <div class="row">
-                <form method="GET" action="{{ route('eduaction.reg.list') }}" class="row g-3 mb-4">
+                <form method="GET" action="{{ route('eduaction.card.list') }}" class="row g-3 mb-4">
                     <div class="row">
                         <div class="col-md-3 col-sm-4">
                             <select name="session_filter" id="session_filter" class="form-control">
@@ -139,8 +138,6 @@
 
                         </div>
                         <div class="col-md-3 col-sm-6 form-group mb-3">
-                            {{-- <label for="districtSelect" class="form-label">District: <span
-                                    class="text-danger">*</span></label> --}}
                             <select class="form-control @error('district') is-invalid @enderror" name="district"
                                 id="districtSelect">
                                 <option value="">Select District</option>
@@ -162,100 +159,94 @@
                     <div class="row">
                         <div class="col-md-4">
                             <button type="submit" class="btn btn-primary me-1">Search</button>
-                            <a href="{{ route('eduaction.reg.list') }}" class="btn btn-info text-white me-1">Reset</a>
+                            <a href="{{ route('eduaction.card.list') }}" class="btn btn-info text-white me-1">Reset</a>
                         </div>
                     </div>
                 </form>
             </div>
-            @php
-                $isSearchApplied = request()->anyFilled([
-                    'session_filter',
-                    'application_no',
-                    'registration_no',
-                    'name',
-                    'reg_type',
-                    'state',
-                    'district',
-                    'block',
-                ]);
-            @endphp
 
-            @if ($isSearchApplied)
+            <div class="card shadow-sm">
+                <div class="card-body table-responsive">
+                    <table class="table table-bordered table-hover align-middle text-center">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>Health Card Registration Date</th>
+                                <th>Health Card No</th>
+                                <th>Registration No</th>
+                                <th>Registration Date</th>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Father/Husband Name</th>
+                                <th>Address</th>
+                                <th>Caste</th>
+                                <th>Caste Category</th>
+                                <th>Religion</th>
+                                <th>Mobile No.</th>
+                                <th>Registration Type</th>
+                                <th>Student</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($combined as $index => $row)
+                                @php
+                                    $item = $row['person'];
+                                    $card = $row['card'];
+                                @endphp
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($card->education_registration_date)->format('d-m-Y') }}
+                                    </td>
+                                    <td>{{ $card->eduacationcard_no }}</td>
+                                    <td>{{ $item->registration_no }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($item->registration_date)->format('d-m-Y') }}</td>
 
-                <div class="card shadow-sm">
-                    <div class="card-body table-responsive">
-                        @if ($combined->count() > 0)
-                            <table class="table table-bordered table-hover align-middle text-center">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>Sr. No.</th>
-                                        <th>Application Date</th>
-                                        <th>Application No.</th>
-                                        <th>Registration Date</th>
-                                        <th>Registration No.</th>
-                                        <th>Image</th>
-                                        <th>Name</th>
-                                        <th>Father/Husband Name</th>
-                                        <th>Address</th>
-                                        <th>Caste</th>
-                                        <th>Caste Category</th>
-                                        <th>Religion</th>
-                                        <th>Mobile No.</th>
-                                        <th>Registration Type</th>
-                                        <th>Session</th>
-                                        <th>Education Card</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($combined as $index => $item)
-                                        <tr>
-                                            <td>{{ $index + 1 }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($item->application_date)->format('d-m-Y') }}</td>
-                                            <td>{{ $item->application_no }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($item->registration_date)->format('d-m-Y') }}</td>
-                                            <td>{{ $item->registration_no }}</td>
-                                            <td>
-                                                <img src="{{ asset(($item instanceof \App\Models\beneficiarie ? 'benefries_images/' : 'member_images/') . $item->image) }}"
-                                                    width="80">
-                                            </td>
-                                            <td>{{ $item->name }}</td>
-                                            <td>{{ $item->gurdian_name }}</td>
-                                            <td>
-                                                {{ $item->village }},
-                                                {{ $item->post }},
-                                                {{ $item->block }},
-                                                {{ $item->district }},
-                                                {{ $item->state }} - {{ $item->pincode }}
-                                            </td>
-                                            <td>{{ $item->caste }}</td>
-                                            <td>{{ $item->religion_category }}</td>
-                                            <td>{{ $item->religion }}</td>
-                                            <td>{{ $item->phone }}</td>
-                                            <td>{{ $item->reg_type ?? 'Member' }}</td>
-                                            <td>{{ $item->academic_session }}</td>
-                                            <td>
-                                                <a href="{{ route('generate.educationcard', ['id' => $item->id, 'type' => $item->reg_type]) }}"
-                                                    class="btn btn-success btn-sm">
-                                                    Generate Education Card
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        @else
-                            <div class="alert alert-warning text-center mb-0">
-                                No records found for the selected search criteria.
-                            </div>
-                        @endif
-                    </div>
+                                    <td>
+                                        <img src="{{ asset(($item instanceof \App\Models\beneficiarie ? 'benefries_images/' : 'member_images/') . $item->image) }}"
+                                            width="100">
+                                    </td>
+
+                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->gurdian_name }}</td>
+
+                                    <td>
+                                        {{ $item->village }},
+                                        {{ $item->post }},
+                                        {{ $item->block }},
+                                        {{ $item->district }},
+                                        {{ $item->state }} - {{ $item->pincode }}
+                                        ({{ $item->area_type }})
+                                    </td>
+
+                                    <td>{{ $item->caste }}</td>
+                                    <td>{{ $item->religion_category }}</td>
+                                    <td>{{ $item->religion }}</td>
+                                    <td>{{ $item->phone }}</td>
+                                    <td>{{ $item->reg_type ?? 'Member' }}</td>
+
+                                    <td>{{ implode(', ', $card->students ?? []) }}</td>
+
+                                    <td class="text-center">
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <a href="{{ route('show.educationcard', ['id' => $item->id, 'education_id' => $card->id]) }}"
+                                                class="btn btn-sm btn-success px-3">
+                                                Education Card
+                                            </a>
+
+                                            <a href="{{-- route('healthcard.edit', $card->id) --}}" class="btn btn-sm btn-primary px-3">
+                                                Edit
+                                            </a>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            @endforeach
+                        </tbody>
+
+                    </table>
                 </div>
-            @else
-                <div class="alert alert-info text-center">
-                    Please use the search filters above and click <strong>Search</strong> to view records.
-                </div>
-            @endif
-
+            </div>
         </div>
     </div>
     <script>
