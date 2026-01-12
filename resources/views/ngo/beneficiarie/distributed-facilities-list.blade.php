@@ -486,29 +486,31 @@
                                                     <i class="fa-regular fa-eye"></i>
                                                 </a>
 
-                                                <a href="{{ route('edit-distribute-facilities', [$item->id, $survey->id]) }}"
+                                                <a href="{{ route('edit-distribute-facilities-status', [$item->id, $survey->id]) }}"
                                                     class="btn btn-primary btn-sm px-3" title="Edit">
-                                                    <i class="fa-regular fa-edit"></i>
+                                                    Edit
                                                 </a>
 
                                                 <a href="{{ route('delete-distribute-facilities-status', [$item->id, $survey->id]) }}"
                                                     onclick="return confirm('Are you sure want to return Distribute Facilities Status')"
-                                                    class="btn btn-danger btn-sm px-3" title="Delete">
+                                                    class="btn btn-warning btn-sm px-3" title="Delete">
                                                     Return
                                                 </a>
 
+                                                @php
+                                                    $user = auth()->user();
+                                                @endphp
+
+                                                @if ($user && $user->user_type === 'ngo')
+                                                    <a href="{{ route('delete-distribute-facilities-all', [$item->id, $survey->id]) }}"
+                                                        class="btn btn-danger btn-sm px-3"
+                                                        onclick="return confirm('Are you sure you want to delete forever beneficiary distribute facilities?')">
+                                                        Delete
+                                                    </a>
+                                                @endif
+
                                             </div>
                                         </td>
-
-                                        {{-- <td>
-                                            <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                                <a href="{{ route('show-beneficiarie-token', [$item->id, $survey->id]) }}"
-                                                    class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                    title="View">
-                                                    Token
-                                                </a>
-                                            </div> 
-                                        </td> --}}
                                         <td class="no-print">
                                             <div class="d-flex justify-content-center gap-2 flex-wrap">
                                                 <a href="{{ route('show-beneficiarie-receipt', [$item->id, $survey->id]) }}"

@@ -243,7 +243,8 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <button type="submit" class="btn btn-primary me-1">Search</button>
-                                <a href="{{ route('distributed-list-for-approve') }}" class="btn btn-info text-white me-1">Reset</a>
+                                <a href="{{ route('distributed-list-for-approve') }}"
+                                    class="btn btn-info text-white me-1">Reset</a>
                             </div>
                         </div>
                     </form>
@@ -385,11 +386,28 @@
                                                     Approve
                                                 </a>
 
+                                                <a href="{{ route('edit-distribute-facilities', [$item->id, $survey->id]) }}"
+                                                    class="btn btn-primary btn-sm px-3" title="Delete">
+                                                    Edit
+                                                </a>
+
                                                 <a href="{{ route('delete-distribute-facilities', [$item->id, $survey->id]) }}"
                                                     onclick="return confirm('Are you sure want to return Distribute Facilities')"
-                                                    class="btn btn-danger btn-sm px-3" title="Delete">
+                                                    class="btn btn-warning btn-sm px-3" title="Delete">
                                                     Return
                                                 </a>
+
+                                                @php
+                                                    $user = auth()->user();
+                                                @endphp
+
+                                                @if ($user && $user->user_type === 'ngo')
+                                                    <a href="{{ route('delete-distribute-facilities-all', [$item->id, $survey->id]) }}"
+                                                        class="btn btn-danger btn-sm px-3"
+                                                        onclick="return confirm('Are you sure you want to delete forever beneficiary distribute facilities?')">
+                                                        Delete
+                                                    </a>
+                                                @endif
 
                                             </div>
                                         </td>

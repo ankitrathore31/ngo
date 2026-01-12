@@ -244,6 +244,8 @@ Route::controller(BeneficiarieController::class)->group(function () {
     Route::post('ngo/store-distribute-facilities/{beneficiarie_id}/survey/{survey_id}', 'storedistributefacilities')->middleware('auth')->name('store-distribute-facilities');
     Route::get('ngo/edit-distribute-facilities/{beneficiarie_id}/survey/{survey_id}', 'EditDistributeFacilities')->middleware('auth')->name('edit-distribute-facilities');
     Route::post('ngo/update-distribute-facilities/{beneficiarie_id}/survey/{survey_id}', 'Updatedistributefacilities')->middleware('auth')->name('update-distribute-facilities');
+    Route::get('ngo/edit-distribute-facilities-status/{beneficiarie_id}/survey/{survey_id}', 'EditDistributeFacilitiesStatus')->middleware('auth')->name('edit-distribute-facilities-status');
+    Route::post('ngo/update-distribute-facilities-status/{beneficiarie_id}/survey/{survey_id}', 'UpdatedistributefacilitiesStatus')->middleware('auth')->name('update-distribute-facilities-status');
     Route::get('ngo/distributed-facilities', 'distributefacilities')->middleware('auth')->name('distributed-list');
     Route::get('ngo/distributed-facilities-for-approve', 'DistributeFacilitiesForApprove')->middleware('auth')->name('distributed-list-for-approve');
     Route::get('ngo/distribute-approve-facilities/{beneficiarie_id}/survey/{survey_id}', 'DistributeFacilitiesStatus')->middleware('auth')->name('distribute-facilities-status');
@@ -263,6 +265,8 @@ Route::controller(BeneficiarieController::class)->group(function () {
     Route::post('ngo/store-bulk-distribute-status', 'storeBulkDistributeStatus')->middleware('auth')->name('store-bulk-distribute-status');
     Route::get('ngo/delete-distribute-facilities/{beneficiarie_id}/survey/{survey_id}', 'DeleteDistribueFacilities')->middleware('auth')->name('delete-distribute-facilities');
     Route::get('ngo/delete-distribute-facilities-status/{beneficiarie_id}/survey/{survey_id}', 'DeleteDistribueFacilitiesStatus')->middleware('auth')->name('delete-distribute-facilities-status');
+    Route::get('ngo/delete-distribute-facilities-all/{beneficiarie_id}/survey/{survey_id}', 'deleteBeneficiarieFacilitiesAll')->middleware('auth')->name('delete-distribute-facilities-all');
+
 
 });
 

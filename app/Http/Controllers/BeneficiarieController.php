@@ -289,7 +289,7 @@ class BeneficiarieController extends Controller
         $survey->delete();
 
 
-        Beneficiarie::where('id', $beneficiarie_id)->update(['survey_status' => 0]);
+        beneficiarie::where('id', $beneficiarie_id)->update(['survey_status' => 0]);
 
         return redirect()->back()->with('success', 'Survey deleted successfully');
     }
@@ -973,9 +973,7 @@ class BeneficiarieController extends Controller
     {
         $request->validate([
             'distribute_date' => 'required|date',
-            'status' => 'required',
             'distribute_place' => 'required|string',
-            'pending_reason' => 'required_if:status,Pending',
         ]);
 
         try {
@@ -985,22 +983,67 @@ class BeneficiarieController extends Controller
 
             $distribute->distribute_date = Carbon::parse($request->input('distribute_date'));
             $distribute->distribute_place = $request->input('distribute_place');
-            $distribute->status = $request->input('status');
-            $distribute->pending_reason = $request->input('status') === 'Pending'
-                ? $request->input('pending_reason')
-                : null;
 
             $distribute->save();
 
-            if ($distribute->status === 'Distributed') {
-                return redirect()->route('distributed-list')->with('success', 'Facilities successfully distributed.');
-            } else {
-                return redirect()->route('pending-distribute-list')->with('success', 'Facilities marked as pending.');
-            }
+            return redirect()->route('distributed-list-for-approve')->with('success', 'Facilities successfully distributed.');
         } catch (\Throwable $th) {
             return back()->withInput()->withErrors(['error' => 'Failed to update distribution.']);
         }
     }
+
+    public function EditDistributeFacilitiesStatus($beneficiarie_id, $survey_id)
+    {
+        $survey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+            ->where('id', $survey_id)
+            ->with('beneficiarie')
+            ->firstOrFail();
+        $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->find($beneficiarie_id);
+        $staff = Staff::get();
+        return view('ngo.beneficiarie.edit-approve-facilities', compact('survey', 'beneficiarie', 'staff'));
+    }
+
+    public function updateDistributeFacilitiesStatus(Request $request, $beneficiarie_id, $survey_id)
+    {
+        $request->validate([
+            'officer'         => 'nullable|string|max:255',
+            'status'          => 'required|in:Pending,Distributed,Reject',
+            'pending_reason'  => 'required_if:status,Pending,Reject|nullable|string|max:500',
+        ]);
+
+        try {
+            $survey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+                ->where('id', $survey_id)
+                ->firstOrFail();
+
+            $survey->update([
+                'survey_officer' => $request->input('officer'),
+                'status'         => $request->input('status'),
+                'pending_reason' => in_array($request->input('status'), ['Pending', 'Reject'])
+                    ? $request->input('pending_reason')
+                    : null,
+            ]);
+
+            return match ($survey->status) {
+                'Distributed' => redirect()
+                    ->route('distributed-list')
+                    ->with('success', 'Facilities successfully distributed.'),
+
+                'Reject' => redirect()
+                    ->route('pending-distribute-list')
+                    ->with('success', 'Facilities rejected.'),
+
+                default => redirect()
+                    ->route('pending-distribute-list')
+                    ->with('success', 'Facilities marked as pending.'),
+            };
+        } catch (\Throwable $th) {
+            return back()
+                ->withInput()
+                ->withErrors(['error' => 'Failed to update distribution status.']);
+        }
+    }
+
 
     public function DeleteDistribueFacilitiesStatus($beneficiarie_id, $survey_id)
     {
@@ -1236,6 +1279,48 @@ class BeneficiarieController extends Controller
 
         return view('ngo.beneficiarie.all-beneficiarie-list', compact('beneficiarie', 'data', 'categories'));
     }
+
+    public function deleteBeneficiarieFacilitiesAll($beneficiarie_id, $survey_id)
+    {
+        try {
+            $survey = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+                ->where('id', $survey_id)
+                ->firstOrFail();
+
+            $survey->update([
+                // Facility fields
+                'facilities_category'   => null,
+                'facilities'            => null,
+                'academic_session'      => null,
+                'facilities_status'     => null,
+
+                // Distribution fields
+                'distribute_date'       => null,
+                'distribute_place'      => null,
+
+                // Distribution status fields
+                'status'                => null,
+                'pending_reason'        => null,
+                'survey_officer'        => null,
+            ]);
+
+            logWork(
+                'Facilities',
+                $survey->id,
+                'Beneficiarie Facilities & Distribution Reset',
+                'All facility, distribution, and status fields Deleted'
+            );
+
+            return redirect()
+                ->back()
+                ->with('success', 'Facilities and distribution data reset successfully.');
+        } catch (\Throwable $th) {
+            return back()->withErrors([
+                'error' => 'Failed to reset facilities and distribution data.'
+            ]);
+        }
+    }
+
 
     public function showbeneficiariereport($beneficiarie_id, $survey_id)
     {
