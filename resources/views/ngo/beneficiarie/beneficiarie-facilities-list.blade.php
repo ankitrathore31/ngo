@@ -136,7 +136,7 @@
                             </select>
                         </div>
 
-                          <div class="col-md-3 col-sm-4 mb-3">
+                        <div class="col-md-3 col-sm-4 mb-3">
                             <input type="number" class="form-control" name="application_no"
                                 placeholder="Search By Application/Registration No.">
                         </div>
@@ -187,7 +187,7 @@
                                 <option value="Large Farmers">15. Large Farmers</option>
                             </select>
                         </div>
-                        
+
                         <div class="col-md-4">
                             <button type="submit" class="btn btn-primary me-2">Search</button>
                             <a href="{{ route('beneficiarie-facilities-list') }}"
@@ -316,9 +316,9 @@
                                                     <i class="fa-regular fa-eye"></i> Facilities
                                                 </a>
 
-                                                <a href="{{ route('delete.beneficiarie.facilities',  $survey->id) }}"
+                                                <a href="{{ route('delete.beneficiarie.facilities', $survey->id) }}"
                                                     onclick="return confirm('Are you sure want to return  Facilities')"
-                                                    class="btn btn-danger btn-sm px-3" title="Delete">
+                                                    class="btn btn-warning btn-sm px-3" title="Delete">
                                                     Return
                                                 </a>
 
@@ -327,6 +327,17 @@
                                                     title="View" style="min-width: 38px; height: auto;">
                                                     <i class="fa-regular fa-edit me-1"></i> Edit
                                                 </a>
+                                                @php
+                                                    $user = auth()->user();
+                                                @endphp
+
+                                                @if ($user && $user->user_type === 'ngo')
+                                                    <a href="{{ route('delete-distribute-facilities-all', [$item->id, $survey->id]) }}"
+                                                        class="btn btn-danger btn-sm px-3"
+                                                        onclick="return confirm('Are you sure you want to delete forever beneficiary distribute facilities?')">
+                                                        Delete
+                                                    </a>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
