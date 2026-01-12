@@ -307,7 +307,7 @@
                     action="{{ route('store-distribute-status', ['beneficiarie_id' => $beneficiarie->id, 'survey_id' => $survey->id]) }}"
                     method="POST">
                     @csrf
-                    <h5 class="text-success text-center">Distribute Beneficiarie Facilities</h5>
+                    <h5 class="text-success text-center">Distribute Beneficiarie Facilities Status</h5>
                     <div class="mt-2 mb-3">
                         <label for="officer" class="form-label">Approve Officer:</label>
                         <select name="officer" class="form-control @error('officer') is-invalid @enderror">

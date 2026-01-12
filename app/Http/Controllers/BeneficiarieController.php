@@ -345,6 +345,33 @@ class BeneficiarieController extends Controller
         }
     }
 
+    public function deleteBeneficiarieFacilities($id)
+    {
+        try {
+            $survey = Beneficiarie_Survey::findOrFail($id);
+
+            $survey->facilities_category = null;
+            $survey->facilities = null;
+            $survey->academic_session = null;
+            $survey->facilities_status = null;
+
+            $survey->save();
+
+            logWork(
+                'Facilities',
+                $survey->id,
+                'Benefries Facilities Cleared',
+                'All facility values set to Reset'
+            );
+
+            return redirect()
+                ->route('beneficiarie-facilities-list')
+                ->with('success', 'Facility removed successfully');
+        } catch (\Throwable $th) {
+            return back()->withErrors(['error' => 'Failed to remove facility.']);
+        }
+    }
+
     public function storeBulkBeneficiarieFacilities(Request $request)
     {
         $request->validate([
@@ -619,6 +646,27 @@ class BeneficiarieController extends Controller
         }
     }
 
+    public function DeleteDistribueFacilities($beneficiarie_id, $survey_id)
+    {
+        try {
+            $distribute = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+                ->where('id', $survey_id)
+                ->firstOrFail();
+
+            $distribute->distribute_date     = null;
+            $distribute->distribute_place    = null;
+            $distribute->status = null;
+
+            $distribute->save();
+
+            return back()->with('success', 'Distribution data has been reset successfully.');
+        } catch (\Throwable $th) {
+            return back()->withErrors([
+                'error' => 'Failed to reset distribution data.'
+            ]);
+        }
+    }
+
     public function storeBulkDistribute(Request $request)
     {
         $request->validate([
@@ -707,65 +755,49 @@ class BeneficiarieController extends Controller
     public function storedistributefacilitiesStatus(Request $request, $beneficiarie_id, $survey_id)
     {
         $request->validate([
-            'distribute_items' => 'required|string',
-            'distribute_date'  => 'required|date',
-            'distribute_place' => 'nullable|string',
+            'officer'         => 'nullable|string|max:255',
+            'status'          => 'required|in:Pending,Distributed,Reject',
+            'pending_reason'  => 'required_if:status,Pending,Reject|nullable|string|max:500',
         ]);
 
         try {
-            DB::transaction(function () use ($request) {
+            $distribute = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+                ->where('id', $survey_id)
+                ->firstOrFail();
 
-                $items = explode(',', $request->distribute_items);
+            $distribute->survey_officer = $request->input('officer');
+            $distribute->status = $request->input('status');
 
-                foreach ($items as $item) {
+            // Handle Pending / Reject reason
+            if (in_array($request->input('status'), ['Pending', 'Reject'])) {
+                $distribute->pending_reason = $request->input('pending_reason');
+            } else {
+                $distribute->pending_reason = null;
+            }
 
-                    [$beneficiarie_id, $survey_id] = explode('|', $item);
+            $distribute->save();
 
-                    $distribute = Beneficiarie_Survey::lockForUpdate()
-                        ->where('beneficiarie_id', $beneficiarie_id)
-                        ->where('id', $survey_id)
-                        ->firstOrFail();
+            // Redirect based on status
+            return match ($distribute->status) {
+                'Distributed' => redirect()
+                    ->route('distributed-list')
+                    ->with('success', 'Facilities successfully distributed.'),
 
-                    // Skip if already distributed
-                    if ($distribute->status === '0') {
-                        continue;
-                    }
+                'Reject' => redirect()
+                    ->route('pending-distribute-list')
+                    ->with('success', 'Facilities rejected.'),
 
-                    $distribute->distribute_date  = Carbon::parse($request->distribute_date);
-                    $distribute->distribute_place = $request->distribute_place;
-                    $distribute->status = '0';
-
-                    if (empty($distribute->token_no)) {
-                        $lastToken = Beneficiarie_Survey::where('status', '0')
-                            ->whereNotNull('token_no')
-                            ->orderByRaw('CAST(token_no AS UNSIGNED) DESC')
-                            ->lockForUpdate()
-                            ->value('token_no');
-
-                        $distribute->token_no = $lastToken
-                            ? str_pad(((int)$lastToken + 1), 2, '0', STR_PAD_LEFT)
-                            : '01';
-                    }
-
-                    $distribute->save();
-
-                    logWork(
-                        'Distribute Facilities',
-                        $distribute->id,
-                        'Bulk Distribution',
-                        'Date: ' . $distribute->distribute_date
-                    );
-                }
-            });
-
-            return redirect()
-                ->route('distributed-list-for-approve')
-                ->with('success', 'Facilities distributed successfully.');
+                default => redirect()
+                    ->route('pending-distribute-list')
+                    ->with('success', 'Facilities marked as pending.'),
+            };
         } catch (\Throwable $th) {
             return back()
-                ->withErrors(['error' => 'Bulk distribution failed.']);
+                ->withInput()
+                ->withErrors(['error' => 'Failed to update distribution status.']);
         }
     }
+
 
     public function storeBulkDistributeStatus(Request $request)
     {
@@ -967,6 +999,27 @@ class BeneficiarieController extends Controller
             }
         } catch (\Throwable $th) {
             return back()->withInput()->withErrors(['error' => 'Failed to update distribution.']);
+        }
+    }
+
+    public function DeleteDistribueFacilitiesStatus($beneficiarie_id, $survey_id)
+    {
+        try {
+            $distribute = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
+                ->where('id', $survey_id)
+                ->firstOrFail();
+
+            $distribute->pending_reason      = null;
+            $distribute->officer             = null;
+            $distribute->status              = '0';
+
+            $distribute->save();
+
+            return back()->with('success', 'Distribution Status has been reset successfully.');
+        } catch (\Throwable $th) {
+            return back()->withErrors([
+                'error' => 'Failed to reset distribution data.'
+            ]);
         }
     }
 
@@ -1192,32 +1245,6 @@ class BeneficiarieController extends Controller
             ->firstOrFail();
         $beneficiarie = beneficiarie::with('surveys')->where('status', 1)->find($beneficiarie_id);
         return view('ngo.beneficiarie.show-beneficiarie-report', compact('beneficiarie', 'survey'));
-    }
-
-    public function DeleteDistribueFacilities($beneficiarie_id, $survey_id)
-    {
-        try {
-            $distribute = Beneficiarie_Survey::where('beneficiarie_id', $beneficiarie_id)
-                ->where('id', $survey_id)
-                ->firstOrFail();
-
-            $distribute->facilities_category = null;
-            $distribute->facilities          = null;
-            $distribute->facilities_status   = null;
-            $distribute->distribute_date     = null;
-            $distribute->distribute_place    = null;
-            $distribute->pending_reason      = null;
-            $distribute->officer             = null;
-            $distribute->status              = null;
-
-            $distribute->save();
-
-            return back()->with('success', 'Distribution data has been reset successfully.');
-        } catch (\Throwable $th) {
-            return back()->withErrors([
-                'error' => 'Failed to reset distribution data.'
-            ]);
-        }
     }
 
     public function surveyrecivedlist()

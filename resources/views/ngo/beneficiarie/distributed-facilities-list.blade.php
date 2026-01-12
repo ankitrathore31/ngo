@@ -491,10 +491,10 @@
                                                     <i class="fa-regular fa-edit"></i>
                                                 </a>
 
-                                                <a href="{{ route('delete-distribute-facilities', [$item->id, $survey->id]) }}"
-                                                    onclick="return confirm('Are you sure want to delete Distribute Facilities')"
+                                                <a href="{{ route('delete-distribute-facilities-status', [$item->id, $survey->id]) }}"
+                                                    onclick="return confirm('Are you sure want to return Distribute Facilities Status')"
                                                     class="btn btn-danger btn-sm px-3" title="Delete">
-                                                    <i class="fa-regular fa-trash"></i>
+                                                    Return
                                                 </a>
 
                                             </div>
