@@ -1287,22 +1287,7 @@ class BeneficiarieController extends Controller
                 ->where('id', $survey_id)
                 ->firstOrFail();
 
-            $survey->update([
-                // Facility fields
-                'facilities_category'   => null,
-                'facilities'            => null,
-                'academic_session'      => null,
-                'facilities_status'     => null,
-
-                // Distribution fields
-                'distribute_date'       => null,
-                'distribute_place'      => null,
-
-                // Distribution status fields
-                'status'                => null,
-                'pending_reason'        => null,
-                'survey_officer'        => null,
-            ]);
+            $survey->delete();
 
             logWork(
                 'Facilities',
@@ -1313,7 +1298,7 @@ class BeneficiarieController extends Controller
 
             return redirect()
                 ->back()
-                ->with('success', 'Facilities and distribution data reset successfully.');
+                ->with('success', 'Facilities and distribution data delete successfully.');
         } catch (\Throwable $th) {
             return back()->withErrors([
                 'error' => 'Failed to reset facilities and distribution data.'
