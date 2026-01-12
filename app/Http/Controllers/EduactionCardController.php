@@ -296,7 +296,7 @@ class EduactionCardController extends Controller
             $query->where('school_code', 'like', '%' . $request->school_code . '%');
         }
 
-        $schools = $query->orderBy('id', 'desc')->get();
+        $schools = $query->orderBy('id', 'asc')->get();
 
         return view('ngo.educationcard.school-list', compact('schools'));
     }

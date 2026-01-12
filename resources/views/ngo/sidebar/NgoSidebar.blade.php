@@ -107,7 +107,7 @@
                 <!-- Inbox -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
-                        <i class="fas fa-tasks"></i> Staff Work
+                        <i class="fas fa-tasks"></i> STAFF WORK
                     </a>
                     <ul class="dropdown-menu bg-primary">
                         <li><a class="dropdown-item" href="{{ route('survey.start') }}">Work Start</a></li>
