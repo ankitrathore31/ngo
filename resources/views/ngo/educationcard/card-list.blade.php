@@ -50,7 +50,13 @@
 
                         @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
                             <a href="{{ route('eduaction.card.list') }}" class="btn btn-sm btn-primary">
-                                education Card List
+                               Education Card List
+                            </a>
+                        @endif
+
+                        @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
+                            <a href="{{ route('eduaction.demand.list') }}" class="btn btn-sm btn-primary">
+                                Demand Facility
                             </a>
                         @endif
 
@@ -87,6 +93,10 @@
                             </select>
                         </div>
                         <div class="col-md-3 col-sm-4 mb-3">
+                            <input type="number" class="form-control" name="educationcard_no"
+                                placeholder="Search By Education Card No.">
+                        </div>
+                        <div class="col-md-3 col-sm-4 mb-3">
                             <input type="number" class="form-control" name="application_no"
                                 placeholder="Search By Application/Registration No.">
                         </div>
@@ -98,26 +108,7 @@
                             <input type="text" class="form-control" name="name"
                                 placeholder="Search By Person/Guardian's Name">
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3 col-sm-6 mb-3">
-                            <div class="form-group">
-                                {{-- <label for="reg_type" class="form-label">Registraition Type <span
-                                        class="text-danger">*</span></label> --}}
-                                <select class="form-control" id="reg_type" name="reg_type">
-                                    <option selected disabled>Select Registration Type</option>
-                                    <option value="Beneficiaries"
-                                        {{ old('reg_type') == 'Beneficiaries' ? 'selected' : '' }}>
-                                        Beneficiaries
-                                    </option>
-                                    <option value="Member" {{ old('reg_type') == 'Member' ? 'selected' : '' }}>Member
-                                    </option>
-                                </select>
-                                @error('reg_type')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
+
                         @php
                             $districtsByState = config('districts');
                         @endphp
@@ -171,8 +162,8 @@
                         <thead class="table-primary">
                             <tr>
                                 <th>Sr. No.</th>
-                                <th>Health Card Registration Date</th>
-                                <th>Health Card No</th>
+                                <th>Education Card Registration Date</th>
+                                <th>Education Card No</th>
                                 <th>Registration No</th>
                                 <th>Registration Date</th>
                                 <th>Image</th>
@@ -198,7 +189,7 @@
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ \Carbon\Carbon::parse($card->education_registration_date)->format('d-m-Y') }}
                                     </td>
-                                    <td>{{ $card->eduacationcard_no }}</td>
+                                    <td>{{ $card->educationcard_no }}</td>
                                     <td>{{ $item->registration_no }}</td>
                                     <td>{{ \Carbon\Carbon::parse($item->registration_date)->format('d-m-Y') }}</td>
 
@@ -234,9 +225,17 @@
                                                 Education Card
                                             </a>
 
-                                            <a href="{{-- route('healthcard.edit', $card->id) --}}" class="btn btn-sm btn-primary px-3">
+                                            <a href="{{ route('edit.educationcard', $card->id) }}"
+                                                class="btn btn-sm btn-primary px-3">
                                                 Edit
                                             </a>
+
+                                            <a href="{{ route('delete.educationcard', $card->id) }}"
+                                                class="btn btn-sm btn-danger px-3"
+                                                onclick="return confirm('Are you sure want to delete Education Card')">
+                                                Delete
+                                            </a>
+
                                         </div>
                                     </td>
 

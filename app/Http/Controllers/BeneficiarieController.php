@@ -798,7 +798,7 @@ class BeneficiarieController extends Controller
         }
     }
 
-
+    
     public function storeBulkDistributeStatus(Request $request)
     {
         $request->validate([

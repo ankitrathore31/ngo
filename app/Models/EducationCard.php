@@ -27,4 +27,13 @@ class EducationCard extends Model
         return $this->hasMany(EducationCard::class, 'reg_id', 'id');
     }
 
+     public function beneficiary()
+    {
+        return $this->belongsTo(beneficiarie::class, 'reg_id');
+    }
+
+    public function member()
+    {
+        return $this->belongsTo(Member::class, 'reg_id');
+    }
 }

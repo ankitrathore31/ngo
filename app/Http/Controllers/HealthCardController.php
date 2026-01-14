@@ -336,6 +336,7 @@ class HealthCardController extends Controller
             'diseases'
         ));
     }
+    
     public function UpdateHealthCard(Request $request, $health_id)
     {
         $request->validate([
