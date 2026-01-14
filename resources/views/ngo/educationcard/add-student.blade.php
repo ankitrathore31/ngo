@@ -86,7 +86,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-3 mt-5">
                                     <button type="submit" class="btn btn-success w-100">
                                         Save Student
                                     </button>

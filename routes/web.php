@@ -626,8 +626,13 @@ Route::controller(EduactionCardController::class)->middleware('auth')->group(fun
     Route::get('ngo/list-student', 'StudentList')->name('list.student');
     Route::get('ngo/generate-educationcard/{id}/{type}', 'GenerateEducationCard')->name('generate.educationcard');
     Route::post('ngo/educationcard/store', 'StoreEducationCard')->name('educationcard.store');
+    Route::get('ngo/edit-educationcard/{id}', 'EditEducationCard')->name('edit.educationcard');
+    Route::post('ngo/educationcard/update/{id}', 'UpdateEducationCard')->name('educationcard.upate');
     Route::get('ngo/education-card-list', 'EducationCardList')->name('eduaction.card.list');
-        Route::get('ngo/show-education-card/{id}/{education_id}', 'ShowEducationCard')->name('show.educationcard');
+    Route::get('ngo/show-education-card/{id}/{education_id}', 'ShowEducationCard')->name('show.educationcard');
+    Route::get('ngo/delete-educationcard/{id}', 'DeleteEducationCard')->name('delete.educationcard');
+    Route::get('ngo/education-demand-list', 'EducationDemandList')->name('eduaction.demand.list');
+
 
 
 });

@@ -415,108 +415,183 @@ class EduactionCardController extends Controller
             ->with('success', 'Education Card saved successfully.');
     }
 
-    public function EducationCardList(Request $request)
+    public function EditEducationCard($education_id)
     {
-        $queryBene = beneficiarie::with(['educationCards' => function ($q) {
-            $q->where('status', 1);
-        }])
-            ->where('status', 1)
-            ->whereHas('educationCards', function ($q) {
-                $q->where('status', 1);
-            });
+        $educationCard = EducationCard::with(['beneficiary', 'member'])->findOrFail($education_id);
 
-        $queryMember = Member::with(['educationCards' => function ($q) {
-            $q->where('status', 1);
-        }])
-            ->where('status', 1)
-            ->whereHas('educationCards', function ($q) {
-                $q->where('status', 1);
-            });
+        // Detect owner (Beneficiary or Member)
+        $person = $educationCard->beneficiary ?? $educationCard->member;
 
-        if ($request->filled('session_filter')) {
-            $queryBene->where('academic_session', $request->session_filter);
-            $queryMember->where('academic_session', $request->session_filter);
+        if (!$person) {
+            abort(404, 'Person not found for this education card');
         }
 
-        if ($request->filled('application_no')) {
-            $search = $request->application_no;
+        $schools  = School::orderBy('school_name')->get();
+        $students = Student::orderBy('student_name')->get();
 
-            $queryBene->where(
-                fn($q) =>
-                $q->where('application_no', 'like', "%$search%")
-                    ->orWhere('registration_no', 'like', "%$search%")
-            );
-
-            $queryMember->where(
-                fn($q) =>
-                $q->where('application_no', 'like', "%$search%")
-                    ->orWhere('registration_no', 'like', "%$search%")
-            );
-        }
-
-        if ($request->filled('identity_no')) {
-            $identity = $request->identity_no;
-
-            $queryBene->where(
-                fn($q) =>
-                $q->where('phone', 'like', "%$identity%")
-                    ->orWhere('identity_no', 'like', "%$identity%")
-            );
-
-            $queryMember->where(
-                fn($q) =>
-                $q->where('phone', 'like', "%$identity%")
-                    ->orWhere('identity_no', 'like', "%$identity%")
-            );
-        }
-
-        if ($request->filled('reg_type')) {
-            $queryBene->where('reg_type', $request->reg_type);
-            $queryMember->where('reg_type', $request->reg_type);
-        }
-
-        if ($request->filled('block')) {
-            $queryBene->where('block', 'like', "%{$request->block}%");
-            $queryMember->where('block', 'like', "%{$request->block}%");
-        }
-
-        if ($request->filled('state')) {
-            $queryBene->where('state', $request->state);
-            $queryMember->where('state', $request->state);
-        }
-
-        if ($request->filled('district')) {
-            $queryBene->where('district', $request->district);
-            $queryMember->where('district', $request->district);
-        }
-
-        $beneficiaries = $queryBene->get();
-        $members = $queryMember->get();
-
-        /* FLATTEN: one row per health card */
-        $combined = collect()
-            ->merge($beneficiaries)
-            ->merge($members)
-            ->flatMap(function ($item) {
-                return $item->educationCards->map(function ($card) use ($item) {
-                    return [
-                        'person' => $item,
-                        'card'   => $card
-                    ];
-                });
-            })
-            ->sortBy(fn($row) => $row['card']->created_at)
-            ->values();
-
-        $data = academic_session::all();
-        $states = config('states');
-
-        return view('ngo.educationcard.card-list', compact(
-            'combined',
-            'data',
-            'states'
+        return view('ngo.educationcard.edit-card', compact(
+            'educationCard',
+            'person',
+            'schools',
+            'students'
         ));
     }
+
+
+    public function updateEducationCard(Request $request, $id)
+    {
+        $request->validate([
+            'education_registration_date' => 'required|date',
+            'students'        => 'nullable|array',
+            'students.*'      => 'string',
+            'school_name'     => 'nullable|array',
+            'school_name.*'   => 'string',
+        ]);
+
+        $educationCard = EducationCard::findOrFail($id);
+
+        $educationCard->update([
+            'education_registration_date' => $request->education_registration_date,
+            'students'    => $request->students ?? [],
+            'school_name' => $request->school_name ?? [],
+        ]);
+
+        return redirect()
+            ->route('eduaction.card.list')
+            ->with('success', 'Education Card updated successfully.');
+    }
+
+
+ 
+    public function EducationCardList(Request $request)
+{
+    /* ---------------- Base Queries ---------------- */
+
+    $queryBene = beneficiarie::with(['educationCards' => function ($q) {
+        $q->where('status', 1);
+    }])
+        ->where('status', 1)
+        ->whereHas('educationCards', function ($q) {
+            $q->where('status', 1);
+        });
+
+    $queryMember = Member::with(['educationCards' => function ($q) {
+        $q->where('status', 1);
+    }])
+        ->where('status', 1)
+        ->whereHas('educationCards', function ($q) {
+            $q->where('status', 1);
+        });
+
+    /* ---------------- Session Filter ---------------- */
+
+    if ($request->filled('session_filter')) {
+        $queryBene->where('academic_session', $request->session_filter);
+        $queryMember->where('academic_session', $request->session_filter);
+    }
+
+    /* ---------------- Education Card No ---------------- */
+
+    if ($request->filled('educationcard_no')) {
+        $cardNo = $request->educationcard_no;
+
+        $queryBene->whereHas('educationCards', function ($q) use ($cardNo) {
+            $q->where('educationcard_no', 'like', "%{$cardNo}%");
+        });
+
+        $queryMember->whereHas('educationCards', function ($q) use ($cardNo) {
+            $q->where('educationcard_no', 'like', "%{$cardNo}%");
+        });
+    }
+
+    /* ---------------- Application No ---------------- */
+
+    if ($request->filled('application_no')) {
+        $search = $request->application_no;
+
+        $queryBene->where('application_no', 'like', "%{$search}%");
+        $queryMember->where('application_no', 'like', "%{$search}%");
+    }
+
+    /* ---------------- Registration No ---------------- */
+
+    if ($request->filled('registration_no')) {
+        $search = $request->registration_no;
+
+        $queryBene->where('registration_no', 'like', "%{$search}%");
+        $queryMember->where('registration_no', 'like', "%{$search}%");
+    }
+
+    /* ---------------- Name / Guardian Name ---------------- */
+
+    if ($request->filled('name')) {
+        $name = $request->name;
+
+        $queryBene->where(function ($q) use ($name) {
+            $q->where('name', 'like', "%{$name}%")
+              ->orWhere('guardian_name', 'like', "%{$name}%");
+        });
+
+        $queryMember->where(function ($q) use ($name) {
+            $q->where('name', 'like', "%{$name}%")
+              ->orWhere('guardian_name', 'like', "%{$name}%");
+        });
+    }
+
+    /* ---------------- Block ---------------- */
+
+    if ($request->filled('block')) {
+        $queryBene->where('block', 'like', "%{$request->block}%");
+        $queryMember->where('block', 'like', "%{$request->block}%");
+    }
+
+    /* ---------------- State ---------------- */
+
+    if ($request->filled('state')) {
+        $queryBene->where('state', $request->state);
+        $queryMember->where('state', $request->state);
+    }
+
+    /* ---------------- District ---------------- */
+
+    if ($request->filled('district')) {
+        $queryBene->where('district', $request->district);
+        $queryMember->where('district', $request->district);
+    }
+
+    /* ---------------- Fetch Data ---------------- */
+
+    $beneficiaries = $queryBene->get();
+    $members       = $queryMember->get();
+
+    /* ---------------- Flatten (1 row per education card) ---------------- */
+
+    $combined = collect()
+        ->merge($beneficiaries)
+        ->merge($members)
+        ->flatMap(function ($item) {
+            return $item->educationCards->map(function ($card) use ($item) {
+                return [
+                    'person' => $item,
+                    'card'   => $card,
+                ];
+            });
+        })
+        ->sortBy(fn ($row) => $row['card']->created_at)
+        ->values();
+
+    /* ---------------- Extra Data ---------------- */
+
+    $data   = academic_session::all();
+    $states = config('states');
+
+    return view('ngo.educationcard.card-list', compact(
+        'combined',
+        'data',
+        'states'
+    ));
+}
+
 
     public function ShowEducationCard($id, $education_id)
     {
@@ -544,5 +619,151 @@ class EduactionCardController extends Controller
         $signatures = Signature::pluck('file_path', 'role');
 
         return view('ngo.educationcard.card', compact('record', 'educationCard', 'signatures'));
+    }
+
+    public function deleteEducationCard($education_id)
+    {
+        try {
+            $educationCard = EducationCard::findOrFail($education_id);
+
+            $educationCard->delete();
+
+            return redirect()
+                ->back()
+                ->with('success', 'Education Card deleted successfully.');
+        } catch (\Throwable $th) {
+            return back()->withErrors([
+                'error' => 'Failed to delete Education Card.'
+            ]);
+        }
+    }
+
+    public function EducationDemandList(Request $request)
+    {
+        /* ---------------- Base Queries ---------------- */
+
+        $queryBene = beneficiarie::with(['educationCards' => function ($q) {
+            $q->where('status', 1);
+        }])
+            ->where('status', 1)
+            ->whereHas('educationCards', function ($q) {
+                $q->where('status', 1);
+            });
+
+        $queryMember = Member::with(['educationCards' => function ($q) {
+            $q->where('status', 1);
+        }])
+            ->where('status', 1)
+            ->whereHas('educationCards', function ($q) {
+                $q->where('status', 1);
+            });
+
+        /* ---------------- Session Filter ---------------- */
+
+        if ($request->filled('session_filter')) {
+            $queryBene->where('academic_session', $request->session_filter);
+            $queryMember->where('academic_session', $request->session_filter);
+        }
+
+        /* ---------------- Education Card No ---------------- */
+
+        if ($request->filled('educationcard_no')) {
+            $cardNo = $request->educationcard_no;
+
+            $queryBene->whereHas('educationCards', function ($q) use ($cardNo) {
+                $q->where('educationcard_no', 'like', "%{$cardNo}%");
+            });
+
+            $queryMember->whereHas('educationCards', function ($q) use ($cardNo) {
+                $q->where('educationcard_no', 'like', "%{$cardNo}%");
+            });
+        }
+
+        /* ---------------- Application No ---------------- */
+
+        if ($request->filled('application_no')) {
+            $search = $request->application_no;
+
+            $queryBene->where('application_no', 'like', "%{$search}%");
+            $queryMember->where('application_no', 'like', "%{$search}%");
+        }
+
+        /* ---------------- Registration No ---------------- */
+
+        if ($request->filled('registration_no')) {
+            $search = $request->registration_no;
+
+            $queryBene->where('registration_no', 'like', "%{$search}%");
+            $queryMember->where('registration_no', 'like', "%{$search}%");
+        }
+
+        /* ---------------- Name / Guardian Name ---------------- */
+
+        if ($request->filled('name')) {
+            $name = $request->name;
+
+            $queryBene->where(function ($q) use ($name) {
+                $q->where('name', 'like', "%{$name}%")
+                    ->orWhere('guardian_name', 'like', "%{$name}%");
+            });
+
+            $queryMember->where(function ($q) use ($name) {
+                $q->where('name', 'like', "%{$name}%")
+                    ->orWhere('guardian_name', 'like', "%{$name}%");
+            });
+        }
+
+        /* ---------------- Block ---------------- */
+
+        if ($request->filled('block')) {
+            $queryBene->where('block', 'like', "%{$request->block}%");
+            $queryMember->where('block', 'like', "%{$request->block}%");
+        }
+
+        /* ---------------- State ---------------- */
+
+        if ($request->filled('state')) {
+            $queryBene->where('state', $request->state);
+            $queryMember->where('state', $request->state);
+        }
+
+        /* ---------------- District ---------------- */
+
+        if ($request->filled('district')) {
+            $queryBene->where('district', $request->district);
+            $queryMember->where('district', $request->district);
+        }
+
+        /* ---------------- Fetch Data ---------------- */
+
+        $beneficiaries = $queryBene->get();
+        $members       = $queryMember->get();
+
+        /* ---------------- Flatten (1 row per education card) ---------------- */
+
+        $combined = collect()
+            ->merge($beneficiaries)
+            ->merge($members)
+            ->flatMap(function ($item) {
+                return $item->educationCards->map(function ($card) use ($item) {
+                    return [
+                        'person' => $item,
+                        'card'   => $card,
+                    ];
+                });
+            })
+            ->sortBy(fn($row) => $row['card']->created_at)
+            ->values();
+
+        /* ---------------- Extra Data ---------------- */
+
+        $data   = academic_session::all();
+        $states = config('states');
+
+        return view('ngo.educationcard.demand-list', compact(
+            'combined',
+            'data',
+            'states'
+        ));
     }
 }

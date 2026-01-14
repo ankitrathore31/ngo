@@ -380,7 +380,6 @@
                                             <div class="col-sm-12 mb-3">
                                                 <h5><b>Token / Notice / Seat / Matarial / Gate Pass No:</b>
                                                     <b>{{ str_pad($survey->token_no, 2, '0', STR_PAD_LEFT) }}</b>
-
                                                 </h5>
                                             </div>
                                         </div>
@@ -456,7 +455,7 @@
                                             </div>
 
                                             <div class="col-sm-4 mb-3">
-                                                <strong>items ID No:</strong> {{ $item->identity_no }}
+                                                <strong>Beneficiarie ID No:</strong> {{ $item->identity_no }}
                                             </div>
 
                                             <div class="col-sm-4 mb-3">
