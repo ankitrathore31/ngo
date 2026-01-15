@@ -89,7 +89,7 @@
                             </select>
                         </div>
                         <div class="col-md-3 col-sm-4 mb-3">
-                            <input type="number" class="form-control" name="educationcard_no"
+                            <input type="text" class="form-control" name="educationcard_no"
                                 placeholder="Search By Education Card No.">
                         </div>
                         <div class="col-md-3 col-sm-4 mb-3">
@@ -232,7 +232,7 @@
 
                                             <td class="text-center">
                                                 <div class="d-flex justify-content-center gap-2">
-                                                    <a href="{{-- route('show.educationcard', ['id' => $item->id, 'education_id' => $card->id]) --}}"
+                                                    <a href="{{ route('demand.education.facility', ['id' => $item->id, 'education_id' => $card->id]) }}"
                                                         class="btn btn-sm btn-success px-3">
                                                         Demand Education Facility
                                                     </a>

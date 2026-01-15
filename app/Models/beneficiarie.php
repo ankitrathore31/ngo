@@ -89,4 +89,7 @@ class beneficiarie extends Model
     {
         return $this->hasMany(\App\Models\EducationCard::class, 'reg_id', 'id');
     }
+    public function kyc(){
+        return $this->hasMany(KycVerification::class, 'beneficiarie_id');
+    }
 }

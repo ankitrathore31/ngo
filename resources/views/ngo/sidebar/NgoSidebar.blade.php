@@ -833,14 +833,17 @@
                         </a>
                         <ul class="dropdown-menu bg-primary">
                             @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{-- route('kyc') --}}">KYC Start</a></li>
+                                <li><a class="dropdown-item" href="{{ route('list-for-kyc') }}">KYC Start</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{-- route('notice-list') --}}">KYC Pending List</a></li>
+                                <li><a class="dropdown-item" href="{{ route('list.pending.kyc') }}">KYC Pending List</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{-- route('notice-list') --}}">KYC Approve List</a></li>
+                                <li><a class="dropdown-item" href="{{ route('list.approve.kyc') }}">KYC Approve List</a></li>
                             @endif
+                            {{-- @if (!$isStaff || $user->hasPermission('kyc'))
+                                <li><a class="dropdown-item" href="{{ route('list.reject.kyc') }}">KYC Reject List</a></li>
+                            @endif --}}
                         </ul>
                     </li>
                 @endif

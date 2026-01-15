@@ -48,67 +48,6 @@
                             </a>
                         @endif
 
-                        {{-- @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
-                            <a href="{{ route('eduaction.reg.list') }}" class="btn btn-sm btn-primary">
-                                education Card List
-                            </a>
-                        @endif
-
-                        @if (!$isStaff || $user->hasPermission('educationfacility_demand'))
-                            <a href="{{ route('list.demandfacility') }}" class="btn btn-sm btn-warning text-dark">
-                                Demand Facility
-                            </a>
-                        @endif
-
-                        @if (!$isStaff || $user->hasPermission('educationfacility_pending'))
-                            <a href="{{ route('list.pendingfacility') }}" class="btn btn-sm btn-info text-white">
-                                Facility Pending
-                            </a>
-                        @endif
-
-                        @if (!$isStaff || $user->hasPermission('educationfacility_bill_investigation'))
-                            <a href="{{ route('list.Investigationfacility') }}" class="btn btn-sm btn-secondary">
-                                Bill Investigation
-                            </a>
-                        @endif --}}
-
-                        {{-- @if (!$isStaff || $user->hasPermission('educationfacility_bill_verify'))
-                            <a href="{{ route('list.Verifyeducationfacility') }}" class="btn btn-sm btn-secondary">
-                                Bill Verify
-                            </a>
-                        @endif
-
-                        @if (!$isStaff || $user->hasPermission('educationfacility_demand_approve'))
-                            <a href="{{ route('list.Approvaleducationfacility') }}" class="btn btn-sm btn-success">
-                                Demand Approve
-                            </a>
-                        @endif
-
-                        @if (!$isStaff || $user->hasPermission('educationfacility_final_approve'))
-                            <a href="{{ route('list.Approveeducationfacility') }}" class="btn btn-sm btn-success">
-                                Final Approve
-                            </a>
-                        @endif
-
-                        @if (!$isStaff || $user->hasPermission('educationfacility_reject'))
-                            <a href="{{ route('list.Rejecteducationfacility') }}" class="btn btn-sm btn-danger">
-                                Reject Facility
-                            </a>
-                        @endif --}}
-
-                        {{-- @if (!$isStaff || $user->hasPermission('educationfacility_pending_demand'))
-                            <a href="{{ route('list.DemandPendingeducationfacility') }}"
-                                class="btn btn-sm btn-warning text-dark">
-                                Pending Demand
-                            </a>
-                        @endif
-
-                        @if (!$isStaff || $user->hasPermission('educationfacility_non_budget'))
-                            <a href="{{ route('list.NonBudgeteducationfacility') }}" class="btn btn-sm btn-dark">
-                                Non-Budget
-                            </a>
-                        @endif --}}
-
                     </div>
                 </div>
             </div>

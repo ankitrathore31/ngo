@@ -21,6 +21,7 @@ use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\HealthCardController;
 use App\Http\Controllers\IdcardController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\KycController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\OrganizationController;
@@ -632,9 +633,24 @@ Route::controller(EduactionCardController::class)->middleware('auth')->group(fun
     Route::get('ngo/show-education-card/{id}/{education_id}', 'ShowEducationCard')->name('show.educationcard');
     Route::get('ngo/delete-educationcard/{id}', 'DeleteEducationCard')->name('delete.educationcard');
     Route::get('ngo/education-demand-list', 'EducationDemandList')->name('eduaction.demand.list');
-
-
+    Route::get('ngo/demand-education-facility/{id}/{education_id}', 'DemandEducationFacility')->name('demand.education.facility');
 
 });
+
+Route::controller(KycController::class)->middleware('auth')->group(function(){
+    Route::get('ngo/beneficiarie-list-for-kyc', 'BeneficiarieListForKyc')->name('list-for-kyc');
+    Route::get('ngo/beneficiarie-kyc/{id}', 'BeneficiarieKyc')->name('beneficiare-kyc');
+    Route::post('ngo/kyc-store/{id}', 'StoreKyc')->name('kyc.store');
+    Route::get('ngo/edit-beneficiarie-kyc/{id}/{kyc_id}', 'EditBeneficiarieKyc')->name('edit-beneficiare-kyc');
+    Route::post('ngo/kyc-update/{id}', 'UpdateKyc')->name('kyc.update');
+    Route::get('ngo/pending-list-kyc', 'PendingKycList')->name('list.pending.kyc');
+    Route::post('ngo/store-kyc-status/{id}', 'StoreKycStatus')->name('kyc.store.status');
+    Route::get('ngo/approve-list-kyc', 'ApproveKycList')->name('list.approve.kyc');
+    Route::get('ngo/reject-list-kyc', 'RejectKycList')->name('list.reject.kyc');
+    Route::get('ngo/show-kyc/{id}/{kyc_id}', 'ShowKyc')->name('show.kyc');
+    
+});
+
+
 
 require __DIR__ . '/auth.php';
