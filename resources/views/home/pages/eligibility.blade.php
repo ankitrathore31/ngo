@@ -46,7 +46,7 @@
                 "1. बेघर परिवार",
                 "2. कच्चे या एक कमरे वाले मकानों में रहने वाले लोग",
                 "3. विधवा",
-                "4. वृद्धा",
+                "4. विकलांग",
                 "5. दिव्यांग",
                 "6. भूमिहीन",
                 "7. आर्थिक रूप से कमजोर लोग",
@@ -57,13 +57,14 @@
                 "12. पीड़ित लोग",
                 "13. सीमांत किसान",
                 "14. लघु किसान",
-                "15. बड़े किसान"
+                "15. बड़े किसान",
+                "16. बुजुर्ग व्यक्ति"
             ],
             english: [
                 "1. Homeless Families",
                 "2. People living in kutcha or one-room houses",
-                "3. Widows",
-                "4. Elderly Women",
+                "3. Widow",
+                "4. Handicapped",
                 "5. Persons with Disabilities",
                 "6. Landless",
                 "7. Economically Weaker Section",
@@ -74,7 +75,8 @@
                 "12. Affected People",
                 "13. Marginal Farmers",
                 "14. Small Farmers",
-                "15. Large Farmers"
+                "15. Large Farmers",
+                "16. Old Age Person"
             ]
         };
 
