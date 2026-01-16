@@ -333,7 +333,7 @@
                                 <option value="Homeless Families">1. Homeless Families</option>
                                 <option value="People living in kutcha or one-room houses">2. People living in kutcha or
                                     one-room houses</option>
-                                <option value="Widows">3. Widows</option>
+                                <option value="Widows">3. Widow</option>
                                 <option value="Elderly Women">4. Handicapped</option>
                                 <option value="Persons with Disabilities">5. Persons with Disabilities</option>
                                 <option value="Landless">6. Landless</option>
