@@ -215,12 +215,12 @@
                     <div class="row mb-3">
                         <div class="col-md-2">
                             <label for="cgst">CGST (%)</label>
-                            <input type="number" id="cgst" name="cgst" class="form-control" value="0"
+                            <input type="number" id="cgst" name="cgst" step="any" class="form-control" value="0"
                                 onchange="updateTotal()">
                         </div>
                         <div class="col-md-2">
                             <label for="sgst">SGST (%)</label>
-                            <input type="number" id="sgst" name="sgst" class="form-control" value="0"
+                            <input type="number" id="sgst" name="sgst" step="any" class="form-control" value="0"
                                 onchange="updateTotal()">
                         </div>
                         <div class="col-md-2">

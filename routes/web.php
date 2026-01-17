@@ -648,6 +648,7 @@ Route::controller(KycController::class)->middleware('auth')->group(function(){
     Route::get('ngo/approve-list-kyc', 'ApproveKycList')->name('list.approve.kyc');
     Route::get('ngo/reject-list-kyc', 'RejectKycList')->name('list.reject.kyc');
     Route::get('ngo/show-kyc/{id}/{kyc_id}', 'ShowKyc')->name('show.kyc');
+    Route::get('ngo/delete-kyc/{id}/{kyc_id}', 'DeleteKyc')->name('delete-beneficiare-kyc');
     
 });
 

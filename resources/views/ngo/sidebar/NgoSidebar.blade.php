@@ -826,24 +826,40 @@
                 @endif
 
                 <!-- Kyc -->
-                @if (!$isStaff || $user->hasPermission('kyc') || $user->hasPermission('kyc'))
+                @if (
+                    !$isStaff ||
+                        $user->hasPermission('kyc-start') ||
+                        $user->hasPermission('kyc-pending-list') ||
+                        $user->hasPermission('kyc-approve-list'))
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
                             <i class="fas fa-chalkboard-teacher"></i> KYC
                         </a>
+
                         <ul class="dropdown-menu bg-primary">
-                            @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{ route('list-for-kyc') }}">KYC Start</a></li>
+                            @if (!$isStaff || $user->hasPermission('kyc-start'))
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('list-for-kyc') }}">
+                                        KYC Start
+                                    </a>
+                                </li>
                             @endif
-                            @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{ route('list.pending.kyc') }}">KYC Pending List</a></li>
+
+                            @if (!$isStaff || $user->hasPermission('kyc-pending-list'))
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('list.pending.kyc') }}">
+                                        KYC Pending List
+                                    </a>
+                                </li>
                             @endif
-                            @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{ route('list.approve.kyc') }}">KYC Approve List</a></li>
+
+                            @if (!$isStaff || $user->hasPermission('kyc-approve-list'))
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('list.approve.kyc') }}">
+                                        KYC Approve List
+                                    </a>
+                                </li>
                             @endif
-                            {{-- @if (!$isStaff || $user->hasPermission('kyc'))
-                                <li><a class="dropdown-item" href="{{ route('list.reject.kyc') }}">KYC Reject List</a></li>
-                            @endif --}}
                         </ul>
                     </li>
                 @endif
@@ -862,7 +878,7 @@
                             @endif
                             {{-- Education Facility Menu --}}
                             @if (!$isStaff || $user->hasPermission('education_facility'))
-                                 <li><a class="dropdown-item" href="{{ route('eduaction.reg.list') }}">
+                                <li><a class="dropdown-item" href="{{ route('eduaction.reg.list') }}">
                                         Eduaction Card Facility
                                     </a></li>
                             @endif

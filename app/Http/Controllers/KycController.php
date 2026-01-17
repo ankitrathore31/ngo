@@ -8,6 +8,7 @@ use App\Models\KycVerification;
 use App\Models\Staff;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 
 class KycController extends Controller
 {
@@ -93,10 +94,23 @@ class KycController extends Controller
                 ->withInput()
                 ->with('error', 'This Aadhaar number is already used for another beneficiary.');
         }
+        $beneficiary = beneficiarie::findOrFail($id);
+        if ($beneficiary->identity_type === 'Aadhar Card') {
+            $reqAadhar =  $beneficiary->identity_no;
+
+            if ($aadhaar !== $reqAadhar) {
+                return back()
+                    ->withInput()
+                    ->with(
+                        'error',
+                        'Beneficiary Aadhaar No does not match Kyc Aadhaar No.'
+                    );
+            }
+        }
 
         $request->validate([
             'aadhaar_no'    => 'required|string|max:14',
-            'aadhaar_front' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'aadhaar_front' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'aadhaar_back'  => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'staff'         => 'required',
             'verified_at'   =>  'required|date',
@@ -131,15 +145,17 @@ class KycController extends Controller
         KycVerification::create($data);
         beneficiarie::where('id', $id)->update(['kyc_status' => 1]);
 
-        redirect()->route('list.pending.kyc')->with('success', 'KYC submitted successfully.');
+        return redirect()
+            ->route('list.pending.kyc')
+            ->with('success', 'KYC submitted successfully.');
     }
 
-     public function EditBeneficiarieKyc($id, $kyc_id)
+    public function EditBeneficiarieKyc($id, $kyc_id)
     {
         $record = beneficiarie::findOrFail($id);
         $kyc = KycVerification::findOrFail($kyc_id);
         $staffs = Staff::get();
-        return view('ngo.kyc.edit-kyc', compact('record', 'kyc','staffs'));
+        return view('ngo.kyc.edit-kyc', compact('record', 'kyc', 'staffs'));
     }
 
     public function UpdateKyc(Request $request, $id)
@@ -195,6 +211,33 @@ class KycController extends Controller
         return redirect()
             ->route('list.pending.kyc')
             ->with('success', 'KYC updated successfully.');
+    }
+
+    public function deleteKyc($id)
+    {
+        // Find KYC
+        $kyc = KycVerification::where('beneficiarie_id', $id)->firstOrFail();
+
+        // ✅ Delete files if exist
+        if ($kyc->aadhaar_front && File::exists(public_path($kyc->aadhaar_front))) {
+            File::delete(public_path($kyc->aadhaar_front));
+        }
+
+        if ($kyc->aadhaar_back && File::exists(public_path($kyc->aadhaar_back))) {
+            File::delete(public_path($kyc->aadhaar_back));
+        }
+
+        // ✅ Delete KYC record
+        $kyc->delete();
+
+        // ✅ Update beneficiary KYC status
+        beneficiarie::where('id', $id)->update([
+            'kyc_status' => 0
+        ]);
+
+        return redirect()
+            ->back()
+            ->with('success', 'KYC deleted successfully.');
     }
 
 
