@@ -167,6 +167,15 @@
                                             Edit
                                         </a>
 
+                                        <a href="{{ route('delete-beneficiare-kyc', [
+                                            'id' => $item->id,
+                                            'kyc_id' => $item->kyc->first()->id,
+                                        ]) }}"
+                                            class="btn mb-1 btn-sm btn-danger"
+                                            onclick="return confirm('Are you sure you want to delete this KYC?');">
+                                            Delete
+                                        </a>
+
                                         {{-- Approve KYC --}}
                                         <form action="{{ route('kyc.store.status', $item->kyc->first()->id) }}"
                                             method="POST"

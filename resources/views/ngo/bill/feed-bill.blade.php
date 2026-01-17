@@ -241,11 +241,11 @@
                         <!-- Upload Input -->
                         <div class="col-md-6 mb-3">
                             <label for="fileInput" class="form-label">Upload Evidence Image/PDF</label>
-                            <input type="file" name="image" class="form-control" id="fileInput" accept="image/*,application/pdf"
-                            capture="environment">
+                            <input type="file" name="image" class="form-control" id="fileInput"
+                                accept="image/*,application/pdf" capture="environment">
                             <small class="text-muted">Supports image, PDF, or mobile camera capture.</small>
                             @error('image')
-                                <span class="text-danger">{{$message}}</span>
+                                <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
 
@@ -279,13 +279,13 @@
                     <div class="row mb-3">
                         <div class="col-md-2">
                             <label for="cgst">CGST (%)</label>
-                            <input type="number" id="cgst" name="cgst" class="form-control" value="0"
-                                onchange="updateTotal()">
+                            <input type="number" id="cgst" name="cgst" step="any" class="form-control"
+                                value="0" onchange="updateTotal()">
                         </div>
                         <div class="col-md-2">
                             <label for="sgst">SGST (%)</label>
-                            <input type="number" id="sgst" name="sgst" class="form-control" value="0"
-                                onchange="updateTotal()">
+                            <input type="number" id="sgst" name="sgst" step="any" class="form-control"
+                                value="0" onchange="updateTotal()">
                         </div>
                         <div class="col-md-2">
                             <label for="igst">IGST (%)</label>
@@ -348,32 +348,33 @@
 
         function updateTotal() {
             let total = 0;
+
             document.querySelectorAll('.amount').forEach(cell => {
-                total += parseFloat(cell.textContent);
+                total += parseFloat(cell.textContent) || 0;
             });
 
-            // Get GST percentage values
-            const cgstPercent = parseFloat(document.getElementById('cgst').value) || 0;
-            const sgstPercent = parseFloat(document.getElementById('sgst').value) || 0;
-            const igstPercent = parseFloat(document.getElementById('igst').value) || 0;
+            // Read GST %
+            let cgstPercent = parseFloat(document.getElementById('cgst').value) || 0;
+            let sgstPercent = parseFloat(document.getElementById('sgst').value) || 0;
 
-            // Calculate GST amounts
-            const cgstAmount = (total * cgstPercent) / 100;
-            const sgstAmount = (total * sgstPercent) / 100;
-            const igstAmount = (total * igstPercent) / 100;
+            // ✅ Auto IGST = CGST + SGST
+            let igstPercent = cgstPercent + sgstPercent;
 
-            // Calculate grand total
-            const Totaligst = cgstPercent + sgstPercent;
-            const grandTotal = total + cgstAmount + sgstAmount;
-            const TotaligstAmount = cgstAmount + sgstAmount;
+            // Calculate amounts
+            let cgstAmount = (total * cgstPercent) / 100;
+            let sgstAmount = (total * sgstPercent) / 100;
+            let igstAmount = cgstAmount + sgstAmount;
+
+            let grandTotal = total + igstAmount;
 
             // Update DOM
+            document.getElementById('igst').value = igstPercent.toFixed(2);
+
             document.getElementById('total-amount').textContent = total.toFixed(2);
             document.getElementById('cgst-amount').textContent = cgstAmount.toFixed(2);
             document.getElementById('sgst-amount').textContent = sgstAmount.toFixed(2);
-            document.getElementById('igst-amount').textContent = TotaligstAmount.toFixed(2);
+            document.getElementById('igst-amount').textContent = igstAmount.toFixed(2);
             document.getElementById('grand-total').textContent = grandTotal.toFixed(2);
-            document.getElementById('igst').value = Totaligst.toFixed(2);
         }
 
 

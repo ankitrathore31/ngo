@@ -171,13 +171,13 @@
                     <div class="row mb-3 mt-2">
                         <div id="gst_input_wrapper" class="col-sm-6 mb-3">
                             <label for="gst">Vendor/Shop/Farm GST</label>
-                            <input type="number" name="shop_gst_no" id="gst" class="form-control"
+                            <input type="text" name="shop_gst_no" id="gst" class="form-control"
                                 value="{{ old('gst') }}">
                         </div>
 
                         <div class="col-sm-6 mb-2">
                             <label for="gst">Operator GST</label>
-                            <input type="number" name="operator_gst_no" id="gst" class="form-control"
+                            <input type="text" name="operator_gst_no" id="gst" class="form-control"
                                 value="{{ old('gst') }}">
                         </div>
 

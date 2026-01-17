@@ -236,39 +236,6 @@
                         <div class="col-sm-4 mb-3">
                             <strong>Religion Category:</strong> {{ $record->religion_category }}
                         </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Religion:</strong> {{ $record->religion }}
-                        </div>
-
-
-
-                        <div class="col-sm-4 mb-3">
-                            <strong>Date of Birth:</strong>
-                            {{ \Carbon\Carbon::parse($record->dob)->format('d-m-Y') }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Marital Status:</strong> {{ $record->marital_status }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Occupation:</strong> {{ $record->occupation }}
-                        </div>
-
-                        <div class="col-sm-4 mb-3">
-                            <strong>Identity Type:</strong> {{ $record->identity_type }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Identity Number:</strong> {{ $record->identity_no }}
-                        </div>
-                        @php
-                            $imagePath = $record->reg_type === 'Member' ? 'member_images/' : 'benefries_images/';
-                        @endphp
-
-                        <div class="col-sm-4 mb-3">
-
-                            <strong>ID Document:</strong>
-                            <a href="{{ asset($imagePath . $record->id_document) }}" target="_blank">View Document</a>
-
-                        </div>
 
                     </div>
                     <div class="row">

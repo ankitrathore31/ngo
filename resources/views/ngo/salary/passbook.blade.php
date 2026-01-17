@@ -194,9 +194,13 @@
                     <div class="row mb-3">
                         <div class="col-sm-8">
                             <div class="row">
+                                <div class="col-sm-6 mb-2"><strong>Staff Code:</strong> {{ $staff->staff_code }}</div>
                                 <div class="col-sm-6 mb-2"><strong>Position:</strong> {{ $staff->position }}</div>
+                                <div class="col-sm-6 mb-2"><strong>Joing Date:</strong>
+                                    {{ \Carbon\Carbon::parse($staff->joining_date)->format('d-m-Y') }}</div>
                                 <div class="col-sm-6 mb-2"><strong>Name:</strong> {{ $staff->name }}</div>
                                 <div class="col-sm-6 mb-2"><strong>Guardian:</strong> {{ $staff->gurdian_name }}</div>
+                                <div class="col-sm-6 mb-2"><strong>Contact No.:</strong> {{ $staff->phone }}</div>
                                 <div class="col-sm-6 mb-2"><strong>Village:</strong> {{ $staff->village }}</div>
                                 <div class="col-sm-6 mb-2"><strong>Post:</strong> {{ $staff->post }}</div>
                                 <div class="col-sm-6 mb-2"><strong>Block:</strong> {{ $staff->block }}</div>
@@ -208,6 +212,27 @@
                             <img src="{{ asset($staff->image) }}" alt="Image" class="img-thumbnail" width="120">
                         </div>
                     </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="alert alert-primary">
+                                <strong>Total Salary (From Joining):</strong><br>
+                                ₹ {{ number_format($overallTotalSalary, 2) }}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="alert alert-success">
+                                <strong>Total Paid:</strong><br>
+                                ₹ {{ number_format($overallPaid, 2) }}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="alert alert-danger">
+                                <strong>Total Remaining:</strong><br>
+                                ₹ {{ number_format($overallRemaining, 2) }}
+                            </div>
+                        </div>
+                    </div>
+
                     <table class="table table-bordered table-striped align-middle">
                         <thead class="table-primary text-center">
                             <tr>
@@ -263,21 +288,36 @@
 
                         <tfoot class="table-light fw-bold">
                             <tr>
-                                <td colspan="4" class="text-end">Total Salary:</td>
-                                <td class="text-end">₹ {{ number_format($totalAmount, 2) }}</td>
+                                <td colspan="4" class="text-end">
+                                    Total Salary ({{ $selectedYear }}):
+                                </td>
+                                <td class="text-end">
+                                    ₹ {{ number_format($totalAmount, 2) }}
+                                </td>
                                 <td></td>
                             </tr>
+
                             <tr>
-                                <td colspan="4" class="text-end">Total Paid:</td>
-                                <td class="text-end text-success">₹ {{ number_format($totalPaid, 2) }}</td>
+                                <td colspan="4" class="text-end">
+                                    Total Paid ({{ $selectedYear }}):
+                                </td>
+                                <td class="text-end text-success">
+                                    ₹ {{ number_format($totalPaid, 2) }}
+                                </td>
                                 <td></td>
                             </tr>
+
                             <tr>
-                                <td colspan="4" class="text-end">Remaining Balance:</td>
-                                <td class="text-end text-danger">₹ {{ number_format($remaining, 2) }}</td>
+                                <td colspan="4" class="text-end">
+                                    Remaining Balance ({{ $selectedYear }}):
+                                </td>
+                                <td class="text-end text-danger">
+                                    ₹ {{ number_format($remaining, 2) }}
+                                </td>
                                 <td></td>
                             </tr>
                         </tfoot>
+
                     </table>
                 </div>
             </div>

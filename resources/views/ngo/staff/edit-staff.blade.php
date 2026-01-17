@@ -2,8 +2,8 @@
 @section('content')
     <style>
         /* ::placeholder {
-                                                                        font-size: 8px;
-                                                                    } */
+                                                                            font-size: 8px;
+                                                                        } */
 
         .upload-container {
             text-align: center;
@@ -806,6 +806,12 @@
                             <optgroup label="Work Plan">
                                 <option value="add-workplan" data-label="Add Work Plan">Add Work Plan</option>
                                 <option value="workplan-list" data-label="Work Plan List">Work Plan List</option>
+                            </optgroup>
+
+                            <optgroup label="KYC">
+                                <option value="kyc-start" data-label="KYC Start">KYC Start</option>
+                                <option value="kyc-pending-list" data-label="KYC Pending List">KYC Pending List</option>
+                                <option value="kyc-approve-list" data-label="KYC Approve List">KYC Approve List</option>
                             </optgroup>
 
                             <optgroup label="Notice">

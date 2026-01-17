@@ -102,41 +102,49 @@ class SallaryController extends Controller
 
     public function PaySalary(Request $request, $id)
     {
-        $staff = Staff::where('status', 1)->findOrFail($id); // ✅ Only active staff
+        $staff = Staff::where('status', 1)->findOrFail($id);
         $salary = Sallary::where('position', $staff->position)->first();
 
-        $joiningYear = \Carbon\Carbon::parse($staff->joining_date)->year;
-        $currentYear = now()->year;
+        $joiningDate  = \Carbon\Carbon::parse($staff->joining_date);
+        $joiningYear  = $joiningDate->year;
+        $joiningMonth = $joiningDate->month;
 
-        // ✅ Only generate salaries for active staff
+        $currentYear  = now()->year;
+        $currentMonth = now()->month;
+
         if ($staff->status == 1) {
             for ($year = $joiningYear; $year <= $currentYear; $year++) {
-                $startMonth = ($year == $joiningYear) ? \Carbon\Carbon::parse($staff->joining_date)->month : 1;
 
-                for ($month = $startMonth; $month <= 12; $month++) {
-                    SalaryTransaction::firstOrCreate([
-                        'staff_id' => $staff->id,
-                        'year'     => $year,
-                        'month'    => $month,
-                    ], [
-                        'amount'   => $salary->salary,
-                        'status'   => 'unpaid',
-                    ]);
+                // ✅ determine start month
+                $startMonth = ($year == $joiningYear) ? $joiningMonth : 1;
+
+                // ✅ determine end month
+                $endMonth = ($year == $currentYear) ? $currentMonth : 12;
+
+                for ($month = $startMonth; $month <= $endMonth; $month++) {
+                    SalaryTransaction::firstOrCreate(
+                        [
+                            'staff_id' => $staff->id,
+                            'year'     => $year,
+                            'month'    => $month,
+                        ],
+                        [
+                            'amount'   => $salary->salary,
+                            'status'   => 'unpaid',
+                        ]
+                    );
                 }
             }
         }
 
-        // Get selected year (default: current year)
         $selectedYear = $request->input('year', $currentYear);
 
-        // Fetch transactions grouped by year
         $transactions = SalaryTransaction::where('staff_id', $staff->id)
             ->orderBy('year')
             ->orderBy('month')
             ->get()
             ->groupBy('year');
 
-        // Filter transactions for only selected year
         $yearTransactions = $transactions->get($selectedYear, collect());
 
         return view('ngo.salary.pay-salary', compact(
@@ -149,6 +157,7 @@ class SallaryController extends Controller
             'currentYear'
         ));
     }
+
 
 
     public function storeSalaryPayment(Request $request, $staffId)
@@ -260,10 +269,9 @@ class SallaryController extends Controller
     {
         $staff = Staff::where('status', 1)->findOrFail($id);
 
-        // Fetch only paid/partial transactions with payments
+        // ✅ Fetch ALL salary transactions
         $transactions = SalaryTransaction::with('payments')
             ->where('staff_id', $staff->id)
-            ->whereIn('status', ['paid', 'partial']) // exclude unpaid
             ->orderBy('year')
             ->orderBy('month')
             ->get()
@@ -272,13 +280,24 @@ class SallaryController extends Controller
         $years = $transactions->keys();
         $selectedYear = $request->input('year', now()->year);
 
-        // Transactions for selected year
+        // ✅ Selected year transactions
         $yearTransactions = $transactions->get($selectedYear, collect());
 
-        // Totals only for paid transactions
+        /* -------------------------
+       YEAR-WISE TOTALS
+    --------------------------*/
         $totalAmount = $yearTransactions->sum('amount');
-        $totalPaid = $yearTransactions->flatMap->payments->sum('amount');
-        $remaining = $totalAmount - $totalPaid;
+        $totalPaid   = $yearTransactions->flatMap->payments->sum('amount');
+        $remaining   = $totalAmount - $totalPaid;
+
+        /* -------------------------
+       OVERALL TOTALS (FROM JOINING)
+    --------------------------*/
+        $allTransactions = $transactions->flatten();
+
+        $overallTotalSalary = $allTransactions->sum('amount');
+        $overallPaid        = $allTransactions->flatMap->payments->sum('amount');
+        $overallRemaining   = $overallTotalSalary - $overallPaid;
 
         return view('ngo.salary.passbook', compact(
             'staff',
@@ -288,7 +307,10 @@ class SallaryController extends Controller
             'years',
             'totalAmount',
             'totalPaid',
-            'remaining'
+            'remaining',
+            'overallTotalSalary',
+            'overallPaid',
+            'overallRemaining'
         ));
     }
 }

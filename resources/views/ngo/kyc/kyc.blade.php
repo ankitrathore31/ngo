@@ -236,39 +236,6 @@
                         <div class="col-sm-4 mb-3">
                             <strong>Religion Category:</strong> {{ $record->religion_category }}
                         </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Religion:</strong> {{ $record->religion }}
-                        </div>
-
-
-
-                        <div class="col-sm-4 mb-3">
-                            <strong>Date of Birth:</strong>
-                            {{ \Carbon\Carbon::parse($record->dob)->format('d-m-Y') }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Marital Status:</strong> {{ $record->marital_status }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Occupation:</strong> {{ $record->occupation }}
-                        </div>
-
-                        <div class="col-sm-4 mb-3">
-                            <strong>Identity Type:</strong> {{ $record->identity_type }}
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <strong>Identity Number:</strong> {{ $record->identity_no }}
-                        </div>
-                        @php
-                            $imagePath = $record->reg_type === 'Member' ? 'member_images/' : 'benefries_images/';
-                        @endphp
-
-                        <div class="col-sm-4 mb-3">
-
-                            <strong>ID Document:</strong>
-                            <a href="{{ asset($imagePath . $record->id_document) }}" target="_blank">View Document</a>
-
-                        </div>
 
                     </div>
                 </div>
@@ -283,15 +250,15 @@
                             placeholder="XXXX XXXX XXXX" required>
 
                         {{-- Upload Front --}}
-                        <label class="fw-bold mt-3">Aadhaar Front</label>
+                        <label class="fw-bold mt-3">Aadhaar Front (Optional)</label>
                         <input type="file" name="aadhaar_front" class="form-control" accept="image/*,application/pdf"
-                            capture="environment" onchange="previewFile(this, 'frontPreview')" required>
+                            capture="environment" onchange="previewFile(this, 'frontPreview')" >
 
                         <div id="frontPreview" class="mt-2"></div>
 
 
                         {{-- Upload Back / Combined --}}
-                        <label class="fw-bold mt-3">Aadhaar Back / Combined PDF</label>
+                        <label class="fw-bold mt-3">Aadhaar Back / Combined PDF (Optional)</label>
                         <input type="file" name="aadhaar_back" class="form-control" accept="image/*,application/pdf"
                             capture="environment" onchange="previewFile(this, 'backPreview')">
 

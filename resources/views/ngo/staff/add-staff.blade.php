@@ -764,6 +764,12 @@
                                 <option value="workplan-list">Work Plan List</option>
                             </optgroup>
 
+                            <optgroup label="Kyc">
+                                <option value="kyc-start">Kyc Start</option>
+                                <option value="kyc-pending-list">Kyc Pending List</option>
+                                <option value="kyc-approve-list">Kyc Approve List</option>
+                            </optgroup>
+
                             <optgroup label="Notice">
                                 <option value="add-notice">Add Notice</option>
                                 <option value="notice-list">Notice List</option>
