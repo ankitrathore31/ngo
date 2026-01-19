@@ -13,7 +13,8 @@ class Voucher_Item extends Model
         'bill_voucher_id',
         'product',
         'qty',
-        'rate'
+        'rate',
+        'unit',
     ];
 
     public function bill()

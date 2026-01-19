@@ -242,7 +242,7 @@
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $item->product }}</td>
-                                                        <td>{{ $item->qty }}</td>
+                                                        <td>{{ $item->qty }}{{ $item->unit }}</td>
                                                         <td>{{ number_format($item->rate, 2) }}</td>
                                                         <td>{{ number_format($amount, 2) }}</td>
                                                     </tr>
