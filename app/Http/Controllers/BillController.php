@@ -81,12 +81,13 @@ class BillController extends Controller
                     'bill_voucher_id' => $voucher->id,
                     'product' => $item['product'] ?? null,
                     'qty'     => $item['qty'] ?? null,
+                    'unit'     => $item['unit'] ?? null,
                     'rate'    => $item['rate'] ?? null,
                 ]);
             }
         }
 
-        return back()->with('success', 'Voucher saved successfully!');
+        return redirect()->route('bill-list')->with('success', 'Bill Voucher saved successfully!');
     }
 
     public function BillList(Request $request)
@@ -94,7 +95,6 @@ class BillController extends Controller
         $session = academic_session::all();
         $category = Category::orderBy('category', 'asc')->get();
 
-        // Start the query
         $query = Bill_Voucher::query();
 
         // Filter by session
@@ -104,28 +104,24 @@ class BillController extends Controller
 
         // Filter by category
         if ($request->filled('category_filter')) {
-            $query->where('work_category', $request->category_filter); // Assuming 'work_category' is the column name
+            $query->where('work_category', $request->category_filter);
         }
 
-        // Apply additional filters (bill_no, name)
+        // Filter by bill no
         if ($request->filled('bill_no')) {
-            $query->where('biil_no', 'like', '%' . $request->bill_no . '%'); // Check spelling: biil_no vs bill_no
+            $query->where('biil_no', 'like', '%' . $request->bill_no . '%');
         }
 
+        // Filter by name
         if ($request->filled('name')) {
             $query->where('name', 'like', '%' . $request->name . '%');
         }
 
-        // Get final filtered result
-        $record = $query->orderBy('created_at', 'desc')->get();
+        // ✅ Latest bill DATE first
+        $record = $query->orderBy('date', 'desc')->get();
 
-        return view('ngo.bill.bill-list', [
-            'session' => $session,
-            'record' => $record,
-            'category' => $category,
-        ]);
+        return view('ngo.bill.bill-list', compact('session', 'record', 'category'));
     }
-
 
     public function EditBill($id)
     {
@@ -410,6 +406,7 @@ class BillController extends Controller
                 'bill_id' => $voucher->id,
                 'product' => $item['product'] ?? null,
                 'qty' => $item['qty'] ?? null,
+                'unit' => $item['unit'] ?? null,
                 'rate' => $item['rate'] ?? null,
             ]);
         }

@@ -166,9 +166,34 @@
                                 <td class="sr-no">{{ $i + 1 }}</td>
                                 <td><input type="text" name="items[{{ $i }}][product]"
                                         class="form-control" value="{{ $item->product }}" required></td>
-                                <td><input type="number" name="items[{{ $i }}][qty]"
-                                        class="form-control text-end qty" step="1" value="{{ $item->qty }}"
-                                        onchange="updateAmount(this)"></td>
+                                <td>
+                                    <div class="d-flex gap-1">
+                                        <input type="number" name="items[{{ $i }}][qty]"
+                                            class="form-control text-end qty" step="0.01" value="{{ $item->qty }}"
+                                            onchange="updateAmount(this)">
+
+                                        <select name="items[{{ $i }}][unit]" class="form-select">
+                                            <option value="Nos" {{ $item->unit == 'Nos' ? 'selected' : '' }}>Nos
+                                            </option>
+                                            <option value="Kg" {{ $item->unit == 'Kg' ? 'selected' : '' }}>Kg</option>
+                                            <option value="Gram" {{ $item->unit == 'Gram' ? 'selected' : '' }}>Gram
+                                            </option>
+                                            <option value="Litre" {{ $item->unit == 'Litre' ? 'selected' : '' }}>Litre
+                                            </option>
+                                            <option value="ML" {{ $item->unit == 'ML' ? 'selected' : '' }}>ML</option>
+                                            <option value="Meter" {{ $item->unit == 'Meter' ? 'selected' : '' }}>Meter
+                                            </option>
+                                            <option value="Feet" {{ $item->unit == 'Feet' ? 'selected' : '' }}>Feet
+                                            </option>
+                                            <option value="Box" {{ $item->unit == 'Box' ? 'selected' : '' }}>Box
+                                            </option>
+                                            <option value="Pack" {{ $item->unit == 'Pack' ? 'selected' : '' }}>Pack
+                                            </option>
+                                            <option value="Piece" {{ $item->unit == 'Piece' ? 'selected' : '' }}>Piece
+                                            </option>
+                                        </select>
+                                    </div>
+                                </td>
                                 <td><input type="number" name="items[{{ $i }}][rate]"
                                         class="form-control text-end rate" step="0.01" value="{{ $item->rate }}"
                                         onchange="updateAmount(this)"></td>
@@ -199,8 +224,8 @@
                     </div>
                     <div class="col-md-2">
                         <label for="igst">IGST (%)</label>
-                        <input type="number" id="igst" name="igst" class="form-control"
-                            value="{{ old('igst', $bill->igst ?? 0) }}" onchange="updateTotal()" readonly>
+                        <input type="number" id="igst" name="igst" class="form-control" value=""
+                            onchange="updateTotal()" readonly>
                     </div>
                 </div>
 
@@ -228,8 +253,29 @@
                 row.innerHTML = `
             <td class="sr-no">${index + 1}</td>
             <td><input type="text" name="items[${index}][product]" class="form-control" required></td>
-            <td><input type="number" name="items[${index}][qty]" class="form-control text-end qty" step="1" value="0" onchange="updateAmount(this)"></td>
-            <td><input type="number" name="items[${index}][rate]" class="form-control text-end rate" step="0.01" value="0.00" onchange="updateAmount(this)"></td>
+<td>
+    <div class="d-flex gap-1">
+        <input type="number"
+               name="items[${index}][qty]"
+               class="form-control text-end qty"
+               step="0.01"
+               value="0"
+               onchange="updateAmount(this)">
+
+        <select name="items[${index}][unit]" class="form-select form-select-sm"">
+            <option value="Nos">Nos</option>
+            <option value="Kg">Kg</option>
+            <option value="Gram">Gram</option>
+            <option value="Litre">Litre</option>
+            <option value="ML">ML</option>
+            <option value="Meter">Meter</option>
+            <option value="Feet">Feet</option>
+            <option value="Box">Box</option>
+            <option value="Pack">Pack</option>
+            <option value="Piece">Piece</option>
+        </select>
+    </div>
+</td>            <td><input type="number" name="items[${index}][rate]" class="form-control text-end rate" step="0.01" value="0.00" onchange="updateAmount(this)"></td> 
             <td class="text-end amount">0.00</td>
             <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">X</button></td>
         `;
@@ -258,36 +304,33 @@
             function updateTotal() {
                 let baseAmount = 0;
 
-                // Sum all item amounts
+                // 1️⃣ Sum item amounts
                 document.querySelectorAll('#items-table .amount').forEach(cell => {
                     baseAmount += parseFloat(cell.textContent) || 0;
                 });
 
-                // Update total-amount before tax
-                document.getElementById('total-amount').innerText = baseAmount.toFixed(2);
-
-                // Get GST rates
+                // 2️⃣ GST Rates
                 const cgstRate = parseFloat(document.getElementById('cgst').value) || 0;
                 const sgstRate = parseFloat(document.getElementById('sgst').value) || 0;
-                const igstRate = parseFloat(document.getElementById('igst').value) || 0;
 
-                // Calculate tax amounts
+                // 3️⃣ Auto IGST = CGST + SGST
+                const igstRate = cgstRate + sgstRate;
+
+                // 4️⃣ Tax calculations
                 const cgstAmount = (baseAmount * cgstRate) / 100;
                 const sgstAmount = (baseAmount * sgstRate) / 100;
-                const igstAmount = (baseAmount * igstRate) / 100;
+                const igstAmount = cgstAmount + sgstAmount;
 
-                // Calculate grand total
-                const Totaligst = cgstPercent + sgstPercent;
-                const grandTotal = total + cgstAmount + sgstAmount;
-                const TotaligstAmount = cgstAmount + sgstAmount;
+                // 5️⃣ Grand total
+                const grandTotal = baseAmount + igstAmount;
 
-                // Update DOM
-                document.getElementById('total-amount').textContent = total.toFixed(2);
+                // 6️⃣ Update DOM
+                document.getElementById('total-amount').textContent = baseAmount.toFixed(2);
                 document.getElementById('cgst-amount').textContent = cgstAmount.toFixed(2);
                 document.getElementById('sgst-amount').textContent = sgstAmount.toFixed(2);
-                document.getElementById('igst-amount').textContent = TotaligstAmount.toFixed(2);
+                document.getElementById('igst-amount').textContent = igstAmount.toFixed(2);
                 document.getElementById('grand-total').textContent = grandTotal.toFixed(2);
-                document.getElementById('igst').value = Totaligst.toFixed(2);
+                document.getElementById('igst').value = igstRate.toFixed(2);
             }
 
 

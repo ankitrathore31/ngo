@@ -231,8 +231,29 @@
                 row.innerHTML = `
         <td class="sr-no">${index + 1}</td>
         <td><input type="text" name="items[${index}][product]" class="form-control" value="${product}" required></td>
-        <td><input type="number" name="items[${index}][qty]" class="form-control text-end qty" step="1" value="${qty}" onchange="updateAmount(this)"></td>
-        <td><input type="number" name="items[${index}][rate]" class="form-control text-end rate" step="0.01" value="${rate}" onchange="updateAmount(this)"></td>
+<td>
+    <div class="d-flex gap-1">
+        <input type="number"
+               name="items[${index}][qty]"
+               class="form-control text-end qty"
+               step="0.01"
+               value="0"
+               onchange="updateAmount(this)">
+
+        <select name="items[${index}][unit]" class="form-select form-select-sm"">
+            <option value="Nos">Nos</option>
+            <option value="Kg">Kg</option>
+            <option value="Gram">Gram</option>
+            <option value="Litre">Litre</option>
+            <option value="ML">ML</option>
+            <option value="Meter">Meter</option>
+            <option value="Feet">Feet</option>
+            <option value="Box">Box</option>
+            <option value="Pack">Pack</option>
+            <option value="Piece">Piece</option>
+        </select>
+    </div>
+</td>        <td><input type="number" name="items[${index}][rate]" class="form-control text-end rate" step="0.01" value="${rate}" onchange="updateAmount(this)"></td>
         <td class="text-end amount">${amount.toFixed(2)}</td>
         <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">X</button></td>
     `;
