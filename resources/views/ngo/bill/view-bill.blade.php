@@ -292,7 +292,7 @@
                             </div>
                         </div>
                         <div class="row d-flex justify-content-between mt-5">
-                            <div class="col-sm-4 text-start">
+                            <div class="col-sm-5 text-start">
                                 <dl class="row">
                                     <dt class="col-sm-4">Account No:</dt>
                                     <dd class="col-sm-8">xxxx-xxxx</dd>
@@ -307,14 +307,14 @@
                                     <dd class="col-sm-8">BARB0AMERIA</dd>
                                 </dl>
                             </div>
-                            <div class="col-sm-4 text-center">
+                            <div class="col-sm-5 text-center">
                                 <div class="mt-2">
                                     {{ $bill->name }}<br>
-                                <strong>Signature
+                                <strong>{{ $bill->role }} Signature
                                 </strong>
                                 </div>
                             </div>
-                            <div class="col-sm-4 text-center">
+                            {{-- <div class="col-sm-4 text-center">
                                 @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
                                     <div id="directorSignatureBox" class="mt-2">
                                         <p class="text-success no-print">Attached</p>
@@ -334,7 +334,7 @@
                                 @endif
                                 <strong>Authorized Signature
                                 </strong>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     <div class="container border border-dark" style="display: none;" id="evidenceContainer">

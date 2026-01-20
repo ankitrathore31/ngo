@@ -88,6 +88,7 @@ class CashBookController extends Controller
                 fn($q) => $q->whereBetween('date', [$request->start_date, $request->end_date])
             );
 
+
         // Bill
         $b = Bill::with('items')
             ->when($request->filled('session_filter'), fn($q) => $q->where('academic_session', $request->session_filter))
@@ -114,6 +115,8 @@ class CashBookController extends Controller
             )
             ->get();
 
+
+
         // GbsBill
         $g = GbsBill::when($request->filled('session_filter'), fn($q) => $q->where('academic_session', $request->session_filter))
             ->when($request->filled('bill_no'), fn($q) => $q->where('invoice_no', $request->bill_no))
@@ -136,8 +139,16 @@ class CashBookController extends Controller
                 fn($q) => $q->whereBetween('bill_date', [$request->start_date, $request->end_date])
             );
 
-        // Mapping - Standardize date field as 'date'
+
         $bvList = $bv->get()->map(function ($x) {
+
+            $baseAmount = $x->items->sum(fn($i) => $i->qty * $i->rate);
+
+            $cgstAmount = ($baseAmount * ($x->cgst ?? 0)) / 100;
+            $sgstAmount = ($baseAmount * ($x->sgst ?? 0)) / 100;
+
+            $totalAmount = $baseAmount + $cgstAmount + $sgstAmount;
+
             return [
                 'type' => 'voucher',
                 'id' => $x->id,
@@ -149,11 +160,22 @@ class CashBookController extends Controller
                 'email' => $x->email,
                 'mobile' => $x->mobile,
                 'session' => $x->academic_session,
-                'amount' => $x->items->sum(fn($i) => $i->qty * $i->rate)
+                'amount' => round($totalAmount, 2),
             ];
         });
 
+
+
+
         $bList = $b->map(function ($x) {
+
+            $baseAmount = $x->items->sum(fn($i) => $i->qty * $i->rate);
+
+            $cgstAmount = ($baseAmount * ($x->cgst ?? 0)) / 100;
+            $sgstAmount = ($baseAmount * ($x->sgst ?? 0)) / 100;
+
+            $totalAmount = $baseAmount + $cgstAmount + $sgstAmount;
+
             return [
                 'type' => 'bill',
                 'id' => $x->id,
@@ -167,9 +189,11 @@ class CashBookController extends Controller
                 'email' => $x->email,
                 'mobile' => $x->mobile,
                 'session' => $x->academic_session,
-                'amount' => $x->items->sum(fn($i) => $i->qty * $i->rate)
+                'amount' => round($totalAmount, 2),
             ];
         });
+
+
 
         $gList = $g->get()->map(function ($x) {
             return [
@@ -230,12 +254,30 @@ class CashBookController extends Controller
             $bvExpense = Bill_Voucher::with('items')
                 ->whereBetween('date', [$startDate, $endDate])
                 ->get()
-                ->sum(fn($x) => $x->items->sum(fn($i) => $i->qty * $i->rate));
+                ->sum(function ($x) {
+
+                    $baseAmount = $x->items->sum(fn($i) => $i->qty * $i->rate);
+
+                    $cgstAmount = ($baseAmount * ($x->cgst ?? 0)) / 100;
+                    $sgstAmount = ($baseAmount * ($x->sgst ?? 0)) / 100;
+
+                    return $baseAmount + $cgstAmount + $sgstAmount;
+                });
+
 
             $bExpense = Bill::with('items')
                 ->whereBetween('date', [$startDate, $endDate])
                 ->get()
-                ->sum(fn($x) => $x->items->sum(fn($i) => $i->qty * $i->rate));
+                ->sum(function ($x) {
+
+                    $baseAmount = $x->items->sum(fn($i) => $i->qty * $i->rate);
+
+                    $cgstAmount = ($baseAmount * ($x->cgst ?? 0)) / 100;
+                    $sgstAmount = ($baseAmount * ($x->sgst ?? 0)) / 100;
+
+                    return $baseAmount + $cgstAmount + $sgstAmount;
+                });
+
 
             $gbsExpense = GbsBill::whereBetween('bill_date', [$startDate, $endDate])->sum('amount');
 
@@ -262,4 +304,5 @@ class CashBookController extends Controller
 
         return view('ngo.cashbook.report', compact('reports', 'year'));
     }
+    
 }
