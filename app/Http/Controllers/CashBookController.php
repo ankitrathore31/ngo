@@ -304,5 +304,89 @@ class CashBookController extends Controller
 
         return view('ngo.cashbook.report', compact('reports', 'year'));
     }
-    
+
+
+    public function IncomeExpenditureReport(Request $request)
+    {
+        $year = $request->input('year', now()->year);
+
+        $startDate = Carbon::create($year, 1, 1)->startOfYear();
+        $endDate   = Carbon::create($year, 12, 31)->endOfYear();
+
+
+        // Offline Donations grouped by amountType
+        $offlineIncome = Donation::whereBetween('date', [$startDate, $endDate])
+            ->selectRaw('amountType, SUM(amount) as total')
+            ->groupBy('amountType')
+            ->get();
+
+        $offlineTotal = $offlineIncome->sum('total');
+
+        // Online Donations
+        $onlineTotal = donor_data::where('status', 'Successful')
+            ->whereBetween('date', [$startDate, $endDate])
+            ->sum('amount');
+
+        $grandTotalIncome = $offlineTotal + $onlineTotal;
+
+        /* =========================
+       EXPENDITURE SECTION
+    ==========================*/
+
+        $expenses = collect();
+
+        // Bill Voucher
+        $bvBills = Bill_Voucher::with('items')
+            ->whereBetween('date', [$startDate, $endDate])
+            ->get();
+
+        foreach ($bvBills as $bill) {
+            $base = $bill->items->sum(fn($i) => $i->qty * $i->rate);
+            $gst  = ($base * ($bill->cgst ?? 0) / 100) + ($base * ($bill->sgst ?? 0) / 100);
+            $expenses->push([
+                'category' => $bill->work_category,
+                'amount' => $base + $gst
+            ]);
+        }
+
+        // Bill
+        $bBills = Bill::with('items')
+            ->whereBetween('date', [$startDate, $endDate])
+            ->get();
+
+        foreach ($bBills as $bill) {
+            $base = $bill->items->sum(fn($i) => $i->qty * $i->rate);
+            $gst  = ($base * ($bill->cgst ?? 0) / 100) + ($base * ($bill->sgst ?? 0) / 100);
+            $expenses->push([
+                'category' => $bill->work_category,
+                'amount' => $base + $gst
+            ]);
+        }
+
+        // GBS Bills
+        $gbsBills = GbsBill::whereBetween('bill_date', [$startDate, $endDate])->get();
+
+        foreach ($gbsBills as $bill) {
+            $expenses->push([
+                'category' => $bill->work_category,
+                'amount' => $bill->amount
+            ]);
+        }
+
+        // Group expenses by work_category
+        $expenseSummary = $expenses
+            ->groupBy('category')
+            ->map(fn($row) => $row->sum('amount'));
+
+        $grandTotalExpense = $expenseSummary->sum();
+
+        return view('ngo.cashbook.expenditure-income-report', compact(
+            'year',
+            'offlineIncome',
+            'onlineTotal',
+            'grandTotalIncome',
+            'expenseSummary',
+            'grandTotalExpense'
+        ));
+    }
 }

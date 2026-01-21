@@ -731,8 +731,7 @@
                                         Report</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('year-wise-report'))
-                                <li><a class="dropdown-item" href="{{-- route('balance.report.view') --}}">Work Category Laser
-                                        Acoount</a></li>
+                                <li><a class="dropdown-item" href="{{ route('income.expenditure.view') }}">Work Category Laser Acoount Income / Expenditure List</a></li>
                             @endif
                         </ul>
                     </li>
