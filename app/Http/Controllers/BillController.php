@@ -118,7 +118,7 @@ class BillController extends Controller
         }
 
         // ✅ Latest bill DATE first
-        $record = $query->orderBy('date', 'desc')->get();
+        $record = $query->orderBy('date', 'asc')->get();
 
         return view('ngo.bill.bill-list', compact('session', 'record', 'category'));
     }
