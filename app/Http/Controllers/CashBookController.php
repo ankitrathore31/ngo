@@ -305,16 +305,27 @@ class CashBookController extends Controller
         return view('ngo.cashbook.report', compact('reports', 'year'));
     }
 
-
     public function IncomeExpenditureReport(Request $request)
     {
-        $year = $request->input('year', now()->year);
+        $now = now();
 
-        $startDate = Carbon::create($year, 1, 1)->startOfYear();
-        $endDate   = Carbon::create($year, 12, 31)->endOfYear();
+        // Correct financial year default
+        if ($now->month >= 4) {
+            $defaultSession = $now->year . '-' . ($now->year + 1);
+        } else {
+            $defaultSession = ($now->year - 1) . '-' . $now->year;
+        }
 
+        // Selected or default session
+        $selectedSession = $request->input('session', $defaultSession);
+        [$fromYear, $toYear] = explode('-', $selectedSession);
 
-        // Offline Donations grouped by amountType
+        // Financial year date range
+        $startDate = Carbon::create($fromYear, 4, 1)->startOfDay();
+        $endDate   = Carbon::create($toYear, 3, 31)->endOfDay();
+
+        /* ===================== INCOME ===================== */
+
         $offlineIncome = Donation::whereBetween('date', [$startDate, $endDate])
             ->selectRaw('amountType, SUM(amount) as total')
             ->groupBy('amountType')
@@ -322,48 +333,46 @@ class CashBookController extends Controller
 
         $offlineTotal = $offlineIncome->sum('total');
 
-        // Online Donations
         $onlineTotal = donor_data::where('status', 'Successful')
             ->whereBetween('date', [$startDate, $endDate])
             ->sum('amount');
 
         $grandTotalIncome = $offlineTotal + $onlineTotal;
 
-        /* =========================
-       EXPENDITURE SECTION
-    ==========================*/
+        /* ===================== EXPENSE ===================== */
 
         $expenses = collect();
 
-        // Bill Voucher
         $bvBills = Bill_Voucher::with('items')
             ->whereBetween('date', [$startDate, $endDate])
             ->get();
 
         foreach ($bvBills as $bill) {
             $base = $bill->items->sum(fn($i) => $i->qty * $i->rate);
-            $gst  = ($base * ($bill->cgst ?? 0) / 100) + ($base * ($bill->sgst ?? 0) / 100);
+            $gst  = ($base * ($bill->cgst ?? 0) / 100)
+                + ($base * ($bill->sgst ?? 0) / 100);
+
             $expenses->push([
                 'category' => $bill->work_category,
                 'amount' => $base + $gst
             ]);
         }
 
-        // Bill
         $bBills = Bill::with('items')
             ->whereBetween('date', [$startDate, $endDate])
             ->get();
 
         foreach ($bBills as $bill) {
             $base = $bill->items->sum(fn($i) => $i->qty * $i->rate);
-            $gst  = ($base * ($bill->cgst ?? 0) / 100) + ($base * ($bill->sgst ?? 0) / 100);
+            $gst  = ($base * ($bill->cgst ?? 0) / 100)
+                + ($base * ($bill->sgst ?? 0) / 100);
+
             $expenses->push([
                 'category' => $bill->work_category,
                 'amount' => $base + $gst
             ]);
         }
 
-        // GBS Bills
         $gbsBills = GbsBill::whereBetween('bill_date', [$startDate, $endDate])->get();
 
         foreach ($gbsBills as $bill) {
@@ -373,7 +382,6 @@ class CashBookController extends Controller
             ]);
         }
 
-        // Group expenses by work_category
         $expenseSummary = $expenses
             ->groupBy('category')
             ->map(fn($row) => $row->sum('amount'));
@@ -381,7 +389,7 @@ class CashBookController extends Controller
         $grandTotalExpense = $expenseSummary->sum();
 
         return view('ngo.cashbook.expenditure-income-report', compact(
-            'year',
+            'selectedSession',
             'offlineIncome',
             'onlineTotal',
             'grandTotalIncome',
