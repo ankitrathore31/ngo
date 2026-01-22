@@ -145,23 +145,38 @@
                 <div class="row">
                     <div class="col-md-12">
                         <!-- Search Year Form (Single Year) -->
+                        @php
+                            $currentYear = now()->year;
+                            $startYear = 2000;
+                        @endphp
+
                         <form method="GET" action="{{ route('income.expenditure.view') }}" class="mb-4">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label>Search by Year:</label>
-                                    <select name="year" class="form-control" onchange="this.form.submit()">
-                                        @for ($y = now()->year; $y >= 2000; $y--)
-                                            <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>
-                                                {{ $y }}</option>
+                                    <label>Search by Session:</label>
+                                    <select name="session" class="form-control" onchange="this.form.submit()">
+                                        @for ($y = $currentYear; $y >= $startYear; $y--)
+                                            @php
+                                                $sessionOption = $y . '-' . ($y + 1);
+                                            @endphp
+                                            <option value="{{ $sessionOption }}"
+                                                {{ $selectedSession == $sessionOption ? 'selected' : '' }}>
+                                                {{ $sessionOption }}
+                                            </option>
                                         @endfor
                                     </select>
+
                                 </div>
+
                                 <div class="col-sm-4">
-                                    <a href="{{ route('income.expenditure.view') }}" class="btn btn-sm btn-primary mt-4">Refresh</a>
+                                    <a href="{{ route('income.expenditure.view') }}" class="btn btn-sm btn-primary mt-4">
+                                        Refresh
+                                    </a>
                                 </div>
                             </div>
                         </form>
-                        
+
+
                     </div>
                 </div>
                 <button type="button" onclick="printTable()" class="btn btn-primary mb-2">Print </button>
@@ -200,7 +215,7 @@
                                     </p> --}}
                                     <p style="font-size: 14px; margin: 0;">
                                         <b>
-                                            Receipt And Payment Account For The Year Ended On {{ $year }}
+                                            Receipt And Payment Account For The Year Ended On {{ $selectedSession }}
                                         </b>
                                     </p>
                                 </div>
@@ -298,8 +313,8 @@
 
                                 {{-- ================= CLOSING BALANCE ================= --}}
                                 <div class="row fw-bold small">
-                                    <div class="col-md-4">Total Remaining Balance</div>
-                                    <div class="col-md-2 text-end">
+                                    <div class="col-md-5">Total Remaining Balance</div>
+                                    <div class="col-md-4 text-start">
                                         {{ number_format($grandTotalIncome - $grandTotalExpense, 2) }}
                                     </div>
                                 </div>
