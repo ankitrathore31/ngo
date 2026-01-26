@@ -137,7 +137,7 @@
                             </select>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <select name="category" id="category" class="form-control" >
+                            <select name="category" id="category" class="form-control">
                                 <option value="">Select Donation Category</option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category }}">{{ $category }}</option>
@@ -271,32 +271,33 @@
                         <tbody>
                             @foreach ($donations as $item)
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{$item->Onlinereceipt_no}}</td>
-                                    <td>{{ $item->receipt_no}}</td>
-                                    <td>{{ $item->name ?? '-' }}</td>
-                                    <td>{{ $item->gurdian_name ?? 'Donation with Online cashfree' }}</td>
-                                    <td>{{ $item->address ?? $item->donor_village }}</td>
-                                    <td>{{ $item->mobile ?? '-' }}</td>
-                                    <td>{{ $item->amountType ?? 'Donation with Online cashfree' }}</td>
-                                    <td>{{ $item->category ?? $item->donation_category }}</td>
-                                    <td>{{ $item->amount }}</td>
-                                    <td>{{ $item->date ? \Carbon\Carbon::parse($item->date)->format('d-m-Y') : 'Not Found' }}
-                                    </td>
-                                    <td>{{ $item->payment_method ?? 'Online cashfree' }}</td>
-                                    <td>{{ $item->academic_session }}</td>
+                                    <td>{{ $loop->iteration}}</td>
+                                    <td>{{ $item['online_receipt'] ?? '-' }}</td>
+                                    <td>{{ $item['receipt_no'] ?? '-' }}</td>
+                                    <td>{{ $item['name'] }}</td>
+                                    <td>{{ $item['guardian_name'] }}</td>
+                                    <td>{{ $item['address'] }}</td>
+                                    <td>{{ $item['mobile'] }}</td>
+                                    <td>{{ $item['amountType'] }}</td>
+                                    <td>{{ $item['category'] }}</td>
+                                    <td>{{ $item['amount'] }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($item['date'])->format('d-m-Y') }}</td>
+                                    <td>{{ $item['payment_method'] }}</td>
+                                    <td>{{ $item['academic_session'] }}</td>
+
                                     <td class="no-print">
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            <a href="{{ route('view-donation', $item->id) }}"
+                                            <a href="{{ route('view-donation', $item['id'] ) }}"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
                                                 title="View" style="min-width: 38px; height: 38px;">
                                                 <i class="fa-regular fa-eye"></i>
                                             </a>
                                         </div>
                                     </td>
+                                    
                                     <td class="no-print">
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            <a href="{{ route('certi-donation', $item->id) }}"
+                                            <a href="{{ route('certi-donation', $item['id'] ) }}"
                                                 class="btn btn-success btn-sm" title="View"
                                                 style="min-width: 38px; height: 38px;">
                                                 Certificate
@@ -308,7 +309,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="7" class="text-end"><strong>Total Donation Amount:</strong></td>
+                                <td colspan="9" class="text-end"><strong>Total Donation Amount:</strong></td>
                                 <td><strong>{{ $donations->sum('amount') }}</strong></td>
                                 <td colspan="5"></td>
                             </tr>

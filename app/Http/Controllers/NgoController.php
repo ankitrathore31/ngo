@@ -234,28 +234,53 @@ class NgoController extends Controller
 
         $todaydonate = $todayOffline + $todayOnline;
 
-        // cost data 
-        // Total sum of all amounts
-        $billTotal = Bill::with('items')->get()
-            ->sum(fn($bill) => $bill->items->sum(fn($item) => $item->qty * $item->rate));
+        // ================= TOTAL COST (WITH GST) =================
 
-        $voucherTotal = Bill_Voucher::with('items')->get()
-            ->sum(fn($voucher) => $voucher->items->sum(fn($item) => $item->qty * $item->rate));
+        $billTotal = Bill::with('items')->get()->sum(function ($bill) {
+            $base = $bill->items->sum(fn($i) => $i->qty * $i->rate);
+            $gst  = ($base * ($bill->cgst ?? 0) / 100)
+                + ($base * ($bill->sgst ?? 0) / 100);
+            return $base + $gst;
+        });
+
+        $voucherTotal = Bill_Voucher::with('items')->get()->sum(function ($voucher) {
+            $base = $voucher->items->sum(fn($i) => $i->qty * $i->rate);
+            $gst  = ($base * ($voucher->cgst ?? 0) / 100)
+                + ($base * ($voucher->sgst ?? 0) / 100);
+            return $base + $gst;
+        });
 
         $gbsTotal = GbsBill::sum('amount');
 
         $totalCostAmount = $billTotal + $voucherTotal + $gbsTotal;
 
-        // Today's total sum amount
-        $billToday = Bill::with('items')->whereDate('date', now())->get()
-            ->sum(fn($bill) => $bill->items->sum(fn($item) => $item->qty * $item->rate));
 
-        $voucherToday = Bill_Voucher::with('items')->whereDate('date', now())->get()
-            ->sum(fn($voucher) => $voucher->items->sum(fn($item) => $item->qty * $item->rate));
+        // ================= TODAY COST (WITH GST) =================
+
+        $billToday = Bill::with('items')
+            ->whereDate('date', now())
+            ->get()
+            ->sum(function ($bill) {
+                $base = $bill->items->sum(fn($i) => $i->qty * $i->rate);
+                $gst  = ($base * ($bill->cgst ?? 0) / 100)
+                    + ($base * ($bill->sgst ?? 0) / 100);
+                return $base + $gst;
+            });
+
+        $voucherToday = Bill_Voucher::with('items')
+            ->whereDate('date', now())
+            ->get()
+            ->sum(function ($voucher) {
+                $base = $voucher->items->sum(fn($i) => $i->qty * $i->rate);
+                $gst  = ($base * ($voucher->cgst ?? 0) / 100)
+                    + ($base * ($voucher->sgst ?? 0) / 100);
+                return $base + $gst;
+            });
 
         $gbsToday = GbsBill::whereDate('bill_date', now())->sum('amount');
 
         $todayCostAmount = $billToday + $voucherToday + $gbsToday;
+
 
         // Income Data 
         // Total income amount
@@ -298,5 +323,4 @@ class NgoController extends Controller
             'remainingBalance'
         ));
     }
-
 }

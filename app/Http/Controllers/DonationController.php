@@ -49,7 +49,7 @@ class DonationController extends Controller
         $data = academic_session::all();
         $categories = Category::orderBy('category', 'asc')->pluck('category');
         $allProjects = Project::select('name', 'category')->get();
-        $donor = $query->get()->sortByDesc('date');
+        $donor = $query->get()->sortBy('date');
 
         return view('ngo.donation.donation-list', compact('data', 'donor', 'categories', 'allProjects'));
     }
@@ -359,11 +359,51 @@ class DonationController extends Controller
             $offline->where('amountType', $request->amountType);
         }
 
-        // Get both collections and merge
-        $donations = $online->get()->merge($offline->get());
+        $onlineList = $online->get()->map(function ($x) {
+            return [
+                'id'               => $x->id,
+                'online_receipt'   => $x->Onlinereceipt_no,
+                'receipt_no'       => null,
+                'name'             => $x->name,
+                'guardian_name'    => 'Donation with Online Cashfree',
+                'address'          => $x->donor_village ?? '-',
+                'mobile'           => $x->mobile ?? '-',
+                'amountType'       => 'Online',
+                'category'         => $x->donation_category,
+                'amount'           => $x->amount,
+                'date'             => $x->date,
+                'payment_method'   => 'Online Cashfree',
+                'academic_session' => $x->academic_session,
+                'type'             => 'online',
+                'created_at'       => $x->created_at,
+            ];
+        });
 
-        // Optional: sort the merged collection (e.g., by date)
-        $donations = $donations->sortByDesc('created_at'); // or any other column you have
+        $offlineList = $offline->get()->map(function ($x) {
+            return [
+                'id'               => $x->id,
+                'online_receipt'   => null,
+                'receipt_no'       => $x->receipt_no,
+                'name'             => $x->name,
+                'guardian_name'    => $x->gurdian_name,
+                'address'          => $x->address,
+                'mobile'           => $x->mobile,
+                'amountType'       => $x->amountType,
+                'category'         => $x->category,
+                'amount'           => $x->amount,
+                'date'             => $x->date,
+                'payment_method'   => $x->payment_method,
+                'academic_session' => $x->academic_session,
+                'type'             => 'offline',
+                'created_at'       => $x->created_at,
+            ];
+        });
+
+        $donations = collect()
+            ->merge($onlineList)
+            ->merge($offlineList)
+            ->sortBy('date');
+
 
         // For academic session dropdown
         $data = academic_session::all();

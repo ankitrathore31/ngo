@@ -567,7 +567,7 @@
                         </div>
                     </div>
                 @endif
-                @if (
+                {{-- @if (
                     !$isStaff ||
                         $user->hasPermission('add-bill') ||
                         $user->hasPermission('bill-list') ||
@@ -616,7 +616,7 @@
                             </div>
                         </div>
                     </div>
-                @endif
+                @endif --}}
                 @if (
                     !$isStaff ||
                         $user->hasPermission('discover-problems') ||
