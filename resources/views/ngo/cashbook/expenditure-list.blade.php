@@ -220,7 +220,7 @@
                                 <th>Bill/Voucher/Invoice No.</th>
                                 <th>Bill/Voucher/Invoice Date</th>
                                 <th>Shop/Farm / Name</th>
-                                <th>Father/Husband Name</th>
+                                {{-- <th>Father/Husband Name</th> --}}
                                 <th>Shop/Farm / Name/Address</th>
                                 <th>Shop/Farm / Name/Mobile No.</th>
                                 <th>Expenditure Amount</th>
@@ -236,7 +236,7 @@
                                     <td>{{ $item['bill_no'] }}</td>
                                     <td>{{ \Carbon\Carbon::parse($item['date'])->format('d-m-Y') }}</td>
                                     <td>{{ $item['shop'] ?? $item['name'] }}</td>
-                                    <td>{{ $item['name'] }}</td>
+                                    {{-- <td>{{ $item['gurdian_name'] }}</td> --}}
                                     <td>{{ $item['address'] }}</td>
                                     <td>{{ $item['mobile'] ?? '-' }}</td>
                                     <td>{{ number_format($item['amount'], 2) }}</td>
@@ -248,7 +248,7 @@
                         </tbody>
                         <tfoot class="table-light">
                             <tr>
-                                <th colspan="10" class="text-end">Total Expenditure Amount:</th>
+                                <th colspan="9" class="text-end">Total Expenditure Amount:</th>
                                 <th>{{ number_format($totalAmount, 2) }}</th>
                             </tr>
                         </tfoot>

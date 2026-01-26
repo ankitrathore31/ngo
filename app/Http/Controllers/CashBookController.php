@@ -11,6 +11,7 @@ use App\Models\Category;
 use App\Models\Donation;
 use App\Models\donor_data;
 use App\Models\GbsBill;
+use App\Models\SalaryPayment;
 use App\Models\Voucher_Item;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -139,6 +140,41 @@ class CashBookController extends Controller
                 fn($q) => $q->whereBetween('bill_date', [$request->start_date, $request->end_date])
             );
 
+        $salaries = SalaryPayment::with('staff')
+            ->when($request->filled('session_filter'), function ($q) use ($request) {
+                $q->whereHas('staff', function ($s) use ($request) {
+                    $s->where('academic_session', $request->session_filter);
+                });
+            })
+            ->when($request->filled('name'), function ($q) use ($request) {
+                $q->whereHas('staff', function ($s) use ($request) {
+                    $s->where('name', 'like', '%' . $request->name . '%');
+                });
+            })
+            ->when($request->filled('address'), function ($q) use ($request) {
+                $q->whereHas('staff', function ($s) use ($request) {
+                    $s->where('village', 'like', '%' . $request->address . '%')
+                        ->orWhere('post', 'like', '%' . $request->address . '%')
+                        ->orWhere('block', 'like', '%' . $request->address . '%')
+                        ->orWhere('district', 'like', '%' . $request->address . '%')
+                        ->orWhere('state', 'like', '%' . $request->address . '%');
+                });
+            })
+            ->when($request->filled('phone'), function ($q) use ($request) {
+                $q->whereHas('staff', function ($s) use ($request) {
+                    $s->where('phone', 'like', '%' . $request->mobile . '%');
+                });
+            })
+            ->when(
+                $request->filled('today'),
+                fn($q) =>
+                $q->whereDate('payment_date', now()->toDateString())
+            )
+            ->when(
+                $request->filled('start_date') && $request->filled('end_date'),
+                fn($q) => $q->whereBetween('payment_date', [$request->start_date, $request->end_date])
+            );
+
 
         $bvList = $bv->get()->map(function ($x) {
 
@@ -213,15 +249,37 @@ class CashBookController extends Controller
             ];
         });
 
+        $salaryList = $salaries->get()->map(function ($x) {
+            return [
+                'type'          => 'salary',
+                'id'            => $x->id,
+                'bill_no'       => $x->receipt_no ?? 'RCP-' . $x->id,
+                'work_category' => 'Staff Salary',
+                'date'          => $x->payment_date,
+                'name'          => $x->staff->name,
+                'address' => collect([$x->staff->village, $x->staff->post, $x->staff->block, $x->staff->district, $x->staff->state])
+                    ->filter()
+                    ->implode(', '),
+                'email'         => $x->staff->email,
+                'mobile'        => $x->staff->phone,
+                'session'       => $x->staff->academic_session,
+                'amount'        => $x->amount,
+            ];
+        });
+
+
         // Merge and sort by 'date'
         $records = collect()
             ->merge($bvList)
             ->merge($bList)
             ->merge($gList)
-            ->sortByDesc('date');
+            ->merge($salaryList)
+            ->sortBy('date');
+
 
         // Total Amount
         $totalAmount = $records->sum('amount');
+
 
         // Session list
         $session = academic_session::all();
@@ -382,11 +440,22 @@ class CashBookController extends Controller
             ]);
         }
 
+        $salaryPayments = SalaryPayment::whereBetween('payment_date', [$startDate, $endDate])->get();
+
+        foreach ($salaryPayments as $salary) {
+            $expenses->push([
+                'category' => 'Staff Salary',
+                'amount'   => $salary->amount
+            ]);
+        }
+
+
         $expenseSummary = $expenses
             ->groupBy('category')
             ->map(fn($row) => $row->sum('amount'));
 
         $grandTotalExpense = $expenseSummary->sum();
+
 
         return view('ngo.cashbook.expenditure-income-report', compact(
             'selectedSession',

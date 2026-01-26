@@ -158,8 +158,6 @@ class SallaryController extends Controller
         ));
     }
 
-
-
     public function storeSalaryPayment(Request $request, $staffId)
     {
         $request->validate([

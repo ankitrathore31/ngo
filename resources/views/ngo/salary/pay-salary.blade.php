@@ -355,14 +355,18 @@
                                                                     </div>
                                                                     <div class="mb-3">
                                                                         <label>Payment Mode</label>
-                                                                        <select name="payment_mode" class="form-control"
-                                                                            required>
+                                                                        <select name="payment_mode"
+                                                                            class="form-control payment-mode" required>
+                                                                            <option value="">-- Select --</option>
                                                                             <option value="cash">Cash</option>
                                                                             <option value="bank">Bank</option>
                                                                             <option value="cheque">Cheque</option>
                                                                             <option value="upi">UPI</option>
                                                                         </select>
                                                                     </div>
+
+                                                                    <div class="mb-3 mode-fields"></div>
+
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="submit" class="btn btn-primary">Submit
@@ -400,55 +404,58 @@
         </div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.payment-mode').forEach(select => {
-                select.addEventListener('change', function() {
-                    let targetId = this.dataset.target;
-                    let container = document.getElementById('mode-fields-' + targetId);
-                    container.innerHTML = '';
+        document.addEventListener('change', function(e) {
+            if (!e.target.classList.contains('payment-mode')) return;
 
-                    if (this.value === 'bank') {
-                        container.innerHTML = `
-                    <div class="mb-3">
-                        <label>Bank Name</label>
-                        <input type="text" name="bank_name" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label>Bank No.</label>
-                        <input type="text" name="bank_no" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label>IFSC Code</label>
-                        <input type="text" name="ifsc_code" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label>Transaction ID</label>
-                        <input type="text" name="transaction_id" class="form-control" required>
-                    </div>
-                `;
-                    }
-                    if (this.value === 'cheque') {
-                        container.innerHTML = `
-                    <div class="mb-3">
-                        <label>Cheque No</label>
-                        <input type="text" name="cheque_no" class="form-control" required>
-                    </div>
-                `;
-                    }
-                    if (this.value === 'upi') {
-                        container.innerHTML = `
-                    <div class="mb-3">
-                        <label>UPI ID</label>
-                        <input type="text" name="upi_id" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label>Transaction ID</label>
-                        <input type="text" name="transaction_id" class="form-control" required>
-                    </div>
-                `;
-                    }
-                });
-            });
+            const select = e.target;
+            const modalBody = select.closest('.modal-body');
+            const container = modalBody.querySelector('.mode-fields');
+
+            container.innerHTML = '';
+
+            if (select.value === 'bank') {
+                container.innerHTML = `
+            <div class="mb-3">
+                <label>Bank Name</label>
+                <input type="text" name="bank_name" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label>Bank No.</label>
+                <input type="text" name="bank_no" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label>IFSC Code</label>
+                <input type="text" name="ifsc_code" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label>Transaction ID</label>
+                <input type="text" name="transaction_id" class="form-control" required>
+            </div>
+        `;
+            }
+
+            if (select.value === 'cheque') {
+                container.innerHTML = `
+            <div class="mb-3">
+                <label>Cheque No</label>
+                <input type="text" name="cheque_no" class="form-control" required>
+            </div>
+        `;
+            }
+
+            if (select.value === 'upi') {
+                container.innerHTML = `
+            <div class="mb-3">
+                <label>UPI ID</label>
+                <input type="text" name="upi_id" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label>Transaction ID</label>
+                <input type="text" name="transaction_id" class="form-control" required>
+            </div>
+        `;
+            }
         });
     </script>
+
 @endsection
