@@ -258,32 +258,27 @@
 
                                     </div>
 
-                                    {{-- Student Select --}}
                                     <div class="col-md-6 mb-2">
                                         <label>Student</label>
-                                        <select id="studentSelect" class="form-control">
-                                            <option value="">Select Student</option>
-                                            @foreach ($students as $student)
-                                                <option value="{{ $student->student_name }}">
-                                                    {{ $student->student_name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-
+                                        <input type="text" id="studentInput" class="form-control"
+                                            placeholder="Type student name and press Enter">
                                     </div>
 
-                                    {{-- Selected Students --}}
+
                                     <div class="col-md-6 mt-3">
                                         <div id="selectedStudents" class="d-flex flex-wrap gap-2">
                                             @foreach ($educationCard->students ?? [] as $studentName)
-                                                <span class="badge bg-success">
-                                                    {{ $studentName }}
+                                                <span class="badge bg-success d-flex align-items-center me-2 mb-2"
+                                                    data-value="{{ $studentName }}">
+                                                    <span class="me-2">{{ $studentName }}</span>
+                                                    <button type="button" class="btn btn-sm btn-light"
+                                                        onclick="removeStudent('{{ $studentName }}')">&times;</button>
                                                     <input type="hidden" name="students[]" value="{{ $studentName }}">
                                                 </span>
                                             @endforeach
                                         </div>
-
                                     </div>
+
 
                                     <div class="col-md-12 mt-3">
                                         <button class="btn btn-success">
@@ -317,7 +312,7 @@
                 <span class="me-2">${val}</span>
                 <button type="button"
                         class="btn btn-sm btn-light"
-                        onclick="${removeFn}('${val}')">&times;</button>
+                        onclick="${removeFn}('${val.replace(/'/g, "\\'")}')">&times;</button>
                 <input type="hidden" name="${inputName}[]" value="${val}">
             `;
 
@@ -325,36 +320,87 @@
                 });
             }
 
-            /* ---------- Student Handling ---------- */
-            document.getElementById('studentSelect').addEventListener('change', function() {
-                if (this.value && !selectedStudents.includes(this.value)) {
-                    selectedStudents.push(this.value);
-                    renderTags('selectedStudents', selectedStudents, 'students', 'removeStudent', 'bg-success');
+            /* ---------- STUDENT HANDLING (TEXT INPUT) ---------- */
+            const studentInput = document.getElementById('studentInput');
+
+            studentInput.addEventListener('keydown', function(e) {
+                if (e.key !== 'Enter') return;
+
+                e.preventDefault();
+                const value = this.value.trim();
+                if (!value) return;
+
+                // Case-insensitive duplicate check
+                const exists = selectedStudents.some(
+                    v => v.toLowerCase() === value.toLowerCase()
+                );
+
+                if (!exists) {
+                    selectedStudents.push(value);
+                    renderTags(
+                        'selectedStudents',
+                        selectedStudents,
+                        'students',
+                        'removeStudent',
+                        'bg-success'
+                    );
                 }
+
                 this.value = '';
             });
 
             function removeStudent(val) {
-                selectedStudents = selectedStudents.filter(v => v !== val);
-                renderTags('selectedStudents', selectedStudents, 'students', 'removeStudent', 'bg-success');
+                selectedStudents = selectedStudents.filter(
+                    v => v.toLowerCase() !== val.toLowerCase()
+                );
+
+                renderTags(
+                    'selectedStudents',
+                    selectedStudents,
+                    'students',
+                    'removeStudent',
+                    'bg-success'
+                );
             }
 
-            /* ---------- School Handling ---------- */
+            /* ---------- SCHOOL HANDLING (SELECT - UNCHANGED) ---------- */
             document.getElementById('schoolSelect').addEventListener('change', function() {
                 if (this.value && !selectedSchools.includes(this.value)) {
                     selectedSchools.push(this.value);
-                    renderTags('selectedSchools', selectedSchools, 'schools', 'removeSchool');
+                    renderTags(
+                        'selectedSchools',
+                        selectedSchools,
+                        'schools',
+                        'removeSchool'
+                    );
                 }
                 this.value = '';
             });
 
             function removeSchool(val) {
                 selectedSchools = selectedSchools.filter(v => v !== val);
-                renderTags('selectedSchools', selectedSchools, 'schools', 'removeSchool');
+                renderTags(
+                    'selectedSchools',
+                    selectedSchools,
+                    'schools',
+                    'removeSchool'
+                );
             }
 
             /* ---------- Initial Render ---------- */
-            renderTags('selectedStudents', selectedStudents, 'students', 'removeStudent', 'bg-success');
-            renderTags('selectedSchools', selectedSchools, 'schools', 'removeSchool');
+            renderTags(
+                'selectedStudents',
+                selectedStudents,
+                'students',
+                'removeStudent',
+                'bg-success'
+            );
+
+            renderTags(
+                'selectedSchools',
+                selectedSchools,
+                'schools',
+                'removeSchool'
+            );
         </script>
     @endsection

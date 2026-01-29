@@ -55,6 +55,21 @@ class EduactionCardController extends Controller
             });
         }
 
+        if ($request->filled('name')) {
+
+            $name = trim($request->name);
+
+            $queryBene->where(function ($q) use ($name) {
+                $q->where('name', 'like', "{$name}%")
+                    ->orWhere('gurdian_name', 'like', "{$name}%");
+            });
+
+            $queryMember->where(function ($q) use ($name) {
+                $q->where('name', 'like', "{$name}%")
+                    ->orWhere('gurdian_name', 'like', "{$name}%");
+            });
+        }
+
         if ($request->filled('reg_type')) {
             $queryBene->where('reg_type', $request->reg_type);
             $queryMember->where('reg_type', $request->reg_type);
@@ -701,16 +716,17 @@ class EduactionCardController extends Controller
         /* ---------------- Name / Guardian Name ---------------- */
 
         if ($request->filled('name')) {
-            $name = $request->name;
+
+            $name = trim($request->name);
 
             $queryBene->where(function ($q) use ($name) {
-                $q->where('name', 'like', "%{$name}%")
-                    ->orWhere('guardian_name', 'like', "%{$name}%");
+                $q->where('name', 'like', "{$name}%")
+                    ->orWhere('gurdian_name', 'like', "{$name}%");
             });
 
             $queryMember->where(function ($q) use ($name) {
-                $q->where('name', 'like', "%{$name}%")
-                    ->orWhere('guardian_name', 'like', "%{$name}%");
+                $q->where('name', 'like', "{$name}%")
+                    ->orWhere('gurdian_name', 'like', "{$name}%");
             });
         }
 
@@ -959,18 +975,20 @@ class EduactionCardController extends Controller
         }
 
         if ($request->filled('name')) {
-            $name = $request->name;
+
+            $name = trim($request->name);
 
             $queryBene->where(function ($q) use ($name) {
-                $q->where('name', 'like', "%{$name}%")
-                    ->orWhere('guardian_name', 'like', "%{$name}%");
+                $q->where('name', 'like', "{$name}%")
+                    ->orWhere('gurdian_name', 'like', "{$name}%");
             });
 
             $queryMember->where(function ($q) use ($name) {
-                $q->where('name', 'like', "%{$name}%")
-                    ->orWhere('guardian_name', 'like', "%{$name}%");
+                $q->where('name', 'like', "{$name}%")
+                    ->orWhere('gurdian_name', 'like', "{$name}%");
             });
         }
+
 
         if ($request->filled('block')) {
             $queryBene->where('block', 'like', "%{$request->block}%");

@@ -30,12 +30,6 @@
                 <div class="col-12">
                     <div class="d-flex flex-wrap gap-1">
 
-                        @if (!$isStaff || $user->hasPermission('educationfacility_add_disease'))
-                            <a href="{{ route('list.student') }}" class="btn btn-sm btn-primary">
-                                Add Student
-                            </a>
-                        @endif
-
                         @if (!$isStaff || $user->hasPermission('educationfacility_hospital_list'))
                             <a href="{{ route('list.school') }}" class="btn btn-sm btn-primary">
                                 School List
