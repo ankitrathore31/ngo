@@ -125,7 +125,7 @@
             <!-- Language Toggle -->
             <div class="d-flex justify-content-between align-records-center mb-3 mt-4">
                 <h5 class="mb-0">
-                    <span>Demand Education Card Facility </span>
+                    <span>Edit Demand Education Card Facility </span>
                 </h5>
                 <div>
                     <button onclick="window.print()" class="btn btn-primary">Print </button>
@@ -188,11 +188,11 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-sm-6 mb-3">
-                                    <h4><b>Education Card No:</b> <b>{{ $educationCard->educationcard_no }}</b></h4>
+                                    <h4><b>Education Card No:</b> <b>{{ $card->card_no }}</b></h4>
                                 </div>
                                 <div class="col-sm-6 mb-3">
                                     <strong>Education Card Registraition Date:</strong>
-                                    {{ \Carbon\Carbon::parse($educationCard->education_registration_date)->format('d-m-Y') }}
+                                    {{ \Carbon\Carbon::parse($card->education_registration_date)->format('d-m-Y') }}
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -276,8 +276,8 @@
 
                                 <div class="col-sm-12 mb-3">
                                     <strong>Student Name:</strong>
-                                    @if (!empty($educationCard->students))
-                                        @foreach ($educationCard->students as $student)
+                                    @if (!empty($card->students))
+                                        @foreach ($card->students as $student)
                                             {{ $loop->iteration }}. {{ $student }}@if (!$loop->last)
                                                 ,
                                             @endif
@@ -288,8 +288,8 @@
                                 <div class="col-sm-12 mb-3">
                                     <strong>School / Instituion / Tuition / Teacher Name:</strong>
 
-                                    @if (!empty($educationCard->school_name))
-                                        @foreach ($educationCard->school_name as $index => $SchoolCode)
+                                    @if (!empty($card->school_name))
+                                        @foreach ($card->school_name as $index => $SchoolCode)
                                             @php
                                                 $school = \App\Models\School::getByCode($SchoolCode);
                                             @endphp
@@ -314,58 +314,90 @@
             </div>
             <div class="card">
                 <div class="card-header">
-                    <h5>Education Demand Facility</h5>
+                    <h5>Edit Education Demand Facility</h5>
                 </div>
+
                 <div class="card-body">
-                    <form action="{{ route('demand.education.facility.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('demand.education.facility.update', $facility->id) }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
-                        <input type="text" name="card_id" value="{{ $educationCard->id }}" hidden>
-                        <input type="text"name="reg_id" value="{{ $record->id }}" hidden>
+                        <input type="hidden" name="card_id" value="{{ $card->id }}">
+                        <input type="hidden" name="reg_id" value="{{ $record->id }}">
+
                         <div class="row">
+
+                            <!-- Fees Type -->
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Type Of Student Fees</label>
                                 <select name="fees_type" class="form-control" required>
                                     <option value="">-- Select Type --</option>
-                                    <option value="School">School</option>
-                                    <option value="Coaching">Coaching</option>
-                                    <option value="Book Shop">Book Shop</option>
-                                    <option value="Teacher">Teacher</option>
+                                    <option value="School" {{ $facility->fees_type == 'School' ? 'selected' : '' }}>School
+                                    </option>
+                                    <option value="Coaching" {{ $facility->fees_type == 'Coaching' ? 'selected' : '' }}>
+                                        Coaching</option>
+                                    <option value="Book Shop"{{ $facility->fees_type == 'Book Shop' ? 'selected' : '' }}>
+                                        Book Shop</option>
+                                    <option value="Teacher" {{ $facility->fees_type == 'Teacher' ? 'selected' : '' }}>
+                                        Teacher</option>
                                 </select>
                             </div>
+
+                            <!-- Registration No -->
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Registration No / SR No</label>
-                                <input type="text" name="registration_no" class="form-control" required>
+                                <input type="text" name="registration_no" class="form-control"
+                                    value="{{ $facility->registration_no }}" required>
                             </div>
 
+                            <!-- Fees Slip No -->
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Fees Slip No</label>
-                                <input type="text" name="fees_slip_no" class="form-control" required>
+                                <input type="text" name="fees_slip_no" class="form-control"
+                                    value="{{ $facility->fees_slip_no }}" required>
                             </div>
 
+                            <!-- Submit Date -->
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Fees Submit Date</label>
                                 <input type="date" name="fees_submit_date" id="fees_submit_date" class="form-control"
-                                    required>
+                                    value="{{ $facility->fees_submit_date }}" required>
 
                                 <small id="dateError" class="text-danger d-none">
                                     Warning - Please enter a date within the last month.
                                 </small>
                             </div>
 
+                            <!-- Fees Amount -->
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Total Fees Amount</label>
-                                <input type="number" name="fees_amount" class="form-control" required>
+                                <input type="number" name="fees_amount" class="form-control"
+                                    value="{{ $facility->fees_amount }}" required>
                             </div>
 
+                            <!-- Slip Upload -->
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Fees Slip Upload</label>
                                 <input type="file" name="slip" class="form-control">
+
+                                @if ($facility->slip)
+                                    <small class="d-block mt-1">
+                                        Current Slip:
+                                        <a href="{{ asset( $facility->slip) }}" target="_blank">
+                                            View
+                                        </a>
+                                    </small>
+                                @endif
                             </div>
+
                         </div>
-                        <button type="submit" class="btn btn-primary">Save</button>
+
+                        <button type="submit" class="btn btn-primary">
+                            Update
+                        </button>
                     </form>
                 </div>
             </div>
+
         </div>
     </div>
     <script>

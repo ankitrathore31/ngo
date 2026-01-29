@@ -387,7 +387,7 @@
                             <input type="date" name="bill_date" class="form-control">
 
                             <small class="text-danger">
-                                Please submit the bill for only one month with the current date.
+                                Warning - Please enter a date within the last month.
                             </small>
                         </div>
 
