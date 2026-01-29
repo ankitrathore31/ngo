@@ -341,6 +341,20 @@
                                         Teacher</option>
                                 </select>
                             </div>
+                            <div class="col-md-6 mb-2">
+                                <label for="school">School / Coaching / Bookshop / Teacher</label>
+                                <select name="school" id="school" class="form-control">
+                                    <option value="">Select School</option>
+                                    @foreach ($schools as $school)
+                                        <option value="{{ $school->school_code }}"
+                                            {{ isset($facility) && $facility->school == $school->school_code ? 'selected' : '' }}>
+                                            {{ $school->school_name }} ({{ $school->school_code }}),
+                                            {{ $school->principal_name }}, {{ $school->address }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
 
                             <!-- Registration No -->
                             <div class="col-md-6 mb-3">
@@ -361,9 +375,8 @@
                                 <label class="form-label">Fees Submit Date</label>
                                 <input type="date" name="fees_submit_date" id="fees_submit_date" class="form-control"
                                     value="{{ $facility->fees_submit_date }}" required>
-
                                 <small id="dateError" class="text-danger d-none">
-                                    Warning - Please enter a date within the last month.
+                                    Warning - Please enter a date within the next 30 days.
                                 </small>
                             </div>
 
@@ -382,7 +395,7 @@
                                 @if ($facility->slip)
                                     <small class="d-block mt-1">
                                         Current Slip:
-                                        <a href="{{ asset( $facility->slip) }}" target="_blank">
+                                        <a href="{{ asset($facility->slip) }}" target="_blank">
                                             View
                                         </a>
                                     </small>
@@ -424,11 +437,11 @@
                 selectedDate.setHours(0, 0, 0, 0);
                 currentDate.setHours(0, 0, 0, 0);
 
-                // Difference in days
-                const diffTime = Math.abs(currentDate - selectedDate);
-                const diffDays = diffTime / (1000 * 60 * 60 * 24);
+                // Calculate date 30 days from now
+                const maxDate = new Date(currentDate);
+                maxDate.setDate(maxDate.getDate() + 30);
 
-                if (diffDays > 30) {
+                if (selectedDate < currentDate || selectedDate > maxDate) {
                     errorMsg.classList.remove('d-none');
                     dateInput.classList.add('is-invalid');
                     return false;
@@ -440,6 +453,4 @@
             }
         });
     </script>
-
-
 @endsection

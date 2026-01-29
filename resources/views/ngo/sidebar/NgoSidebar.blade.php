@@ -731,7 +731,8 @@
                                         Report</a></li>
                             @endif
                             @if (!$isStaff || $user->hasPermission('year-wise-report'))
-                                <li><a class="dropdown-item" href="{{ route('income.expenditure.view') }}">Work Category Laser Acoount Income / Expenditure List</a></li>
+                                <li><a class="dropdown-item" href="{{ route('income.expenditure.view') }}">Work
+                                        Category Laser Acoount Income / Expenditure List</a></li>
                             @endif
                         </ul>
                     </li>
@@ -864,26 +865,41 @@
                 @endif
 
                 {{-- Facility Main Menu --}}
-                @if (!$isStaff || $user->hasPermission('facility_access'))
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-building"></i> FACILITY
-                        </a>
-                        <ul class="dropdown-menu bg-primary">
-                            @if (!$isStaff || $user->hasPermission('health_facility'))
-                                <li><a class="dropdown-item" href="{{ route('generatelist.healthcard') }}">
-                                        Health Card Facility
-                                    </a></li>
-                            @endif
-                            {{-- Education Facility Menu --}}
-                            @if (!$isStaff || $user->hasPermission('education_facility'))
-                                <li><a class="dropdown-item" href="{{ route('eduaction.reg.list') }}">
-                                        Eduaction Card Facility
-                                    </a></li>
-                            @endif
-                        </ul>
-                    </li>
-                @endif
+                {{-- @if (!$isStaff || $user->hasPermission('facility_access')) --}}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
+                        <i class="fas fa-building"></i> FACILITY
+                    </a>
+                    <ul class="dropdown-menu bg-primary">
+                        @if (!$isStaff || $user->hasPermission('health_facility'))
+                            <li><a class="dropdown-item" href="{{ route('generatelist.healthcard') }}">
+                                    Health Card Facility
+                                </a></li>
+                        @endif
+                        {{-- Education Facility Menu --}}
+                        @if (!$isStaff || $user->hasPermission('education_facility'))
+                            <li><a class="dropdown-item" href="{{ route('eduaction.reg.list') }}">
+                                    Eduaction Card Facility
+                                </a></li>
+                        @endif
+                        @if (ShowFacilityMenu())
+                            <li>
+                                <a class="dropdown-item" href="{{ route('education.list.Investigationfacility') }}">
+                                    Education Investigation Facility
+                                </a>
+                            </li>
+                        @endif
+                         @if (ShowFacilityMenu())
+                            <li>
+                                <a class="dropdown-item" href="{{ route('education.list.Verifyfacility') }}">
+                                    Education Verify Facility
+                                </a>
+                            </li>
+                        @endif
+
+                    </ul>
+                </li>
+                {{-- @endif --}}
 
             </ul>
         </div>
