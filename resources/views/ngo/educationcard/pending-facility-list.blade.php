@@ -28,36 +28,14 @@
                         $user = auth()->user();
                         $isStaff = $user && $user->user_type === 'staff';
                     @endphp
-                    @if (!$isStaff || $user->hasPermission('educationfacility_add_disease'))
-                        <a href="{{ route('list.student') }}" class="btn btn-sm btn-primary">
-                            Add Student
-                        </a>
-                    @endif
-
-                    @if (!$isStaff || $user->hasPermission('educationfacility_hospital_list'))
-                        <a href="{{ route('list.school') }}" class="btn btn-sm btn-primary">
-                            School List
-                        </a>
-                    @endif
-
-                    @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_generate'))
-                        <a href="{{ route('eduaction.reg.list') }}" class="btn btn-sm btn-primary">
-                            Education Card Generate
-                        </a>
-                    @endif
-
-                    @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
-                        <a href="{{ route('eduaction.card.list') }}" class="btn btn-sm btn-primary">
-                            Education Card List
-                        </a>
-                    @endif
 
                     @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
                         <a href="{{ route('eduaction.demand.list') }}" class="btn btn-sm btn-primary">
                             Demand Facility
                         </a>
                     @endif
-                     @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
+
+                    @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
                         <a href="{{ route('eduaction.demand.pending.list') }}" class="btn btn-sm btn-primary">
                             Demand Pending Facility
                         </a>

@@ -242,19 +242,14 @@
 
                                     <div class="col-md-6 mb-2">
                                         <label>Student</label>
-                                        <select id="studentSelect" class="form-control">
-                                            <option value="">Select Student</option>
-                                            @foreach ($students as $student)
-                                                <option value="{{ $student->student_name }}">
-                                                    {{ $student->student_name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
+                                        <input type="text" id="studentInput" class="form-control"
+                                            placeholder="Enter student name and press Enter">
                                     </div>
 
                                     <div class="col-md-6 mt-3">
                                         <div id="selectedStudents" class="d-flex flex-wrap gap-2"></div>
                                     </div>
+
 
 
                                     <div class="col-md-12 mt-3">
@@ -294,19 +289,28 @@
                 });
             }
 
-            /* ---------- Student ---------- */
-            document.getElementById('studentSelect').addEventListener('change', function() {
-                if (this.value && !selectedStudents.includes(this.value)) {
-                    selectedStudents.push(this.value);
-                    renderTags('selectedStudents', selectedStudents, 'students', 'removeStudent');
+            /* ---------- Student (Text Input) ---------- */
+            document.getElementById('studentInput').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+
+                    const value = this.value.trim();
+
+                    if (value && !selectedStudents.includes(value)) {
+                        selectedStudents.push(value);
+                        renderTags('selectedStudents', selectedStudents, 'students', 'removeStudent');
+                    }
+
+                    this.value = '';
                 }
-                this.value = '';
             });
 
             function removeStudent(val) {
                 selectedStudents = selectedStudents.filter(v => v !== val);
                 renderTags('selectedStudents', selectedStudents, 'students', 'removeStudent');
             }
+
+
 
             /* ---------- School ---------- */
             document.getElementById('schoolSelect').addEventListener('change', function() {
