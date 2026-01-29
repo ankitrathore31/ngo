@@ -225,7 +225,7 @@
 
                                     <!-- School Select -->
                                     <div class="col-md-6 mb-2">
-                                        <label>School</label>
+                                        <label>School/ Coaching Center / Book Shop/ Teacher Name</label>
                                         <select id="schoolSelect" class="form-control">
                                             <option value="">Select School</option>
                                             @foreach ($schools as $school)

@@ -6,6 +6,7 @@ use App\Models\academic_session;
 use App\Models\beneficiarie;
 use App\Models\Education_class;
 use App\Models\EducationCard;
+use App\Models\EducationFacility;
 use App\Models\Member;
 use App\Models\School;
 use App\Models\Signature;
@@ -793,5 +794,231 @@ class EduactionCardController extends Controller
         $signatures = Signature::pluck('file_path', 'role');
 
         return view('ngo.educationcard.demand-facility', compact('record', 'educationCard', 'signatures'));
+    }
+
+    public function StoreDemandFacility(Request $request)
+    {
+        $data = $request->validate([
+            'reg_id' => 'required',
+            'card_id' => 'required',
+            'fees_type' => 'required',
+            'registration_no' => 'required',
+            'fees_slip_no' => 'required',
+            'fees_submit_date' => 'required|date',
+            'fees_amount' => 'required|numeric',
+            'slip' => 'nullable|file'
+        ]);
+
+        if ($request->hasFile('slip')) {
+            $file = $request->file('slip');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('documents'), $filename);
+            $data['slip'] = $filename;
+        }
+        $data['status'] = 'Pending';
+        EducationFacility::create($data);
+
+        return redirect()->route('eduaction.demand.list')->with('success', 'Education Demand Facility Added Successfully');
+    }
+
+    public function EditFacility(EducationFacility $facility)
+    {
+        $card = $facility->educationCard; // ✅ FIXED
+
+        if (!$card) {
+            return redirect()->back()->with('error', 'Education Card not found.');
+        }
+
+        $record = beneficiarie::find($card->reg_id)
+            ?? Member::find($card->reg_id);
+
+        if (!$record) {
+            return redirect()->back()->with('error', 'Person not found.');
+        }
+
+        return view(
+            'ngo.educationcard.edit-demand',
+            compact('facility', 'card', 'record')
+        );
+    }
+
+    public function UpdateDemandFacility(Request $request, EducationFacility $facility)
+    {
+        $data = $request->validate([
+            'reg_id'            => 'required',
+            'card_id'           => 'required',
+            'fees_type'         => 'required',
+            'registration_no'   => 'required',
+            'fees_slip_no'      => 'required',
+            'fees_submit_date'  => 'required|date',
+            'fees_amount'       => 'required|numeric',
+            'slip'              => 'nullable|file'
+        ]);
+
+        if ($request->hasFile('slip')) {
+
+            if ($facility->slip && file_exists(public_path('documents/' . $facility->slip))) {
+                unlink(public_path('documents/' . $facility->slip));
+            }
+
+            $file = $request->file('slip');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('documents'), $filename);
+
+            $data['slip'] = $filename;
+        }
+
+        $facility->update($data);
+
+        return redirect()->route('eduaction.demand.pending.list')->with('success', 'Education Demand Facility Updated Successfully');
+    }
+
+    public function DeleteDemandFacility($id)
+    {
+        $facility = EducationFacility::findOrFail($id);
+
+        /* ---------- Delete Slip File ---------- */
+        if ($facility->slip && file_exists(public_path('documents/' . $facility->slip))) {
+            unlink(public_path('documents/' . $facility->slip));
+        }
+
+        /* ---------- Delete Record ---------- */
+        $facility->delete();
+
+        return redirect()->back()->with('success', 'Education Demand Facility Deleted Successfully');
+    }
+
+    public function ShowFacility(EducationFacility $facility)
+    {
+        $card = $facility->educationCard; // ✅ FIXED
+
+        if (!$card) {
+            return redirect()->back()->with('error', 'Education Card not found.');
+        }
+
+        $record = beneficiarie::find($card->reg_id)
+            ?? Member::find($card->reg_id);
+
+        if (!$record) {
+            return redirect()->back()->with('error', 'Person not found.');
+        }
+
+        return view(
+            'ngo.educationcard.show-demand-facility',
+            compact('facility', 'card', 'record')
+        );
+    }
+
+    public function EducationDemandPendingList(Request $request)
+    {
+        /* ---------- Education Card + Facility Constraint ---------- */
+
+        $educationCardConstraint = function ($q) use ($request) {
+            $q->where('status', 1)
+                ->whereHas('educationFacilities', function ($ef) {
+                    $ef->where('status', 'Pending');
+                })
+                ->with(['educationFacilities' => function ($ef) {
+                    $ef->where('status', 'Pending');
+                }]);
+
+            if ($request->filled('educationcard_no')) {
+                $q->where('educationcard_no', trim($request->educationcard_no));
+            }
+        };
+
+        /* ---------- Base Queries ---------- */
+
+        $queryBene = beneficiarie::with(['educationCards' => $educationCardConstraint])
+            ->where('status', 1)
+            ->whereHas('educationCards', $educationCardConstraint);
+
+        $queryMember = Member::with(['educationCards' => $educationCardConstraint])
+            ->where('status', 1)
+            ->whereHas('educationCards', $educationCardConstraint);
+
+        /* ---------- Filters (same as education demand) ---------- */
+
+        if ($request->filled('session_filter')) {
+            $queryBene->where('academic_session', $request->session_filter);
+            $queryMember->where('academic_session', $request->session_filter);
+        }
+
+        if ($request->filled('application_no')) {
+            $search = $request->application_no;
+
+            $queryBene->where('application_no', 'like', "%{$search}%");
+            $queryMember->where('application_no', 'like', "%{$search}%");
+        }
+
+        if ($request->filled('registration_no')) {
+            $search = $request->registration_no;
+
+            $queryBene->where('registration_no', 'like', "%{$search}%");
+            $queryMember->where('registration_no', 'like', "%{$search}%");
+        }
+
+        if ($request->filled('name')) {
+            $name = $request->name;
+
+            $queryBene->where(function ($q) use ($name) {
+                $q->where('name', 'like', "%{$name}%")
+                    ->orWhere('guardian_name', 'like', "%{$name}%");
+            });
+
+            $queryMember->where(function ($q) use ($name) {
+                $q->where('name', 'like', "%{$name}%")
+                    ->orWhere('guardian_name', 'like', "%{$name}%");
+            });
+        }
+
+        if ($request->filled('block')) {
+            $queryBene->where('block', 'like', "%{$request->block}%");
+            $queryMember->where('block', 'like', "%{$request->block}%");
+        }
+
+        if ($request->filled('state')) {
+            $queryBene->where('state', $request->state);
+            $queryMember->where('state', $request->state);
+        }
+
+        if ($request->filled('district')) {
+            $queryBene->where('district', $request->district);
+            $queryMember->where('district', $request->district);
+        }
+
+        /* ---------- Fetch Data ---------- */
+
+        $beneficiaries = $queryBene->get();
+        $members       = $queryMember->get();
+
+        /* ---------- Flatten: Card + Facility ---------- */
+
+        $combined = collect()
+            ->merge($beneficiaries)
+            ->merge($members)
+            ->flatMap(function ($item) {
+                return $item->educationCards->flatMap(function ($card) use ($item) {
+                    return $card->educationFacilities->map(function ($facility) use ($item, $card) {
+                        return [
+                            'person'   => $item,
+                            'card'     => $card,
+                            'facility' => $facility,
+                        ];
+                    });
+                });
+            })
+            ->sortBy(fn($row) => $row['facility']->created_at)
+            ->values();
+
+        /* ---------- Extra Data ---------- */
+
+        $data   = academic_session::all();
+        $states = config('states');
+
+        return view(
+            'ngo.educationcard.pending-facility-list',
+            compact('combined', 'data', 'states')
+        );
     }
 }

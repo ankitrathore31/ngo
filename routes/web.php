@@ -240,7 +240,7 @@ Route::controller(BeneficiarieController::class)->group(function () {
     Route::get('ngo/show-beneficiarie-facilities/{beneficiarie_id}/survey/{survey_id}', 'showbeneficiariefacilities')->middleware('auth')->name('show-beneficiarie-facilities');
     Route::get('ngo/edit-facilities/{beneficiarie_id}/survey/{survey_id}', 'editFacilities')->middleware('auth')->name('edit-facilities');
     Route::post('ngo/update-facilities/{beneficiarie_id}/survey/{survey_id}', 'updateFacilities')->middleware('auth')->name('update-facilities');
-        Route::get('ngo/delete-beneficiarie-facilities/{id}', 'deleteBeneficiarieFacilities')->middleware('auth')->name('delete.beneficiarie.facilities');
+    Route::get('ngo/delete-beneficiarie-facilities/{id}', 'deleteBeneficiarieFacilities')->middleware('auth')->name('delete.beneficiarie.facilities');
     Route::get('ngo/distribute-beneficiarie-facilities/{beneficiarie_id}/survey/{survey_id}', 'distributebeneficiarieFacilities')->middleware('auth')->name('distribute-beneficiarie-facilities');
     Route::post('ngo/store-distribute-facilities/{beneficiarie_id}/survey/{survey_id}', 'storedistributefacilities')->middleware('auth')->name('store-distribute-facilities');
     Route::get('ngo/edit-distribute-facilities/{beneficiarie_id}/survey/{survey_id}', 'EditDistributeFacilities')->middleware('auth')->name('edit-distribute-facilities');
@@ -259,7 +259,7 @@ Route::controller(BeneficiarieController::class)->group(function () {
     Route::post('/beneficiaries/facilities/bulk-store',  'storeBulkBeneficiarieFacilities')->middleware('auth')
         ->name('store-bulk-beneficiarie-facilities');
     Route::get('ngo/show-beneficiarie-token', 'showbeneficiarietoken')->middleware('auth')->name('show-beneficiarie-token');
-        // Route::get('ngo/show-beneficiarie-token/{beneficiarie_id}/survey/{survey_id}', 'showbeneficiarietoken')->middleware('auth')->name('show-beneficiarie-token');
+    // Route::get('ngo/show-beneficiarie-token/{beneficiarie_id}/survey/{survey_id}', 'showbeneficiarietoken')->middleware('auth')->name('show-beneficiarie-token');
     Route::get('ngo/show-beneficiarie-receipt/{beneficiarie_id}/survey/{survey_id}', 'showbeneficiarieRecipt')->middleware('auth')->name('show-beneficiarie-receipt');
     Route::post('ngo/store-bulk-beneficiarie', 'storeBulkBeneficiarie')->middleware('auth')->name('store-bulk-beneficiarie');
     Route::post('ngo/store-bulk-distribute', 'storeBulkDistribute')->middleware('auth')->name('store-bulk-distribute');
@@ -267,8 +267,6 @@ Route::controller(BeneficiarieController::class)->group(function () {
     Route::get('ngo/delete-distribute-facilities/{beneficiarie_id}/survey/{survey_id}', 'DeleteDistribueFacilities')->middleware('auth')->name('delete-distribute-facilities');
     Route::get('ngo/delete-distribute-facilities-status/{beneficiarie_id}/survey/{survey_id}', 'DeleteDistribueFacilitiesStatus')->middleware('auth')->name('delete-distribute-facilities-status');
     Route::get('ngo/delete-distribute-facilities-all/{beneficiarie_id}/survey/{survey_id}', 'deleteBeneficiarieFacilitiesAll')->middleware('auth')->name('delete-distribute-facilities-all');
-
-
 });
 
 Route::controller(WorkingAreaController::class)->group(function () {
@@ -508,7 +506,6 @@ Route::controller(CashBookController::class)->middleware('auth')->group(function
     Route::get('ngo/balance-report', 'BalanceReportView')->name('balance.report.view');
     Route::get('ngo/generate-balance-report', 'generateMonthlyReport')->name('balance.report.generate');
     Route::get('ngo/income-expenditure-report', 'IncomeExpenditureReport')->name('income.expenditure.view');
-
 });
 
 Route::controller(CourseController::class)->middleware('auth')->group(function () {
@@ -636,10 +633,16 @@ Route::controller(EduactionCardController::class)->middleware('auth')->group(fun
     Route::get('ngo/delete-educationcard/{id}', 'DeleteEducationCard')->name('delete.educationcard');
     Route::get('ngo/education-demand-list', 'EducationDemandList')->name('eduaction.demand.list');
     Route::get('ngo/demand-education-facility/{id}/{education_id}', 'DemandEducationFacility')->name('demand.education.facility');
+    Route::post('ngo/store-demand-education-facility', 'StoreDemandFacility')->name('demand.education.facility.store');
+    Route::get('ngo/education-demand-pending-list', 'EducationDemandPendingList')->name('eduaction.demand.pending.list');
+    Route::get('ngo/edit-demand-education-facility/{facility}', 'EditFacility')->name('demand.education.facility.edit');
+    Route::post('ngo/update-demand-education-facility', 'UpdateDemandFacility')->name('demand.education.facility.update');
+    Route::delete('ngo/demand/education/facility/{id}','DeleteDemandFacility')->name('demand.education.facility.delete');
+    Route::get('ngo/show-demand-education-facility/{facility}', 'ShowFacility')->name('demand.education.facility.show');
 
 });
 
-Route::controller(KycController::class)->middleware('auth')->group(function(){
+Route::controller(KycController::class)->middleware('auth')->group(function () {
     Route::get('ngo/beneficiarie-list-for-kyc', 'BeneficiarieListForKyc')->name('list-for-kyc');
     Route::get('ngo/beneficiarie-kyc/{id}', 'BeneficiarieKyc')->name('beneficiare-kyc');
     Route::post('ngo/kyc-store/{id}', 'StoreKyc')->name('kyc.store');
@@ -651,7 +654,6 @@ Route::controller(KycController::class)->middleware('auth')->group(function(){
     Route::get('ngo/reject-list-kyc', 'RejectKycList')->name('list.reject.kyc');
     Route::get('ngo/show-kyc/{id}/{kyc_id}', 'ShowKyc')->name('show.kyc');
     Route::get('ngo/delete-kyc/{id}/{kyc_id}', 'DeleteKyc')->name('delete-beneficiare-kyc');
-    
 });
 
 

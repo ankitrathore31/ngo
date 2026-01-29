@@ -125,7 +125,7 @@
             <!-- Language Toggle -->
             <div class="d-flex justify-content-between align-records-center mb-3 mt-4">
                 <h5 class="mb-0">
-                    <span>Demand Education Card Facility </span>
+                    <span>Education Facility Card</span>
                 </h5>
                 <div>
                     <button onclick="window.print()" class="btn btn-primary">Print </button>
@@ -134,9 +134,9 @@
                 </div>
             </div>
             <div class=" rounded print-card">
-                <div class="">
+                <div class="" style="border: 9px solid red;">
                     <div>
-                        <div class="p-2" s>
+                        <div class="p-2" style="border: 9px solid #138808;">
                             <div class="text-center mb-4 border-bottom pb-2">
                                 <div class="row mb-2">
                                     <div class="col-sm-12">
@@ -160,7 +160,9 @@
                                         <h5> <strong>
                                                 <span>The Path To Peace And Development</span></strong></h5>
                                         <h6 style="color: blue;"><b>
-
+                                                <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत,
+                                                    उत्तर प्रदेश -
+                                                    262121</span>
                                                 <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District -
                                                     Pilibhit, UP -
                                                     262121</span>
@@ -188,11 +190,11 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-sm-6 mb-3">
-                                    <h4><b>Education Card No:</b> <b>{{ $educationCard->educationcard_no }}</b></h4>
+                                    <h4><b>Education Card No:</b> <b>{{ $card->card_no }}</b></h4>
                                 </div>
                                 <div class="col-sm-6 mb-3">
                                     <strong>Education Card Registraition Date:</strong>
-                                    {{ \Carbon\Carbon::parse($educationCard->education_registration_date)->format('d-m-Y') }}
+                                    {{ \Carbon\Carbon::parse($card->education_registration_date)->format('d-m-Y') }}
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -276,8 +278,8 @@
 
                                 <div class="col-sm-12 mb-3">
                                     <strong>Student Name:</strong>
-                                    @if (!empty($educationCard->students))
-                                        @foreach ($educationCard->students as $student)
+                                    @if (!empty($card->students))
+                                        @foreach ($card->students as $student)
                                             {{ $loop->iteration }}. {{ $student }}@if (!$loop->last)
                                                 ,
                                             @endif
@@ -288,8 +290,8 @@
                                 <div class="col-sm-12 mb-3">
                                     <strong>School / Instituion / Tuition / Teacher Name:</strong>
 
-                                    @if (!empty($educationCard->school_name))
-                                        @foreach ($educationCard->school_name as $index => $SchoolCode)
+                                    @if (!empty($card->school_name))
+                                        @foreach ($card->school_name as $index => $SchoolCode)
                                             @php
                                                 $school = \App\Models\School::getByCode($SchoolCode);
                                             @endphp
@@ -307,107 +309,104 @@
                                     @endif
 
                                 </div>
+
+
+                            </div>
+                            <div class="row">
+                                <div>
+                                    <h5>Education Demand Facility Details</h5>
+                                </div>
+
+
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Fees Type:</strong> {{ $facility->fees_type }}
+                                </div>
+
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Registration / SR No:</strong> {{ $facility->registration_no }}
+                                </div>
+
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Fees Slip No:</strong> {{ $facility->fees_slip_no }}
+                                </div>
+
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Fees Submit Date:</strong>
+                                    {{ \Carbon\Carbon::parse($facility->fees_submit_date)->format('d-m-Y') }}
+                                </div>
+
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Total Fees Amount:</strong> ₹{{ number_format($facility->fees_amount, 2) }}
+                                </div>
+
+                                {{-- <div class="col-sm-4 mb-3">
+                                    <strong>Facility Status:</strong>
+                                    <span class="badge bg-warning">{{ $facility->status }}</span>
+                                </div> --}}
+
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Slip Document:</strong>
+                                    @if ($facility->slip)
+                                        <a href="{{ asset('documents/' . $facility->slip) }}" target="_blank">
+                                            View
+                                        </a>
+                                    @else
+                                        N/A
+                                    @endif
+                                </div>
+
+                            </div>
+
+                            <div class="row d-flex justify-content-around mt-5">
+                                <div class="col-sm-6 text-center">
+                                </div>
+
+                                <div class="col-sm-6 text-center">
+                                    @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
+                                        <div id="directorSignatureBox" class="mt-2">
+                                            <p class="text-success no-print">Attached</p>
+                                            <img src="{{ asset($signatures['director']) }}" alt="Director Signature"
+                                                class="img" style="max-height: 80px;">
+                                            <br>
+                                            <button class="btn btn-danger btn-sm mt-2 no-print"
+                                                onclick="toggleDirector(false)">Remove</button>
+                                        </div>
+
+                                        <div id="directorShowBtnBox" class="mt-2 d-none no-print">
+                                            <button class="btn btn-primary btn-sm" onclick="toggleDirector(true)">Attached
+                                                Signature</button>
+                                        </div>
+                                    @else
+                                        <p class="text-muted mt-2 no-print">Not attached</p>
+                                    @endif
+                                    <strong class="text-danger">Digitally Signed By <br>
+                                        MANOJ KUMAR RATHOR <br>
+                                        DIRECTOR
+                                    </strong><br>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card">
-                <div class="card-header">
-                    <h5>Education Demand Facility</h5>
-                </div>
-                <div class="card-body">
-                    <form action="{{ route('demand.education.facility.store') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <input type="text" name="card_id" value="{{ $educationCard->id }}" hidden>
-                        <input type="text"name="reg_id" value="{{ $record->id }}" hidden>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Type Of Student Fees</label>
-                                <select name="fees_type" class="form-control" required>
-                                    <option value="">-- Select Type --</option>
-                                    <option value="School">School</option>
-                                    <option value="Coaching">Coaching</option>
-                                    <option value="Book Shop">Book Shop</option>
-                                    <option value="Teacher">Teacher</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Registration No / SR No</label>
-                                <input type="text" name="registration_no" class="form-control" required>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Fees Slip No</label>
-                                <input type="text" name="fees_slip_no" class="form-control" required>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Fees Submit Date</label>
-                                <input type="date" name="fees_submit_date" id="fees_submit_date" class="form-control"
-                                    required>
-
-                                <small id="dateError" class="text-danger d-none">
-                                    Warning - Please enter a date within the last month.
-                                </small>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Total Fees Amount</label>
-                                <input type="number" name="fees_amount" class="form-control" required>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Fees Slip Upload</label>
-                                <input type="file" name="slip" class="form-control">
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </form>
-                </div>
-            </div>
         </div>
-    </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-
-            const dateInput = document.getElementById('fees_submit_date');
-            const errorMsg = document.getElementById('dateError');
-            const form = dateInput.closest('form');
-
-            dateInput.addEventListener('change', validateDate);
-            form.addEventListener('submit', function(e) {
-                if (!validateDate()) {
-                    e.preventDefault();
-                }
-            });
-
-            function validateDate() {
-                if (!dateInput.value) return false;
-
-                const selectedDate = new Date(dateInput.value);
-                const currentDate = new Date();
-
-                // Remove time part
-                selectedDate.setHours(0, 0, 0, 0);
-                currentDate.setHours(0, 0, 0, 0);
-
-                // Difference in days
-                const diffTime = Math.abs(currentDate - selectedDate);
-                const diffDays = diffTime / (1000 * 60 * 60 * 24);
-
-                if (diffDays > 30) {
-                    errorMsg.classList.remove('d-none');
-                    dateInput.classList.add('is-invalid');
-                    return false;
-                } else {
-                    errorMsg.classList.add('d-none');
-                    dateInput.classList.remove('is-invalid');
-                    return true;
-                }
+        <script>
+            function setLanguage(lang) {
+                document.querySelectorAll('[data-lang]').forEach(el => {
+                    el.style.display = el.getAttribute('data-lang') === lang ? 'inline' : 'none';
+                });
             }
-        });
-    </script>
+            window.onload = () => setLanguage('en'); // Set Eng as default
+        </script>
+        <script>
+            function togglePM(show) {
+                document.getElementById('pmSignatureBox').classList.toggle('d-none', !show);
+                document.getElementById('pmShowBtnBox').classList.toggle('d-none', show);
+            }
 
-
-@endsection
+            function toggleDirector(show) {
+                document.getElementById('directorSignatureBox').classList.toggle('d-none', !show);
+                document.getElementById('directorShowBtnBox').classList.toggle('d-none', show);
+            }
+        </script>
+    @endsection
