@@ -317,7 +317,8 @@
                     <h5>Education Demand Facility</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('demand.education.facility.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('demand.education.facility.store') }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
                         <input type="text" name="card_id" value="{{ $educationCard->id }}" hidden>
                         <input type="text"name="reg_id" value="{{ $record->id }}" hidden>
@@ -327,9 +328,22 @@
                                 <select name="fees_type" class="form-control" required>
                                     <option value="">-- Select Type --</option>
                                     <option value="School">School</option>
-                                    <option value="Coaching">Coaching</option>
+                                    <option value="Instituion">Instituion</option>
+                                    <option value="Tuition Centre">Tuition Centre</option>
                                     <option value="Book Shop">Book Shop</option>
                                     <option value="Teacher">Teacher</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label>School/ Coaching Center / Book Shop/ Teacher Name</label>
+                                <select name="school" class="form-control">
+                                    <option value="">Select School</option>
+                                    @foreach ($schools as $school)
+                                        <option value="{{ $school->school_code }}">
+                                            {{ $school->school_name }} ({{ $school->school_code }}),
+                                            {{ $school->principal_name }}, {{ $school->address }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
@@ -346,9 +360,8 @@
                                 <label class="form-label">Fees Submit Date</label>
                                 <input type="date" name="fees_submit_date" id="fees_submit_date" class="form-control"
                                     required>
-
                                 <small id="dateError" class="text-danger d-none">
-                                    Warning - Please enter a date within the last month.
+                                    Warning - Please enter a date within the next 30 days.
                                 </small>
                             </div>
 
@@ -392,11 +405,11 @@
                 selectedDate.setHours(0, 0, 0, 0);
                 currentDate.setHours(0, 0, 0, 0);
 
-                // Difference in days
-                const diffTime = Math.abs(currentDate - selectedDate);
-                const diffDays = diffTime / (1000 * 60 * 60 * 24);
+                // Calculate date 30 days from now
+                const maxDate = new Date(currentDate);
+                maxDate.setDate(maxDate.getDate() + 30);
 
-                if (diffDays > 30) {
+                if (selectedDate < currentDate || selectedDate > maxDate) {
                     errorMsg.classList.remove('d-none');
                     dateInput.classList.add('is-invalid');
                     return false;
@@ -408,6 +421,4 @@
             }
         });
     </script>
-
-
 @endsection

@@ -40,7 +40,7 @@
                             Demand Pending Facility
                         </a>
                     @endif
-                     @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
+                    @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
                         <a href="{{ route('education.list.Investigationfacility') }}" class="btn btn-sm btn-primary">
                             Investigation Education Facility
                         </a>
@@ -54,7 +54,7 @@
                 </div>
             </div>
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Demand Education Facility List</h5>
+                <h5 class="mb-0">Investigation Education Facility List</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
@@ -68,7 +68,7 @@
                 </div>
             @endif
             <div class="row">
-                <form method="GET" action="{{ route('eduaction.demand.pending.list') }}" class="row g-3 mb-4">
+                <form method="GET" action="{{ route('education.list.Investigationfacility') }}" class="row g-3 mb-4">
                     <div class="row">
                         <div class="col-md-3 col-sm-4">
                             <select name="session_filter" id="session_filter" class="form-control">
@@ -139,7 +139,7 @@
                     <div class="row">
                         <div class="col-md-4">
                             <button type="submit" class="btn btn-primary me-1">Search</button>
-                            <a href="{{ route('eduaction.demand.pending.list') }}"
+                            <a href="{{ route('education.list.Investigationfacility') }}"
                                 class="btn btn-info text-white me-1">Reset</a>
                         </div>
                     </div>
@@ -169,6 +169,7 @@
                                     <th>Fees Slip No</th>
                                     <th>Fees Submit Date</th>
                                     <th>Fees Amount</th>
+                                    <th>Investigation Officer</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -214,32 +215,39 @@
                                         <td>{{ $facility->fees_slip_no }}</td>
                                         <td>{{ \Carbon\Carbon::parse($facility->fees_submit_date)->format('d-m-Y') }}</td>
                                         <td>{{ $facility->fees_amount }}</td>
+                                        <td>
+                                        @php
+                                            $staff = staffByEmail($facility->investigation_officer);
+                                        @endphp
+
+                                            @if ($staff)
+                                                {{ $staff->name }} ({{ $staff->staff_code }}) - {{ $staff->position }}
+                                            @endif
+                                        </td>
                                         <td class="text-center">
                                             <a href="{{ route('demand.education.facility.show', $facility->id) }}"
                                                 class="btn btn-sm btn-success mb-1">
                                                 Show Facility
                                             </a>
-                                            <a href="{{ route('demand.education.facility.edit', $facility->id) }}"
-                                                class="btn btn-sm btn-warning mb-1">
-                                                Edit
+
+                                            <a href="{{ route('investigation.education.facility.form', $facility->id) }}"
+                                                class="btn btn-sm btn-primary mb-1">
+                                                Investigation Form
                                             </a>
-                                            <form action="{{ route('demand.education.facility.delete', $facility->id) }}"
-                                                method="POST"
-                                                onsubmit="return confirm('Are you sure you want to delete this record?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm mb-1">
-                                                    Delete
-                                                </button>
-                                            </form>
-                                            <button type="button" class="btn btn-primary btn-sm"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#investigationModal-{{ $facility->id }}">
-                                                Investigation
-                                            </button>
+                                            
+                                            @if ($user->user_type === 'ngo')
+                                                <form
+                                                    action="{{ route('demand.education.facility.delete', $facility->id) }}"
+                                                    method="POST"
+                                                    onsubmit="return confirm('Are you sure you want to delete this record?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger btn-sm mb-1">
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            @endif
                                         </td>
-
-
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -252,75 +260,6 @@
                     @endif
                 </div>
             </div>
-            @foreach ($combined as $row)
-                @php
-                    $facility = $row['facility'];
-                    $card = $row['card'];
-                    $item = $row['person'];
-                @endphp
-
-                <div class="modal fade" id="investigationModal-{{ $facility->id }}" tabindex="-1" aria-hidden="true">
-
-                    <div class="modal-dialog modal-lg">
-                        <form method="POST" action="{{ route('investigation.educationfacility.store', $facility->id) }}">
-                            @csrf
-
-                            <div class="modal-content">
-
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Health Facility Investigation</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-
-                                <div class="modal-body">
-
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <strong>Name:</strong> {{ $item->name }}<br>
-                                            <strong>Father/Husband Name:</strong> {{ $item->gurdian_name }}<br>
-                                            <strong>Registration No:</strong> {{ $item->registration_no }}
-                                        </div>
-                                        <div class="col-md-6">
-                                            <strong>Health Card No:</strong> {{ $card->educationcard_no }}<br>
-                                            <strong>Bill No:</strong> {{ $facility->fees_slip_no }} <br>
-                                            <strong>Amount:</strong> {{ number_format($facility->fees_amount ?? 0, 2) }}
-                                        </div>
-                                    </div>
-
-                                    <hr>
-
-                                    <div class="mb-3">
-                                        <label class="form-label">Investigation Officer</label>
-                                        <select name="investigation_officer" class="form-control" required>
-                                            <option value="">Select Officer</option>
-                                            @foreach ($staff as $person)
-                                                <option
-                                                    value="{{ $person->email }}"
-                                                    {{ $facility->investigation_officer ==
-                                                    $person->name . ' (' . $person->staff_code . ') (' . $person->position . ')'
-                                                        ? 'selected'
-                                                        : '' }}>
-                                                    {{ $person->name }} ({{ $person->staff_code }})
-                                                    ({{ $person->position }})
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                </div>
-
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-success">Send Investigation Officer</button>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                        Cancel
-                                    </button>
-                                </div>
-
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            @endforeach
         </div>
     </div>
 @endsection

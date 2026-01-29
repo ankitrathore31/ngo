@@ -639,6 +639,15 @@ Route::controller(EduactionCardController::class)->middleware('auth')->group(fun
     Route::post('ngo/update-demand-education-facility', 'UpdateDemandFacility')->name('demand.education.facility.update');
     Route::delete('ngo/demand/education/facility/{id}','DeleteDemandFacility')->name('demand.education.facility.delete');
     Route::get('ngo/show-demand-education-facility/{facility}', 'ShowFacility')->name('demand.education.facility.show');
+    Route::post('ngo/educationfacility-investigation-officer-store/{facility}','InvetigationOfficerStore')->name('investigation.educationfacility.store');
+    Route::get('ngo/educationfacility-investigation-list','InvetigationFacilityList')->name('education.list.Investigationfacility');
+    Route::get('ngo/educationfacility-verify-list','VerifyFacilityList')->name('education.list.Verifyfacility');
+    Route::get('ngo/education-facility-investigation-form/{facility}', 'InvestigationForm')->name('investigation.education.facility.form');
+    Route::post('ngo/educationfacility-investigation-form-store/{facility}','StoreInvestigationForm')->name('education.investigation.form.store');
+    Route::get('ngo/education-facility-investigation-show/{facility}', 'ShowInvestigationForm')->name('investigation.education.facility.show');
+
+
+
 
 });
 

@@ -107,7 +107,7 @@
     <div class="wrapper">
 
         <div class="d-flex justify-content-between align-record-centre mb-0 mt-4">
-            <h5 class="mb-0">Education Card</h5>
+            <h5 class="mb-0">Education Facility Investigation Form</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                     <li class="breadcrumb-record"><a href="{{ url('dashboard') }}">Dashboard</a></li>
@@ -125,7 +125,7 @@
             <!-- Language Toggle -->
             <div class="d-flex justify-content-between align-records-center mb-3 mt-4">
                 <h5 class="mb-0">
-                    <span>Education Facility Card</span>
+                    <span> Education Facility Investigation Form</span>
                 </h5>
                 <div>
                     <button onclick="window.print()" class="btn btn-primary">Print </button>
@@ -134,21 +134,21 @@
                 </div>
             </div>
             <div class=" rounded print-card">
-                <div class="" style="border: 9px solid red;">
+                <div class="">
                     <div>
-                        <div class="p-2" style="border: 9px solid #138808;">
+                        <div class="p-2">
                             <div class="text-center mb-4 border-bottom pb-2">
-                                <div class="row mb-2">
+                                {{-- <div class="row mb-2">
                                     <div class="col-sm-12">
                                         <h3><b>EDUCATION CARD</b></h3>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="row">
                                     <div class="col-sm-2 text-center text-md-start">
                                         <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="150"
                                             height="140">
                                     </div>
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-10">
                                         <p style="margin: 0;" class="d-flex justify-content-around mb-2"><b>
                                                 <span>NEETI AYOG ID NO. UP/2023/0360430</span>&nbsp;
                                                 &nbsp; &nbsp;<span>NGO NO. UP/00033062</span>&nbsp; &nbsp;
@@ -175,10 +175,7 @@
                                             </b>
                                         </p>
                                     </div>
-                                    <div class="col-sm-2 text-center text-md-start">
-                                        {{-- <img src="{{ asset('images/plu.png') }}" alt="Logo" width="120"
-                                            height="130"> --}}
-                                    </div>
+
                                 </div>
                             </div>
                             <div class="row d-flex justify-content-center">
@@ -317,7 +314,6 @@
                                     <h5>Education Demand Facility Details</h5>
                                 </div>
 
-
                                 <div class="col-sm-12 mb-3">
                                     <strong>School / Institution / Tuition / Teacher Name:</strong>
                                     @php
@@ -326,13 +322,13 @@
                                     @if ($school)
                                         {{ $school->school_name }},
                                         {{ $school->address }},
-                                        {{ $school->principal_name }},
+                                        {{ $school->principle_name }},
                                         {{ $school->contact_number }}
                                     @else
                                         No school assigned
                                     @endif
                                 </div>
-                                
+
 
                                 <div class="col-sm-4 mb-3">
                                     <strong>Fees Type:</strong> {{ $facility->fees_type }}
@@ -372,39 +368,97 @@
                                 </div>
 
                             </div>
+                            <div class="col-sm-4 mb-3">
+                                <b>Investigation Officer</b> @php
+                                    $staff = staffByEmail($facility->investigation_officer);
+                                @endphp
 
-                            <div class="row d-flex justify-content-around mt-5">
-                                <div class="col-sm-6 text-center">
+                                @if ($staff)
+                                    {{ $staff->name }} ({{ $staff->staff_code }}) - {{ $staff->position }}
+                                @endif
+                            </div>
+
+                            <form action="{{ route('education.investigation.form.store', $facility->id) }}" method="POST"
+                                enctype="multipart/form-data">
+                                @csrf
+                                <div class="row">
+
+                                    <div class="col-sm-4 mb-3">
+                                        <b>Person Paying Fees Name</b>
+                                        <input type="text" class="form-control no-print" name="person_paying_amount">
+                                    </div>
+
+                                    <div class="col-sm-4 mb-3">
+                                        <b>Account No.</b>
+                                        <input type="text" class="form-control no-print" name="account_no">
+                                    </div>
+
+                                    <div class="col-sm-4 mb-3">
+                                        <b>Account Holder Name</b>
+                                        <input type="text" class="form-control no-print" name="account_holder_name">
+                                    </div>
+
+                                    <div class="col-sm-4 mb-3">
+                                        <b>Bank IFSC Code</b>
+                                        <input type="text" class="form-control no-print" name="ifsc_code">
+                                    </div>
+
+                                    <div class="col-sm-4 mb-3">
+                                        <b>Bank Name</b>
+                                        <input type="text" class="form-control no-print" name="bank_name">
+                                    </div>
+
+                                    <div class="col-sm-4 mb-3">
+                                        <b>Bank Branch</b>
+                                        <input type="text" class="form-control no-print" name="bank_branch">
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3">
+                                        <b>Account Holder Address</b>
+                                        <textarea class="form-control no-print" name="account_holder_address" rows="3"></textarea>
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3 no-print">
+                                        <b>Verify Officer</b>
+                                        <select name="verify_officer" class="form-control" required>
+                                            <option value="">Select Officer</option>
+                                            @foreach ($officer as $person)
+                                                <option value="{{ $person->email }}"
+                                                    {{ $facility->verify_officer == $person->name . ' (' . $person->staff_code . ') (' . $person->position . ')'
+                                                        ? 'selected'
+                                                        : '' }}>
+                                                    {{ $person->name }} ({{ $person->staff_code }})
+                                                    ({{ $person->position }})
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3 no-print">
+                                        <b>Investigation Proof <small>(Upload Photo)</small></b>
+                                        <input type="file" name="investigation_proof" class="form-control">
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3 no-print">
+                                        <input type="submit" value="Send To Verify"
+                                            class="btn btn-success mt-2 no-print">
+                                    </div>
+
                                 </div>
 
-                                <div class="col-sm-6 text-center">
-                                    @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
-                                        <div id="directorSignatureBox" class="mt-2">
-                                            <p class="text-success no-print">Attached</p>
-                                            <img src="{{ asset($signatures['director']) }}" alt="Director Signature"
-                                                class="img" style="max-height: 80px;">
-                                            <br>
-                                            <button class="btn btn-danger btn-sm mt-2 no-print"
-                                                onclick="toggleDirector(false)">Remove</button>
-                                        </div>
+                            </form>
 
-                                        <div id="directorShowBtnBox" class="mt-2 d-none no-print">
-                                            <button class="btn btn-primary btn-sm" onclick="toggleDirector(true)">Attached
-                                                Signature</button>
-                                        </div>
-                                    @else
-                                        <p class="text-muted mt-2 no-print">Not attached</p>
-                                    @endif
-                                    <strong class="text-danger">Digitally Signed By <br>
-                                        MANOJ KUMAR RATHOR <br>
-                                        DIRECTOR
-                                    </strong><br>
-                                </div>
+                            <div class="col-sm-12 mb-4 text-end mb-3">
+                                <b>Investigation Officer Sign</b> <br>
+                                @if ($staff)
+                                    {{ $staff->name }}
+                                @endif
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
         <script>
             function setLanguage(lang) {
@@ -413,16 +467,5 @@
                 });
             }
             window.onload = () => setLanguage('en'); // Set Eng as default
-        </script>
-        <script>
-            function togglePM(show) {
-                document.getElementById('pmSignatureBox').classList.toggle('d-none', !show);
-                document.getElementById('pmShowBtnBox').classList.toggle('d-none', show);
-            }
-
-            function toggleDirector(show) {
-                document.getElementById('directorSignatureBox').classList.toggle('d-none', !show);
-                document.getElementById('directorShowBtnBox').classList.toggle('d-none', show);
-            }
         </script>
     @endsection

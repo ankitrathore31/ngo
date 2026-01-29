@@ -105,7 +105,7 @@
 
 
     <div class="wrapper">
-                <div class="row mb-3 mt-4">
+        <div class="row mb-3 mt-4">
             @php
                 $user = auth()->user();
                 $isStaff = $user && $user->user_type === 'staff';
@@ -381,13 +381,11 @@
                         </div>
 
                         {{-- Bill Date --}}
-                        {{-- Bill Date --}}
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Bill Date</label>
-                            <input type="date" name="bill_date" class="form-control">
-
-                            <small class="text-danger">
-                                Warning - Please enter a date within the last month.
+                            <input type="date" name="bill_date" id="bill_date" class="form-control" required>
+                            <small id="billDateError" class="text-danger d-none">
+                                Warning - Please enter a date within the last 30 days.
                             </small>
                         </div>
 
@@ -417,4 +415,45 @@
                 </form>
             </div>
         </div>
-    @endsection
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const billDateInput = document.getElementById('bill_date');
+            const billErrorMsg = document.getElementById('billDateError');
+            const form = billDateInput.closest('form');
+
+            billDateInput.addEventListener('change', validateBillDate);
+            form.addEventListener('submit', function(e) {
+                if (!validateBillDate()) {
+                    e.preventDefault();
+                }
+            });
+
+            function validateBillDate() {
+                if (!billDateInput.value) return false;
+
+                const selectedDate = new Date(billDateInput.value);
+                const currentDate = new Date();
+
+                // Remove time part
+                selectedDate.setHours(0, 0, 0, 0);
+                currentDate.setHours(0, 0, 0, 0);
+
+                // Calculate date 30 days ago
+                const minDate = new Date(currentDate);
+                minDate.setDate(minDate.getDate() - 30);
+
+                if (selectedDate < minDate || selectedDate > currentDate) {
+                    billErrorMsg.classList.remove('d-none');
+                    billDateInput.classList.add('is-invalid');
+                    return false;
+                } else {
+                    billErrorMsg.classList.add('d-none');
+                    billDateInput.classList.remove('is-invalid');
+                    return true;
+                }
+            }
+        });
+    </script>
+@endsection

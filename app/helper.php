@@ -3,6 +3,7 @@
 use App\Models\beneficiarie;
 use App\Models\Beneficiarie_Survey;
 use App\Models\Category;
+use App\Models\EducationFacility;
 use App\Models\HeadOrganization;
 use App\Models\HealthCard;
 use App\Models\HealthFacility;
@@ -12,11 +13,13 @@ use App\Models\OrganizationMember;
 use App\Models\Problem;
 use App\Models\Project;
 use App\Models\ProjectReport;
+use App\Models\Staff;
 use App\Models\Story;
 use App\Models\Visitor;
 use Illuminate\Support\Facades\DB;
 use App\Models\WorkLog;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 if (!function_exists('hello')) {
     function hello()
@@ -498,5 +501,47 @@ if (!function_exists('DemandPendinglHalthFacility')) {
         return $data;
     }
 }
+if (!function_exists('ShowFacilityMenu')) {
 
+    function ShowFacilityMenu(): bool
+    {
+        $user = Auth::user();
 
+        // Not logged in or not staff
+        if (!$user || $user->user_type !== 'staff') {
+            return false;
+        }
+
+        $email = $user->email;
+
+        return Cache::remember(
+            'facility_menu_' . $user->id,
+            now()->addMinutes(10),
+            function () use ($email) {
+
+                return EducationFacility::where(function ($q) use ($email) {
+                    $q->where('investigation_officer', $email)
+                        ->orWhere('verify_officer', $email);
+                })
+                    ->exists()
+
+                    || HealthFacility::where(function ($q) use ($email) {
+                        $q->where('investigation_officer', $email)
+                            ->orWhere('verify_officer', $email);
+                    })
+                    ->exists();
+            }
+        );
+    }
+}
+if (!function_exists('staffByEmail')) {
+
+    function staffByEmail(?string $email)
+    {
+        if (!$email) {
+            return null;
+        }
+
+        return Staff::where('email', $email)->first();
+    }
+}

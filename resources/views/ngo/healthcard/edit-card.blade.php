@@ -323,7 +323,7 @@
                                             <option value="">Select Hospital</option>
                                             @foreach ($hospitals as $hospital)
                                                 <option value="{{ $hospital->hospital_code }}">
-                                                    {{ $hospital->hospital_name }} ({{ $hospital->hospital_code }})
+                                                    {{ $hospital->hospital_name }} ({{ $hospital->hospital_code }}), {{ $hospital->operator_name }}, {{ $hospital->address }}
                                                 </option>
                                             @endforeach
                                         </select>
