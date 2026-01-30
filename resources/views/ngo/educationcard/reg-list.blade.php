@@ -50,7 +50,33 @@
 
                         @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
                             <a href="{{ route('eduaction.demand.list') }}" class="btn btn-sm btn-primary">
-                                Demand Facility
+                                Demand Education Facility
+                            </a>
+                        @endif
+
+                        @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
+                            <a href="{{ route('eduaction.demand.pending.list') }}" class="btn btn-sm btn-primary">
+                                Demand Pending Facility
+                            </a>
+                        @endif
+                        @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
+                            <a href="{{ route('education.list.Investigationfacility') }}" class="btn btn-sm btn-primary">
+                                Investigation Education Facility
+                            </a>
+                        @endif
+                        @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
+                            <a href="{{ route('education.list.Investigationfacility') }}" class="btn btn-sm btn-primary">
+                                Verify Education Facility
+                            </a>
+                        @endif
+                        @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
+                            <a href="{{ route('education.list.Approvalfacility') }}" class="btn btn-sm btn-primary">
+                                Approval Education Facility
+                            </a>
+                        @endif
+                        @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
+                            <a href="{{ route('education.list.Approvefacility') }}" class="btn btn-sm btn-primary">
+                                Approve Education Facility
                             </a>
                         @endif
 

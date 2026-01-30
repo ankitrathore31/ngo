@@ -14,7 +14,7 @@ class EducationFacility extends Model
         'card_id',
         'fees_type',
         'school',
-        'registration_no',
+        // 'registration_no',
         'fees_slip_no',
         'fees_submit_date',
         'fees_amount',
@@ -30,6 +30,10 @@ class EducationFacility extends Model
         'account_holder_address',
         'verify_officer',
         'investigation_proof',
+        'verify_proof',
+        'clearness_amount',
+        'remark',
+        'reason',
     ];
 
 

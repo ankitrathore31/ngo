@@ -362,13 +362,13 @@
 
                         {{-- Hospital / Clinic / Medical Name --}}
                         <div class="col-md-6 mb-2">
-                            <label>Hospital</label>
+                            <label>Hospital / Clinic / Medical / Doctor Name</label>
                             <select name="hospital_name" class="form-control" required>
                                 <option value="">Select Hospital</option>
                                 @foreach ($hospitals as $hospital)
                                     <option value="{{ $hospital->hospital_name }} ({{ $hospital->hospital_code }})"
                                         {{ isset($healthcard) && $healthcard->hospital_name == $hospital->hospital_name ? 'selected' : '' }}>
-                                        {{ $hospital->hospital_name }}({{ $hospital->hospital_code }})
+                                        {{ $hospital->hospital_name }} ({{ $hospital->hospital_code }}),,{{ $hospital->operator_name }} ,{{ $hospital->address }} 
                                     </option>
                                 @endforeach
                             </select>
