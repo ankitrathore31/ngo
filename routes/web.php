@@ -432,6 +432,7 @@ Route::controller(VendorController::class)->middleware('auth')->group(function (
     Route::post('ngo/update-vendor/{id}', 'UpdateVendor')->name('update.vendor');
     Route::get('ngo/delete-vendor/{id}', 'DeleteVendor')->name('delete.vendor');
     Route::get('ngo/view-vendor/{id}', 'ViewVendor')->name('view.vendor');
+    Route::get('ngo/certificate-vendor/{id}', 'CertificateVendor')->name('certificate.vendor');
 });
 
 Route::controller(WorkPlanController::class)->group(function () {
@@ -652,8 +653,9 @@ Route::controller(EduactionCardController::class)->middleware('auth')->group(fun
     Route::get('ngo/educationfacility-approval-list', 'ApprovalFacilityList')->name('education.list.Approvalfacility');
     Route::post('ngo/educationfacility-status-store/{facility}', 'StoreFacilitiesStatus')->name('education.facility.status.store');
     Route::get('ngo/educationfacility-approve-list', 'ApproveFacilityList')->name('education.list.Approvefacility');
-        Route::get('ngo/education-facility-show/{facility}', 'ShowFacilityForm')->name('investigation.education.facility.finalshow');
-
+    Route::get('ngo/education-facility-show/{facility}', 'ShowFacilityForm')->name('investigation.education.facility.finalshow');
+    Route::get('ngo/educationfacility-reject-list', 'RejectFacilityList')->name('education.list.Rejectfacility');
+    Route::get('ngo/educationfacility-nonbudget-list', 'NonBudgetFacilityList')->name('education.list.NonBudgetfacility');
 });
 
 Route::controller(KycController::class)->middleware('auth')->group(function () {

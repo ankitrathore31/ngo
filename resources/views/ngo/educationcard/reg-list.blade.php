@@ -79,6 +79,16 @@
                                 Approve Education Facility
                             </a>
                         @endif
+                         @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
+                            <a href="{{ route('education.list.NonBudgetfacility') }}" class="btn btn-sm btn-primary">
+                                Non Budget Education Facility
+                            </a>
+                        @endif
+                        @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
+                            <a href="{{ route('education.list.Rejectfacility') }}" class="btn btn-sm btn-primary">
+                                Reject Education Facility
+                            </a>
+                        @endif
 
                     </div>
                 </div>

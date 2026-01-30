@@ -140,7 +140,7 @@
                     <div class="col-md-3">
                         <button type="submit" class="btn btn-primary me-1">Search</button>
                         <a href="{{ route('vendor.list') }}" class="btn btn-info text-white me-1">Reset</a>
-                                            <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
+                        <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
                     </div>
                 </form>
 
@@ -200,6 +200,7 @@
                                 <th>Address</th>
                                 <th>Session</th>
                                 <th>Action</th>
+                                <th>Certificate</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -218,7 +219,8 @@
                                     <td>{{ $item->academic_session ?? 'N/A' }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            <a href="{{ route('view.vendor', $item->id) }}" class="btn btn-success btn-sm px-3">
+                                            <a href="{{ route('view.vendor', $item->id) }}"
+                                                class="btn btn-success btn-sm px-3">
                                                 <i class="fa-regular fa-eye"></i>
                                             </a>
                                             <a href="{{ route('edit.vendor', $item->id) }}" class="btn btn-primary btn-sm"
@@ -231,6 +233,11 @@
                                                 <i class="fa-regular fa-trash-can"></i>
                                             </a>
                                         </div>
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('certificate.vendor', $item->id) }}" class="btn btn-success btn-sm px-3">
+                                        Certificate
+                                    </a>
                                     </td>
                                 </tr>
                             @endforeach

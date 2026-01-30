@@ -1795,4 +1795,243 @@ class EduactionCardController extends Controller
             compact('facility', 'card', 'record', 'officer', 'signatures')
         );
     }
+
+    public function RejectFacilityList(Request $request)
+    {
+        /* ---------- Education Card + Facility Constraint ---------- */
+
+
+        $educationCardConstraint = function ($q) use ($request) {
+
+            $q->where('status', 1)
+                ->whereHas('educationFacilities', function ($ef) {
+                    $ef->where('status', 'Reject');
+                })
+                ->with(['educationFacilities' => function ($ef) {
+                    $ef->where('status', 'Reject');
+                }]);
+
+            if ($request->filled('educationcard_no')) {
+                $q->where('educationcard_no', trim($request->educationcard_no));
+            }
+        };
+
+
+
+        /* ---------- Base Queries ---------- */
+
+        $queryBene = beneficiarie::with(['educationCards' => $educationCardConstraint])
+            ->where('status', 1)
+            ->whereHas('educationCards', $educationCardConstraint);
+
+        $queryMember = Member::with(['educationCards' => $educationCardConstraint])
+            ->where('status', 1)
+            ->whereHas('educationCards', $educationCardConstraint);
+
+        /* ---------- Filters (same as education demand) ---------- */
+
+        if ($request->filled('session_filter')) {
+            $queryBene->where('academic_session', $request->session_filter);
+            $queryMember->where('academic_session', $request->session_filter);
+        }
+
+        if ($request->filled('application_no')) {
+            $search = $request->application_no;
+
+            $queryBene->where('application_no', 'like', "%{$search}%");
+            $queryMember->where('application_no', 'like', "%{$search}%");
+        }
+
+        if ($request->filled('registration_no')) {
+            $search = $request->registration_no;
+
+            $queryBene->where('registration_no', 'like', "%{$search}%");
+            $queryMember->where('registration_no', 'like', "%{$search}%");
+        }
+
+        if ($request->filled('name')) {
+
+            $name = trim($request->name);
+
+            $queryBene->where(function ($q) use ($name) {
+                $q->where('name', 'like', "{$name}%")
+                    ->orWhere('gurdian_name', 'like', "{$name}%");
+            });
+
+            $queryMember->where(function ($q) use ($name) {
+                $q->where('name', 'like', "{$name}%")
+                    ->orWhere('gurdian_name', 'like', "{$name}%");
+            });
+        }
+
+
+        if ($request->filled('block')) {
+            $queryBene->where('block', 'like', "%{$request->block}%");
+            $queryMember->where('block', 'like', "%{$request->block}%");
+        }
+
+        if ($request->filled('state')) {
+            $queryBene->where('state', $request->state);
+            $queryMember->where('state', $request->state);
+        }
+
+        if ($request->filled('district')) {
+            $queryBene->where('district', $request->district);
+            $queryMember->where('district', $request->district);
+        }
+
+        /* ---------- Fetch Data ---------- */
+
+        $beneficiaries = $queryBene->get();
+        $members       = $queryMember->get();
+
+        /* ---------- Flatten: Card + Facility ---------- */
+
+        $combined = collect()
+            ->merge($beneficiaries)
+            ->merge($members)
+            ->flatMap(function ($item) {
+                return $item->educationCards->flatMap(function ($card) use ($item) {
+                    return $card->educationFacilities->map(function ($facility) use ($item, $card) {
+                        return [
+                            'person'   => $item,
+                            'card'     => $card,
+                            'facility' => $facility,
+                        ];
+                    });
+                });
+            })
+            ->sortBy(fn($row) => $row['facility']->created_at)
+            ->values();
+
+        /* ---------- Extra Data ---------- */
+
+        $data   = academic_session::all();
+        $states = config('states');
+        $staff = Staff::get();
+        return view(
+            'ngo.educationcard.reject-list',
+            compact('combined', 'data', 'states', 'staff')
+        );
+    }
+
+    public function NonBudgetFacilityList(Request $request)
+    {
+        /* ---------- Education Card + Facility Constraint ---------- */
+
+
+        $educationCardConstraint = function ($q) use ($request) {
+
+            $q->where('status', 1)
+                ->whereHas('educationFacilities', function ($ef) {
+                    $ef->where('status', 'Non-Budget');
+                })
+                ->with(['educationFacilities' => function ($ef) {
+                    $ef->where('status', 'Non-Budget');
+                }]);
+
+            if ($request->filled('educationcard_no')) {
+                $q->where('educationcard_no', trim($request->educationcard_no));
+            }
+        };
+
+
+
+        /* ---------- Base Queries ---------- */
+
+        $queryBene = beneficiarie::with(['educationCards' => $educationCardConstraint])
+            ->where('status', 1)
+            ->whereHas('educationCards', $educationCardConstraint);
+
+        $queryMember = Member::with(['educationCards' => $educationCardConstraint])
+            ->where('status', 1)
+            ->whereHas('educationCards', $educationCardConstraint);
+
+        /* ---------- Filters (same as education demand) ---------- */
+
+        if ($request->filled('session_filter')) {
+            $queryBene->where('academic_session', $request->session_filter);
+            $queryMember->where('academic_session', $request->session_filter);
+        }
+
+        if ($request->filled('application_no')) {
+            $search = $request->application_no;
+
+            $queryBene->where('application_no', 'like', "%{$search}%");
+            $queryMember->where('application_no', 'like', "%{$search}%");
+        }
+
+        if ($request->filled('registration_no')) {
+            $search = $request->registration_no;
+
+            $queryBene->where('registration_no', 'like', "%{$search}%");
+            $queryMember->where('registration_no', 'like', "%{$search}%");
+        }
+
+        if ($request->filled('name')) {
+
+            $name = trim($request->name);
+
+            $queryBene->where(function ($q) use ($name) {
+                $q->where('name', 'like', "{$name}%")
+                    ->orWhere('gurdian_name', 'like', "{$name}%");
+            });
+
+            $queryMember->where(function ($q) use ($name) {
+                $q->where('name', 'like', "{$name}%")
+                    ->orWhere('gurdian_name', 'like', "{$name}%");
+            });
+        }
+
+
+        if ($request->filled('block')) {
+            $queryBene->where('block', 'like', "%{$request->block}%");
+            $queryMember->where('block', 'like', "%{$request->block}%");
+        }
+
+        if ($request->filled('state')) {
+            $queryBene->where('state', $request->state);
+            $queryMember->where('state', $request->state);
+        }
+
+        if ($request->filled('district')) {
+            $queryBene->where('district', $request->district);
+            $queryMember->where('district', $request->district);
+        }
+
+        /* ---------- Fetch Data ---------- */
+
+        $beneficiaries = $queryBene->get();
+        $members       = $queryMember->get();
+
+        /* ---------- Flatten: Card + Facility ---------- */
+
+        $combined = collect()
+            ->merge($beneficiaries)
+            ->merge($members)
+            ->flatMap(function ($item) {
+                return $item->educationCards->flatMap(function ($card) use ($item) {
+                    return $card->educationFacilities->map(function ($facility) use ($item, $card) {
+                        return [
+                            'person'   => $item,
+                            'card'     => $card,
+                            'facility' => $facility,
+                        ];
+                    });
+                });
+            })
+            ->sortBy(fn($row) => $row['facility']->created_at)
+            ->values();
+
+        /* ---------- Extra Data ---------- */
+
+        $data   = academic_session::all();
+        $states = config('states');
+        $staff = Staff::get();
+        return view(
+            'ngo.educationcard.non-budget',
+            compact('combined', 'data', 'states', 'staff')
+        );
+    }
+    
 }

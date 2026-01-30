@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\academic_session;
+use App\Models\Signature;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 
@@ -196,5 +197,13 @@ class VendorController extends Controller
         $vendor = Vendor::findOrFail($id);
         $data = academic_session::all();
         return view('ngo.vendor.view-vendor', compact('vendor', 'data'));
+    }
+
+     public function CertificateVendor($id)
+    {
+        $vendor = Vendor::findOrFail($id);
+        $data = academic_session::all();
+        $signatures = Signature::pluck('file_path','role');
+        return view('ngo.vendor.certificate', compact('vendor', 'data','signatures'));
     }
 }
