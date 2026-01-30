@@ -79,7 +79,7 @@
                                 Approve Education Facility
                             </a>
                         @endif
-                         @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
+                             @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
                             <a href="{{ route('education.list.NonBudgetfacility') }}" class="btn btn-sm btn-primary">
                                 Non Budget Education Facility
                             </a>
@@ -89,12 +89,11 @@
                                 Reject Education Facility
                             </a>
                         @endif
-
                     </div>
                 </div>
             </div>
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Investigation Education Facility List</h5>
+                <h5 class="mb-0">Non Budget Education Facility List</h5>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
@@ -108,7 +107,7 @@
                 </div>
             @endif
             <div class="row">
-                <form method="GET" action="{{ route('education.list.Investigationfacility') }}" class="row g-3 mb-4">
+                <form method="GET" action="{{ route('education.list.NonBudgetfacility') }}" class="row g-3 mb-4">
                     <div class="row">
                         <div class="col-md-3 col-sm-4">
                             <select name="session_filter" id="session_filter" class="form-control">
@@ -179,7 +178,7 @@
                     <div class="row">
                         <div class="col-md-4">
                             <button type="submit" class="btn btn-primary me-1">Search</button>
-                            <a href="{{ route('education.list.Investigationfacility') }}"
+                            <a href="{{ route('education.list.NonBudgetfacility') }}"
                                 class="btn btn-info text-white me-1">Reset</a>
                         </div>
                     </div>
@@ -190,7 +189,6 @@
                     @if ($combined->count())
                         <table class="table table-bordered table-hover align-middle text-center">
                             <thead class="table-primary">
-
                                 <tr>
                                     <th>Sr. No.</th>
                                     <th>Education Card Registration Date</th>
@@ -211,8 +209,8 @@
                                     <th>Fees Submit Date</th>
                                     <th>Fees Amount</th>
                                     <th>Investigation Officer</th>
-                                    <th class="text-danger">Form Remark</th>
-
+                                    <th>Verify Officer</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -225,9 +223,6 @@
                                     @endphp
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
-
-
-
                                         <td>{{ \Carbon\Carbon::parse($card->education_registration_date)->format('d-m-Y') }}
                                         </td>
                                         <td>{{ $card->educationcard_no }}</td>
@@ -270,34 +265,26 @@
                                                 {{ $staff->name }} ({{ $staff->staff_code }}) - {{ $staff->position }}
                                             @endif
                                         </td>
-                                        <td class="text-start">
-                                            @if (!empty($facility->remark))
-                                                <span class="badge bg-danger mb-1">Rejected</span>
-                                                <div class="border border-danger rounded p-2 mt-1 text-danger small">
-                                                    {{ $facility->remark }}
-                                                </div>
-                                            @else
-                                                <span class="badge bg-warning text-dark">In Progress</span>
+                                        <td>
+                                            @php
+                                                $staff = staffByEmail($facility->verify_officer);
+                                            @endphp
+
+                                            @if ($staff)
+                                                {{ $staff->name }} ({{ $staff->staff_code }}) - {{ $staff->position }}
                                             @endif
                                         </td>
+                                        <td class="text-start">
+
+                                            {{ $facility->status }}
+
+                                        </td>
+
                                         <td class="text-center">
-                                            <a href="{{ route('demand.education.facility.show', $facility->id) }}"
+                                            <a href="{{ route('investigation.education.facility.finalshow', $facility->id) }}"
                                                 class="btn btn-sm btn-success mb-1">
-                                                Show Facility
+                                                Show
                                             </a>
-
-                                            @if (empty($facility->remark))
-                                                <a href="{{ route('investigation.education.facility.form', $facility->id) }}"
-                                                    class="btn btn-sm btn-primary mb-1">
-                                                    Investigation Form
-                                                </a>
-                                            @else
-                                                <a href="{{ route('investigation.education.facility.form.edit', $facility->id) }}"
-                                                    class="btn btn-sm btn-warning mb-1">
-                                                    Reject Form
-                                                </a>
-                                            @endif
-
 
                                             @if ($user->user_type === 'ngo')
                                                 <form
