@@ -107,7 +107,7 @@
     <div class="wrapper">
 
         <div class="d-flex justify-content-between align-record-centre mb-0 mt-4">
-            <h5 class="mb-0">Education Card</h5>
+            <h5 class="mb-0">Education Facility Reject Investigation Form</h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-light px-3 py-2 mb-0 rounded">
                     <li class="breadcrumb-record"><a href="{{ url('dashboard') }}">Dashboard</a></li>
@@ -125,7 +125,7 @@
             <!-- Language Toggle -->
             <div class="d-flex justify-content-between align-records-center mb-3 mt-4">
                 <h5 class="mb-0">
-                    <span>Demand Education Card Facility </span>
+                    <span> Education Facility Reject Investigation Form</span>
                 </h5>
                 <div>
                     <button onclick="window.print()" class="btn btn-primary">Print </button>
@@ -136,19 +136,19 @@
             <div class=" rounded print-card">
                 <div class="">
                     <div>
-                        <div class="p-2" s>
+                        <div class="p-2">
                             <div class="text-center mb-4 border-bottom pb-2">
-                                <div class="row mb-2">
+                                {{-- <div class="row mb-2">
                                     <div class="col-sm-12">
                                         <h3><b>EDUCATION CARD</b></h3>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="row">
                                     <div class="col-sm-2 text-center text-md-start">
                                         <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="150"
                                             height="140">
                                     </div>
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-10">
                                         <p style="margin: 0;" class="d-flex justify-content-around mb-2"><b>
                                                 <span>NEETI AYOG ID NO. UP/2023/0360430</span>&nbsp;
                                                 &nbsp; &nbsp;<span>NGO NO. UP/00033062</span>&nbsp; &nbsp;
@@ -160,7 +160,9 @@
                                         <h5> <strong>
                                                 <span>The Path To Peace And Development</span></strong></h5>
                                         <h6 style="color: blue;"><b>
-
+                                                <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत,
+                                                    उत्तर प्रदेश -
+                                                    262121</span>
                                                 <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District -
                                                     Pilibhit, UP -
                                                     262121</span>
@@ -173,10 +175,7 @@
                                             </b>
                                         </p>
                                     </div>
-                                    <div class="col-sm-2 text-center text-md-start">
-                                        {{-- <img src="{{ asset('images/plu.png') }}" alt="Logo" width="120"
-                                            height="130"> --}}
-                                    </div>
+
                                 </div>
                             </div>
                             <div class="row d-flex justify-content-center">
@@ -188,11 +187,11 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-sm-6 mb-3">
-                                    <h4><b>Education Card No:</b> <b>{{ $educationCard->educationcard_no }}</b></h4>
+                                    <h4><b>Education Card No:</b> <b>{{ $card->card_no }}</b></h4>
                                 </div>
                                 <div class="col-sm-6 mb-3">
                                     <strong>Education Card Registraition Date:</strong>
-                                    {{ \Carbon\Carbon::parse($educationCard->education_registration_date)->format('d-m-Y') }}
+                                    {{ \Carbon\Carbon::parse($card->education_registration_date)->format('d-m-Y') }}
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -276,8 +275,8 @@
 
                                 <div class="col-sm-12 mb-3">
                                     <strong>Student Name:</strong>
-                                    @if (!empty($educationCard->students))
-                                        @foreach ($educationCard->students as $student)
+                                    @if (!empty($card->students))
+                                        @foreach ($card->students as $student)
                                             {{ $loop->iteration }}. {{ $student }}@if (!$loop->last)
                                                 ,
                                             @endif
@@ -288,8 +287,8 @@
                                 <div class="col-sm-12 mb-3">
                                     <strong>School / Instituion / Tuition / Teacher Name:</strong>
 
-                                    @if (!empty($educationCard->school_name))
-                                        @foreach ($educationCard->school_name as $index => $SchoolCode)
+                                    @if (!empty($card->school_name))
+                                        @foreach ($card->school_name as $index => $SchoolCode)
                                             @php
                                                 $school = \App\Models\School::getByCode($SchoolCode);
                                             @endphp
@@ -307,118 +306,190 @@
                                     @endif
 
                                 </div>
+
+
+                            </div>
+                            <div class="row">
+                                <div>
+                                    <h5>Education Demand Facility Details</h5>
+                                </div>
+
+                                <div class="col-sm-12 mb-3">
+                                    <strong>School / Institution / Tuition / Teacher Name:</strong>
+                                    @php
+                                        $school = \App\Models\School::getByCode($facility->school);
+                                    @endphp
+                                    @if ($school)
+                                        {{ $school->school_name }},
+                                        {{ $school->address }},
+                                        {{ $school->principle_name }},
+                                        {{ $school->contact_number }}
+                                    @else
+                                        No school assigned
+                                    @endif
+                                </div>
+
+
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Fees Type:</strong> {{ $facility->fees_type }}
+                                </div>
+
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Registration / SR No:</strong> {{ $facility->registration_no }}
+                                </div>
+
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Fees Slip No:</strong> {{ $facility->fees_slip_no }}
+                                </div>
+
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Fees Submit Date:</strong>
+                                    {{ \Carbon\Carbon::parse($facility->fees_submit_date)->format('d-m-Y') }}
+                                </div>
+
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Total Fees Amount:</strong> ₹{{ number_format($facility->fees_amount, 2) }}
+                                </div>
+
+                                {{-- <div class="col-sm-4 mb-3">
+                                    <strong>Facility Status:</strong>
+                                    <span class="badge bg-warning">{{ $facility->status }}</span>
+                                </div> --}}
+
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Slip Document:</strong>
+                                    @if ($facility->slip)
+                                        <a href="{{ asset('documents/' . $facility->slip) }}" target="_blank">
+                                            View
+                                        </a>
+                                    @else
+                                        N/A
+                                    @endif
+                                </div>
+
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <b>Investigation Officer</b> @php
+                                    $staff = staffByEmail($facility->investigation_officer);
+                                @endphp
+
+                                @if ($staff)
+                                    {{ $staff->name }} ({{ $staff->staff_code }}) - {{ $staff->position }}
+                                @endif
+                            </div>
+
+                            <form action="{{ route('education.investigation.form.update', $facility->id) }}" method="POST"
+                                enctype="multipart/form-data">
+                                @csrf
+
+                                <div class="row">
+
+                                    <div class="col-sm-4 mb-3">
+                                        <b>Person Paying Fees Name</b>
+                                        <input type="text" class="form-control" name="person_paying_amount"
+                                            value="{{ old('person_paying_amount', $facility->person_paying_amount) }}">
+                                    </div>
+
+                                    <div class="col-sm-4 mb-3">
+                                        <b>Account No.</b>
+                                        <input type="text" class="form-control" name="account_no"
+                                            value="{{ old('account_no', $facility->account_no) }}">
+                                    </div>
+
+                                    <div class="col-sm-4 mb-3">
+                                        <b>Account Holder Name</b>
+                                        <input type="text" class="form-control" name="account_holder_name"
+                                            value="{{ old('account_holder_name', $facility->account_holder_name) }}">
+                                    </div>
+
+                                    <div class="col-sm-4 mb-3">
+                                        <b>Bank IFSC Code</b>
+                                        <input type="text" class="form-control" name="ifsc_code"
+                                            value="{{ old('ifsc_code', $facility->ifsc_code) }}">
+                                    </div>
+
+                                    <div class="col-sm-4 mb-3">
+                                        <b>Bank Name</b>
+                                        <input type="text" class="form-control" name="bank_name"
+                                            value="{{ old('bank_name', $facility->bank_name) }}">
+                                    </div>
+
+                                    <div class="col-sm-4 mb-3">
+                                        <b>Bank Branch</b>
+                                        <input type="text" class="form-control" name="bank_branch"
+                                            value="{{ old('bank_branch', $facility->bank_branch) }}">
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3">
+                                        <b>Account Holder Address</b>
+                                        <textarea class="form-control" name="account_holder_address" rows="3">{{ old('account_holder_address', $facility->account_holder_address) }}</textarea>
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3">
+                                        <b>Verify Officer :</b> <small>(If you want to change verify officer then select )</small>
+                                        <select name="verify_officer" class="form-control">
+                                            <option value="">Select Officer</option>
+                                            @foreach ($officer as $person)
+                                                <option value="{{ $person->email }}"
+                                                    {{ old('verify_officer', $facility->verify_officer) == $person->email ? 'selected' : '' }}>
+                                                    {{ $person->name }} ({{ $person->staff_code }})
+                                                    ({{ $person->position }})
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3">
+                                        <b>Investigation Proof</b>
+                                        <input type="file" name="investigation_proof" class="form-control">
+
+                                        @if ($facility->investigation_proof)
+                                            <small class="text-muted">
+                                                Current file:
+                                                <a href="{{ asset('images/' . $facility->investigation_proof) }}"
+                                                    target="_blank">View</a>
+                                            </small>
+                                        @endif
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3">
+
+                                        @if (!empty($facility->remark))
+                                            <div class="alert alert-danger mt-2 p-2">
+                                                <strong>Remark:</strong><br>
+                                                {{ $facility->remark }}
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3">
+                                        <button type="submit" class="btn btn-success mt-2">
+                                            Update & Send to Verify
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </form>
+
+
+                            <div class="col-sm-12 mb-4 text-end mb-3">
+                                <b>Investigation Officer Sign</b> <br>
+                                @if ($staff)
+                                    {{ $staff->name }}
+                                @endif
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card">
-                <div class="card-header">
-                    <h5>Education Demand Facility</h5>
-                </div>
-                <div class="card-body">
-                    <form action="{{ route('demand.education.facility.store') }}" method="POST"
-                        enctype="multipart/form-data">
-                        @csrf
-                        <input type="text" name="card_id" value="{{ $educationCard->id }}" hidden>
-                        <input type="text"name="reg_id" value="{{ $record->id }}" hidden>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Type Of Student Fees</label>
-                                <select name="fees_type" class="form-control" required>
-                                    <option value="">-- Select Type --</option>
-                                    <option value="School">School</option>
-                                    <option value="Instituion">Instituion</option>
-                                    <option value="Tuition Centre">Tuition Centre</option>
-                                    <option value="Book Shop">Book Shop</option>
-                                    <option value="Teacher">Teacher</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <label>School/ Coaching Center / Book Shop/ Teacher Name</label>
-                                <select name="school" class="form-control">
-                                    <option value="">Select School</option>
-                                    @foreach ($schools as $school)
-                                        <option value="{{ $school->school_code }}">
-                                            {{ $school->school_name }} ({{ $school->school_code }}),
-                                            {{ $school->principal_name }}, {{ $school->address }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            {{-- <div class="col-md-6 mb-3">
-                                <label class="form-label">Registration No / SR No</label>
-                                <input type="text" name="registration_no" class="form-control" required>
-                            </div> --}}
 
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Fees Slip No</label>
-                                <input type="text" name="fees_slip_no" class="form-control" required>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Fees Submit Date</label>
-                                <input type="date" name="fees_submit_date" id="fees_submit_date" class="form-control"
-                                    required>
-                                <small id="dateError" class="text-danger d-none">
-                                    Warning - Please enter a date within the next 30 days.
-                                </small>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Total Fees Amount</label>
-                                <input type="number" name="fees_amount" class="form-control" required>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Fees Slip Upload</label>
-                                <input type="file" name="slip" class="form-control">
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </form>
-                </div>
-            </div>
         </div>
-    </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-
-            const dateInput = document.getElementById('fees_submit_date');
-            const errorMsg = document.getElementById('dateError');
-            const form = dateInput.closest('form');
-
-            dateInput.addEventListener('change', validateDate);
-            form.addEventListener('submit', function(e) {
-                if (!validateDate()) {
-                    e.preventDefault();
-                }
-            });
-
-            function validateDate() {
-                if (!dateInput.value) return false;
-
-                const selectedDate = new Date(dateInput.value);
-                const currentDate = new Date();
-
-                // Remove time part
-                selectedDate.setHours(0, 0, 0, 0);
-                currentDate.setHours(0, 0, 0, 0);
-
-                // Calculate date 30 days from now
-                const maxDate = new Date(currentDate);
-                maxDate.setDate(maxDate.getDate() + 30);
-
-                if (selectedDate < currentDate || selectedDate > maxDate) {
-                    errorMsg.classList.remove('d-none');
-                    dateInput.classList.add('is-invalid');
-                    return false;
-                } else {
-                    errorMsg.classList.add('d-none');
-                    dateInput.classList.remove('is-invalid');
-                    return true;
-                }
+        <script>
+            function setLanguage(lang) {
+                document.querySelectorAll('[data-lang]').forEach(el => {
+                    el.style.display = el.getAttribute('data-lang') === lang ? 'inline' : 'none';
+                });
             }
-        });
-    </script>
-@endsection
+            window.onload = () => setLanguage('en'); // Set Eng as default
+        </script>
+    @endsection

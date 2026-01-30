@@ -637,17 +637,22 @@ Route::controller(EduactionCardController::class)->middleware('auth')->group(fun
     Route::get('ngo/education-demand-pending-list', 'EducationDemandPendingList')->name('eduaction.demand.pending.list');
     Route::get('ngo/edit-demand-education-facility/{facility}', 'EditFacility')->name('demand.education.facility.edit');
     Route::post('ngo/update-demand-education-facility', 'UpdateDemandFacility')->name('demand.education.facility.update');
-    Route::delete('ngo/demand/education/facility/{id}','DeleteDemandFacility')->name('demand.education.facility.delete');
+    Route::delete('ngo/demand/education/facility/{id}', 'DeleteDemandFacility')->name('demand.education.facility.delete');
     Route::get('ngo/show-demand-education-facility/{facility}', 'ShowFacility')->name('demand.education.facility.show');
-    Route::post('ngo/educationfacility-investigation-officer-store/{facility}','InvetigationOfficerStore')->name('investigation.educationfacility.store');
-    Route::get('ngo/educationfacility-investigation-list','InvetigationFacilityList')->name('education.list.Investigationfacility');
-    Route::get('ngo/educationfacility-verify-list','VerifyFacilityList')->name('education.list.Verifyfacility');
+    Route::post('ngo/educationfacility-investigation-officer-store/{facility}', 'InvetigationOfficerStore')->name('investigation.educationfacility.store');
+    Route::get('ngo/educationfacility-investigation-list', 'InvetigationFacilityList')->name('education.list.Investigationfacility');
+    Route::get('ngo/educationfacility-verify-list', 'VerifyFacilityList')->name('education.list.Verifyfacility');
     Route::get('ngo/education-facility-investigation-form/{facility}', 'InvestigationForm')->name('investigation.education.facility.form');
-    Route::post('ngo/educationfacility-investigation-form-store/{facility}','StoreInvestigationForm')->name('education.investigation.form.store');
+    Route::post('ngo/educationfacility-investigation-form-store/{facility}', 'StoreInvestigationForm')->name('education.investigation.form.store');
     Route::get('ngo/education-facility-investigation-show/{facility}', 'ShowInvestigationForm')->name('investigation.education.facility.show');
-
-
-
+    Route::post('ngo/education-facility-reject/{facility}', 'InvestigationReject')->name('investigation.education.facility.reject');
+    Route::get('ngo/education-facility-investigation-edit/{facility}', 'EditRejectForm')->name('investigation.education.facility.form.edit');
+    Route::post('ngo/educationfacility-investigation-form-update/{facility}', 'UpdateInvestigationForm')->name('education.investigation.form.update');
+    Route::post('ngo/educationfacility-investigation-form-verify/{facility}', 'VerifyInvestigationForm')->name('education.investigation.form.verify');
+    Route::get('ngo/educationfacility-approval-list', 'ApprovalFacilityList')->name('education.list.Approvalfacility');
+    Route::post('ngo/educationfacility-status-store/{facility}', 'StoreFacilitiesStatus')->name('education.facility.status.store');
+    Route::get('ngo/educationfacility-approve-list', 'ApproveFacilityList')->name('education.list.Approvefacility');
+        Route::get('ngo/education-facility-show/{facility}', 'ShowFacilityForm')->name('investigation.education.facility.finalshow');
 
 });
 

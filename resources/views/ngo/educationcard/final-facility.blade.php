@@ -444,10 +444,19 @@
                                         </a>
                                     </div>
                                 @endif
+                                  <div class="col-sm-4 mb-3">
+                                    <b>Clearness Amount</b>
+                                    {{ $facility->clearness_amount ?? '—' }}
+                                </div>
+
+                                <div class="col-sm-6 mb-3">
+                                    <b>Status</b>
+                                    {{ $facility->status ?? '—' }}
+                                </div>
                             </div>
                             <div class="row d-flex mt-4 justify-content-between">
                                 @if ($facility->investigation_officer)
-                                    <div class="col-sm-6 mb-3">
+                                    <div class="col-sm-4 mb-3">
                                         @php
                                             $investigationStaff = staffByEmail($facility->investigation_officer);
                                         @endphp
@@ -457,7 +466,7 @@
                                         @endif
                                     </div>
                                 @endif
-                                <div class="col-sm-6 mb-3">
+                                <div class="col-sm-4 mb-3">
                                     @if ($facility->verify_proof)
                                         @php
                                             $verifyStaff = staffByEmail($facility->verify_officer);
@@ -468,186 +477,33 @@
                                         @endif
                                     @endif
                                 </div>
-                               
-                            </div>
-                            <div class="row mt-2 no-print text-center">
-                                <div class="col">
-                                    <!-- Approve Button -->
-                                    @if ($facility->status == 'Verify')
-                                        <button type="button" class="btn btn-sm btn-success mb-1" data-bs-toggle="modal"
-                                            data-bs-target="#approveModal">
-                                            Approve Verify
-                                        </button>
-                                    @endif
-                                    @if ($facility->status == 'Approval')
-                                        <button type="button" class="btn btn-sm btn-success mb-1" data-bs-toggle="modal"
-                                            data-bs-target="#approvalModal">
-                                            Approve Facility
-                                        </button>
-                                    @endif
-                                    @if ($facility->status == 'Approval')
-                                        <!-- Reject Button -->
-                                        <button type="button" class="btn btn-sm btn-danger mb-1" data-bs-toggle="modal"
-                                            data-bs-target="#rejectModal">
-                                            Reject
-                                        </button>
-                                    @endif
-                                    {{-- @if ($facility->status == 'Approve')
-                                        <button type="button" class="btn btn-sm btn-success mb-1" data-bs-toggle="modal"
-                                            data-bs-target="#approvalModal">
-                                            Update Status
-                                        </button>
-                                    @endif --}}
-                                </div>
-                            </div>
-                            <div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel"
-                                aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <form method="POST"
-                                        action="{{ route('education.investigation.form.verify', $facility->id) }}"
-                                        enctype="multipart/form-data">
-                                        @csrf
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="approveModalLabel">Confirm Verification</h5>
-                                                <button type="button" class="btn-close"
-                                                    data-bs-dismiss="modal"></button>
+                                @if ($facility->status == 'Approve')
+                                    <div class="col-sm-4 text-center">
+                                        @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
+                                            <div id="directorSignatureBox" class="mt-2">
+                                                <p class="text-success no-print">Attached</p>
+                                                <img src="{{ asset($signatures['director']) }}" alt="Director Signature"
+                                                    class="img" style="max-height: 80px;">
+                                                <br>
+                                                <button class="btn btn-danger btn-sm mt-2 no-print"
+                                                    onclick="toggleDirector(false)">Remove</button>
                                             </div>
 
-                                            <div class="modal-body">
-                                                <p>Do you want to verify this facility?</p>
-
-                                                <div class="mb-3">
-                                                    <label for="verify_proof" class="form-label">Upload Verification
-                                                        Proof</label>
-                                                    <input type="file" name="verify_proof" id="verify_proof"
-                                                        class="form-control" required>
-                                                </div>
+                                            <div id="directorShowBtnBox" class="mt-2 d-none no-print">
+                                                <button class="btn btn-primary btn-sm"
+                                                    onclick="toggleDirector(true)">Attached
+                                                    Signature</button>
                                             </div>
+                                        @else
+                                            <p class="text-muted mt-2 no-print">Not attached</p>
+                                        @endif
+                                        <strong class="text-danger">Digitally Signed By <br>
+                                            MANOJ KUMAR RATHOR <br>
+                                            DIRECTOR
+                                        </strong><br>
+                                    </div>
+                                @endif
 
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                    Cancel
-                                                </button>
-                                                <button type="submit" class="btn btn-success">
-                                                    Verify
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="modal fade" id="approvalModal" tabindex="-1"
-                                aria-labelledby="approvalModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <form method="POST"
-                                        action="{{ route('education.facility.status.store', $facility->id) }}">
-                                        @csrf
-
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="rejectModalLabel">Confirm Approve</h5>
-                                                <button type="button" class="btn-close"
-                                                    data-bs-dismiss="modal"></button>
-                                            </div>
-
-                                            <div class="modal-body">
-                                                <p>Do you want to Approve this facility?</p>
-
-                                                <div class="row">
-                                                    <div class="col-sm-12 mb-3">
-                                                        <strong>Total Fees Amount:</strong> <br>
-                                                        <span id="billAmountText">
-                                                            <b>{{ number_format($facility->fees_amount ?? 0, 2) }}</b>
-                                                        </span>
-
-                                                        <input type="hidden" id="fees_amount"
-                                                            value="{{ $facility->fees_amount ?? 0 }}">
-                                                    </div>
-
-                                                    <div class="col-sm-12 mb-3">
-                                                        <label><strong> Clearness Claim(%)</strong></label>
-                                                        <input type="number" id="percentage" class="form-control"
-                                                            step="0.01" min="0" max="100"
-                                                            placeholder="Enter percentage"
-                                                            oninput="calculateClearingAmount()">
-                                                    </div>
-
-                                                    <div class="col-sm-12 mb-3">
-                                                        <label><strong>Clearness Amount</strong></label>
-                                                        <input type="text" id="clearing_amount"
-                                                            name="clearness_amount" class="form-control" readonly>
-                                                    </div>
-
-
-
-                                                    <div class="col-sm-12 mb-3 no-print">
-                                                        <b>Status</b>
-                                                        <select name="status" class="form-control" id="status"
-                                                            required onchange="toggleReasonField()">
-                                                            <option value="">Select Status</option>
-                                                            <option value="Approve">Approve</option>
-                                                            <option value="Non-Budget">Non-Budget</option>
-                                                            <option value="Demand-Pending">Demand-Pending</option>
-                                                            <option value="Reject">Reject</option>
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="col-sm-12 mb-3 no-print" id="reason_field"
-                                                        style="display:none;">
-                                                        <b>Reason</b>
-                                                        <textarea name="reason" class="form-control" rows="3" placeholder="Enter reason"></textarea>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                    Cancel
-                                                </button>
-                                                <button type="submit" class="btn btn-danger">
-                                                    Approve
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel"
-                                aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <form method="POST"
-                                        action="{{ route('investigation.education.facility.reject', $facility->id) }}">
-                                        @csrf
-
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="rejectModalLabel">Confirm Rejection</h5>
-                                                <button type="button" class="btn-close"
-                                                    data-bs-dismiss="modal"></button>
-                                            </div>
-
-                                            <div class="modal-body">
-                                                <p>Do you want to reject this facility?</p>
-
-                                                <div class="mb-3">
-                                                    <label for="reason" class="form-label">Reason for rejection</label>
-                                                    <textarea name="remark" id="reason" class="form-control" rows="3" required></textarea>
-                                                </div>
-                                            </div>
-
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                    Cancel
-                                                </button>
-                                                <button type="submit" class="btn btn-danger">
-                                                    Reject
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
                             </div>
 
                         </div>
@@ -664,17 +520,6 @@
             });
         }
         window.onload = () => setLanguage('en'); // Set Eng as default
-    </script>
-    <script>
-        function calculateClearingAmount() {
-            const billAmount = parseFloat(document.getElementById('fees_amount').value) || 0;
-            const percentage = parseFloat(document.getElementById('percentage').value) || 0;
-
-            // Clearing amount is the percentage value
-            const clearingAmount = (billAmount * percentage) / 100;
-
-            document.getElementById('clearing_amount').value = clearingAmount.toFixed(2);
-        }
     </script>
     <script>
         function togglePM(show) {

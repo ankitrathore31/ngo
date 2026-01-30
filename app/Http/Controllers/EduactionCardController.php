@@ -818,7 +818,7 @@ class EduactionCardController extends Controller
             'card_id' => 'required',
             'school'  => 'required',
             'fees_type' => 'required',
-            'registration_no' => 'required',
+            // 'registration_no' => 'required',
             'fees_slip_no' => 'required',
             'fees_submit_date' => 'required|date',
             'fees_amount' => 'required|numeric',
@@ -866,7 +866,7 @@ class EduactionCardController extends Controller
             'card_id'           => 'required',
             'fees_type'         => 'required',
             'school'            => 'required',
-            'registration_no'   => 'required',
+            // 'registration_no'   => 'required',
             'fees_slip_no'      => 'required',
             'fees_submit_date'  => 'required|date',
             'fees_amount'       => 'required|numeric',
@@ -1205,9 +1205,10 @@ class EduactionCardController extends Controller
             return redirect()->back()->with('error', 'Person not found.');
         }
         $officer = Staff::get();
+        $signatures = Signature::pluck('file_path', 'role');
         return view(
             'ngo.educationcard.investigation-form',
-            compact('facility', 'card', 'record', 'officer')
+            compact('facility', 'card', 'record', 'officer', 'signatures')
         );
     }
 
@@ -1247,7 +1248,7 @@ class EduactionCardController extends Controller
         ]);
 
         return redirect()
-            ->route('education.list.Verifyfacility')
+            ->route('education.list.Investigationfacility')
             ->with('success', 'Investigation Form Send To Verification successfully.');
     }
 
@@ -1399,6 +1400,399 @@ class EduactionCardController extends Controller
         return view(
             'ngo.educationcard.verify-list',
             compact('combined', 'data', 'states', 'staff')
+        );
+    }
+
+    public function InvestigationReject(Request $request, EducationFacility $facility)
+    {
+        if ($facility->status === 'Investigation') {
+            $facility->status = 'Pending';
+            $facility->remark = $request->remark;
+            $facility->save();
+
+            return redirect()
+                ->route('education.list.Verifyfacility')
+                ->with('success', 'Investigation rejected and moved to Pending successfully');
+        }
+
+        if ($facility->status === 'Verify') {
+            $facility->status = 'Investigation';
+            $facility->remark = $request->remark;
+            $facility->save();
+
+            return redirect()
+                ->route('education.list.Verifyfacility')
+                ->with('success', 'Verification rejected and moved to Investigation successfully');
+        }
+
+        return redirect()
+            ->back()
+            ->with('error', 'Invalid facility status');
+    }
+
+    public function EditRejectForm(EducationFacility $facility)
+    {
+        $card = $facility->educationCard; // ✅ FIXED
+
+        if (!$card) {
+            return redirect()->back()->with('error', 'Education Card not found.');
+        }
+
+        $record = beneficiarie::find($card->reg_id)
+            ?? Member::find($card->reg_id);
+
+        if (!$record) {
+            return redirect()->back()->with('error', 'Person not found.');
+        }
+        $officer = Staff::get();
+        return view(
+            'ngo.educationcard.reject-form',
+            compact('facility', 'card', 'record', 'officer')
+        );
+    }
+
+    public function UpdateInvestigationForm(Request $request, EducationFacility $facility)
+    {
+        $validated = $request->validate([
+            'person_paying_amount'     => 'nullable|string|max:255',
+            'account_no'               => 'nullable|string|max:50',
+            'account_holder_name'      => 'nullable|string|max:255',
+            'ifsc_code'                => 'nullable|string|max:20',
+            'bank_name'                => 'nullable|string|max:255',
+            'bank_branch'              => 'nullable|string|max:255',
+            'account_holder_address'   => 'nullable|string',
+            'verify_officer'           => 'required|string|max:255',
+            'investigation_proof'      => 'nullable|image|mimes:jpg,jpeg,png',
+        ]);
+
+        /* Handle photo upload */
+        if ($request->hasFile('investigation_proof')) {
+            $file = $request->file('investigation_proof');
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('images'), $filename);
+
+            $validated['investigation_proof'] = $filename;
+        }
+
+        $facility->update([
+            'person_paying_amount'     => $validated['person_paying_amount'] ?? $facility->person_paying_amount,
+            'account_no'               => $validated['account_no'] ?? $facility->account_no,
+            'account_holder_name'      => $validated['account_holder_name'] ?? $facility->account_holder_name,
+            'ifsc_code'                => $validated['ifsc_code'] ?? $facility->ifsc_code,
+            'bank_name'                => $validated['bank_name'] ?? $facility->bank_name,
+            'bank_branch'              => $validated['bank_branch'] ?? $facility->bank_branch,
+            'account_holder_address'   => $validated['account_holder_address'] ?? $facility->account_holder_address,
+            'verify_officer'           => $validated['verify_officer'],
+            'investigation_proof'      => $validated['investigation_proof'] ?? $facility->investigation_proof,
+            'status'                   => 'Verify',
+            'remark'                   => null, // reset remark after re-submission
+        ]);
+
+        return redirect()
+            ->route('education.list.Investigationfacility')
+            ->with('success', 'Investigation form updated and sent for verification successfully.');
+    }
+
+    public function VerifyInvestigationForm(Request $request, EducationFacility $facility)
+    {
+        $validated = $request->validate([
+            'verify_proof'    => 'nullable|image|mimes:jpg,jpeg,png',
+        ]);
+
+        /* Handle photo upload (public/images) */
+        if ($request->hasFile('verify_proof')) {
+            $file = $request->file('verify_proof');
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('images'), $filename);
+            $validated['verify_proof'] = $filename;
+        }
+
+        $facility->update([
+            'verify_proof'    => $validated['verify_proof'] ?? null,
+            'status'                 => 'Approval',
+        ]);
+
+        return redirect()
+            ->route('education.list.Verifyfacility')
+            ->with('success', 'Verification Send To Director Successfully.');
+    }
+
+    public function ApprovalFacilityList(Request $request)
+    {
+        /* ---------- Education Card + Facility Constraint ---------- */
+
+
+        $educationCardConstraint = function ($q) use ($request) {
+
+            $q->where('status', 1)
+                ->whereHas('educationFacilities', function ($ef) {
+                    $ef->where('status', 'Approval');
+                })
+                ->with(['educationFacilities' => function ($ef) {
+                    $ef->where('status', 'Approval');
+                }]);
+
+            if ($request->filled('educationcard_no')) {
+                $q->where('educationcard_no', trim($request->educationcard_no));
+            }
+        };
+
+
+
+        /* ---------- Base Queries ---------- */
+
+        $queryBene = beneficiarie::with(['educationCards' => $educationCardConstraint])
+            ->where('status', 1)
+            ->whereHas('educationCards', $educationCardConstraint);
+
+        $queryMember = Member::with(['educationCards' => $educationCardConstraint])
+            ->where('status', 1)
+            ->whereHas('educationCards', $educationCardConstraint);
+
+        /* ---------- Filters (same as education demand) ---------- */
+
+        if ($request->filled('session_filter')) {
+            $queryBene->where('academic_session', $request->session_filter);
+            $queryMember->where('academic_session', $request->session_filter);
+        }
+
+        if ($request->filled('application_no')) {
+            $search = $request->application_no;
+
+            $queryBene->where('application_no', 'like', "%{$search}%");
+            $queryMember->where('application_no', 'like', "%{$search}%");
+        }
+
+        if ($request->filled('registration_no')) {
+            $search = $request->registration_no;
+
+            $queryBene->where('registration_no', 'like', "%{$search}%");
+            $queryMember->where('registration_no', 'like', "%{$search}%");
+        }
+
+        if ($request->filled('name')) {
+
+            $name = trim($request->name);
+
+            $queryBene->where(function ($q) use ($name) {
+                $q->where('name', 'like', "{$name}%")
+                    ->orWhere('gurdian_name', 'like', "{$name}%");
+            });
+
+            $queryMember->where(function ($q) use ($name) {
+                $q->where('name', 'like', "{$name}%")
+                    ->orWhere('gurdian_name', 'like', "{$name}%");
+            });
+        }
+
+
+        if ($request->filled('block')) {
+            $queryBene->where('block', 'like', "%{$request->block}%");
+            $queryMember->where('block', 'like', "%{$request->block}%");
+        }
+
+        if ($request->filled('state')) {
+            $queryBene->where('state', $request->state);
+            $queryMember->where('state', $request->state);
+        }
+
+        if ($request->filled('district')) {
+            $queryBene->where('district', $request->district);
+            $queryMember->where('district', $request->district);
+        }
+
+        /* ---------- Fetch Data ---------- */
+
+        $beneficiaries = $queryBene->get();
+        $members       = $queryMember->get();
+
+        /* ---------- Flatten: Card + Facility ---------- */
+
+        $combined = collect()
+            ->merge($beneficiaries)
+            ->merge($members)
+            ->flatMap(function ($item) {
+                return $item->educationCards->flatMap(function ($card) use ($item) {
+                    return $card->educationFacilities->map(function ($facility) use ($item, $card) {
+                        return [
+                            'person'   => $item,
+                            'card'     => $card,
+                            'facility' => $facility,
+                        ];
+                    });
+                });
+            })
+            ->sortBy(fn($row) => $row['facility']->created_at)
+            ->values();
+
+        /* ---------- Extra Data ---------- */
+
+        $data   = academic_session::all();
+        $states = config('states');
+        $staff = Staff::get();
+        return view(
+            'ngo.educationcard.approval-list',
+            compact('combined', 'data', 'states', 'staff')
+        );
+    }
+
+    public function StoreFacilitiesStatus(Request $request, EducationFacility $facility)
+    {
+        $validated = $request->validate([
+            'clearness_amount' => 'nullable|numeric',
+            'status' => 'required|in:Approve,Non-Budget,Demand-Pending,Reject',
+            'reason' => 'nullable|string|required_if:status,Reject,Non-Budget,Demand-Pending',
+        ]);
+
+        $facility->update([
+            'clearness_amount' => $validated['clearness_amount'] ?? null,
+            'status' => $validated['status'],
+            'reason' => $validated['reason'] ?? null,
+        ]);
+
+        return redirect()
+            ->route('education.list.Approvefacility')
+            ->with('success', 'Health Facilities Status Update successfully.');
+    }
+
+    public function ApproveFacilityList(Request $request)
+    {
+        /* ---------- Education Card + Facility Constraint ---------- */
+
+
+        $educationCardConstraint = function ($q) use ($request) {
+
+            $q->where('status', 1)
+                ->whereHas('educationFacilities', function ($ef) {
+                    $ef->where('status', 'Approve');
+                })
+                ->with(['educationFacilities' => function ($ef) {
+                    $ef->where('status', 'Approve');
+                }]);
+
+            if ($request->filled('educationcard_no')) {
+                $q->where('educationcard_no', trim($request->educationcard_no));
+            }
+        };
+
+
+
+        /* ---------- Base Queries ---------- */
+
+        $queryBene = beneficiarie::with(['educationCards' => $educationCardConstraint])
+            ->where('status', 1)
+            ->whereHas('educationCards', $educationCardConstraint);
+
+        $queryMember = Member::with(['educationCards' => $educationCardConstraint])
+            ->where('status', 1)
+            ->whereHas('educationCards', $educationCardConstraint);
+
+        /* ---------- Filters (same as education demand) ---------- */
+
+        if ($request->filled('session_filter')) {
+            $queryBene->where('academic_session', $request->session_filter);
+            $queryMember->where('academic_session', $request->session_filter);
+        }
+
+        if ($request->filled('application_no')) {
+            $search = $request->application_no;
+
+            $queryBene->where('application_no', 'like', "%{$search}%");
+            $queryMember->where('application_no', 'like', "%{$search}%");
+        }
+
+        if ($request->filled('registration_no')) {
+            $search = $request->registration_no;
+
+            $queryBene->where('registration_no', 'like', "%{$search}%");
+            $queryMember->where('registration_no', 'like', "%{$search}%");
+        }
+
+        if ($request->filled('name')) {
+
+            $name = trim($request->name);
+
+            $queryBene->where(function ($q) use ($name) {
+                $q->where('name', 'like', "{$name}%")
+                    ->orWhere('gurdian_name', 'like', "{$name}%");
+            });
+
+            $queryMember->where(function ($q) use ($name) {
+                $q->where('name', 'like', "{$name}%")
+                    ->orWhere('gurdian_name', 'like', "{$name}%");
+            });
+        }
+
+
+        if ($request->filled('block')) {
+            $queryBene->where('block', 'like', "%{$request->block}%");
+            $queryMember->where('block', 'like', "%{$request->block}%");
+        }
+
+        if ($request->filled('state')) {
+            $queryBene->where('state', $request->state);
+            $queryMember->where('state', $request->state);
+        }
+
+        if ($request->filled('district')) {
+            $queryBene->where('district', $request->district);
+            $queryMember->where('district', $request->district);
+        }
+
+        /* ---------- Fetch Data ---------- */
+
+        $beneficiaries = $queryBene->get();
+        $members       = $queryMember->get();
+
+        /* ---------- Flatten: Card + Facility ---------- */
+
+        $combined = collect()
+            ->merge($beneficiaries)
+            ->merge($members)
+            ->flatMap(function ($item) {
+                return $item->educationCards->flatMap(function ($card) use ($item) {
+                    return $card->educationFacilities->map(function ($facility) use ($item, $card) {
+                        return [
+                            'person'   => $item,
+                            'card'     => $card,
+                            'facility' => $facility,
+                        ];
+                    });
+                });
+            })
+            ->sortBy(fn($row) => $row['facility']->created_at)
+            ->values();
+
+        /* ---------- Extra Data ---------- */
+
+        $data   = academic_session::all();
+        $states = config('states');
+        $staff = Staff::get();
+        return view(
+            'ngo.educationcard.approve-list',
+            compact('combined', 'data', 'states', 'staff')
+        );
+    }
+
+    public function ShowFacilityForm(EducationFacility $facility)
+    {
+        $card = $facility->educationCard; // ✅ FIXED
+
+        if (!$card) {
+            return redirect()->back()->with('error', 'Education Card not found.');
+        }
+
+        $record = beneficiarie::find($card->reg_id)
+            ?? Member::find($card->reg_id);
+
+        if (!$record) {
+            return redirect()->back()->with('error', 'Person not found.');
+        }
+        $officer = Staff::get();
+        $signatures = Signature::pluck('file_path', 'role');
+        return view(
+            'ngo.educationcard.final-facility',
+            compact('facility', 'card', 'record', 'officer', 'signatures')
         );
     }
 }
