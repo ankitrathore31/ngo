@@ -200,7 +200,7 @@
                                 <th>Address</th>
                                 <th>Session</th>
                                 <th>Action</th>
-                                <th>Certificate</th>
+                                <th>Vendor/Shop/Farm Certificate</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -235,9 +235,10 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a href="{{ route('certificate.vendor', $item->id) }}" class="btn btn-success btn-sm px-3">
-                                        Certificate
-                                    </a>
+                                        <a href="{{ route('certificate.vendor', $item->id) }}"
+                                            class="btn btn-success btn-sm px-3">
+                                            Vendor/Shop/Farm Certificate
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach
