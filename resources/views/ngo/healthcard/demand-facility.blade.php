@@ -368,7 +368,9 @@
                                 @foreach ($hospitals as $hospital)
                                     <option value="{{ $hospital->hospital_name }} ({{ $hospital->hospital_code }})"
                                         {{ isset($healthcard) && $healthcard->hospital_name == $hospital->hospital_name ? 'selected' : '' }}>
-                                        {{ $hospital->hospital_name }} ({{ $hospital->hospital_code }}),,{{ $hospital->operator_name }} ,{{ $hospital->address }} 
+                                        {{ $hospital->hospital_name }}
+                                        ({{ $hospital->hospital_code }}),,{{ $hospital->operator_name }}
+                                        ,{{ $hospital->address }}
                                     </option>
                                 @endforeach
                             </select>
@@ -384,10 +386,9 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Bill Date</label>
                             <input type="date" name="bill_date" id="bill_date" class="form-control" required>
-                            <small id="billDateError" class="text-danger d-none">
-                                Warning - Please enter a date within the last 30 days.
-                            </small>
+                            <small id="billDateError" class="text-danger"></small>
                         </div>
+
 
                         {{-- Bill GST --}}
                         <div class="col-md-6 mb-3">
@@ -423,37 +424,44 @@
             const billErrorMsg = document.getElementById('billDateError');
             const form = billDateInput.closest('form');
 
+            const formatDate = (date) => date.toISOString().split('T')[0];
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const past30Days = new Date(today);
+            past30Days.setDate(today.getDate() - 30);
+
+            // Set picker limits
+            billDateInput.min = formatDate(past30Days);
+            billDateInput.max = formatDate(today);
+
+            // Dynamic error message
+            billErrorMsg.innerText =
+                `Please select a date between ${formatDate(past30Days)} and ${formatDate(today)}.`;
+
             billDateInput.addEventListener('change', validateBillDate);
             form.addEventListener('submit', function(e) {
-                if (!validateBillDate()) {
-                    e.preventDefault();
-                }
+                if (!validateBillDate()) e.preventDefault();
             });
 
             function validateBillDate() {
                 if (!billDateInput.value) return false;
 
                 const selectedDate = new Date(billDateInput.value);
-                const currentDate = new Date();
-
-                // Remove time part
                 selectedDate.setHours(0, 0, 0, 0);
-                currentDate.setHours(0, 0, 0, 0);
 
-                // Calculate date 30 days ago
-                const minDate = new Date(currentDate);
-                minDate.setDate(minDate.getDate() - 30);
-
-                if (selectedDate < minDate || selectedDate > currentDate) {
+                if (selectedDate < past30Days || selectedDate > today) {
                     billErrorMsg.classList.remove('d-none');
                     billDateInput.classList.add('is-invalid');
                     return false;
-                } else {
-                    billErrorMsg.classList.add('d-none');
-                    billDateInput.classList.remove('is-invalid');
-                    return true;
                 }
+
+                billErrorMsg.classList.add('d-none');
+                billDateInput.classList.remove('is-invalid');
+                return true;
             }
         });
     </script>
+
 @endsection

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\academic_session;
 use App\Models\beneficiarie;
+use App\Models\Category;
 use App\Models\Disease;
 use App\Models\HealthCard;
 use App\Models\HealthFacility;
@@ -336,7 +337,7 @@ class HealthCardController extends Controller
             'diseases'
         ));
     }
-    
+
     public function UpdateHealthCard(Request $request, $health_id)
     {
         $request->validate([
@@ -635,15 +636,6 @@ class HealthCardController extends Controller
             'bill_upload'     => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx',
         ]);
 
-        /* 🔴 Validate bill date is within current month */
-        $billDate = Carbon::parse($validated['bill_date']);
-        $currentMonth = Carbon::now()->format('Y-m');
-
-        if ($billDate->format('Y-m') !== $currentMonth) {
-            return redirect()->back()
-                ->withInput()
-                ->with('warning', 'Please submit the bill for only one month with the current date.');
-        }
 
         /* Save file directly to public/documents */
         if ($request->hasFile('bill_upload')) {
@@ -991,7 +983,7 @@ class HealthCardController extends Controller
             compact('combined', 'data', 'states', 'staff')
         );
     }
-    
+
 
     public function StoreInvestigationForm(Request $request, HealthFacility $facility)
     {
@@ -1208,7 +1200,6 @@ class HealthCardController extends Controller
             ->with('success', 'Verification rejected successfully.');
     }
 
-
     public function ApprovelFacilityList(Request $request)
     {
         $healthCardConstraint = function ($q) use ($request) {
@@ -1320,14 +1311,16 @@ class HealthCardController extends Controller
         // Dynamically determine the person (beneficiarie or member)
         $person = \App\Models\beneficiarie::find($card->reg_id)
             ?? \App\Models\Member::find($card->reg_id);
+            $categories = Category::orderBy('category', 'asc')->pluck('category');
 
-        return view('ngo.healthcard.show-verify', compact('facility', 'card', 'person'));
+        return view('ngo.healthcard.show-verify', compact('facility', 'card', 'person','categories'));
     }
 
     public function StoreHealthFacilitiesStatus(Request $request, HealthFacility $facility)
     {
         $validated = $request->validate([
             'clearness_amount' => 'nullable|numeric',
+            'work_category'    => 'required',
             'status' => 'required|in:Approve,Non-Budget,Demand-Pending,Reject',
             'reason' => 'nullable|string|required_if:status,Reject,Non-Budget,Demand-Pending',
         ]);
@@ -1335,6 +1328,7 @@ class HealthCardController extends Controller
         $facility->update([
             'clearness_amount' => $validated['clearness_amount'] ?? null,
             'status' => $validated['status'],
+            'work_category' => $validated['work_category'],
             'reason' => $validated['reason'] ?? null,
         ]);
 

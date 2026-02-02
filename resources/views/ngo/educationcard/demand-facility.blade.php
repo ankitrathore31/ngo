@@ -360,10 +360,9 @@
                                 <label class="form-label">Fees Submit Date</label>
                                 <input type="date" name="fees_submit_date" id="fees_submit_date" class="form-control"
                                     required>
-                                <small id="dateError" class="text-danger d-none">
-                                    Warning - Please enter a date within the next 30 days.
-                                </small>
+                                <small id="dateError" class="text-danger"></small>
                             </div>
+
 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Total Fees Amount</label>
@@ -388,37 +387,45 @@
             const errorMsg = document.getElementById('dateError');
             const form = dateInput.closest('form');
 
+            const formatDate = (date) => date.toISOString().split('T')[0];
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const past30Days = new Date(today);
+            past30Days.setDate(today.getDate() - 30);
+
+            // Set picker limits
+            dateInput.min = formatDate(past30Days);
+            dateInput.max = formatDate(today);
+
+            // Set dynamic message
+            errorMsg.innerText =
+                `Please select a date between ${formatDate(past30Days)} and ${formatDate(today)}.`;
+
             dateInput.addEventListener('change', validateDate);
             form.addEventListener('submit', function(e) {
-                if (!validateDate()) {
-                    e.preventDefault();
-                }
+                if (!validateDate()) e.preventDefault();
             });
 
             function validateDate() {
                 if (!dateInput.value) return false;
 
                 const selectedDate = new Date(dateInput.value);
-                const currentDate = new Date();
-
-                // Remove time part
                 selectedDate.setHours(0, 0, 0, 0);
-                currentDate.setHours(0, 0, 0, 0);
 
-                // Calculate date 30 days from now
-                const maxDate = new Date(currentDate);
-                maxDate.setDate(maxDate.getDate() + 30);
-
-                if (selectedDate < currentDate || selectedDate > maxDate) {
+                if (selectedDate < past30Days || selectedDate > today) {
                     errorMsg.classList.remove('d-none');
                     dateInput.classList.add('is-invalid');
                     return false;
-                } else {
-                    errorMsg.classList.add('d-none');
-                    dateInput.classList.remove('is-invalid');
-                    return true;
                 }
+
+                errorMsg.classList.add('d-none');
+                dateInput.classList.remove('is-invalid');
+                return true;
             }
         });
     </script>
+
+
 @endsection

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\academic_session;
 use App\Models\beneficiarie;
+use App\Models\Category;
 use App\Models\Education_class;
 use App\Models\EducationCard;
 use App\Models\EducationFacility;
@@ -1057,7 +1058,7 @@ class EduactionCardController extends Controller
 
         return redirect()
             ->route('education.list.Investigationfacility')
-            ->with('success', 'Investigation details saved successfully.');
+            ->with('success', 'Investigation Officer Selected successfully.');
     }
 
     public function InvetigationFacilityList(Request $request)
@@ -1183,10 +1184,10 @@ class EduactionCardController extends Controller
 
         $data   = academic_session::all();
         $states = config('states');
-        $staff = Staff::get();
+        $officer = Staff::get();
         return view(
             'ngo.educationcard.investigation-list',
-            compact('combined', 'data', 'states', 'staff')
+            compact('combined', 'data', 'states', 'officer')
         );
     }
 
@@ -1222,7 +1223,7 @@ class EduactionCardController extends Controller
             'bank_name'              => 'nullable|string|max:255',
             'bank_branch'            => 'nullable|string|max:255',
             'account_holder_address' => 'nullable|string',
-            'verify_officer'         => 'required|string|max:255',
+            // 'verify_officer'         => 'required|string|max:255',
             'investigation_proof'    => 'nullable|image|mimes:jpg,jpeg,png',
         ]);
 
@@ -1242,9 +1243,9 @@ class EduactionCardController extends Controller
             'bank_name'              => $validated['bank_name'] ?? null,
             'bank_branch'            => $validated['bank_branch'] ?? null,
             'account_holder_address' => $validated['account_holder_address'] ?? null,
-            'verify_officer'         => $validated['verify_officer'],
             'investigation_proof'    => $validated['investigation_proof'] ?? null,
-            'status'                 => 'Verify',
+            'investigation_status'   => 1,
+            'remark'                 => null,
         ]);
 
         return redirect()
@@ -1266,11 +1267,29 @@ class EduactionCardController extends Controller
         if (!$record) {
             return redirect()->back()->with('error', 'Person not found.');
         }
-
+        $categories = Category::orderBy('category', 'asc')->pluck('category');
         return view(
             'ngo.educationcard.show-form',
-            compact('facility', 'card', 'record')
+            compact('facility', 'card', 'record','categories')
         );
+    }
+
+    public function VerifyOfficerStore(Request $request, EducationFacility $facility)
+    {
+        $validated = $request->validate([
+            // 'person_paying_bill'    => 'required|string|max:255',
+            'verify_officer' => 'required|string|max:255',
+        ]);
+
+        $facility->update([
+            // 'person_paying_bill'    => $validated['person_paying_bill'],
+            'verify_officer' => $validated['verify_officer'],
+            'status'                => 'Verify',
+        ]);
+
+        return redirect()
+            ->route('education.list.Verifyfacility')
+            ->with('success', 'Verify Officer Selected successfully.');
     }
 
     public function VerifyFacilityList(Request $request)
@@ -1396,10 +1415,10 @@ class EduactionCardController extends Controller
 
         $data   = academic_session::all();
         $states = config('states');
-        $staff = Staff::get();
+        $officer = Staff::get();
         return view(
             'ngo.educationcard.verify-list',
-            compact('combined', 'data', 'states', 'staff')
+            compact('combined', 'data', 'states', 'officer')
         );
     }
 
@@ -1412,17 +1431,18 @@ class EduactionCardController extends Controller
 
             return redirect()
                 ->route('education.list.Verifyfacility')
-                ->with('success', 'Investigation rejected and moved to Pending successfully');
+                ->with('success', 'Form rejected and moved to Pending successfully');
         }
 
         if ($facility->status === 'Verify') {
             $facility->status = 'Investigation';
+            // $facility->investigation_status = 0;
             $facility->remark = $request->remark;
             $facility->save();
 
             return redirect()
                 ->route('education.list.Verifyfacility')
-                ->with('success', 'Verification rejected and moved to Investigation successfully');
+                ->with('success', 'Form rejected and moved to Investigation successfully');
         }
 
         return redirect()
@@ -1461,7 +1481,6 @@ class EduactionCardController extends Controller
             'bank_name'                => 'nullable|string|max:255',
             'bank_branch'              => 'nullable|string|max:255',
             'account_holder_address'   => 'nullable|string',
-            'verify_officer'           => 'required|string|max:255',
             'investigation_proof'      => 'nullable|image|mimes:jpg,jpeg,png',
         ]);
 
@@ -1482,9 +1501,9 @@ class EduactionCardController extends Controller
             'bank_name'                => $validated['bank_name'] ?? $facility->bank_name,
             'bank_branch'              => $validated['bank_branch'] ?? $facility->bank_branch,
             'account_holder_address'   => $validated['account_holder_address'] ?? $facility->account_holder_address,
-            'verify_officer'           => $validated['verify_officer'],
             'investigation_proof'      => $validated['investigation_proof'] ?? $facility->investigation_proof,
             'status'                   => 'Verify',
+            'investigation_status'   => 1,
             'remark'                   => null, // reset remark after re-submission
         ]);
 
@@ -1640,6 +1659,7 @@ class EduactionCardController extends Controller
     {
         $validated = $request->validate([
             'clearness_amount' => 'nullable|numeric',
+            'work_category'    => 'required',
             'status' => 'required|in:Approve,Non-Budget,Demand-Pending,Reject',
             'reason' => 'nullable|string|required_if:status,Reject,Non-Budget,Demand-Pending',
         ]);
@@ -1647,6 +1667,7 @@ class EduactionCardController extends Controller
         $facility->update([
             'clearness_amount' => $validated['clearness_amount'] ?? null,
             'status' => $validated['status'],
+            'work_category' => $validated['work_category'],
             'reason' => $validated['reason'] ?? null,
         ]);
 

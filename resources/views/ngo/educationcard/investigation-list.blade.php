@@ -31,13 +31,13 @@
                     <div class="d-flex flex-wrap gap-1">
 
                         @if (!$isStaff || $user->hasPermission('educationfacility_hospital_list'))
-                            <a href="{{ route('list.school') }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('list.school') }}" class="btn btn-sm btn-info">
                                 School List
                             </a>
                         @endif
 
                         @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_generate'))
-                            <a href="{{ route('eduaction.reg.list') }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('eduaction.reg.list') }}" class="btn btn-sm btn-success">
                                 Education Card Generate
                             </a>
                         @endif
@@ -49,43 +49,49 @@
                         @endif
 
                         @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
-                            <a href="{{ route('eduaction.demand.list') }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('eduaction.demand.list') }}" class="btn btn-sm btn-warning">
                                 Demand Education Facility
                             </a>
                         @endif
 
                         @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
-                            <a href="{{ route('eduaction.demand.pending.list') }}" class="btn btn-sm btn-primary">
-                                Demand Pending Facility
+                            <a href="{{ route('eduaction.demand.pending.list') }}" class="btn btn-sm btn-warning">
+                                Demand Education Pending Facility
                             </a>
                         @endif
+
                         @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
-                            <a href="{{ route('education.list.Investigationfacility') }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('education.list.Investigationfacility') }}" class="btn btn-sm btn-secondary">
                                 Investigation Education Facility
                             </a>
                         @endif
+
                         @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
-                            <a href="{{ route('education.list.Investigationfacility') }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('education.list.Verifyfacility') }}" class="btn btn-sm btn-dark">
                                 Verify Education Facility
                             </a>
                         @endif
+
                         @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
-                            <a href="{{ route('education.list.Approvalfacility') }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('education.list.Approvalfacility') }}" class="btn btn-sm btn-info">
                                 Approval Education Facility
                             </a>
                         @endif
+
                         @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
-                            <a href="{{ route('education.list.Approvefacility') }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('education.list.Approvefacility') }}" class="btn btn-sm btn-success">
                                 Approve Education Facility
                             </a>
                         @endif
-                         @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
-                            <a href="{{ route('education.list.NonBudgetfacility') }}" class="btn btn-sm btn-primary">
+
+                        @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
+                            <a href="{{ route('education.list.NonBudgetfacility') }}" class="btn btn-sm btn-secondary">
                                 Non Budget Education Facility
                             </a>
                         @endif
+
                         @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
-                            <a href="{{ route('education.list.Rejectfacility') }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('education.list.Rejectfacility') }}" class="btn btn-sm btn-danger">
                                 Reject Education Facility
                             </a>
                         @endif
@@ -311,6 +317,15 @@
                                                     </button>
                                                 </form>
                                             @endif
+                                            @if ($user->user_type === 'ngo')
+                                                @if ($facility->investigation_status == 1)
+                                                    <button type="button" class="btn btn-primary btn-sm"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#investigationModal-{{ $facility->id }}">
+                                                        Verify Officer
+                                                    </button>
+                                                @endif
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -324,6 +339,80 @@
                     @endif
                 </div>
             </div>
+            @foreach ($combined as $row)
+                @php
+                    $facility = $row['facility'];
+                    $card = $row['card'];
+                    $item = $row['person'];
+                @endphp
+
+                <div class="modal fade" id="investigationModal-{{ $facility->id }}" tabindex="-1" aria-hidden="true">
+
+                    <div class="modal-dialog modal-lg">
+                        <form method="POST" action="{{ route('verify.education.officer.store', $facility->id) }}">
+                            @csrf
+
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Education Facility Verify Officer</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+
+                                <div class="modal-body">
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <strong>Name:</strong> {{ $item->name }}<br>
+                                            <strong>Father/Husband Name:</strong> {{ $item->gurdian_name }}<br>
+                                            <strong>Registration No:</strong> {{ $item->registration_no }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            <strong>Health Card No:</strong> {{ $card->educationcard_no }}<br>
+                                            <strong>Bill No:</strong> {{ $facility->fees_slip_no }} <br>
+                                            <strong>Amount:</strong> {{ number_format($facility->fees_amount ?? 0, 2) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            <strong>Investigation:</strong> @if($facility->investigation_status == 1)
+                                             Success @endif <br>
+                                            {{-- <strong>Bill No:</strong> {{ $facility->fees_slip_no }} <br> --}}
+                                            {{-- <strong>Amount:</strong> {{ number_format($facility->fees_amount ?? 0, 2) }} --}}
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Verify Officer</label>
+                                        <select name="verify_officer" class="form-control" required>
+                                            <option value="">Select Officer</option>
+                                            @foreach ($officer as $person)
+                                                <option value="{{ $person->email }}"
+                                                    {{ $facility->investigation_officer ==
+                                                    $person->name . ' (' . $person->staff_code . ') (' . $person->position . ')'
+                                                        ? 'selected'
+                                                        : '' }}>
+                                                    {{ $person->name }} ({{ $person->staff_code }})
+                                                    ({{ $person->position }})
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-success">Send Verify Officer</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                        Cancel
+                                    </button>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            @endforeach
         </div>
     </div>
 @endsection

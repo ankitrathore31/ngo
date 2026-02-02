@@ -418,7 +418,7 @@
                                         <textarea class="form-control no-print" name="account_holder_address" rows="3"></textarea>
                                     </div>
 
-                                    <div class="col-sm-6 mb-3 no-print">
+                                    {{-- <div class="col-sm-6 mb-3 no-print">
                                         <b>Verify Officer</b>
                                         <select name="verify_officer" class="form-control" required>
                                             <option value="">Select Officer</option>
@@ -432,7 +432,7 @@
                                                 </option>
                                             @endforeach
                                         </select>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="col-sm-6 mb-3 no-print">
                                         <b>Investigation Proof <small>(Upload Photo)</small></b>

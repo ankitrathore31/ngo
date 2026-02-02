@@ -426,20 +426,6 @@
                                     </div>
 
                                     <div class="col-sm-6 mb-3">
-                                        <b>Verify Officer :</b> <small>(If you want to change verify officer then select )</small>
-                                        <select name="verify_officer" class="form-control">
-                                            <option value="">Select Officer</option>
-                                            @foreach ($officer as $person)
-                                                <option value="{{ $person->email }}"
-                                                    {{ old('verify_officer', $facility->verify_officer) == $person->email ? 'selected' : '' }}>
-                                                    {{ $person->name }} ({{ $person->staff_code }})
-                                                    ({{ $person->position }})
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="col-sm-6 mb-3">
                                         <b>Investigation Proof</b>
                                         <input type="file" name="investigation_proof" class="form-control">
 
@@ -450,6 +436,13 @@
                                                     target="_blank">View</a>
                                             </small>
                                         @endif
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3">
+                                        <b>Verify Officer :</b>
+
+                                        {{ $facility->verify_officer }}>
+
                                     </div>
 
                                     <div class="col-sm-6 mb-3">
