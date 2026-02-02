@@ -521,7 +521,18 @@
                                                     class="form-control" readonly>
                                             </div>
 
-
+                                            <div class="col-sm-6 mb-3">
+                                                <label class="form-label">Project / Work Category <span
+                                                        class="text-danger">*</span></label>
+                                                <select name="work_category" id="work_category" class="form-control"
+                                                    required>
+                                                    <option value="">Select Category</option>
+                                                    @foreach ($categories as $category)
+                                                        <option value="{{ $category }}">{{ $category }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
 
                                             <div class="col-sm-6 mb-3 no-print">
                                                 <b>Status</b>

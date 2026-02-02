@@ -32,6 +32,8 @@ class HealthFacility extends Model
         'bank_branch',
         'account_holder_address',
         'reason',
+        'work_category',
+        'investigation_status',
         'remark',
         'status',
     ];

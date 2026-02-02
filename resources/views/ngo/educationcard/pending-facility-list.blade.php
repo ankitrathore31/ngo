@@ -31,13 +31,13 @@
                     <div class="d-flex flex-wrap gap-1">
 
                         @if (!$isStaff || $user->hasPermission('educationfacility_hospital_list'))
-                            <a href="{{ route('list.school') }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('list.school') }}" class="btn btn-sm btn-info">
                                 School List
                             </a>
                         @endif
 
                         @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_generate'))
-                            <a href="{{ route('eduaction.reg.list') }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('eduaction.reg.list') }}" class="btn btn-sm btn-success">
                                 Education Card Generate
                             </a>
                         @endif
@@ -49,34 +49,50 @@
                         @endif
 
                         @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
-                            <a href="{{ route('eduaction.demand.list') }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('eduaction.demand.list') }}" class="btn btn-sm btn-warning">
                                 Demand Education Facility
                             </a>
                         @endif
 
                         @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
-                            <a href="{{ route('eduaction.demand.pending.list') }}" class="btn btn-sm btn-primary">
-                                Demand Pending Facility
+                            <a href="{{ route('eduaction.demand.pending.list') }}" class="btn btn-sm btn-warning">
+                                Demand Education Pending Facility
                             </a>
                         @endif
+
                         @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
-                            <a href="{{ route('education.list.Investigationfacility') }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('education.list.Investigationfacility') }}" class="btn btn-sm btn-secondary">
                                 Investigation Education Facility
                             </a>
                         @endif
+
                         @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
-                            <a href="{{ route('education.list.Investigationfacility') }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('education.list.Verifyfacility') }}" class="btn btn-sm btn-dark">
                                 Verify Education Facility
                             </a>
                         @endif
+
                         @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
-                            <a href="{{ route('education.list.Approvalfacility') }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('education.list.Approvalfacility') }}" class="btn btn-sm btn-info">
                                 Approval Education Facility
                             </a>
                         @endif
+
                         @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
-                            <a href="{{ route('education.list.Approvefacility') }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('education.list.Approvefacility') }}" class="btn btn-sm btn-success">
                                 Approve Education Facility
+                            </a>
+                        @endif
+
+                        @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
+                            <a href="{{ route('education.list.NonBudgetfacility') }}" class="btn btn-sm btn-secondary">
+                                Non Budget Education Facility
+                            </a>
+                        @endif
+
+                        @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
+                            <a href="{{ route('education.list.Rejectfacility') }}" class="btn btn-sm btn-danger">
+                                Reject Education Facility
                             </a>
                         @endif
 
@@ -262,14 +278,11 @@
                                                     Delete
                                                 </button>
                                             </form>
-                                            <button type="button" class="btn btn-primary btn-sm"
-                                                data-bs-toggle="modal"
+                                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
                                                 data-bs-target="#investigationModal-{{ $facility->id }}">
                                                 Investigation
                                             </button>
                                         </td>
-
-
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -292,13 +305,14 @@
                 <div class="modal fade" id="investigationModal-{{ $facility->id }}" tabindex="-1" aria-hidden="true">
 
                     <div class="modal-dialog modal-lg">
-                        <form method="POST" action="{{ route('investigation.educationfacility.store', $facility->id) }}">
+                        <form method="POST"
+                            action="{{ route('investigation.educationfacility.store', $facility->id) }}">
                             @csrf
 
                             <div class="modal-content">
 
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Health Facility Investigation</h5>
+                                    <h5 class="modal-title">Education Facility Investigation Officer</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
 
@@ -324,8 +338,7 @@
                                         <select name="investigation_officer" class="form-control" required>
                                             <option value="">Select Officer</option>
                                             @foreach ($staff as $person)
-                                                <option
-                                                    value="{{ $person->email }}"
+                                                <option value="{{ $person->email }}"
                                                     {{ $facility->investigation_officer ==
                                                     $person->name . ' (' . $person->staff_code . ') (' . $person->position . ')'
                                                         ? 'selected'

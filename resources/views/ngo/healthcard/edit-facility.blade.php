@@ -389,7 +389,6 @@
                             <input type="date" name="bill_date" value="{{ old('bill_date', $facility->bill_date) }}"
                                 class="form-control" required>
                             <small id="billDateError" class="text-danger d-none">
-                                Warning - Please enter a date within the last 30 days.
                             </small>
                         </div>
 
@@ -435,43 +434,50 @@
 
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
 
-            const billDateInput = document.getElementById('bill_date');
-            const billErrorMsg = document.getElementById('billDateError');
-            const form = billDateInput.closest('form');
+    const billDateInput = document.getElementById('bill_date');
+    const billErrorMsg  = document.getElementById('billDateError');
+    const form          = billDateInput.closest('form');
 
-            billDateInput.addEventListener('change', validateBillDate);
-            form.addEventListener('submit', function(e) {
-                if (!validateBillDate()) {
-                    e.preventDefault();
-                }
-            });
+    const formatDate = (date) => date.toISOString().split('T')[0];
 
-            function validateBillDate() {
-                if (!billDateInput.value) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-                const selectedDate = new Date(billDateInput.value);
-                const currentDate = new Date();
+    const past30Days = new Date(today);
+    past30Days.setDate(today.getDate() - 30);
 
-                // Remove time part
-                selectedDate.setHours(0, 0, 0, 0);
-                currentDate.setHours(0, 0, 0, 0);
+    // Set picker limits
+    billDateInput.min = formatDate(past30Days);
+    billDateInput.max = formatDate(today);
 
-                // Calculate date 30 days ago
-                const minDate = new Date(currentDate);
-                minDate.setDate(minDate.getDate() - 30);
+    // Dynamic error message
+    billErrorMsg.innerText =
+        `Please select a date between ${formatDate(past30Days)} and ${formatDate(today)}.`;
 
-                if (selectedDate < minDate || selectedDate > currentDate) {
-                    billErrorMsg.classList.remove('d-none');
-                    billDateInput.classList.add('is-invalid');
-                    return false;
-                } else {
-                    billErrorMsg.classList.add('d-none');
-                    billDateInput.classList.remove('is-invalid');
-                    return true;
-                }
-            }
-        });
-    </script>
+    billDateInput.addEventListener('change', validateBillDate);
+    form.addEventListener('submit', function (e) {
+        if (!validateBillDate()) e.preventDefault();
+    });
+
+    function validateBillDate() {
+        if (!billDateInput.value) return false;
+
+        const selectedDate = new Date(billDateInput.value);
+        selectedDate.setHours(0, 0, 0, 0);
+
+        if (selectedDate < past30Days || selectedDate > today) {
+            billErrorMsg.classList.remove('d-none');
+            billDateInput.classList.add('is-invalid');
+            return false;
+        }
+
+        billErrorMsg.classList.add('d-none');
+        billDateInput.classList.remove('is-invalid');
+        return true;
+    }
+});
+</script>
+
 @endsection

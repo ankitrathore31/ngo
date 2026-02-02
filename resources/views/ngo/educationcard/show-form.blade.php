@@ -468,7 +468,7 @@
                                         @endif
                                     @endif
                                 </div>
-                               
+
                             </div>
                             <div class="row mt-2 no-print text-center">
                                 <div class="col">
@@ -485,13 +485,14 @@
                                             Approve Facility
                                         </button>
                                     @endif
-                                    @if ($facility->status == 'Approval')
+                                    @if (in_array($facility->status, ['Verify', 'Approval']))
                                         <!-- Reject Button -->
                                         <button type="button" class="btn btn-sm btn-danger mb-1" data-bs-toggle="modal"
                                             data-bs-target="#rejectModal">
                                             Reject
                                         </button>
                                     @endif
+
                                     {{-- @if ($facility->status == 'Approve')
                                         <button type="button" class="btn btn-sm btn-success mb-1" data-bs-toggle="modal"
                                             data-bs-target="#approvalModal">
@@ -579,7 +580,18 @@
                                                             name="clearness_amount" class="form-control" readonly>
                                                     </div>
 
-
+                                                    <div class="col-sm-12 mb-3">
+                                                        <label class="form-label">Project / Work Category <span
+                                                                class="text-danger">*</span></label>
+                                                        <select name="work_category" id="work_category"
+                                                            class="form-control" required>
+                                                            <option value="">Select Category</option>
+                                                            @foreach ($categories as $category)
+                                                                <option value="{{ $category }}">{{ $category }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
 
                                                     <div class="col-sm-12 mb-3 no-print">
                                                         <b>Status</b>

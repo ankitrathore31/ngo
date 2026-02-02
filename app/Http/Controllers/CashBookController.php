@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\academic_session;
 use App\Models\BalanceReport;
+use App\Models\beneficiarie;
 use App\Models\Bill;
 use App\Models\Bill_Item;
 use App\Models\Bill_Voucher;
@@ -11,6 +12,7 @@ use App\Models\Category;
 use App\Models\Donation;
 use App\Models\donor_data;
 use App\Models\GbsBill;
+use App\Models\Member;
 use App\Models\SalaryPayment;
 use App\Models\Voucher_Item;
 use Carbon\Carbon;
@@ -140,6 +142,124 @@ class CashBookController extends Controller
                 fn($q) => $q->whereBetween('bill_date', [$request->start_date, $request->end_date])
             );
 
+        /* ---------- Approved Education Facility Expenditure ---------- */
+
+        $educationCardConstraint = function ($q) {
+            $q->where('status', 1)
+                ->whereHas('educationFacilities', function ($ef) {
+                    $ef->where('status', 'Approve');
+                })
+                ->with(['educationFacilities' => function ($ef) {
+                    $ef->where('status', 'Approve');
+                }]);
+        };
+
+        $eduBene = beneficiarie::with(['educationCards' => $educationCardConstraint])
+            ->where('status', 1)
+            ->whereHas('educationCards', $educationCardConstraint);
+
+        $eduMember = Member::with(['educationCards' => $educationCardConstraint])
+            ->where('status', 1)
+            ->whereHas('educationCards', $educationCardConstraint);
+
+        /* ---- Optional filters (keep aligned with Expenditure filters) ---- */
+
+        $eduBene
+            ->when($request->filled('session_filter'), fn($q) => $q->where('academic_session', $request->session_filter))
+            ->when($request->filled('name'), fn($q) => $q->where('name', 'like', "%{$request->name}%"));
+
+        $eduMember
+            ->when($request->filled('session_filter'), fn($q) => $q->where('academic_session', $request->session_filter))
+            ->when($request->filled('name'), fn($q) => $q->where('name', 'like', "%{$request->name}%"));
+
+        $eduRecords = collect()
+            ->merge($eduBene->get())
+            ->merge($eduMember->get())
+            ->flatMap(function ($person) {
+                return $person->educationCards->flatMap(function ($card) use ($person) {
+                    return $card->educationFacilities->map(function ($facility) use ($person, $card) {
+                        return [
+                            'type'          => 'education_fee',
+                            'id'            => $facility->id,
+                            'bill_no'       => $card->educationcard_no,
+                            'work_category' => $facility->work_category,
+                            'date'          => $facility->fees_submit_date,
+                            'name'          => $person->name,
+                            'address'       => collect([
+                                $person->village ?? null,
+                                $person->post ?? null,
+                                $person->block ?? null,
+                                $person->district ?? null,
+                                $person->state ?? null,
+                            ])->filter()->implode(', '),
+                            'email'         => $person->email ?? null,
+                            'mobile'        => $person->mobile ?? null,
+                            'session'       => $person->academic_session,
+                            'amount'        => $facility->clearness_amount,
+                        ];
+                    });
+                });
+            });
+
+        /* ---------- Approved Health Facility Expenditure ---------- */
+
+        $healthCardConstraint = function ($q) {
+            $q->where('status', 1)
+                ->whereHas('healthFacilities', function ($hf) {
+                    $hf->where('status', 'Approve');
+                })
+                ->with(['healthFacilities' => function ($hf) {
+                    $hf->where('status', 'Approve');
+                }]);
+        };
+
+        $healthBene = beneficiarie::with(['healthCard' => $healthCardConstraint])
+            ->where('status', 1)
+            ->whereHas('healthCard', $healthCardConstraint);
+
+        $healthMember = Member::with(['healthCard' => $healthCardConstraint])
+            ->where('status', 1)
+            ->whereHas('healthCard', $healthCardConstraint);
+
+        /* ---- Optional alignment filters ---- */
+        $healthBene
+            ->when($request->filled('session_filter'), fn($q) => $q->where('academic_session', $request->session_filter))
+            ->when($request->filled('name'), fn($q) => $q->where('name', 'like', "%{$request->name}%"));
+
+        $healthMember
+            ->when($request->filled('session_filter'), fn($q) => $q->where('academic_session', $request->session_filter))
+            ->when($request->filled('name'), fn($q) => $q->where('name', 'like', "%{$request->name}%"));
+
+        $healthRecords = collect()
+            ->merge($healthBene->get())
+            ->merge($healthMember->get())
+            ->flatMap(function ($person) {
+                return $person->healthCard->flatMap(function ($card) use ($person) {
+                    return $card->healthFacilities->map(function ($facility) use ($person, $card) {
+                        return [
+                            'type'          => 'health_fee',
+                            'id'            => $facility->id,
+                            'bill_no'       => $card->healthcard_no,
+                            'work_category' => $facility->work_category,
+                            'date'          => $facility->bill_date,
+                            'name'          => $person->name,
+                            'address'       => collect([
+                                $person->village ?? null,
+                                $person->post ?? null,
+                                $person->block ?? null,
+                                $person->district ?? null,
+                                $person->state ?? null,
+                            ])->filter()->implode(', '),
+                            'email'         => $person->email ?? null,
+                            'mobile'        => $person->mobile ?? null,
+                            'session'       => $person->academic_session,
+                            'amount'        => $facility->clearness_amount,
+                        ];
+                    });
+                });
+            });
+
+
         $salaries = SalaryPayment::with('staff')
             ->when($request->filled('session_filter'), function ($q) use ($request) {
                 $q->whereHas('staff', function ($s) use ($request) {
@@ -201,8 +321,6 @@ class CashBookController extends Controller
         });
 
 
-
-
         $bList = $b->map(function ($x) {
 
             $baseAmount = $x->items->sum(fn($i) => $i->qty * $i->rate);
@@ -228,8 +346,6 @@ class CashBookController extends Controller
                 'amount' => round($totalAmount, 2),
             ];
         });
-
-
 
         $gList = $g->get()->map(function ($x) {
             return [
@@ -274,8 +390,9 @@ class CashBookController extends Controller
             ->merge($bList)
             ->merge($gList)
             ->merge($salaryList)
+            ->merge($eduRecords)
+            ->merge($healthRecords)
             ->sortBy('date');
-
 
         // Total Amount
         $totalAmount = $records->sum('amount');
@@ -448,6 +565,88 @@ class CashBookController extends Controller
                 'amount'   => $salary->amount
             ]);
         }
+
+        /* ===================== EDUCATION FACILITY EXPENSE ===================== */
+
+        $educationCardConstraint = function ($q) {
+            $q->where('status', 1)
+                ->whereHas('educationFacilities', function ($ef) {
+                    $ef->where('status', 'Approve');
+                })
+                ->with(['educationFacilities' => function ($ef) {
+                    $ef->where('status', 'Approve');
+                }]);
+        };
+
+        $eduBene = beneficiarie::with(['educationCards' => $educationCardConstraint])
+            ->where('status', 1)
+            ->whereHas('educationCards', $educationCardConstraint)
+            ->get();
+
+        $eduMember = Member::with(['educationCards' => $educationCardConstraint])
+            ->where('status', 1)
+            ->whereHas('educationCards', $educationCardConstraint)
+            ->get();
+
+        collect()
+            ->merge($eduBene)
+            ->merge($eduMember)
+            ->flatMap(
+                fn($person) =>
+                $person->educationCards->flatMap(
+                    fn($card) =>
+                    $card->educationFacilities
+                        ->whereBetween('fees_submit_date', [$startDate, $endDate])
+                        ->map(fn($facility) => $facility)
+                )
+            )
+            ->each(function ($facility) use ($expenses) {
+                $expenses->push([
+                    'category' => $facility->work_category,
+                    'amount'   => $facility->clearness_amount
+                ]);
+            });
+
+        /* ===================== HEALTH FACILITY EXPENSE ===================== */
+
+        $healthCardConstraint = function ($q) {
+            $q->where('status', 1)
+                ->whereHas('healthFacilities', function ($hf) {
+                    $hf->where('status', 'Approve');
+                })
+                ->with(['healthFacilities' => function ($hf) {
+                    $hf->where('status', 'Approve');
+                }]);
+        };
+
+        $healthBene = beneficiarie::with(['healthCard' => $healthCardConstraint])
+            ->where('status', 1)
+            ->whereHas('healthCard', $healthCardConstraint)
+            ->get();
+
+        $healthMember = Member::with(['healthCard' => $healthCardConstraint])
+            ->where('status', 1)
+            ->whereHas('healthCard', $healthCardConstraint)
+            ->get();
+
+        collect()
+            ->merge($healthBene)
+            ->merge($healthMember)
+            ->flatMap(
+                fn($person) =>
+                $person->healthCard->flatMap(
+                    fn($card) =>
+                    $card->healthFacilities
+                        ->whereBetween('bill_date', [$startDate, $endDate])
+                        ->map(fn($facility) => $facility)
+                )
+            )
+            ->each(function ($facility) use ($expenses) {
+                $expenses->push([
+                    'category' => $facility->work_category,
+                    'amount'   => $facility->clearness_amount
+                ]);
+            });
 
 
         $expenseSummary = $expenses

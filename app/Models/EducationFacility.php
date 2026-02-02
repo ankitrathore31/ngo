@@ -31,8 +31,10 @@ class EducationFacility extends Model
         'verify_officer',
         'investigation_proof',
         'verify_proof',
+        'investigation_status',
         'clearness_amount',
         'remark',
+        'work_category',
         'reason',
     ];
 
