@@ -238,7 +238,7 @@
                                             <option value="">Select School</option>
                                             @foreach ($schools as $school)
                                                 <option value="{{ $school->school_code }}">
-                                                    {{ $school->school_name }} ({{ $school->school_code }})
+                                                    {{ $school->school_name }} ({{ $school->school_code }}), {{ $school->principal_name }}, {{ $school->address }}
                                                 </option>
                                             @endforeach
                                         </select>

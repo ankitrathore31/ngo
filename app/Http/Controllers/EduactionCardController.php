@@ -423,8 +423,8 @@ class EduactionCardController extends Controller
             'reg_id' => $request->reg_id,
             'educationcard_no' => $request->educationcard_no,
             'education_registration_date' => $request->education_registration_date,
-            'students' => $request->students ?? [],
-            'school_name' => $request->school_name ?? [],
+            'students' => is_array($request->students) ? $request->students : [],
+            'school_name' => is_array($request->school_name) ? $request->school_name : [],
             'status' => 1,
         ]);
 
@@ -1270,7 +1270,7 @@ class EduactionCardController extends Controller
         $categories = Category::orderBy('category', 'asc')->pluck('category');
         return view(
             'ngo.educationcard.show-form',
-            compact('facility', 'card', 'record','categories')
+            compact('facility', 'card', 'record', 'categories')
         );
     }
 
@@ -2054,5 +2054,4 @@ class EduactionCardController extends Controller
             compact('combined', 'data', 'states', 'staff')
         );
     }
-    
 }
