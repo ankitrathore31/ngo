@@ -238,7 +238,8 @@
                                             <option value="">Select School</option>
                                             @foreach ($schools as $school)
                                                 <option value="{{ $school->school_code }}">
-                                                    {{ $school->school_name }} ({{ $school->school_code }}), {{ $school->principal_name }}, {{ $school->address }}
+                                                    {{ $school->school_name }} ({{ $school->school_code }}),
+                                                    {{ $school->principal_name }}, {{ $school->address }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -363,14 +364,14 @@
                 );
             }
 
-            /* ---------- SCHOOL HANDLING (SELECT - UNCHANGED) ---------- */
+            /* ---------- SCHOOL HANDLING (SELECT) ---------- */
             document.getElementById('schoolSelect').addEventListener('change', function() {
                 if (this.value && !selectedSchools.includes(this.value)) {
                     selectedSchools.push(this.value);
                     renderTags(
                         'selectedSchools',
                         selectedSchools,
-                        'schools',
+                        'school_name', // ← FIXED
                         'removeSchool'
                     );
                 }
@@ -382,7 +383,7 @@
                 renderTags(
                     'selectedSchools',
                     selectedSchools,
-                    'schools',
+                    'school_name', // ← FIXED
                     'removeSchool'
                 );
             }
@@ -399,7 +400,7 @@
             renderTags(
                 'selectedSchools',
                 selectedSchools,
-                'schools',
+                'school_name', // ← FIXED
                 'removeSchool'
             );
         </script>

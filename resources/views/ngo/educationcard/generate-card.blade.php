@@ -230,7 +230,8 @@
                                             <option value="">Select School</option>
                                             @foreach ($schools as $school)
                                                 <option value="{{ $school->school_code }}">
-                                                    {{ $school->school_name }} ({{ $school->school_code }}), {{ $school->principal_name }}, {{ $school->address }}
+                                                    {{ $school->school_name }} ({{ $school->school_code }}),
+                                                    {{ $school->principal_name }}, {{ $school->address }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -242,8 +243,13 @@
 
                                     <div class="col-md-6 mb-2">
                                         <label>Student</label>
-                                        <input type="text" id="studentInput" class="form-control"
-                                            placeholder="Enter student name and press Enter">
+                                        <div class="input-group">
+                                            <input type="text" id="studentInput" class="form-control"
+                                                placeholder="Enter student name">
+                                            <button type="button" class="btn btn-primary" id="addStudentBtn">
+                                                Add Student
+                                            </button>
+                                        </div>
                                     </div>
 
                                     <div class="col-md-6 mt-3">
@@ -281,7 +287,7 @@
                 <span class="me-2">${val}</span>
                 <button type="button"
                         class="btn btn-sm btn-light"
-                        onclick="${removeFn}('${val}')">&times;</button>
+                        onclick="${removeFn}('${val.replace(/'/g, "\\'")}')">&times;</button>
                 <input type="hidden" name="${inputName}[]" value="${val}">
             `;
 
@@ -289,28 +295,36 @@
                 });
             }
 
-            /* ---------- Student (Text Input) ---------- */
+            /* ---------- Add Student Function ---------- */
+            function addStudent() {
+                const input = document.getElementById('studentInput');
+                const value = input.value.trim();
+
+                if (value && !selectedStudents.includes(value)) {
+                    selectedStudents.push(value);
+                    renderTags('selectedStudents', selectedStudents, 'students', 'removeStudent');
+                    input.value = '';
+                    input.focus(); // Keep focus on input for easy multiple entries
+                }
+            }
+
+            /* ---------- Student (Text Input) - Enter Key ---------- */
             document.getElementById('studentInput').addEventListener('keydown', function(e) {
                 if (e.key === 'Enter') {
                     e.preventDefault();
-
-                    const value = this.value.trim();
-
-                    if (value && !selectedStudents.includes(value)) {
-                        selectedStudents.push(value);
-                        renderTags('selectedStudents', selectedStudents, 'students', 'removeStudent');
-                    }
-
-                    this.value = '';
+                    addStudent();
                 }
+            });
+
+            /* ---------- Student (Button Click) ---------- */
+            document.getElementById('addStudentBtn').addEventListener('click', function() {
+                addStudent();
             });
 
             function removeStudent(val) {
                 selectedStudents = selectedStudents.filter(v => v !== val);
                 renderTags('selectedStudents', selectedStudents, 'students', 'removeStudent');
             }
-
-
 
             /* ---------- School ---------- */
             document.getElementById('schoolSelect').addEventListener('change', function() {

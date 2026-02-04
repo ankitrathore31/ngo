@@ -74,13 +74,13 @@
 
                         @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
                             <a href="{{ route('education.list.Approvalfacility') }}" class="btn btn-sm btn-info">
-                                Approval Education Facility
+                                Demand Approval Education Facility
                             </a>
                         @endif
 
                         @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
                             <a href="{{ route('education.list.Approvefacility') }}" class="btn btn-sm btn-success">
-                                Approve Education Facility
+                                 Approve Education Facility
                             </a>
                         @endif
 

@@ -209,6 +209,7 @@ Route::middleware('auth')->group(function () {
     Route::get('ngo/edit-registration/{id}/{type}', [RegistrationController::class, 'editRegistration'])->name('edit-reg');
     Route::get('ngo/edit-apporve-registration/{id}/{type}', [RegistrationController::class, 'editApproveRegistration'])->name('edit-apporve-reg');
     Route::post('ngo/update-apporve-registration/{id}', [RegistrationController::class, 'UpdateApporveRegistration'])->name('update-apporve-registration');
+    Route::get('ngo/all-registration-card', [RegistrationController::class, 'AllApporveRegCard'])->name('all-reg-card');
 });
 
 Route::controller(RegistrationController::class)->group(function () {

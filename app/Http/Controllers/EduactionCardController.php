@@ -423,8 +423,8 @@ class EduactionCardController extends Controller
             'reg_id' => $request->reg_id,
             'educationcard_no' => $request->educationcard_no,
             'education_registration_date' => $request->education_registration_date,
-            'students' => is_array($request->students) ? $request->students : [],
-            'school_name' => is_array($request->school_name) ? $request->school_name : [],
+            'students' => $request->students ?? [], // Simplified
+            'school_name' => $request->school_name ?? [], // Simplified
             'status' => 1,
         ]);
 
@@ -454,7 +454,6 @@ class EduactionCardController extends Controller
             'students'
         ));
     }
-
 
     public function updateEducationCard(Request $request, $id)
     {

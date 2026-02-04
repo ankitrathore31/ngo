@@ -899,4 +899,81 @@ class RegistrationController extends Controller
         return view('ngo.registration.reg-card', compact('record', 'signatures'));
     }
 
+       public function AllApporveRegCard(Request $request)
+    {
+        $queryBene = beneficiarie::where('status', 1);
+        $queryMember = Member::where('status', 1);
+
+        if ($request->filled('session_filter')) {
+            $queryBene->where('academic_session', $request->session_filter);
+            $queryMember->where('academic_session', $request->session_filter);
+        }
+
+        // Application / Registration Number Search
+        if ($request->filled('application_no')) {
+            $search = $request->application_no;
+
+            $queryBene->where(function ($q) use ($search) {
+                $q->where('application_no', 'like', "%$search%")
+                    ->orWhere('registration_no', 'like', "%$search%");
+            });
+
+            $queryMember->where(function ($q) use ($search) {
+                $q->where('application_no', 'like', "%$search%")
+                    ->orWhere('registration_no', 'like', "%$search%");
+            });
+        }
+
+        // Mobile / Identity Number Search
+        if ($request->filled('identity_no')) {
+            $identity = $request->identity_no;
+
+            $queryBene->where(function ($q) use ($identity) {
+                $q->where('phone', 'like', "%$identity%")
+                    ->orWhere('identity_no', 'like', "%$identity%");
+            });
+
+            $queryMember->where(function ($q) use ($identity) {
+                $q->where('phone', 'like', "%$identity%")
+                    ->orWhere('identity_no', 'like', "%$identity%");
+            });
+        }
+
+        if ($request->filled('reg_type')) {
+            $queryBene->where('reg_type', $request->reg_type);
+            $queryMember->where('reg_type', $request->reg_type);
+        }
+
+        if ($request->filled('block')) {
+            $queryBene->where('block', 'like', "%{$request->block}%");
+            $queryMember->where('block', 'like', "%{$request->block}%");
+        }
+
+        if ($request->filled('state')) {
+            $queryBene->where('state', $request->state);
+            $queryMember->where('state', $request->state);
+        }
+
+        if ($request->filled('district')) {
+            $queryBene->where('district', $request->district);
+            $queryMember->where('district', $request->district);
+        }
+
+        $approvebeneficiarie = $queryBene->orderBy('created_at', 'asc')->get();
+        $approvemember = $queryMember->orderBy('created_at', 'asc')->get();
+
+        $combined = $approvebeneficiarie->merge($approvemember)->sortBy('created_at');
+
+        $data = academic_session::all();
+        $states = config('states');
+
+        return view('ngo.registration.all-card', compact(
+            'data',
+            'approvebeneficiarie',
+            'approvemember',
+            'combined',
+            'states'
+        ));
+    }
+
 }
