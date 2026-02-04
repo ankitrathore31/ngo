@@ -321,6 +321,11 @@
 
 
             <div class="card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                        <a href="{{ route('all-reg-card') }}" class="btn btn-primary btn-sm">
+                            Registraition Certificate
+                        </a>
+                    </div>
                 <div class="card-body table-responsive">
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-primary">
