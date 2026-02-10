@@ -540,15 +540,20 @@
                         $user->hasPermission('generate-bill') ||
                         $user->hasPermission('gbs-bill-list') ||
                         $user->hasPermission('sanstha-bill-list'))
+                    @php
+                        $cost = costTotals();
+                    @endphp
+
                     <div class="row">
                         <h5 class="fw-bold mb-2">- Cost</h5>
+
                         <div class="col-md-6 col-sm-6 mb-3">
                             <div class="card text-white bg-danger p-3 h-100 card-hover">
                                 <div class="d-flex align-items-center">
                                     <i class="fas fa-coins fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Today's Cost</p>
-                                        <h5 class="mb-0">₹{{ todayCostAmount() }}</h5>
+                                        <h5 class="mb-0">₹{{ $cost['todayCostAmount'] }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -560,13 +565,14 @@
                                     <i class="fas fa-file-invoice-dollar fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Total Cost</p>
-                                        <h5 class="mb-0">₹{{ totalCostAmount() }}</h5>
+                                        <h5 class="mb-0">₹{{ $cost['totalCostAmount'] }}</h5>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 @endif
+
                 @if (
                     !$isStaff ||
                         $user->hasPermission('add-bill') ||
@@ -574,6 +580,12 @@
                         $user->hasPermission('generate-bill') ||
                         $user->hasPermission('gbs-bill-list') ||
                         $user->hasPermission('sanstha-bill-list'))
+                    @php
+                        $cost = costTotals();
+                        $totalCostAmount = $cost['totalCostAmount'];
+                        $remainingBalance = ($totalIncome ?? 0) - $totalCostAmount;
+                    @endphp
+
                     <div class="row">
                         <h5 class="fw-bold mb-2">- Balance Sheet</h5>
 
@@ -595,14 +607,11 @@
                                     <i class="fas fa-file-invoice-dollar fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Total Cost</p>
-                                        <h5 class="mb-0">₹{{ totalCostAmount() }}</h5>
+                                        <h5 class="mb-0">₹{{ number_format($totalCostAmount, 2) }}</h5>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        @php
-                            $remainingBalance = ($totalIncome ?? 0) - ($totalCostAmount ?? 0);
-                        @endphp
 
                         <div class="col-md-4 col-sm-6 mb-3">
                             <div class="card text-dark bg-secondary p-3 h-100 card-hover">
@@ -620,9 +629,9 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 @endif
+
 
                 @if (
                     !$isStaff ||
@@ -668,7 +677,7 @@
                         </div>
                     </div>
                 @endif
-                
+
                 @if (
                     !$isStaff ||
                         $user->hasPermission('health-card') ||
