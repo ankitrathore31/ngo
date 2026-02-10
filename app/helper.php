@@ -534,6 +534,7 @@ if (!function_exists('ShowFacilityMenu')) {
         );
     }
 }
+
 if (!function_exists('staffByEmail')) {
 
     function staffByEmail(?string $email)
@@ -545,3 +546,71 @@ if (!function_exists('staffByEmail')) {
         return Staff::where('email', $email)->first();
     }
 }
+
+if (!function_exists('costTotals')) {
+
+    function costTotals()
+    {
+        $today = Carbon::today()->toDateString();
+
+        $records = collect();
+
+        /* ===== Bill Voucher ===== */
+        $records = $records->merge(
+            Bill_Voucher::with('items')->get()->map(function ($x) {
+                $base = $x->items->sum(fn($i) => $i->qty * $i->rate);
+                return [
+                    'date' => $x->date,
+                    'amount' => $base + ($base * ($x->cgst ?? 0) / 100) + ($base * ($x->sgst ?? 0) / 100)
+                ];
+            })
+        );
+
+        /* ===== Bill ===== */
+        $records = $records->merge(
+            Bill::with('items')->get()->map(function ($x) {
+                $base = $x->items->sum(fn($i) => $i->qty * $i->rate);
+                return [
+                    'date' => $x->date,
+                    'amount' => $base + ($base * ($x->cgst ?? 0) / 100) + ($base * ($x->sgst ?? 0) / 100)
+                ];
+            })
+        );
+
+        /* ===== GBS ===== */
+        $records = $records->merge(
+            GbsBill::all()->map(fn($x) => [
+                'date' => $x->bill_date,
+                'amount' => $x->amount
+            ])
+        );
+
+        /* ===== Salary ===== */
+        $records = $records->merge(
+            SalaryPayment::all()->map(fn($x) => [
+                'date' => $x->payment_date,
+                'amount' => $x->amount
+            ])
+        );
+
+        /* ===== Education Card ===== */
+        $records = $records->merge(
+            EducationCard::all()->map(fn($x) => [
+                'date' => $x->date,
+                'amount' => $x->amount
+            ])
+        );
+
+        /* ===== Health Card ===== */
+        $records = $records->merge(
+            HealthCard::all()->map(fn($x) => [
+                'date' => $x->date,
+                'amount' => $x->amount
+            ])
+        );
+
+        return [
+            'todayCostAmount' => $records->where('date', $today)->sum('amount'),
+            'totalCostAmount' => $records->sum('amount')
+        ];
+    }
