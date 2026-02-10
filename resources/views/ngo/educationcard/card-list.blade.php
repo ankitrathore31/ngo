@@ -80,7 +80,7 @@
 
                         @if (!$isStaff || $user->hasPermission('educationfacility_educationcard_list'))
                             <a href="{{ route('education.list.Approvefacility') }}" class="btn btn-sm btn-success">
-                                Approve Education Facility
+                                Final Approve Education Facility
                             </a>
                         @endif
 

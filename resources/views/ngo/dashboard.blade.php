@@ -548,7 +548,7 @@
                                     <i class="fas fa-coins fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Today's Cost</p>
-                                        <h5 class="mb-0">₹{{ number_format($todayCostAmount, 2) }}</h5>
+                                        <h5 class="mb-0">₹{{ todayCostAmount() }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -560,14 +560,14 @@
                                     <i class="fas fa-file-invoice-dollar fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Total Cost</p>
-                                        <h5 class="mb-0">₹{{ number_format($totalCostAmount, 2) }}</h5>
+                                        <h5 class="mb-0">₹{{ totalCostAmount() }}</h5>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 @endif
-                {{-- @if (
+                @if (
                     !$isStaff ||
                         $user->hasPermission('add-bill') ||
                         $user->hasPermission('bill-list') ||
@@ -595,28 +595,35 @@
                                     <i class="fas fa-file-invoice-dollar fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Total Cost</p>
-                                        <h5 class="mb-0">₹{{ number_format($totalCostAmount, 2) }}</h5>
+                                        <h5 class="mb-0">₹{{ totalCostAmount() }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @php
+                            $remainingBalance = ($totalIncome ?? 0) - ($totalCostAmount ?? 0);
+                        @endphp
+
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="card text-dark bg-secondary p-3 h-100 card-hover">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-wallet fa-2x me-3"></i>
+                                    <div>
+                                        <p class="mb-1">Total Remaining Amount</p>
+                                        <h5 class="mb-0">
+                                            <span style="color: {{ $remainingBalance >= 0 ? 'green' : 'red' }};">
+                                                {{ $remainingBalance >= 0 ? '+' : '-' }}
+                                                ₹{{ number_format(abs($remainingBalance), 2) }}
+                                            </span>
+                                        </h5>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-md-4 col-sm-6 mb-3">
-                            <div class="card text-dark bg-secondry p-3 h-100 card-hover">
-                                <div class="d-flex align-items-center">
-                                    <i class="fas fa-wallet fa-2x me-3"></i>
-                                    <div>
-                                        <p class="mb-1">Total Remaining Amount</p>
-                                        <h5 class="mb-0"><span
-                                                style="color: {{ $remainingBalance >= 0 ? 'green' : 'red' }};">
-                                                {{ $remainingBalance >= 0 ? '+' : '-' }}₹{{ number_format(abs($remainingBalance), 2) }}
-                                            </span></h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-                @endif --}}
+                @endif
+
                 @if (
                     !$isStaff ||
                         $user->hasPermission('discover-problems') ||
@@ -661,6 +668,7 @@
                         </div>
                     </div>
                 @endif
+                
                 @if (
                     !$isStaff ||
                         $user->hasPermission('health-card') ||

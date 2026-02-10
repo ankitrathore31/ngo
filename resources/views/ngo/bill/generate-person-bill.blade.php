@@ -67,7 +67,8 @@
 
                     <div class="col-md-4 form-group mb-3">
                         <label for="">Bill/Voucher/Invoice No.</label>
-                        <input type="text" name="bill_no" class="form-control @error('bill_no') is in-valid @enderror" required>
+                        <input type="text" name="bill_no" class="form-control @error('bill_no') is in-valid @enderror"
+                            required>
                         @error('bill_no')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -93,9 +94,10 @@
 
                     <div class="col-md-4 form-group mb-3">
                         <label for="">Mobile No.</label>
-                        <input type="number" maxlength="10" name="mobile" class="form-control @error('mobile') is in-valid @enderror" required>
+                        <input type="number" maxlength="10" name="mobile"
+                            class="form-control @error('mobile') is in-valid @enderror" required>
                         @error('mobile')
-                            <span>{{ $message}}</span>
+                            <span>{{ $message }}</span>
                         @enderror
                     </div>
 
@@ -121,7 +123,8 @@
                     <div class="col-md-4 form-group mb-3">
                         <label for="block" class="form-label">Block: <span class="text-danger">*</span></label>
                         <input type="text" name="block" id="block"
-                            class="form-control @error('block') is-invalid @enderror" value="{{ old('block') }}" required>
+                            class="form-control @error('block') is-invalid @enderror" value="{{ old('block') }}"
+                            required>
                         @error('block')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -197,8 +200,8 @@
 
                     <div class=" col-md-4 mb-3">
                         <label class="form-label">Amount (₹)</label>
-                        <input type="number" class="form-control" name="amount" id="amountInput"
-                            oninput="updateAmountInWords()" placeholder="₹">
+                        <input type="number" class="form-control" name="amount" step="0.01" min="0"
+                            id="amountInput" oninput="updateAmountInWords()" placeholder="₹">
                         @error('amount')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
