@@ -2,8 +2,12 @@
 
 use App\Models\beneficiarie;
 use App\Models\Beneficiarie_Survey;
+use App\Models\Bill;
+use App\Models\Bill_Voucher;
 use App\Models\Category;
+use App\Models\EducationCard;
 use App\Models\EducationFacility;
+use App\Models\GbsBill;
 use App\Models\HeadOrganization;
 use App\Models\HealthCard;
 use App\Models\HealthFacility;
@@ -13,11 +17,13 @@ use App\Models\OrganizationMember;
 use App\Models\Problem;
 use App\Models\Project;
 use App\Models\ProjectReport;
+use App\Models\SalaryPayment;
 use App\Models\Staff;
 use App\Models\Story;
 use App\Models\Visitor;
 use Illuminate\Support\Facades\DB;
 use App\Models\WorkLog;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
@@ -27,6 +33,7 @@ if (!function_exists('hello')) {
         return print('hello');
     }
 }
+
 if (!function_exists('totalReg')) {
     function totalReg()
     {
@@ -46,6 +53,7 @@ if (!function_exists('totalPendingReg')) {
         return $data;
     }
 }
+
 if (!function_exists('totalRejectedReg')) {
     function totalRejectedReg()
     {
@@ -55,6 +63,7 @@ if (!function_exists('totalRejectedReg')) {
         return $data;
     }
 }
+
 if (!function_exists('totalApprovedReg')) {
     function totalApprovedReg()
     {
@@ -64,6 +73,7 @@ if (!function_exists('totalApprovedReg')) {
         return $data;
     }
 }
+
 if (!function_exists('TotalSurvey')) {
     function TotalSurvey()
     {
@@ -71,6 +81,7 @@ if (!function_exists('TotalSurvey')) {
         return $data;
     }
 }
+
 if (!function_exists('PendingSurvey')) {
     function PendingSurvey()
     {
@@ -78,6 +89,7 @@ if (!function_exists('PendingSurvey')) {
         return $data;
     }
 }
+
 if (!function_exists('ApproveSurvey')) {
     function ApproveSurvey()
     {
@@ -494,6 +506,7 @@ if (!function_exists('NonBudgetHalthFacility')) {
         return $data;
     }
 }
+
 if (!function_exists('DemandPendinglHalthFacility')) {
     function DemandPendingHalthFacility()
     {
@@ -501,6 +514,7 @@ if (!function_exists('DemandPendinglHalthFacility')) {
         return $data;
     }
 }
+
 if (!function_exists('ShowFacilityMenu')) {
 
     function ShowFacilityMenu(): bool
@@ -614,3 +628,4 @@ if (!function_exists('costTotals')) {
             'totalCostAmount' => $records->sum('amount')
         ];
     }
+}
