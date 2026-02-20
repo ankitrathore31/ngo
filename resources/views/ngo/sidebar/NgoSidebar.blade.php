@@ -889,7 +889,7 @@
                                 </a>
                             </li>
                         @endif
-                         @if (ShowFacilityMenu())
+                        @if (ShowFacilityMenu())
                             <li>
                                 <a class="dropdown-item" href="{{ route('education.list.Verifyfacility') }}">
                                     Education Verify Facility
@@ -900,6 +900,51 @@
                     </ul>
                 </li>
                 {{-- @endif --}}
+
+                <!-- Union -->
+                @if (
+                    !$isStaff ||
+                        $user->hasPermission('union-list') ||
+                        $user->hasPermission('union-add') ||
+                        $user->hasPermission('union-edit'))
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-sitemap"></i> UNION
+                        </a>
+
+                        <ul class="dropdown-menu bg-primary">
+
+                            {{-- Add Union --}}
+                            @if (!$isStaff || $user->hasPermission('union-add'))
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('add.union') }}">
+                                        Add Union
+                                    </a>
+                                </li>
+                            @endif
+
+                            {{-- Union List --}}
+                            @if (!$isStaff || $user->hasPermission('union-list'))
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('union.list') }}">
+                                        Union List
+                                    </a>
+                                </li>
+                            @endif
+
+                             {{-- Union List --}}
+                            @if (!$isStaff || $user->hasPermission('union-list'))
+                                <li>
+                                    <a class="dropdown-item" href="{{-- route('union.list') --}}">
+                                        Add Union Member
+                                    </a>
+                                </li>
+                            @endif
+
+
+                        </ul>
+                    </li>
+                @endif
 
             </ul>
         </div>

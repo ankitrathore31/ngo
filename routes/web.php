@@ -34,6 +34,7 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StaffWorkController;
 use App\Http\Controllers\StoryController;
 use App\Http\Controllers\TrainingCenterController;
+use App\Http\Controllers\UnionController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\WorkingAreaController;
 use App\Http\Controllers\WorkPlanController;
@@ -500,6 +501,8 @@ Route::controller(OrganizationController::class)->group(function () {
     Route::get('ngo/view-organization-member/{id}', 'ViewOrgMember')->middleware('auth')->name('view.organization.member');
     Route::get('ngo/delete-organization-member/{id}', 'DeleteOrgMember')->middleware('auth')->name('delete.organization.member');
     Route::get('ngo/group-member-list/{id}', 'GroupMemberList')->middleware('auth')->name('list.group.member');
+    Route::get('ngo/view-organization-member-certificate/{id}', 'ViewOrgMember')->middleware('auth')->name('view.organization.member.certificate');
+
 });
 
 Route::controller(CashBookController::class)->middleware('auth')->group(function () {
@@ -674,6 +677,16 @@ Route::controller(KycController::class)->middleware('auth')->group(function () {
     Route::get('ngo/delete-kyc/{id}/{kyc_id}', 'DeleteKyc')->name('delete-beneficiare-kyc');
 });
 
+
+Route::controller(UnionController::class)->middleware('auth')->group(function (){
+    Route::get('ngo/add-union', 'AddUnion')->name('add.union');
+    Route::post('ngo/store-union', 'StoreUnion')->name('store.union');
+    Route::get('ngo/edit-union/{id}', 'EditUnion')->name('edit.union');
+    Route::post('ngo/update-union/{id}','UpdateUnion')->name('update.union');
+    Route::get('ngo/delete-union/{id}','DeleteUnion')->name('delete.union');
+    Route::get('ngo/list-union','ListUnion')->name('union.list');
+
+});
 
 
 require __DIR__ . '/auth.php';

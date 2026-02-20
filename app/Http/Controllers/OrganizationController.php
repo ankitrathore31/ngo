@@ -95,6 +95,7 @@ class OrganizationController extends Controller
 
         return view('ngo.organization.head-org-list', compact('data', 'states', 'org'));
     }
+
     public function AddOrg()
     {
         $data = academic_session::all();
@@ -387,4 +388,18 @@ class OrganizationController extends Controller
 
         return view('ngo.organization.group-member-list', compact('data', 'organizationMembers', 'organizations', 'sessions', 'organization'));
     }
+
+    public function ViewOrgMemberCertificate($id)
+    {
+        $member = OrganizationMember::with('organization')->findOrFail($id);
+        $person = Beneficiarie::find($member->member_id)
+            ?? Staff::find($member->member_id)
+            ?? Member::find($member->member_id)
+            ?? Donation::find($member->member_id);
+
+        $member->person = $person;
+        $signatures = Signature::pluck('file_path', 'role');
+        return view('ngo.organization.farmer-certi', compact('member', 'signatures'));
+    }
+
 }

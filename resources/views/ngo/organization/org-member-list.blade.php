@@ -226,6 +226,7 @@
                                 <th>Position</th>
                                 <th>session</th>
                                 <th class="no-print">Action</th>
+                                {{-- <th class="no-print">Certificate</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -269,6 +270,12 @@
                                             <i class="fa fa-trash"></i>
                                         </a>
                                     </td>
+                                    {{-- <td class="no-print">
+                                        <a href="{{ route('view.organization.member.certificate', $member->id) }}"
+                                            class="btn btn-success btn-sm me-2">
+                                            Certificate
+                                        </a>
+                                    </td> --}}
                                 </tr>
                             @empty
                                 <tr>
