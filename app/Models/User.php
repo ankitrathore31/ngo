@@ -58,4 +58,8 @@ class User extends Authenticatable
 
         return $this->staff->hasPermission($permission);
     }
+    public function member()
+{
+    return $this->hasOne(Member::class, 'email', 'email');
+}
 }

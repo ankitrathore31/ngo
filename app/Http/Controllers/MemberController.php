@@ -10,12 +10,21 @@ use App\Models\academic_session;
 use App\Models\Activity;
 use App\Models\Setting;
 use App\Models\Signature;
+use App\Models\User;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class MemberController extends Controller
 {
+    public function Member()
+    {
+        $user = auth()->user();
+        $member = Member::where('email', $user->email)->first();
+        $data = memberDashboardData($member->id);
+        return view('member.dashboard', array_merge(compact('member'), $data));
+    }
     public function addmemberlist()
     {
         $member = Member::where('status', 1)
@@ -54,7 +63,31 @@ class MemberController extends Controller
         $member = Member::where('status', 1)
             ->whereNotNull('position')
             ->get();
-        return view('ngo.member.member-position-list', compact('member'));
+        $existingUserEmails = User::whereNotNull('email')
+            ->pluck('email')
+            ->toArray();
+        return view('ngo.member.member-position-list', compact('member', 'existingUserEmails'));
+    }
+    public function addUserMember($id)
+    {
+        $member = Member::findOrFail($id);
+
+        // Check again (security)
+        $existingUser = User::where('email', $member->email)->first();
+
+        if ($existingUser) {
+            return back()->with('error', 'User already exists.');
+        }
+
+        $user = new User();
+        $user->name = $member->name;
+        $user->email = $member->email;
+        $user->phone_number = $member->phone;
+        $user->password = Hash::make($member->phone);
+        $user->user_type = 'member';
+        $user->save();
+
+        return back()->with('success', 'User account created successfully.');
     }
 
     public function memberList()
@@ -76,9 +109,9 @@ class MemberController extends Controller
         $record = Member::where('status', 1)
             ->whereNotNull('position')
             ->find($id);
-        
+
         $signatures = Signature::pluck('file_path', 'role');
-        return view('ngo.member.member-certificate', compact('record','signatures'));
+        return view('ngo.member.member-certificate', compact('record', 'signatures'));
     }
 
     public function MemberLetter($id)
@@ -87,7 +120,7 @@ class MemberController extends Controller
             // ->whereNotNull('position')
             ->find($id);
         $signatures = Signature::pluck('file_path', 'role');
-        return view('ngo.member.member-letter', compact('record','signatures'));
+        return view('ngo.member.member-letter', compact('record', 'signatures'));
     }
 
     public function Memberactivitylist(Request $request)
@@ -165,10 +198,9 @@ class MemberController extends Controller
 
     public function MemberActivityCerti($id, $category)
     {
-        $record = Member::
-            where('status', 1)
+        $record = Member::where('status', 1)
             ->find($id);
-        
+
         dd($record);
 
         return view('ngo.member.activity-certificate', compact('record', 'category'));

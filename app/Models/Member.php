@@ -48,6 +48,7 @@ class Member extends Model
         'status',
         'deleted_reason',
         'deleted_date',
+        'added_by',
     ];
 
     public function organizations()
@@ -61,5 +62,9 @@ class Member extends Model
     public function educationCards()
     {
         return $this->hasMany(\App\Models\EducationCard::class, 'reg_id', 'id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'email', 'email');
     }
 }

@@ -629,3 +629,64 @@ if (!function_exists('costTotals')) {
         ];
     }
 }
+
+if (!function_exists('memberDashboardData')) {
+
+    function memberDashboardData($authMemberId)
+    {
+        // Base Query (Same as your list controller)
+        $baseQuery = Member::where('added_by', $authMemberId)
+                            ->where('status', 1); // Only Active
+
+        /* =========================
+           CARD DATA
+        ========================= */
+
+        $totalSubMembers = (clone $baseQuery)->count();
+
+        $monthlyActivities = (clone $baseQuery)
+            ->whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->count();
+
+        /* =========================
+           LAST 6 MONTH GROWTH
+        ========================= */
+
+        $chartLabels = [];
+        $chartData   = [];
+
+        for ($i = 5; $i >= 0; $i--) {
+
+            $month = Carbon::now()->subMonths($i);
+
+            $chartLabels[] = $month->format('M');
+
+            $count = Member::where('added_by', $authMemberId)
+                ->where('status', 1)
+                ->whereMonth('created_at', $month->month)
+                ->whereYear('created_at', $month->year)
+                ->count();
+
+            $chartData[] = $count;
+        }
+
+        /* =========================
+           RECENT ACTIVE SUB MEMBERS
+        ========================= */
+
+        $recentSubMembers = (clone $baseQuery)
+            ->latest()
+            ->take(10)
+            ->get();
+
+        return [
+            'totalSubMembers'   => $totalSubMembers,
+            'activeMembers'     => $totalSubMembers,
+            'monthlyActivities' => $monthlyActivities,
+            'chartLabels'       => $chartLabels,
+            'chartData'         => $chartData,
+            'recentSubMembers'  => $recentSubMembers,
+        ];
+    }
+}

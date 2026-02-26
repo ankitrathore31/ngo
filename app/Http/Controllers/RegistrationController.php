@@ -9,8 +9,10 @@ use App\Models\Member;
 use App\Models\academic_session;
 use App\Models\Setting;
 use App\Models\Signature;
+use App\Models\User;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class RegistrationController extends Controller
@@ -162,7 +164,13 @@ class RegistrationController extends Controller
             if ($request->reg_type === 'Member') {
                 // Create a new Member record
                 $newRecord = Member::create($data);
-
+                $user = new User();
+                $user->name = $newRecord->name;
+                $user->email = $newRecord->email;
+                $user->phone_number = $newRecord->phone;
+                $user->password = Hash::make($newRecord->phone);
+                $user->user_type = 'member';
+                $user->save();
                 logWork(
                     'Member',
                     $newRecord->id,
@@ -899,7 +907,7 @@ class RegistrationController extends Controller
         return view('ngo.registration.reg-card', compact('record', 'signatures'));
     }
 
-       public function AllApporveRegCard(Request $request)
+    public function AllApporveRegCard(Request $request)
     {
         $queryBene = beneficiarie::where('status', 1);
         $queryMember = Member::where('status', 1);
@@ -975,5 +983,4 @@ class RegistrationController extends Controller
             'states'
         ));
     }
-
 }
