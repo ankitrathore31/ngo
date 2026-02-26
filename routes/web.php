@@ -33,6 +33,7 @@ use App\Http\Controllers\SignatureController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StaffWorkController;
 use App\Http\Controllers\StoryController;
+use App\Http\Controllers\SubMemberController;
 use App\Http\Controllers\TrainingCenterController;
 use App\Http\Controllers\UnionController;
 use App\Http\Controllers\VendorController;
@@ -324,6 +325,7 @@ Route::controller(SallaryController::class)->middleware('auth')->group(function 
 });
 
 Route::controller(MemberController::class)->group(function () {
+    Route::get('ngo/member','Member')->middleware('auth')->name('member');
     Route::get('ngo/member-list', 'memberList')->middleware('auth')->name('member-list');
     Route::get('ngo/add-member-list', 'addmemberlist')->middleware('auth')->name('add-member-list');
     Route::get('ngo/view-member/{id}', 'showMember')->middleware('auth')->name('view-member');
@@ -336,6 +338,7 @@ Route::controller(MemberController::class)->group(function () {
     Route::get('ngo/add-member-activity', 'addmemberactivity')->middleware('auth')->name('add-memberactivity');
     Route::post('ngo/save-member-activity',  'saveMemberactivity')->middleware('auth')->name('save-memberactivity');
     Route::get('ngo/activity-certificate/{id}/{category}', 'MemberActivityCerti')->middleware('auth')->name('member-activity-certi');
+    Route::post('ngo/add-member-user/{id}',  'addUserMember')->middleware('auth')->name('member.add-user');
 });
 
 Route::controller(DonationController::class)->group(function () {
@@ -686,6 +689,12 @@ Route::controller(UnionController::class)->middleware('auth')->group(function ()
     Route::get('ngo/delete-union/{id}','DeleteUnion')->name('delete.union');
     Route::get('ngo/list-union','ListUnion')->name('union.list');
 
+});
+Route::controller(SubMemberController::class)->middleware('auth')->group(function (){
+    Route::get('ngo/add-submember', 'AddSubMember')->name('add.submember');
+    Route::post('ngo/store-submember', 'StoreSubMember')->name('member.sub-member.store');
+    Route::get('ngo/list-submember', 'SubmemberList')->name('member.sub-member.list');
+    Route::get('ngo/show-submember/{id}', 'SubmemberShow')->name('member.sub-member.show');
 });
 
 

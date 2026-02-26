@@ -40,9 +40,9 @@
                         class="rounded-circle shadow-sm me-2">
                     <div class="text-start">
                         <div class="fw-semibold text-dark fs-6">{{auth()->user()->name}}</div>
-                        @php $user = auth()->user(); @endphp
+                        {{-- @php $user = auth()->user(); @endphp --}}
                         <small class="text-muted fst-italic">
-                            Member
+                            Member 
                         </small>
                     </div>
                 </a>

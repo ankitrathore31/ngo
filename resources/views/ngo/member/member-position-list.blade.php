@@ -62,9 +62,9 @@
                                         {{ $item->state }} - {{ $item->pincode }},
                                         ({{ $item->area_type }})
                                     </td>
-                                    <td>{{ $item->position_type ?? 'No Found'}}</td>
-                                    <td>{{ $item->position ?? 'No Found'}}</td>
-                                    <td>{{ $item->working_area ?? 'No Found'}}</td>
+                                    <td>{{ $item->position_type ?? 'No Found' }}</td>
+                                    <td>{{ $item->position ?? 'No Found' }}</td>
+                                    <td>{{ $item->working_area ?? 'No Found' }}</td>
                                     <td>{{ $item->identity_no }}</td>
                                     <td>{{ $item->identity_type }}</td>
                                     <td>{{ $item->phone }}</td>
@@ -82,28 +82,37 @@
                                     <td>{{ $item->academic_session }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                            <a href="{{ route('show-member', $item->id) }}"
-                                                class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                title="View" style="min-width: 38px; height: 38px;">
+
+                                            <a href="{{ route('show-member', $item->id) }}" class="btn btn-success btn-sm"
+                                                title="View">
                                                 <i class="fa-regular fa-eye"></i>
                                             </a>
+
+                                            @if ($item->email && !in_array($item->email, $existingUserEmails))
+                                                <form action="{{ route('member.add-user', $item->id) }}" method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-primary btn-sm"
+                                                        onclick="return confirm('Create login account for this member?')">
+                                                        Add User
+                                                    </button>
+                                                </form>
+                                            @endif
 
                                         </div>
                                     </td>
                                     <td>
-                                          <a href="{{ route('member-certi', $item->id) }}"
-                                                class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                title="View" style="min-width: 38px; height: 38px;">
-                                                Certificate
-                                            </a>
+                                        <a href="{{ route('member-certi', $item->id) }}"
+                                            class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
+                                            title="View" style="min-width: 38px; height: 38px;">
+                                            Certificate
+                                        </a>
                                     </td>
-                                     <td>
-                                          <a href="{{ route('member-letter', $item->id) }}"
-                                                class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
-                                                title="View" style="min-width: 38px; height: 38px;"
-                                                >
-                                                Letter
-                                            </a>
+                                    <td>
+                                        <a href="{{ route('member-letter', $item->id) }}"
+                                            class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
+                                            title="View" style="min-width: 38px; height: 38px;">
+                                            Letter
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach
