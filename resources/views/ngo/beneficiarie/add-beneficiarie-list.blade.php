@@ -1,5 +1,108 @@
 @extends('ngo.layout.master')
 @Section('content')
+    <style>
+        @page {
+            size: auto;
+            margin: 0;
+            /* Remove all margins including top */
+        }
+
+        .print-red-bg {
+            background-color: red !important;
+            /* Bootstrap 'bg-danger' color */
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            color: white !important;
+            font-size: 18px;
+        }
+
+        .print-h4 {
+            background-color: red !important;
+            color: white !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-size: 28px;
+            word-spacing: 8px;
+            text-align: center;
+        }
+
+        @media print {
+
+            html,
+            body {
+                margin: 0 !important;
+                padding: 0 !important;
+                height: 100% !important;
+                width: 100% !important;
+            }
+
+            body * {
+                visibility: hidden;
+            }
+
+            .printable,
+            .printable * {
+                visibility: visible;
+            }
+
+            .table th,
+            .table td {
+                padding: 4px !important;
+                font-size: 9px !important;
+                border: 1px solid #000 !important;
+            }
+
+            .card,
+            .table-responsive {
+                box-shadow: none !important;
+                border: none !important;
+                overflow: visible !important;
+            }
+
+            .btn,
+            .navbar,
+            .footer,
+            .no-print {
+                display: none !important;
+            }
+
+            table {
+                page-break-inside: auto;
+            }
+
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+
+            thead {
+                display: table-header-group;
+            }
+
+            tfoot {
+                display: table-footer-group;
+            }
+
+            .print-red-bg {
+                background-color: red !important;
+                /* Bootstrap 'bg-danger' color */
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                color: white !important;
+                font-size: 18px;
+            }
+
+            .print-h4 {
+                background-color: red !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                font-size: 28px;
+                word-spacing: 8px;
+                text-align: center;
+            }
+        }
+    </style>
     <div class="wrapper">
         <div class="container-fluid mt-4">
 
@@ -91,20 +194,55 @@
                         <div class="col-md-4">
                             <button type="submit" class="btn btn-primary me-1">Search</button>
                             <a href="{{ route('beneficiarie-add-list') }}" class="btn btn-info text-white me-1">Reset</a>
+                            <button onclick="printTable()" class="btn btn-primary mb-3">Print Table</button>
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="card shadow-sm">
+            <div class="card shadow-sm printable">
+                <button type="button" id="openSurveyModal" class="btn btn-primary w-50 btn-sm m-2 no-print" disabled>
+                    Add Survey (<span id="selectedBeneficiarieCount">0</span>)
+                </button>
                 <div class="card-body table-responsive">
-                    <button type="button" id="openSurveyModal" class="btn btn-primary mb-2" disabled>
-                        Add Survey (<span id="selectedBeneficiarieCount">0</span>)
-                    </button>
-
+                    <div class="text-center mb-4 border-bottom pb-2">
+                        <!-- Header -->
+                        <div class="row">
+                            <div class="col-sm-2 text-center text-md-start">
+                                <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="80" height="80">
+                            </div>
+                            <div class="col-sm-10">
+                                <p style="margin: 0;" class="d-flex justify-content-around"><b>
+                                        <span>NEETI AYOG ID NO. UP/2023/0360430</span>&nbsp;
+                                        &nbsp; &nbsp;<span>NGO NO. UP/00033062</span>&nbsp; &nbsp;
+                                        &nbsp; &nbsp;<span>PAN: AAEAG7650B</span>&nbsp;
+                                    </b></p>
+                                <h4 class="print-h4"><b>
+                                        {{-- <span data-lang="hi">ज्ञान भारती संस्था</span> --}}
+                                        <span data-lang="en">GYAN BHARTI SANSTHA</span>
+                                    </b></h4>
+                                <h6 style="color: blue;"><b>
+                                        {{-- <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर
+                                            प्रदेश -
+                                            262121</span> --}}
+                                        <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit,
+                                            UP
+                                            -
+                                            262121</span>
+                                    </b></h6>
+                                <p style="font-size: 14px; margin: 0;">
+                                    <b>
+                                        <span>Website: www.gyanbhartingo.org | Email: gyanbhartingo600@gmail.com
+                                            | Mob:
+                                            9411484111</span>
+                                    </b>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-primary">
                             <tr>
-                                <th>
+                                <th class="no-print"> 
                                     <input type="checkbox" id="select_all">
                                 </th>
                                 <th>Sr. No.</th>
@@ -124,13 +262,15 @@
                                 <th>Status</th>
                                 <th>Beneficiarie Eligibility category</th>
                                 <th>Session</th>
-                                <th>Action</th>
+                                <th>Survey Officer</th>
+                                <th>Survey Date</th>
+                                <th class="no-print">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($beneficiarie as $item)
                                 <tr>
-                                    <td>
+                                    <td class="no-print">
                                         <input type="checkbox" class="select_item" value="{{ $item->id }}">
                                     </td>
                                     <td>{{ $loop->iteration }}</td>
@@ -160,9 +300,11 @@
                                             Approve
                                         @endif
                                     </td>
-                                    <td>{{ $survey->bene_category ?? 'No Found' }}</td>
+                                    <td></td>
                                     <td>{{ $item->academic_session }}</td>
-                                    <td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="no-print">
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
                                             <a href="{{ route('add-beneficiarie', $item->id) }}"
                                                 class="btn btn-success btn-sm px-3 d-flex align-items-center justify-content-center"
@@ -497,5 +639,10 @@
             });
 
         });
+    </script>
+    <script>
+        function printTable() {
+            window.print();
+        }
     </script>
 @endsection
