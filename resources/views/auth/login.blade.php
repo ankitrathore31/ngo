@@ -183,6 +183,21 @@
         <div class="right-panel">
             <div class="login-card">
                 <h4 class="text-center mb-4">Sign In</h4>
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                {{-- @error('email')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+                @error('password')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror --}}
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
                     <div class="form-group">
