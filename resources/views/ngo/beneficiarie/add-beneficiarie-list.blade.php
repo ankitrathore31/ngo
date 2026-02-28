@@ -265,6 +265,7 @@
                                 <th>Survey Officer</th>
                                 <th>Survey Date</th>
                                 <th class="no-print">Action</th>
+                                <th>Survey Report / Eligible / Ineligible / Remark</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -323,6 +324,7 @@
                                             </a>
                                         </div>
                                     </td>
+                                    <td></td>
                                 </tr>
                             @endforeach
                         </tbody>
