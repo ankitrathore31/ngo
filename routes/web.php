@@ -325,7 +325,7 @@ Route::controller(SallaryController::class)->middleware('auth')->group(function 
 });
 
 Route::controller(MemberController::class)->group(function () {
-    Route::get('ngo/member','Member')->middleware('auth')->name('member');
+    Route::get('ngo/member', 'Member')->middleware('auth')->name('member');
     Route::get('ngo/member-list', 'memberList')->middleware('auth')->name('member-list');
     Route::get('ngo/add-member-list', 'addmemberlist')->middleware('auth')->name('add-member-list');
     Route::get('ngo/view-member/{id}', 'showMember')->middleware('auth')->name('view-member');
@@ -505,7 +505,6 @@ Route::controller(OrganizationController::class)->group(function () {
     Route::get('ngo/delete-organization-member/{id}', 'DeleteOrgMember')->middleware('auth')->name('delete.organization.member');
     Route::get('ngo/group-member-list/{id}', 'GroupMemberList')->middleware('auth')->name('list.group.member');
     Route::get('ngo/view-organization-member-certificate/{id}', 'ViewOrgMember')->middleware('auth')->name('view.organization.member.certificate');
-
 });
 
 Route::controller(CashBookController::class)->middleware('auth')->group(function () {
@@ -681,16 +680,20 @@ Route::controller(KycController::class)->middleware('auth')->group(function () {
 });
 
 
-Route::controller(UnionController::class)->middleware('auth')->group(function (){
+Route::controller(UnionController::class)->middleware('auth')->group(function () {
     Route::get('ngo/add-union', 'AddUnion')->name('add.union');
     Route::post('ngo/store-union', 'StoreUnion')->name('store.union');
     Route::get('ngo/edit-union/{id}', 'EditUnion')->name('edit.union');
-    Route::post('ngo/update-union/{id}','UpdateUnion')->name('update.union');
-    Route::get('ngo/delete-union/{id}','DeleteUnion')->name('delete.union');
-    Route::get('ngo/list-union','ListUnion')->name('union.list');
-
+    Route::post('ngo/update-union/{id}', 'UpdateUnion')->name('update.union');
+    Route::get('ngo/delete-union/{id}', 'DeleteUnion')->name('delete.union');
+    Route::get('ngo/list-union', 'ListUnion')->name('union.list');
+    Route::get('ngo/add-union-reg-list', 'RegList')->name('union.reg.list');
+    Route::post('ngo/store-union-member', 'StoreUnionMember')->name('store.union.member');
+    Route::get('ngo/list-union-member', 'ListUnionMember')->name('union.member.list');
+    Route::post('ngo/renew-union-member/{id}', 'RenewUnionMember')->name('renew.union.member');
+    Route::get('ngo/union-member-certificate/{id}', 'UnionMemberCertificate')->name('union.member.certificate');
 });
-Route::controller(SubMemberController::class)->middleware('auth')->group(function (){
+Route::controller(SubMemberController::class)->middleware('auth')->group(function () {
     Route::get('ngo/add-submember', 'AddSubMember')->name('add.submember');
     Route::post('ngo/store-submember', 'StoreSubMember')->name('member.sub-member.store');
     Route::get('ngo/list-submember', 'SubmemberList')->name('member.sub-member.list');

@@ -110,6 +110,27 @@
                         <li><a class="dropdown-item" href="{{ route('member.sub-member.list') }}">Sub Member List</a></li>
                     </ul>
                 </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-sitemap"></i> UNION
+                        </a>
+
+                        <ul class="dropdown-menu bg-primary">
+
+                             {{-- Union List --}}
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('union.reg.list') }}">
+                                        Add Union Member
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('union.member.list') }}">
+                                        Union Member List
+                                    </a>
+                                </li>
+
+                        </ul>
+                    </li>
 
             </ul>
         </div>

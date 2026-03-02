@@ -293,7 +293,7 @@
                                     <td>{{ $item->caste }}</td>
                                     <td>{{ $item->religion_category }}</td>
                                     <td>{{ $item->religion }}</td>
-                                    <td>
+                                    <td>   
                                         {{ $item->dob ? \Carbon\Carbon::parse($item->dob)->age . ' years' : 'Not Found' }}
                                     </td>
                                     <td>

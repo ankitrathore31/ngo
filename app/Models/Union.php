@@ -21,4 +21,8 @@ class Union extends Model
         'state',
         'district',
     ];
+    public function members()
+    {
+        return $this->hasMany(UnionMember::class);
+    }
 }
