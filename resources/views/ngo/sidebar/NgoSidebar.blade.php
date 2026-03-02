@@ -935,13 +935,19 @@
                              {{-- Union List --}}
                             @if (!$isStaff || $user->hasPermission('union-list'))
                                 <li>
-                                    <a class="dropdown-item" href="{{-- route('union.list') --}}">
+                                    <a class="dropdown-item" href="{{ route('union.reg.list') }}">
                                         Add Union Member
                                     </a>
                                 </li>
                             @endif
 
-
+                            @if (!$isStaff || $user->hasPermission('union-list'))
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('union.member.list') }}">
+                                        Union Member List
+                                    </a>
+                                </li>
+                            @endif
                         </ul>
                     </li>
                 @endif
