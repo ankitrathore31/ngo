@@ -2,422 +2,438 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\academic_session;
 use App\Models\Member;
-use App\Models\Union;
-use Illuminate\Http\Request;
-use App\Helpers\PositionHierarchy;
+use App\Models\beneficiarie;
 use App\Models\UnionMember;
+use App\Models\Union;
+use App\Models\academic_session;
+use App\Helpers\PositionHierarchy;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use PSpell\Config;
 
 class UnionController extends Controller
 {
-
-    public function AddUnion()
+    // =========================================================================
+    //  AUTH RESOLVER
+    //
+    //  Priority:
+    //    1. session('union_member_id') → UnionMember (separate login)
+    //    2. auth()->guard('admin')     → NGO Admin (no position restriction)
+    //
+    //  Returns stdClass with:
+    //    ->id            actor's primary key
+    //    ->name          display name
+    //    ->position      position string OR null
+    //    ->image         image filename OR null
+    //    ->application_no
+    //    ->actor_type    'union_member' | 'ngo'
+    //    ->is_ngo        bool — NGO bypasses ALL position restrictions
+    // =========================================================================
+    private function getAuthActor(): object
     {
-        $data = academic_session::all();
-        $states = config('states');
+        if (session()->has('union_member_id')) {
+            $um = UnionMember::findOrFail(session('union_member_id'));
 
-        $lastUnion = Union::orderBy('id', 'desc')->first();
-
-        if ($lastUnion && $lastUnion->union_no) {
-
-            // Remove UIDN prefix (4 characters)
-            $lastNumber = intval(substr($lastUnion->union_no, 4));
-
-            $nextNumber = $lastNumber + 1;
-
-            // UIDN + 4 digit padded number
-            $nextUnionNo = 'UIDN' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
-        } else {
-
-            $nextUnionNo = 'UIDN0001';
+            return (object) [
+                'id'             => $um->id,
+                'name'           => $um->name,
+                'position'       => $um->position    ?? null,
+                'image'          => $um->image        ?? null,
+                'application_no' => $um->application_no ?? '—',
+                'actor_type'     => 'union_member',
+                'is_ngo'         => false,
+            ];
         }
 
-        return view(
-            'ngo.union.add-union',
-            compact('data', 'states', 'nextUnionNo')
-        );
+        if (auth()->check() && auth()->user()->user_type == 'ngo') {
+            $admin = auth()->user();
+
+            return (object) [
+                'id'             => $admin->id,
+                'name'           => $admin->name,
+                'position'       => null, // no restriction for NGO
+                'image'          => $admin->image ?? null,
+                'application_no' => 'NGO-' . $admin->id,
+                'actor_type'     => 'ngo',
+                'is_ngo'         => true,
+            ];
+        }
+
+        abort(403, 'Unauthorized. Please log in.');
     }
 
-    public function StoreUnion(Request $request)
+    private function resolveAllowedLevels(object $actor): array
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'union_no' => 'required|unique:unions,union_no',
-            'academic_session' => 'required',
-            'formation_date' => 'nullable|date',
-            'state' => 'required',
-            'district' => 'required',
-        ]);
+        // NGO → allow all levels and positions
+        if ($actor->is_ngo) {
+            return \App\Helpers\PositionHierarchy::$levels;
+        }
 
-        Union::create([
-            'name' => $request->name,
-            'union_no' => $request->union_no,
-            'union_certificate_format' => $request->union_certificate_format,
-            'academic_session' => $request->academic_session,
-            'formation_date' => $request->formation_date,
-            'area_type' => $request->area_type,
-            'address' => $request->address,
-            'block' => $request->block,
-            'state' => $request->state,
-            'district' => $request->district,
-        ]);
+        // If union member has no position
+        if (!$actor->position) {
+            return [];
+        }
 
-        return redirect()->route('union.list')
-            ->with('success', 'Union Created Successfully');
+        // Block lowest level (gram)
+        if (!\App\Helpers\PositionHierarchy::canAddSubMembers($actor->position)) {
+            return [];
+        }
+
+        // Get positions only from levels below the member
+        return \App\Helpers\PositionHierarchy::getAllowedSubPositions($actor->position);
     }
 
-    public function EditUnion($id)
-    {
-        $union = Union::findOrFail($id);
-        $data = academic_session::all();
-        $states = config('states');
-
-        return view(
-            'ngo.union.edit-union',
-            compact('union', 'data', 'states')
-        );
-    }
-
-    public function UpdateUnion(Request $request, $id)
-    {
-        $union = Union::findOrFail($id);
-
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'academic_session' => 'required',
-            'formation_date' => 'nullable|date',
-            'state' => 'required',
-            'district' => 'required',
-        ]);
-
-        $union->update([
-            'name' => $request->name,
-            'union_certificate_format' => $request->union_certificate_format,
-            'academic_session' => $request->academic_session,
-            'formation_date' => $request->formation_date,
-            'area_type' => $request->area_type,
-            'address' => $request->address,
-            'block' => $request->block,
-            'state' => $request->state,
-            'district' => $request->district,
-        ]);
-
-        return redirect()->route('union.list')
-            ->with('success', 'Union Updated Successfully');
-    }
-
-    public function DeleteUnion($id)
-    {
-        $union = Union::findOrFail($id);
-        $union->delete();
-
-        return redirect()->back()
-            ->with('success', 'Union Deleted Successfully');
-    }
-
-    public function ListUnion(Request $request)
-    {
-        $query = Union::query();
-
-        // Search Filters
-        if ($request->filled('name')) {
-            $query->where('name', 'like', '%' . $request->name . '%');
-        }
-
-        if ($request->filled('union_no')) {
-            $query->where('union_no', 'like', '%' . $request->union_no . '%');
-        }
-
-        if ($request->filled('address')) {
-            $query->where('address', 'like', '%' . $request->address . '%');
-        }
-
-        if ($request->filled('block')) {
-            $query->where('block', 'like', '%' . $request->block . '%');
-        }
-
-        if ($request->filled('state')) {
-            $query->where('state', $request->state);
-        }
-
-        if ($request->filled('district')) {
-            $query->where('district', $request->district);
-        }
-
-        if ($request->filled('area_type')) {
-            $query->where('area_type', $request->area_type);
-        }
-
-        if ($request->filled('academic_session')) {
-            $query->where('academic_session', $request->academic_session);
-        }
-
-        $unions = $query->get();
-
-        $states = config('districts');
-
-        return view('ngo.union.list-union', compact('unions', 'states'));
-    }
-
+    // =========================================================================
+    //  LIST — Approved records from BOTH Member & Beneficiarie (status = 1)
+    // =========================================================================
     public function RegList(Request $request)
     {
-        $authUser = auth()->user();
+        $actor         = $this->getAuthActor();
+        $allowedLevels = $this->resolveAllowedLevels($actor);
 
-        // Define level hierarchy (top to bottom)
-        $levelOrder = [
-            'rashtriya',
-            'pradesh',
-            'mandal',
-            'jila',
-            'nagar',
-            'block',
-            'gram'
-        ];
+        $actorLevel = (!$actor->is_ngo && $actor->position)
+            ? PositionHierarchy::getLevelByPosition($actor->position)
+            : null;
 
-        if ($authUser->user_type === 'member') {
+        // ── Both models ───────────────────────────────────────────────────────
+        $queryBene   = beneficiarie::where('status', 1);
+        $queryMember = Member::where('status', 1);
 
-            // Find logged-in member
-            $authMember = Member::where('email', $authUser->email)->first();
-            $authMemberId = $authMember->id;
-            if (!$authMember) {
-                return redirect()->back()->with('error', 'Member profile not found.');
-            }
-
-            $memberLevel = strtolower(trim($authMember->position_type));
-
-            // Get index of logged-in member level
-            $currentIndex = array_search($memberLevel, $levelOrder);
-
-            if ($currentIndex === false) {
-                // Invalid level → show none
-                $queryMember = Member::whereRaw('0 = 1');
-            } else {
-
-                // Get all levels below current level
-                $allowedLevels = array_slice($levelOrder, $currentIndex + 1);
-
-                if (empty($allowedLevels)) {
-                    // Gram level → nothing below
-                    $queryMember = Member::whereRaw('0 = 1');
-                } else {
-                    $queryMember = Member::where('status', 1)
-                        ->whereIn('position_type', $allowedLevels);
-                }
-            }
-        } else {
-            // NGO sees all active members
-            $queryMember = Member::where('status', 1);
-        }
-        if ($authUser->user_type === 'member') {
-            $authMember = Member::where('email', $authUser->email)->first();
-            $member_by = $authMember->id;
-        } else {
-            $member_by = $authUser->id;
-        }
-        // ------------------ Filters ------------------
-
-        if ($request->filled('session_filter')) {
-            $queryMember->where('academic_session', $request->session_filter);
+        if ($search = $request->search) {
+            $filter = function ($q) use ($search) {
+                $q->where('name', 'like', "%$search%")
+                    ->orWhere('application_no', 'like', "%$search%")
+                    ->orWhere('phone', 'like', "%$search%");
+            };
+            $queryBene->where($filter);
+            $queryMember->where($filter);
         }
 
-        if ($request->filled('application_no')) {
-            $search = $request->application_no;
-            $queryMember->where(function ($q) use ($search) {
-                $q->where('application_no', 'like', "%$search%")
-                    ->orWhere('registration_no', 'like', "%$search%");
-            });
-        }
+        $beneficiaries = $queryBene->get()
+            ->map(fn($b) => array_merge($b->toArray(), ['_source' => 'Beneficiarie']));
 
-        if ($request->filled('identity_no')) {
-            $identity = $request->identity_no;
-            $queryMember->where(function ($q) use ($identity) {
-                $q->where('phone', 'like', "%$identity%")
-                    ->orWhere('identity_no', 'like', "%$identity%");
-            });
-        }
+        $members = $queryMember->get()
+            ->map(fn($m) => array_merge($m->toArray(), ['_source' => 'Member']));
 
-        if ($request->filled('name')) {
-            $name = trim($request->name);
-            $queryMember->where(function ($q) use ($name) {
-                $q->where('name', 'like', "{$name}%")
-                    ->orWhere('gurdian_name', 'like', "{$name}%");
-            });
-        }
+        $approvemember = $beneficiaries->concat($members)
+            ->sortByDesc('application_date')
+            ->values();
 
-        if ($request->filled('block')) {
-            $queryMember->where('block', 'like', "%{$request->block}%");
-        }
-
-        if ($request->filled('state')) {
-            $queryMember->where('state', $request->state);
-        }
-
-        if ($request->filled('district')) {
-            $queryMember->where('district', $request->district);
-        }
-
-        // ------------------------------------------------
-
-        $approvemember = $queryMember->orderBy('created_at', 'asc')->get();
-        $data          = academic_session::all();
-        $states        = config('states');
-        $unions = Union::get();
-        $layout = $authUser->user_type === 'member'
-            ? 'member.layout.master'
-            : 'ngo.layout.master';
-
+        $unions   = Union::orderBy('name')->get();
+        $sessions = academic_session::orderByDesc('id')->get();
+        $districtsByState = Config('sates');
         return view('ngo.union.reg-list', compact(
-            'data',
             'approvemember',
-            'states',
-            'layout',
             'unions',
-            'member_by'
+            'sessions',
+            'actor',
+            'actorLevel',
+            'allowedLevels',
+            'districtsByState'
         ));
     }
 
+    // =========================================================================
+    //  STORE — Add existing Member / Beneficiarie to union (list row modal)
+    //  Full info is copied from source into union_members row automatically
+    // =========================================================================
     public function StoreUnionMember(Request $request)
     {
-        $request->validate([
-            'union_id' => 'required|exists:unions,id',
-            'member_id' => 'required|exists:members,id',
-            'join_date' => 'required|date',
+        $actor         = $this->getAuthActor();
+        $allowedLevels = $this->resolveAllowedLevels($actor);
+
+        if (!$actor->is_ngo && empty($allowedLevels)) {
+            return back()->with('error', 'You are not allowed to add union members.');
+        }
+
+        $allAllowedPositions = count($allowedLevels)
+            ? array_merge(...array_values($allowedLevels))
+            : [];
+
+        // NGO = open, Union Member = restricted to their allowed levels
+        $positionTypeRule = $actor->is_ngo
+            ? 'required|string'
+            : 'required|string|in:' . implode(',', array_keys($allowedLevels));
+
+        $positionRule = $actor->is_ngo
+            ? ['required', 'string']
+            : ['required', 'string', function ($a, $v, $fail) use ($allAllowedPositions) {
+                if (!in_array($v, $allAllowedPositions)) {
+                    $fail('Selected position is not allowed under your level.');
+                }
+            }];
+
+        $validator = Validator::make($request->all(), [
+            'union_id'      => 'required|exists:unions,id',
+            'source_id'     => 'required|integer',
+            'source_model'  => 'required|in:Member,Beneficiarie',
+            'join_date'     => 'required|date',
+            'position_type' => $positionTypeRule,
+            'position'      => $positionRule,
+            'working_area'  => 'required|string|max:255',
         ]);
 
-        $joinDate = Carbon::parse($request->join_date);
-        $exists = UnionMember::where('union_id', $request->union_id)
-            ->where('member_id', $request->member_id)
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        // ── Duplicate check ───────────────────────────────────────────────────
+        $alreadyAdded = UnionMember::where('union_id', $request->union_id)
+            ->where('source_id', $request->source_id)
+            ->where('source_model', $request->source_model)
             ->exists();
 
-        if ($exists) {
-            return back()
-                ->withInput()
-                ->withErrors([
-                    'member_id' => 'This member is already in this union.'
-                ]);
+        if ($alreadyAdded) {
+            return back()->with('error', 'This member is already in the selected union.');
         }
-        UnionMember::updateOrCreate(
-            [
-                'union_id' => $request->union_id,
-                'member_id' => $request->member_id,
-                'member_by' => $request->member_by,
-            ],
-            [
-                'join_date' => $joinDate,
-                'expiry_date' => $joinDate->copy()->addYear(),
-                'status' => 1
-            ]
-        );
 
-        return back()->with('success', 'Member added to union successfully.');
-    }
+        // ── Pull full info from source ────────────────────────────────────────
+        $source = $request->source_model === 'Member'
+            ? Member::findOrFail($request->source_id)
+            : beneficiarie::findOrFail($request->source_id);
 
-    public function RenewUnionMember($id)
-    {
-        $unionMember = UnionMember::findOrFail($id);
+        $joinDate = Carbon::parse($request->join_date);
 
-        $newJoinDate = Carbon::today();
-        $unionMember->update([
-            'join_date' => $newJoinDate,
-            'expiry_date' => $newJoinDate->copy()->addYear(),
-            'status' => 1
+        UnionMember::create([
+            'union_id'          => $request->union_id,
+            'source_model'      => $request->source_model,
+            'source_id'         => $request->source_id,
+            'member_by'         => $actor->id,
+            'added_by_type'     => $actor->actor_type,
+
+            // Position set in modal by actor
+            'position_type'     => $request->position_type,
+            'position'          => $request->position,
+            'working_area'      => $request->working_area,
+
+            // All personal info copied automatically from source
+            'identity_type'     => $source->identity_type     ?? null,
+            'identity_no'       => $source->identity_no       ?? null,
+            'id_document'       => $source->id_document       ?? null,
+            'application_no'    => $source->application_no    ?? null,
+            'application_date'  => $source->application_date  ?? null,
+            'registration_no'   => $source->registration_no   ?? null,
+            'registration_date' => $source->registration_date ?? null,
+            'academic_session'  => $source->academic_session  ?? null,
+            'image'             => $source->image              ?? null,
+            'name'              => $source->name,
+            'gurdian_name'      => $source->gurdian_name       ?? null,
+            'mother_name'       => $source->mother_name        ?? null,
+            'dob'               => $source->dob                ?? null,
+            'gender'            => $source->gender             ?? null,
+            'marital_status'    => $source->marital_status     ?? null,
+            'phone'             => $source->phone              ?? null,
+            'email'             => $source->email              ?? null,
+            'occupation'        => $source->occupation         ?? null,
+            'eligibility'       => $source->eligibility        ?? null,
+            'state'             => $source->state              ?? null,
+            'district'          => $source->district           ?? null,
+            'area_type'         => $source->area_type          ?? null,
+            'block'             => $source->block              ?? null,
+            'post'              => $source->post               ?? null,
+            'village'           => $source->village            ?? null,
+            'pincode'           => $source->pincode            ?? null,
+            'country'           => $source->country            ?? null,
+            'religion'          => $source->religion           ?? null,
+            'religion_category' => $source->religion_category  ?? null,
+            'caste'             => $source->caste              ?? null,
+
+            'join_date'         => $joinDate,
+            'expiry_date'       => $joinDate->copy()->addYear(),
+            'status'            => 1,
         ]);
 
-        return back()->with('success', 'Membership renewed for 1 year.');
+        return back()->with('success', '"' . $source->name . '" added to union successfully.');
     }
-    public function ListUnionMember(Request $request)
+
+    // =========================================================================
+    //  STORE NEW — Register a brand-new union member (full registration form)
+    // =========================================================================
+    public function StoreNewUnionMember(Request $request)
     {
-        $authUser = auth()->user();
+        $actor         = $this->getAuthActor();
+        $allowedLevels = $this->resolveAllowedLevels($actor);
 
-        $query = UnionMember::with(['member', 'union']);
+        if (!$actor->is_ngo && empty($allowedLevels)) {
+            return back()->with('error', 'You are not allowed to add union members.');
+        }
 
-        if ($authUser->user_type === 'member') {
+        $allAllowedPositions = count($allowedLevels)
+            ? array_merge(...array_values($allowedLevels))
+            : [];
 
-            $authMember = Member::where('email', $authUser->email)->first();
+        $positionTypeRule = $actor->is_ngo
+            ? 'required|string'
+            : 'required|string|in:' . implode(',', array_keys($allowedLevels));
 
-            if (!$authMember) {
-                return back()->with('error', 'Member profile not found.');
-            }
-
-            $memberLevel = strtolower(trim($authMember->position_type));
-
-            $levelOrder = [
-                'rashtriya',
-                'pradesh',
-                'mandal',
-                'jila',
-                'nagar',
-                'block',
-                'gram'
-            ];
-
-            $currentIndex = array_search($memberLevel, $levelOrder);
-
-            if ($currentIndex !== false) {
-
-                $allowedLevels = array_slice($levelOrder, $currentIndex + 1);
-
-                if (!empty($allowedLevels)) {
-
-                    $query->whereHas('member', function ($q) use ($allowedLevels) {
-                        $q->whereIn('position_type', $allowedLevels)
-                            ->where('status', 1);
-                    });
-                } else {
-                    $query->whereRaw('0 = 1');
+        $positionRule = $actor->is_ngo
+            ? ['required', 'string']
+            : ['required', 'string', function ($a, $v, $fail) use ($allAllowedPositions) {
+                if (!in_array($v, $allAllowedPositions)) {
+                    $fail('Selected position is not allowed under your level.');
                 }
-            } else {
-                $query->whereRaw('0 = 1');
-            }
+            }];
+
+        $validator = Validator::make($request->all(), [
+            'union_id'          => 'required|exists:unions,id',
+            'position_type'     => $positionTypeRule,
+            'position'          => $positionRule,
+            'working_area'      => 'required|string|max:255',
+            'identity_type'     => 'required|string|max:255',
+            'identity_no'       => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) {
+                    if (
+                        UnionMember::where('identity_no', $value)->exists() ||
+                        Member::where('identity_no', $value)->exists() ||
+                        beneficiarie::where('identity_no', $value)->exists()
+                    ) {
+                        $fail('This identity number is already registered.');
+                    }
+                }
+            ],
+            'id_document'       => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'join_date'         => 'required|date',
+            'application_date'  => 'required|date',
+            'academic_session'  => 'required',
+            'image'             => 'nullable|image|max:2048',
+            'name'              => 'required|string|max:255',
+            'gurdian_name'      => 'required|string|max:255',
+            'mother_name'       => 'required|string|max:255',
+            'dob'               => 'required|date',
+            'gender'            => 'required|in:Male,Female,Other',
+            'marital_status'    => 'required|in:Married,Unmarried',
+            'phone'             => 'required|string|max:10',
+            'email'             => 'nullable|email|max:255',
+            'occupation'        => 'required|string|max:255',
+            'eligibility'       => 'nullable|string|max:100',
+            'state'             => 'required|string|max:255',
+            'district'          => 'required|string|max:255',
+            'area_type'         => 'required|in:Rular,Urban',
+            'block'             => 'required|string|max:255',
+            'post'              => 'required|string|max:255',
+            'village'           => 'nullable|string|max:255',
+            'pincode'           => 'nullable|string|max:10',
+            'country'           => 'required|string|max:100',
+            'religion'          => 'required|string|max:100',
+            'religion_category' => 'required|string|max:100',
+            'caste'             => 'required|string|max:100',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
         }
 
+        // ── Generate Application No ───────────────────────────────────────────
+        $prefix       = '2191000';
+        $prefixLength = strlen($prefix);
 
+        $lastSeq = max(
+            $this->getLastSeq(Member::class,       'application_no', $prefix, $prefixLength, 0),
+            $this->getLastSeq(beneficiarie::class, 'application_no', $prefix, $prefixLength, 0),
+            $this->getLastSeq(UnionMember::class,  'application_no', $prefix, $prefixLength, 0)
+        );
 
-        // Filter by Union
-        if ($request->filled('union_id')) {
-            $query->where('union_id', $request->union_id);
+        // ── Generate Registration No ──────────────────────────────────────────
+        $regPrefix       = '2192000';
+        $regPrefixLength = strlen($regPrefix);
+
+        $lastRegSeq = max(
+            $this->getLastSeq(Member::class,       'registration_no', $regPrefix, $regPrefixLength, 54),
+            $this->getLastSeq(beneficiarie::class, 'registration_no', $regPrefix, $regPrefixLength, 54),
+            $this->getLastSeq(UnionMember::class,  'registration_no', $regPrefix, $regPrefixLength, 54)
+        );
+
+        // ── File Uploads ──────────────────────────────────────────────────────
+        $imageName = null;
+        $idDocName = null;
+
+        if ($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->image->getClientOriginalExtension();
+            $request->image->move(public_path('member_images'), $imageName);
         }
 
-        // Filter by Added By (member_by)
-        if ($request->filled('member_by')) {
-            $query->where('member_by', $request->member_by);
+        if ($request->hasFile('id_document')) {
+            $idDocName = time() . '_id.' . $request->id_document->getClientOriginalExtension();
+            $request->id_document->move(public_path('member_images'), $idDocName);
         }
 
-        $unionMembers = $query->orderBy('created_at', 'desc')->get();
+        $joinDate = Carbon::parse($request->join_date);
 
-        $unions = Union::all();
-        $members = Member::where('status', 1)->get();
+        try {
+            $newUnionMember = UnionMember::create([
+                'union_id'          => $request->union_id,
+                'source_model'      => 'Direct',
+                'source_id'         => null,
+                'member_by'         => $actor->id,
+                'added_by_type'     => $actor->actor_type,
 
-        $layout = $authUser->user_type === 'member'
-            ? 'member.layout.master'
-            : 'ngo.layout.master';
+                'position_type'     => $request->position_type,
+                'position'          => $request->position,
+                'working_area'      => $request->working_area,
 
-        return view('ngo.union.union-member', compact(
-            'unionMembers',
-            'unions',
-            'members',
-            'layout'
-        ));
+                'identity_type'     => $request->identity_type,
+                'identity_no'       => $request->identity_no,
+                'id_document'       => $idDocName,
+
+                'application_no'    => $prefix    . ($lastSeq    + 1),
+                'application_date'  => $request->application_date,
+                'registration_no'   => $regPrefix . ($lastRegSeq + 1),
+                'registration_date' => $request->application_date,
+                'academic_session'  => $request->academic_session,
+
+                'image'             => $imageName,
+                'name'              => $request->name,
+                'gurdian_name'      => $request->gurdian_name,
+                'mother_name'       => $request->mother_name,
+                'dob'               => $request->dob,
+                'gender'            => $request->gender,
+                'marital_status'    => $request->marital_status,
+                'phone'             => $request->phone,
+                'email'             => $request->email,
+                'occupation'        => $request->occupation,
+                'eligibility'       => $request->eligibility,
+                'state'             => $request->state,
+                'district'          => $request->district,
+                'area_type'         => $request->area_type,
+                'block'             => $request->block,
+                'post'              => $request->post,
+                'village'           => $request->village,
+                'pincode'           => $request->pincode,
+                'country'           => $request->country,
+                'religion'          => $request->religion,
+                'religion_category' => $request->religion_category,
+                'caste'             => $request->caste,
+
+                'join_date'         => $joinDate,
+                'expiry_date'       => $joinDate->copy()->addYear(),
+                'status'            => 1,
+            ]);
+
+            return back()->with(
+                'success',
+                'Union member "' . $newUnionMember->name . '" registered! Reg No: ' . $newUnionMember->registration_no
+            );
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Error: ' . $e->getMessage());
+        }
     }
 
-    public function UnionMemberCertificate($id)
-{
-    $unionMember = UnionMember::with(['member', 'union'])
-        ->findOrFail($id);
+    // =========================================================================
+    //  PRIVATE HELPER — last used sequence number for a prefix in any model
+    // =========================================================================
+    private function getLastSeq(string $model, string $column, string $prefix, int $prefixLen, int $default): int
+    {
+        $row = $model::where($column, 'LIKE', $prefix . '%')
+            ->whereRaw("LENGTH($column) > ?", [$prefixLen])
+            ->selectRaw("CAST(SUBSTRING($column, ? + 1) AS UNSIGNED) as seq", [$prefixLen])
+            ->orderByDesc('seq')
+            ->first();
 
-    $member = $unionMember->member;
-    $union  = $unionMember->union;
-    $authUser = auth()->user();
-     $layout = $authUser->user_type === 'member'
-            ? 'member.layout.master'
-            : 'ngo.layout.master';
-    return view('ngo.union.certificate', compact(
-        'unionMember',
-        'member',
-        'union',
-        'layout'
-    ));
-}
+        return $row ? (int) $row->seq : $default;
+    }
 }
