@@ -11,19 +11,71 @@ class UnionMember extends Model
     use HasFactory;
     protected $fillable = [
         'union_id',
-        'member_id',
+        'source_model',
+        'source_id',
         'member_by',
+        'added_by_type',
+
+        'position_type',
+        'position',
+        'working_area',
+
+        'identity_type',
+        'identity_no',
+        'id_document',
+
+        'application_no',
+        'application_date',
+        'registration_no',
+        'registration_date',
+        'academic_session',
+
+        'image',
+        'name',
+        'gurdian_name',
+        'mother_name',
+        'dob',
+        'gender',
+        'marital_status',
+        'phone',
+        'email',
+        'occupation',
+        'eligibility',
+
+        'state',
+        'district',
+        'area_type',
+        'block',
+        'post',
+        'village',
+        'pincode',
+        'country',
+
+        'religion',
+        'religion_category',
+        'caste',
+
         'join_date',
         'expiry_date',
-        'status'
+        'status',
     ];
 
-    protected $dates = ['join_date', 'expiry_date'];
+    protected $casts = [
+        'dob' => 'date',
+        'join_date' => 'date',
+        'expiry_date' => 'date',
+        'application_date' => 'date',
+        'registration_date' => 'date',
+    ];
 
     public function member()
     {
-        return $this->belongsTo(Member::class, 'member_id');
+        return $this->belongsTo(Member::class, 'source_id');
     }
+    // public function member()
+    // {
+    //     return $this->belongsTo(beneficiarie::class, 'source_id');
+    // }
 
     public function union()
     {

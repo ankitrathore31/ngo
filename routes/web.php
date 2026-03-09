@@ -689,7 +689,7 @@ Route::controller(UnionController::class)->middleware('auth')->group(function ()
     Route::get('ngo/list-union', 'ListUnion')->name('union.list');
     Route::get('ngo/add-union-reg-list', 'RegList')->name('union.reg.list');
     Route::post('ngo/store-union-member', 'StoreUnionMember')->name('store.union.member');
-    Route::get('ngo/list-union-member', 'ListUnionMember')->name('union.member.list');
+    Route::get('ngo/list-union-member', 'UnionMemberList')->name('union.member.list');
     Route::post('ngo/renew-union-member/{id}', 'RenewUnionMember')->name('renew.union.member');
     Route::get('ngo/union-member-certificate/{id}', 'UnionMemberCertificate')->name('union.member.certificate');
     Route::post('ngo/store-new-union-member', 'StoreNewUnionMember')->name('store.new.union.member');

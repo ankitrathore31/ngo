@@ -164,8 +164,8 @@
                                 </div>
 
                                 <div class="col-sm-4 mb-3">
-                                    <strong>Union Position:</strong>
-                                    {{ $member->position ?? 'Member' }}
+                                    <strong>Union Member Position:</strong>
+                                    {{ $unionMember->position ?? 'Member' }}
                                 </div>
 
                                 <div class="col-sm-4 mb-3">
@@ -175,14 +175,14 @@
                             </div>
                             <div class="row mb-1">
                                 <div class="col-sm-4 mb-3">
-                                    <strong>Application No:</strong> {{ $member->application_no }}
+                                    <strong>Application No:</strong> {{ $unionMember->application_no }}
                                 </div>
                                 <div class="col-sm-4 mb-3">
-                                    <strong>Registraition No:</strong> {{ $member->registration_no }}
+                                    <strong>Registraition No:</strong> {{ $unionMember->registration_no }}
                                 </div>
                                 <div class="col-sm-4 mb-3">
                                     <strong>Registraition Date:</strong>
-                                    {{ \Carbon\Carbon::parse($member->registration_date)->format('d-m-Y') }}
+                                    {{ \Carbon\Carbon::parse($unionMember->registration_date)->format('d-m-Y') }}
                                 </div>
                                 {{-- <div class="col-sm-4 mb-3">
                                     <strong>Registraition Type:</strong> {{ $member->reg_type }}
@@ -192,43 +192,39 @@
                                 <div class="col-sm-8">
                                     <div class="row">
                                         <div class="col-sm-6 mb-3">
-                                            <strong>Name:</strong> {{ $member->name }}
+                                            <strong>Name:</strong> {{ $unionMember->name }}
                                         </div>
                                         <div class="col-sm-6 mb-3">
-                                            <strong>Father / Husband's Name:</strong> {{ $member->gurdian_name }}
+                                            <strong>Father / Husband's Name:</strong> {{ $unionMember->gurdian_name }}
                                         </div>
                                         <div class="col-sm-6 mb-3">
-                                            <strong>Gender:</strong> {{ $member->gender }}
+                                            <strong>Gender:</strong> {{ $unionMember->gender }}
                                         </div>
                                         <div class="col-sm-6 mb-3">
                                             <strong>Date of Birth:</strong>
-                                            {{ \Carbon\Carbon::parse($member->dob)->format('d-m-Y') }}
+                                            {{ \Carbon\Carbon::parse($unionMember->dob)->format('d-m-Y') }}
                                         </div>
                                         <div class="col-sm-12 mb-3">
                                             <strong>Address: </strong>
-                                            {{ $member->village }},
-                                            {{ $member->post }},
-                                            {{ $member->block }},
-                                            {{ $member->district }},
-                                            {{ $member->state }} - {{ $member->pincode }},({{ $member->area_type }})
+                                            {{ $unionMember->village }},
+                                            {{ $unionMember->post }},
+                                            {{ $unionMember->block }},
+                                            {{ $unionMember->district }},
+                                            {{ $unionMember->state }} - {{ $unionMember->pincode }},({{ $unionMember->area_type }})
                                         </div>
                                         <div class="col-sm-6 mb-3">
-                                            <strong>Phone:</strong> {{ $member->phone }}
+                                            <strong>Phone:</strong> {{ $unionMember->phone }}
                                         </div>
                                         <div class="col-sm-6 mb-3">
-                                            <strong>Marital Status:</strong> {{ $member->marital_status }}
+                                            <strong>Marital Status:</strong> {{ $unionMember->marital_status }}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
-                                    @php
-                                        $imagePath =
-                                            $member->reg_type === 'Member' ? 'member_images/' : 'benefries_images/';
-                                    @endphp
 
                                     {{-- @if ($member->image) --}}
                                     <div class=" mb-3">
-                                        <img src="{{ asset($imagePath . $member->image) }}" alt="Image"
+                                        <img src="{{ asset($unionMember->image) }}" alt="Image"
                                             class="img-thumbnail" width="150" style="max-width: 250">
                                         {{-- <br>
                                     <strong class="text-center"> Image:</strong> --}}

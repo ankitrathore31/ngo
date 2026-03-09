@@ -1,4 +1,4 @@
-@extends($layout)
+@extends('ngo.layout.master')
 @Section('content')
     <style>
         .hover-card {
@@ -48,30 +48,56 @@
                     <div class="col-md-3">
                         <select name="union_id" class="form-control">
                             <option value="">All Unions</option>
+
                             @foreach ($unions as $union)
                                 <option value="{{ $union->id }}"
                                     {{ request('union_id') == $union->id ? 'selected' : '' }}>
                                     {{ $union->name }}
                                 </option>
                             @endforeach
+
                         </select>
                     </div>
 
-                    <div class="col-md-3">
-                        <select name="member_by" class="form-control">
-                            <option value="">Added By (All)</option>
-                            @foreach ($members as $member)
-                                <option value="{{ $member->id }}"
-                                    {{ request('member_by') == $member->id ? 'selected' : '' }}>
-                                    {{ $member->name }} ( {{ $member->position }})
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+
+                    @if ($actor->is_ngo)
+                        <div class="col-md-3">
+                            <select name="member_by" class="form-control">
+
+                                <option value="">Added By (All)</option>
+
+                                @foreach ($members as $member)
+                                    <option value="{{ $member->member_by }}"
+                                        {{ request('member_by') == $member->member_by ? 'selected' : '' }}>
+
+                                        {{ $member->name }} ({{ $member->position }})
+
+                                    </option>
+                                @endforeach
+
+                            </select>
+                        </div>
+                    @endif
+
 
                     <div class="col-md-3">
-                        <button type="submit" class="btn btn-primary">Search</button>
-                        <a href="{{ route('union.member.list') }}" class="btn btn-info text-white">Reset</a>
+                        <input type="text" name="search" value="{{ request('search') }}" class="form-control"
+                            placeholder="Search Name / App No / Father / Mobile">
+                    </div>
+
+
+                    <div class="col-md-3">
+
+                        <button type="submit" class="btn btn-primary">
+                            Search
+                        </button>
+
+                        <a href="{{ route('union.member.list') }}" class="btn btn-info text-white">
+
+                            Reset
+
+                        </a>
+
                     </div>
 
                 </form>
@@ -111,35 +137,35 @@
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
                                         <td>{{ $item->union->name ?? '-' }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($item->member->application_date)->format('d-m-Y') }}
+                                        <td>{{ \Carbon\Carbon::parse($item->application_date)->format('d-m-Y') }}
                                         </td>
-                                        <td>{{ $item->member->application_no }}</td>
+                                        <td>{{ $item->application_no }}</td>
 
                                         <td>
-                                            <img src="{{ asset('member_images/' . $item->member->image) }}" width="80">
+                                            <img src="{{ asset('member_images/' . $item->image) }}" width="80">
                                         </td>
 
-                                        <td>{{ $item->member->name }}</td>
-                                        <td>{{ $item->member->gurdian_name }}</td>
-                                        <td>{{ $item->member->position_type ?? 'No Found' }}</td>
-                                        <td>{{ $item->member->position ?? 'No Found' }}</td>
+                                        <td>{{ $item->name }}</td>
+                                        <td>{{ $item->gurdian_name }}</td>
+                                        <td>{{ $item->position_type ?? 'No Found' }}</td>
+                                        <td>{{ $item->position ?? 'No Found' }}</td>
                                         <td>
-                                            {{ $item->member->village }},
-                                            {{ $item->member->post }},
-                                            {{ $item->member->block }},
-                                            {{ $item->member->district }},
-                                            {{ $item->member->state }} - {{ $item->member->pincode }}
+                                            {{ $item->village }},
+                                            {{ $item->post }},
+                                            {{ $item->block }},
+                                            {{ $item->district }},
+                                            {{ $item->state }} - {{ $item->pincode }}
                                         </td>
 
-                                        <td>{{ $item->member->caste }}</td>
-                                        <td>{{ $item->member->religion_category }}</td>
-                                        <td>{{ $item->member->religion }}</td>
-                                        <td>{{ $item->member->phone }}</td>
+                                        <td>{{ $item->caste }}</td>
+                                        <td>{{ $item->religion_category }}</td>
+                                        <td>{{ $item->religion }}</td>
+                                        <td>{{ $item->phone }}</td>
                                         <td>{{ \Carbon\Carbon::parse($item->join_date)->format('d-m-Y') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($item->expiry_date)->format('d-m-Y') }}</td>
                                         <td>
-                                            {{ optional(\App\Models\Member::find($item->member_by))->name ?? 'NGO' }}
-                                            ({{ optional(\App\Models\Member::find($item->member_by))->position ?? ' ' }} )
+                                            {{ $actor->name ?? 'NGO' }}
+                                            ({{ $actor->position ?? 'NGO' }})
                                         </td>
                                         <td>
                                             @php
@@ -184,7 +210,7 @@
 
                                                         <p>
                                                             Are you sure you want to renew membership for
-                                                            <strong>{{ $item->member->name ?? '' }}</strong>?
+                                                            <strong>{{ $item->name ?? '' }}</strong>?
                                                         </p>
 
                                                         <p class="text-danger">

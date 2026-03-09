@@ -8,29 +8,164 @@ use App\Models\UnionMember;
 use App\Models\Union;
 use App\Models\academic_session;
 use App\Helpers\PositionHierarchy;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use PSpell\Config;
 
 class UnionController extends Controller
 {
-    // =========================================================================
-    //  AUTH RESOLVER
-    //
-    //  Priority:
-    //    1. session('union_member_id') → UnionMember (separate login)
-    //    2. auth()->guard('admin')     → NGO Admin (no position restriction)
-    //
-    //  Returns stdClass with:
-    //    ->id            actor's primary key
-    //    ->name          display name
-    //    ->position      position string OR null
-    //    ->image         image filename OR null
-    //    ->application_no
-    //    ->actor_type    'union_member' | 'ngo'
-    //    ->is_ngo        bool — NGO bypasses ALL position restrictions
-    // =========================================================================
+
+    public function AddUnion()
+    {
+        $data = academic_session::all();
+        $states = config('states');
+
+        $lastUnion = Union::orderBy('id', 'desc')->first();
+
+        if ($lastUnion && $lastUnion->union_no) {
+
+            // Remove UIDN prefix (4 characters)
+            $lastNumber = intval(substr($lastUnion->union_no, 4));
+
+            $nextNumber = $lastNumber + 1;
+
+            // UIDN + 4 digit padded number
+            $nextUnionNo = 'UIDN' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+        } else {
+
+            $nextUnionNo = 'UIDN0001';
+        }
+
+        return view(
+            'ngo.union.add-union',
+            compact('data', 'states', 'nextUnionNo')
+        );
+    }
+
+    public function StoreUnion(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'union_no' => 'required|unique:unions,union_no',
+            'academic_session' => 'required',
+            'formation_date' => 'nullable|date',
+            'state' => 'required',
+            'district' => 'required',
+        ]);
+
+        Union::create([
+            'name' => $request->name,
+            'union_no' => $request->union_no,
+            'union_certificate_format' => $request->union_certificate_format,
+            'academic_session' => $request->academic_session,
+            'formation_date' => $request->formation_date,
+            'area_type' => $request->area_type,
+            'address' => $request->address,
+            'block' => $request->block,
+            'state' => $request->state,
+            'district' => $request->district,
+        ]);
+
+        return redirect()->route('union.list')
+            ->with('success', 'Union Created Successfully');
+    }
+
+    public function EditUnion($id)
+    {
+        $union = Union::findOrFail($id);
+        $data = academic_session::all();
+        $states = config('states');
+
+        return view(
+            'ngo.union.edit-union',
+            compact('union', 'data', 'states')
+        );
+    }
+
+    public function UpdateUnion(Request $request, $id)
+    {
+        $union = Union::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'academic_session' => 'required',
+            'formation_date' => 'nullable|date',
+            'state' => 'required',
+            'district' => 'required',
+        ]);
+
+        $union->update([
+            'name' => $request->name,
+            'union_certificate_format' => $request->union_certificate_format,
+            'academic_session' => $request->academic_session,
+            'formation_date' => $request->formation_date,
+            'area_type' => $request->area_type,
+            'address' => $request->address,
+            'block' => $request->block,
+            'state' => $request->state,
+            'district' => $request->district,
+        ]);
+
+        return redirect()->route('union.list')
+            ->with('success', 'Union Updated Successfully');
+    }
+
+    public function DeleteUnion($id)
+    {
+        $union = Union::findOrFail($id);
+        $union->delete();
+
+        return redirect()->back()
+            ->with('success', 'Union Deleted Successfully');
+    }
+
+    public function ListUnion(Request $request)
+    {
+        $query = Union::query();
+
+        // Search Filters
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        if ($request->filled('union_no')) {
+            $query->where('union_no', 'like', '%' . $request->union_no . '%');
+        }
+
+        if ($request->filled('address')) {
+            $query->where('address', 'like', '%' . $request->address . '%');
+        }
+
+        if ($request->filled('block')) {
+            $query->where('block', 'like', '%' . $request->block . '%');
+        }
+
+        if ($request->filled('state')) {
+            $query->where('state', $request->state);
+        }
+
+        if ($request->filled('district')) {
+            $query->where('district', $request->district);
+        }
+
+        if ($request->filled('area_type')) {
+            $query->where('area_type', $request->area_type);
+        }
+
+        if ($request->filled('academic_session')) {
+            $query->where('academic_session', $request->academic_session);
+        }
+
+        $unions = $query->get();
+
+        $states = config('districts');
+
+        return view('ngo.union.list-union', compact('unions', 'states'));
+    }
+
     private function getAuthActor(): object
     {
         if (session()->has('union_member_id')) {
@@ -97,33 +232,58 @@ class UnionController extends Controller
             ? PositionHierarchy::getLevelByPosition($actor->position)
             : null;
 
-        // ── Both models ───────────────────────────────────────────────────────
+        // Base queries
         $queryBene   = beneficiarie::where('status', 1);
         $queryMember = Member::where('status', 1);
 
-        if ($search = $request->search) {
-            $filter = function ($q) use ($search) {
-                $q->where('name', 'like', "%$search%")
-                    ->orWhere('application_no', 'like', "%$search%")
-                    ->orWhere('phone', 'like', "%$search%");
-            };
-            $queryBene->where($filter);
-            $queryMember->where($filter);
+        // Name search (exact-like search)
+        if ($request->filled('name')) {
+            $name = $request->name;
+
+            $queryBene->where('name', 'LIKE', "{$name}%");
+            $queryMember->where('name', 'LIKE', "{$name}%");
         }
 
+        // Father/Husband name search
+        if ($request->filled('gurdian_name')) {
+            $father = $request->gurdian_name;
+
+            $queryBene->where('gurdian_name', 'LIKE', "{$father}%");
+            $queryMember->where('gurdian_name', 'LIKE', "{$father}%");
+        }
+
+        // Application number search
+        if ($request->filled('application_no')) {
+            $appNo = $request->application_no;
+
+            $queryBene->where('application_no', $appNo);
+            $queryMember->where('application_no', $appNo);
+        }
+
+        // Mobile search
+        if ($request->filled('phone')) {
+            $phone = $request->phone;
+
+            $queryBene->where('phone', 'LIKE', "{$phone}%");
+            $queryMember->where('phone', 'LIKE', "{$phone}%");
+        }
+
+        // Get data
         $beneficiaries = $queryBene->get()
             ->map(fn($b) => array_merge($b->toArray(), ['_source' => 'Beneficiarie']));
 
         $members = $queryMember->get()
             ->map(fn($m) => array_merge($m->toArray(), ['_source' => 'Member']));
 
-        $approvemember = $beneficiaries->concat($members)
+        $approvemember = $beneficiaries
+            ->concat($members)
             ->sortByDesc('application_date')
             ->values();
 
         $unions   = Union::orderBy('name')->get();
         $sessions = academic_session::orderByDesc('id')->get();
-        $districtsByState = Config('sates');
+        $districtsByState = config('sates');
+
         return view('ngo.union.reg-list', compact(
             'approvemember',
             'unions',
@@ -135,10 +295,6 @@ class UnionController extends Controller
         ));
     }
 
-    // =========================================================================
-    //  STORE — Add existing Member / Beneficiarie to union (list row modal)
-    //  Full info is copied from source into union_members row automatically
-    // =========================================================================
     public function StoreUnionMember(Request $request)
     {
         $actor         = $this->getAuthActor();
@@ -245,12 +401,17 @@ class UnionController extends Controller
             'status'            => 1,
         ]);
 
+        User::create([
+            'name'      => $source->name,
+            'email'     => $source->email ?? null,
+            'phone'     => $source->phone,
+            'password'  => Hash::make($source->phone),
+            'user_type' => 'union',
+        ]);
+
         return back()->with('success', '"' . $source->name . '" added to union successfully.');
     }
 
-    // =========================================================================
-    //  STORE NEW — Register a brand-new union member (full registration form)
-    // =========================================================================
     public function StoreNewUnionMember(Request $request)
     {
         $actor         = $this->getAuthActor();
@@ -421,11 +582,16 @@ class UnionController extends Controller
         } catch (\Exception $e) {
             return back()->withInput()->with('error', 'Error: ' . $e->getMessage());
         }
-    }
 
-    // =========================================================================
-    //  PRIVATE HELPER — last used sequence number for a prefix in any model
-    // =========================================================================
+        User::create([
+            'name'      => $newUnionMember->name,
+            'email'     => $newUnionMember->email ?? null,
+            'phone'     => $newUnionMember->phone,
+            'password'  => Hash::make($newUnionMember->phone),
+            'user_type' => 'union',
+        ]);
+    }
+    
     private function getLastSeq(string $model, string $column, string $prefix, int $prefixLen, int $default): int
     {
         $row = $model::where($column, 'LIKE', $prefix . '%')
@@ -435,5 +601,77 @@ class UnionController extends Controller
             ->first();
 
         return $row ? (int) $row->seq : $default;
+    }
+
+    public function UnionMemberList(Request $request)
+    {
+        $actor = $this->getAuthActor();
+
+        $query = \App\Models\UnionMember::with('union');
+
+        // If union member login → only his records
+        if (!$actor->is_ngo) {
+            $query->where('member_by', $actor->id)
+                ->where('added_by_type', $actor->actor_type);
+        }
+
+        // Filter by Union
+        if ($request->filled('union_id')) {
+            $query->where('union_id', $request->union_id);
+        }
+
+        // Filter by Added By (only NGO allowed)
+        if ($actor->is_ngo && $request->filled('member_by')) {
+            $query->where('member_by', $request->member_by);
+        }
+
+        // Global search
+        if ($request->filled('search')) {
+
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+
+                $q->where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('application_no', 'LIKE', "%{$search}%")
+                    ->orWhere('registration_no', 'LIKE', "%{$search}%")
+                    ->orWhere('gurdian_name', 'LIKE', "%{$search}%")
+                    ->orWhere('phone', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $unionMembers = $query->orderBy('id', 'desc')->paginate(25);
+
+        $unions = \App\Models\Union::orderBy('name')->get();
+
+        // Added By dropdown only for NGO
+        $members = $actor->is_ngo
+            ? \App\Models\UnionMember::select('member_by', 'name', 'position')
+            ->distinct()
+            ->get()
+            : collect();
+
+        return view('ngo.union.union-member', compact(
+            'unionMembers',
+            'actor',
+            'unions',
+            'members'
+        ));
+    }
+
+    public function UnionMemberCertificate($id)
+    {
+        $unionMember = UnionMember::findOrFail($id);
+        $union  = $unionMember->union;
+        $authUser = auth()->user();
+
+        $layout = $authUser->user_type === 'member'
+            ? 'member.layout.master'
+            : 'ngo.layout.master';
+        return view('ngo.union.certificate', compact(
+            'unionMember',
+            'union',
+            'layout'
+        ));
     }
 }
