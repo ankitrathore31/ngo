@@ -65,7 +65,45 @@
                 <strong>Not Allowed!</strong> ग्राम स्तर के सदस्य यूनियन मेंबर नहीं जोड़ सकते।
             </div>
         @endif
+        <div class="row">
+            <form method="GET" action="{{ route('union.reg.list') }}" class="row g-3 mb-4">
 
+                <div class="col-md-3">
+                    <input type="text" name="name" value="{{ request('name') }}" class="form-control"
+                        placeholder="Search Name">
+                </div>
+
+                <div class="col-md-3">
+                    <input type="text" name="gurdian_name" value="{{ request('gurdian_name') }}" class="form-control"
+                        placeholder="Father/Husband Name">
+                </div>
+
+                <div class="col-md-2">
+                    <input type="text" name="application_no" value="{{ request('application_no') }}"
+                        class="form-control" placeholder="Application No">
+                </div>
+
+                <div class="col-md-2">
+                    <input type="text" name="phone" value="{{ request('phone') }}" class="form-control"
+                        placeholder="Mobile Number">
+                </div>
+
+                <div class="col-md-2">
+
+                    <button type="submit" class="btn btn-primary">
+                        Search
+                    </button>
+
+                    <a href="{{ route('union.reg.list') }}" class="btn btn-info text-white">
+
+                        Reset
+
+                    </a>
+
+                </div>
+
+            </form>
+        </div>
         {{-- Approved Members & Beneficiaries Table --}}
         <div class="card shadow-sm">
             {{-- <div class="card-header bg-primary text-white">
@@ -152,7 +190,7 @@
                                         tabindex="-1">
                                         <div class="modal-dialog modal-lg">
                                             <div class="modal-content">
-                                                <form action="{{-- route('store.union.member') --}}" method="POST">
+                                                <form action="{{ route('store.union.member') }}" method="POST">
                                                     @csrf
                                                     <input type="hidden" name="source_id" value="{{ $itemId }}">
                                                     <input type="hidden" name="source_model" value="{{ $sourceModel }}">
@@ -289,7 +327,7 @@
                             </h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
-                        
+
                         <div class="modal-body overflow-auto">
 
                             @php $districtsByState = config('districts'); @endphp
@@ -297,36 +335,37 @@
                             {{-- Union & Join Date --}}
                             <div class="border rounded p-3 mb-4 bg-light">
                                 <form action="{{-- --}}" method="POST">
-                            @csrf
-                                <h6 class="text-primary fw-bold mb-3"><i class="bi bi-building me-2"></i>Union Details
-                                </h6>
-                                <div class="row g-3">
-                                    <div class="col-md-4">
-                                        <label class="form-label">Select Union <span class="text-danger">*</span></label>
-                                        <select name="union_id" class="form-select" required>
-                                            <option value="">-- Select Union --</option>
-                                            @foreach ($unions as $union)
-                                                <option value="{{ $union->id }}">{{ $union->name }}</option>
-                                            @endforeach
-                                        </select>
+                                    @csrf
+                                    <h6 class="text-primary fw-bold mb-3"><i class="bi bi-building me-2"></i>Union Details
+                                    </h6>
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <label class="form-label">Select Union <span
+                                                    class="text-danger">*</span></label>
+                                            <select name="union_id" class="form-select" required>
+                                                <option value="">-- Select Union --</option>
+                                                @foreach ($unions as $union)
+                                                    <option value="{{ $union->id }}">{{ $union->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Join Date <span class="text-danger">*</span></label>
+                                            <input type="date" name="join_date" class="form-control"
+                                                value="{{ date('Y-m-d') }}" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Session <span class="text-danger">*</span></label>
+                                            <select class="form-select" name="academic_session" required>
+                                                <option value="">Select Session</option>
+                                                @foreach ($sessions as $session)
+                                                    <option value="{{ $session->session_date }}">
+                                                        {{ $session->session_date }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">Join Date <span class="text-danger">*</span></label>
-                                        <input type="date" name="join_date" class="form-control"
-                                            value="{{ date('Y-m-d') }}" required>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">Session <span class="text-danger">*</span></label>
-                                        <select class="form-select" name="academic_session" required>
-                                            <option value="">Select Session</option>
-                                            @foreach ($sessions as $session)
-                                                <option value="{{ $session->session_date }}">
-                                                    {{ $session->session_date }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
                             </div>
 
                             {{-- Position Section --}}
