@@ -26,28 +26,45 @@ class AuthenticatedSessionController extends Controller
      * @param  \App\Http\Requests\Auth\LoginRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(LoginRequest $request)
+    public function store(Request $request)
     {
-        $request->authenticate();
 
-        $request->session()->regenerate();
-        if(auth()->user()->user_type == 'Admin'){
-            // return redirect()->route('admin');
-            return redirect('/admin');
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+            'user_type' => ['required']
+        ]);
+
+
+        if (Auth::attempt([
+            'email' => $request->email,
+            'password' => $request->password,
+            'user_type' => $request->user_type
+        ], $request->remember)) {
+
+            $request->session()->regenerate();
+
+            $user = Auth::user();
+
+            if ($user->user_type == 'Admin') {
+                return redirect('/admin');
+            } elseif ($user->user_type == 'ngo') {
+                return redirect()->route('ngo');
+            } elseif ($user->user_type == 'staff') {
+                return redirect()->route('staff');
+            } elseif ($user->user_type == 'member') {
+                return redirect()->route('member');
+            } elseif ($user->user_type == 'union') {
+                return redirect()->route('union');
+            }
         }
-        elseif(auth()->user()->user_type == 'ngo'){
-            return redirect()->route('ngo');
-        }
-        elseif(auth()->user()->user_type == 'staff'){
-           return redirect()->route('ngo');
-        }
-        elseif(auth()->user()->user_type == 'member'){
-           return redirect()->route('member');
-        }
-        
+
+        return back()->withErrors([
+            'email' => 'Invalid credentials'
+        ])->withInput();
     }
 
-    
+
 
     /**
      * Destroy an authenticated session.

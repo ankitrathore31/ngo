@@ -681,6 +681,7 @@ Route::controller(KycController::class)->middleware('auth')->group(function () {
 
 
 Route::controller(UnionController::class)->middleware('auth')->group(function () {
+    Route::get('ngo/union', 'Union')->middleware('auth')->name('union');
     Route::get('ngo/add-union', 'AddUnion')->name('add.union');
     Route::post('ngo/store-union', 'StoreUnion')->name('store.union');
     Route::get('ngo/edit-union/{id}', 'EditUnion')->name('edit.union');
