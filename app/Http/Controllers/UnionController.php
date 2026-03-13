@@ -17,6 +17,13 @@ use PSpell\Config;
 
 class UnionController extends Controller
 {
+    public function Union()
+    {
+        $user = auth()->user();
+        $member = UnionMember::where('email', $user->email)->first();
+        $data = memberDashboardData($member->id);
+        return view('union.dashboard', array_merge(compact('member'), $data));
+    }
 
     public function AddUnion()
     {
@@ -283,7 +290,10 @@ class UnionController extends Controller
         $unions   = Union::orderBy('name')->get();
         $sessions = academic_session::orderByDesc('id')->get();
         $districtsByState = config('sates');
-
+        $authUser = auth()->user();
+        $layout = $authUser->user_type === 'union'
+            ? 'union.layout.master'
+            : 'ngo.layout.master';
         return view('ngo.union.reg-list', compact(
             'approvemember',
             'unions',
@@ -291,7 +301,8 @@ class UnionController extends Controller
             'actor',
             'actorLevel',
             'allowedLevels',
-            'districtsByState'
+            'districtsByState',
+            'layout'
         ));
     }
 
@@ -404,7 +415,7 @@ class UnionController extends Controller
         User::create([
             'name'      => $source->name,
             'email'     => $source->email ?? null,
-            'phone'     => $source->phone,
+            'phone_number'     => $source->phone,
             'password'  => Hash::make($source->phone),
             'user_type' => 'union',
         ]);
@@ -586,12 +597,12 @@ class UnionController extends Controller
         User::create([
             'name'      => $newUnionMember->name,
             'email'     => $newUnionMember->email ?? null,
-            'phone'     => $newUnionMember->phone,
+            'phone_number'     => $newUnionMember->phone,
             'password'  => Hash::make($newUnionMember->phone),
             'user_type' => 'union',
         ]);
     }
-    
+
     private function getLastSeq(string $model, string $column, string $prefix, int $prefixLen, int $default): int
     {
         $row = $model::where($column, 'LIKE', $prefix . '%')
@@ -650,12 +661,16 @@ class UnionController extends Controller
             ->distinct()
             ->get()
             : collect();
-
+        $authUser = auth()->user();
+        $layout = $authUser->user_type === 'union'
+            ? 'union.layout.master'
+            : 'ngo.layout.master';
         return view('ngo.union.union-member', compact(
             'unionMembers',
             'actor',
             'unions',
-            'members'
+            'members',
+            'layout'
         ));
     }
 
@@ -665,8 +680,8 @@ class UnionController extends Controller
         $union  = $unionMember->union;
         $authUser = auth()->user();
 
-        $layout = $authUser->user_type === 'member'
-            ? 'member.layout.master'
+        $layout = $authUser->user_type === 'union'
+            ? 'union.layout.master'
             : 'ngo.layout.master';
         return view('ngo.union.certificate', compact(
             'unionMember',

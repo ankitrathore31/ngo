@@ -1,4 +1,4 @@
-@extends('ngo.layout.master')
+@extends($layout)
 @Section('content')
     <style>
         .hover-card {

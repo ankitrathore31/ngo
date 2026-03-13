@@ -1,4 +1,4 @@
-@extends('ngo.layout.master')
+@extends($layout)
 @section('content')
     <div class="container-fluid py-4">
 

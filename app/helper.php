@@ -20,6 +20,7 @@ use App\Models\ProjectReport;
 use App\Models\SalaryPayment;
 use App\Models\Staff;
 use App\Models\Story;
+use App\Models\UnionMember;
 use App\Models\Visitor;
 use Illuminate\Support\Facades\DB;
 use App\Models\WorkLog;
@@ -635,8 +636,7 @@ if (!function_exists('memberDashboardData')) {
     function memberDashboardData($authMemberId)
     {
         // Base Query (Same as your list controller)
-        $baseQuery = Member::where('added_by', $authMemberId)
-                            ->where('status', 1); // Only Active
+        $baseQuery = UnionMember::where('member_by', $authMemberId); // Only Active
 
         /* =========================
            CARD DATA
@@ -662,7 +662,7 @@ if (!function_exists('memberDashboardData')) {
 
             $chartLabels[] = $month->format('M');
 
-            $count = Member::where('added_by', $authMemberId)
+            $count = UnionMember::where('member_by', $authMemberId)
                 ->where('status', 1)
                 ->whereMonth('created_at', $month->month)
                 ->whereYear('created_at', $month->year)
