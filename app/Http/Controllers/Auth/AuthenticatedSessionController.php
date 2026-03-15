@@ -51,7 +51,7 @@ class AuthenticatedSessionController extends Controller
             } elseif ($user->user_type == 'ngo') {
                 return redirect()->route('ngo');
             } elseif ($user->user_type == 'staff') {
-                return redirect()->route('staff');
+                return redirect()->route('ngo');
             } elseif ($user->user_type == 'member') {
                 return redirect()->route('member');
             } elseif ($user->user_type == 'union') {
