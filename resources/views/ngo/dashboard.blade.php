@@ -588,7 +588,7 @@
             <i class="fas fa-wallet fa-2x me-3 text-white"></i>
 
             <div>
-                <p class="mb-1 fw-semibold text-white-50">
+                <p class="mb-1 fw-semibold text-white">
                     Total Remaining Amount
                 </p>
 
