@@ -562,66 +562,104 @@ if (!function_exists('staffByEmail')) {
     }
 }
 
+
+if (!function_exists('getSessionDates')) {
+    function getSessionDates($session)
+    {
+        [$startYear, $endYearShort] = explode('-', $session);
+
+        $startDate = Carbon::createFromDate($startYear, 4, 1)->startOfDay();
+        $endYear   = substr($startYear, 0, 2) . $endYearShort;
+        $endDate   = Carbon::createFromDate($endYear, 3, 31)->endOfDay();
+
+        return [$startDate, $endDate];
+    }
+}
+
+
 if (!function_exists('costTotals')) {
 
-    function costTotals()
+    function costTotals($session = null)
     {
+        if (!$session) {
+            return [
+                'todayCostAmount' => 0,
+                'totalCostAmount' => 0
+            ];
+        }
+
+        [$startDate, $endDate] = getSessionDates($session);
+
         $today = Carbon::today()->toDateString();
 
         $records = collect();
 
-        /* ===== Bill Voucher ===== */
-        $records = $records->merge(
-            Bill_Voucher::with('items')->get()->map(function ($x) {
-                $base = $x->items->sum(fn($i) => $i->qty * $i->rate);
-                return [
-                    'date' => $x->date,
-                    'amount' => $base + ($base * ($x->cgst ?? 0) / 100) + ($base * ($x->sgst ?? 0) / 100)
-                ];
-            })
-        );
-
         /* ===== Bill ===== */
         $records = $records->merge(
-            Bill::with('items')->get()->map(function ($x) {
-                $base = $x->items->sum(fn($i) => $i->qty * $i->rate);
-                return [
-                    'date' => $x->date,
-                    'amount' => $base + ($base * ($x->cgst ?? 0) / 100) + ($base * ($x->sgst ?? 0) / 100)
-                ];
-            })
+            Bill::where('academic_session', $session)
+                ->with('items')
+                ->get()
+                ->map(function ($x) {
+                    $base = $x->items->sum(fn($i) => $i->qty * $i->rate);
+                    $gst  = ($base * ($x->cgst ?? 0) / 100)
+                        + ($base * ($x->sgst ?? 0) / 100);
+
+                    return ['date' => $x->date, 'amount' => $base + $gst];
+                })
+        );
+
+        /* ===== Voucher ===== */
+        $records = $records->merge(
+            Bill_Voucher::where('academic_session', $session)
+                ->with('items')
+                ->get()
+                ->map(function ($x) {
+                    $base = $x->items->sum(fn($i) => $i->qty * $i->rate);
+                    $gst  = ($base * ($x->cgst ?? 0) / 100)
+                        + ($base * ($x->sgst ?? 0) / 100);
+
+                    return ['date' => $x->date, 'amount' => $base + $gst];
+                })
         );
 
         /* ===== GBS ===== */
         $records = $records->merge(
-            GbsBill::all()->map(fn($x) => [
-                'date' => $x->bill_date,
-                'amount' => $x->amount
-            ])
+            GbsBill::where('academic_session', $session)
+                ->get()
+                ->map(fn($x) => [
+                    'date' => $x->bill_date,
+                    'amount' => $x->amount
+                ])
         );
 
         /* ===== Salary ===== */
         $records = $records->merge(
-            SalaryPayment::all()->map(fn($x) => [
-                'date' => $x->payment_date,
-                'amount' => $x->amount
-            ])
+            SalaryPayment::whereBetween('payment_date', [$startDate, $endDate])
+                ->get()
+                ->map(fn($x) => [
+                    'date' => $x->payment_date,
+                    'amount' => $x->amount
+                ])
         );
 
-        /* ===== Education Card ===== */
+        /* ===== Education ===== */
         $records = $records->merge(
-            EducationCard::all()->map(fn($x) => [
-                'date' => $x->date,
-                'amount' => $x->amount
-            ])
+            EducationCard::whereBetween('education_registration_date', [$startDate, $endDate])
+                ->get()
+                ->map(fn($x) => [
+                    'date' => $x->education_registration_date,
+                    'amount' => $x->amount
+                ])
         );
 
-        /* ===== Health Card ===== */
+        /* ===== Health ===== */
         $records = $records->merge(
-            HealthCard::all()->map(fn($x) => [
-                'date' => $x->date,
-                'amount' => $x->amount
-            ])
+            HealthCard::whereBetween('Health_registration_date', [$startDate, $endDate])
+                ->get()
+                ->map(fn($x) => [
+                    'date' => $x->Health_registration_date,
+                    'amount' => $x->amount
+                ])
         );
 
         return [

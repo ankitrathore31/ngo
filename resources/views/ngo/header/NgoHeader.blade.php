@@ -18,16 +18,20 @@
 
         <!-- Center: Session Selector -->
         <div class="col-md-4 text-end">
-            <label for="session" class="form-label fw-bold mb-1">Session Year</label>
-            <select class="form-select form-select-sm d-inline-block w-auto" id="session">
-                @php
-                    $sessions = Session::get('all_academic_session');
-                    $sessions = collect($sessions)->sortByDesc('session_date');
-                @endphp
-                @foreach ($sessions as $session)
-                    <option value="{{ $session->session_date }}">{{ $session->session_date }}</option>
-                @endforeach
-            </select>
+            <form method="GET">
+                <label class="fw-bold">Session Year</label>
+
+                <select name="session" class="form-select form-select-sm w-auto d-inline-block"
+                    onchange="this.form.submit()">
+
+                    @foreach ($sessions as $s)
+                        <option value="{{ $s->session_date }}" {{ $session == $s->session_date ? 'selected' : '' }}>
+                            {{ $s->session_date }}
+                        </option>
+                    @endforeach
+
+                </select>
+            </form>
         </div>
 
 
@@ -39,21 +43,25 @@
                     <img src="{{ asset('images/LOGO.png') }}" alt="User" width="48" height="48"
                         class="rounded-circle shadow-sm me-2">
                     <div class="text-start">
-                        <div class="fw-semibold text-dark fs-6">{{auth()->user()->name}}</div>
+                        <div class="fw-semibold text-dark fs-6">{{ auth()->user()->name }}</div>
                         @php $user = auth()->user(); @endphp
-                        <small class="text-muted fst-italic">@if($user->user_type == 'staff'){{$user->staff->position}}@endif
-                        @if($user->user_type == 'ngo')Founder
-                        @endif
+                        <small class="text-muted fst-italic">
+                            @if ($user->user_type == 'staff')
+                                {{ $user->staff->position }}
+                            @endif
+                            @if ($user->user_type == 'ngo')
+                                Founder
+                            @endif
                         </small>
                     </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end mt-2 shadow-sm border-0" aria-labelledby="userDropdown">
                     <li><a class="dropdown-item text-dark fw-medium" href="#"><i
                                 class="fas fa-user me-2 text-primary"></i>Profile</a></li>
-                    <li><a class="dropdown-item text-dark fw-medium" href="{{route('change.pass.show')}}"><i
+                    <li><a class="dropdown-item text-dark fw-medium" href="{{ route('change.pass.show') }}"><i
                                 class="fas fa-cog me-2 text-secondary"></i>Change Password</a></li>
                     <li>
-                     <li><a class="dropdown-item text-dark fw-medium" href="#"><i
+                    <li><a class="dropdown-item text-dark fw-medium" href="#"><i
                                 class="fas fa-cog me-2 text-secondary"></i>Settings</a></li>
                     <li>
                         <hr class="dropdown-divider">
