@@ -579,22 +579,28 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4 col-sm-6 mb-3">
-                            <div class="card text-dark bg-secondary p-3 h-100 card-hover">
-                                <div class="d-flex align-items-center">
-                                    <i class="fas fa-wallet fa-2x me-3"></i>
-                                    <div>
-                                        <p class="mb-1">Total Remaining Amount</p>
-                                        <h5 class="mb-0">
-                                            <span style="color: {{ $remainingBalance >= 0 ? 'green' : 'red' }};">
-                                                {{ $remainingBalance >= 0 ? '+' : '-' }}
-                                                ₹{{ number_format(abs($remainingBalance), 2) }}
-                                            </span>
-                                        </h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                       <div class="col-md-4 col-sm-6 mb-3">
+    <div class="card p-3 h-100 shadow-sm card-hover text-white 
+        {{ $remainingBalance >= 0 ? 'bg-success' : 'bg-danger' }}">
+        
+        <div class="d-flex align-items-center">
+            
+            <i class="fas fa-wallet fa-2x me-3 text-white"></i>
+
+            <div>
+                <p class="mb-1 fw-semibold text-white-50">
+                    Total Remaining Amount
+                </p>
+
+                <h5 class="mb-0 fw-bold text-white">
+                    {{ $remainingBalance >= 0 ? '+' : '-' }}
+                    ₹{{ number_format(abs($remainingBalance), 2) }}
+                </h5>
+            </div>
+
+        </div>
+    </div>
+</div>
                     </div>
                 @endif
 
