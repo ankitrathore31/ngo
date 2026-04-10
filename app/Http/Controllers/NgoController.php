@@ -209,115 +209,102 @@ class NgoController extends Controller
         return view('admin.ngo.view-ngo', compact('ngo'));
     }
 
-    public function ngo()
+
+    public function ngo(Request $request)
     {
-        // regsitration data
-        $allbene = beneficiarie::count();
-        $penbene = beneficiarie::where('status', 0)->count();
-        $apbene = beneficiarie::where('status', 1)->count();
-        $rebene = Beneficiarie::onlyTrashed()->count();
-        // acativity data 
-        $allacti = Activity::count();
-        $todayacti = Activity::whereDate('created_at', Carbon::today())->count();
-        $totalStaff = Staff::count();
-        $allmem = Member::count();
-        $appmem = Member::where('status', 1)->count();
-        $penmem = Member::where('status', 0)->count();
-        // donation data 
-        $offlinedonate = Donation::sum('amount');
-        $succdonate = donor_data::where('status', 'Successful')->sum('amount');
+        // ===== SESSION =====
+        $sessions = Session::get('all_academic_session');
+
+        $latestSession = collect($sessions)
+            ->sortByDesc('session_date')
+            ->first();
+
+        $session = $request->get('session', $latestSession->session_date ?? null);
+
+        [$startDate, $endDate] = getSessionDates($session);
+
+
+        // ===== REGISTRATION =====
+        $allbene = beneficiarie::where('academic_session', $session)->count();
+        $penbene = beneficiarie::where('status', 0)->where('academic_session', $session)->count();
+        $apbene  = beneficiarie::where('status', 1)->where('academic_session', $session)->count();
+        $rebene  = beneficiarie::onlyTrashed()->where('academic_session', $session)->count();
+
+
+        // ===== ACTIVITY =====
+        $allacti = Activity::where('academic_session', $session)->count();
+        $todayacti = Activity::where('academic_session', $session)
+            ->whereDate('created_at', today())
+            ->count();
+
+        $totalStaff = Staff::where('academic_session', $session)->count();
+
+        $allmem = Member::where('academic_session', $session)->count();
+        $appmem = Member::where('status', 1)->where('academic_session', $session)->count();
+        $penmem = Member::where('status', 0)->where('academic_session', $session)->count();
+
+
+        // ===== DONATION =====
+        $offlinedonate = Donation::where('academic_session', $session)->sum('amount');
+
+        $succdonate = donor_data::where('status', 'Successful')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('amount');
+
         $totaldonation = $offlinedonate + $succdonate;
-        $todayOffline = Donation::whereDate('created_at', Carbon::today())->sum('amount');
+
+        $todayOffline = Donation::where('academic_session', $session)
+            ->whereDate('created_at', today())
+            ->sum('amount');
+
         $todayOnline = donor_data::where('status', 'Successful')
-            ->whereDate('created_at', Carbon::today())
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereDate('created_at', today())
             ->sum('amount');
 
         $todaydonate = $todayOffline + $todayOnline;
 
-        // ================= TOTAL COST (WITH GST) =================
 
-        $billTotal = Bill::with('items')->get()->sum(function ($bill) {
-            $base = $bill->items->sum(fn($i) => $i->qty * $i->rate);
-            $gst  = ($base * ($bill->cgst ?? 0) / 100)
-                + ($base * ($bill->sgst ?? 0) / 100);
-            return $base + $gst;
-        });
-
-        $voucherTotal = Bill_Voucher::with('items')->get()->sum(function ($voucher) {
-            $base = $voucher->items->sum(fn($i) => $i->qty * $i->rate);
-            $gst  = ($base * ($voucher->cgst ?? 0) / 100)
-                + ($base * ($voucher->sgst ?? 0) / 100);
-            return $base + $gst;
-        });
-
-        $gbsTotal = GbsBill::sum('amount');
-
-        $totalCostAmount = $billTotal + $voucherTotal + $gbsTotal;
+        // ===== COST =====
+        $cost = costTotals($session);
+        $totalCostAmount = $cost['totalCostAmount'];
+        $todayCostAmount = $cost['todayCostAmount'];
 
 
-        // ================= TODAY COST (WITH GST) =================
+        // ===== INCOME =====
+        $totalIncome = $totaldonation;
+        $todayIncome = $todaydonate;
 
-        $billToday = Bill::with('items')
-            ->whereDate('date', now())
-            ->get()
-            ->sum(function ($bill) {
-                $base = $bill->items->sum(fn($i) => $i->qty * $i->rate);
-                $gst  = ($base * ($bill->cgst ?? 0) / 100)
-                    + ($base * ($bill->sgst ?? 0) / 100);
-                return $base + $gst;
-            });
-
-        $voucherToday = Bill_Voucher::with('items')
-            ->whereDate('date', now())
-            ->get()
-            ->sum(function ($voucher) {
-                $base = $voucher->items->sum(fn($i) => $i->qty * $i->rate);
-                $gst  = ($base * ($voucher->cgst ?? 0) / 100)
-                    + ($base * ($voucher->sgst ?? 0) / 100);
-                return $base + $gst;
-            });
-
-        $gbsToday = GbsBill::whereDate('bill_date', now())->sum('amount');
-
-        $todayCostAmount = $billToday + $voucherToday + $gbsToday;
-
-
-        // Income Data 
-        // Total income amount
-        $onlineTotal = donor_data::where('status', 'Successful')->sum('amount');
-        $offlineTotal = Donation::sum('amount');
-        $totalIncome = $onlineTotal + $offlineTotal;
-
-        // Today's income amount
-        $today = now()->toDateString();
-        $onlineToday = donor_data::where('status', 'Successful')
-            ->whereDate('created_at', $today)
-            ->sum('amount');
-        $offlineToday = Donation::whereDate('created_at', $today)->sum('amount');
-
-        $todayIncome = $onlineToday + $offlineToday;
-
-        // Remaing Balance 
-        // Remaining balance (income - cost)
+        // ===== BALANCE =====
         $remainingBalance = $totalIncome - $totalCostAmount;
 
+
         return view('ngo.dashboard', compact(
+            'session',
+            'sessions',
+
             'allbene',
             'penbene',
             'apbene',
             'rebene',
+
             'allacti',
             'todayacti',
+
             'allmem',
             'appmem',
             'penmem',
+
+            'totalStaff',
+
             'succdonate',
-            'todaydonate',
             'offlinedonate',
             'totaldonation',
-            'totalStaff',
+            'todaydonate',
+
             'totalCostAmount',
             'todayCostAmount',
+
             'totalIncome',
             'todayIncome',
             'remainingBalance'

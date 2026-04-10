@@ -43,7 +43,7 @@
                                     <i class="fas fa-user-plus fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Total Registration</p>
-                                        <h5 class="mb-0">{{ totalReg() }}</h5>
+                                        <h5 class="mb-0">{{ $allbene }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -54,7 +54,7 @@
                                     <i class="fas fa-clock fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Pending Registration</p>
-                                        <h5 class="mb-0">{{ totalPendingReg() }}</h5>
+                                        <h5 class="mb-0">{{ $penbene }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -66,7 +66,7 @@
                                     <i class="fas fa-check-circle fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Approved Registration</p>
-                                        <h5 class="mb-0">{{ totalApprovedReg() }}</h5>
+                                        <h5 class="mb-0">{{ $apbene }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -78,7 +78,7 @@
                                     <i class="fas fa-times-circle fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Rejected Registration</p>
-                                        <h5 class="mb-0">{{ totalRejectedReg() }}</h5>
+                                        <h5 class="mb-0">{{ $rebene }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -433,6 +433,7 @@
                         </div>
                     </div>
                 @endif
+
                 @if (
                     !$isStaff ||
                         $user->hasPermission('donation') ||
@@ -497,42 +498,7 @@
                         @endif
                     </div>
                 @endif
-                @if (!$isStaff || $user->hasPermission('add-group') || $user->hasPermission('group-list'))
-                    <div class="row">
-                        <h5 class="fw-bold mb-2">- Organization</h5>
-                        <div class="col-md-3 mb-2">
-                            <div class="card text-center shadow-sm text-white"
-                                style="background: linear-gradient(45deg, #43e97b, #38f9d7);">
-                                <div class="card-body">
-                                    <p class="card-title fw-bold"> Total Organization </p>
-                                    <h5 class="card-text fs-4">{{ TotalOrganization() }}</h5>
-                                </div>
-                            </div>
-                        </div>
-                        @php
-                            $gradients = [
-                                'background: linear-gradient(45deg, #ff6a00, #ffcc00);', // orange to yellow
-                                'background: linear-gradient(45deg, #ff416c, #ff4b2b);', // pink to red
-                                'background: linear-gradient(45deg, #36d1dc, #5b86e5);', // cyan to blue
-                                'background: linear-gradient(45deg, #43e97b, #38f9d7);', // green to teal
-                                'background: linear-gradient(45deg, #f7971e, #ffd200);', // orange to gold
-                                'background: linear-gradient(45deg, #7f00ff, #e100ff);', // purple to magenta
-                            ];
-                        @endphp
-                        @foreach (organization() as $index => $item)
-                            <div class="col-md-3 mb-2">
-                                <div class="card text-center shadow-sm text-white"
-                                    style="{{ $gradients[$index % count($gradients)] }}">
-                                    <div class="card-body">
-                                        <p class="mb-1">{{ $item->name }}</p>
-                                        <h5 class="mb-0">{{ TotalorganizationGroup($item->id) }}</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
 
-                    </div>
-                @endif
                 @if (
                     !$isStaff ||
                         $user->hasPermission('add-bill') ||
@@ -540,10 +506,6 @@
                         $user->hasPermission('generate-bill') ||
                         $user->hasPermission('gbs-bill-list') ||
                         $user->hasPermission('sanstha-bill-list'))
-                    @php
-                        $cost = costTotals();
-                    @endphp
-
                     <div class="row">
                         <h5 class="fw-bold mb-2">- Cost</h5>
 
@@ -553,7 +515,9 @@
                                     <i class="fas fa-coins fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Today's Cost</p>
-                                        <h5 class="mb-0">₹{{ $cost['todayCostAmount'] }}</h5>
+                                        <h5 class="mb-0">
+                                            ₹{{ number_format($todayCostAmount, 2) }}
+                                        </h5>
                                     </div>
                                 </div>
                             </div>
@@ -565,7 +529,9 @@
                                     <i class="fas fa-file-invoice-dollar fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Total Cost</p>
-                                        <h5 class="mb-0">₹{{ $cost['totalCostAmount'] }}</h5>
+                                        <h5 class="mb-0">
+                                            ₹{{ number_format($totalCostAmount, 2) }}
+                                        </h5>
                                     </div>
                                 </div>
                             </div>
@@ -632,6 +598,42 @@
                     </div>
                 @endif
 
+                @if (!$isStaff || $user->hasPermission('add-group') || $user->hasPermission('group-list'))
+                    <div class="row">
+                        <h5 class="fw-bold mb-2">- Organization</h5>
+                        <div class="col-md-3 mb-2">
+                            <div class="card text-center shadow-sm text-white"
+                                style="background: linear-gradient(45deg, #43e97b, #38f9d7);">
+                                <div class="card-body">
+                                    <p class="card-title fw-bold"> Total Organization </p>
+                                    <h5 class="card-text fs-4">{{ TotalOrganization() }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                        @php
+                            $gradients = [
+                                'background: linear-gradient(45deg, #ff6a00, #ffcc00);', // orange to yellow
+                                'background: linear-gradient(45deg, #ff416c, #ff4b2b);', // pink to red
+                                'background: linear-gradient(45deg, #36d1dc, #5b86e5);', // cyan to blue
+                                'background: linear-gradient(45deg, #43e97b, #38f9d7);', // green to teal
+                                'background: linear-gradient(45deg, #f7971e, #ffd200);', // orange to gold
+                                'background: linear-gradient(45deg, #7f00ff, #e100ff);', // purple to magenta
+                            ];
+                        @endphp
+                        @foreach (organization() as $index => $item)
+                            <div class="col-md-3 mb-2">
+                                <div class="card text-center shadow-sm text-white"
+                                    style="{{ $gradients[$index % count($gradients)] }}">
+                                    <div class="card-body">
+                                        <p class="mb-1">{{ $item->name }}</p>
+                                        <h5 class="mb-0">{{ TotalorganizationGroup($item->id) }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+
+                    </div>
+                @endif
 
                 @if (
                     !$isStaff ||
