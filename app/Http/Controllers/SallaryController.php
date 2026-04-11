@@ -112,14 +112,12 @@ class SallaryController extends Controller
         $currentYear  = now()->year;
         $currentMonth = now()->month;
 
+
         if ($staff->status == 1) {
             for ($year = $joiningYear; $year <= $currentYear; $year++) {
 
-                // ✅ determine start month
                 $startMonth = ($year == $joiningYear) ? $joiningMonth : 1;
-
-                // ✅ determine end month
-                $endMonth = ($year == $currentYear) ? $currentMonth : 12;
+                $endMonth   = ($year == $currentYear) ? $currentMonth : 12;
 
                 for ($month = $startMonth; $month <= $endMonth; $month++) {
                     SalaryTransaction::firstOrCreate(
@@ -137,24 +135,62 @@ class SallaryController extends Controller
             }
         }
 
-        $selectedYear = $request->input('year', $currentYear);
 
-        $transactions = SalaryTransaction::where('staff_id', $staff->id)
-            ->orderBy('year')
-            ->orderBy('month')
-            ->get()
-            ->groupBy('year');
+        // Determine first financial year based on joining
+        $startFY = ($joiningMonth >= 4) ? $joiningYear : $joiningYear - 1;
 
-        $yearTransactions = $transactions->get($selectedYear, collect());
+        // Determine current financial year
+        $currentFY = (now()->month >= 4) ? now()->year : now()->year - 1;
+
+        // Selected FY
+        $selectedYear = $request->input('year', $currentFY);
+
+
+
+        $yearTransactions = SalaryTransaction::where('staff_id', $staff->id)
+            ->where(function ($q) use ($selectedYear) {
+
+                // April → December (selected year)
+                $q->where(function ($sub) use ($selectedYear) {
+                    $sub->where('year', $selectedYear)
+                        ->whereBetween('month', [4, 12]);
+                })
+
+                    // January → March (next year)
+                    ->orWhere(function ($sub) use ($selectedYear) {
+                        $sub->where('year', $selectedYear + 1)
+                            ->whereBetween('month', [1, 3]);
+                    });
+            })
+            ->get();
+
+ 
+
+        $yearTransactions = $yearTransactions->filter(function ($t) use ($joiningYear, $joiningMonth) {
+
+            // remove months before joining date
+            if ($t->year == $joiningYear && $t->month < $joiningMonth) {
+                return false;
+            }
+
+            return true;
+        });
+
+
+
+        $yearTransactions = $yearTransactions->sortBy(function ($t) {
+            return ($t->month >= 4) ? $t->month : $t->month + 12;
+        });
 
         return view('ngo.salary.pay-salary', compact(
             'staff',
             'salary',
-            'transactions',
-            'selectedYear',
             'yearTransactions',
+            'selectedYear',
+            'startFY',
+            'currentFY',
             'joiningYear',
-            'currentYear'
+            'joiningMonth'
         ));
     }
 

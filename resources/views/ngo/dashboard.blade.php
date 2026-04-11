@@ -43,7 +43,7 @@
                                     <i class="fas fa-user-plus fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Total Registration</p>
-                                        <h5 class="mb-0">{{ $allbene }}</h5>
+                                        <h5 class="mb-0">{{ totalReg() }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -54,7 +54,7 @@
                                     <i class="fas fa-clock fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Pending Registration</p>
-                                        <h5 class="mb-0">{{ $penbene }}</h5>
+                                        <h5 class="mb-0">{{ totalPendingReg() }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -66,7 +66,7 @@
                                     <i class="fas fa-check-circle fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Approved Registration</p>
-                                        <h5 class="mb-0">{{ $apbene }}</h5>
+                                        <h5 class="mb-0">{{ totalApprovedReg() }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -78,7 +78,7 @@
                                     <i class="fas fa-times-circle fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Rejected Registration</p>
-                                        <h5 class="mb-0">{{ $rebene }}</h5>
+                                        <h5 class="mb-0">{{ totalRejectedReg() }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -580,18 +580,25 @@
                         </div>
 
                         <div class="col-md-4 col-sm-6 mb-3">
-                            <div class="card text-dark bg-secondary p-3 h-100 card-hover">
+                            <div
+                                class="card p-3 h-100 shadow-sm card-hover text-white 
+                                {{ $remainingBalance >= 0 ? 'bg-success' : 'bg-danger' }}">
+
                                 <div class="d-flex align-items-center">
-                                    <i class="fas fa-wallet fa-2x me-3"></i>
+
+                                    <i class="fas fa-wallet fa-2x me-3 text-white"></i>
+
                                     <div>
-                                        <p class="mb-1">Total Remaining Amount</p>
-                                        <h5 class="mb-0">
-                                            <span style="color: {{ $remainingBalance >= 0 ? 'green' : 'red' }};">
-                                                {{ $remainingBalance >= 0 ? '+' : '-' }}
-                                                ₹{{ number_format(abs($remainingBalance), 2) }}
-                                            </span>
+                                        <p class="mb-1 fw-semibold text-white">
+                                            Total Remaining Amount
+                                        </p>
+
+                                        <h5 class="mb-0 fw-bold text-white">
+                                            {{ $remainingBalance >= 0 ? '+' : '-' }}
+                                            ₹{{ number_format(abs($remainingBalance), 2) }}
                                         </h5>
                                     </div>
+
                                 </div>
                             </div>
                         </div>

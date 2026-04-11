@@ -18,6 +18,15 @@
 
         <!-- Center: Session Selector -->
         <div class="col-md-4 text-end">
+            @php
+                $sessions = Session::get('all_academic_session') ?? [];
+
+                $latestSession = collect($sessions)->sortByDesc('session_date')->first();
+
+                $session = request()->get('session', $latestSession->session_date ?? null);
+
+                [$startDate, $endDate] = getSessionDates($session);
+            @endphp
             <form method="GET">
                 <label class="fw-bold">Session Year</label>
 
