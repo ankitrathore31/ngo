@@ -21,7 +21,9 @@
             @php
                 $sessions = Session::get('all_academic_session') ?? [];
 
-                $latestSession = collect($sessions)->sortByDesc('session_date')->first();
+                $latestSession = collect($sessions)
+                ->sortByDesc('session_date')
+                ->first();
 
                 $session = request()->get('session', $latestSession->session_date ?? null);
 
