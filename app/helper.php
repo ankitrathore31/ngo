@@ -566,11 +566,29 @@ if (!function_exists('staffByEmail')) {
 if (!function_exists('getSessionDates')) {
     function getSessionDates($session)
     {
-        [$startYear, $endYearShort] = explode('-', $session);
+        // Validate input
+        if (empty($session) || !str_contains($session, '-')) {
+            return [null, null]; // or throw exception if you prefer
+        }
 
-        $startDate = Carbon::createFromDate($startYear, 4, 1)->startOfDay();
-        $endYear   = substr($startYear, 0, 2) . $endYearShort;
-        $endDate   = Carbon::createFromDate($endYear, 3, 31)->endOfDay();
+        $parts = explode('-', $session);
+
+        // Ensure both parts exist
+        if (count($parts) < 2) {
+            return [null, null];
+        }
+
+        [$startYear, $endYearShort] = $parts;
+
+        // Validate numeric values
+        if (!is_numeric($startYear) || !is_numeric($endYearShort)) {
+            return [null, null];
+        }
+
+        $startDate = Carbon::createFromDate((int)$startYear, 4, 1)->startOfDay();
+
+        $endYear = substr($startYear, 0, 2) . $endYearShort;
+        $endDate = Carbon::createFromDate((int)$endYear, 3, 31)->endOfDay();
 
         return [$startDate, $endDate];
     }

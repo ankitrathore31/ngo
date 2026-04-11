@@ -126,12 +126,11 @@
                 <div class="col-md-12">
                     <form method="GET" action="{{ route('donation-list') }}" class="row g-3 mb-4">
                         <div class="col-md-4">
-                            {{-- <label for="session_filter" class="form-label">Select Session</label> --}}
                             <select name="session_filter" id="session_filter" class="form-control">
-                                <option value="">All Sessions</option> <!-- Default option to show all -->
-                                @foreach ($data as $session)
+                                <option value="" {{ $sessionFilter == '' ? 'selected' : '' }}>All Sessions</option>
+                                @foreach ($data->sortByDesc('session_date') as $session)
                                     <option value="{{ $session->session_date }}"
-                                        {{ request('session_filter') == $session->session_date ? 'selected' : '' }}>
+                                        {{ $sessionFilter == $session->session_date ? 'selected' : '' }}>
                                         {{ $session->session_date }}
                                     </option>
                                 @endforeach

@@ -20,65 +20,126 @@ use Illuminate\Http\Request;
 
 class CashBookController extends Controller
 {
+    // public function IncomeList(Request $request)
+    // {
+    //     $online = donor_data::where('status', 'Successful');
+    //     $offline = Donation::query();
+
+    //     if ($request->filled('name')) {
+    //         $online->where('name', 'like', '%' . $request->name . '%');
+    //         $offline->where('name', 'like', '%' . $request->name . '%');
+    //     }
+    //     if ($request->filled('session_filter')) {
+    //         $online->where('academic_session', $request->session_filter);
+    //         $offline->where('academic_session', $request->session_filter);
+    //     }
+    //     if ($request->filled('block')) {
+    //         $online->where('block', 'like', '%' . $request->block . '%');
+    //         $offline->where('block', 'like', '%' . $request->block . '%');
+    //     }
+    //     if ($request->filled('amountType')) {
+    //         // $online->where('block', 'like', '%' . $request->block . '%');
+    //         $offline->where('amountType', 'like', '%' . $request->amountType . '%');
+    //     }
+    //     if ($request->filled('state')) {
+    //         $online->where('state', $request->state);
+    //         $offline->where('state', $request->state);
+    //     }
+    //     if ($request->filled('district')) {
+    //         $online->where('district', $request->district);
+    //         $offline->where('district', $request->district);
+    //     }
+
+    //     // Today filter
+    //     if ($request->filled('today')) {
+    //         $todayDate = now()->format('Y-m-d');
+    //         $online->whereDate('created_at', $todayDate);
+    //         $offline->whereDate('created_at', $todayDate);
+    //     }
+
+    //     // Date Range filter
+    //     if ($request->filled('start_date') && $request->filled('end_date')) {
+    //         $startDate = $request->start_date;
+    //         $endDate = $request->end_date;
+    //         $online->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
+    //         $offline->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
+    //     }
+
+    //     // Get donations
+    //     $donations = $online->get()->merge($offline->get())->sortByDesc('created_at');
+
+    //     $data = academic_session::all();
+    //     $states = config('states');
+
+    //     return view('ngo.cashbook.income-list', compact('data', 'donations', 'states'));
+    // }
+
     public function IncomeList(Request $request)
     {
-        $online = donor_data::where('status', 'Successful');
+        $latestSession = academic_session::orderBy('session_date', 'desc')->value('session_date');
+
+        // $online = donor_data::where('status', 'Successful');
         $offline = Donation::query();
 
+        // Default session filter
+        $sessionFilter = $request->session_filter ?? $latestSession;
+
+        if ($sessionFilter) {
+            // $online->where('academic_session', $sessionFilter);
+            $offline->where('academic_session', $sessionFilter);
+        }
+
         if ($request->filled('name')) {
-            $online->where('name', 'like', '%' . $request->name . '%');
+            // $online->where('name', 'like', '%' . $request->name . '%');
             $offline->where('name', 'like', '%' . $request->name . '%');
         }
-        if ($request->filled('session_filter')) {
-            $online->where('academic_session', $request->session_filter);
-            $offline->where('academic_session', $request->session_filter);
-        }
+
         if ($request->filled('block')) {
-            $online->where('block', 'like', '%' . $request->block . '%');
+            // $online->where('block', 'like', '%' . $request->block . '%');
             $offline->where('block', 'like', '%' . $request->block . '%');
         }
+
         if ($request->filled('amountType')) {
-            // $online->where('block', 'like', '%' . $request->block . '%');
             $offline->where('amountType', 'like', '%' . $request->amountType . '%');
         }
+
         if ($request->filled('state')) {
-            $online->where('state', $request->state);
+            // $online->where('state', $request->state);
             $offline->where('state', $request->state);
         }
+
         if ($request->filled('district')) {
-            $online->where('district', $request->district);
+            // $online->where('district', $request->district);
             $offline->where('district', $request->district);
         }
 
-        // Today filter
         if ($request->filled('today')) {
             $todayDate = now()->format('Y-m-d');
-            $online->whereDate('created_at', $todayDate);
+            // $online->whereDate('created_at', $todayDate);
             $offline->whereDate('created_at', $todayDate);
         }
 
-        // Date Range filter
         if ($request->filled('start_date') && $request->filled('end_date')) {
-            $startDate = $request->start_date;
-            $endDate = $request->end_date;
-            $online->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
-            $offline->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
+            // $online->whereBetween('created_at', [$request->start_date . ' 00:00:00', $request->end_date . ' 23:59:59']);
+            $offline->whereBetween('created_at', [$request->start_date . ' 00:00:00', $request->end_date . ' 23:59:59']);
         }
 
-        // Get donations
-        $donations = $online->get()->merge($offline->get())->sortByDesc('created_at');
-
-        $data = academic_session::all();
+        // $donations = $online->get()->merge($offline->get())->sortByDesc('created_at');
+            $donations = $offline->get()->sortByDesc('created_at');
+        $session = academic_session::orderBy('session_date', 'desc')->pluck('session_date');
         $states = config('states');
 
-        return view('ngo.cashbook.income-list', compact('data', 'donations', 'states'));
+        return view('ngo.cashbook.income-list', compact('donations', 'states', 'session', 'latestSession'));
     }
 
     public function ExpenditureList(Request $request)
     {
+        $latestSession = academic_session::orderBy('session_date', 'desc')->value('session_date');
+        $sessionFilter = $request->input('session_filter', $latestSession);
+
         // Bill_Voucher
         $bv = Bill_Voucher::with('items')
-            ->when($request->filled('session_filter'), fn($q) => $q->where('academic_session', $request->session_filter))
+            ->where('academic_session', $sessionFilter)
             ->when($request->filled('bill_no'), fn($q) => $q->where('bill_no', $request->bill_no))
             ->when($request->filled('work_category'), fn($q) => $q->where('work_category', $request->work_category))
             ->when($request->filled('name'), fn($q) => $q->where('name', 'like', '%' . $request->name . '%'))
@@ -91,10 +152,9 @@ class CashBookController extends Controller
                 fn($q) => $q->whereBetween('date', [$request->start_date, $request->end_date])
             );
 
-
         // Bill
         $b = Bill::with('items')
-            ->when($request->filled('session_filter'), fn($q) => $q->where('academic_session', $request->session_filter))
+            ->where('academic_session', $sessionFilter)
             ->when($request->filled('bill_no'), fn($q) => $q->where('bill_no', $request->bill_no))
             ->when($request->filled('work_category'), fn($q) => $q->where('work_category', $request->work_category))
             ->when($request->filled('name'), fn($q) => $q->where('name', 'like', '%' . $request->name . '%'))
@@ -118,10 +178,8 @@ class CashBookController extends Controller
             )
             ->get();
 
-
-
         // GbsBill
-        $g = GbsBill::when($request->filled('session_filter'), fn($q) => $q->where('academic_session', $request->session_filter))
+        $g = GbsBill::where('academic_session', $sessionFilter)
             ->when($request->filled('bill_no'), fn($q) => $q->where('invoice_no', $request->bill_no))
             ->when($request->filled('work_category'), fn($q) => $q->where('work_category', $request->work_category))
             ->when($request->filled('name'), fn($q) => $q->where('name', 'like', '%' . $request->name . '%'))
@@ -156,20 +214,14 @@ class CashBookController extends Controller
 
         $eduBene = beneficiarie::with(['educationCards' => $educationCardConstraint])
             ->where('status', 1)
-            ->whereHas('educationCards', $educationCardConstraint);
+            ->where('academic_session', $sessionFilter)
+            ->whereHas('educationCards', $educationCardConstraint)
+            ->when($request->filled('name'), fn($q) => $q->where('name', 'like', "%{$request->name}%"));
 
         $eduMember = Member::with(['educationCards' => $educationCardConstraint])
             ->where('status', 1)
-            ->whereHas('educationCards', $educationCardConstraint);
-
-        /* ---- Optional filters (keep aligned with Expenditure filters) ---- */
-
-        $eduBene
-            ->when($request->filled('session_filter'), fn($q) => $q->where('academic_session', $request->session_filter))
-            ->when($request->filled('name'), fn($q) => $q->where('name', 'like', "%{$request->name}%"));
-
-        $eduMember
-            ->when($request->filled('session_filter'), fn($q) => $q->where('academic_session', $request->session_filter))
+            ->where('academic_session', $sessionFilter)
+            ->whereHas('educationCards', $educationCardConstraint)
             ->when($request->filled('name'), fn($q) => $q->where('name', 'like', "%{$request->name}%"));
 
         $eduRecords = collect()
@@ -187,12 +239,12 @@ class CashBookController extends Controller
                             'name'          => $person->name,
                             'address'       => collect([
                                 $person->village ?? null,
-                                $person->post ?? null,
-                                $person->block ?? null,
+                                $person->post    ?? null,
+                                $person->block   ?? null,
                                 $person->district ?? null,
-                                $person->state ?? null,
+                                $person->state   ?? null,
                             ])->filter()->implode(', '),
-                            'email'         => $person->email ?? null,
+                            'email'         => $person->email  ?? null,
                             'mobile'        => $person->mobile ?? null,
                             'session'       => $person->academic_session,
                             'amount'        => $facility->clearness_amount,
@@ -215,19 +267,14 @@ class CashBookController extends Controller
 
         $healthBene = beneficiarie::with(['healthCard' => $healthCardConstraint])
             ->where('status', 1)
-            ->whereHas('healthCard', $healthCardConstraint);
+            ->where('academic_session', $sessionFilter)
+            ->whereHas('healthCard', $healthCardConstraint)
+            ->when($request->filled('name'), fn($q) => $q->where('name', 'like', "%{$request->name}%"));
 
         $healthMember = Member::with(['healthCard' => $healthCardConstraint])
             ->where('status', 1)
-            ->whereHas('healthCard', $healthCardConstraint);
-
-        /* ---- Optional alignment filters ---- */
-        $healthBene
-            ->when($request->filled('session_filter'), fn($q) => $q->where('academic_session', $request->session_filter))
-            ->when($request->filled('name'), fn($q) => $q->where('name', 'like', "%{$request->name}%"));
-
-        $healthMember
-            ->when($request->filled('session_filter'), fn($q) => $q->where('academic_session', $request->session_filter))
+            ->where('academic_session', $sessionFilter)
+            ->whereHas('healthCard', $healthCardConstraint)
             ->when($request->filled('name'), fn($q) => $q->where('name', 'like', "%{$request->name}%"));
 
         $healthRecords = collect()
@@ -244,13 +291,13 @@ class CashBookController extends Controller
                             'date'          => $facility->bill_date,
                             'name'          => $person->name,
                             'address'       => collect([
-                                $person->village ?? null,
-                                $person->post ?? null,
-                                $person->block ?? null,
+                                $person->village  ?? null,
+                                $person->post     ?? null,
+                                $person->block    ?? null,
                                 $person->district ?? null,
-                                $person->state ?? null,
+                                $person->state    ?? null,
                             ])->filter()->implode(', '),
-                            'email'         => $person->email ?? null,
+                            'email'         => $person->email  ?? null,
                             'mobile'        => $person->mobile ?? null,
                             'session'       => $person->academic_session,
                             'amount'        => $facility->clearness_amount,
@@ -259,17 +306,11 @@ class CashBookController extends Controller
                 });
             });
 
-
+        // Salary
         $salaries = SalaryPayment::with('staff')
-            ->when($request->filled('session_filter'), function ($q) use ($request) {
-                $q->whereHas('staff', function ($s) use ($request) {
-                    $s->where('academic_session', $request->session_filter);
-                });
-            })
+            ->whereHas('staff', fn($s) => $s->where('academic_session', $sessionFilter))
             ->when($request->filled('name'), function ($q) use ($request) {
-                $q->whereHas('staff', function ($s) use ($request) {
-                    $s->where('name', 'like', '%' . $request->name . '%');
-                });
+                $q->whereHas('staff', fn($s) => $s->where('name', 'like', '%' . $request->name . '%'));
             })
             ->when($request->filled('address'), function ($q) use ($request) {
                 $q->whereHas('staff', function ($s) use ($request) {
@@ -280,88 +321,73 @@ class CashBookController extends Controller
                         ->orWhere('state', 'like', '%' . $request->address . '%');
                 });
             })
-            ->when($request->filled('phone'), function ($q) use ($request) {
-                $q->whereHas('staff', function ($s) use ($request) {
-                    $s->where('phone', 'like', '%' . $request->mobile . '%');
-                });
+            ->when($request->filled('mobile'), function ($q) use ($request) {
+                $q->whereHas('staff', fn($s) => $s->where('phone', 'like', '%' . $request->mobile . '%'));
             })
-            ->when(
-                $request->filled('today'),
-                fn($q) =>
-                $q->whereDate('payment_date', now()->toDateString())
-            )
+            ->when($request->filled('today'), fn($q) => $q->whereDate('payment_date', now()->toDateString()))
             ->when(
                 $request->filled('start_date') && $request->filled('end_date'),
                 fn($q) => $q->whereBetween('payment_date', [$request->start_date, $request->end_date])
             );
 
-
+        // Map results
         $bvList = $bv->get()->map(function ($x) {
-
-            $baseAmount = $x->items->sum(fn($i) => $i->qty * $i->rate);
-
-            $cgstAmount = ($baseAmount * ($x->cgst ?? 0)) / 100;
-            $sgstAmount = ($baseAmount * ($x->sgst ?? 0)) / 100;
-
+            $baseAmount  = $x->items->sum(fn($i) => $i->qty * $i->rate);
+            $cgstAmount  = ($baseAmount * ($x->cgst ?? 0)) / 100;
+            $sgstAmount  = ($baseAmount * ($x->sgst ?? 0)) / 100;
             $totalAmount = $baseAmount + $cgstAmount + $sgstAmount;
 
             return [
-                'type' => 'voucher',
-                'id' => $x->id,
-                'bill_no' => $x->bill_no,
+                'type'          => 'voucher',
+                'id'            => $x->id,
+                'bill_no'       => $x->bill_no,
                 'work_category' => $x->work_category,
-                'date' => $x->date,
-                'name' => $x->name,
-                'address' => $x->address,
-                'email' => $x->email,
-                'mobile' => $x->mobile,
-                'session' => $x->academic_session,
-                'amount' => round($totalAmount, 2),
+                'date'          => $x->date,
+                'name'          => $x->name,
+                'address'       => $x->address,
+                'email'         => $x->email,
+                'mobile'        => $x->mobile,
+                'session'       => $x->academic_session,
+                'amount'        => round($totalAmount, 2),
             ];
         });
 
-
         $bList = $b->map(function ($x) {
-
-            $baseAmount = $x->items->sum(fn($i) => $i->qty * $i->rate);
-
-            $cgstAmount = ($baseAmount * ($x->cgst ?? 0)) / 100;
-            $sgstAmount = ($baseAmount * ($x->sgst ?? 0)) / 100;
-
+            $baseAmount  = $x->items->sum(fn($i) => $i->qty * $i->rate);
+            $cgstAmount  = ($baseAmount * ($x->cgst ?? 0)) / 100;
+            $sgstAmount  = ($baseAmount * ($x->sgst ?? 0)) / 100;
             $totalAmount = $baseAmount + $cgstAmount + $sgstAmount;
 
             return [
-                'type' => 'bill',
-                'id' => $x->id,
-                'bill_no' => $x->bill_no,
+                'type'          => 'bill',
+                'id'            => $x->id,
+                'bill_no'       => $x->bill_no,
                 'work_category' => $x->work_category,
-                'date' => $x->date,
-                'name' => $x->name,
-                'address' => collect([$x->address, $x->block, $x->district, $x->state])
-                    ->filter()
-                    ->join(', '),
-                'email' => $x->email,
-                'mobile' => $x->mobile,
-                'session' => $x->academic_session,
-                'amount' => round($totalAmount, 2),
+                'date'          => $x->date,
+                'name'          => $x->name,
+                'address'       => collect([$x->address, $x->block, $x->district, $x->state])
+                    ->filter()->join(', '),
+                'email'         => $x->email,
+                'mobile'        => $x->mobile,
+                'session'       => $x->academic_session,
+                'amount'        => round($totalAmount, 2),
             ];
         });
 
         $gList = $g->get()->map(function ($x) {
             return [
-                'type' => 'gbs',
-                'id' => $x->id,
-                'bill_no' => $x->invoice_no,
+                'type'          => 'gbs',
+                'id'            => $x->id,
+                'bill_no'       => $x->invoice_no,
                 'work_category' => $x->work_category,
-                'date' => $x->bill_date, // Standardized to 'date'
-                'name' => $x->name,
-                'address' => collect([$x->village, $x->post, $x->block, $x->district, $x->state])
-                    ->filter()
-                    ->implode(', '),
-                'email' => $x->email,
-                'mobile' => $x->mobile,
-                'session' => $x->academic_session,
-                'amount' => $x->amount
+                'date'          => $x->bill_date,
+                'name'          => $x->name,
+                'address'       => collect([$x->village, $x->post, $x->block, $x->district, $x->state])
+                    ->filter()->implode(', '),
+                'email'         => $x->email,
+                'mobile'        => $x->mobile,
+                'session'       => $x->academic_session,
+                'amount'        => $x->amount,
             ];
         });
 
@@ -373,9 +399,13 @@ class CashBookController extends Controller
                 'work_category' => 'Staff Salary',
                 'date'          => $x->payment_date,
                 'name'          => $x->staff->name,
-                'address' => collect([$x->staff->village, $x->staff->post, $x->staff->block, $x->staff->district, $x->staff->state])
-                    ->filter()
-                    ->implode(', '),
+                'address'       => collect([
+                    $x->staff->village,
+                    $x->staff->post,
+                    $x->staff->block,
+                    $x->staff->district,
+                    $x->staff->state,
+                ])->filter()->implode(', '),
                 'email'         => $x->staff->email,
                 'mobile'        => $x->staff->phone,
                 'session'       => $x->staff->academic_session,
@@ -383,8 +413,7 @@ class CashBookController extends Controller
             ];
         });
 
-
-        // Merge and sort by 'date'
+        // Merge and sort
         $records = collect()
             ->merge($bvList)
             ->merge($bList)
@@ -392,22 +421,22 @@ class CashBookController extends Controller
             ->merge($salaryList)
             ->merge($eduRecords)
             ->merge($healthRecords)
-            ->sortBy('date');
+            ->sortBy('date')
+            ->values();
 
-        // Total Amount
         $totalAmount = $records->sum('amount');
+        $session     = academic_session::all();
+        $categories  = Category::orderBy('category', 'asc')->get();
 
-
-        // Session list
-        $session = academic_session::all();
-        $categories = Category::orderBy('category', 'asc')->get();
         return view('ngo.cashbook.expenditure-list', [
-            'records' => $records,
-            'totalAmount' => $totalAmount,
-            'session' => $session,
-            'categories' => $categories
+            'records'       => $records,
+            'totalAmount'   => $totalAmount,
+            'session'       => $session,
+            'sessionFilter' => $sessionFilter,
+            'categories'    => $categories,
         ]);
     }
+
 
     public function generateMonthlyReport(Request $request)
     {

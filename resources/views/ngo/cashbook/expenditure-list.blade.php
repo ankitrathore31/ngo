@@ -125,13 +125,18 @@
 
             <div class="row mb-3">
                 <form method="GET" action="{{ route('expenditure.list') }}" class="row g-3 align-items-end">
+                    @php
+                        $sessions = collect($session)->pluck('session_date')->sortDesc();
+                    @endphp
+
                     <div class="col-md-3">
                         <label>Session</label>
                         <select name="session_filter" class="form-control">
-                            <option value="">All Sessions</option>
-                            @foreach ($session as $s)
-                                <option value="{{ $s }}" {{ request('session_filter') == $s ? 'selected' : '' }}>
-                                    {{ $s }}</option>
+                            {{-- No "All Sessions" blank option, latest is always pre-selected --}}
+                            @foreach ($sessions as $s)
+                                <option value="{{ $s }}" {{ $sessionFilter == $s ? 'selected' : '' }}>
+                                    {{ $s }}
+                                </option>
                             @endforeach
                         </select>
                     </div>

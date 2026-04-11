@@ -29,29 +29,52 @@ class DonationController extends Controller
 
     public function donationList(Request $request)
     {
+        // Get latest session
+        $latestSession = academic_session::orderBy('session_date', 'desc')->first();
 
         $query = Donation::query();
+
+        // Session filter (default = latest session)
         if ($request->filled('session_filter')) {
             $query->where('academic_session', $request->session_filter);
+        } else {
+            if ($latestSession) {
+                $query->where('academic_session', $latestSession->session_date);
+            }
         }
+
+        // Other filters
         if ($request->filled('name')) {
             $query->where('name', 'like', '%' . $request->name . '%');
         }
+
         if ($request->filled('category')) {
             $query->where('category', $request->category);
         }
+
         if ($request->filled('amountType')) {
             $query->where('amountType', $request->amountType);
         }
+
         if ($request->filled('payment_method')) {
             $query->where('payment_method', $request->payment_method);
         }
-        $data = academic_session::all();
+
+        // Get dropdown data (latest first)
+        $data = academic_session::orderBy('session_date', 'desc')->get();
+
         $categories = Category::orderBy('category', 'asc')->pluck('category');
         $allProjects = Project::select('name', 'category')->get();
-        $donor = $query->get()->sortBy('date');
 
-        return view('ngo.donation.donation-list', compact('data', 'donor', 'categories', 'allProjects'));
+        $donor = $query->orderBy('date', 'asc')->get();
+
+        return view('ngo.donation.donation-list', compact(
+            'data',
+            'donor',
+            'categories',
+            'allProjects',
+            'latestSession'
+        ));
     }
 
     public function donation(Request $request)
@@ -309,55 +332,43 @@ class DonationController extends Controller
 
     public function allDonations(Request $request)
     {
-        $online = donor_data::where('status', 'Successful');
+        $latestSession = academic_session::orderBy('session_date', 'desc')->value('session_date');
+        $sessionFilter = $request->has('session_filter')
+            ? $request->input('session_filter')
+            : $latestSession;
 
-        if ($request->filled('name')) {
-            $online->where('name', 'like', '%' . $request->name . '%');
-        }
-        if ($request->filled('session_filter')) {
-            $online->where('academic_session', $request->session_filter);
-        }
-        if ($request->filled('block')) {
-            $online->where('block', 'like', '%' . $request->block . '%');
-        }
+        // Helper: convert "2024-25" => ['2024-04-01', '2025-03-31']
+        $sessionDateRange = function ($sessionDate) {
+            if (!$sessionDate) return null;
+            $parts     = explode('-', $sessionDate);
+            $startYear = $parts[0];
+            $endYear   = '20' . $parts[1];
+            return [
+                $startYear . '-04-01',
+                $endYear   . '-03-31',
+            ];
+        };
 
-        if ($request->filled('state')) {
-            $online->where('state', $request->state);
-        }
+        $dateRange = $sessionDateRange($sessionFilter);
 
-        if ($request->filled('district')) {
-            $online->where('district', $request->district);
-        }
-        if ($request->filled('category')) {
-            $online->where('donation_category', $request->category);
-        }
+        // Online (donor_data - no academic_session, filter by date range)
+        $online = donor_data::where('status', 'Successful')
+            ->when($dateRange, fn($q) => $q->whereBetween('date', $dateRange))
+            ->when($request->filled('name'), fn($q) => $q->where('name', 'like', '%' . $request->name . '%'))
+            ->when($request->filled('block'), fn($q) => $q->where('block', 'like', '%' . $request->block . '%'))
+            ->when($request->filled('state'), fn($q) => $q->where('state', $request->state))
+            ->when($request->filled('district'), fn($q) => $q->where('district', $request->district))
+            ->when($request->filled('category'), fn($q) => $q->where('donation_category', $request->category));
 
-        // Apply filters to Donation (offline donations)
-        $offline = Donation::query();
-
-        if ($request->filled('name')) {
-            $offline->where('name', 'like', '%' . $request->name . '%');
-        }
-        if ($request->filled('session_filter')) {
-            $offline->where('academic_session', $request->session_filter);
-        }
-        if ($request->filled('block')) {
-            $offline->where('block', 'like', '%' . $request->block . '%');
-        }
-
-        if ($request->filled('state')) {
-            $offline->where('state', $request->state);
-        }
-
-        if ($request->filled('district')) {
-            $offline->where('district', $request->district);
-        }
-        if ($request->filled('category')) {
-            $offline->where('category', $request->category);
-        }
-        if ($request->filled('amountType')) {
-            $offline->where('amountType', $request->amountType);
-        }
+        // Offline (Donation - has academic_session)
+        $offline = Donation::query()
+            ->when($sessionFilter, fn($q) => $q->where('academic_session', $sessionFilter))
+            ->when($request->filled('name'), fn($q) => $q->where('name', 'like', '%' . $request->name . '%'))
+            ->when($request->filled('block'), fn($q) => $q->where('block', 'like', '%' . $request->block . '%'))
+            ->when($request->filled('state'), fn($q) => $q->where('state', $request->state))
+            ->when($request->filled('district'), fn($q) => $q->where('district', $request->district))
+            ->when($request->filled('category'), fn($q) => $q->where('category', $request->category))
+            ->when($request->filled('amountType'), fn($q) => $q->where('amountType', $request->amountType));
 
         $onlineList = $online->get()->map(function ($x) {
             return [
@@ -373,7 +384,7 @@ class DonationController extends Controller
                 'amount'           => $x->amount,
                 'date'             => $x->date,
                 'payment_method'   => 'Online Cashfree',
-                'academic_session' => $x->academic_session,
+                'academic_session' => $x->academic_session ?? null,
                 'type'             => 'online',
                 'created_at'       => $x->created_at,
             ];
@@ -402,14 +413,20 @@ class DonationController extends Controller
         $donations = collect()
             ->merge($onlineList)
             ->merge($offlineList)
-            ->sortBy('date');
+            ->sortBy('date')
+            ->values();
 
-
-        // For academic session dropdown
-        $data = academic_session::all();
-        $states = config('states');
+        $data       = academic_session::all();
+        $states     = config('states');
         $categories = Category::orderBy('category', 'asc')->pluck('category');
-        return view('ngo.donation.all-donation-list', compact('data', 'donations', 'states', 'categories'));
+
+        return view('ngo.donation.all-donation-list', compact(
+            'data',
+            'donations',
+            'states',
+            'categories',
+            'sessionFilter'
+        ));
     }
 
     public function DonationReport(Request $request)
