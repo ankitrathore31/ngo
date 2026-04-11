@@ -127,13 +127,14 @@
 
                         <!-- Session Filter -->
                         <div class="col-md-3">
-                            <label for="session_filter" class="form-label">Session</label>
-                            <select name="session_filter" id="session_filter" class="form-control">
+                            <label>Session</label>
+                            <select name="session_filter" class="form-control">
                                 <option value="">All Sessions</option>
-                                @foreach ($data as $session)
-                                    <option value="{{ $session->session_date }}"
-                                        {{ request('session_filter') == $session->session_date ? 'selected' : '' }}>
-                                        {{ $session->session_date }}
+
+                                @foreach ($session as $s)
+                                    <option value="{{ $s }}"
+                                        {{ request('session_filter', $latestSession) == $s ? 'selected' : '' }}>
+                                        {{ $s }}
                                     </option>
                                 @endforeach
                             </select>
@@ -141,7 +142,7 @@
 
                         <div class="col-md-3
                         ">
-                         <label for="" class="form-label">Amount Type</label>
+                            <label for="" class="form-label">Amount Type</label>
                             <select class="form-control" id="amountType" name="amountType">
                                 <option value="">Select Amount Type</option>
                                 <option value="donation">Donation</option>
