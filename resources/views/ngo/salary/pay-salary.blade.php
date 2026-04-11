@@ -233,18 +233,25 @@
                     <h5 class="text-primary">Salary Transactions</h5>
                     <form method="GET" action="{{ route('pay.salary', $staff->id) }}">
                         <select name="year" class="form-select" onchange="this.form.submit()" style="width:auto;">
-                            @for ($y = $joiningYear; $y <= $currentYear; $y++)
+
+                            @for ($y = $startFY; $y <= $currentFY; $y++)
+                                @php
+                                    $nextYear = $y + 1;
+                                @endphp
                                 <option value="{{ $y }}" {{ $y == $selectedYear ? 'selected' : '' }}>
-                                    {{ $y }}
+                                    {{ $y }}-{{ substr($nextYear, -2) }}
                                 </option>
                             @endfor
+
                         </select>
                     </form>
                 </div>
                 {{-- Salary Card for Selected Year --}}
                 <div class="card mb-3">
+                    @php $nextYear = $selectedYear + 1; @endphp
+
                     <div class="card-header bg-light text-primary">
-                        Salary Year: {{ $selectedYear }}
+                        Salary Year: {{ $selectedYear }}-{{ substr($nextYear, -2) }}
                     </div>
                     <div class="card-body">
                         <table class="table table-bordered">

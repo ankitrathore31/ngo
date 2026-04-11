@@ -43,7 +43,7 @@
                                     <i class="fas fa-user-plus fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Total Registration</p>
-                                        <h5 class="mb-0">{{ $allbene }}</h5>
+                                        <h5 class="mb-0">{{ totalReg() }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -54,7 +54,7 @@
                                     <i class="fas fa-clock fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Pending Registration</p>
-                                        <h5 class="mb-0">{{ $penbene }}</h5>
+                                        <h5 class="mb-0">{{ totalPendingReg() }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -66,7 +66,7 @@
                                     <i class="fas fa-check-circle fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Approved Registration</p>
-                                        <h5 class="mb-0">{{ $apbene }}</h5>
+                                        <h5 class="mb-0">{{ totalApprovedReg() }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -78,7 +78,7 @@
                                     <i class="fas fa-times-circle fa-2x me-3"></i>
                                     <div>
                                         <p class="mb-1">Rejected Registration</p>
-                                        <h5 class="mb-0">{{ $rebene }}</h5>
+                                        <h5 class="mb-0">{{ totalRejectedReg() }}</h5>
                                     </div>
                                 </div>
                             </div>
