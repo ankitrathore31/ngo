@@ -28,20 +28,20 @@ class DonationController extends Controller
     }
 
     public function donationList(Request $request)
-{
-    $latestSession = academic_session::orderBy('session_date', 'desc')->first();
+    {
+        // Get latest session
+        $latestSession = academic_session::orderBy('session_date', 'desc')->first();
 
-    // Determine session filter
-    $sessionFilter = $request->has('session_filter')
-        ? $request->input('session_filter')
-        : ($latestSession ? $latestSession->session_date : null);
+        $query = Donation::query();
 
-    $query = Donation::query();
-
-    // Session filter
-    if ($sessionFilter) {
-        $query->where('academic_session', $sessionFilter);
-    }
+        // Session filter (default = latest session)
+        if ($request->filled('session_filter')) {
+            $query->where('academic_session', $request->session_filter);
+        } else {
+            if ($latestSession) {
+                $query->where('academic_session', $latestSession->session_date);
+            }
+        }
 
     // Other filters
     if ($request->filled('name')) {
@@ -60,20 +60,23 @@ class DonationController extends Controller
         $query->where('payment_method', $request->payment_method);
     }
 
-    $data        = academic_session::orderBy('session_date', 'desc')->get();
-    $categories  = Category::orderBy('category', 'asc')->pluck('category');
-    $allProjects = Project::select('name', 'category')->get();
-    $donor       = $query->orderBy('date', 'asc')->get();
+        // Get dropdown data (latest first)
+        $data = academic_session::orderBy('session_date', 'desc')->get();
 
-    return view('ngo.donation.donation-list', compact(
-        'data',
-        'donor',
-        'categories',
-        'allProjects',
-        'latestSession',
-        'sessionFilter'  // ← was missing
-    ));
-}
+        $categories = Category::orderBy('category', 'asc')->pluck('category');
+        $allProjects = Project::select('name', 'category')->get();
+
+        $donor = $query->orderBy('date', 'asc')->get();
+
+        return view('ngo.donation.donation-list', compact(
+            'data',
+            'donor',
+            'categories',
+            'allProjects',
+            'latestSession'
+        ));
+    }
+
     public function donation(Request $request)
     {
         $data = academic_session::all();
