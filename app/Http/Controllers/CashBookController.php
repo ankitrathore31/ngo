@@ -125,7 +125,7 @@ class CashBookController extends Controller
         }
 
         // $donations = $online->get()->merge($offline->get())->sortByDesc('created_at');
-        $donations = $offline->get()->sortByAsc('created_at');
+        $donations = $offline->orderBy('created_at', 'asc')->get();
         $session = academic_session::orderBy('session_date', 'desc')->pluck('session_date');
         $states = config('states');
 
