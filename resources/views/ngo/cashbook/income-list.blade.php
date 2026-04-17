@@ -231,6 +231,7 @@
                             <button type="submit" class="btn btn-primary me-2">Search</button>
                             <a href="{{ route('list.income') }}" class="btn btn-info text-white me-2">Reset</a>
                             <button type="button" onclick="printTable()" class="btn btn-secondary">Print Table</button>
+                            <a href="{{ route('print.income') }}" class="btn btn-info text-white me-2">Print Incomes</a>
                         </div>
                     </form>
                 </div>

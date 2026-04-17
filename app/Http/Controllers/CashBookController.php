@@ -132,6 +132,58 @@ class CashBookController extends Controller
         return view('ngo.cashbook.income-list', compact('donations', 'states', 'session', 'latestSession'));
     }
 
+    public function IncomePrint(Request $request)
+    {
+        // Latest session
+        $latestSession = academic_session::orderBy('session_date', 'desc')
+            ->value('session_date');
+
+        $offline = Donation::query();
+
+        // Apply same filters as list
+        $sessionFilter = $request->session_filter ?? $latestSession;
+
+        if (!empty($sessionFilter)) {
+            $offline->where('academic_session', $sessionFilter);
+        }
+
+        if ($request->filled('name')) {
+            $offline->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        if ($request->filled('block')) {
+            $offline->where('block', 'like', '%' . $request->block . '%');
+        }
+
+        if ($request->filled('amountType')) {
+            $offline->where('amountType', $request->amountType);
+        }
+
+        if ($request->filled('state')) {
+            $offline->where('state', $request->state);
+        }
+
+        if ($request->filled('district')) {
+            $offline->where('district', $request->district);
+        }
+
+        if ($request->filled('today')) {
+            $offline->whereDate('created_at', now());
+        }
+
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $offline->whereBetween('created_at', [
+                $request->start_date . ' 00:00:00',
+                $request->end_date . ' 23:59:59'
+            ]);
+        }
+
+        // ✅ Sorting
+        $donations = $offline->orderBy('created_at', 'asc')->get();
+        $session = academic_session::orderBy('session_date', 'desc')->pluck('session_date');
+        return view('ngo.cashbook.income-print', compact('donations','session','latestSession'));
+    }
+
     public function ExpenditureList(Request $request)
     {
         $latestSession = academic_session::orderBy('session_date', 'desc')->value('session_date');

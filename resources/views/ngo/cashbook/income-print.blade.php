@@ -1,0 +1,559 @@
+@extends('ngo.layout.master')
+
+@section('content')
+    <style>
+        .print-red-bg {
+            background-color: red !important;
+            /* Bootstrap 'bg-danger' color */
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            color: white !important;
+        }
+
+        .print-h4 {
+            background-color: red !important;
+            color: white !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-size: 28px;
+            word-spacing: 8px;
+            text-align: center;
+        }
+
+        .amount {
+            background-color: green;
+            color: white;
+            font-weight: 400;
+        }
+
+        .recipt {
+            background-color: blue !important;
+            color: white !important;
+            font-weight: 400 !important;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+                font-size: 12px;
+
+            }
+
+            .print-card,
+            .print-card * {
+                visibility: visible;
+            }
+
+            .print-card {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+
+            .amount {
+                background-color: green !important;
+                color: white !important;
+                font-weight: 400 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .recipt {
+                background-color: blue !important;
+                color: white !important;
+                font-weight: 400 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .print-red-bg {
+                background-color: red !important;
+                /* Bootstrap 'bg-danger' color */
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                color: white !important;
+            }
+
+            .print-h4 {
+                background-color: red !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                font-size: 28px !important;
+                word-spacing: 8px;
+                text-align: center;
+            }
+
+            html,
+            body {
+                width: 210mm;
+                height: 297mm;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+
+            @page {
+                size: A4;
+                margin: 20mm;
+            }
+
+            /* Optional: Hide buttons like Print/Download and Language Toggle */
+            button,
+            .btn,
+            {
+            display: none !important;
+        }
+        }
+    </style>
+
+    <div class="container-fluid mt-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+            <h5 class="mb-0">
+                {{-- <span data-lang="hi">दान रसीद</span> --}}
+                <span>Income Receipt</span>
+            </h5>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Filter Form -->
+                <form method="GET" action="{{ route('print.income') }}" class="row g-3 mb-4 align-items-end">
+
+                    <!-- Session Filter -->
+                    <div class="col-md-3">
+                        <label>Session</label>
+                        <select name="session_filter" class="form-control">
+                            <option value="">All Sessions</option>
+
+                            @foreach ($session as $s)
+                                <option value="{{ $s }}"
+                                    {{ request('session_filter', $latestSession) == $s ? 'selected' : '' }}>
+                                    {{ $s }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-3
+                        ">
+                        <label for="" class="form-label">Amount Type</label>
+                        <select class="form-control" id="amountType" name="amountType">
+                            <option value="">Select Amount Type</option>
+                            <option value="donation">Donation</option>
+                            <option value="membership">Membership</option>
+                            <option value="income">Income from other sources</option>
+                            <option value="balance">Year wise balance amount</option>
+                            <option value="trainingFees">Training fees</option>
+                            <option value="tuitionFees">Tuition fees</option>
+                        </select>
+                    </div>
+
+                    <!-- Name Filter -->
+                    <div class="col-md-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" name="name" id="name"
+                            placeholder="Search by Name" value="{{ request('name') }}">
+                    </div>
+
+                    <!-- State Filter -->
+                    @php
+                        $districtsByState = config('districts');
+                    @endphp
+                    <div class="col-md-3">
+                        <label for="stateSelect" class="form-label">State</label>
+                        <select class="form-control @error('state') is-invalid @enderror" name="state" id="stateSelect">
+                            <option value="">Select State</option>
+                            @foreach ($districtsByState as $state => $districts)
+                                <option value="{{ $state }}" {{ request('state') == $state ? 'selected' : '' }}>
+                                    {{ $state }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('state')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <!-- District Filter -->
+                    <div class="col-md-3">
+                        <label for="districtSelect" class="form-label">District</label>
+                        <select class="form-control @error('district') is-invalid @enderror" name="district"
+                            id="districtSelect">
+                            <option value="">Select District</option>
+                        </select>
+                        @error('district')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <!-- Block Filter -->
+                    <div class="col-md-3">
+                        <label for="block" class="form-label">Block</label>
+                        <input type="text" name="block" id="block"
+                            class="form-control @error('block') is-invalid @enderror" value="{{ request('block') }}"
+                            placeholder="Search by Block">
+                        @error('block')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <!-- Date Range -->
+                    <div class="col-md-3">
+                        <label for="start_date" class="form-label">Start Date</label>
+                        <input type="date" class="form-control" name="start_date" id="start_date"
+                            value="{{ request('start_date') }}">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="end_date" class="form-label">End Date</label>
+                        <input type="date" class="form-control" name="end_date" id="end_date"
+                            value="{{ request('end_date') }}">
+                    </div>
+
+                    <!-- Today Filter (Better UI) -->
+                    <div class="col-md-3">
+                        <label for="today" class="form-label">Today Filter</label>
+                        <select name="today" id="today" class="form-control" onchange="this.form.submit()">
+                            <option value="">-- Select --</option>
+                            <option value="1" {{ request('today') ? 'selected' : '' }}>Today</option>
+                        </select>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="col-md-12 text-end mt-2">
+                        <button type="submit" class="btn btn-primary me-2">Search</button>
+                        <a href="{{ route('print.income') }}" class="btn btn-info text-white me-2">Reset</a>
+                        <button onclick="window.print()" class="btn btn-primary">Print / Download</button>
+                        <button class="btn btn-sm btn-outline-primary" onclick="setLanguage('en')">English</button>
+                        <button class="btn btn-sm btn-outline-success" onclick="setLanguage('hi')">हिंदी</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Loop All Donations -->
+        @foreach ($donations as $donor)
+            <div class="card shadow rounded p-4 my-4 print-card" style="border: 6px solid blue;">
+                <div class="text-center mb-4 border-bottom pb-2">
+                    <!-- Header -->
+                    <div class="row">
+                        <div class="col-sm-2 text-center text-md-start">
+                            <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="120" height="120">
+                        </div>
+                        <div class="col-sm-10">
+                            <p style="margin: 0;">
+                                <span data-lang="hi"><b>सोसाइटीज रजिस्ट्रेशन एक्ट 1860 के अंतर्गत पंजीकृत</b></span>
+                                <span data-lang="en"><b>Registered under Societies Registration Act 1860</b></span>
+                            </p>
+                            <h4 class="print-h4">
+                                <b>
+                                    <span data-lang="hi">ज्ञान भारती संस्था</span>
+                                    <span data-lang="en">GYAN BHARTI SANSTHA</span>
+                                </b>
+                            </h4>
+
+                            <h6 style="color: blue;"><b>
+                                    <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर प्रदेश
+                                        -
+                                        262121</span>
+                                    <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit, UP -
+                                        262121</span>
+                                </b></h6>
+                            <p style="margin: 0;">
+                                <span data-lang="hi"><b>आयकर अधिनियम 80G, 12A, के अंतर्गत रजिस्टर्ड</b></span>
+                                <span data-lang="en"><b>Registered under Income Tax Act 80G, 12A</b></span>
+                            </p>
+                            <p style="margin: 0;"><b>
+                                    <span data-lang="hi">पंजीकरण सं.: 80G-AAEAG7650BF20231 | 12A: AAEAG7650BE20231 |
+                                        दिनांक:
+                                        02-10-2023</span>
+                                    <span data-lang="en">Reg. No: 80G-AAEAG7650BF20231 | 12A: AAEAG7650BE20231 | Date:
+                                        02-10-2023</span>
+                                    <span data-lang="hi">| पैन: AAEAG7650B</span>
+                                    <span data-lang="en">| PAN: AAEAG7650B</span>
+                                </b></p>
+                            {{-- <p style="margin: 0;"><b>
+
+                                </b></p> --}}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Donation Fields -->
+                <div class="row justify-content-between">
+                    <div class="col-sm-4 text-white mb-2 recipt">
+                        {{-- <span data-lang="hi">दान रसीद</span> --}}
+                        <span> Online Donation Receipt No</span>
+                        &nbsp; &nbsp;{{ $donor->Onlinereceipt_no ?? 'Donation with OnlineCashfree' }}
+                    </div>
+
+                    <div class="col-sm-4 text-center mb-2 print-red-bg">
+                        <span data-lang="hi">दान रसीद</span>
+                        <span data-lang="en">Donation Receipt</span>
+                    </div>
+
+                    <div class="col-sm-3 mb-2 text-end">
+                        <p><strong>
+                                <span data-lang="hi">दान तारीख: </span>
+                                <span data-lang="en">Donation Date: </span>
+                            </strong> {{ \Carbon\Carbon::parse($donor->date)->format('d-m-Y') }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 border border-dark mb-2">
+                        <p><strong>
+                                <span data-lang="hi">रसीद क्रमांक-</span>
+                                <span data-lang="en">Offline Donation Receipt No </span>
+                            </strong> &nbsp; &nbsp;{{ $donor->receipt_no ?? 'Donation with OnlineCashfree' }}
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 mb-2">
+                        <p><strong>
+                                <span data-lang="hi">श्री / श्रीमती का नाम:</span>
+                                <span data-lang="en">Full Name:</span>
+                            </strong> {{ $donor->name }}</p>
+                    </div>
+
+                    <div class="col-sm-6 mb-2">
+                        <p><strong>
+                                <span data-lang="hi">पिता/पति का नाम:</span>
+                                <span data-lang="en">Father/Husband's Name:</span>
+                            </strong> {{ $donor->gurdian_name ?? 'Donation with OnlineCashfree' }}</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6 mb-2">
+                        <p><strong>
+                                <span data-lang="hi">पता:</span>
+                                <span data-lang="en">Address:</span>
+                            </strong>{{ $donor->address }}
+                            {{ $donor->block }}
+                            {{ $donor->district }}
+                            {{ $donor->state }}</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p>
+                            <strong>
+                                <span data-lang="hi">मोबाइल नंबर</span>
+                                <span data-lang="en">Mobile No.</span>
+                            </strong> {{ $donor->mobile }}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row justify-content-between">
+                    <div class="col-sm-4 mb-2 amount">
+                        <p><strong>
+                                <span data-lang="hi">दान राशि (₹):</span>
+                                <span data-lang="en">Donation Amount (₹):</span>
+                            </strong>
+                            <span id="amountInput" oninput="updateAmountInWords()">
+                                {{ $donor->amount }}
+                            </span>
+                        </p>
+                    </div>
+
+                    <div class="col-sm-6 mb-2">
+                        <p><strong>
+                                <span data-lang="hi">दान रुपये (शब्दों में):</span>
+                                <span data-lang="en">Donation Amount (in words):</span>
+                            </strong>
+                            <span data-lang="en" id="amount-words-en"></span>
+                            <span data-lang="hi" id="amount-words-hi"></span>
+                        </p>
+                    </div>
+                </div>
+
+                {{-- Show Payment Method --}}
+                <div class="row">
+                    <div class="col-sm-6">
+                        <p><strong>
+                                <span data-lang="hi">भुगतान का प्रकार :</span>
+                                <span data-lang="en">Payment Method :</span>
+                            </strong>{{ $donor->payment_method ?? 'Donation with OnlineCashfree' }}</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p><strong>
+                                <span data-lang="hi">दिनांक:</span>
+                                <span data-lang="en">Date:</span>
+                            </strong> {{ \Carbon\Carbon::parse($donor->date)->format('d-m-Y') }}</p>
+                    </div>
+                </div>
+
+                {{-- Conditionally Show Cheque Details --}}
+                @if ($donor->payment_method === 'Cheque')
+                    <div class="row">
+                        <div class="col-sm-3 mb-2"><strong>Cheque No:</strong> {{ $donor->cheque_no }}</div>
+                        <div class="col-sm-3 mb-2"><strong>Bank Name:</strong> {{ $donor->bank_name }}</div>
+                        <div class="col-sm-3 mb-2"><strong>Bank Branch:</strong> {{ $donor->bank_branch }}</div>
+                        <div class="col-sm-3 mb-2"><strong>Cheque Date:</strong> {{ $donor->cheque_date }}</div>
+                    </div>
+                @endif
+
+                {{-- Conditionally Show UPI Details --}}
+                @if ($donor->payment_method === 'UPI')
+                    <div class="row">
+                        <div class="col-sm-6 mb-2"><strong>Transaction No:</strong> {{ $donor->transaction_no }}</div>
+                        <div class="col-sm-6 mb-2"><strong>Transaction Date:</strong> {{ $donor->transaction_date }}</div>
+                    </div>
+                @endif
+
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <p>
+                            <strong>
+                                <span data-lang="hi">जमाकर्ता का संबंध:</span>
+                                <span data-lang="en">Relationship:</span>
+                            </strong> {{ $donor->relationship ?? 'Donation with OnlineCashfree' }}
+                        </p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p>
+                            <strong>
+                                <span data-lang="hi">टिप्पणी / संदेश:</span>
+                                <span data-lang="en">Remark:</span>
+                            </strong> {{ $donor->remark ?? $donor->donation_remark }}
+                        </p>
+                    </div>
+                    {{-- <div class="col-sm-6 mb-2 border">
+                        <p><strong>
+                                <span data-lang="hi">राशि (₹):</span>
+                                <span data-lang="en">Donation Amount (₹):</span>
+                            </strong>
+                            <span id="amountInput" oninput="updateAmountInWords()">
+                                {{ $donor->amount }}
+                            </span>
+                        </p>
+                    </div> --}}
+                </div>
+                <hr>
+                <div class="row justify-content-between align-items-end mt-5">
+                    <div class="col-sm-4 text-center">
+                        <p style="color: #0000FF;">{{ $donor->depositor_name ?? 'Donation with OnlineCashfree' }}</p>
+                        <p class="text-danger"><strong>
+                                <span data-lang="hi">जमाकर्ता का नाम:</span>
+                                <span data-lang="en">Depositor Name:</span>
+                            </strong></p>
+
+                        {{-- <hr style="width: 80%; margin: 10px auto 0;">
+                        <small>Signature</small> --}}
+                    </div>
+
+                    <div class="col-sm-4 text-center">
+                        <p style="color: #0000FF;">{{ $donor->recipient_name ?? 'Donation with OnlineCashfree' }}</p>
+                        <p class="text-danger"><strong>
+                                <span data-lang="hi">प्राप्तकर्ता का नाम:</span>
+                                <span data-lang="en">Recipient Name:</span>
+                            </strong></p>
+
+                        {{-- <hr style="width: 80%; margin: 10px auto 0;">
+                        <small>Signature</small> --}}
+                    </div>
+                    <div class="col-sm-4 text-center">
+                        @if (!empty($signatures['director']) && file_exists(public_path($signatures['director'])))
+                            <div id="directorSignatureBox" class="mt-2">
+                                <p class="text-success no-print">Attached</p>
+                                <img src="{{ asset($signatures['director']) }}" alt="Director Signature" class="img"
+                                    style="max-height: 100px;">
+                                <br>
+                                <button class="btn btn-danger btn-sm mt-2 no-print"
+                                    onclick="toggleDirector(false)">Remove</button>
+                            </div>
+
+                            <div id="directorShowBtnBox" class="mt-2 d-none no-print">
+                                <button class="btn btn-primary btn-sm" onclick="toggleDirector(true)">Attached
+                                    Signature</button>
+                            </div>
+                        @else
+                            <p class="text-muted mt-2 no-print">Not attached</p>
+                        @endif
+                        <strong class="text-primary">Digitally Signed By <br>
+                            MANOJ KUMAR RATHOR <br>
+                            DIRECTOR
+                        </strong><br>
+                    </div>
+                </div>
+
+            </div>
+        @endforeach
+
+    </div>
+    <script>
+        function numberToWordsEN(num) {
+            const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
+                'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
+            ];
+            const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+            if ((num = num.toString()).length > 9) return 'Overflow';
+            let n = ('000000000' + num).slice(-9).match(/(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})/);
+            if (!n) return '';
+
+            const getWords = (num) => {
+                if (num < 20) return ones[num];
+                return tens[Math.floor(num / 10)] + (num % 10 ? ' ' + ones[num % 10] : '');
+            };
+
+            let str = '';
+            if (+n[1]) str += getWords(+n[1]) + ' Crore ';
+            if (+n[2]) str += getWords(+n[2]) + ' Lakh ';
+            if (+n[3]) str += getWords(+n[3]) + ' Thousand ';
+            if (+n[4]) str += ones[+n[4]] + ' Hundred ';
+            if (+n[5]) str += getWords(+n[5]) + ' ';
+
+            return str.trim() + ' Rupees Only';
+        }
+
+
+        function numberToWordsHI(num) {
+            const ones = ['', 'एक', 'दो', 'तीन', 'चार', 'पांच', 'छह', 'सात', 'आठ', 'नौ', 'दस',
+                'ग्यारह', 'बारह', 'तेरह', 'चौदह', 'पंद्रह', 'सोलह', 'सत्रह', 'अठारह', 'उन्नीस'
+            ];
+            const tens = ['', '', 'बीस', 'तीस', 'चालीस', 'पचास', 'साठ', 'सत्तर', 'अस्सी', 'नब्बे'];
+
+            const numToHindiWords = (n) => {
+                if (n === 0) return '';
+                if (n < 20) return ones[n];
+                if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 !== 0 ? ' ' + ones[n % 10] : '');
+                if (n < 1000) return ones[Math.floor(n / 100)] + ' सौ' + (n % 100 !== 0 ? ' ' + numToHindiWords(n %
+                    100) : '');
+                if (n < 100000) return numToHindiWords(Math.floor(n / 1000)) + ' हजार' + (n % 1000 !== 0 ? ' ' +
+                    numToHindiWords(n % 1000) : '');
+                if (n < 10000000) return numToHindiWords(Math.floor(n / 100000)) + ' लाख' + (n % 100000 !== 0 ? ' ' +
+                    numToHindiWords(n % 100000) : '');
+                return numToHindiWords(Math.floor(n / 10000000)) + ' करोड़' + (n % 10000000 !== 0 ? ' ' +
+                    numToHindiWords(n % 10000000) : '');
+            };
+
+            return numToHindiWords(num).trim() + ' रुपये मात्र';
+        }
+
+
+
+        function updateAmountInWords() {
+            const amountText = document.getElementById('amountInput').textContent;
+            const amount = parseInt(amountText);
+            if (isNaN(amount)) return;
+
+            document.getElementById('amount-words-en').textContent = numberToWordsEN(amount);
+            document.getElementById('amount-words-hi').textContent = numberToWordsHI(amount);
+        }
+
+        // Call on page load
+        document.addEventListener('DOMContentLoaded', updateAmountInWords);
+    </script>
+    <script>
+        function setLanguage(lang) {
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                el.style.display = el.getAttribute('data-lang') === lang ? 'inline' : 'none';
+            });
+        }
+        window.onload = () => setLanguage('en'); // Set Hindi as default
+    </script>
+@endsection

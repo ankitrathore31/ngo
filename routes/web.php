@@ -513,6 +513,7 @@ Route::controller(CashBookController::class)->middleware('auth')->group(function
     Route::get('ngo/balance-report', 'BalanceReportView')->name('balance.report.view');
     Route::get('ngo/generate-balance-report', 'generateMonthlyReport')->name('balance.report.generate');
     Route::get('ngo/income-expenditure-report', 'IncomeExpenditureReport')->name('income.expenditure.view');
+    Route::get('ngo/income-print', 'IncomePrint')->name('print.income');
 });
 
 Route::controller(CourseController::class)->middleware('auth')->group(function () {
