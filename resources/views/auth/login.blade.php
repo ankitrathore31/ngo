@@ -577,15 +577,6 @@
                             </div>
                         </div>
 
-                        <!-- Live Preview Strip -->
-                        {{-- <div class="role-preview">
-                        <div class="preview-inner" id="previewInner">
-                            <div class="preview-dot"></div>
-                            <span class="preview-text" id="previewText">Logging in as …</span>
-                        </div>
-                        <span class="preview-hint" id="previewHint">← select a role</span>
-                    </div> --}}
-
                         <input type="hidden" name="user_type" id="user_type" required>
                     </div>
 
@@ -597,8 +588,6 @@
                         <input id="email" type="email" class="form-control" name="email"
                             value="{{ old('email') }}" required autofocus placeholder="you@example.com">
                     </div>
-
-
 
                     <!-- Password -->
                     <div class="form-group">

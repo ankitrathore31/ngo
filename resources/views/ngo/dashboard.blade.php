@@ -546,11 +546,11 @@
                         $user->hasPermission('generate-bill') ||
                         $user->hasPermission('gbs-bill-list') ||
                         $user->hasPermission('sanstha-bill-list'))
-                    @php
+                    {{-- @php
                         $cost = costTotals();
                         $totalCostAmount = $cost['totalCostAmount'];
                         $remainingBalance = ($totalIncome ?? 0) - $totalCostAmount;
-                    @endphp
+                    @endphp --}}
 
                     <div class="row">
                         <h5 class="fw-bold mb-2">- Balance Sheet</h5>
@@ -579,28 +579,29 @@
                             </div>
                         </div>
 
-                       <div class="col-md-4 col-sm-6 mb-3">
-    <div class="card p-3 h-100 shadow-sm card-hover text-white 
-        {{ $remainingBalance >= 0 ? 'bg-success' : 'bg-danger' }}">
-        
-        <div class="d-flex align-items-center">
-            
-            <i class="fas fa-wallet fa-2x me-3 text-white"></i>
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div
+                                class="card p-3 h-100 shadow-sm card-hover text-white 
+                                    {{ $remainingBalance >= 0 ? 'bg-success' : 'bg-danger' }}">
 
-            <div>
-                <p class="mb-1 fw-semibold text-white">
-                    Total Remaining Amount
-                </p>
+                                <div class="d-flex align-items-center">
 
-                <h5 class="mb-0 fw-bold text-white">
-                    {{ $remainingBalance >= 0 ? '+' : '-' }}
-                    ₹{{ number_format(abs($remainingBalance), 2) }}
-                </h5>
-            </div>
+                                    <i class="fas fa-wallet fa-2x me-3 text-white"></i>
 
-        </div>
-    </div>
-</div>
+                                    <div>
+                                        <p class="mb-1 fw-semibold text-white">
+                                            Total Remaining Amount
+                                        </p>
+
+                                        <h5 class="mb-0 fw-bold text-white">
+                                            {{ $remainingBalance >= 0 ? '+' : '-' }}
+                                            ₹{{ number_format(abs($remainingBalance), 2) }}
+                                        </h5>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 @endif
 
