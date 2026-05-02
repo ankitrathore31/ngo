@@ -1,12 +1,6 @@
 @extends('ngo.layout.master')
 @Section('content')
     <style>
-        @page {
-            size: auto;
-            margin: 0;
-            /* Remove all margins including top */
-        }
-
         .print-red-bg {
             background-color: red !important;
             /* Bootstrap 'bg-danger' color */
@@ -26,33 +20,50 @@
             text-align: center;
         }
 
-        .printable {
-            font-family: "Times New Roman", serif;
-            font-size: 18px;
-            color: #000;
-        }
+     
 
         hr {
             border-top: 1px solid #000;
             margin: 4px 0;
         }
 
+
+
         @media print {
-            .container {
-                max-width: 100%;
+
+            @page {
+                size: A4 landscape;
+                margin: 2mm !important;
+                margin-top: 2mm !important;
+                margin-bottom: 2mm !important;
+                margin-left: 2mm !important;
+                margin-right: 2mm !important;
             }
+               @page {
+            size: A4 landscape;
+            margin: 5mm !important;
         }
 
+        * {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
 
-
-        @media print {
+        .printable {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 5mm !important;
+        }
 
             html,
             body {
                 margin: 0 !important;
+                margin-top: 0 !important;
                 padding: 0 !important;
                 height: 100% !important;
-                width: 100% !important;
             }
 
             body * {
@@ -221,8 +232,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="container printable my-4">
-                            <div class="border p-3">
+                        <div class="my-4">
+                            <div class=" p-3">
 
                                 <hr class="my-2">
 
