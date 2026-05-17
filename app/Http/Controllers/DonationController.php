@@ -30,6 +30,7 @@ class DonationController extends Controller
     public function donationList(Request $request)
     {
         // Get latest session
+        
         $latestSession = academic_session::orderBy('session_date', 'desc')->first();
 
         $query = Donation::query();
