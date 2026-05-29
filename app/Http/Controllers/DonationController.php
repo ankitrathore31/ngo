@@ -29,8 +29,7 @@ class DonationController extends Controller
 
     public function donationList(Request $request)
     {
-        // Get latest session
-        
+
         $latestSession = academic_session::orderBy('session_date', 'desc')->first();
 
         $query = Donation::query();
@@ -44,22 +43,21 @@ class DonationController extends Controller
             }
         }
 
-    // Other filters
-    if ($request->filled('name')) {
-        $query->where('name', 'like', '%' . $request->name . '%');
-    }
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
 
-    if ($request->filled('category')) {
-        $query->where('category', $request->category);
-    }
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
 
-    if ($request->filled('amountType')) {
-        $query->where('amountType', $request->amountType);
-    }
+        if ($request->filled('amountType')) {
+            $query->where('amountType', $request->amountType);
+        }
 
-    if ($request->filled('payment_method')) {
-        $query->where('payment_method', $request->payment_method);
-    }
+        if ($request->filled('payment_method')) {
+            $query->where('payment_method', $request->payment_method);
+        }
 
         // Get dropdown data (latest first)
         $data = academic_session::orderBy('session_date', 'desc')->get();

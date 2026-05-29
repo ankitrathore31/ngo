@@ -188,6 +188,7 @@ class BeneficiarieController extends Controller
         // Step 2: Load the surveys with related beneficiary data
         $surveys = Beneficiarie_Survey::with('beneficiarie')
             ->whereIn('id', $firstSurveyIds)
+            ->whereHas('beneficiarie')
             ->orderBy('id', 'asc');
 
         // Step 3: Apply filters from the form

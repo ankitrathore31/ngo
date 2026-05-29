@@ -288,6 +288,10 @@
                         <tbody>
                             @foreach ($surveys as $survey)
                                 @php $item = $survey->beneficiarie; @endphp
+                                {{-- @php $item = $survey->beneficiarie; @endphp --}}
+                                @if (!$item)
+                                    @continue
+                                @endif
                                 <tr>
                                     <td>
                                         <input type="checkbox" class="form-check-input survey-checkbox"
