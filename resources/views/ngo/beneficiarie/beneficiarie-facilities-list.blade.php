@@ -103,6 +103,71 @@
             }
         }
     </style>
+    <style>
+        @keyframes spinIn {
+            from {
+                transform: rotate(-180deg) scale(.4);
+                opacity: 0
+            }
+
+            to {
+                transform: rotate(0) scale(1);
+                opacity: 1
+            }
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(.4);
+                opacity: 0
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-10px);
+                opacity: 0
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1
+            }
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0)
+            }
+
+            20% {
+                transform: translateX(-6px)
+            }
+
+            40% {
+                transform: translateX(6px)
+            }
+
+            60% {
+                transform: translateX(-4px)
+            }
+
+            80% {
+                transform: translateX(4px)
+            }
+        }
+
+        .shake {
+            animation: shake .4s ease;
+        }
+    </style>
     <div class="wrapper">
         <div class="container-fluid mt-4">
 
@@ -198,10 +263,13 @@
                 </div>
             </div>
             <button type="button" id="openDistributeModal" class="btn btn-success mb-2" disabled>
-                Distribute Selected
+                <i class="fa-solid fa-share-from-square me-1"></i> Distribute Selected
+                <span class="badge bg-dark ms-1" id="distributeCountBadge">0</span>
             </button>
-
-
+            <button type="button" id="openReturnModal" class="btn btn-warning mb-2 ms-2" disabled>
+                <i class="fa-solid fa-rotate-left me-1"></i> Return Selected
+                <span class="badge bg-dark ms-1" id="returnCountBadge">0</span>
+            </button>
             <div class="card shadow-sm printable">
                 <div class="card-body table-responsive">
                     <div class="text-center mb-4 border-bottom pb-2">
@@ -224,7 +292,8 @@
                                         {{-- <span data-lang="hi">ग्राम - कैंचू टांडा, पोस्ट - अमरिया, जिला - पीलीभीत, उत्तर
                                             प्रदेश -
                                             262121</span> --}}
-                                        <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit, UP
+                                        <span data-lang="en">Village - Kainchu Tanda, Post - Amaria, District - Pilibhit,
+                                            UP
                                             -
                                             262121</span>
                                     </b></h6>
@@ -348,57 +417,263 @@
                 </div>
             </div>
 
+            {{-- ===== BULK DISTRIBUTE MODAL — two-panel layout ===== --}}
             <div class="modal fade" id="bulkDistributeModal" tabindex="-1" aria-hidden="true"
                 data-bs-backdrop="static" data-bs-keyboard="false">
-
-                <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-                    <div class="modal-content">
+                <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content"
+                        style="border-radius:14px; overflow:hidden; border:none; box-shadow:0 20px 60px rgba(0,0,0,.18);">
 
                         <form action="{{ route('store-bulk-distribute') }}" method="POST">
                             @csrf
-
-                            <!-- IMPORTANT: single hidden input ONLY -->
                             <input type="hidden" name="distribute_items" id="distribute_items">
 
-                            <div class="modal-header bg-success text-white">
-                                <h5 class="modal-title">
-                                    Distribute Beneficiarie Facilities
-                                    (<span id="modalDistributeCount">0</span> Selected)
-                                </h5>
-                                <button type="button" class="btn-close btn-close-white"
+                            {{-- ── Header ── --}}
+                            <div class="modal-header text-white"
+                                style="background: linear-gradient(135deg,#16a34a,#15803d); border:none; padding:18px 24px;">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div id="distIconWrap"
+                                        style="
+                            width:42px; height:42px; border-radius:50%;
+                            background:rgba(255,255,255,.18);
+                            display:flex; align-items:center; justify-content:center;">
+                                        <i class="fa-solid fa-share-from-square" style="font-size:17px;"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="modal-title mb-0"
+                                            style="font-weight:700; font-size:1.1rem; letter-spacing:.2px;">
+                                            Distribute Beneficiarie Facilities
+                                        </h5>
+                                        <small style="opacity:.85;">
+                                            <span id="modalDistributeCount"
+                                                style="font-weight:800; font-size:1.05em;">0</span>
+                                            &nbsp;record(s) selected for distribution
+                                        </small>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-close btn-close-white ms-auto"
                                     data-bs-dismiss="modal"></button>
                             </div>
 
-                            <div class="modal-body">
+                            {{-- ── Two-panel body ── --}}
+                            <div class="modal-body p-0" style="min-height:420px;">
+                                <div class="row g-0" style="min-height:420px;">
 
-                                <div class="mb-3">
-                                    <label class="form-label">
-                                        Distribute Date <span class="text-danger">*</span>
-                                    </label>
-                                    <input type="date" name="distribute_date" class="form-control" required>
+                                    {{-- LEFT — Form ── --}}
+                                    <div class="col-md-6 p-4" style="border-right:1px solid #e5e7eb;">
+
+                                        <p class="fw-semibold mb-3"
+                                            style="color:#15803d; font-size:.95rem; letter-spacing:.3px;">
+                                            <i class="fa-solid fa-clipboard-list me-2"></i>Distribution Details
+                                        </p>
+
+                                        {{-- Distribute Date --}}
+                                        <div class="mb-4">
+                                            <label class="form-label fw-semibold"
+                                                style="font-size:.85rem; color:#374151;">
+                                                Distribute Date <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"
+                                                    style="background:#f0fdf4; border-color:#bbf7d0;">
+                                                    <i class="fa-regular fa-calendar" style="color:#16a34a;"></i>
+                                                </span>
+                                                <input type="date" name="distribute_date" class="form-control"
+                                                    style="border-color:#bbf7d0; border-left:none;" required>
+                                            </div>
+                                        </div>
+
+                                        {{-- Distribute Place --}}
+                                        <div class="mb-4">
+                                            <label class="form-label fw-semibold"
+                                                style="font-size:.85rem; color:#374151;">
+                                                Distribute Place
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"
+                                                    style="background:#f0fdf4; border-color:#bbf7d0;">
+                                                    <i class="fa-solid fa-location-dot" style="color:#16a34a;"></i>
+                                                </span>
+                                                <textarea name="distribute_place" class="form-control" rows="3"
+                                                    placeholder="Enter distribution location / camp name..."
+                                                    style="border-color:#bbf7d0; border-left:none; resize:none;"></textarea>
+                                            </div>
+                                        </div>
+
+                                        {{-- Note --}}
+                                        {{-- <div class="mb-2">
+                                            <label class="form-label fw-semibold"
+                                                style="font-size:.85rem; color:#374151;">
+                                                Note <span class="text-muted fw-normal">(optional)</span>
+                                            </label>
+                                            <textarea name="distribute_note" class="form-control" rows="2" placeholder="Any remarks or instructions..."
+                                                style="border-color:#d1d5db; resize:none; font-size:.88rem;"></textarea>
+                                        </div> --}}
+
+                                        {{-- Summary pill --}}
+                                        <div class="mt-4 p-3 rounded-3 d-flex align-items-center gap-3"
+                                            style="background:#f0fdf4; border:1px solid #bbf7d0;">
+                                            <div style="
+                                    width:48px; height:48px; border-radius:50%;
+                                    background:#16a34a; color:#fff;
+                                    display:flex; align-items:center; justify-content:center;
+                                    font-size:1.3rem; font-weight:700; flex-shrink:0;"
+                                                id="distSummaryCount">0</div>
+                                            <div>
+                                                <div class="fw-semibold" style="color:#14532d; font-size:.9rem;">
+                                                    Beneficiaries selected
+                                                </div>
+                                                <div style="color:#16a34a; font-size:.8rem;">
+                                                    Ready to distribute facilities
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    {{-- RIGHT — Selected persons list ── --}}
+                                    <div class="col-md-6 p-4" style="background:#fafafa;">
+
+                                        <div class="d-flex align-items-center justify-content-between mb-3">
+                                            <p class="fw-semibold mb-0"
+                                                style="color:#374151; font-size:.95rem; letter-spacing:.3px;">
+                                                <i class="fa-solid fa-users me-2" style="color:#16a34a;"></i>Selected
+                                                Persons
+                                            </p>
+                                            <span class="badge" id="distListBadge"
+                                                style="background:#dcfce7; color:#15803d; font-size:.78rem; border-radius:20px; padding:5px 12px; font-weight:600;">
+                                                0 selected
+                                            </span>
+                                        </div>
+
+                                        {{-- Scrollable person cards --}}
+                                        <div id="distributePersonList"
+                                            style="max-height:360px; overflow-y:auto; display:flex; flex-direction:column; gap:8px;
+                                       scrollbar-width:thin; scrollbar-color:#bbf7d0 transparent;">
+                                            {{-- Cards injected by JS --}}
+                                            <div id="distEmptyState" class="text-center py-5" style="color:#9ca3af;">
+                                                <i class="fa-solid fa-inbox"
+                                                    style="font-size:2rem; display:block; margin-bottom:8px;"></i>
+                                                <span style="font-size:.88rem;">No beneficiaries selected yet</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
                                 </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">Distribute Place</label>
-                                    <textarea name="distribute_place" class="form-control"></textarea>
-                                </div>
-
                             </div>
 
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-success">
-                                    Distribute Facilities
+                            {{-- ── Footer ── --}}
+                            <div class="modal-footer"
+                                style="border-top:1px solid #d1fae5; background:#f0fdf4; padding:14px 24px;">
+                                <button type="submit" class="btn btn-success fw-bold px-5"
+                                    style="
+                        border-radius:8px; letter-spacing:.3px;
+                        background: linear-gradient(135deg,#16a34a,#15803d); border:none;">
+                                    <i class="fa-solid fa-share-from-square me-2"></i>Confirm Distribution
                                 </button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                <button type="button" class="btn btn-light fw-semibold px-4" data-bs-dismiss="modal"
+                                    style="border-radius:8px;">
                                     Cancel
                                 </button>
                             </div>
 
                         </form>
-
                     </div>
                 </div>
             </div>
+            <div class="modal fade" id="bulkReturnModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static"
+                data-bs-keyboard="false">
+                <div class="modal-dialog modal-md modal-dialog-centered">
+                    <div class="modal-content" style="border-radius:12px; overflow:hidden; border:none;">
+
+                        <form action="{{ route('bulk-return-facilities') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="return_items" id="return_items">
+
+                            <div class="modal-header text-white"
+                                style="background: linear-gradient(135deg,#f59e0b,#d97706); border:none;">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="return-icon-wrap"
+                                        style="
+                            width:38px; height:38px; border-radius:50%;
+                            background:rgba(255,255,255,.2);
+                            display:flex; align-items:center; justify-content:center;
+                            animation: spinIn .5s cubic-bezier(.34,1.56,.64,1) both;">
+                                        <i class="fa-solid fa-rotate-left" style="font-size:16px;"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="modal-title mb-0" style="font-weight:700;">Return Facilities</h5>
+                                        <small style="opacity:.85;">
+                                            <span id="modalReturnCount"
+                                                style="
+                                    font-weight:800; font-size:1.1em;
+                                    animation: popIn .4s .15s cubic-bezier(.34,1.56,.64,1) both;
+                                    display:inline-block;">0</span>
+                                            record(s) selected
+                                        </small>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-close btn-close-white ms-auto"
+                                    data-bs-dismiss="modal"></button>
+                            </div>
+
+                            <div class="modal-body p-4">
+
+                                {{-- Animated warning card --}}
+                                <div class="alert mb-3 d-flex align-items-start gap-3"
+                                    style="
+                        background:#fff8ed; border:1.5px solid #f59e0b;
+                        border-radius:10px; padding:14px 16px;
+                        animation: slideDown .4s .1s ease both;">
+                                    <i class="fa-solid fa-triangle-exclamation text-warning mt-1"
+                                        style="font-size:20px; flex-shrink:0;"></i>
+                                    <div>
+                                        <strong style="color:#92400e;">Are you sure?</strong>
+                                        <p class="mb-0 mt-1" style="color:#78350f; font-size:.88rem; line-height:1.5;">
+                                            This will <strong>clear</strong> the facilities category, facilities, session,
+                                            and status for all selected records. This action cannot be undone automatically.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {{-- Optional reason --}}
+                                {{-- <div
+                                    style="animation: slideDown .4s .2s ease both; opacity:0; animation-fill-mode:forwards;">
+                                    <label class="form-label fw-semibold" style="font-size:.9rem; color:#374151;">
+                                        Return Reason <span class="text-muted fw-normal">(optional)</span>
+                                    </label>
+                                    <textarea name="return_reason" class="form-control" rows="2"
+                                        placeholder="e.g. Duplicate entry, Incorrect facility assigned..."
+                                        style="border-radius:8px; font-size:.9rem; resize:none;"></textarea>
+                                </div> --}}
+
+                                {{-- Selected count chips preview --}}
+                                <div class="mt-3"
+                                    style="animation: slideDown .4s .3s ease both; opacity:0; animation-fill-mode:forwards;">
+                                    <span class="text-muted" style="font-size:.8rem;">Selected IDs:</span>
+                                    <div id="returnChipsWrap" class="d-flex flex-wrap gap-1 mt-1"
+                                        style="max-height:72px; overflow:auto;"></div>
+                                </div>
+
+                            </div>
+
+                            <div class="modal-footer" style="border-top:1px solid #fde68a; background:#fffbeb;">
+                                <button type="submit" class="btn btn-warning text-white fw-bold px-4"
+                                    style="
+                        border-radius:8px;
+                        background: linear-gradient(135deg,#f59e0b,#d97706);
+                        border:none; letter-spacing:.3px;">
+                                    <i class="fa-solid fa-rotate-left me-2"></i>Confirm Return
+                                </button>
+                                <button type="button" class="btn btn-light fw-semibold" data-bs-dismiss="modal"
+                                    style="border-radius:8px;">Cancel</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
 
 
         </div>
@@ -413,33 +688,143 @@
 
             const selectAll = document.getElementById('select_all_distribute');
             const items = document.querySelectorAll('.select_distribute_item');
-            const openBtn = document.getElementById('openDistributeModal');
-            const modalCount = document.getElementById('modalDistributeCount');
-            const hiddenInput = document.getElementById('distribute_items');
-            const modalEl = document.getElementById('bulkDistributeModal');
 
-            let modalInstance = null;
+            /* Distribute */
+            const openDistBtn = document.getElementById('openDistributeModal');
+            const distributeBadge = document.getElementById('distributeCountBadge');
+            const modalDistCount = document.getElementById('modalDistributeCount');
+            const distSummaryCount = document.getElementById('distSummaryCount');
+            const distListBadge = document.getElementById('distListBadge');
+            const distributeInput = document.getElementById('distribute_items');
+            const personList = document.getElementById('distributePersonList');
+            const distEmptyState = document.getElementById('distEmptyState');
+            const distributeModalEl = document.getElementById('bulkDistributeModal');
 
+            /* Return */
+            const openReturnBtn = document.getElementById('openReturnModal');
+            const returnBadge = document.getElementById('returnCountBadge');
+            const modalReturnCount = document.getElementById('modalReturnCount');
+            const returnInput = document.getElementById('return_items');
+            const returnChips = document.getElementById('returnChipsWrap');
+            const returnModalEl = document.getElementById('bulkReturnModal');
+
+            let distributeModalInstance = null;
+            let returnModalInstance = null;
+
+            /* ── Badge bounce ── */
+            function bounceBadge(badge, count) {
+                badge.textContent = count;
+                badge.style.transform = 'scale(1.5)';
+                badge.style.transition = 'transform .2s cubic-bezier(.34,1.56,.64,1)';
+                setTimeout(() => badge.style.transform = 'scale(1)', 220);
+            }
+
+            /* ── Build distribute person cards ── */
+            function renderPersonCards(selected) {
+                personList.innerHTML = '';
+
+                if (selected.length === 0) {
+                    personList.appendChild(distEmptyState);
+                    return;
+                }
+
+                selected.forEach((item, idx) => {
+                    const row = item.closest('tr');
+                    const cells = row.querySelectorAll('td');
+                    const regNo = cells[2] ? cells[2].textContent.trim() : '—';
+                    const name = cells[3] ? cells[3].textContent.trim() : '—';
+                    const father = cells[4] ? cells[4].textContent.trim() : '—';
+                    const mobile = cells[8] ? cells[8].textContent.trim() : '—';
+                    const facilities = cells[15] ? cells[15].textContent.trim() : '—';
+
+                    const initials = name.split(' ').slice(0, 2).map(w => w[0] || '').join('')
+                .toUpperCase();
+                    const colors = ['#16a34a', '#0891b2', '#7c3aed', '#db2777', '#d97706', '#dc2626'];
+                    const bg = colors[idx % colors.length];
+
+                    const card = document.createElement('div');
+                    card.style.cssText = `
+                background:#fff; border:1px solid #e5e7eb; border-radius:10px;
+                padding:10px 14px; display:flex; align-items:center; gap:12px;
+                animation: cardIn .3s ${idx * 0.06}s ease both;
+            `;
+                    card.innerHTML = `
+                <div style="
+                    width:40px; height:40px; border-radius:50%;
+                    background:${bg}; color:#fff; flex-shrink:0;
+                    display:flex; align-items:center; justify-content:center;
+                    font-weight:700; font-size:.85rem; letter-spacing:.5px;">
+                    ${initials}
+                </div>
+                <div style="flex:1; min-width:0;">
+                    <div style="font-weight:600; font-size:.88rem; color:#111827; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                        ${name}
+                    </div>
+                    <div style="font-size:.75rem; color:#6b7280; margin-top:1px;">
+                        Reg: <strong style="color:#374151;">${regNo}</strong>
+                        &nbsp;·&nbsp; <i class="fa-solid fa-phone" style="font-size:.65rem;"></i> ${mobile}
+                    </div>
+                    <div style="font-size:.72rem; color:#9ca3af; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                        F/H: ${father} &nbsp;·&nbsp; ${facilities}
+                    </div>
+                </div>
+                <span style="
+                    background:#dcfce7; color:#15803d;
+                    font-size:.7rem; font-weight:600;
+                    padding:3px 8px; border-radius:20px; flex-shrink:0;">
+                    #${idx+1}
+                </span>
+            `;
+                    personList.appendChild(card);
+                });
+            }
+
+            /* ── Return chips ── */
+            function renderReturnChips(selected) {
+                returnChips.innerHTML = '';
+                selected.forEach(i => {
+                    const row = i.closest('tr');
+                    const cells = row.querySelectorAll('td');
+                    const regNo = cells[2] ? cells[2].textContent.trim() : '—';
+                    const name = cells[3] ? cells[3].textContent.trim() : '—';
+                    const chip = document.createElement('span');
+                    chip.className = 'badge bg-warning text-dark';
+                    chip.style.cssText =
+                        'font-size:.75rem; border-radius:6px; padding:4px 10px; display:inline-flex; align-items:center; gap:5px;';
+                    chip.innerHTML =
+                        `<i class="fa-solid fa-user" style="font-size:.65rem;opacity:.7;"></i><strong>${regNo}</strong> — ${name}`;
+                    returnChips.appendChild(chip);
+                });
+            }
+
+            /* ── Master update ── */
             function updateSelection() {
                 const selected = Array.from(items).filter(i => i.checked);
                 const count = selected.length;
+                const value = selected.map(i => i.value).join(',');
 
-                openBtn.disabled = count === 0;
-                modalCount.textContent = count;
-                hiddenInput.value = selected.map(i => i.value).join(',');
+                /* Distribute */
+                openDistBtn.disabled = count === 0;
+                distributeInput.value = value;
+                modalDistCount.textContent = count;
+                distSummaryCount.textContent = count;
+                distListBadge.textContent = count + ' selected';
+                bounceBadge(distributeBadge, count);
 
+                /* Return */
+                openReturnBtn.disabled = count === 0;
+                returnInput.value = value;
+                modalReturnCount.textContent = count;
+                bounceBadge(returnBadge, count);
+
+                /* Select-all */
                 if (selectAll) {
                     selectAll.checked = count === items.length && items.length > 0;
                     selectAll.indeterminate = count > 0 && count < items.length;
                 }
             }
 
-            /* Individual checkbox */
-            items.forEach(item => {
-                item.addEventListener('change', updateSelection);
-            });
-
-            /* Select all checkbox */
+            items.forEach(item => item.addEventListener('change', updateSelection));
             if (selectAll) {
                 selectAll.addEventListener('change', function() {
                     items.forEach(i => i.checked = this.checked);
@@ -447,19 +832,116 @@
                 });
             }
 
-            /* Open modal ONLY on button click */
-            openBtn.addEventListener('click', function() {
-
-                if (!hiddenInput.value) return;
-
-                if (!modalInstance) {
-                    modalInstance = new bootstrap.Modal(modalEl, {
+            /* ── Open Distribute ── */
+            openDistBtn.addEventListener('click', function() {
+                const selected = Array.from(items).filter(i => i.checked);
+                if (selected.length === 0) {
+                    openDistBtn.classList.add('shake');
+                    setTimeout(() => openDistBtn.classList.remove('shake'), 450);
+                    return;
+                }
+                renderPersonCards(selected);
+                if (!distributeModalInstance) {
+                    distributeModalInstance = new bootstrap.Modal(distributeModalEl, {
                         backdrop: 'static',
                         keyboard: false
                     });
                 }
+                distributeModalInstance.show();
+            });
 
-                modalInstance.show();
+            /* ── Open Return ── */
+            openReturnBtn.addEventListener('click', function() {
+                const selected = Array.from(items).filter(i => i.checked);
+                if (selected.length === 0) {
+                    openReturnBtn.classList.add('shake');
+                    setTimeout(() => openReturnBtn.classList.remove('shake'), 450);
+                    return;
+                }
+                renderReturnChips(selected);
+                if (!returnModalInstance) {
+                    returnModalInstance = new bootstrap.Modal(returnModalEl, {
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                }
+                returnModalInstance.show();
+            });
+
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const openReturnBtn = document.getElementById('openReturnModal');
+            const returnBadge = document.getElementById('returnCountBadge');
+            const modalReturnCount = document.getElementById('modalReturnCount');
+            const returnInput = document.getElementById('return_items');
+            const chipsWrap = document.getElementById('returnChipsWrap');
+            const modalEl = document.getElementById('bulkReturnModal');
+            const items = document.querySelectorAll('.select_distribute_item');
+
+            let returnModalInstance = null;
+
+            // Extend the existing updateSelection to also update Return button
+            function syncReturnButton() {
+                const selected = Array.from(items).filter(i => i.checked);
+                const count = selected.length;
+
+                openReturnBtn.disabled = count === 0;
+                returnBadge.textContent = count;
+                returnBadge.style.transform = 'scale(1.4)';
+                setTimeout(() => returnBadge.style.transform = 'scale(1)', 200);
+
+                returnInput.value = selected.map(i => i.value).join(',');
+                modalReturnCount.textContent = count;
+
+                // Render chips
+                // Render chips with Registration No. + Name from table row
+                chipsWrap.innerHTML = '';
+                selected.forEach(i => {
+                    const row = i.closest('tr');
+                    const cells = row.querySelectorAll('td');
+                    // td index: 0=checkbox, 1=Sr, 2=Reg No, 3=Name
+                    const regNo = cells[2] ? cells[2].textContent.trim() : '—';
+                    const name = cells[3] ? cells[3].textContent.trim() : '—';
+
+                    const chip = document.createElement('span');
+                    chip.className = 'badge bg-warning text-dark';
+                    chip.style.cssText =
+                        'font-size:.75rem; border-radius:6px; padding:4px 10px; display:inline-flex; align-items:center; gap:5px;';
+                    chip.innerHTML =
+                        `<i class="fa-solid fa-user" style="font-size:.65rem;opacity:.7;"></i><strong>${regNo}</strong> &mdash; ${name}`;
+                    chipsWrap.appendChild(chip);
+                });
+            }
+
+            // Attach extra listener to existing checkboxes
+            items.forEach(item => item.addEventListener('change', syncReturnButton));
+
+            const existingSelectAll = document.getElementById('select_all_distribute');
+            if (existingSelectAll) {
+                existingSelectAll.addEventListener('change', syncReturnButton);
+            }
+
+            // Open modal
+            openReturnBtn.addEventListener('click', function() {
+                const selected = Array.from(items).filter(i => i.checked);
+                if (selected.length === 0) {
+                    openReturnBtn.classList.add('shake');
+                    setTimeout(() => openReturnBtn.classList.remove('shake'), 450);
+                    return;
+                }
+
+                syncReturnButton(); // refresh count + chips
+
+                if (!returnModalInstance) {
+                    returnModalInstance = new bootstrap.Modal(modalEl, {
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                }
+                returnModalInstance.show();
             });
 
         });
