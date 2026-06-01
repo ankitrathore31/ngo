@@ -286,7 +286,6 @@ class BeneficiarieController extends Controller
             ->where('id', $survey_id)
             ->firstOrFail();
 
-
         $survey->delete();
 
 
@@ -371,6 +370,33 @@ class BeneficiarieController extends Controller
         } catch (\Throwable $th) {
             return back()->withErrors(['error' => 'Failed to remove facility.']);
         }
+    }
+    public function bulkReturnFacilities(Request $request)
+    {
+        $items = array_filter(explode(',', $request->input('return_items', '')));
+        $count = 0;
+
+        foreach ($items as $pair) {
+            [$beneficiaryId, $surveyId] = explode('|', $pair);
+            $survey = Beneficiarie_Survey::where('id', $surveyId)
+                ->where('beneficiarie_id', $beneficiaryId)
+                ->first();
+
+            if ($survey) {
+                $survey->facilities_category = null;
+                $survey->facilities         = null;
+                $survey->academic_session   = null;
+                $survey->facilities_status  = null;
+                $survey->save();
+
+                logWork('Facilities', $survey->id, 'Bulk Facilities Return', 'Reset via bulk return');
+                $count++;
+            }
+        }
+
+        return redirect()
+            ->route('beneficiarie-facilities-list')
+            ->with('success', "$count facility record(s) returned successfully.");
     }
 
     public function storeBulkBeneficiarieFacilities(Request $request)
@@ -668,6 +694,34 @@ class BeneficiarieController extends Controller
         }
     }
 
+    // Bulk Return Distribute
+    public function bulkReturnDistribute(Request $request)
+    {
+        $items = array_filter(explode(',', $request->input('return_items', '')));
+        $count = 0;
+
+        foreach ($items as $pair) {
+            [$beneficiaryId, $surveyId] = explode('|', $pair);
+            $survey = Beneficiarie_Survey::where('id', $surveyId)
+                ->where('beneficiarie_id', $beneficiaryId)
+                ->first();
+
+            if ($survey) {
+                $survey->distribute_date  = null;
+                $survey->distribute_place = null;
+                $survey->status           = null;
+                $survey->save();
+
+                logWork('Distribute', $survey->id, 'Bulk Distribute Return', 'Reset via bulk return');
+                $count++;
+            }
+        }
+
+        return redirect()
+            ->route('distributed-list-for-approve')
+            ->with('success', "$count distribution record(s) returned successfully.");
+    }
+
     public function storeBulkDistribute(Request $request)
     {
         $request->validate([
@@ -799,7 +853,7 @@ class BeneficiarieController extends Controller
         }
     }
 
-    
+
     public function storeBulkDistributeStatus(Request $request)
     {
         $request->validate([
