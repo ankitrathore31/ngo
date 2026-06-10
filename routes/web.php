@@ -23,6 +23,7 @@ use App\Http\Controllers\IdcardController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\KycController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\NOCController;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\ProblemController;
@@ -698,11 +699,22 @@ Route::controller(UnionController::class)->middleware('auth')->group(function ()
     Route::get('ngo/union-member-certificate/{id}', 'UnionMemberCertificate')->name('union.member.certificate');
     Route::post('ngo/store-new-union-member', 'StoreNewUnionMember')->name('store.new.union.member');
 });
+
 Route::controller(SubMemberController::class)->middleware('auth')->group(function () {
     Route::get('ngo/add-submember', 'AddSubMember')->name('add.submember');
     Route::post('ngo/store-submember', 'StoreSubMember')->name('member.sub-member.store');
     Route::get('ngo/list-submember', 'SubmemberList')->name('member.sub-member.list');
     Route::get('ngo/show-submember/{id}', 'SubmemberShow')->name('member.sub-member.show');
+});
+
+Route::middleware('auth')->prefix('ngo')->name('noc.')->group(function () {
+    Route::get   ('noc',             [NocController::class, 'index'])   ->name('index');
+    Route::get   ('noc/create',      [NocController::class, 'create'])  ->name('create');
+    Route::post  ('noc',             [NOCController::class, 'store'])   ->name('store');
+    Route::get   ('noc/{id}',        [NocController::class, 'show'])    ->name('show');
+    Route::get   ('noc/{id}/edit',   [NocController::class, 'edit'])    ->name('edit');
+    Route::put   ('noc/{id}',        [NocController::class, 'update'])  ->name('update');
+    Route::delete('noc/{id}',        [NocController::class, 'destroy']) ->name('destroy');
 });
 
 
