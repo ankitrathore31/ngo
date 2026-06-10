@@ -952,6 +952,40 @@
                     </li>
                 @endif
 
+                @if (
+                    !$isStaff ||
+                        $user->hasPermission('noc-list') ||
+                        $user->hasPermission('noc-add') ||
+                        $user->hasPermission('noc-edit'))
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-sitemap"></i> NOC
+                        </a>
+
+                        <ul class="dropdown-menu bg-primary">
+
+                            {{-- Add Union --}}
+                            @if (!$isStaff || $user->hasPermission('noc-add'))
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('noc.create') }}">
+                                        Add Noc
+                                    </a>
+                                </li>
+                            @endif
+
+                            {{-- Union List --}}
+                            @if (!$isStaff || $user->hasPermission('noc-list'))
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('noc.index') }}">
+                                        Noc List
+                                    </a>
+                                </li>
+                            @endif
+
+                        </ul>
+                    </li>
+                @endif
+
             </ul>
         </div>
     </div>
