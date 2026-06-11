@@ -11,7 +11,7 @@ class NOCController extends Controller
     // ─── List ────────────────────────────────────────────────────────────────
     public function index()
     {
-        $nocs = NOC::latest()->paginate(10);
+        $nocs = NOC::get();
         return view('ngo.noc.index', compact('nocs'));
     }
 

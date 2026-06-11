@@ -100,6 +100,8 @@ Route::controller(HomeControlller::class)->group(function () {
     Route::get('/vacancies', 'HomeJobList')->name('vacancies');
     Route::get('/download-document', 'document')->name('document');
     Route::get('/true-story', 'TrueStory')->name('true.story.list');
+    Route::get('/noc','NocIndex')->name('home.noc.index');
+    Route::get('/noc-show/{id}','NocShow')->name('home.noc.show');
 });
 
 Route::controller(CertificateController::class)->group(function () {

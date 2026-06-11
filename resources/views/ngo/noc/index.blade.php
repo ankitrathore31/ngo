@@ -95,7 +95,6 @@
                 <span class="fw-semibold text-dark">
                     <i class="fas fa-list me-2 text-muted"></i>NOC Records
                 </span>
-                <small class="text-muted">Showing {{ $nocs->firstItem() }}–{{ $nocs->lastItem() }} of {{ $nocs->total() }}</small>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -114,7 +113,7 @@
                         <tbody>
                             @forelse($nocs as $index => $noc)
                             <tr>
-                                <td class="ps-4 text-muted">{{ $nocs->firstItem() + $index }}</td>
+                                <td class="ps-4 text-muted">{{ $loop->iteration }}</td>
                                 <td>
                                     <span class="badge bg-primary bg-opacity-10 text-primary fw-normal px-2 py-1">
                                         <i class="fas fa-calendar-days me-1"></i>

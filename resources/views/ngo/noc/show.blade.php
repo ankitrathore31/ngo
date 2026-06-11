@@ -77,7 +77,7 @@
                             <div class="col-md-6">
                                 <div class="detail-block">
                                     <label class="detail-label">
-                                        <i class="fas fa-user me-2 text-primary"></i>Name Of The Person Issuing NO
+                                        <i class="fas fa-user me-2 text-primary"></i>Name Of The Person Issuing NOC
                                     </label>
                                     <p class="detail-value">{{ $noc->issuer_name }}</p>
                                 </div>
@@ -85,7 +85,7 @@
                             <div class="col-md-6">
                                 <div class="detail-block">
                                     <label class="detail-label">
-                                        <i class="fas fa-id-badge me-2 text-primary"></i>Designation Of The Person Issuing
+                                        <i class="fas fa-id-badge me-2 text-primary"></i>Designation Of The Person Issuing NOC
                                     </label>
                                     <p class="detail-value">{{ $noc->issuer_designation }}</p>
                                 </div>

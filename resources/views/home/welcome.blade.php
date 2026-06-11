@@ -316,6 +316,12 @@
             </a>
         </div>
 
+        <div class="col-md-2 mb-3">
+            <a href="{{route('home.noc.index')}}" class="btn btn-primary w-100">
+                NOC
+            </a>
+        </div>
+
     </div>
 
     <div class="owl-carousel owl-theme slider">
