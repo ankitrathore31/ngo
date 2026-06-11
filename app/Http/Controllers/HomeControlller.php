@@ -17,6 +17,7 @@ use App\Models\Working_Area;
 use App\Models\Event;
 use App\Models\HeadOrganization;
 use App\Models\Job;
+use App\Models\NOC;
 use App\Models\Organization;
 use App\Models\OrganizationMember;
 use App\Models\Project;
@@ -484,4 +485,17 @@ class HomeControlller extends Controller
         $stories = Story::latest()->get();
         return view('home.gallery.story',compact('stories'));
     }
+
+    public function NocIndex()
+    {
+        $nocs = NOC::all();
+        return view('home.noc.index', compact('nocs'));
+    }
+
+    public function NocShow($id)
+    {
+        $noc = NOC::findOrFail($id);
+        return view('home.noc.show', compact('noc'));
+    }
+
 }

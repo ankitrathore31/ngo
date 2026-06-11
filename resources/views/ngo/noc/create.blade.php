@@ -155,7 +155,7 @@
                             {{-- Actions --}}
                             <div class="d-flex gap-2">
                                 <button type="submit" class="btn btn-primary px-4">
-                                    <i class="fas fa-upload me-2"></i>Upload NOC
+                                    <i class="fas fa-upload me-2"></i>Save NOC
                                 </button>
                                 <a href="{{ route('noc.index') }}" class="btn btn-outline-secondary px-4">
                                     <i class="fas fa-arrow-left me-2"></i>Cancel
