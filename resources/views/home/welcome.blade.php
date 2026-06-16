@@ -322,6 +322,12 @@
             </a>
         </div>
 
+        <div class="col-md-2 mb-3">
+            <a href="{{route('auction.index')}}" class="btn btn-success w-100">
+                Rare Material Auction
+            </a>
+        </div>
+
     </div>
 
     <div class="owl-carousel owl-theme slider">
