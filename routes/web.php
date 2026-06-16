@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialActivityController;
 use App\Http\Controllers\HomeControlller;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AuctionBidController;
+use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\BeneficiarieController;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\CashBookController;
@@ -719,5 +721,29 @@ Route::middleware('auth')->prefix('ngo')->name('noc.')->group(function () {
     Route::delete('noc/{id}',        [NocController::class, 'destroy']) ->name('destroy');
 });
 
+Route::prefix('auctions')->name('auction.')->group(function () {
+    Route::get('/',               [AuctionBidController::class, 'index'])->name('index');
+    Route::get('/{id}',           [AuctionBidController::class, 'show'])->name('show');
+    Route::post('/{id}/bid',      [AuctionBidController::class, 'placeBid'])->name('bid');
+    Route::get('/confirmation/{bidId}', [AuctionBidController::class, 'confirmation'])->name('bid.confirmation');
+    Route::get('/api/live/{id}',  [AuctionBidController::class, 'liveStatus'])->name('live.status');
+});
+ 
+
+Route::prefix('ngo/auctions')->name('ngo.auction.')->middleware('auth')->group(function () {
+    Route::get('/dashboard',         [AuctionController::class, 'dashboard'])->name('dashboard');
+    Route::get('/index',                  [AuctionController::class, 'index'])->name('index');
+    Route::get('/create',            [AuctionController::class, 'create'])->name('create');
+    Route::post('/store',            [AuctionController::class, 'store'])->name('store');
+    Route::get('/{id}/edit',         [AuctionController::class, 'edit'])->name('edit');
+    Route::put('/{id}',              [AuctionController::class, 'update'])->name('update');
+    Route::delete('/{id}',           [AuctionController::class, 'destroy'])->name('destroy');
+    Route::delete('/image/{id}',     [AuctionController::class, 'deleteImage'])->name('image.delete');
+    Route::get('/{id}/bids',         [AuctionController::class, 'bids'])->name('bids');
+    Route::post('/{id}/close',       [AuctionController::class, 'closeAuction'])->name('close');
+    Route::post('/bid/{bidId}/approve-winner', [AuctionController::class, 'approveWinner'])->name('approve.winner');
+    Route::post('/bid/{bidId}/approve',        [AuctionController::class, 'approveBid'])->name('approve.bid');
+    Route::post('/bid/{bidId}/reject',         [AuctionController::class, 'rejectBid'])->name('reject.bid');
+});
 
 require __DIR__ . '/auth.php';

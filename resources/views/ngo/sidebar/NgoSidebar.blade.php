@@ -932,7 +932,7 @@
                                 </li>
                             @endif
 
-                             {{-- Union List --}}
+                            {{-- Union List --}}
                             @if (!$isStaff || $user->hasPermission('union-list'))
                                 <li>
                                     <a class="dropdown-item" href="{{ route('union.reg.list') }}">
@@ -981,6 +981,49 @@
                                     </a>
                                 </li>
                             @endif
+
+                        </ul>
+                    </li>
+                @endif
+
+                @if (
+                    !$isStaff ||
+                        $user->hasPermission('noc-list') ||
+                        $user->hasPermission('noc-add') ||
+                        $user->hasPermission('noc-edit'))
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-sitemap"></i> RARE MATERIAL AUCTION
+                        </a>
+
+                        <ul class="dropdown-menu bg-primary">
+
+                            {{-- Add Union --}}
+                            @if (!$isStaff || $user->hasPermission('noc-add'))
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('ngo.auction.dashboard') }}">
+                                        Auction Overview
+                                    </a>
+                                </li>
+                            @endif
+
+                            @if (!$isStaff || $user->hasPermission('noc-list'))
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('ngo.auction.create') }}">
+                                        Add Auction
+                                    </a>
+                                </li>
+                            @endif
+
+                            {{-- Union List --}}
+                            @if (!$isStaff || $user->hasPermission('noc-list'))
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('ngo.auction.index') }}">
+                                        Auction List
+                                    </a>
+                                </li>
+                            @endif
+
 
                         </ul>
                     </li>
