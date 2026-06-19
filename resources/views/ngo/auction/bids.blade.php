@@ -12,7 +12,7 @@
     }
 
     .bids-hero {
-        background: linear-gradient(135deg, var(--deep), #2D1F0A);
+        background: linear-gradient(135deg, var(--deep), #4f52e7);
         border-radius: 14px;
         padding: 24px 28px;
         color: #fff;
@@ -387,6 +387,124 @@
         padding: 60px 20px;
         color: #aaa;
     }
+
+    /* View full details trigger */
+    .btn-view-full-details {
+        margin-top: 10px;
+        background: rgba(201, 168, 76, .15);
+        border: 1px solid rgba(201, 168, 76, .45);
+        color: var(--gold);
+        font-size: .72rem;
+        font-weight: 700;
+        letter-spacing: .3px;
+        padding: 6px 16px;
+        border-radius: 50px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all .2s;
+    }
+
+    .btn-view-full-details:hover {
+        background: var(--gold);
+        color: #fff;
+    }
+
+    /* Item details modal — light theme, no dark surfaces */
+    #itemDetailsModal .modal-content {
+        border: none;
+        border-radius: 16px;
+        overflow: hidden;
+    }
+
+    #itemDetailsModal .modal-header {
+        background: var(--cream);
+        border-bottom: 1px solid rgba(0, 0, 0, .06);
+        padding: 18px 24px;
+    }
+
+    #itemDetailsModal .modal-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: var(--deep);
+    }
+
+    #itemDetailsModal .modal-body {
+        background: #fff;
+        padding: 24px;
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+
+    .detail-section {
+        margin-bottom: 22px;
+    }
+
+    .detail-section:last-child {
+        margin-bottom: 0;
+    }
+
+    .detail-section-title {
+        font-size: .66rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        font-weight: 700;
+        color: var(--gold);
+        margin-bottom: 10px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid rgba(201, 168, 76, .2);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+        gap: 14px;
+    }
+
+    .detail-item .detail-lbl {
+        font-size: .62rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #aaa;
+        font-weight: 700;
+        margin-bottom: 3px;
+    }
+
+    .detail-item .detail-val {
+        font-size: .85rem;
+        font-weight: 600;
+        color: var(--deep);
+        line-height: 1.4;
+    }
+
+    .detail-text-block {
+        font-size: .85rem;
+        color: #444;
+        line-height: 1.7;
+        background: var(--cream);
+        border-radius: 10px;
+        padding: 14px 16px;
+        border: 1px solid rgba(0, 0, 0, .05);
+    }
+
+    .detail-img-grid {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .detail-img-grid img {
+        width: 88px;
+        height: 88px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid rgba(0, 0, 0, .08);
+    }
 </style>
 
 @section('content')
@@ -411,7 +529,13 @@
 
             {{-- Item hero --}}
             <div class="bids-hero">
-                <img src="{{ $item->thumbnail }}" alt="{{ $item->title }}" class="bids-hero-img">
+                {{-- <img src="{{ $item->thumbnail }}" alt="{{ $item->title }}" > --}}
+                @php
+                    $thumbnail = $item->images->where('image_type', 'thumbnail')->first();
+                @endphp
+
+                <img src="{{ $thumbnail ? asset($thumbnail->image_path) : asset('images/no-image.png') }}"
+                    alt="{{ $item->title }}" class="bids-hero-img">
                 <div>
                     <div class="bids-hero-title">{{ $item->title }}</div>
                     <div class="bids-hero-meta">
@@ -422,6 +546,10 @@
                         <span class="badge"
                             style="background:rgba(201,168,76,.2);color:var(--gold);font-size:.68rem;">{{ ucfirst(str_replace('_', ' ', $item->rarity_level)) }}</span>
                     </div>
+                    <button type="button" class="btn-view-full-details" data-bs-toggle="modal"
+                        data-bs-target="#itemDetailsModal">
+                        <i class="fas fa-circle-info"></i> View Full Item Details
+                    </button>
                 </div>
                 <div class="bids-hero-stats">
                     <div class="bid-stat-mini">
@@ -436,6 +564,146 @@
                     <div class="bid-stat-mini">
                         <div class="bid-stat-val">{{ $bids->where('ngo_approved', false)->count() }}</div>
                         <div class="bid-stat-lbl">Pending</div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Full Item Details Modal --}}
+            <div class="modal fade" id="itemDetailsModal" tabindex="-1" aria-labelledby="itemDetailsModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="itemDetailsModalLabel">
+                                <i class="fas fa-scroll me-2" style="color:var(--gold);"></i>{{ $item->title }}
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
+                            {{-- Description --}}
+                            <div class="detail-section">
+                                <div class="detail-section-title"><i class="fas fa-align-left"></i> Short Description
+                                </div>
+                                <div class="detail-text-block">{{ $item->description ?? '—' }}</div>
+                            </div>
+
+                            {{-- About material --}}
+                            @if ($item->about_material)
+                                <div class="detail-section">
+                                    <div class="detail-section-title"><i class="fas fa-book-open"></i> About This
+                                        Material</div>
+                                    <div class="detail-text-block">{{ $item->about_material }}</div>
+                                </div>
+                            @endif
+
+                            {{-- Material specs --}}
+                            <div class="detail-section">
+                                <div class="detail-section-title"><i class="fas fa-microscope"></i> Material
+                                    Specifications</div>
+                                <div class="detail-grid">
+                                    <div class="detail-item">
+                                        <div class="detail-lbl">Material Type</div>
+                                        <div class="detail-val">{{ $item->material_type ?? '—' }}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-lbl">Origin / Region</div>
+                                        <div class="detail-val">{{ $item->origin ?? '—' }}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-lbl">Age / Period</div>
+                                        <div class="detail-val">{{ $item->age_period ?? '—' }}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-lbl">Condition</div>
+                                        <div class="detail-val">{{ $item->condition ?? '—' }}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-lbl">Dimensions</div>
+                                        <div class="detail-val">{{ $item->dimensions ?? '—' }}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-lbl">Weight</div>
+                                        <div class="detail-val">{{ $item->weight ?? '—' }}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-lbl">Certificate No.</div>
+                                        <div class="detail-val">{{ $item->certificate_number ?? '—' }}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-lbl">Rarity</div>
+                                        <div class="detail-val">
+                                            {{ ucfirst(str_replace('_', ' ', $item->rarity_level)) }}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Provenance --}}
+                            @if ($item->provenance)
+                                <div class="detail-section">
+                                    <div class="detail-section-title"><i class="fas fa-signature"></i> Provenance
+                                        (Ownership History)</div>
+                                    <div class="detail-text-block">{{ $item->provenance }}</div>
+                                </div>
+                            @endif
+
+                            {{-- Auction & pricing --}}
+                            <div class="detail-section">
+                                <div class="detail-section-title"><i class="fas fa-indian-rupee-sign"></i> Auction &
+                                    Pricing</div>
+                                <div class="detail-grid">
+                                    <div class="detail-item">
+                                        <div class="detail-lbl">Starting Bid</div>
+                                        <div class="detail-val">₹{{ number_format($item->starting_bid, 0) }}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-lbl">Reserve Price</div>
+                                        <div class="detail-val">
+                                            {{ $item->reserve_price ? '₹' . number_format($item->reserve_price, 0) : 'Not set' }}
+                                        </div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-lbl">Auction Start</div>
+                                        <div class="detail-val">{{ $item->auction_start->format('d M Y, h:i A') }}
+                                        </div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-lbl">Auction End</div>
+                                        <div class="detail-val">{{ $item->auction_end->format('d M Y, h:i A') }}
+                                        </div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-lbl">Status</div>
+                                        <div class="detail-val">
+                                            {{ ucfirst(str_replace('_', ' ', $item->status)) }}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- 3D model --}}
+                            @if ($item->model_3d_url)
+                                <div class="detail-section">
+                                    <div class="detail-section-title"><i class="fas fa-cube"></i> 3D Model</div>
+                                    <a href="{{ $item->model_3d_url }}" target="_blank" rel="noopener"
+                                        style="font-size:.85rem;color:var(--jade);text-decoration:underline;word-break:break-all;">
+                                        {{ $item->model_3d_url }}
+                                    </a>
+                                </div>
+                            @endif
+
+                            {{-- Images --}}
+                            @if ($item->images->isNotEmpty())
+                                <div class="detail-section">
+                                    <div class="detail-section-title"><i class="fas fa-images"></i> Item Images</div>
+                                    <div class="detail-img-grid">
+                                        @foreach ($item->images as $img)
+                                            <img src="{{ asset($img->image_path) }}" alt="">
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+
+                        </div>
                     </div>
                 </div>
             </div>

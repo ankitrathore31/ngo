@@ -43,8 +43,9 @@
     .main-image-wrap img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
-        transition: transform .4s ease;
+        object-fit: contain;
+        background: #F0EBE1;
+        transition: transform .4s ease, opacity .25s ease;
     }
 
     .main-image-wrap:hover img {
@@ -107,6 +108,39 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+    }
+
+    /* Gallery slider nav arrows */
+    .gallery-nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, .85);
+        border: 1px solid rgba(0, 0, 0, .08);
+        color: var(--deep);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background .2s, color .2s;
+        z-index: 3;
+        font-size: .85rem;
+    }
+
+    .gallery-nav-btn:hover {
+        background: var(--gold);
+        color: #fff;
+    }
+
+    .gallery-nav-prev {
+        left: 12px;
+    }
+
+    .gallery-nav-next {
+        right: 12px;
     }
 
     /* 3D modal */
@@ -420,20 +454,59 @@
     }
 
     /* ── Bid form ───────────────────────── */
-    #bid-form {
+    .place-bid-cta {
+        margin-top: 28px;
+        text-align: center;
         background: #fff;
         border: 2px solid rgba(201, 168, 76, .25);
         border-radius: 16px;
-        padding: 28px;
-        margin-top: 28px;
+        padding: 26px;
     }
 
-    .bid-form-title {
-        font-family: 'Playfair Display', serif;
-        font-size: 1.3rem;
+    .btn-open-bid-modal {
+        background: linear-gradient(135deg, var(--rust), #A0471F);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 14px 38px;
+        font-size: 1rem;
         font-weight: 700;
+        letter-spacing: .5px;
+        cursor: pointer;
+        transition: all .3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .btn-open-bid-modal:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(139, 58, 26, .4);
+    }
+
+    /* Bid form modal — light theme, matches page, no dark surfaces */
+    #bidFormModal .modal-content {
+        border: none;
+        border-radius: 18px;
+        overflow: hidden;
+    }
+
+    #bidFormModal .modal-header {
+        background: var(--cream);
+        border-bottom: 1px solid rgba(0, 0, 0, .06);
+        padding: 20px 28px;
+    }
+
+    #bidFormModal .modal-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 1.15rem;
         color: var(--deep);
-        margin-bottom: 6px;
+    }
+
+    #bidFormModal .modal-body {
+        background: #fff;
+        padding: 28px;
     }
 
     .bid-form-subtitle {
@@ -585,12 +658,23 @@
                         <div class="main-image-wrap" id="mainImageWrap">
                             @php
                                 $thumbnail = $item->images->where('image_type', 'thumbnail')->first();
+                                $offset = $thumbnail ? 1 : 0;
+                                $totalSlides = $offset + $item->galleryImages->count();
                             @endphp
 
                             <img src="{{ $thumbnail ? asset($thumbnail->image_path) : asset('images/no-image.png') }}"
                                 alt="{{ $item->title }}" id="mainImage" onclick="openLightbox(this.src)">
-                            {{-- <img src="{{ asset($item->image_path) }}" id="mainImage" onclick="openLightbox(this.src)" alt="{{ $item->title }}" 
-                                > --}}
+
+                            @if ($totalSlides > 1)
+                                <button type="button" class="gallery-nav-btn gallery-nav-prev"
+                                    onclick="goToSlide(currentSlide - 1)" aria-label="Previous image">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <button type="button" class="gallery-nav-btn gallery-nav-next"
+                                    onclick="goToSlide(currentSlide + 1)" aria-label="Next image">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            @endif
 
                             @if ($item->model_3d_url)
                                 <a href="#" class="view-3d-btn" data-bs-toggle="modal" data-bs-target="#modal3d">
@@ -600,16 +684,21 @@
                         </div>
 
                         {{-- Thumbnails --}}
-                        <div class="thumb-strip">
+                        <div class="thumb-strip" id="thumbStrip">
+                            @if ($thumbnail)
+                                <div class="thumb-item active" onclick="goToSlide(0)">
+                                    <img src="{{ asset($thumbnail->image_path) }}" alt="Cover">
+                                </div>
+                            @endif
                             @foreach ($item->galleryImages as $i => $img)
-                                <div class="thumb-item {{ $i === 0 ? 'active' : '' }}"
-                                    onclick="switchMainImage(this, '{{ asset($img->image_path) }}')">
+                                <div class="thumb-item {{ !$thumbnail && $i === 0 ? 'active' : '' }}"
+                                    onclick="goToSlide({{ $i + $offset }})">
                                     <img src="{{ asset($img->image_path) }}" alt="View {{ $i + 1 }}">
                                 </div>
                             @endforeach
 
                             @if ($item->model_3d_url)
-                                <div class="thumb-item d-flex align-items-center justify-content-center bg-dark"
+                                <div class="thumb-item thumb-item-3d d-flex align-items-center justify-content-center bg-dark"
                                     style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#modal3d">
                                     <i class="fas fa-cube text-warning" style="font-size:1.4rem;"></i>
                                 </div>
@@ -754,153 +843,206 @@
 
                     {{-- ═══ BID FORM ═══ --}}
                     @if ($item->status === 'active' && !$item->auction_end->isPast())
-                        <div id="bid-form">
-                            <h3 class="bid-form-title"><i class="fas fa-gavel me-2 text-warning"></i>Place Your Bid</h3>
-                            <p class="bid-form-subtitle">Your bid is a donation pledge. The highest bidder at close wins
-                                the artifact.</p>
+                        <div class="place-bid-cta">
+                            <button type="button" class="btn-open-bid-modal" data-bs-toggle="modal"
+                                data-bs-target="#bidFormModal">
+                                <i class="fas fa-gavel"></i> Place Your Bid
+                            </button>
+                            <p class="min-bid-hint mt-2">Minimum bid:
+                                <strong>₹{{ number_format(($topBid ?? $item->starting_bid) + 1, 0) }}</strong>
+                                · reviewed by admin before it appears publicly
+                            </p>
+                        </div>
 
-                            @if ($errors->any())
-                                <div class="alert alert-danger py-2 small mb-3">
-                                    <ul class="mb-0">
-                                        @foreach ($errors->all() as $err)
-                                            <li>{{ $err }}</li>
-                                        @endforeach
-                                    </ul>
+                        {{-- Bid form modal --}}
+                        <div class="modal fade" id="bidFormModal" tabindex="-1" aria-labelledby="bidFormModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="bidFormModalLabel">
+                                            <i class="fas fa-gavel me-2 text-warning"></i>Place Your Bid
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p class="bid-form-subtitle">Your bid is a donation pledge. The highest bidder
+                                            at close wins the artifact.</p>
+
+                                        @if ($errors->any())
+                                            <div class="alert alert-danger py-2 small mb-3">
+                                                <ul class="mb-0">
+                                                    @foreach ($errors->all() as $err)
+                                                        <li>{{ $err }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        @endif
+
+                                        @if (session('success'))
+                                            <div class="alert alert-success py-2 small mb-3">{{ session('success') }}
+                                            </div>
+                                        @endif
+
+                                        <form action="{{ route('auction.bid', $item->id) }}" method="POST"
+                                            id="bidForm">
+                                            @csrf
+
+                                            {{-- Bid amount --}}
+                                            <div class="mb-4">
+                                                <label class="fw-semibold mb-2" style="font-size:.85rem;">Your Bid
+                                                    Amount</label>
+                                                <div class="bid-amount-input-wrap">
+                                                    <span class="bid-currency-prefix">₹</span>
+                                                    <input type="number" name="bid_amount"
+                                                        class="custom-form-control bid-amount-field"
+                                                        id="bidAmountInput"
+                                                        min="{{ ($topBid ?? $item->starting_bid) + 1 }}" step="1"
+                                                        placeholder="{{ ($topBid ?? $item->starting_bid) + 100 }}"
+                                                        value="{{ old('bid_amount') }}" required>
+                                                </div>
+                                                <p class="min-bid-hint">Minimum bid:
+                                                    <strong>₹{{ number_format(($topBid ?? $item->starting_bid) + 1, 0) }}</strong>
+                                                </p>
+                                            </div>
+
+                                            {{-- Personal info --}}
+                                            <div class="form-section-label"><i class="fas fa-user me-1"></i>Personal
+                                                Information</div>
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <label class="form-label small fw-semibold">Full Name <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" name="bidder_name" class="custom-form-control"
+                                                        value="{{ old('bidder_name') }}" required
+                                                        placeholder="Your full name">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label small fw-semibold">Email Address <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="email" name="bidder_email"
+                                                        class="custom-form-control" value="{{ old('bidder_email') }}"
+                                                        required placeholder="your@email.com">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label small fw-semibold">Phone Number <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="tel" name="bidder_phone" class="custom-form-control"
+                                                        value="{{ old('bidder_phone') }}" required
+                                                        placeholder="+91 XXXXX XXXXX">
+                                                </div>
+                                            </div>
+
+                                            {{-- Address --}}
+                                            <div class="form-section-label"><i
+                                                    class="fas fa-location-dot me-1"></i>Address Details
+                                            </div>
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <label class="form-label small fw-semibold">House No /
+                                                        Street</label>
+                                                    <input type="text" name="bidder_house_no"
+                                                        class="custom-form-control"
+                                                        value="{{ old('bidder_house_no') }}"
+                                                        placeholder="H. No., Street name">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label small fw-semibold">Village / City</label>
+                                                    <input type="text" name="bidder_village"
+                                                        class="custom-form-control"
+                                                        value="{{ old('bidder_village') }}"
+                                                        placeholder="Village or city name">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label small fw-semibold">Block / Tehsil</label>
+                                                    <input type="text" name="bidder_block"
+                                                        class="custom-form-control" value="{{ old('bidder_block') }}"
+                                                        placeholder="Block / Tehsil">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label small fw-semibold">District <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" name="bidder_district"
+                                                        class="custom-form-control"
+                                                        value="{{ old('bidder_district') }}" required
+                                                        placeholder="District">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label small fw-semibold">State <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" name="bidder_state"
+                                                        class="custom-form-control" value="{{ old('bidder_state') }}"
+                                                        required placeholder="State">
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label class="form-label small fw-semibold">Pincode</label>
+                                                    <input type="text" name="bidder_pincode"
+                                                        class="custom-form-control"
+                                                        value="{{ old('bidder_pincode') }}" placeholder="110001">
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label class="form-label small fw-semibold">Country <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" name="bidder_country"
+                                                        class="custom-form-control"
+                                                        value="{{ old('bidder_country', 'India') }}" required>
+                                                </div>
+                                            </div>
+
+                                            {{-- ID info --}}
+                                            <div class="form-section-label"><i
+                                                    class="fas fa-id-card me-1"></i>Identity Verification
+                                            </div>
+                                            <div class="row g-3">
+                                                <div class="col-md-4">
+                                                    <label class="form-label small fw-semibold">ID Type</label>
+                                                    <select name="bidder_id_type"
+                                                        class="custom-form-control custom-select">
+                                                        <option value="">Select ID Type</option>
+                                                        <option value="aadhar"
+                                                            {{ old('bidder_id_type') == 'aadhar' ? 'selected' : '' }}>
+                                                            Aadhar Card</option>
+                                                        <option value="pan"
+                                                            {{ old('bidder_id_type') == 'pan' ? 'selected' : '' }}>
+                                                            PAN
+                                                            Card</option>
+                                                        <option value="passport"
+                                                            {{ old('bidder_id_type') == 'passport' ? 'selected' : '' }}>
+                                                            Passport
+                                                        </option>
+                                                        <option value="voter_id"
+                                                            {{ old('bidder_id_type') == 'voter_id' ? 'selected' : '' }}>
+                                                            Voter ID
+                                                        </option>
+                                                        <option value="other"
+                                                            {{ old('bidder_id_type') == 'other' ? 'selected' : '' }}>
+                                                            Other</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <label class="form-label small fw-semibold">ID Number</label>
+                                                    <input type="text" name="bidder_id_number"
+                                                        class="custom-form-control"
+                                                        value="{{ old('bidder_id_number') }}"
+                                                        placeholder="Enter ID number">
+                                                </div>
+                                            </div>
+
+                                            <button type="submit" class="btn-place-bid" id="bidSubmitBtn">
+                                                <span class="hammer-icon"><i class="fas fa-gavel"></i></span>
+                                                Place Bid · ₹<span
+                                                    id="bidPreview">{{ number_format(($topBid ?? $item->starting_bid) + 100, 0) }}</span>
+                                            </button>
+                                            <p class="min-bid-hint">
+                                                <i class="fas fa-shield-halved me-1"></i>
+                                                Your bid is reviewed by admin before it appears publicly. You'll be
+                                                notified if you win.
+                                            </p>
+                                        </form>
+                                    </div>
                                 </div>
-                            @endif
-
-                            @if (session('success'))
-                                <div class="alert alert-success py-2 small mb-3">{{ session('success') }}</div>
-                            @endif
-
-                            <form action="{{ route('auction.bid', $item->id) }}" method="POST" id="bidForm">
-                                @csrf
-
-                                {{-- Bid amount --}}
-                                <div class="mb-4">
-                                    <label class="fw-semibold mb-2" style="font-size:.85rem;">Your Bid Amount</label>
-                                    <div class="bid-amount-input-wrap">
-                                        <span class="bid-currency-prefix">₹</span>
-                                        <input type="number" name="bid_amount"
-                                            class="custom-form-control bid-amount-field" id="bidAmountInput"
-                                            min="{{ ($topBid ?? $item->starting_bid) + 1 }}" step="1"
-                                            placeholder="{{ ($topBid ?? $item->starting_bid) + 100 }}"
-                                            value="{{ old('bid_amount') }}" required>
-                                    </div>
-                                    <p class="min-bid-hint">Minimum bid:
-                                        <strong>₹{{ number_format(($topBid ?? $item->starting_bid) + 1, 0) }}</strong>
-                                    </p>
-                                </div>
-
-                                {{-- Personal info --}}
-                                <div class="form-section-label"><i class="fas fa-user me-1"></i>Personal Information</div>
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label small fw-semibold">Full Name <span
-                                                class="text-danger">*</span></label>
-                                        <input type="text" name="bidder_name" class="custom-form-control"
-                                            value="{{ old('bidder_name') }}" required placeholder="Your full name">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label small fw-semibold">Email Address <span
-                                                class="text-danger">*</span></label>
-                                        <input type="email" name="bidder_email" class="custom-form-control"
-                                            value="{{ old('bidder_email') }}" required placeholder="your@email.com">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label small fw-semibold">Phone Number <span
-                                                class="text-danger">*</span></label>
-                                        <input type="tel" name="bidder_phone" class="custom-form-control"
-                                            value="{{ old('bidder_phone') }}" required placeholder="+91 XXXXX XXXXX">
-                                    </div>
-                                </div>
-
-                                {{-- Address --}}
-                                <div class="form-section-label"><i class="fas fa-location-dot me-1"></i>Address Details
-                                </div>
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label small fw-semibold">House No / Street</label>
-                                        <input type="text" name="bidder_house_no" class="custom-form-control"
-                                            value="{{ old('bidder_house_no') }}" placeholder="H. No., Street name">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label small fw-semibold">Village / City</label>
-                                        <input type="text" name="bidder_village" class="custom-form-control"
-                                            value="{{ old('bidder_village') }}" placeholder="Village or city name">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label small fw-semibold">Block / Tehsil</label>
-                                        <input type="text" name="bidder_block" class="custom-form-control"
-                                            value="{{ old('bidder_block') }}" placeholder="Block / Tehsil">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label small fw-semibold">District <span
-                                                class="text-danger">*</span></label>
-                                        <input type="text" name="bidder_district" class="custom-form-control"
-                                            value="{{ old('bidder_district') }}" required placeholder="District">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label small fw-semibold">State <span
-                                                class="text-danger">*</span></label>
-                                        <input type="text" name="bidder_state" class="custom-form-control"
-                                            value="{{ old('bidder_state') }}" required placeholder="State">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label small fw-semibold">Pincode</label>
-                                        <input type="text" name="bidder_pincode" class="custom-form-control"
-                                            value="{{ old('bidder_pincode') }}" placeholder="110001">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label small fw-semibold">Country <span
-                                                class="text-danger">*</span></label>
-                                        <input type="text" name="bidder_country" class="custom-form-control"
-                                            value="{{ old('bidder_country', 'India') }}" required>
-                                    </div>
-                                </div>
-
-                                {{-- ID info --}}
-                                <div class="form-section-label"><i class="fas fa-id-card me-1"></i>Identity Verification
-                                </div>
-                                <div class="row g-3">
-                                    <div class="col-md-4">
-                                        <label class="form-label small fw-semibold">ID Type</label>
-                                        <select name="bidder_id_type" class="custom-form-control custom-select">
-                                            <option value="">Select ID Type</option>
-                                            <option value="aadhar"
-                                                {{ old('bidder_id_type') == 'aadhar' ? 'selected' : '' }}>
-                                                Aadhar Card</option>
-                                            <option value="pan" {{ old('bidder_id_type') == 'pan' ? 'selected' : '' }}>
-                                                PAN
-                                                Card</option>
-                                            <option value="passport"
-                                                {{ old('bidder_id_type') == 'passport' ? 'selected' : '' }}>Passport
-                                            </option>
-                                            <option value="voter_id"
-                                                {{ old('bidder_id_type') == 'voter_id' ? 'selected' : '' }}>Voter ID
-                                            </option>
-                                            <option value="other"
-                                                {{ old('bidder_id_type') == 'other' ? 'selected' : '' }}>
-                                                Other</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <label class="form-label small fw-semibold">ID Number</label>
-                                        <input type="text" name="bidder_id_number" class="custom-form-control"
-                                            value="{{ old('bidder_id_number') }}" placeholder="Enter ID number">
-                                    </div>
-                                </div>
-
-                                <button type="submit" class="btn-place-bid" id="bidSubmitBtn">
-                                    <span class="hammer-icon"><i class="fas fa-gavel"></i></span>
-                                    Place Bid · ₹<span
-                                        id="bidPreview">{{ number_format(($topBid ?? $item->starting_bid) + 100, 0) }}</span>
-                                </button>
-                                <p class="min-bid-hint">
-                                    <i class="fas fa-shield-halved me-1"></i>
-                                    Your bid is reviewed by admin before it appears publicly. You'll be notified if you win.
-                                </p>
-                            </form>
+                            </div>
                         </div>
                     @elseif($item->status === 'winner_selected' || $item->status === 'completed')
                         <div class="alert"
@@ -959,12 +1101,61 @@
 
 
     <script>
-        // ── Gallery switcher ───────────────
-        function switchMainImage(thumb, src) {
-            document.getElementById('mainImage').src = src;
-            document.querySelectorAll('.thumb-item').forEach(t => t.classList.remove('active'));
-            thumb.classList.add('active');
+        // ── Gallery slider ─────────────────
+        const galleryImages = [
+            @if ($thumbnail)
+                "{{ asset($thumbnail->image_path) }}",
+            @endif
+            @foreach ($item->galleryImages as $img)
+                "{{ asset($img->image_path) }}",
+            @endforeach
+        ];
+        if (galleryImages.length === 0) {
+            galleryImages.push("{{ asset('images/no-image.png') }}");
         }
+
+        let currentSlide = 0;
+        let autoSlideTimer = null;
+        const mainImageEl = document.getElementById('mainImage');
+
+        function renderSlide(index) {
+            if (!galleryImages.length) return;
+            currentSlide = ((index % galleryImages.length) + galleryImages.length) % galleryImages.length;
+            mainImageEl.style.opacity = '0';
+            setTimeout(() => {
+                mainImageEl.src = galleryImages[currentSlide];
+                mainImageEl.style.opacity = '1';
+            }, 180);
+            document.querySelectorAll('#thumbStrip .thumb-item:not(.thumb-item-3d)').forEach((t, i) => {
+                t.classList.toggle('active', i === currentSlide);
+            });
+        }
+
+        function goToSlide(index) {
+            renderSlide(index);
+            restartAutoSlide();
+        }
+
+        function restartAutoSlide() {
+            clearInterval(autoSlideTimer);
+            if (galleryImages.length > 1) {
+                autoSlideTimer = setInterval(() => renderSlide(currentSlide + 1), 4500);
+            }
+        }
+        restartAutoSlide();
+
+        // Swipe support on mobile
+        const mainImageWrapEl = document.getElementById('mainImageWrap');
+        let touchStartX = 0;
+        mainImageWrapEl.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        mainImageWrapEl.addEventListener('touchend', e => {
+            const diff = touchStartX - e.changedTouches[0].screenX;
+            if (Math.abs(diff) > 40) {
+                goToSlide(currentSlide + (diff > 0 ? 1 : -1));
+            }
+        });
 
         // ── Lightbox ───────────────────────
         function openLightbox(src) {
@@ -1029,5 +1220,15 @@
                 if (el) el.textContent = '₹' + Number(d.top_bid).toLocaleString('en-IN');
             } catch (e) {}
         }, 10000);
+
+        // ── Reopen bid modal after a failed submission ──
+        @if ($errors->any() || old('bid_amount'))
+            document.addEventListener('DOMContentLoaded', function() {
+                const bidModalEl = document.getElementById('bidFormModal');
+                if (bidModalEl && window.bootstrap) {
+                    new bootstrap.Modal(bidModalEl).show();
+                }
+            });
+        @endif
     </script>
 @endsection

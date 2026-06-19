@@ -14,11 +14,10 @@ class AuctionBidController extends Controller
     public function index()
     {
         $activeAuctions = AuctionItem::where('status', 'active')
-            ->where('auction_end', '>', now())
-            ->with('images')
-            ->withCount('bids')
-            ->latest()
-            ->get();
+        ->with('images')
+        ->withCount('bids')
+        ->latest()
+        ->get();
 
         $closedAuctions = AuctionItem::whereIn('status', ['closed', 'winner_selected', 'completed'])
             ->with('images')
