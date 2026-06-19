@@ -377,14 +377,11 @@
                                         @foreach ($item->images as $img)
                                             <div class="existing-img-wrap">
                                                 <img src="{{ asset($img->image_path) }}" alt="">
-                                                <form method="POST"
-                                                    action="{{ route('ngo.auction.image.delete', $img->id) }}"
-                                                    onsubmit="return confirm('Remove this image?')">
-                                                    @csrf @method('DELETE')
-                                                    <button type="submit" class="del-img-btn">
-                                                        <i class="fas fa-times"></i>
-                                                    </button>
-                                                </form>
+                                                <button type="button" class="del-img-btn"
+                                                    data-url="{{ route('ngo.auction.image.delete', $img->id) }}"
+                                                    onclick="deleteExistingImage(this)">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
                                             </div>
                                         @endforeach
                                     </div>
@@ -601,6 +598,27 @@
             selectedFiles.forEach(f => dt.items.add(f));
             imgInput.files = dt.files;
             handleFiles();
+        }
+
+        // ── Delete existing image (AJAX, no nested form) ─
+        function deleteExistingImage(btn) {
+            if (!confirm('Remove this image?')) return;
+            const url = btn.dataset.url;
+            const tokenMeta = document.querySelector('meta[name="csrf-token"]');
+            const token = tokenMeta ? tokenMeta.content : '{{ csrf_token() }}';
+
+            fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': token,
+                    'Accept': 'application/json'
+                }
+            })
+            .then(res => {
+                if (!res.ok) throw new Error('Delete failed');
+                btn.closest('.existing-img-wrap').remove();
+            })
+            .catch(() => alert('Could not remove image. Please try again.'));
         }
 
         // ── Quick duration setter ──────────────────────

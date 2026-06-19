@@ -11,7 +11,7 @@ class NOCController extends Controller
     // ─── List ────────────────────────────────────────────────────────────────
     public function index()
     {
-        $nocs = NOC::get();
+        $nocs = NOC::orderBy('noc_date', 'asc')->get();
         return view('ngo.noc.index', compact('nocs'));
     }
 

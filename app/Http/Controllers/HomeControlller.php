@@ -488,7 +488,7 @@ class HomeControlller extends Controller
 
     public function NocIndex()
     {
-        $nocs = NOC::all();
+        $nocs = NOC::orderBy('noc_date', 'asc')->get();
         return view('home.noc.index', compact('nocs'));
     }
 
