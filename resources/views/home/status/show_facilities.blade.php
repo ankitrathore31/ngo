@@ -7,6 +7,9 @@
                 visibility: hidden;
             }
 
+            /* Facilities card is the only thing this page's own print handles.
+               The Registration card is printed separately via its own window (see script below),
+               so it deliberately has no print rule here. */
             .print-card,
             .print-card * {
                 visibility: visible;
@@ -37,6 +40,8 @@
         <div class="container my-5">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="fw-bold">Facilities Status</h2>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#registrationModal">Registration Download</button>
                 <button onclick="window.print()" class="btn btn-primary">Print / Download</button>
             </div>
             <div class="card shadow-lg p-4 print-card">
@@ -101,18 +106,6 @@
                     </div>
                     {{-- <hr> --}}
                     <div class="col-sm-12 mb-3 mt-1">
-                        {{-- <h5><u>Survey Details</u></h5>
-                        <div class="col-sm-12">
-                            <div class="col-md-4">
-                                <p><strong>Survey Date:</strong>
-                                    {{ \Carbon\Carbon::parse($beneficiarie->$surveys->survey_date)->format('d M Y') ?? 'Pending' }}
-                                </p>
-                            </div>
-                            <div class="col-8">
-                                <p><strong>Survey Details:</strong> {{$beneficiarie->$surveys->survey_details ?? 'Pending' }}</p>
-                            </div>
-                        </div> --}}
-
                         <h5><u>Facilities Details</u></h5>
                         <div class="card-body table-responsive">
                             <table class="table table-bordered table-hover align-middle text-center">
@@ -201,4 +194,218 @@
                 </div>
             </div>
         </div>
-    @endsection
+
+        {{-- ===================== Registration Preview Modal ===================== --}}
+        <div class="modal fade" id="registrationModal" tabindex="-1" aria-labelledby="registrationModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="registrationModalLabel">Registration Form Preview</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @php
+                            $imagePath = $beneficiarie->reg_type === 'Member' ? 'member_images/' : 'benefries_images/';
+                        @endphp
+
+                        <div class="card p-4 shadow rounded registration-print-card">
+                            <div class="text-center mb-4 border-bottom">
+                                <div class="row align-items-center">
+                                    <div class="col-sm-2 text-center text-md-start">
+                                        <a href="https://gyanbhartingo.org">
+                                            <img src="{{ asset('images/LOGO.png') }}" alt="Logo" width="80"
+                                                height="80" class="">
+                                        </a>
+                                    </div>
+                                    <div class="col-sm-10 text-center">
+                                        <h4 style="color: red; font-weight:500; font-size:25px;"><b>GYAN BHARTI
+                                                SANSTHA</b></h4>
+                                        <h6 style="color: blue;"><b>Head Office: Kainchu Tanda Amaria Pilibhit UP
+                                                262121</b></h6>
+                                        <p><b>Website : www.gyanbhartingo.org Email : gyanbhartingo600@gmail.com
+                                                Mob- 9411484111</b>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Application Date:</strong>
+                                    {{ $beneficiarie->application_date ? \Carbon\Carbon::parse($beneficiarie->application_date)->format('d-m-Y') : 'N/A' }}
+                                </div>
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Application No:</strong> {{ $beneficiarie->application_no ?? 'N/A' }}
+                                </div>
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Registraition Type:</strong> {{ $beneficiarie->reg_type ?? 'N/A' }}
+                                </div>
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Registraition No:</strong> {{ $beneficiarie->registration_no ?? 'N/A' }}
+                                </div>
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Session:</strong> {{ $beneficiarie->academic_session ?? 'N/A' }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="row">
+                                        <div class="col-sm-6 mb-3">
+                                            <strong>Name:</strong> {{ $beneficiarie->name }}
+                                        </div>
+                                        <div class="col-sm-6 mb-3">
+                                            <strong>Guardian's Name:</strong> {{ $beneficiarie->gurdian_name }}
+                                        </div>
+                                        <div class="col-sm-6 mb-3">
+                                            <strong>Mother's Name:</strong> {{ $beneficiarie->mother_name ?? 'N/A' }}
+                                        </div>
+                                        <div class="col-sm-6 mb-3">
+                                            <strong>Area Type:</strong> {{ $beneficiarie->area_type }}
+                                        </div>
+                                        <div class="col-sm-6 mb-3">
+                                            <strong>Village/Locality:</strong> {{ $beneficiarie->village }}
+                                        </div>
+                                        <div class="col-sm-6 mb-3">
+                                            <strong>Post/Town:</strong> {{ $beneficiarie->post }}
+                                        </div>
+                                        <div class="col-sm-6 mb-3">
+                                            <strong>Block:</strong> {{ $beneficiarie->block }}
+                                        </div>
+                                        <div class="col-sm-6 mb-3">
+                                            <strong>District</strong> {{ $beneficiarie->district }}
+                                        </div>
+                                        <div class="col-sm-6 mb-3">
+                                            <strong>State</strong> {{ $beneficiarie->state }}
+                                        </div>
+                                        <div class="col-sm-6 mb-3">
+                                            <strong>Pincode:</strong> {{ $beneficiarie->pincode }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <img src="{{ asset($imagePath . $beneficiarie->image) }}" alt="Image"
+                                            class="img-thumbnail" width="150">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Country:</strong> {{ $beneficiarie->country ?? 'N/A' }}
+                                </div>
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Gender:</strong> {{ $beneficiarie->gender }}
+                                </div>
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Phone:</strong> {{ $beneficiarie->phone }}
+                                </div>
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Email:</strong> {{ $beneficiarie->email ?? 'N/A' }}
+                                </div>
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Eligibility:</strong> {{ $beneficiarie->eligibility ?? 'N/A' }}
+                                </div>
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Caste:</strong> {{ $beneficiarie->caste }}
+                                </div>
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Religion Category:</strong> {{ $beneficiarie->religion_category }}
+                                </div>
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Religion:</strong> {{ $beneficiarie->religion }}
+                                </div>
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Date of Birth:</strong>
+                                    {{ $beneficiarie->dob ? \Carbon\Carbon::parse($beneficiarie->dob)->format('d-m-Y') : 'N/A' }}
+                                </div>
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Marital Status:</strong> {{ $beneficiarie->marital_status ?? 'N/A' }}
+                                </div>
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Occupation:</strong> {{ $beneficiarie->occupation ?? 'N/A' }}
+                                </div>
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Identity Type:</strong> {{ $beneficiarie->identity_type ?? 'N/A' }}
+                                </div>
+                                <div class="col-sm-4 mb-3">
+                                    <strong>Identity Number:</strong> {{ $beneficiarie->identity_no ?? 'N/A' }}
+                                </div>
+                                <div class="col-sm-4 mb-3">
+                                    <strong>ID Document:</strong>
+                                    <a href="{{ asset($imagePath . $beneficiarie->id_document) }}"
+                                        target="_blank">View Document</a>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                @if ($beneficiarie->reg_type == 'Beneficiaries')
+                                    <div class="col-sm-8 mb-3">
+                                        <strong>Help Needed:</strong> {{ $beneficiarie->help_needed ?? 'N/A' }}
+                                    </div>
+                                @endif
+                            </div>
+                            <hr>
+                            <div class="row d-flex justify-content-between mt-2">
+                                <div class="col-sm-4 mb-5">
+                                    <label class="form-label"><b>{{ $beneficiarie->reg_type }} Signature/ Thumb
+                                            Impression of the Recipient</b></label>
+                                </div>
+                                <div class="col-sm-4 mb-5">
+                                    <label class="form-label"><b>Signature</b></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="printRegistrationBtn">Print /
+                            Download</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- =================== End Registration Preview Modal =================== --}}
+    </div>
+
+    <script>
+        document.getElementById('printRegistrationBtn').addEventListener('click', function () {
+            var cardHtml = document.querySelector('#registrationModal .registration-print-card').outerHTML;
+
+            var printWindow = window.open('', '_blank', 'width=950,height=700');
+            if (!printWindow) {
+                alert('Please allow pop-ups for this site to print the registration form.');
+                return;
+            }
+
+            printWindow.document.open();
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="utf-8">
+                    <title>Registration Form</title>
+                    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+                    <style>
+                        body { padding: 24px; }
+                        .registration-print-card { box-shadow: none !important; }
+                        img { max-width: 150px; }
+                    </style>
+                </head>
+                <body>
+                    ${cardHtml}
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+
+            // Wait for images/CSS to finish loading before triggering print
+            printWindow.onload = function () {
+                printWindow.focus();
+                printWindow.print();
+            };
+        });
+    </script>
+@endsection

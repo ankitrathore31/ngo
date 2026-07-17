@@ -42,7 +42,7 @@
                             <i class="fas fa-file-lines text-primary fa-lg"></i>
                         </div>
                         <div>
-                            <div class="fw-bold fs-4 lh-1">{{ $nocs->total() }}</div>
+                            <div class="fw-bold fs-4 lh-1">{{ $nocs->count() }}</div>
                             <small class="text-muted">Total NOCs</small>
                         </div>
                     </div>
@@ -190,14 +190,14 @@
                     </table>
                 </div>
             </div>
-            @if($nocs->hasPages())
+            {{-- @if($nocs->hasPages())
             <div class="card-footer bg-white border-top py-3 d-flex justify-content-between align-items-center">
                 <small class="text-muted">
                     Page {{ $nocs->currentPage() }} of {{ $nocs->lastPage() }}
                 </small>
                 {{ $nocs->links('pagination::bootstrap-5') }}
             </div>
-            @endif
+            @endif --}}
         </div>
 
     </div>{{-- /container --}}
