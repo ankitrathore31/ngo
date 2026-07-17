@@ -864,8 +864,6 @@
                     </li>
                 @endif
 
-                {{-- Facility Main Menu --}}
-                {{-- @if (!$isStaff || $user->hasPermission('facility_access')) --}}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
                         <i class="fas fa-building"></i> FACILITY
@@ -899,9 +897,7 @@
 
                     </ul>
                 </li>
-                {{-- @endif --}}
-
-                <!-- Union -->
+                
                 @if (
                     !$isStaff ||
                         $user->hasPermission('union-list') ||
@@ -1024,6 +1020,31 @@
                                 </li>
                             @endif
 
+
+                        </ul>
+                    </li>
+                @endif
+
+                @if (
+                    !$isStaff ||
+                        $user->hasPermission('human-list') ||
+                        $user->hasPermission('human-add') ||
+                        $user->hasPermission('human-edit'))
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
+                        <i class="fas fa-sitemap"></i> HUMAN RESOURCE MANAGEMENT REPORT
+                        </a>
+
+                        <ul class="dropdown-menu bg-primary">
+
+                            {{-- Add Union --}}
+                            @if (!$isStaff || $user->hasPermission('human-add'))
+                                <li>
+                                    <a class="dropdown-item" href="{{-- route('ngo.human.dashboard') --}}">
+                                        Human Resource Management
+                                    </a>
+                                </li>
+                            @endif
 
                         </ul>
                     </li>
