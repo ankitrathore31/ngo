@@ -38,12 +38,12 @@
         </div>
 
         <div class="container my-5">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            {{-- <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="fw-bold">Facilities Status</h2>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                     data-bs-target="#registrationModal">Registration Download</button>
                 <button onclick="window.print()" class="btn btn-primary">Print / Download</button>
-            </div>
+            </div> --}}
             <div class="card shadow-lg p-4 print-card">
                 <!-- Report Header -->
                 <div class="text-center mb-4 border-bottom">
