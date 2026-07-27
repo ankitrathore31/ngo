@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\beneficiarie;
 use App\Models\Member;
 use App\Models\academic_session;
+use App\Models\Beneficiarie_Survey;
 use App\Models\Setting;
 use App\Models\Signature;
 use App\Models\User;
@@ -982,5 +983,47 @@ class RegistrationController extends Controller
             'combined',
             'states'
         ));
+    }
+
+    public function showStatusForm()
+    {
+        return view('ngo.registration.check_status');
+    }
+
+    public function showStatus(Request $request)
+    {
+        $request->validate([
+            'search_no' => 'required|string',
+        ]);
+
+        $searchNo = trim(str_replace(' ', '', $request->search_no));
+
+        $record = beneficiarie::withTrashed()
+            ->with(['surveys' => function ($query) {
+                $query->where(function ($q) {
+                    $q->whereNotNull('survey_date')
+                        ->orWhereNotNull('facilities');
+                });
+            }])
+            ->where('identity_no', $searchNo)
+            ->orWhere('application_no', $searchNo)
+            ->orWhere('registration_no', $searchNo)
+            ->first();
+
+        if (!$record) {
+            return back()
+                ->with('error', 'No record found for the given Identity / Application / Registration number.')
+                ->withInput();
+        }
+
+        $firstSurvey = $record->surveys->first();
+
+        $surveys = Beneficiarie_Survey::where('beneficiarie_id', $record->id)
+            ->where('facilities_status', 1)
+            ->where('status', 'Distributed')
+            ->get();
+
+        return view('ngo.registration.show_status', compact('record', 'firstSurvey', 'surveys'))
+            ->with('success', 'Record found successfully.');
     }
 }

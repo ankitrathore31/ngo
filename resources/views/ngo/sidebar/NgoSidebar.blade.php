@@ -261,6 +261,10 @@
                                 <li><a class="dropdown-item" href="{{ route('reg-setting') }}">Online Registration
                                         Setting</a></li>
                             @endif
+                            @if (!$isStaff || $user->hasPermission('reg-status'))
+                                <li><a class="dropdown-item" href="{{ route('reg.status.check') }}">Registration  Status
+                                    </a></li>
+                            @endif
                         </ul>
                     </li>
                 @endif

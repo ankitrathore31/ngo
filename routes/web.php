@@ -102,8 +102,8 @@ Route::controller(HomeControlller::class)->group(function () {
     Route::get('/vacancies', 'HomeJobList')->name('vacancies');
     Route::get('/download-document', 'document')->name('document');
     Route::get('/true-story', 'TrueStory')->name('true.story.list');
-    Route::get('/noc','NocIndex')->name('home.noc.index');
-    Route::get('/noc-show/{id}','NocShow')->name('home.noc.show');
+    Route::get('/noc', 'NocIndex')->name('home.noc.index');
+    Route::get('/noc-show/{id}', 'NocShow')->name('home.noc.show');
 });
 
 Route::controller(CertificateController::class)->group(function () {
@@ -217,6 +217,11 @@ Route::middleware('auth')->group(function () {
     Route::get('ngo/edit-apporve-registration/{id}/{type}', [RegistrationController::class, 'editApproveRegistration'])->name('edit-apporve-reg');
     Route::post('ngo/update-apporve-registration/{id}', [RegistrationController::class, 'UpdateApporveRegistration'])->name('update-apporve-registration');
     Route::get('ngo/all-registration-card', [RegistrationController::class, 'AllApporveRegCard'])->name('all-reg-card');
+});
+
+Route::controller(RegistrationController::class)->middleware('auth')->group(function () {
+    Route::get('ngo/status',  'showStatusForm')->name('reg.status.form');
+    Route::post('ngo/status', 'showStatus')->name('reg.status.check');
 });
 
 Route::controller(RegistrationController::class)->group(function () {
@@ -712,13 +717,13 @@ Route::controller(SubMemberController::class)->middleware('auth')->group(functio
 });
 
 Route::middleware('auth')->prefix('ngo')->name('noc.')->group(function () {
-    Route::get   ('noc',             [NocController::class, 'index'])   ->name('index');
-    Route::get   ('noc/create',      [NocController::class, 'create'])  ->name('create');
-    Route::post  ('noc',             [NOCController::class, 'store'])   ->name('store');
-    Route::get   ('noc/{id}',        [NocController::class, 'show'])    ->name('show');
-    Route::get   ('noc/{id}/edit',   [NocController::class, 'edit'])    ->name('edit');
-    Route::put   ('noc/{id}',        [NocController::class, 'update'])  ->name('update');
-    Route::delete('noc/{id}',        [NocController::class, 'destroy']) ->name('destroy');
+    Route::get('noc',             [NocController::class, 'index'])->name('index');
+    Route::get('noc/create',      [NocController::class, 'create'])->name('create');
+    Route::post('noc',             [NOCController::class, 'store'])->name('store');
+    Route::get('noc/{id}',        [NocController::class, 'show'])->name('show');
+    Route::get('noc/{id}/edit',   [NocController::class, 'edit'])->name('edit');
+    Route::put('noc/{id}',        [NocController::class, 'update'])->name('update');
+    Route::delete('noc/{id}',        [NocController::class, 'destroy'])->name('destroy');
 });
 
 Route::prefix('auctions')->name('auction.')->group(function () {
@@ -728,7 +733,7 @@ Route::prefix('auctions')->name('auction.')->group(function () {
     Route::get('/confirmation/{bidId}', [AuctionBidController::class, 'confirmation'])->name('bid.confirmation');
     Route::get('/api/live/{id}',  [AuctionBidController::class, 'liveStatus'])->name('live.status');
 });
- 
+
 
 Route::prefix('ngo/auctions')->name('ngo.auction.')->middleware('auth')->group(function () {
     Route::get('/dashboard',         [AuctionController::class, 'dashboard'])->name('dashboard');
