@@ -19,6 +19,7 @@
 
             @php
                 $isApproved = $record->status == 1;
+                $isPending = $record->status == 0;
                 $isRegistered = !empty($record->registration_no);
             @endphp
 
@@ -185,6 +186,20 @@
                         class="btn btn-outline-primary download-btn">
                         <i class="bi bi-file-earmark-text"></i> Download Registration Form
                     </a>
+                    {{-- {{ dd($isRegistered, $isApproved) }} --}}
+                    @if ($isPending == true && $isApproved == false)
+                        <a href="{{ route('edit-reg', [$record->id, $record->reg_type]) }}" target="_blank"
+                            class="btn btn-success download-btn">
+                            <i class="bi bi-card-checklist"></i> Update Pending Registration
+                        </a>
+                    @endif
+
+                    @if ($isApproved)
+                        <a href="{{ route('edit-apporve-reg', [$record->id, $record->reg_type]) }}" target="_blank"
+                            class="btn btn-success download-btn">
+                            <i class="bi bi-card-checklist"></i> Update Approve Registration
+                        </a>
+                    @endif
 
                     @if ($isRegistered)
                         <a href="{{ route('show-reg-card', [$record->id, $record->reg_type]) }}" target="_blank"
@@ -196,6 +211,7 @@
                             <i class="bi bi-card-checklist"></i> Registration Card (Not Available Yet)
                         </button>
                     @endif
+
                 </div>
             </div>
         </div>
